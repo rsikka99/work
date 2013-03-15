@@ -134,5 +134,12 @@ class Admin_Model_Dealer extends My_Model_Abstract
         return $this->_quoteSetting;
     }
 
-
+    /**
+     * Gets how many users a dealer has
+     * @return int
+     */
+    public function getNumberOfLicensesUsed()
+    {
+        return count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($this->id));
+    }
 }

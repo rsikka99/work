@@ -15,8 +15,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
     {
         // Display all of the clients
         $mapper    = Quotegen_Model_Mapper_Client::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
-
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper,Application_Model_Mapper_User::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
 
@@ -33,11 +32,19 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
     public function deleteAction ()
     {
         $clientId = $this->_getParam('id', false);
-
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$clientId)
         {
             $this->_helper->flashMessenger(array(
                                                 'warning' => 'Please select a client to delete first.'
+                                           ));
+            $this->redirector('index');
+        }
+        $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        if ($client && $client->dealerId != $dealerId)
+        {
+            $this->_helper->flashMessenger(array(
+                                                'danger' => 'Insufficient Privilege: You cannot delete this client.'
                                            ));
             $this->redirector('index');
         }
@@ -113,6 +120,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
             try
             {
                 // Create Client
+                $values['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
                 $clientId = $clientService->create($values);
             }
             catch (Exception $e)
@@ -145,8 +153,16 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
     {
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         // Get the client object from the database
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
+        if ($client && $client->dealerId != $dealerId)
+        {
+            $this->_helper->flashMessenger(array(
+                                                'danger' => 'Insufficient Privilege: You cannot edit this client.'
+                                           ));
+            $this->redirector('index');
+        }
         // Start the client service
         $clientService = new Admin_Service_Client();
         if ($client)
@@ -201,8 +217,16 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
     public function viewAction ()
     {
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$this->view->client)
         {
+            $this->redirector('index');
+        }
+        if ($this->view->client && $this->view->client->dealerId != $dealerId)
+        {
+            $this->_helper->flashMessenger(array(
+                                                'danger' => 'Insufficient Privilege: You cannot view this client.'
+                                           ));
             $this->redirector('index');
         }
         $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));

@@ -47,84 +47,98 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    // Save to the database
-                    try
+                    $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+                    if ($dealer && $dealer->getNumberOfLicensesUsed() < $dealer->userLicenses)
                     {
-                        $db->beginTransaction();
-                        $mapper = new Application_Model_Mapper_User();
-                        $user   = new Application_Model_User();
-                        $user->populate($values);
-                        $user->password = Application_Model_User::cryptPassword($user->password);
-                        $user->dealerId = 2;
-                        $userId         = $mapper->insert($user);
-                        // Save changes to the user roles
-                        if (isset($values ["userRoles"]))
+                        try
                         {
-                            $userRole         = new Admin_Model_UserRole();
-                            $userRole->userId = $userId;
-                            $userRoleMapper   = new Admin_Model_Mapper_UserRole();
-                            $userRoles        = $userRoleMapper->fetchAll(array(
-                                                                               'userId = ?' => $userId
-                                                                          ));
-                            // Loop through our new roles
-                            foreach ($values ["userRoles"] as $roleId)
+                            // Save to the database
+                            try
                             {
-                                $hasRole = false;
-
-                                foreach ($userRoles as $existingUserRole)
+                                $db->beginTransaction();
+                                $mapper = new Application_Model_Mapper_User();
+                                $user   = new Application_Model_User();
+                                $user->populate($values);
+                                $user->password = Application_Model_User::cryptPassword($user->password);
+                                $user->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                $userId         = $mapper->insert($user);
+                                // Save changes to the user roles
+                                if (isset($values ["userRoles"]))
                                 {
-                                    if ($existingUserRole->roleId == $roleId)
+                                    $userRole         = new Admin_Model_UserRole();
+                                    $userRole->userId = $userId;
+                                    $userRoleMapper   = new Admin_Model_Mapper_UserRole();
+                                    $userRoles        = $userRoleMapper->fetchAll(array(
+                                                                                       'userId = ?' => $userId
+                                                                                  ));
+                                    // Loop through our new roles
+                                    foreach ($values ["userRoles"] as $roleId)
                                     {
-                                        $hasRole = true;
-                                        break;
+                                        $hasRole = false;
+
+                                        foreach ($userRoles as $existingUserRole)
+                                        {
+                                            if ($existingUserRole->roleId == $roleId)
+                                            {
+                                                $hasRole = true;
+                                                break;
+                                            }
+                                        }
+
+                                        // If the role is new
+                                        if (!$hasRole)
+                                        {
+                                            $userRole->roleId = $roleId;
+                                            $userRoleMapper->insert($userRole);
+                                        }
                                     }
-                                }
+                                    $this->_helper->flashMessenger(array(
+                                                                        'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
+                                                                   ));
 
-                                // If the role is new
-                                if (!$hasRole)
-                                {
-                                    $userRole->roleId = $roleId;
-                                    $userRoleMapper->insert($userRole);
+                                    // Reset the form after everything is saved successfully
+                                    $form->reset();
                                 }
+                                $db->commit();
                             }
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
-                                                           ));
+                            catch (Zend_Db_Statement_Mysqli_Exception $e)
+                            {
+                                $db->rollBack();
+                                // Check to see what error code was thrown
+                                switch ($e->getCode())
+                                {
+                                    // Duplicate column
+                                    case 1062 :
+                                        $this->_helper->flashMessenger(array(
+                                                                            'danger' => 'Username already exists.'
+                                                                       ));
+                                        break;
+                                    default :
+                                        $this->_helper->flashMessenger(array(
+                                                                            'danger' => 'Error saving to database.  Please try again.'
+                                                                       ));
+                                        break;
+                                }
 
-                            // Reset the form after everything is saved successfully
-                            $form->reset();
+                                $form->populate($request->getPost());
+                            }
                         }
-                        $db->commit();
-}
-                    catch (Zend_Db_Statement_Mysqli_Exception $e)
-                    {
-                        $db->rollBack();
-                        // Check to see what error code was thrown
-                        switch ($e->getCode())
+                        catch (Exception $e)
                         {
-                            // Duplicate column
-                            case 1062 :
-                                $this->_helper->flashMessenger(array(
-                                                                    'danger' => 'Username already exists.'
-                                                               ));
-                                break;
-                            default :
-                                $this->_helper->flashMessenger(array(
-                                                                    'danger' => 'Error saving to database.  Please try again.'
-                                                               ));
-                                break;
+                            $db->rollBack();
+                            My_Log::logException($e);
+                            $this->_helper->flashMessenger(array(
+                                                                'danger' => 'There was an error processing this request.  Please try again.'
+                                                           ));
+                            $form->populate($request->getPost());
                         }
 
-                        $form->populate($request->getPost());
                     }
-                    catch (Exception $e)
+                    else
                     {
-                        $db->rollBack();
-                        My_Log::logException($e);
                         $this->_helper->flashMessenger(array(
-                                                            'danger' => 'There was an error processing this request.  Please try again.'
+                                                            'danger' => "You have reached your maxiumum user licenses of {$dealer->userLicenses}"
                                                        ));
-                        $form->populate($request->getPost());
                     }
                 }
                 else
@@ -137,6 +151,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             }
         }
 
+
         $this->view->form = $form;
     }
 
@@ -145,7 +160,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $userId = $this->_getParam('id', false);
+        $userId   = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
@@ -227,7 +242,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
-        $userId = $this->_getParam('id', false);
+        $userId   = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
