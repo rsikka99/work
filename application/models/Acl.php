@@ -13,6 +13,7 @@ class Application_Model_Acl extends Zend_Acl
     const ROLE_PROPOSAL_USER      = "3";
     const ROLE_QUOTE_ADMIN        = "4";
     const ROLE_QUOTE_USER         = "5";
+    const ROLE_DEALER_ADMIN       = "6";
 
     /**
      * Resource parameters
@@ -52,7 +53,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
     const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
-    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD = "default__auth__resetpassword";
+    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD  = "default__auth__resetpassword";
 
     /**
      * Hardware Library Constants
@@ -123,6 +124,12 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTE_INDEX               = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE              = "quotegen__quote__delete";
 
+    const RESOURCE_DEALERMANAGEMENT                 = "dealermanagement__index__index";
+    const RESOURCE_DEALERMANAGEMENT_WILDCARD                 = "dealermanagement__%__%";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD = "dealermanagement__client__%";
+    const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
+    const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD = "dealermanagement__user__%";
+
 
     /**
      * This is what kind of access we want to allow. We can use this to provide dynamic pages based on acl
@@ -180,6 +187,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->_setupQuoteUserRole();
         $this->_setupQuoteAdminRole();
         $this->_setupSystemAdminRole();
+        $this->_setupDealerAdminRole();
     }
 
     /**
@@ -417,6 +425,14 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_INDEX);
         $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_SYSTEM);
 
+        /**
+         * Dealermanagement Resources
+         */
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT);
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_WILDCARD);
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD);
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD);
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD);
     }
 
     /**
@@ -576,6 +592,17 @@ class Application_Model_Acl extends Zend_Acl
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_INDEX, self::PRIVILEGE_VIEW);
+    }
+
+    protected function _setupDealerAdminRole ()
+    {
+        // Add our role
+        $this->addRole(self::ROLE_DEALER_ADMIN,self::ROLE_AUTHENTICATED_USER);
+
+        // Add our privileges
+        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
     /**
