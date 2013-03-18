@@ -5,8 +5,8 @@ INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverage
 -- ---------------------------------
 -- Create a default leasing schema
 -- ---------------------------------
-INSERT INTO `qgen_leasing_schemas` (`id`, `name`) VALUES
-(1,'default');
+INSERT INTO `qgen_leasing_schemas` (`id`, `dealerId`, `name`) VALUES
+(1,2,'default');
 
 INSERT INTO `qgen_leasing_schema_ranges` (`id`, `leasingSchemaId`, `startRange`) VALUES
 (1, 1, 0),

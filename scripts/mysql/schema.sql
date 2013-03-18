@@ -906,8 +906,15 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_device_configurations` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
+    `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
-    PRIMARY KEY (`id`) )
+    PRIMARY KEY (`id`) ,
+    INDEX `qgen_leasing_schemas_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `qgen_leasing_schemas_ibfk_1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 2
     DEFAULT CHARACTER SET = utf8
