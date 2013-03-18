@@ -11,6 +11,7 @@
     <tr>
         <th>Username</th>
         <th>Name</th>
+        <th>Dealer Name</th>
         <th style="width: 70px;">Login Attempts</th>
         <th style="width: 100px;">Frozen Until</th>
         <th style="width: 60px;">Locked</th>
@@ -22,6 +23,7 @@
     <tr>
         <td><?php echo $user->username; ?></td>
         <td><?php echo $user->firstname; ?> <?php echo $user->lastname; ?></td>
+        <td><?php echo Admin_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->dealerName ?></td>
         <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
         <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
         <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
