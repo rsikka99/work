@@ -1638,9 +1638,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_dealer_survey_setting`
+-- Table `pgen_dealer_survey_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_setting` (
+CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_settings` (
     `dealerId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
