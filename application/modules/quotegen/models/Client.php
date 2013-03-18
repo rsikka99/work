@@ -8,6 +8,10 @@ class Quotegen_Model_Client extends My_Model_Abstract
     public $id = 0;
 
     /**
+     * @var int
+     */
+    public $dealerId;
+    /**
      * @var string
      */
     public $accountNumber;
@@ -42,6 +46,11 @@ class Quotegen_Model_Client extends My_Model_Abstract
             $this->id = $params->id;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->accountNumber) && !is_null($params->accountNumber))
         {
             $this->accountNumber = $params->accountNumber;
@@ -71,6 +80,7 @@ class Quotegen_Model_Client extends My_Model_Abstract
     {
         return array(
             "id"            => $this->id,
+            "dealerId"      => $this->dealerId,
             "accountNumber" => $this->accountNumber,
             "companyName"   => $this->companyName,
             "legalName"     => $this->legalName,

@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
     public $col_companyName = 'companyName';
     public $col_legalName = 'legalName';
 
@@ -243,5 +244,17 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         return $this->fetchAll(array(
                                     "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%"
                                ));
+    }
+
+    /**
+     * Fetches a list of clients for the dealer
+     * @param int dealer id
+     *
+     * @return Application_Model_Client[]
+     */
+    public function fetchClientListForDealer ($dealerId)
+    {
+        $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $users;
     }
 }

@@ -3,7 +3,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 {
     // Column Names
     public $col_id = "id";
-
+    public $col_dealerId = "dealerId";
     /**
      * The default db table class to use
      *
@@ -234,6 +234,20 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Gets a where clause for filtering by dealerId
+     *
+     * @param string $dealerId
+     *
+     * @return array
+     */
+    public function getWhereDealerId ($dealerId)
+    {
+        return array(
+            "dealerId = ?" => $dealerId
+        );
+    }
+
+    /**
      * @param Application_Model_User $object
      *
      * @return int
@@ -261,6 +275,18 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
             $users = $this->fetchAll(array("{$this->col_id} != ?" => 1));
         }
 
+        return $users;
+    }
+
+    /**
+     * Fetches a list of users for the dealer
+     * @param bool $includeRootUser
+     *
+     * @return Application_Model_User[]
+     */
+    public function fetchUserListForDealer ($dealerId)
+    {
+        $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
         return $users;
     }
 }

@@ -1,0 +1,53 @@
+<?php 
+$leasingSchemaRanges = $this->leasingSchemaRanges;
+?>
+
+<form name="leasingSchemaTerm" id="leasingSchemaTerm" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
+
+	<div class="control-group <?php echo ($this->element->getElement("term")->hasErrors()) ? 'error' : '' ?>">
+		<label class="control-label pull-left" for="term">Term Value: </label>
+		<div class="controls">
+			<div class="input-append">
+				<?php if ( $this->element->getElement("term")->hasErrors() ) { 
+					$this->element->getElement("term")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+				} ?> 
+				<?php echo $this->element->getElement("term")->renderViewHelper(); ?><span class="add-on">months</span>
+				<?php echo $this->element->getElement("term")->renderErrors(); ?>
+			</div>
+		</div>
+	</div>
+	
+	<div class="controls">
+		<div style="overflow: auto; overflow-y: hidden; -ms-overflow-y: hidden; margin: 20px 0px 0px 0px;">
+		<table class="table table-stripped table-bordered">
+			<thead>
+				<tr>
+					<th style="text-align: left;">Range</th>
+					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
+					<th style="text-align: center;"><?php echo $this->currency($range->startRange); ?>+</th>
+					<?php } ?>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>Rate</th>
+					<?php foreach ( $leasingSchemaRanges as $range ) { ?>
+					<td style="text-align: center;">
+						<?php if ( $this->element->getElement("rate{$range->id}")->hasErrors() ) {
+							$this->element->getElement("rate{$range->id}")->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+						} ?> 
+						<?php echo $this->element->getElement("rate{$range->id}")->renderViewHelper(); ?>
+					</td>
+					<?php } ?>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	
+	<div>
+		<?php echo $this->element->submit; ?>
+		<?php echo $this->element->cancel; ?>
+	</div>
+
+</form>
