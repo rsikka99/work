@@ -8,6 +8,11 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     public $id = 0;
 
     /**
+     * @var int
+     */
+    public $dealerId;
+
+    /**
      * @var string
      */
     public $name;
@@ -50,6 +55,11 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
             $this->id = $params->id;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->name) && !is_null($params->name))
         {
             $this->name = $params->name;
@@ -64,6 +74,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     {
         return array(
             "id"   => $this->id,
+            "dealerId"   => $this->dealerId,
             "name" => $this->name,
         );
     }

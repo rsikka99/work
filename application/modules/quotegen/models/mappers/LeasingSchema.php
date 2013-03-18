@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
     */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
 
     /**
      * Gets an instance of the mapper
@@ -211,6 +212,20 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Gets a where clause for filtering by id
+     *
+     * @param $dealerId
+     *
+     * @return array
+     */
+    public function getWhereDealerId($dealerId)
+    {
+        return array(
+            "{$this->col_dealerId} = ?" => $dealerId
+        );
+    }
+
+    /**
      * @param Quotegen_Model_LeasingSchema @object
      *
      * @return int
@@ -218,6 +233,11 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    public function getSchemasForDealer($dealerId)
+    {
+        return $this->fetchAll($this->getWhereDealerId($dealerId));
     }
 }
 

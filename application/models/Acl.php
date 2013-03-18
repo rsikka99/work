@@ -118,6 +118,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX         = "quotegen__quote_groups__index";
     const RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX          = "quotegen__quote_pages__index";
     const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX  = "quotegen__quote_profitability__index";
+    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS  = "quotegen__quote_profitability__leasingdetails";
     const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE       = "quotegen__index__existing-quote";
     const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT = "quotegen__index__get-reports-for-client";
     const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT        = "quotegen__index__create-client";
@@ -399,6 +400,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX);
+        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS);
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE);
         $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT);
@@ -579,6 +581,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT, self::PRIVILEGE_VIEW);

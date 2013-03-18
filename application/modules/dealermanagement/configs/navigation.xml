@@ -67,6 +67,24 @@
                             <resource>dealermanagement__leasingschema__index</resource>
                             <visible>0</visible>
                         </viewschema>
+                        <view>
+                            <label>View</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>view</action>
+                            <resource>dealermanagement__leasingschema__view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <delete>
+                            <label>Delete</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>delete</action>
+                            <resource>dealermanagement__leasingschema__delete</resource>
+                            <visible>0</visible>
+                        </delete>
                         <addterm>
                             <label>Add Term</label>
                             <class></class>

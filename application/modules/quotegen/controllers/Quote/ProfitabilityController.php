@@ -14,7 +14,9 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
      */
     public function indexAction ()
     {
-        $form = new Quotegen_Form_Quote_Profitability($this->_quote);
+
+        $selectedLeasingSchemaId = $this->_getParam('leasingSchemaId', null);
+        $form = new Quotegen_Form_Quote_Profitability($this->_quote, $selectedLeasingSchemaId);
         
         $request = $this->getRequest();
         if ($request->isPost())
@@ -87,6 +89,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         // Only make changes if the quote is leased.
                         if ($this->_quote->isLeased())
                         {
+
                             // Get the leasing schema id to have the form populate the select box options properly
                             $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
                             
@@ -162,6 +165,56 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
         }
         
         $this->view->form = $form;
+    }
+    /**
+     * The leasingdetailsAction accepts a leaseId as a GET parameter, and
+     * returns
+     * information about the corresponding lease in json format.
+     * Jquery code
+     * requesting data from this action is located in on the main layout page.
+     */
+    public function leasingdetailsAction ()
+    {
+        // Disable the default layout
+        $this->_helper->layout->disableLayout();
+        $leasingSchemaId = $this->_getParam('schemaId', false);
+
+        try
+        {
+            if ($leasingSchemaId > 0)
+            {
+                $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+                $leasingSchemaTerms = array ();
+                if ($leasingSchema)
+                {
+                    $formData = null;
+                    /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
+                    $i = 0;
+                    foreach ( $leasingSchema->getTerms() as $leasingSchemaTerm )
+                    {
+                        $formData->$i = array(
+                            $leasingSchemaTerm->id,
+                            number_format($leasingSchemaTerm->months) . " months"
+                        );
+                        $i++;
+                    }
+                    $formData->length = $i;
+                }
+            }
+            else
+            {
+                $formdata = array();
+            }
+        }
+        catch (Exception $e)
+        {
+            // CRITICAL EXCEPTION
+            Throw new exception("Critical Error: Unable to find company.", 0, $e);
+        } // end catch
+
+
+        // Encode company data to return to the client:
+        $this->sendJson($formData);
     }
 }
 
