@@ -3,81 +3,85 @@
 class Preferences_Service_ReportSettings
 {
     /**
-     * The form for a client
+     * Default report settings and survey settings combined into an array
      *
-     * @var Proposalgen_Form_Settings_Report
+     * @var array|null
+     */
+    protected $_defaultSettings;
+
+    /**
+     * Gets the report setting form.
+     *
+     * @var Preferences_Form_ReportSetting
      */
     protected $_form;
 
     /**
-     * The system report settings
+     * Gets the report settings from the system
      *
      * @var Proposalgen_Model_Report_Setting
      */
-    protected $_systemSettings;
+    protected $_systemReportSettings;
+
+
+    protected $_systemSurveySettings;
+
+    protected $_userReportSettings;
+
+    protected $_userSurveySettings;
 
     /**
-     * The user report settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @param $defaultSettings array
      */
-    protected $_userSettings;
-
-    /**
-     * Dealer report settings
-     *
-     * @var Proposalgen_Model_Report_Setting
-     */
-    protected $_dealerSettings;
-
-    /**
-     * The default settings (uses overrides)
-     *
-     * @var Proposalgen_Model_Report_Setting
-     */
-    protected $_defaultSettings;
-
-    public function __construct ($userId)
+    public function __construct ($defaultSettings = null)
     {
-        // Dealer settings
-        $user = Application_Model_Mapper_User::getInstance()->find($userId);
-        $this->_dealerSettings = Admin_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->getReportSetting();
-
-        // System settings
-        $this->_systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting();
-
-        // User settings
-        $this->_userSettings   = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
-
-        // Default setting
-        $this->_defaultSettings = new Proposalgen_Model_Report_Setting($this->_systemSettings->toArray());
-        $this->_defaultSettings->populate($this->_userSettings->toArray());
+        $this->_systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $this->_systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
+        $this->_defaultSettings = $defaultSettings;
     }
 
     /**
-     * Gets the client form
+     * Gets the report setting form
      *
-     * @return Proposalgen_Form_Settings_Report
+     * @return Preferences_Form_ReportSetting
      */
     public function getForm ()
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Proposalgen_Form_Settings_Report($this->_defaultSettings);
+            $this->_form = new Preferences_Form_ReportSetting();
+            $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
 
-            // Populate with initial data?
-//            $this->_form->populate($this->_reportSettings->toArray());
+            // User form will populate the description with defaults
+            if($this->_defaultSettings)
+            {
+                foreach($this->_form->getElements() as $element)
+                {
+                    if(array_key_exists("Zend_Form_Decorator_Description", $element->getDecorators()))
+                    {
+                        $element->setDescription($populateSettings[$element->getName()]);
+                    }
+                }
+                // Get the user settings for population
+                $this->_systemReportSettings->populate($this->_defaultSettings);
+                $this->_systemSurveySettings->populate($this->_defaultSettings);
 
-//            $this->_form->setDecorators(array(
-//                                             array(
-//                                                 'ViewScript',
-//                                                 array(
-//                                                     'viewScript' => 'forms/settings/report.phtml'
-//                                                 )
-//                                             )
-//                                        ));
+                // Re-load the settings into report settings
+                $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
+            }
+            else
+            {
+                // Get the current class of the element and adds default settings
+                foreach($this->_form->getElements() as $element)
+                {
+                    $currentClass = $element->getAttrib('class');
+                    $element->setAttrib('class',"{$currentClass} defaultSettings ");
+                }
+            }
+
+            $this->_form->populate($populateSettings);
         }
-
         return $this->_form;
     }
 

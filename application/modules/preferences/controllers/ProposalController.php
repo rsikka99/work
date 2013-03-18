@@ -195,7 +195,12 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
-        $form = new Preferences_Form_ReportSetting();
+        $userId = Zend_Auth::getInstance()->getIdentity()->id;
+        $defaultSettings = array_merge(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId)->toArray(), Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId)->toArray());
+        $reportSettingFormService = new Preferences_Service_ReportSettings($defaultSettings);
+
+        $form = $reportSettingFormService->getForm();
+
         $request = $this->getRequest();
 
         if($request->isPost())
