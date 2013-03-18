@@ -1409,6 +1409,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
             $this->_averageOemOnlyCostPerPage = $costPerPage;
         }
 
@@ -1445,7 +1447,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 

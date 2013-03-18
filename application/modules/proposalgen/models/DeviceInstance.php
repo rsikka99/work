@@ -1376,4 +1376,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
     }
+
+    /**
+     * Returns percent of maximum recommended print volume they are printing.
+     * If their recommended max is 1000, and they print 2000. This returns 200 (Without % Sign)
+     * @return float
+     */
+    public function calculatePercentOfMaximumRecommendedMaxVolume()
+    {
+        return ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume()*100);
+    }
 }

@@ -46,11 +46,10 @@ foreach ($proposal->getOptimizedDevices() as $device)
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
     $optimizedDevicesTable->addRow();
-    $textrun = $this->translate($deviceName);
-    $textrun .= $this->translate($device->serialNumber);
     $cell = $optimizedDevicesTable->addCell($cellWidths [0], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber);
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
     $optimizedDevicesTable->addCell($cellWidths [1], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $optimizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
@@ -91,11 +90,10 @@ foreach ($proposal->getUnderutilizedDevices() as $device)
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
     $UnderutilizedDevicesTable->addRow();
-    $textrun = $this->translate($deviceName);
-    $textrun .= $this->translate($device->serialNumber);
     $cell = $UnderutilizedDevicesTable->addCell($cellWidths [0], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber);
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
     $UnderutilizedDevicesTable->addCell($cellWidths [1], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $UnderutilizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume(), 0), null, 'nospacing_rightalign');
@@ -127,11 +125,10 @@ foreach ($proposal->getOverutilizedDevices() as $device)
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
     $OverutilizedDevicesTable->addRow();
-    $textrun = $this->translate($deviceName);
-    $textrun .= $this->translate($device->serialNumber);
     $cell = $OverutilizedDevicesTable->addCell($cellWidths [0], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber);
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
     $OverutilizedDevicesTable->addCell($cellWidths [1], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $OverutilizedDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume(), 0), null, 'nospacing_rightalign');
@@ -172,11 +169,10 @@ foreach ($proposal->getOldDevices() as $device)
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
     $oldDevicesTable->addRow();
-    $textrun = $this->translate($deviceName);
-    $textrun .= $this->translate($device->serialNumber);
     $cell = $oldDevicesTable->addCell($cellWidths [0], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber);
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
     $oldDevicesTable->addCell($cellWidths [1], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $oldDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
@@ -207,11 +203,10 @@ foreach ($proposal->getDevicesNotReportingTonerLevels() as $device)
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 
     $notReportingTonerDevicesTable->addRow();
-    $textrun = $this->translate($deviceName);
-    $textrun .= $this->translate($device->serialNumber);
     $cell = $notReportingTonerDevicesTable->addCell($cellWidths [0], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell1));
     $cell->addText($deviceName, null, array('spaceAfter' => 0));
-    $cell->addText($device->serialNumber);
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
     $notReportingTonerDevicesTable->addCell($cellWidths [1], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [2], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getAverageMonthlyPageCount(), 0), null, 'nospacing_rightalign');
     $notReportingTonerDevicesTable->addCell($cellWidths [3], ($device->getIsLeased() ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->getAverageMonthlyPageCount() / $proposal->getPageCounts()->Total->Combined->Monthly) * 100, 2) . '%'), null, 'nospacing_rightalign');
