@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th style="width: 30px;">ID</th>
+            <th>Dealer Name</th>
             <th>Company Name</th>
             <th>Legal Name</th>
             <th style="width: 120px;">Action</th>
@@ -19,6 +20,7 @@
         <?php foreach ($this->paginator->getCurrentItems() as $client) : /* @var $client Quotegen_Model_Client */ ?>
         <tr>
             <td><?php echo $this->escape($client->id); ?></td>
+            <td><?php echo $this->escape(Admin_Model_Mapper_Dealer::getInstance()->find($client->dealerId)->dealerName); ?></td>
             <td><?php echo $this->escape($client->companyName); ?></td>
             <td><?php echo $this->escape($client->legalName); ?></td>
             <td>
