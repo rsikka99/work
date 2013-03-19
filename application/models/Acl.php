@@ -604,7 +604,6 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
@@ -619,6 +618,7 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_ADMIN);
     }
 
 

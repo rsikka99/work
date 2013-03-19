@@ -153,7 +153,30 @@ class Admin_Form_User extends EasyBib_Form
             }
             $this->addElement($userRoles);
         }
-
+        $isSystemAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if ($isSystemAdmin)
+        {
+            $firstDealerId = null;
+            $dealers       = array();
+            foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+            {
+                // Use this to grab the first id in the leasing schema dropdown
+                if (!$firstDealerId)
+                {
+                    $firstDealerId = $dealer->id;
+                }
+                $dealers [$dealer->id] = $dealer->dealerName;
+            }
+            if ($dealers)
+            {
+                $this->addElement('select', 'dealerId', array(
+                                                             'label'        => 'Dealer:',
+                                                             'class'        => 'input-medium',
+                                                             'multiOptions' => $dealers,
+                                                             'required'     => true,
+                                                             'value'        => $firstDealerId));
+            }
+        }
         // No need to edit this when creating a user
         if ($this->getFormMode() === self::MODE_EDIT)
         {
