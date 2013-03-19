@@ -1,11 +1,13 @@
 <?php
 class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 {
+    public $allowsNull = false;
+
     public function init ()
     {
         $this->setMethod('post');
         $this->_addClassNames('reportSettingsForm');
-        $this->addPrefixPath('My_Form_Decorator','My/Form/Decorator/','decorator');
+        $this->addPrefixPath('My_Form_Decorator', 'My/Form/Decorator/', 'decorator');
 
         $coverageValidator = array(
             array(
@@ -81,69 +83,69 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                              'validators' => $costValidator
                                                         ));
         $this->addElement('text', 'leasedBwCostPerPage', array(
-                                                              'label'  => 'Leased Monochrome Cost',
-                                                              'append' => '$ / page',
+                                                              'label'      => 'Leased Monochrome Cost',
+                                                              'append'     => '$ / page',
                                                               'validators' => $cppValidator
                                                          ));
         $this->addElement('text', 'leasedColorCostPerPage', array(
-                                                                 'label'  => 'Leased Color Cost',
-                                                                 'append' => '$ / page',
+                                                                 'label'      => 'Leased Color Cost',
+                                                                 'append'     => '$ / page',
                                                                  'validators' => $cppValidator
                                                             ));
         $this->addElement('text', 'mpsBwCostPerPage', array(
-                                                           'label'  => 'Monochrome Cost',
-                                                           'append' => '$ / page',
+                                                           'label'      => 'Monochrome Cost',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'mpsColorCostPerPage', array(
-                                                              'label'  => 'Color Cost',
-                                                              'append' => '$ / page',
+                                                              'label'      => 'Color Cost',
+                                                              'append'     => '$ / page',
                                                               'validators' => $cppValidator
                                                          ));
         $this->addElement('text', 'kilowattsPerHour', array(
-                                                           'label'  => 'Energy Cost',
-                                                           'append' => '/ KWh',
+                                                           'label'      => 'Energy Cost',
+                                                           'append'     => '/ KWh',
                                                            'validators' => $costValidator
                                                       ));
-        $this->addElement('select', 'assessmentPricingConfigId', array(
-                                                                      'label' => 'Toner Preference',
-                                                                      'class' => 'span3 '
-                                                                 ));
+        $assessmentPricingConfig = $this->createElement('select', 'assessmentPricingConfigId', array(
+                                                                                                    'label' => 'Toner Preference',
+                                                                                                    'class' => 'span3 '
+                                                                                               ));
         // Gross margin elements
         $this->addElement('text', 'actualPageCoverageMono', array(
-                                                                 'label'  => 'Page Coverage Monochrome',
-                                                                 'append' => '%',
+                                                                 'label'      => 'Page Coverage Monochrome',
+                                                                 'append'     => '%',
                                                                  'validators' => $coverageValidator
                                                             ));
         $this->addElement('text', 'actualPageCoverageColor', array(
-                                                                  'label'  => 'Page Coverage Color',
-                                                                  'append' => '%',
+                                                                  'label'      => 'Page Coverage Color',
+                                                                  'append'     => '%',
                                                                   'validators' => $coverageValidator
                                                              ));
         $this->addElement('text', 'adminCostPerPage', array(
-                                                           'label'  => 'Admin Cost',
-                                                           'append' => '$ / page',
+                                                           'label'      => 'Admin Cost',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'serviceCostPerPage', array(
-                                                             'label'  => 'Service Cost',
-                                                             'append' => '$ / page',
+                                                             'label'      => 'Service Cost',
+                                                             'append'     => '$ / page',
                                                              'validators' => $cppValidator
                                                         ));
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
-                                                        'label'  => 'Cost Threshold',
-                                                        'append' => '$',
+                                                        'label'      => 'Cost Threshold',
+                                                        'append'     => '$',
                                                         'validators' => $costValidator
                                                    ));
         $this->addElement('text', 'targetMonochromeCostPerPage', array(
-                                                                      'label'  => 'Target Monochrome Cost Per Page',
-                                                                      'append' => '$ / page',
+                                                                      'label'      => 'Target Monochrome Cost Per Page',
+                                                                      'append'     => '$ / page',
                                                                       'validators' => $cppValidator
                                                                  ));
         $this->addElement('text', 'targetColorCostPerPage', array(
-                                                                 'label'  => 'Target Color Cost Per Page',
-                                                                 'append' => '$ / page',
+                                                                 'label'      => 'Target Color Cost Per Page',
+                                                                 'append'     => '$ / page',
                                                                  'validators' => $cppValidator
                                                             ));
 
@@ -157,6 +159,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
             {
                 $element->setAttrib('class', 'span2 ');
             }
+            $element->setRequired(true);
         }
 
         $this->addDisplayGroup(array('pageCoverageMono', 'pageCoverageColor'), 'survey', array('legend' => 'Survey Settings'));
@@ -168,7 +171,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'mpsBwCostPerPage',
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
-                                     'assessmentPricingConfigId'
+                                     $assessmentPricingConfig,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
         $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'serviceCostPerPage'), 'grossMargin', array('legend' => 'Gross Margin Settings'));
         $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage'), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
@@ -201,10 +204,44 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
+                                              array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
+                                              array(array('table' => 'HtmlTag'), array('tag' => 'table')),
+                                              array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
+                                              'FieldSet'
+                                         ));
+
+        $pricingConfigOptions = array();
+        // Add multi options to toner preferences.
+        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
+        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
+        {
+            $pricingConfigOptions [] = $pricingConfig->configName;
+        }
+        $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
+    }
+
+    /**
+     *  This is used to set up the form with a three column header.
+     */
+    public function setUpFormWithDefaultDecorators ()
+    {
+        $this->setDisplayGroupDecorators(array(
+                                              'FormElements',
                                               array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'FieldSet'
                                          ));
     }
+
+    public function allowNullValues()
+    {
+        /* @var Zend_Form_Element_Text $element */
+        foreach($this->getElements() as $element)
+        {
+            $element->setRequired(false);
+        }
+        $this->allowsNull = true;
+    }
+
 }

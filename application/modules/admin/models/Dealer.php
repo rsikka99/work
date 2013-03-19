@@ -44,7 +44,7 @@ class Admin_Model_Dealer extends My_Model_Abstract
      *
      * @var Proposalgen_Model_Report_Setting
      */
-    protected $_reportSetting;
+    protected $_reportSettings;
 
     /**
      * Gets a quote setting object for the dealer object.
@@ -105,18 +105,25 @@ class Admin_Model_Dealer extends My_Model_Abstract
     }
 
     /**
-     * Gets the Proposalgen_Model_Report_Setting objet that relates to the dealer instance
+     * Gets the report and survey settings for the user
      *
-     * @return \Proposalgen_Model_Report_Setting
+     * @param $dealerId
+     *
+     * @return array
      */
-    public function getReportSetting ()
+    public function getReportSettings ($dealerId)
     {
-        if (!isset($this->_reportSetting))
+        if (!isset($this->_reportSettings))
         {
-             $this->_reportSetting = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find($this->reportSettingId);
+            $dealerReportSetting                      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($dealerId);
+            $dealerSurveySetting                      = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchDealerSurveySetting($dealerId);
+            $this->_reportSettings                    = array_merge($dealerReportSetting->toArray(), $dealerSurveySetting->toArray());
+            $this->_reportSettings['reportSettingId'] = $dealerReportSetting->id;
+            $this->_reportSettings['surveySettingId'] = $dealerSurveySetting->id;
+            unset($this->_reportSettings['id']);
         }
 
-        return $this->_reportSetting;
+        return $this->_reportSettings;
     }
 
     /**
@@ -136,9 +143,10 @@ class Admin_Model_Dealer extends My_Model_Abstract
 
     /**
      * Gets how many users a dealer has
+     *
      * @return int
      */
-    public function getNumberOfLicensesUsed()
+    public function getNumberOfLicensesUsed ()
     {
         return count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($this->id));
     }

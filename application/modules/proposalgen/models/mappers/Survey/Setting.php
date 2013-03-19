@@ -201,8 +201,40 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
 
     }
 
+    public function fetchDealerSurveySetting ($dealerId)
+    {
+        $surveySetting       = false;
+        $dealerSurveySetting = Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->find($dealerId);
+        if ($dealerSurveySetting)
+        {
+            $surveySetting = $this->find($dealerSurveySetting->surveySettingId);
+        }
+
+        if (!$surveySetting)
+        {
+            $surveySetting   = new Proposalgen_Model_Survey_Setting();
+            $surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
+
+            if ($dealerSurveySetting)
+            {
+                $dealerSurveySetting->surveySettingId = $surveySettingId;
+                Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->save($dealerSurveySetting, null);
+            }
+            else
+            {
+                $dealerSurveySetting                  = new Proposalgen_Model_Dealer_Survey_Setting();
+                $dealerSurveySetting->dealerId        = $dealerId;
+                $dealerSurveySetting->surveySettingId = $surveySettingId;
+                Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->insert($dealerSurveySetting);
+            }
+        }
+
+        return $surveySetting;
+    }
+
     /**
      * Fetches system default report survey_setting
+     *
      * @return Proposalgen_Model_Survey_Setting
      */
     public function fetchSystemDefaultSurveySettings ()

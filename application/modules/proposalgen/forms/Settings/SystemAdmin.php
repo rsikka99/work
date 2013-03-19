@@ -871,14 +871,9 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
         {
-            if($pricingConfig->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
-            {
-                $pricingConfigOptions [] = $pricingConfig->configName;
-            }
+            $pricingConfigOptions [] = $pricingConfig->configName;
         }
 
         $pricing_config->addMultiOptions($pricingConfigOptions);
     }
 }
-?>
-

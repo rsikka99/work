@@ -28,16 +28,6 @@ class Preferences_Service_ReportSettings
      */
     protected $_systemSurveySettings;
 
-//    /**
-//     * @var Proposalgen_Model_Report_Setting
-//     */
-//    protected $_userReportSettings;
-//
-//    /**
-//     * @var Proposalgen_Model_Survey_Setting
-//     */
-//    protected $_userSurveySettings;
-
     /**
      *
      * @param $defaultSettings array
@@ -74,6 +64,9 @@ class Preferences_Service_ReportSettings
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;
             }
+            // This function sets up the third row column header decorator
+            $this->_form->allowNullValues();
+            $this->_form->setUpFormWithDefaultDecorators();
 
             $this->_form->populate($populateSettings);
         }
@@ -125,11 +118,29 @@ class Preferences_Service_ReportSettings
     protected function validateAndFilterData ($data)
     {
         $validData = false;
+
         $form      = $this->getFormWithDefaults();
 
         if ($form->isValid($data))
         {
-            $validData = $form->getValues();
+            if($this->_form->allowsNull)
+            {
+
+                foreach($data as $key => $value)
+                {
+                    if($value === "")
+                    {
+                        $data [$key] = new Zend_Db_Expr("NULL");
+                    }
+
+                }
+
+                $validData = $data;
+            }
+            else
+            {
+                $validData = $form->getValues();
+            }
         }
         else
         {
@@ -161,14 +172,11 @@ class Preferences_Service_ReportSettings
                     unset($validData [$key]);
                 }
             }
+
             // Check the valid data to see if toner preferences drop downs have been set.
             if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
                 unset($validData ['assessmentPricingConfigId']);
-            }
-            if ((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['grossMarginPricingConfigId']);
             }
 
             $reportSetting = new Proposalgen_Model_Report_Setting();
@@ -177,23 +185,19 @@ class Preferences_Service_ReportSettings
             $reportSetting->populate($validData);
             $surveySetting->populate($validData);
 
-            if (isset($this->_defaultSettings->id))
+            if ($this->_defaultSettings)
             {
-                $id = $this->_defaultSettings->id;
+                $reportSetting->id = $this->_defaultSettings['reportSettingId'];
+                $surveySetting->id = $this->_defaultSettings['surveySettingId'];
             }
             else
             {
-                $id = 1;
+                $reportSetting->id = $this->_systemReportSettings->id;
+                $surveySetting->id = $this->_systemReportSettings->id;
             }
 
-            $reportSetting->id = $id;
-            $surveySetting->id = $id;
-
-
-            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_userReportSettings);
-            Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($this->_userSurveySettings);
-
-            $this->getFormWithDefaults()->populate($this->_reportSettings->toArray());
+            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSetting);
+            Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
 
             return true;
         }
