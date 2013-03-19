@@ -1,6 +1,7 @@
 <?php
 class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 {
+    public $allowsNull = false;
 
     public function init ()
     {
@@ -158,6 +159,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
             {
                 $element->setAttrib('class', 'span2 ');
             }
+            $element->setRequired(true);
         }
 
         $this->addDisplayGroup(array('pageCoverageMono', 'pageCoverageColor'), 'survey', array('legend' => 'Survey Settings'));
@@ -230,6 +232,16 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'FieldSet'
                                          ));
+    }
+
+    public function allowNullValues()
+    {
+        /* @var Zend_Form_Element_Text $element */
+        foreach($this->getElements() as $element)
+        {
+            $element->setRequired(false);
+        }
+        $this->allowsNull = true;
     }
 
 }

@@ -65,6 +65,7 @@ class Preferences_Service_ReportSettings
                 $populateSettings = $this->_defaultSettings;
             }
             // This function sets up the third row column header decorator
+            $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
 
             $this->_form->populate($populateSettings);
@@ -117,11 +118,29 @@ class Preferences_Service_ReportSettings
     protected function validateAndFilterData ($data)
     {
         $validData = false;
+
         $form      = $this->getFormWithDefaults();
 
         if ($form->isValid($data))
         {
-            $validData = $form->getValues();
+            if($this->_form->allowsNull)
+            {
+
+                foreach($data as $key => $value)
+                {
+                    if($value === "")
+                    {
+                        $data [$key] = new Zend_Db_Expr("NULL");
+                    }
+
+                }
+
+                $validData = $data;
+            }
+            else
+            {
+                $validData = $form->getValues();
+            }
         }
         else
         {
@@ -179,8 +198,6 @@ class Preferences_Service_ReportSettings
 
             Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSetting);
             Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
-
-            $this->getFormWithDefaults()->populate(array_merge($reportSetting->toArray(), $surveySetting->toArray()));
 
             return true;
         }
