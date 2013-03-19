@@ -5,7 +5,7 @@ class Preferences_Service_ReportSettings
     /**
      * Default report settings and survey settings combined into an array
      *
-     * @var array|null
+     * @var Proposalgen_Model_Report_Setting|array|null
      */
     protected $_defaultSettings;
 
@@ -23,12 +23,20 @@ class Preferences_Service_ReportSettings
      */
     protected $_systemReportSettings;
 
-
+    /**
+     * @var Proposalgen_Model_Survey_Setting
+     */
     protected $_systemSurveySettings;
 
-    protected $_userReportSettings;
-
-    protected $_userSurveySettings;
+//    /**
+//     * @var Proposalgen_Model_Report_Setting
+//     */
+//    protected $_userReportSettings;
+//
+//    /**
+//     * @var Proposalgen_Model_Survey_Setting
+//     */
+//    protected $_userSurveySettings;
 
     /**
      *
@@ -38,7 +46,39 @@ class Preferences_Service_ReportSettings
     {
         $this->_systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
         $this->_systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
-        $this->_defaultSettings = $defaultSettings;
+        $this->_defaultSettings      = $defaultSettings;
+    }
+
+    /**
+     * Gets the report setting form with default values populated
+     *
+     * @return Preferences_Form_ReportSetting
+     */
+    public function getFormWithDefaults ()
+    {
+        if (!isset($this->_form))
+        {
+            $this->_form      = new Preferences_Form_ReportSetting();
+            $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
+
+            // User form will populate the description with defaults
+            if (is_array($this->_defaultSettings))
+            {
+                foreach ($this->_form->getElements() as $element)
+                {
+                    if (array_key_exists("Zend_Form_Decorator_Description", $element->getDecorators()))
+                    {
+                        $element->setDescription($populateSettings[$element->getName()]);
+                    }
+                }
+                // Re-load the settings into report settings
+                $populateSettings = $this->_defaultSettings;
+            }
+
+            $this->_form->populate($populateSettings);
+        }
+
+        return $this->_form;
     }
 
     /**
@@ -50,38 +90,27 @@ class Preferences_Service_ReportSettings
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Preferences_Form_ReportSetting();
+            $this->_form      = new Preferences_Form_ReportSetting();
             $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
-
-            // User form will populate the description with defaults
-            if($this->_defaultSettings)
+            if ($this->_defaultSettings)
             {
-                foreach($this->_form->getElements() as $element)
-                {
-                    if(array_key_exists("Zend_Form_Decorator_Description", $element->getDecorators()))
-                    {
-                        $element->setDescription($populateSettings[$element->getName()]);
-                    }
-                }
                 // Get the user settings for population
                 $this->_systemReportSettings->populate($this->_defaultSettings);
                 $this->_systemSurveySettings->populate($this->_defaultSettings);
-
                 // Re-load the settings into report settings
                 $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
             }
-            else
+
+            // Get the current class of the element and adds default settings
+            foreach ($this->_form->getElements() as $element)
             {
-                // Get the current class of the element and adds default settings
-                foreach($this->_form->getElements() as $element)
-                {
-                    $currentClass = $element->getAttrib('class');
-                    $element->setAttrib('class',"{$currentClass} defaultSettings ");
-                }
+                $currentClass = $element->getAttrib('class');
+                $element->setAttrib('class', "{$currentClass} defaultSettings ");
             }
 
             $this->_form->populate($populateSettings);
         }
+
         return $this->_form;
     }
 
@@ -96,7 +125,7 @@ class Preferences_Service_ReportSettings
     protected function validateAndFilterData ($data)
     {
         $validData = false;
-        $form      = $this->getForm();
+        $form      = $this->getFormWithDefaults();
 
         if ($form->isValid($data))
         {
@@ -104,9 +133,9 @@ class Preferences_Service_ReportSettings
         }
         else
         {
-            if ($this->getForm() instanceof EasyBib_Form)
+            if ($this->getFormWithDefaults() instanceof EasyBib_Form)
             {
-                $this->getForm()->buildBootstrapErrorDecorators();
+                $this->getFormWithDefaults()->buildBootstrapErrorDecorators();
             }
         }
 
@@ -142,21 +171,33 @@ class Preferences_Service_ReportSettings
                 unset($validData ['grossMarginPricingConfigId']);
             }
 
-            // Save the id as it will get erased
-            $reportSettingsId = $this->_reportSettings->id;
+            $reportSetting = new Proposalgen_Model_Report_Setting();
+            $surveySetting = new Proposalgen_Model_Survey_Setting();
 
-            $this->_reportSettings->populate($this->_defaultSettings->toArray());
-            $this->_reportSettings->populate($validData);
+            $reportSetting->populate($validData);
+            $surveySetting->populate($validData);
 
-            // Restore the ID
-            $this->_reportSettings->id = $reportSettingsId;
+            if (isset($this->_defaultSettings->id))
+            {
+                $id = $this->_defaultSettings->id;
+            }
+            else
+            {
+                $id = 1;
+            }
 
-            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_reportSettings);
+            $reportSetting->id = $id;
+            $surveySetting->id = $id;
 
-            $this->getForm()->populate($this->_reportSettings->toArray());
+
+            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_userReportSettings);
+            Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($this->_userSurveySettings);
+
+            $this->getFormWithDefaults()->populate($this->_reportSettings->toArray());
 
             return true;
         }
+
         return false;
     }
 }

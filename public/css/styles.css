@@ -157,9 +157,14 @@ label.label-phone-number-country {
 }
 .reportSettingsForm .add-on {
   width: 75px;
+  text-align: left;
 }
 .reportSettingsForm .help-inline {
   float: right;
+}
+.reportSettingsForm .headerRow {
+  text-align: center;
+  font-weight: bold;
 }
 /* Fix jqGrid for bootstrap */
 tr.ui-search-toolbar select {
