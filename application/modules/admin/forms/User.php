@@ -26,7 +26,7 @@ class Admin_Form_User extends EasyBib_Form
             $this->formMode = $formMode;
         }
         $this->dealerManagement = $dealerManagement;
-        $this->roles = $roles;
+        $this->roles            = $roles;
 
         parent::__construct($options);
     }
@@ -150,7 +150,10 @@ class Admin_Form_User extends EasyBib_Form
             /* @var $role Admin_Model_Role */
             foreach ($this->roles as $role)
             {
-                $userRoles->addMultiOption($role->getId(), $role->getName());
+                if ($role->getId() != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->getId() == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
+                {
+                    $userRoles->addMultiOption($role->getId(), $role->getName());
+                }
             }
             $this->addElement($userRoles);
         }

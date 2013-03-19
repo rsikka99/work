@@ -76,6 +76,24 @@
                             <resource>dealermanagement__leasingschema__view</resource>
                             <visible>0</visible>
                         </view>
+                        <create>
+                            <label>Create</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>create</action>
+                            <resource>dealermanagement__leasingschema__create</resource>
+                            <visible>0</visible>
+                        </create>
+                        <edit>
+                            <label>Edit</label>
+                            <class></class>
+                            <module>dealermanagement</module>
+                            <controller>leasingschema</controller>
+                            <action>edit</action>
+                            <resource>dealermanagement__leasingschema__edit</resource>
+                            <visible>0</visible>
+                        </edit>
                         <delete>
                             <label>Delete</label>
                             <class></class>

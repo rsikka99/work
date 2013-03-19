@@ -69,11 +69,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                                                                 'class'        => 'input-medium',
                                                                 'multiOptions' => $leasingSchemas,
                                                                 'required'     => true,
-                                                                'value'        => $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id));
+                                                                'value'        => $leasingSchemaId));
 
             $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
             $leasingSchemaTerms = array();
-            if ($leasingSchema)
+            if ($leasingSchema && $leasingSchemas)
             {
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)

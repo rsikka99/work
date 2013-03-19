@@ -14,11 +14,11 @@ class Admin_Service_Client
      *
      * @return Admin_Form_Client
      */
-    public function getForm ()
+    public function getForm ($dealerManagement = true)
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Admin_Form_Client();
+            $this->_form = new Admin_Form_Client($dealerManagement);
         }
 
         return $this->_form;

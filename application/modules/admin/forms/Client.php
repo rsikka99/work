@@ -64,7 +64,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setAllowEmpty(true);
         $dealerSelect  = null;
         $isSystemAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ($isSystemAdmin)
+        if ($isSystemAdmin && $this->_dealerManagement == false)
         {
             $firstDealerId = null;
             $dealers       = array();

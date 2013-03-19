@@ -68,6 +68,33 @@
                             <resource>admin__leasingschema__index</resource>
                             <visible>0</visible>
                         </viewschema>
+                        <view>
+                            <label>View</label>
+                            <class></class>
+                            <module>admin</module>
+                            <controller>leasingschema</controller>
+                            <action>view</action>
+                            <resource>admin__leasingschema__view</resource>
+                            <visible>0</visible>
+                        </view>
+                        <create>
+                            <label>Create</label>
+                            <class></class>
+                            <module>admin</module>
+                            <controller>leasingschema</controller>
+                            <action>create</action>
+                            <resource>admin__leasingschema__create</resource>
+                            <visible>0</visible>
+                        </create>
+                        <delete>
+                            <label>Delete</label>
+                            <class></class>
+                            <module>admin</module>
+                            <controller>leasingschema</controller>
+                            <action>delete</action>
+                            <resource>admin__leasingschema__delete</resource>
+                            <visible>0</visible>
+                        </delete>
                         <addterm>
                             <label>Add Term</label>
                             <class></class>

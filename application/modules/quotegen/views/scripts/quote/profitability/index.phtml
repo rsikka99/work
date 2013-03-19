@@ -8,12 +8,10 @@ $("#leasingSchemaId").change(function() {
         },
         url: '<?php echo $this->baseUrl('/quotegen/quote_profitability/leasingdetails'); ?>?schemaId='+$("#leasingSchemaId").val(),
         success: function(data) {
-
+            //empty out leasingSchemaId
+            $("#leasingSchemaTermId").html('');
             for (var i = 0; i < data.length; i++)
             {
-
-                //empty out leasingSchemaId
-                $("#leasingSchemaTermId").html('');
                 var listItems = "";
                 for (var i = 0; i < data.length; i++)
                 {

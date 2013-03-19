@@ -138,7 +138,7 @@ class Admin_ClientController extends Tangent_Controller_Action
             }
         }
 
-        $this->view->form = $clientService->getForm();
+        $this->view->form = $clientService->getForm(false);
     }
 
     public function editAction ()
@@ -151,6 +151,8 @@ class Admin_ClientController extends Tangent_Controller_Action
         $clientService = new Admin_Service_Client();
         if ($client)
         {
+            //This sets the form to not be a dealer management form
+            $clientService->getForm(false);
             $clientService->populateForm($clientId);
         }
         else
@@ -192,7 +194,7 @@ class Admin_ClientController extends Tangent_Controller_Action
                                                ));
             }
         }
-        $this->view->form = $clientService->getForm();
+        $this->view->form = $clientService->getForm(false);
     }
 
     /**
