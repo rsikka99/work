@@ -94,6 +94,14 @@ class Application_Model_User extends My_Model_Abstract
     public $dealerId;
 
     /**
+     * This is a combined array of report and survey settings
+     *
+     * @var array
+     */
+    protected $_reportSettings;
+
+
+    /**
      * @var Admin_Model_UserRole[]
      */
     protected $_userRoles;
@@ -198,6 +206,7 @@ class Application_Model_User extends My_Model_Abstract
         {
             $this->_userRoles = Admin_Model_Mapper_UserRole::getInstance()->fetchAllRolesForUser($this->id);
         }
+
         return $this->_userRoles;
     }
 
@@ -243,4 +252,28 @@ class Application_Model_User extends My_Model_Abstract
 
         return crypt($password, $salt);
     }
+
+    /**
+     * Gets the report and survey settings for the user
+     *
+     * @param $userId int
+     *
+     * @return array
+     */
+    public function getReportSettings ($userId)
+    {
+        if (!isset($this->_reportSettings))
+        {
+            $userReportSetting                        = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
+            $userSurveySetting                        = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
+            $this->_reportSettings                    = array_merge($userReportSetting->toArray(), $userSurveySetting->toArray());
+            $this->_reportSettings['reportSettingId'] = $userReportSetting->id;
+            $this->_reportSettings['surveySettingId'] = $userSurveySetting->id;
+            unset($this->_reportSettings['id']);
+        }
+
+        return $this->_reportSettings;
+    }
+
+
 }
