@@ -14,17 +14,18 @@ class Admin_Form_User extends EasyBib_Form
      */
     protected $formMode = self::MODE_CREATE;
     protected $roles;
+    protected $dealerManagement;
 
     /*
      * (non-PHPdoc) @see Zend_Form::__construct()
      */
-    public function __construct ($formMode = null, $roles = null, $options = null)
+    public function __construct ($formMode = null, $roles = null, $options = null, $dealerManagement = true)
     {
         if (null !== $formMode)
         {
             $this->formMode = $formMode;
         }
-
+        $this->dealerManagement = $dealerManagement;
         $this->roles = $roles;
 
         parent::__construct($options);
@@ -154,7 +155,7 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($userRoles);
         }
         $isSystemAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ($isSystemAdmin)
+        if ($isSystemAdmin && $this->dealerManagement == false)
         {
             $firstDealerId = null;
             $dealers       = array();

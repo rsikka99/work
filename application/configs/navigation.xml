@@ -13,122 +13,122 @@
             <pages>
                 <clients>
                     <label>Clients</label>
-                    <module>quotegen</module>
+                    <module>admin</module>
                     <controller>client</controller>
                     <action>index</action>
-                    <resource>quotegen__client__index</resource>
+                    <resource>admin__client__index</resource>
                     <pages>
                         <create>
                             <label>Create New</label>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>client</controller>
                             <action>create</action>
                             <visible>0</visible>
-                            <resource>quotegen__client__create</resource>
+                            <resource>admin__client__create</resource>
                         </create>
                         <editclient>
                             <label>Edit Client</label>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>client</controller>
                             <action>edit</action>
                             <visible>0</visible>
-                            <resource>quotegen__client__edit</resource>
+                            <resource>admin__client__edit</resource>
                         </editclient>
                         <viewclient>
                             <label>View Client</label>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>client</controller>
                             <action>view</action>
                             <visible>0</visible>
-                            <resource>quotegen__client__view</resource>
+                            <resource>admin__client__view</resource>
                         </viewclient>
                         <deleteclient>
                             <label>Delete Client</label>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>client</controller>
                             <action>delete</action>
                             <visible>0</visible>
-                            <resource>quotegen__client__delete</resource>
+                            <resource>admin__client__delete</resource>
                         </deleteclient>
                     </pages>
                 </clients>
                 <leasing>
                     <label>Leasing Rates</label>
-                    <module>quotegen</module>
+                    <module>admin</module>
                     <controller>leasingschema</controller>
                     <action>index</action>
-                    <resource>quotegen__leasingschema__index</resource>
+                    <resource>admin__leasingschema__index</resource>
                     <pages>
                         <viewschema>
                             <label>View Provider</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>index</action>
-                            <resource>quotegen__leasingschema__index</resource>
+                            <resource>admin__leasingschema__index</resource>
                             <visible>0</visible>
                         </viewschema>
                         <addterm>
                             <label>Add Term</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>addterm</action>
-                            <resource>quotegen__leasingschema__addterm</resource>
+                            <resource>admin__leasingschema__addterm</resource>
                             <visible>0</visible>
                         </addterm>
                         <editterm>
                             <label>Edit Term</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>editterm</action>
-                            <resource>quotegen__leasingschema__editterm</resource>
+                            <resource>admin__leasingschema__editterm</resource>
                             <visible>0</visible>
                         </editterm>
                         <delterm>
                             <label>Delete Term</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>deleteterm</action>
-                            <resource>quotegen__leasingschema__deleteterm</resource>
+                            <resource>admin__leasingschema__deleteterm</resource>
                             <visible>0</visible>
                         </delterm>
                         <addrange>
                             <label>Add Range</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>addrange</action>
-                            <resource>quotegen__leasingschema__addrange</resource>
+                            <resource>admin__leasingschema__addrange</resource>
                             <visible>0</visible>
                         </addrange>
                         <editrange>
                             <label>Edit Range</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>editrange</action>
-                            <resource>quotegen__leasingschema__editrange</resource>
+                            <resource>admin__leasingschema__editrange</resource>
                             <visible>0</visible>
                         </editrange>
                         <delrange>
                             <label>Delete Range</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>deleterange</action>
-                            <resource>quotegen__leasingschema__deleterange</resource>
+                            <resource>admin__leasingschema__deleterange</resource>
                             <visible>0</visible>
                         </delrange>
                         <resetschema>
                             <label>Clear Provider</label>
                             <class></class>
-                            <module>quotegen</module>
+                            <module>admin</module>
                             <controller>leasingschema</controller>
                             <action>resetschema</action>
-                            <resource>quotegen__leasingschema__resetschema</resource>
+                            <resource>admin__leasingschema__resetschema</resource>
                             <visible>0</visible>
                         </resetschema>
                     </pages>

@@ -23,7 +23,6 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
         $userMapper = new Application_Model_Mapper_User();
         $users      = $userMapper->fetchUserListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
-
         // Display all of the users
         $this->view->users = $users;
     }

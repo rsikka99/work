@@ -46,6 +46,8 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_ADMIN_INDEX_INDEX   = "admin__index__index";
     const RESOURCE_ADMIN_USER_PROFILE  = "admin__user__profile";
     const RESOURCE_ADMIN_USER_WILDCARD = "admin__user__%";
+    const RESOURCE_ADMIN_CLIENT_WILDCARD = "admin__client__%";
+    const RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD = "admin__leasingschema__%";
 
     /**
      * Default constants
@@ -114,22 +116,22 @@ class Application_Model_Acl extends Zend_Acl
     /**
      * Quotegen constants
      */
-    const RESOURCE_QUOTEGEN                           = "quotegen__index__index";
-    const RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX         = "quotegen__quote_groups__index";
-    const RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX          = "quotegen__quote_pages__index";
-    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX  = "quotegen__quote_profitability__index";
-    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS  = "quotegen__quote_profitability__leasingdetails";
-    const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE       = "quotegen__index__existing-quote";
-    const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT = "quotegen__index__get-reports-for-client";
-    const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT        = "quotegen__index__create-client";
-    const RESOURCE_QUOTEGEN_QUOTE_INDEX               = "quotegen__quote__index";
-    const RESOURCE_QUOTEGEN_QUOTE_DELETE              = "quotegen__quote__delete";
+    const RESOURCE_QUOTEGEN                                   = "quotegen__index__index";
+    const RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX                 = "quotegen__quote_groups__index";
+    const RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX                  = "quotegen__quote_pages__index";
+    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX          = "quotegen__quote_profitability__index";
+    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS = "quotegen__quote_profitability__leasingdetails";
+    const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE               = "quotegen__index__existing-quote";
+    const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT         = "quotegen__index__get-reports-for-client";
+    const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT                = "quotegen__index__create-client";
+    const RESOURCE_QUOTEGEN_QUOTE_INDEX                       = "quotegen__quote__index";
+    const RESOURCE_QUOTEGEN_QUOTE_DELETE                      = "quotegen__quote__delete";
 
-    const RESOURCE_DEALERMANAGEMENT                 = "dealermanagement__index__index";
-    const RESOURCE_DEALERMANAGEMENT_WILDCARD                 = "dealermanagement__%__%";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD = "dealermanagement__client__%";
+    const RESOURCE_DEALERMANAGEMENT                        = "dealermanagement__index__index";
+    const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD        = "dealermanagement__client__%";
     const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
-    const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD = "dealermanagement__user__%";
+    const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD          = "dealermanagement__user__%";
 
 
     /**
@@ -411,6 +413,8 @@ class Application_Model_Acl extends Zend_Acl
 
         $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
         $this->addResource(self::RESOURCE_ADMIN_USER_WILDCARD);
+        $this->addResource(self::RESOURCE_ADMIN_CLIENT_WILDCARD);
+        $this->addResource(self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD);
 
         $this->addResource(self::RESOURCE_ADMIN_INDEX_INDEX);
 
@@ -554,7 +558,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
+//        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_WILDCARD, self::PRIVILEGE_VIEW);
     }
@@ -591,7 +595,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
 
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
+//        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_INDEX, self::PRIVILEGE_VIEW);
@@ -600,7 +604,7 @@ class Application_Model_Acl extends Zend_Acl
     protected function _setupDealerAdminRole ()
     {
         // Add our role
-        $this->addRole(self::ROLE_DEALER_ADMIN,self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_DEALER_ADMIN, self::ROLE_AUTHENTICATED_USER);
 
         // Add our privileges
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
@@ -617,8 +621,11 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_ADMIN);
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
 
