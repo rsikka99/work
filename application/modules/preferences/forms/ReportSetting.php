@@ -5,6 +5,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
     {
         $this->setMethod('post');
         $this->_addClassNames('reportSettingsForm');
+        $this->addPrefixPath('My_Form_Decorator','My/Form/Decorator/','decorator');
 
         $coverageValidator = array(
             array(
@@ -200,6 +201,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
+                                              array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'FieldSet'
