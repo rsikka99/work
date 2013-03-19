@@ -118,21 +118,18 @@ class Preferences_Service_ReportSettings
     protected function validateAndFilterData ($data)
     {
         $validData = false;
-
         $form      = $this->getFormWithDefaults();
 
         if ($form->isValid($data))
         {
             if($this->_form->allowsNull)
             {
-
                 foreach($data as $key => $value)
                 {
                     if($value === "")
                     {
                         $data [$key] = new Zend_Db_Expr("NULL");
                     }
-
                 }
 
                 $validData = $data;
@@ -174,6 +171,10 @@ class Preferences_Service_ReportSettings
             }
 
             // Check the valid data to see if toner preferences drop downs have been set.
+            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            {
+                unset($validData ['assessmentPricingConfigId']);
+            }
             if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
                 unset($validData ['assessmentPricingConfigId']);

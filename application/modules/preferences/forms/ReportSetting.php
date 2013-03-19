@@ -132,6 +132,11 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                              'append'     => '$ / page',
                                                              'validators' => $cppValidator
                                                         ));
+        $grossMarginPricingConfig = $this->createElement('select', 'grossMarginPricingConfigId', array(
+                                                                                                      'label' => 'Toner Preference',
+                                                                                                      'class' => 'span3 '
+                                                                                                 ));
+
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
                                                         'label'      => 'Cost Threshold',
@@ -173,7 +178,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'kilowattsPerHour',
                                      $assessmentPricingConfig,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
-        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'serviceCostPerPage'), 'grossMargin', array('legend' => 'Gross Margin Settings'));
+        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'serviceCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
         $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage'), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
@@ -215,9 +220,10 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
         {
-            $pricingConfigOptions [] = $pricingConfig->configName;
+            $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
         }
         $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
+        $grossMarginPricingConfig->addMultiOptions($pricingConfigOptions);
     }
 
     /**
@@ -234,14 +240,16 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                          ));
     }
 
-    public function allowNullValues()
+    /**
+     * Allows the form to allow null vlaues
+     */
+    public function allowNullValues ()
     {
         /* @var Zend_Form_Element_Text $element */
-        foreach($this->getElements() as $element)
+        foreach ($this->getElements() as $element)
         {
             $element->setRequired(false);
         }
         $this->allowsNull = true;
     }
-
 }

@@ -14,7 +14,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values = $request->getPost();
+            $values  = $request->getPost();
             $success = $reportSettingFormService->update($values);
 
             if ($success)
@@ -43,7 +43,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values = $request->getPost();
+            $values  = $request->getPost();
             $success = $reportSettingFormService->update($values);
 
             if ($success)
@@ -72,7 +72,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values = $request->getPost();
+            $values  = $request->getPost();
             $success = $reportSettingFormService->update($values);
 
             if ($success)
