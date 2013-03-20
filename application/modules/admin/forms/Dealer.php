@@ -37,26 +37,26 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement($userLicences);
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array(
+        $submit = $this->createElement('submit', 'submit', array(
+                                                   'buttonType' =>Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
                                                    'ignore' => true,
-                                                   'label'  => 'Submit'
+                                                   'label'  => 'Save'
                                               ));
         // Add the submit button
-        $this->addElement('submit', 'cancel', array(
+        $cancel = $this->createElement('submit', 'cancel', array(
                                                    'ignore' => true,
                                                    'label'  => 'Cancel'
                                               ));
+        $this->addDisplayGroup(array(
+                                    $submit,
+                                    $cancel
+                               ), 'actions', array(
+                                                  'disableLoadDefaultDecorators' => true,
+                                                  'decorators'                   => array(
+                                                      'Actions'
+                                                  ),
+                                                  'class'                        => 'form-actions-center'
+                                             ));
 
-        $this->addElement('button', 'submit', array(
-                                                   'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-                                                   'label'      => 'Save',
-                                                   'type'       => 'submit',
-
-                                              ));
-        $this->addElement('button', 'cancel', array(
-                                                   'label'      => 'Cancel',
-                                                   'type'       => 'submit',
-
-                                              ));
     }
 }

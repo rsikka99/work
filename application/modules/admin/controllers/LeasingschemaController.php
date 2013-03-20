@@ -102,7 +102,37 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     {
                         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
                         $leasingSchema       = new Quotegen_Model_LeasingSchema($values);
+                        $leasingSchema->dealerId = $values['dealerId'];
                         $leasingSchemaMapper->insert($leasingSchema);
+                        // Reset the grid to default values
+                        $months = "12";
+                        $range  = "0";
+                        $rate   = "0.0750";
+
+                        // Prep mappers
+                        $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
+                        $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+
+                        // Prep models
+                        $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                        $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
+                        $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
+                        // Save Term
+                        $leasingSchemaTermModel->leasingSchemaId = $leasingSchema->id;
+                        $leasingSchemaTermModel->months          = $months;
+                        $termId                                  = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
+
+                        // Save Range
+                        $leasingSchemaRangeModel->leasingSchemaId = $leasingSchema->id;
+                        $leasingSchemaRangeModel->startRange      = $range;
+                        $rangeId                                  = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
+
+                        // Save Rate
+                        $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
+                        $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
+                        $leasingSchemaRateModel->rate                 = $rate;
+                        $leasingSchemaRateId                          = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
                         $db->commit();
                         $this->_helper->flashMessenger(array(
                                                             'success' => "{$leasingSchema->name} has been created successfully."
@@ -1055,7 +1085,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         {
             // Delete existing leasing schema ranges
             $leasingSchemaRanges = $leasingSchemaRangeMapper->fetchAll(array(
-                                                                            'leasingSchemaId' => $leasingSchemaId
+                                                                            'leasingSchemaId = ?' => $leasingSchemaId
                                                                        ));
             foreach ($leasingSchemaRanges as $leasingSchemaRange)
             {
@@ -1064,7 +1094,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
             // Delete existing leasing schema terms
             $leasingSchemaTerms = $leasingSchemaTermMapper->fetchAll(array(
-                                                                          'leasingSchemaId' => $leasingSchemaId
+                                                                          'leasingSchemaId = ?' => $leasingSchemaId
                                                                      ));
             foreach ($leasingSchemaTerms as $leasingSchemaTerm)
             {

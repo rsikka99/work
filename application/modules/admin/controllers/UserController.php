@@ -35,7 +35,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $db         = Zend_Db_Table_Abstract::getDefaultAdapter();
         $roleMapper = new Admin_Model_Mapper_Role();
         $roles      = $roleMapper->fetchAll();
-        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles,null,false);
+        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles, null, false);
 
         $request = $this->getRequest();
 
@@ -46,84 +46,93 @@ class Admin_UserController extends Tangent_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    // Save to the database
-                    try
+                    $dealer = Admin_Model_Mapper_Dealer::getInstance()->find($values['dealerId']);
+                    if ($dealer && $dealer->getNumberOfLicensesUsed() < $dealer->userLicenses)
                     {
-                        $db->beginTransaction();
-                        $mapper = new Application_Model_Mapper_User();
-                        $user   = new Application_Model_User();
-                        $user->populate($values);
-                        $user->password = Application_Model_User::cryptPassword($user->password);
-                        $user->dealerId = 2;
-                        $userId         = $mapper->insert($user);
-                        // Save changes to the user roles
-                        if (isset($values ["userRoles"]))
+                        // Save to the database
+                        try
                         {
-                            $userRole         = new Admin_Model_UserRole();
-                            $userRole->userId = $userId;
-                            $userRoleMapper   = new Admin_Model_Mapper_UserRole();
-                            $userRoles        = $userRoleMapper->fetchAll(array(
-                                                                               'userId = ?' => $userId
-                                                                          ));
-                            // Loop through our new roles
-                            foreach ($values ["userRoles"] as $roleId)
+                            $db->beginTransaction();
+                            $mapper = new Application_Model_Mapper_User();
+                            $user   = new Application_Model_User();
+                            $user->populate($values);
+                            $user->password = Application_Model_User::cryptPassword($user->password);
+                            $userId         = $mapper->insert($user);
+                            // Save changes to the user roles
+                            if (isset($values ["userRoles"]))
                             {
-                                $hasRole = false;
-
-                                foreach ($userRoles as $existingUserRole)
+                                $userRole         = new Admin_Model_UserRole();
+                                $userRole->userId = $userId;
+                                $userRoleMapper   = new Admin_Model_Mapper_UserRole();
+                                $userRoles        = $userRoleMapper->fetchAll(array(
+                                                                                   'userId = ?' => $userId
+                                                                              ));
+                                // Loop through our new roles
+                                foreach ($values ["userRoles"] as $roleId)
                                 {
-                                    if ($existingUserRole->roleId == $roleId)
+                                    $hasRole = false;
+
+                                    foreach ($userRoles as $existingUserRole)
                                     {
-                                        $hasRole = true;
-                                        break;
+                                        if ($existingUserRole->roleId == $roleId)
+                                        {
+                                            $hasRole = true;
+                                            break;
+                                        }
+                                    }
+
+                                    // If the role is new
+                                    if (!$hasRole)
+                                    {
+                                        $userRole->roleId = $roleId;
+                                        $userRoleMapper->insert($userRole);
                                     }
                                 }
+                                $this->_helper->flashMessenger(array(
+                                                                    'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
+                                                               ));
 
-                                // If the role is new
-                                if (!$hasRole)
-                                {
-                                    $userRole->roleId = $roleId;
-                                    $userRoleMapper->insert($userRole);
-                                }
+                                // Reset the form after everything is saved successfully
+                                $form->reset();
                             }
-                            $this->_helper->flashMessenger(array(
-                                                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
-                                                           ));
-
-                            // Reset the form after everything is saved successfully
-                            $form->reset();
+                            $db->commit();
                         }
-                        $db->commit();
-}
-                    catch (Zend_Db_Statement_Mysqli_Exception $e)
-                    {
-                        $db->rollBack();
-                        // Check to see what error code was thrown
-                        switch ($e->getCode())
+                        catch (Zend_Db_Statement_Mysqli_Exception $e)
                         {
-                            // Duplicate column
-                            case 1062 :
-                                $this->_helper->flashMessenger(array(
-                                                                    'danger' => 'Username already exists.'
-                                                               ));
-                                break;
-                            default :
-                                $this->_helper->flashMessenger(array(
-                                                                    'danger' => 'Error saving to database.  Please try again.'
-                                                               ));
-                                break;
-                        }
+                            $db->rollBack();
+                            // Check to see what error code was thrown
+                            switch ($e->getCode())
+                            {
+                                // Duplicate column
+                                case 1062 :
+                                    $this->_helper->flashMessenger(array(
+                                                                        'danger' => 'Username already exists.'
+                                                                   ));
+                                    break;
+                                default :
+                                    $this->_helper->flashMessenger(array(
+                                                                        'danger' => 'Error saving to database.  Please try again.'
+                                                                   ));
+                                    break;
+                            }
 
-                        $form->populate($request->getPost());
+                            $form->populate($request->getPost());
+                        }
+                        catch (Exception $e)
+                        {
+                            $db->rollBack();
+                            My_Log::logException($e);
+                            $this->_helper->flashMessenger(array(
+                                                                'danger' => 'There was an error processing this request.  Please try again.'
+                                                           ));
+                            $form->populate($request->getPost());
+                        }
                     }
-                    catch (Exception $e)
+                    else
                     {
-                        $db->rollBack();
-                        My_Log::logException($e);
                         $this->_helper->flashMessenger(array(
-                                                            'danger' => 'There was an error processing this request.  Please try again.'
+                                                            'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
                                                        ));
-                        $form->populate($request->getPost());
                     }
                 }
                 else
@@ -268,7 +277,7 @@ class Admin_UserController extends Tangent_Controller_Action
         }
 
         // Create a new form with the mode and roles set
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles,null,false);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles, null, false);
 
         // Prepare the data for the form
         $values               = $user->toArray();
@@ -452,7 +461,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $userMapper = new Application_Model_Mapper_User();
         $user       = $userMapper->find($userId);
 
-        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT,null,null,false);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT, null, null, false);
         $form->populate($user->toArray());
 
         $request = $this->getRequest();
