@@ -1658,6 +1658,27 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_settings` (
     ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `qgen_dealer_quote_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
+    `dealerId` INT(11) NOT NULL ,
+    `quoteSettingId` INT(11) NOT NULL ,
+    PRIMARY KEY (`dealerId`) ,
+    INDEX `qgen_dealer_quote_settings_ibkf2_idx` (`quoteSettingId` ASC) ,
+    CONSTRAINT `qgen_dealer_quote_settings_ibkf1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `qgen_dealer_quote_settings_ibkf2`
+    FOREIGN KEY (`quoteSettingId` )
+    REFERENCES `qgen_quote_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
