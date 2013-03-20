@@ -259,7 +259,6 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
         // Toner preference for the assessment
         $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
@@ -332,23 +331,42 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $grossMarginGroup->elements [] = $admin_charge;
         
         // Service Cost Per Page
-        $service_cost = new Zend_Form_Element_Text('serviceCostPerPage');
-        $service_cost->setLabel('Service Cost')
+        $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
+        $labor_cost->setLabel('Labor Cost')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->serviceCostPerPage, 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
                 'min' => 0 
         ));
-        $service_cost->getValidator('Float')->setMessage('Please enter a number.');
+        $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
         
-        $this->addElement($service_cost);
-        $grossMarginGroup->elements [] = $service_cost;
+        $this->addElement($labor_cost);
+        $grossMarginGroup->elements [] = $labor_cost;
+
+        // Service Cost Per Page
+        $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
+        $parts_cost->setLabel('Parts Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($parts_cost);
+        $grossMarginGroup->elements [] = $parts_cost;
         
         // Toner preference for the gross margin
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');

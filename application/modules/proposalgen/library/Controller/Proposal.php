@@ -29,6 +29,11 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * @var int
      */
+    protected $_dealerId;
+
+    /**
+     * @var int
+     */
     protected $_clientId;
 
     /**
@@ -91,6 +96,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->_reportId         = (int)$this->_reportSession->reportId;
         $this->view->reportSteps = $this->getReportSteps();
         $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
 
         $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;

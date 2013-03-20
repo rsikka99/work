@@ -445,8 +445,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => 'Sorting parameters are invalid'
-                                 ));
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
         }
     }
 
@@ -639,8 +639,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => 'Sorting parameters are invalid'
-                                 ));
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
         }
     }
 
@@ -652,7 +652,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_REPORTSETTINGS);
 
-        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId);
+        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
 
         if ($this->getRequest()->isPost())
         {

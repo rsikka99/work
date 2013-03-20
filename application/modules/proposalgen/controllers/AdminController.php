@@ -282,10 +282,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $db = Zend_Db_Table::getDefaultAdapter();
         try
         {
-            $unknown_devivce_instance = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-            $where                    = $unknown_devivce_instance->getAdapter()->quoteInto("user_id = ?", $selUserID, 'INTEGER');
-            $unknown_devivce_instance->delete($where);
-
             $report  = new Proposalgen_Model_DbTable_Reports();
             $where   = $report->getAdapter()->quoteInto("user_id = ?", $selUserID, 'INTEGER');
             $reports = $report->fetchAll($where);
@@ -6502,14 +6498,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $report->id     = $report_id;
                     $report->userId = $new_user_id;
                     $reportMapper->save($report);
-
-//                    // update unknown_device_instance records
-//                    $udiTable         = new Proposalgen_Model_DbTable_UnknownDeviceInstance();
-//                    $data ['user_id'] = $new_user_id;
-//                    $where            = $udiTable->getAdapter()->quoteInto('report_id = ?', $report_id, 'INTEGER');
-
-                    // Perform the update.
-                    //$udiTable->update($data, $where);
 
                     $this->_helper->flashMessenger(array(
                                                         "success" => "Report Transfer Complete."
