@@ -1,181 +1,140 @@
 <?php
 class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
 {
-    protected $_showSystemDefaults;
-
     /**
-     * Constructor for QuoteSetting form
+     * Bool used to determine if the form requires values or not.
      *
-     * @param boolean      $showDefaults When set to true, defaults will be appended to each of the form elements so that users know what the default is.
-     * @param array|null   $options
+     * @var bool
      */
-    public function __construct ($showDefaults = false, $options = null)
-    {
-        $this->_showSystemDefaults = $showDefaults;
-        parent::__construct($options);
-        Quotegen_Form_Quote_Navigation::addFormActionsToForm(Quotegen_Form_Quote_Navigation::BUTTONS_SAVE, $this);
-    }
+    public $allowsNull = false;
 
     public function init ()
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
-        $this->setAttrib('class', 'form-horizontal form-center-actions');
+        $this->_addClassNames('reportSettingsForm');
+        $this->setMethod('post');
+        $this->addPrefixPath('My_Form_Decorator', 'My/Form/Decorator/', 'decorator');
 
-        $pageCoverageMonochrome = $this->createElement('text', 'pageCoverageMonochrome', array(
-                                                                                              'label'      => 'Page Coverage Mono:',
-                                                                                              'required'   => true,
-                                                                                              'class'      => 'input-mini',
-                                                                                              'filters'    => array(
-                                                                                                  'StringTrim',
-                                                                                                  'StripTags'
-                                                                                              ),
-                                                                                              'validators' => array(
-                                                                                                  array(
-                                                                                                      'validator' => 'Between',
-                                                                                                      'options'   => array(
-                                                                                                          'min'       => 0,
-                                                                                                          'max'       => 100,
-                                                                                                          'inclusive' => false
-                                                                                                      )
-                                                                                                  ),
-                                                                                                  'Float'
-                                                                                              )
-                                                                                         ));
-        $this->addElement($pageCoverageMonochrome);
+        $coverageValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min'       => 0,
+                    'max'       => 100,
+                    'inclusive' => false
+                )
+            ),
+            'Float'
+        );
 
-        $pageCoverageColor = $this->createElement('text', 'pageCoverageColor', array(
-                                                                                    'label'      => 'Page Coverage Color:',
-                                                                                    'required'   => true,
+        $marginValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min' => -100,
+                    'max' => 100
+                )
+            ),
+            'Float'
+        );
 
-                                                                                    'class'      => 'input-mini',
-                                                                                    'filters'    => array(
-                                                                                        'StringTrim',
-                                                                                        'StripTags'
-                                                                                    ),
-                                                                                    'validators' => array(
-                                                                                        array(
-                                                                                            'validator' => 'Between',
-                                                                                            'options'   => array(
-                                                                                                'min'       => 0,
-                                                                                                'max'       => 100,
-                                                                                                'inclusive' => false
-                                                                                            )
-                                                                                        ),
-                                                                                        'Float'
-                                                                                    )
-                                                                               ));
-        $this->addElement($pageCoverageColor);
+        $cppValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min'       => 0,
+                    'max'       => 5,
+                    'inclusive' => true
+                )
+            ),
+            'Float'
+        );
 
-        $deviceMargin = $this->createElement('text', 'deviceMargin', array(
-                                                                          'label'      => 'Device Margin:',
-                                                                          'required'   => true,
-                                                                          'class'      => 'input-mini',
-                                                                          'filters'    => array(
-                                                                              'StringTrim',
-                                                                              'StripTags'
-                                                                          ),
-                                                                          'validators' => array(
-                                                                              array(
-                                                                                  'validator' => 'Between',
-                                                                                  'options'   => array(
-                                                                                      'min' => -100,
-                                                                                      'max' => 100
-                                                                                  )
-                                                                              ),
-                                                                              'Float'
-                                                                          )
-                                                                     ));
-        $this->addElement($deviceMargin);
+        $this->addElement('text', 'pageCoverageMonochrome', array(
+                                                                 'label'      => 'Page Coverage Mono:',
+                                                                 'required'   => true,
+                                                                 'append'     => '$',
+                                                                 'filters'    => array(
+                                                                     'StringTrim',
+                                                                     'StripTags'
+                                                                 ),
+                                                                 'validators' => $coverageValidator,
+                                                            ));
 
-        $pageMargin = $this->createElement('text', 'pageMargin', array(
-                                                                      'label'      => 'Page Margin:',
-                                                                      'required'   => true,
-                                                                      'class'      => 'input-mini',
-                                                                      'filters'    => array(
-                                                                          'StringTrim',
-                                                                          'StripTags'
-                                                                      ),
-                                                                      'validators' => array(
-                                                                          array(
-                                                                              'validator' => 'Between',
-                                                                              'options'   => array(
-                                                                                  'min' => -100,
-                                                                                  'max' => 100
-                                                                              )
-                                                                          ),
-                                                                          'Float'
-                                                                      )
-                                                                 ));
-        $this->addElement($pageMargin);
+        $this->addElement('text', 'pageCoverageColor', array(
+                                                            'label'      => 'Page Coverage Color:',
+                                                            'required'   => true,
+                                                            'append'     => '$',
+                                                            'filters'    => array(
+                                                                'StringTrim',
+                                                                'StripTags'
+                                                            ),
+                                                            'validators' => $coverageValidator
+                                                       ));
 
-        $adminCostPerPage = $this->createElement('text', 'adminCostPerPage', array(
-                                                                                  'label'      => 'Admin Cost Per Page:',
+        $this->addElement('text', 'deviceMargin', array(
+                                                       'label'      => 'Device Margin:',
+                                                       'required'   => true,
+                                                       'append'     => '$',
+                                                       'filters'    => array(
+                                                           'StringTrim',
+                                                           'StripTags'
+                                                       ),
+                                                       'validators' => $marginValidator
+                                                  ));
 
-                                                                                  'required'   => true,
-                                                                                  'class'      => 'input-mini',
-                                                                                  'filters'    => array(
-                                                                                      'StringTrim',
-                                                                                      'StripTags'
-                                                                                  ),
-                                                                                  'validators' => array(
-                                                                                      array(
-                                                                                          'validator' => 'Between',
-                                                                                          'options'   => array(
-                                                                                              'min'       => 0,
-                                                                                              'max'       => 5,
-                                                                                              'inclusive' => true
-                                                                                          )
-                                                                                      ),
-                                                                                      'Float'
-                                                                                  )
-                                                                             ));
-        $this->addElement($adminCostPerPage);
+        $this->addElement('text', 'pageMargin', array(
+                                                     'label'      => 'Page Margin:',
+                                                     'required'   => true,
+                                                     'append'     => '$',
+                                                     'filters'    => array(
+                                                         'StringTrim',
+                                                         'StripTags'
+                                                     ),
+                                                     'validators' => $marginValidator
+                                                ));
 
-        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array(
-                                                                                      'label'      => 'Service Cost Per Page:',
+        $this->addElement('text', 'adminCostPerPage', array(
+                                                           'label'      => 'Admin Cost:',
+                                                           'required'   => true,
+                                                           'append'     => '$ / per page',
+                                                           'filters'    => array(
+                                                               'StringTrim',
+                                                               'StripTags'
+                                                           ),
+                                                           'validators' => $cppValidator
+                                                      ));
 
-                                                                                      'required'   => true,
-                                                                                      'class'      => 'input-mini',
-                                                                                      'filters'    => array(
-                                                                                          'StringTrim',
-                                                                                          'StripTags'
-                                                                                      ),
-                                                                                      'validators' => array(
-                                                                                          array(
-                                                                                              'validator' => 'Between',
-                                                                                              'options'   => array(
-                                                                                                  'min'       => 0,
-                                                                                                  'max'       => 5,
-                                                                                                  'inclusive' => true
-                                                                                              )
-                                                                                          ),
-                                                                                          'Float'
-                                                                                      )
-                                                                                 ));
-        $this->addElement($serviceCostPerPage);
+        $this->addElement('text', 'laborCostPerPage', array(
+                                                             'label'      => 'Labor Cost:',
+                                                             'required'   => true,
+                                                             'append'     => '$ / per page',
+                                                             'filters'    => array(
+                                                                 'StringTrim',
+                                                                 'StripTags'
+                                                             ),
+                                                             'validators' => $cppValidator
+                                                        ));
 
-        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array(
-                                                                                        'label' => 'Toner Preference:'
-                                                                                   ));
+        $this->addElement('text', 'partsCostPerPage', array(
+                                                             'label'      => 'Parts Cost Per Page:',
+                                                             'required'   => true,
+                                                             'append'     => '$ / per page',
+                                                             'filters'    => array(
+                                                                 'StringTrim',
+                                                                 'StripTags'
+                                                             ),
+                                                             'validators' => $cppValidator
+                                                        ));
 
+
+
+        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array('label' => 'Toner Preference:', 'class' => 'span3'));
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
         {
-            if ($pricingConfig->pricingConfigId === Proposalgen_Model_PricingConfig::NONE && !$this->_showSystemDefaults)
+            if ($pricingConfig->pricingConfigId === Proposalgen_Model_PricingConfig::NONE)
             {
                 continue;
             }
@@ -183,30 +142,75 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         }
         $this->addElement($pricingConfigDropdown);
 
-        /*
-         * Set the defaults if the flag is enabled
-         */
-        if ($this->_showSystemDefaults)
-        {
-            /* @var $systemDefaultQuoteSetting Quotegen_Model_QuoteSetting */
-            $systemDefaultQuoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find(Quotegen_Model_QuoteSetting::SYSTEM_ROW_ID);
-            $pageCoverageMonochrome->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageCoverageMonochrome, 2)));
-            $pageCoverageMonochrome->setRequired(false);
-            $pageCoverageColor->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageCoverageColor, 2)));
-            $pageCoverageColor->setRequired(false);
-            $adminCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
-                ->currency((float)$systemDefaultQuoteSetting->adminCostPerPage)));
-            $adminCostPerPage->setRequired(false);
-            $serviceCostPerPage->setAttrib('append', sprintf("System Default: %s", $this->getView()
-                ->currency((float)$systemDefaultQuoteSetting->serviceCostPerPage)));
-            $serviceCostPerPage->setRequired(false);
+        // Display groups and decoratos
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'deviceMargin', 'pageMargin', 'adminCostPerPage', 'laborCostPerPage' , 'partsCostPerPage', $pricingConfigDropdown), 'quoteSetting', array('legend' => 'Quote Settings'));
+        $this->setElementDecorators(array(
+                                         'FieldSize',
+                                         'ViewHelper',
+                                         'Addon',
+                                         'ElementErrors',
+                                         array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                         'Wrapper',
+                                         array(array('data' => 'HtmlTag'), array('tag' => 'td')),
+                                         array('Description', array('tag' => 'td', 'placement' => 'prepend', 'class' => 'description')),
+                                         array('Label', array('tag' => 'td')),
+                                         array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
+                                    ));
+        $this->setDisplayGroupDecorators(array(
+                                              'FormElements',
+                                              array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
+                                              array(array('table' => 'HtmlTag'), array('tag' => 'table')),
+                                              array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
+                                              'FieldSet'
+                                         ));
 
-            $deviceMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->deviceMargin, 2)));
-            $deviceMargin->setRequired(false);
-            $pageMargin->setAttrib('append', sprintf("System Default: %s%%", number_format($systemDefaultQuoteSetting->pageMargin, 2)));
-            $pageMargin->setRequired(false);
-            $pricingConfigDropdown->setAttrib('append', sprintf("System Default: %s", $systemDefaultQuoteSetting->getPricingConfig()
-                ->configName));
+        // Set a span 2 to all elements that do not have a class
+        /* @var $element Zend_Form_Element_Text */
+        foreach ($this->getElements() as $element)
+        {
+            $class = $element->getAttrib('class');
+            if (!$class)
+            {
+                $element->setAttrib('class', 'span2 ');
+            }
+            $element->setRequired(true);
         }
+
+        // Form Buttons
+        $submitButton = $this->createElement('submit', 'submit', array('label' => 'Submit',));
+        $submitButton->setDecorators(array(
+                                          'FieldSize',
+                                          'ViewHelper',
+                                          'Addon',
+                                          'ElementErrors',
+                                     ));
+        $this->addElement($submitButton);
+    }
+
+    /**
+     *  This is used to set up the form with a three column header.
+     */
+    public function setUpFormWithDefaultDecorators ()
+    {
+        $this->setDisplayGroupDecorators(array(
+                                              'FormElements',
+                                              array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
+                                              array(array('table' => 'HtmlTag'), array('tag' => 'table')),
+                                              array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
+                                              'FieldSet'
+                                         ));
+    }
+
+    /**
+     * Allows the form to allow null vlaues
+     */
+    public function allowNullValues ()
+    {
+        /* @var Zend_Form_Element_Text $element */
+        foreach ($this->getElements() as $element)
+        {
+            $element->setRequired(false);
+        }
+        $this->allowsNull = true;
     }
 }
