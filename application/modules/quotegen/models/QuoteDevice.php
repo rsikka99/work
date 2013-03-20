@@ -582,7 +582,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($costPerPageColor > 0)
         {
-            $costPerPageColor += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
+            $costPerPageColor += $this->getQuote()->adminCostPerPage + $this->getQuote()->laborCostPerPage + $this->getQuote()->partsCostPerPage;
         }
 
         return (float)$costPerPageColor;
@@ -631,7 +631,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($costPerPageMonochrome > 0)
         {
-            $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
+            $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $this->getQuote()->partsCostPerPage + $this->getQuote()->laborCostPerPage;
         }
 
         return $costPerPageMonochrome;

@@ -35,13 +35,6 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $actualPageCoverageColor;
 
     /**
-     * The service cost per page
-     *
-     * @var int
-     */
-    public $serviceCostPerPage;
-
-    /**
      * The labor cost per page
      *
      * @var int
@@ -314,8 +307,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public
-    function getAssessmentPricingConfig ()
+    public function getAssessmentPricingConfig ()
     {
         if (!isset($this->_assessmentPricingConfig))
         {
@@ -333,8 +325,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public
-    function setAssessmentPricingConfig ($AssessmentPricingConfig)
+    public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
         $this->_assessmentPricingConfig = $AssessmentPricingConfig;
 
@@ -346,8 +337,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public
-    function getGrossMarginPricingConfig ()
+    public function getGrossMarginPricingConfig ()
     {
         if (!isset($this->_grossMarginPricingConfig))
         {
@@ -365,8 +355,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public
-    function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
+    public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
         $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
 

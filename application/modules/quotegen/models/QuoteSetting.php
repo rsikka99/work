@@ -36,7 +36,12 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     /**
      * @var float
      */
-    public $serviceCostPerPage;
+    public $laborCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $partsCostPerPage;
 
     /**
      * @var float
@@ -90,9 +95,14 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->pricingConfigId = $params->pricingConfigId;
         }
 
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
         {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
+            $this->partsCostPerPage = $params->partsCostPerPage;
+        }
+
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
+        {
+            $this->laborCostPerPage = $params->laborCostPerPage;
         }
 
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
@@ -139,9 +149,13 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $this->pageMargin = $settings->pageMargin;
         }
-        if (isset($settings->serviceCostPerPage) && !is_null($settings->serviceCostPerPage))
+        if (isset($settings->laborCostPerPage) && !is_null($settings->laborCostPerPage))
         {
-            $this->serviceCostPerPage = $settings->serviceCostPerPage;
+            $this->laborCostPerPage = $settings->laborCostPerPage;
+        }
+        if (isset($settings->partsCostPerPage) && !is_null($settings->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $settings->partsCostPerPage;
         }
         if (isset($settings->adminCostPerPage) && !is_null($settings->adminCostPerPage))
         {
@@ -169,7 +183,8 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             "deviceMargin"           => $this->deviceMargin,
             "pageMargin"             => $this->pageMargin,
             "pricingConfigId"        => $this->pricingConfigId,
-            "serviceCostPerPage"     => $this->serviceCostPerPage,
+            "laborCostPerPage"     => $this->laborCostPerPage,
+            "PartsCostPerPage"     => $this->partsCostPerPage,
             "adminCostPerPage"       => $this->adminCostPerPage,
         );
     }
