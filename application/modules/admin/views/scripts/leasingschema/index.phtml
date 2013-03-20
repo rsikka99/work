@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h1>Leasing Rates - <small>Leasing Rates</small></h1>
+    <h1>Leasing Rates - <small>Lease Management</small></h1>
 </div>
 <div class="clearfix">
     <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
@@ -9,8 +9,9 @@
     <table class="table table-striped table-condensed table-bordered">
         <thead>
         <tr>
-            <th style="width:100px;">Id</th>
-            <th style="width:700px;">Name</th>
+            <th style="width:200px;">Id</th>
+            <th style="width:200px;">Name</th>
+            <th style="width:405px;">Dealer Name</th>
             <th >Action</th>
         </tr>
         </thead>
@@ -19,6 +20,7 @@
             <tr>
                 <td><?php echo $leasingSchema->id; ?></td>
                 <td><?php echo $leasingSchema->name; ?></td>
+                <td><?php echo Admin_Model_Mapper_Dealer::getInstance()->find($leasingSchema->dealerId)->dealerName; ?></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-warning btn-mini" title="Edit Leasing Rate" href="<?php echo $this->url( array ( 'action' => 'view', 'leasingSchemaId' => $leasingSchema->id))?>" ?><i class="icon-pencil"></i></a>

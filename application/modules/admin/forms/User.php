@@ -14,18 +14,19 @@ class Admin_Form_User extends EasyBib_Form
      */
     protected $formMode = self::MODE_CREATE;
     protected $roles;
+    protected $dealerManagement;
 
     /*
      * (non-PHPdoc) @see Zend_Form::__construct()
      */
-    public function __construct ($formMode = null, $roles = null, $options = null)
+    public function __construct ($formMode = null, $roles = null, $options = null, $dealerManagement = true)
     {
         if (null !== $formMode)
         {
             $this->formMode = $formMode;
         }
-
-        $this->roles = $roles;
+        $this->dealerManagement = $dealerManagement;
+        $this->roles            = $roles;
 
         parent::__construct($options);
     }
@@ -149,11 +150,37 @@ class Admin_Form_User extends EasyBib_Form
             /* @var $role Admin_Model_Role */
             foreach ($this->roles as $role)
             {
-                $userRoles->addMultiOption($role->getId(), $role->getName());
+                if ($role->getId() != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->getId() == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
+                {
+                    $userRoles->addMultiOption($role->getId(), $role->getName());
+                }
             }
             $this->addElement($userRoles);
         }
-
+        $isSystemAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if ($isSystemAdmin && $this->dealerManagement == false)
+        {
+            $firstDealerId = null;
+            $dealers       = array();
+            foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+            {
+                // Use this to grab the first id in the leasing schema dropdown
+                if (!$firstDealerId)
+                {
+                    $firstDealerId = $dealer->id;
+                }
+                $dealers [$dealer->id] = $dealer->dealerName;
+            }
+            if ($dealers)
+            {
+                $this->addElement('select', 'dealerId', array(
+                                                             'label'        => 'Dealer:',
+                                                             'class'        => 'input-medium',
+                                                             'multiOptions' => $dealers,
+                                                             'required'     => true,
+                                                             'value'        => $firstDealerId));
+            }
+        }
         // No need to edit this when creating a user
         if ($this->getFormMode() === self::MODE_EDIT)
         {

@@ -2,6 +2,17 @@
 
 class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
 {
+    protected $_dealerManagement;
+
+    /*
+ * (non-PHPdoc) @see Zend_Form::__construct()
+ */
+    public function __construct ($dealerManagement = false, $options = null)
+    {
+        $this->_dealerManagement = $dealerManagement;
+
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -47,10 +58,35 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setAllowEmpty(true);
 
         //setup contact last name
-        $lastName = $this->createElement('text', 'lastName')
+        $lastName      = $this->createElement('text', 'lastName')
             ->addErrorMessage("Please enter a last name")
             ->setLabel("Last Name:")
             ->setAllowEmpty(true);
+        $dealerSelect  = null;
+        $isSystemAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if ($isSystemAdmin && $this->_dealerManagement == false)
+        {
+            $firstDealerId = null;
+            $dealers       = array();
+            foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+            {
+                // Use this to grab the first id in the leasing schema dropdown
+                if (!$firstDealerId)
+                {
+                    $firstDealerId = $dealer->id;
+                }
+                $dealers [$dealer->id] = $dealer->dealerName;
+            }
+            if ($dealers)
+            {
+                $dealerSelect = $this->createElement('select', 'dealerId', array(
+                                                                                'label'        => 'Dealer:',
+                                                                                'class'        => 'input-medium',
+                                                                                'multiOptions' => $dealers,
+                                                                                'required'     => true,
+                                                                                'value'        => $firstDealerId));
+            }
+        }
 
         ///////////////////////PHONE NUMBERS/////////////////////////////////////
         //Country Code
@@ -184,20 +220,41 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                                                               'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
                                                          ));
         //Groups the Company Information onto the left side of the screen
-        $this->addDisplayGroup(array(
-                                    $accountNumber,
-                                    $companyName,
-                                    $legalName,
-                                    $employeeCount,
-                                    $countryId,
-                                    $region,
-                                    $city,
-                                    $addressLine1,
-                                    $addressLine2,
-                                    $postCode
-                               ), 'company', array(
-                                                  'legend' => 'Company Information'
-                                             ));
+        if ($dealerSelect && $this->_dealerManagement == false)
+        {
+            $this->addDisplayGroup(array(
+                                        $accountNumber,
+                                        $companyName,
+                                        $legalName,
+                                        $employeeCount,
+                                        $countryId,
+                                        $region,
+                                        $city,
+                                        $addressLine1,
+                                        $addressLine2,
+                                        $postCode,
+                                        $dealerSelect
+                                   ), 'company', array(
+                                                      'legend' => 'Company Information'
+                                                 ));
+        }
+        else
+        {
+            $this->addDisplayGroup(array(
+                                        $accountNumber,
+                                        $companyName,
+                                        $legalName,
+                                        $employeeCount,
+                                        $countryId,
+                                        $region,
+                                        $city,
+                                        $addressLine1,
+                                        $addressLine2,
+                                        $postCode
+                                   ), 'company', array(
+                                                      'legend' => 'Company Information'
+                                                 ));
+        }
         $company = $this->getDisplayGroup('company');
         $company->setDecorators(array(
 

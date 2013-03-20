@@ -51,7 +51,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             /**
              * If the quote has a leasing schema term already selected we should grab the values from the schema it's from
              */
-            if ($this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id)
+            if ($this->getQuote()->getLeasingSchemaTerm() && $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id)
             {
                 $leasingSchemaId = $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id;
             }
@@ -69,26 +69,32 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                                                                 'class'        => 'input-medium',
                                                                 'multiOptions' => $leasingSchemas,
                                                                 'required'     => true,
-                                                                'value'        => $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id));
+                                                                'value'        => $leasingSchemaId));
 
             $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
             $leasingSchemaTerms = array();
-            if ($leasingSchema)
+            $firstId = null;
+            if ($leasingSchema && $leasingSchemas)
             {
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
                 {
                     $leasingSchemaTerms [$leasingSchemaTerm->id] = number_format($leasingSchemaTerm->months) . " months";
+                    if($firstId == null)
+                        $firstId = $leasingSchemaTerm->id;
                 }
             }
 
-
+            if(!$this->getQuote()->getLeasingSchemaTerm() && $firstId != null)
+                $termId = $firstId;
+            else
+                $termId = $this->getQuote()->getLeasingSchemaTerm()->id;
             $this->addElement('select', 'leasingSchemaTermId', array(
                                                                     'label'        => 'Lease Term:',
                                                                     'class'        => 'input-medium',
                                                                     'multiOptions' => $leasingSchemaTerms,
                                                                     'required'     => true,
-                                                                    'value'        => $this->getQuote()->getLeasingSchemaTerm()->id
+                                                                    'value'        => $termId
                                                                ));
         }
 
