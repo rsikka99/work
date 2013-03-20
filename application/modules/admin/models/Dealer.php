@@ -40,6 +40,13 @@ class Admin_Model_Dealer extends My_Model_Abstract
     public $quoteSettingId;
 
     /**
+     * DONT WORRY, SAID SHAWN!
+     *
+     * @var int
+     */
+    public $surveySettingId;
+
+    /**
      * Gets a report setting object for the dealer.
      *
      * @var Proposalgen_Model_Report_Setting
@@ -87,6 +94,10 @@ class Admin_Model_Dealer extends My_Model_Abstract
         {
             $this->quoteSettingId = $params->quoteSettingId;
         }
+        if (isset($params->surveySettingId) && !is_null($params->surveySettingId))
+        {
+            $this->surveySettingId = $params->surveySettingId;
+        }
     }
 
     /**
@@ -101,6 +112,7 @@ class Admin_Model_Dealer extends My_Model_Abstract
             "dealerName"      => $this->dealerName,
             "dateCreated"     => $this->dateCreated,
             "quoteSettingId"  => $this->quoteSettingId,
+            "surveySettingId"  => $this->surveySettingId,
         );
     }
 
