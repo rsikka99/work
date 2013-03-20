@@ -131,9 +131,6 @@ label.label-phone-number-country {
 .reportSettingsForm table {
   width: 100%;
 }
-.reportSettingsForm td:first-child {
-  width: 250px;
-}
 .reportSettingsForm input {
   text-align: right;
 }
@@ -155,6 +152,10 @@ label.label-phone-number-country {
   text-align: center;
   width: 100px;
   margin-right: 50px;
+}
+.reportSettingsForm td:nth-child(1) {
+  width: 250px;
+  padding-left: 30px;
 }
 .reportSettingsForm .add-on {
   width: 75px;
