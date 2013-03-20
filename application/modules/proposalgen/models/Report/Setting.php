@@ -42,6 +42,20 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $serviceCostPerPage;
 
     /**
+     * The labor cost per page
+     *
+     * @var int
+     */
+    public $laborCostPerPage;
+
+    /**
+     * The parts cost per page
+     *
+     * @var int
+     */
+    public $partsCostPerPage;
+
+    /**
      * The admin cost per page
      *
      * @var int
@@ -196,9 +210,13 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         {
             $this->actualPageCoverageColor = $params->actualPageCoverageColor;
         }
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
         {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
+            $this->laborCostPerPage = $params->laborCostPerPage;
+        }
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $params->partsCostPerPage;
         }
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
@@ -271,7 +289,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "id"                          => $this->id,
             "actualPageCoverageMono"      => $this->actualPageCoverageMono,
             "actualPageCoverageColor"     => $this->actualPageCoverageColor,
-            "serviceCostPerPage"          => $this->serviceCostPerPage,
+            "laborCostPerPage"            => $this->laborCostPerPage,
+            "partsCostPerPage"            => $this->partsCostPerPage,
             "adminCostPerPage"            => $this->adminCostPerPage,
             "assessmentReportMargin"      => $this->assessmentReportMargin,
             "grossMarginReportMargin"     => $this->grossMarginReportMargin,

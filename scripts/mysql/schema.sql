@@ -568,7 +568,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `actualPageCoverageMono` DOUBLE NULL DEFAULT NULL ,
     `actualPageCoverageColor` DOUBLE NULL DEFAULT NULL ,
-    `serviceCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `laborCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `partsCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `adminCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `assessmentReportMargin` DOUBLE NULL DEFAULT NULL ,
     `grossMarginReportMargin` DOUBLE NULL DEFAULT NULL ,
@@ -1044,7 +1045,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     `monochromePageMargin` DOUBLE NOT NULL ,
     `colorPageMargin` DOUBLE NOT NULL ,
     `adminCostPerPage` DOUBLE NOT NULL ,
-    `serviceCostPerPage` DOUBLE NOT NULL ,
+    `partsCostPerPage` DOUBLE NOT NULL ,
+    `laborCostPerPage` DOUBLE NOT NULL ,
     `monochromeOverageMargin` DOUBLE NOT NULL ,
     `colorOverageMargin` DOUBLE NOT NULL ,
     PRIMARY KEY (`id`) ,
@@ -1180,7 +1182,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
     `deviceMargin` DOUBLE NULL DEFAULT NULL ,
     `pageMargin` DOUBLE NULL DEFAULT NULL ,
     `pricingConfigId` INT(11) NULL DEFAULT NULL ,
-    `serviceCostPerPage` DOUBLE NULL ,
+    `partsCostPerPage` DOUBLE NULL ,
+    `laborCostPerPage` DOUBLE NULL ,
     `adminCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `quotegen_quote_settings_ibfk1_idx` (`pricingConfigId` ASC) ,
@@ -1653,6 +1656,27 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_settings` (
     CONSTRAINT `proposalgenerator_dealer_survey_settings_ibfk2`
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `qgen_dealer_quote_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
+    `dealerId` INT(11) NOT NULL ,
+    `quoteSettingId` INT(11) NOT NULL ,
+    PRIMARY KEY (`dealerId`) ,
+    INDEX `qgen_dealer_quote_settings_ibkf2_idx` (`quoteSettingId` ASC) ,
+    CONSTRAINT `qgen_dealer_quote_settings_ibkf1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `qgen_dealer_quote_settings_ibkf2`
+    FOREIGN KEY (`quoteSettingId` )
+    REFERENCES `qgen_quote_settings` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;

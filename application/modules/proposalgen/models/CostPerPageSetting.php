@@ -13,7 +13,14 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      *
      * @var float
      */
-    public $serviceCostPerPage = 0;
+    public $laborCostPerPage = 0;
+
+    /**
+     * The default service cost per page
+     *
+     * @var float
+     */
+    public $partsCostPerPage = 0;
     /**
      * The monochrome page coverage
      *
@@ -89,7 +96,8 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     {
         return array(
             "adminCostPerPage"       => $this->adminCostPerPage,
-            "serviceCostPerPage"     => $this->serviceCostPerPage,
+            "partsCostPerPage"     => $this->partsCostPerPage,
+            "laborCostPerPage"     => $this->laborCostPerPage,
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
             "pageCoverageColor"      => $this->pageCoverageColor,
             "pricingConfiguration"   => $this->pricingConfiguration,
@@ -103,6 +111,6 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      */
     public function createCacheKey ()
     {
-        return "{$this->adminCostPerPage}_{$this->serviceCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->pricingConfiguration->pricingConfigId}";
+        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->pricingConfiguration->pricingConfigId}";
     }
 }
