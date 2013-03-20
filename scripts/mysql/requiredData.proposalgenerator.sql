@@ -35,3 +35,9 @@ INSERT INTO `pgen_report_settings` (`id`,`actualPageCoverageMono`,`actualPageCov
 /* Default System Survey Settings */
 INSERT INTO `pgen_survey_settings` (`id`, `pageCoverageMono`, `pageCoverageColor`) VALUES
 (1,6,24);
+
+INSERT INTO `pgen_dealer_survey_settings` (`dealerId`, `surveySettingId`) VALUES
+(1,1);
+
+INSERT INTO `pgen_dealer_report_settings` (`dealerId`, `reportSettingId`) VALUES
+(1,1);

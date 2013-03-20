@@ -12,6 +12,7 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     `userLicenses` INT NOT NULL ,
     `reportSettingId` INT NOT NULL ,
     `quoteSettingId` INT NOT NULL ,
+    `surveySettingId` INT NOT NULL ,
     `dateCreated` DATE NOT NULL ,
     PRIMARY KEY (`id`) )
     ENGINE = InnoDB;
