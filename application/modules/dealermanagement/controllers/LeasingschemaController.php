@@ -121,6 +121,36 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchema           = new Quotegen_Model_LeasingSchema($values);
                         $leasingSchema->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $leasingSchemaMapper->insert($leasingSchema);
+                        // Reset the grid to default values
+                        $months = "12";
+                        $range  = "0";
+                        $rate   = "0.0750";
+
+                        // Prep mappers
+                        $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
+                        $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
+                        $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
+
+                        // Prep models
+                        $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
+                        $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
+                        $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
+                        // Save Term
+                        $leasingSchemaTermModel->leasingSchemaId = $leasingSchema->id;
+                        $leasingSchemaTermModel->months          = $months;
+                        $termId                                  = $leasingSchemaTermMapper->insert($leasingSchemaTermModel);
+
+                        // Save Range
+                        $leasingSchemaRangeModel->leasingSchemaId = $leasingSchema->id;
+                        $leasingSchemaRangeModel->startRange      = $range;
+                        $rangeId                                  = $leasingSchemaRangeMapper->insert($leasingSchemaRangeModel);
+
+                        // Save Rate
+                        $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
+                        $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
+                        $leasingSchemaRateModel->rate                 = $rate;
+                        $leasingSchemaRateId                          = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
+
                         $db->commit();
                         $this->_helper->flashMessenger(array(
                                                             'success' => "{$leasingSchema->name} has been created successfully."

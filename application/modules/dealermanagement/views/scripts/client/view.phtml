@@ -25,17 +25,17 @@ $address = $client->getAddress();
 		<dd><?php echo nl2br($address->addressLine2) . '&nbsp'; ?></dd>
 		<dt>Zip or Postal Code</dt>
 		<dd><?php echo nl2br($address->postCode); ?></dd>
-		<dt>Contact First Name</dt>
-		<dd><?php echo nl2br($contact->firstName) . '&nbsp'; ?></dd>
-		<dt>Contact Last Name</dt>
-		<dd><?php echo nl2br($contact->lastName) . '&nbsp'; ?></dd>
-		<dt>Phone Number</dt>
-		<dd>
-		<?php
-		if($contact->areaCode){
-		 echo nl2br("+" . $contact->countryCode . "(" . $contact->areaCode . ")" . $contact->exchangeCode . "-" . $contact->number . ($contact->extension ? " Ext {$contact->extension}" : ''));
-		}
-		?>
+        <dt>Contact First Name</dt>
+        <dd><?php echo nl2br(isset($contact->firstName) ? $contact->firstName : '') . '&nbsp'; ?></dd>
+        <dt>Contact Last Name</dt>
+        <dd><?php echo nl2br(isset($contact->lastName) ? $contact->lastName : '') . '&nbsp'; ?></dd>
+        <dt>Phone Number</dt>
+        <dd>
+            <?php
+            if(isset($contact->areaCode)){
+                echo nl2br("+" . $contact->countryCode . "(" . $contact->areaCode . ")" . $contact->exchangeCode . "-" . $contact->number . ($contact->extension ? " Ext {$contact->extension}" : ''));
+            }
+            ?>
 		</dd>
 	</dl>
 </div>
