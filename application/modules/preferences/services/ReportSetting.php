@@ -42,14 +42,16 @@ class Preferences_Service_ReportSetting
     /**
      * Gets the report setting form with default values populated
      *
+     * @param $dealerSettings array
+     *
      * @return Preferences_Form_ReportSetting
      */
-    public function getFormWithDefaults ()
+    public function getFormWithDefaults ($dealerSettings)
     {
         if (!isset($this->_form))
         {
             $this->_form      = new Preferences_Form_ReportSetting();
-            $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
+            $populateSettings = $dealerSettings;//array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
@@ -132,7 +134,7 @@ class Preferences_Service_ReportSetting
     protected function validateAndFilterData ($data)
     {
         $validData = false;
-        $form      = $this->getFormWithDefaults();
+        $form      = $this->getForm();
 
         if ($form->isValid($data))
         {
@@ -155,9 +157,9 @@ class Preferences_Service_ReportSetting
         }
         else
         {
-            if ($this->getFormWithDefaults() instanceof EasyBib_Form)
+            if ($this->getForm() instanceof EasyBib_Form)
             {
-                $this->getFormWithDefaults()->buildBootstrapErrorDecorators();
+                $this->getForm()->buildBootstrapErrorDecorators();
             }
         }
 

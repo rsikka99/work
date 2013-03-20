@@ -28,9 +28,10 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function userAction ()
     {
+        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->fetchDealerQuoteSetting(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $userQuoteSettings = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
         $quoteService = new Preferences_Service_QuoteSetting($userQuoteSettings->toArray());
-        $form         = $quoteService->getFormWithDefaults();
+        $form         = $quoteService->getFormWithDefaults($dealerQuoteSetting);
         $request = $this->getRequest();
         if ($request->isPost())
         {

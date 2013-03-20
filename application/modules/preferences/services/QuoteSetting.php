@@ -38,14 +38,16 @@ class Preferences_Service_QuoteSetting
     /**
      * Gets the report setting form with default values populated
      *
+     * @param $dealerQuoteSetting Quotegen_Model_QuoteSetting
+     *
      * @return Preferences_Form_QuoteSetting
      */
-    public function getFormWithDefaults ()
+    public function getFormWithDefaults ($dealerQuoteSetting)
     {
         if (!isset($this->_form))
         {
             $this->_form      = new Preferences_Form_QuoteSetting();
-            $populateSettings = $this->_systemQuoteSetting->toArray();
+            $populateSettings = $dealerQuoteSetting->toArray();
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
@@ -115,7 +117,7 @@ class Preferences_Service_QuoteSetting
     protected function validateAndFilterData ($data)
     {
         $validData = false;
-        $form      = $this->getFormWithDefaults();
+        $form      = $this->getForm();
 
         if ($form->isValid($data))
         {
@@ -138,9 +140,9 @@ class Preferences_Service_QuoteSetting
         }
         else
         {
-            if ($this->getFormWithDefaults() instanceof EasyBib_Form)
+            if ($this->getForm() instanceof EasyBib_Form)
             {
-                $this->getFormWithDefaults()->buildBootstrapErrorDecorators();
+                $this->getForm()->buildBootstrapErrorDecorators();
             }
         }
 
