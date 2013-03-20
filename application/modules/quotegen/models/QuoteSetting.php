@@ -184,7 +184,7 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             "pageMargin"             => $this->pageMargin,
             "pricingConfigId"        => $this->pricingConfigId,
             "laborCostPerPage"     => $this->laborCostPerPage,
-            "PartsCostPerPage"     => $this->partsCostPerPage,
+            "partsCostPerPage"     => $this->partsCostPerPage,
             "adminCostPerPage"       => $this->adminCostPerPage,
         );
     }
