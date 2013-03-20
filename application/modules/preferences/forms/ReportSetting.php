@@ -127,8 +127,13 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
-        $this->addElement('text', 'serviceCostPerPage', array(
-                                                             'label'      => 'Service Cost',
+        $this->addElement('text', 'laborCostPerPage', array(
+                                                             'label'      => 'Labor Cost',
+                                                             'append'     => '$ / page',
+                                                             'validators' => $cppValidator
+                                                        ));
+        $this->addElement('text', 'partsCostPerPage', array(
+                                                             'label'      => 'Parts Cost',
                                                              'append'     => '$ / page',
                                                              'validators' => $cppValidator
                                                         ));
@@ -178,7 +183,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'kilowattsPerHour',
                                      $assessmentPricingConfig,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
-        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'serviceCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
+        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage','partsCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
         $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage'), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(

@@ -1,6 +1,6 @@
 <?php
 
-class Preferences_Service_ReportSettings
+class Preferences_Service_ReportSetting
 {
     /**
      * Default report settings and survey settings combined into an array
@@ -54,13 +54,27 @@ class Preferences_Service_ReportSettings
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
             {
-                foreach ($this->_form->getElements() as $element)
-                {
-                    if (array_key_exists("Zend_Form_Decorator_Description", $element->getDecorators()))
-                    {
-                        $element->setDescription($populateSettings[$element->getName()]);
-                    }
-                }
+
+                $this->_form->getElement("pageCoverageMono")->setDescription($populateSettings["pageCoverageMono"]);
+                $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
+                $this->_form->getElement("assessmentReportMargin")->setDescription($populateSettings["assessmentReportMargin"]);
+                $this->_form->getElement("monthlyLeasePayment")->setDescription($populateSettings["monthlyLeasePayment"]);
+                $this->_form->getElement("defaultPrinterCost")->setDescription($populateSettings["defaultPrinterCost"]);
+                $this->_form->getElement("leasedBwCostPerPage")->setDescription($populateSettings["leasedBwCostPerPage"]);
+                $this->_form->getElement("leasedColorCostPerPage")->setDescription($populateSettings["leasedColorCostPerPage"]);
+                $this->_form->getElement("mpsBwCostPerPage")->setDescription($populateSettings["mpsBwCostPerPage"]);
+                $this->_form->getElement("mpsColorCostPerPage")->setDescription($populateSettings["mpsColorCostPerPage"]);
+                $this->_form->getElement("kilowattsPerHour")->setDescription($populateSettings["kilowattsPerHour"]);
+                $this->_form->getElement("actualPageCoverageMono")->setDescription($populateSettings["actualPageCoverageMono"]);
+                $this->_form->getElement("actualPageCoverageColor")->setDescription($populateSettings["actualPageCoverageColor"]);
+                $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
+                $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
+                $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
+                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
+                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
+                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
+                $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
+                $this->_form->getElement("grossMarginPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['grossMarginPricingConfigId']]);
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;
             }

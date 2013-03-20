@@ -1,25 +1,27 @@
 <?php
 
-class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
+class Quotegen_Model_Mapper_DealerQuoteSetting extends My_Model_Mapper_Abstract
 {
+    /*
+     * Column name definitions. Define all columns up here and use them down below. 
+     */
+    public $col_dealerId = 'dealerId';
+
+    /*
+     * Mapper Definitions
+     */
     /**
      * The default db table class to use
      *
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Quotegen_Model_DbTable_UserQuoteSetting';
-
-    /*
-     * Define the primary key of the model association
-     */
-    public $col_userId = 'userId';
-    public $col_userQuoteSettingId = 'userQuoteSettingId';
+    protected $_defaultDbTable = 'Quotegen_Model_DbTable_DealerQuoteSetting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Quotegen_Model_Mapper_UserQuoteSetting
+     * @return Quotegen_Model_Mapper_DealerQuoteSetting
      */
     public static function getInstance ()
     {
@@ -27,10 +29,10 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Quotegen_Model_UserQuoteSetting to the database.
+     * Saves an instance of Quotegen_Model_DealerQuoteSetting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_UserQuoteSetting
+     * @param $object Quotegen_Model_DealerQuoteSetting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -43,6 +45,8 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         // Insert the data
         $id = $this->getDbTable()->insert($data);
 
+        $object->id = $id;
+
         // Save the object into the cache
         $this->saveItemToCache($object);
 
@@ -50,10 +54,10 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Quotegen_Model_UserQuoteSetting to the database.
+     * Saves (updates) an instance of Quotegen_Model_DealerQuoteSetting to the database.
      *
-     * @param $object     Quotegen_Model_UserQuoteSetting
-     *                    The userQuoteSetting model to save to the database
+     * @param $object     Quotegen_Model_DealerQuoteSetting
+     *                    The DealerQuoteSetting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -65,14 +69,12 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data [$this->col_userId];
-            $primaryKey [] = $data [$this->col_userQuoteSettingId];
+            $primaryKey = $data [$this->col_dealerId];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_userId} = ?"             => $primaryKey [0],
-                                                                "{$this->col_userQuoteSettingId} = ?" => $primaryKey [1]
+                                                                "{$this->col_dealerId} = ?" => $primaryKey
                                                            ));
 
         // Save the object into the cache
@@ -85,25 +87,23 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Quotegen_Model_UserQuoteSetting or the
+     *                This can either be an instance of Quotegen_Model_DealerQuoteSetting or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Quotegen_Model_UserQuoteSetting)
+        if ($object instanceof Quotegen_Model_DealerQuoteSetting)
         {
             $whereClause = array(
-                "{$this->col_userId} = ?"             => $object->userId,
-                "{$this->col_userQuoteSettingId} = ?" => $object->getUserQuoteSettingId()
+                "{$this->col_dealerId} = ?" => $object->dealerId
             );
         }
         else
         {
             $whereClause = array(
-                "{$this->col_userId} = ?"             => $object [0],
-                "{$this->col_userQuoteSettingId} = ?" => $object [1]
+                "{$this->col_dealerId} = ?" => $object
             );
         }
 
@@ -113,18 +113,18 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a userQuoteSetting based on it's primaryKey
+     * Finds a DealerQuoteSetting based on it's primaryKey
      *
      * @param $id int
-     *            The id of the userQuoteSetting to find
+     *            The id of the DealerQuoteSetting to find
      *
-     * @return Quotegen_Model_UserQuoteSetting
+     * @return Quotegen_Model_DealerQuoteSetting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Quotegen_Model_UserQuoteSetting)
+        if ($result instanceof Quotegen_Model_DealerQuoteSetting)
         {
             return $result;
         }
@@ -136,7 +136,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
+        $object = new Quotegen_Model_DealerQuoteSetting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -145,7 +145,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a userQuoteSetting
+     * Fetches a DealerQuoteSetting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -154,7 +154,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Quotegen_Model_UserQuoteSetting
+     * @return Quotegen_Model_DealerQuoteSetting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -164,18 +164,16 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
+        $object = new Quotegen_Model_DealerQuoteSetting($row->toArray());
 
         // Save the object into the cache
-        $primaryKey [0] = $object->userId;
-        $primaryKey [1] = $object->quoteSettingId;
         $this->saveItemToCache($object);
 
         return $object;
     }
 
     /**
-     * Fetches all userQuoteSettings
+     * Fetches all DealerQuoteSettings
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -186,7 +184,7 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Quotegen_Model_UserQuoteSetting[]
+     * @return Quotegen_Model_DealerQuoteSetting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -194,11 +192,9 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Quotegen_Model_UserQuoteSetting($row->toArray());
+            $object = new Quotegen_Model_DealerQuoteSetting($row->toArray());
 
             // Save the object into the cache
-            $primaryKey [0] = $object->userId;
-            $primaryKey [1] = $object->quoteSettingId;
             $this->saveItemToCache($object);
 
             $entries [] = $object;
@@ -217,59 +213,46 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_userId} = ?"             => $id [0],
-            "{$this->col_userQuoteSettingId} = ?" => $id [1]
+            "{$this->col_dealerId} = ?" => $id
         );
     }
 
-    /**
-     * Takes in a userid and returns a Quotegen_Model_QuoteSetting
-     *
-     * @param int $userId
-     *
-     * @return Quotegen_Model_QuoteSetting
-     */
-    public function fetchUserQuoteSetting ($userId)
+    public function fetchDealerQuoteSetting ($dealerId)
     {
-        $userQuoteSetting = $this->fetch(array(
-                                              "{$this->col_userId} = ?" => $userId
-                                         ));
+        $userDealerSetting = $this->fetch(array("{$this->col_dealerId} = ?" => $dealerId));
 
-        // If no userQuoteSetting exists insert new QuoteSetting
-        // If no userQuoteSetting exists insert new UserQuoteSetting
-        if (!$userQuoteSetting)
+        // If we dont have setting create them
+        if (!$userDealerSetting)
         {
             // Create a new QuoteSetting
             $quoteSetting                  = new Quotegen_Model_QuoteSetting();
             $quoteSetting->pricingConfigId = Proposalgen_Model_PricingConfig::NONE;
             $quoteSettingId                = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
 
-            // Create a new UserQuoteSetting 
-            $userQuoteSetting                 = new Quotegen_Model_UserQuoteSetting();
-            $userQuoteSetting->userId         = $userId;
-            $userQuoteSetting->quoteSettingId = $quoteSettingId;
-            $this->insert($userQuoteSetting);
+            // Create a new DealerQuoteSetting
+            $userDealerSetting                 = new Quotegen_Model_DealerQuoteSetting();
+            $userDealerSetting->dealerId      = $dealerId;
+            $userDealerSetting->quoteSettingId = $quoteSettingId;
+            $this->insert($userDealerSetting);
         }
         else
         {
-            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($userQuoteSetting->quoteSettingId);
+            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($userDealerSetting->quoteSettingId);
         }
 
         return $quoteSetting;
+
     }
 
     /**
-     * @param Quotegen_Model_UserQuoteSetting $object
      *
-     * @return array
+     * @param Quotegen_Model_DealerQuoteSetting $object
+     *
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return array(
-            $object->userId,
-            $object->quoteSettingId
-        );
+        return $object->dealerId;
     }
 }
-
 

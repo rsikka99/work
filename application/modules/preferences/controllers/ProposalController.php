@@ -7,7 +7,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
     {
         // Initialize and get the form
         $dealer                   = new Admin_Model_Dealer();
-        $reportSettingFormService = new Preferences_Service_ReportSettings($dealer->getReportSettings(Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $reportSettingFormService = new Preferences_Service_ReportSetting($dealer->getReportSettings(Zend_Auth::getInstance()->getIdentity()->dealerId));
         $form                     = $reportSettingFormService->getForm();
 
         $request = $this->getRequest();
@@ -36,7 +36,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
     public function systemAction ()
     {
         // Initialize and get the form
-        $reportSettingFormService = new Preferences_Service_ReportSettings();
+        $reportSettingFormService = new Preferences_Service_ReportSetting();
         $form                     = $reportSettingFormService->getForm();
 
         $request = $this->getRequest();
@@ -64,7 +64,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
         // Initialize and get the form
 
         $user                     = new Application_Model_User();
-        $reportSettingFormService = new Preferences_Service_ReportSettings($user->getReportSettings(Zend_Auth::getInstance()->getIdentity()->id));
+        $reportSettingFormService = new Preferences_Service_ReportSetting($user->getReportSettings(Zend_Auth::getInstance()->getIdentity()->id));
 
         $form = $reportSettingFormService->getFormWithDefaults();
 
