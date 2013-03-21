@@ -73,7 +73,8 @@ $printingFields = array(
 
 $masterDeviceFields = array(
     "CPP Admin" => "$" . number_format($this->device->MasterDevice->AdminCostPerPage, 4),
-	"CPP Service" => "$" . number_format($this->device->MasterDevice->ServiceCostPerPage, 4),
+	"CPP parts" => "$" . number_format($this->device->MasterDevice->getAttributes()->partsCostPerPage, 4),
+	"CPP labor" => "$" . number_format($this->device->MasterDevice->getAttributes()->laborCostPerPage, 4),
 	"Date Created" => $this->device->MasterDevice->DateCreated,
 	"Device Price" => "$" . number_format($this->device->MasterDevice->DevicePrice, 2),
 	"Duty Cycle" => ($this->device->MasterDevice->DutyCycle) ? $this->device->MasterDevice->DutyCycle : "N/A",

@@ -281,10 +281,33 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                           ));
 
         /*
-         * Service Cost Per Page
+         * Parts Cost Per Page
          */
-        $this->addElement('text', 'serviceCostPerPage', array(
-                                                             'label'      => 'Service Cost Per Page:',
+        $this->addElement('text', 'partsCostPerPage', array(
+                                                             'label'      => 'Parts Cost Per Page:',
+                                                             'class'      => 'span1',
+                                                             'maxlength'  => 8,
+                                                             'filters'    => array(
+                                                                 'StringTrim',
+                                                                 'StripTags'
+                                                             ),
+                                                             'validators' => array(
+                                                                 'Float',
+                                                                 array(
+                                                                     'validator' => 'Between',
+                                                                     'options'   => array(
+                                                                         'min' => 0.0001,
+                                                                         'max' => 5
+                                                                     )
+                                                                 )
+                                                             )
+                                                        ));
+
+        /*
+        * Labor Cost Per Page
+        */
+        $this->addElement('text', 'laborCostPerPage', array(
+                                                             'label'      => 'Labor Cost Per Page:',
                                                              'class'      => 'span1',
                                                              'maxlength'  => 8,
                                                              'filters'    => array(
