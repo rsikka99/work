@@ -537,6 +537,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
 CREATE  TABLE IF NOT EXISTS `assessments` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `clientId` INT NOT NULL ,
+    `dealerId` INT NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
     `stepName` VARCHAR(255) NULL ,
@@ -1678,6 +1679,56 @@ CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
     CONSTRAINT `qgen_dealer_quote_settings_ibkf2`
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `qgen_quote_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `dealer_master_device_attributes`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
+    `masterDeviceId` INT NOT NULL ,
+    `dealerId` INT NOT NULL ,
+    `cost` DOUBLE NULL ,
+    `laborCostPerPage` DOUBLE NULL ,
+    `partsCostPerPage` DOUBLE NULL ,
+    `dealerSku` VARCHAR(45) NULL ,
+    PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
+    INDEX `dealer_master_device_attributes_ibk1_idx` (`dealerId` ASC) ,
+    INDEX `dealer_master_device_attributes_ibk2_idx` (`masterDeviceId` ASC) ,
+    CONSTRAINT `dealer_master_device_attributes_ibk1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_master_device_attributes_ibk2`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `pgen_master_devices` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `dealer_toner_attributes`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
+    `tonerId` INT(11) NOT NULL ,
+    `dealerId` INT(11) NOT NULL ,
+    `cost` INT NULL ,
+    `dealerSku` VARCHAR(255) NULL ,
+    PRIMARY KEY (`tonerId`, `dealerId`) ,
+    INDEX `dealer_toner_attributes_ibfk1_idx` (`tonerId` ASC) ,
+    INDEX `dealer_toner_attributes_ibfk2_idx` (`dealerId` ASC) ,
+    CONSTRAINT `dealer_toner_attributes_ibfk1`
+    FOREIGN KEY (`tonerId` )
+    REFERENCES `pgen_toners` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_toner_attributes_ibfk2`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;

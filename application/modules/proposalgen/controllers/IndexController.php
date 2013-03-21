@@ -80,6 +80,7 @@ class Proposalgen_IndexController extends Tangent_Controller_Action
             // Tack on a proposal that handles creating a new one
             $newReport = new Proposalgen_Model_Assessment();
             $newReport->id = 0;
+            $newReport->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $newReport->getClient()->companyName = "Start New Proposal";
             array_unshift($reports, $newReport);
         }
