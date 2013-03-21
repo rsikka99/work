@@ -1,9 +1,9 @@
 <?php
-class Proposalgen_Model_DealerMasterDeviceAttributes extends My_Model_Abstract
+class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
 {
     /**
- * @var int
- */
+     * @var int
+     */
     public $masterDeviceId;
 
     /**
@@ -12,17 +12,17 @@ class Proposalgen_Model_DealerMasterDeviceAttributes extends My_Model_Abstract
     public $dealerId;
 
     /**
-     * @var double
+     * @var Float
      */
     public $cost;
 
     /**
-     * @var double
+     * @var Float
      */
     public $partsCostPerPage;
 
     /**
-     * @var double
+     * @var Float
      */
     public $laborCostPerPage;
 
