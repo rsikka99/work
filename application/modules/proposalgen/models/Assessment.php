@@ -6,12 +6,15 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      */
     public $id;
 
-
     /**
      * @var int
      */
     public $clientId;
 
+    /**
+     * @var int
+     */
+    public $dealerId;
 
     /**
      * @var int
@@ -98,6 +101,11 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
             $this->clientId = $params->clientId;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
             $this->rmsUploadId = $params->rmsUploadId;
@@ -143,6 +151,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
         return array(
             "id"                  => $this->id,
             "clientId"            => $this->clientId,
+            "dealerId"            => $this->dealerId,
             "rmsUploadId"         => $this->rmsUploadId,
             "userPricingOverride" => $this->userPricingOverride,
             "stepName"            => $this->stepName,

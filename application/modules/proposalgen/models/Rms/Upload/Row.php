@@ -104,7 +104,12 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     /**
      * @var float
      */
-    public $serviceCostPerPage;
+    public $partsCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $laborCostPerPage;
 
     /**
      * @var int
@@ -438,9 +443,14 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->ppmColor = $params->ppmColor;
         }
 
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
         {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
+            $this->partsCostPerPage = $params->partsCostPerPage;
+        }
+
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
+        {
+            $this->laborCostPerPage = $params->laborCostPerPage;
         }
 
         if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
@@ -686,7 +696,8 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "leasedTonerYield"         => $this->leasedTonerYield,
             "ppmBlack"                 => $this->ppmBlack,
             "ppmColor"                 => $this->ppmColor,
-            "serviceCostPerPage"       => $this->serviceCostPerPage,
+            "partsCostPerPage"         => $this->partsCostPerPage,
+            "laborCostPerPage"         => $this->laborCostPerPage,
             "tonerConfigId"            => $this->tonerConfigId,
             "wattsPowerNormal"         => $this->wattsPowerNormal,
             "wattsPowerIdle"           => $this->wattsPowerIdle,

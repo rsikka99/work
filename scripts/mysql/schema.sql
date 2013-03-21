@@ -210,7 +210,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
     `leasedTonerYield` INT(11) NULL ,
     `ppmBlack` DOUBLE NULL ,
     `ppmColor` DOUBLE NULL ,
-    `serviceCostPerPage` DOUBLE NULL ,
+    `partsCostPerPage` DOUBLE NULL ,
+    `laborCostPerPage` DOUBLE NULL ,
     `tonerConfigId` INT(11) NOT NULL DEFAULT 1 ,
     `wattsPowerNormal` DOUBLE NULL ,
     `wattsPowerIdle` DOUBLE NULL ,
@@ -537,6 +538,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
 CREATE  TABLE IF NOT EXISTS `assessments` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `clientId` INT NOT NULL ,
+    `dealerId` INT NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
     `stepName` VARCHAR(255) NULL ,
