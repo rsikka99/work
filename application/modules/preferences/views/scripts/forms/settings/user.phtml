@@ -228,56 +228,6 @@ $form = new Zend_Form();
         </tbody>
 	</table>
 	</div>
-
-    <h4>Hardware Profitability Settings</h4>
-	<div class="well">
-    <table id="<?php echo $formID?>" style="width: 100%;">
-		<col style='width: auto;' />
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<col style='width: 150px;' />
-		<thead>
-			<tr>
-				<th class="forms_heading" align="left" valign="top"><strong>Property</strong></th>
-				<th class="forms_heading" align="center" valign="top"><strong><?php echo $this->dealerName; ?> Default</strong></th>
-				<th class="forms_heading" align="center" valign="top" colspan="2"><strong>Override</strong></th>
-			</tr>
-		</thead>
-        <tbody>
-            <!-- Cost Delta $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->costThreshold->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["costThreshold"]) ? "$" . $this->dealerData["costThreshold"] : ""; ?></td>
-                <td <?php echo ($this->element->costThreshold->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->costThreshold->renderViewHelper(); ?></td>
-            </tr>
-            <?php if ($this->element->costThreshold->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->costThreshold->renderErrors(); ?></td>
-            <?php endif; ?>
-
-            <!-- Target Monochrome $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->targetMonochrome->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetMonochromeCostPerPage"]) ? "$" . $this->dealerData["targetMonochromeCostPerPage"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->targetMonochrome->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetMonochrome->renderViewHelper(); ?></td>
-                <td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->targetMonochrome->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetMonochrome->renderErrors(); ?></td>
-            <?php endif; ?>
-
-            <!-- Target Color $ --------------------------------------------------------------------------------------- -->
-            <tr>
-                <td><?php echo $this->element->targetColor->renderLabel();?></td>
-                <td align="left" style="padding-left: 10"><?php echo ($this->dealerData["targetColorCostPerPage"]) ? "$" . $this->dealerData["targetColorCostPerPage"] . " / page" : ""; ?></td>
-                <td <?php echo ($this->element->targetColor->hasErrors()) ? "class='error'" : ""; ?> align="right">$<?php echo $this->element->targetColor->renderViewHelper(); ?></td>
-                <td>&nbsp;/ page</td>
-            </tr>
-            <?php if ($this->element->targetColor->hasErrors()) : ?>
-            <tr><td colspan="2"></td><td colspan="2"><?php echo $this->element->targetColor->renderErrors(); ?></td>
-            <?php endif; ?>
-        </tbody>
-	</table>
-	</div>
     <div id="submitBtns" class="submitBar">
 		<?php echo $this->element->save_settings; ?>
 		<?php echo $this->element->back_button; ?>
