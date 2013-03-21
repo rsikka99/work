@@ -80,6 +80,29 @@ class Proposalgen_Model_Mapper_DealerMasterDeviceAttributes extends Tangent_Mode
     }
 
     /**
+     * Saves an instance of Quotegen_Model_DealerMasterDeviceAttributes to the database.
+     * If the id is null then it will insert a new row
+     *
+     * @param $object Quotegen_Model_DealerMasterDeviceAttributes
+     *                The object to insert
+     *
+     * @return int The primary key of the new row
+     */
+    public function insert (&$object)
+    {
+        // Get an array of data to save
+        $data = $object->toArray();
+
+        // Insert the data
+        $id = $this->getDbTable()->insert($data);
+
+        // Save the object into the cache
+        $this->saveItemToCache($object);
+
+        return $id;
+    }
+
+    /**
      * Saved an Proposalgen_Model_ object to the database
      *
      * @param Proposalgen_Model_DealerMasterDeviceAttributes $object
