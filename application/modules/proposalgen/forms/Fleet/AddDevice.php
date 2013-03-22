@@ -102,7 +102,7 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                           ));
 
          /*
-         * parts Cost
+         * parts Cost Per Page
          */
         $deviceDetailElements[] = 'partsCostPerPage';
         $this->addElement('text', 'partsCostPerPage', array(
@@ -119,8 +119,8 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                           ));
 
         /*
- * Device Cost
- */
+         * labor Cost Per Page
+         */
         $deviceDetailElements[] = 'laborCostPerPage';
         $this->addElement('text', 'laborCostPerPage', array(
                                                'dimension'  => 2,

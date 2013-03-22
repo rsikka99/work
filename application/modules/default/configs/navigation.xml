@@ -322,7 +322,7 @@
                     <visible>0</visible>
                     <pages>
                         <changepassword>
-                            <label>Reset Password</label>
+                            <label>Change Password</label>
                             <module>default</module>
                             <controller>auth</controller>
                             <action>changepassword</action>

@@ -210,7 +210,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
     /**
      * Gets a where clause for filtering by id
      *
-     * @param int $id
+     * @param array $id
      *
      * @return array
      */

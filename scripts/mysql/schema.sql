@@ -1701,13 +1701,13 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
     CONSTRAINT `dealer_master_device_attributes_ibk1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `dealer_master_device_attributes_ibk2`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 

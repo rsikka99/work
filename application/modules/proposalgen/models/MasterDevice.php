@@ -65,16 +65,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public $wattsPowerIdle;
 
     /**
-     * @var float
-     */
-    public $cost;
-
-    /**
-     * @var float
-     */
-    public $serviceCostPerPage;
-
-    /**
      * @var string
      */
     public $launchDate;
@@ -135,6 +125,19 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_tonersForGrossMargin;
     protected $_requiredTonerColors;
 
+    protected $_dealerAttributes;
+
+    /**
+     * @return Proposalgen_Model_Dealer_Master_Device_Attribute
+     */
+    public function getDealerAttributes ()
+    {
+        if(!isset($this->_dealerAttributes))
+        {
+            $this->_dealerAttributes = $this->getDealerMasterDeviceAttribute(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        }
+        return $this->_dealerAttributes;
+    }
 
     /**
      * Whether or not overrides have been processed
@@ -169,10 +172,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     $this->cost = $deviceOverride->overrideDevicePrice;
                 }
             }
-
             // Apply Report Margin to the device price
-            $this->cost = $this->cost / $report->getReportSettings()->assessmentReportMargin;
-
+            $this->getDealerAttributes()->cost = $this->getDealerAttributes()->cost / $report->getReportSettings()->assessmentReportMargin;
             // Handle Toners
             // Toner Overrides + Margin
             foreach ($this->getToners() as $tonersByPartType)
@@ -193,11 +194,17 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 }
             } // End of toners loop
 
-            // Service Cost Per Page Cost
-            if ($this->serviceCostPerPage <= 0)
+
+            // Parts cost per page / labor cost per page
+            if ($this->getDealerAttributes()->laborCostPerPage <= 0)
             {
-                $this->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
+                $this->getDealerAttributes()->laborCostPerPage = $report->getReportSettings()->laborCostPerPage;
             }
+            if ($this->getDealerAttributes()->partsCostPerPage <= 0)
+            {
+                $this->getDealerAttributes()->partsCostPerPage = $report->getReportSettings()->partsCostPerPage;
+            }
+
 
             // Admin Charge
             $this->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
@@ -205,6 +212,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->_overridesProcessed = true;
         }
     }
+
 
     /**
      * The maximum monthly page volume is calculated using the smallest toner yield
@@ -308,16 +316,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->wattsPowerIdle = $params->wattsPowerIdle;
         }
 
-        if (isset($params->cost) && !is_null($params->cost))
-        {
-            $this->cost = $params->cost;
-        }
-
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
-        {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
-        }
-
         if (isset($params->launchDate) && !is_null($params->launchDate))
         {
             $this->launchDate = $params->launchDate;
@@ -376,8 +374,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isReplacementDevice" => $this->isReplacementDevice,
             "wattsPowerNormal"    => $this->wattsPowerNormal,
             "wattsPowerIdle"      => $this->wattsPowerIdle,
-            "cost"                => $this->cost,
-            "serviceCostPerPage"  => $this->serviceCostPerPage,
             "launchDate"          => $this->launchDate,
             "dateCreated"         => $this->dateCreated,
             "dutyCycle"           => $this->dutyCycle,
@@ -578,9 +574,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = 0;
             $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = 0;
 
-            $ServicePlusAdminCPP                    = $this->serviceCostPerPage + $this->adminCostPerPage;
-            $ServiceCPP                             = $this->serviceCostPerPage;
-            $costPerPage->Actual->Raw->ServiceCPP   = $this->serviceCostPerPage;
+            $ServicePlusAdminCPP                    = $this->getDealerAttributes()->laborCostPerPage + $this->getDealerAttributes()->partsCostPerPage + $this->adminCostPerPage;
+            $ServiceCPP                             = $this->getDealerAttributes()->laborCostPerPage + $this->getDealerAttributes()->partsCostPerPage;
+            $costPerPage->Actual->Raw->ServiceCPP   = $this->getDealerAttributes()->laborCostPerPage + $this->getDealerAttributes()->partsCostPerPage;
             $costPerPage->Actual->Raw->AdminCPP     = $this->adminCostPerPage;
             $costPerPage->Actual->Raw->ReportMargin = $ReportMargin;
 
@@ -1081,5 +1077,38 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         }
 
         return $this->_cachedCheapestTonerSets [$cacheKey];
+    }
+
+    /**
+     * Gets the Proposalgen_Model_Dealer_Master_Device_Attributes for a dealer's master device
+     *
+     * @param $dealerId
+     *
+     * @return Proposalgen_Model_Dealer_Master_Device_Attribute
+     */
+    public function getDealerMasterDeviceAttribute ($dealerId)
+    {
+        $attribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->fetch(Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id,$dealerId)));
+        if($attribute)
+        {
+            return $attribute;
+        }
+        else
+        {
+            try
+            {
+                $attribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                $attribute->masterDeviceId = $this->id;
+                $attribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($attribute);
+            }
+            catch (Exception $e)
+            {
+                echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                var_dump($e);
+                die();
+            }
+        }
+        return $attribute;
     }
 }

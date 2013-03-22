@@ -10,15 +10,15 @@ $form = $this->form;
     $(document).ready(function() {
     	// Set up info popups
     	$('i').popover();
-    	
+
     	// Toggle the filter field
 		$("#criteria_filter").change(function() {
 			var url = '';
-			
+
 			//clear searches
 			$("#txtCriteria").val('');
 			$("#cboCriteria").val('');
-			
+
 			switch (this.value) {
 				case "manufacturer":
 					$("#text_criteria").hide();
@@ -32,7 +32,7 @@ $form = $this->form;
 					break;
 			}
     	});
-    	
+
     	// Set up filter values
     	<?php if ( $this->search_filter == "manufacturer" ) { ?>
 			$("#text_criteria").hide();
@@ -44,7 +44,7 @@ $form = $this->form;
     		$("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
    		<?php } ?>
     });
-    
+
     function removeA(arr) {
 	    var what, a= arguments, L= a.length, ax;
 	    while(L> 1 && arr.length){
@@ -55,19 +55,19 @@ $form = $this->form;
 	    }
 	    return arr;
 	}
-	    
+
     function update_toner(id) {
     	var ids = $("#hdnToners").val();
     	var idsArray = ids.split(',');
-    	
+
     	if ( jQuery.inArray(id.toString(), idsArray) > -1 ) {
     		// remove from array
     		idsArray.splice(jQuery.inArray(id.toString(), idsArray), 1);
-    		
+
     		// toggle button to assign
     		$("#btnAssign"+id).attr('class','btn btn-success btn-mini');
     		$("#btnAssign"+id).html('<i class="icon-plus-sign icon-white"></i> Assign');
-    		
+
     	} else {
     		// add to array
     		if ( ids.length > 0 ) {
@@ -75,14 +75,14 @@ $form = $this->form;
     		} else {
     			idsArray = id;
     		}
-    		
+
     		// toggle button to remove
     		$("#btnAssign"+id).attr('class','btn btn-danger btn-mini');
     		$("#btnAssign"+id).html('<i class="icon-minus-sign icon-white"></i> Unassign');
     	}
     	$("#hdnToners").val(idsArray.toString());
     }
-	
+
 <?php $this->headScript()->captureEnd() ?>
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
@@ -91,7 +91,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -102,7 +102,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -113,7 +113,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -125,7 +125,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -136,7 +136,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -147,7 +147,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -158,7 +158,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -169,7 +169,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -180,7 +180,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -191,7 +191,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -202,7 +202,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -213,7 +213,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -224,7 +224,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -235,24 +235,35 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("serviceCostPerPage"); ?>
+	<?php $element = $this->element->getElement("partsCostPerPage"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
+    <?php $element = $this->element->getElement("laborCostPerPage"); ?>
+    <div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
+        <?php echo $element->renderLabel(); ?>
+        <div class="controls">
+            <?php if ( $element->hasErrors() ) {
+                $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+            } ?>
+            <?php echo trim($element->renderViewHelper()); ?>
+            <?php echo $element->renderErrors(); ?>
+        </div>
+    </div>
 	<?php $element = $this->element->getElement("launchDate"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
@@ -266,7 +277,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -277,7 +288,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -288,7 +299,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -299,7 +310,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -311,7 +322,7 @@ $form = $this->form;
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
-			<?php if ( $element->hasErrors() ) { 
+			<?php if ( $element->hasErrors() ) {
 				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
 			} ?>
 			<?php echo trim($element->renderViewHelper()); ?>
@@ -324,7 +335,7 @@ $form = $this->form;
 	<div id="toners_container">
 	<h3>Toners</h3>
 	<input type="hidden" name="hdnToners" id="hdnToners" value="<?php echo $this->assignedToners ?>" />
-	
+
 	<div id="filter" class="well">
 		<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 		<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
@@ -343,7 +354,7 @@ $form = $this->form;
 		<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
 		<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 	</div>
-	
+
 	<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
 		<table class="table table-striped table-condensed table-bordered">
 			<thead>
@@ -381,9 +392,9 @@ $form = $this->form;
 	<?php else : ?>
 		<h4>There are no toners available.</h4>
 	<?php endif; ?>
-	
+
 	</div>
-	
+
 	<div>
 		<?php echo $this->element->submit; ?>
 		<?php echo $this->element->cancel; ?>
