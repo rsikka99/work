@@ -67,53 +67,68 @@ class Admin_DealerController extends Tangent_Controller_Action
             {
                 if ($form->isValid($values))
                 {
-                    // Create a new dealer object
-                    $dealer = new Admin_Model_Dealer();
-                    $dealer->populate($values);
-                    $dealer->dateCreated = date("Y-m-d");
-
-                    // Create a new report setting based on the system default report setting
-                    // Then assigned the dealer object the new id.
-                    $reportSetting = new Proposalgen_Model_Report_Setting();
-                    $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting());
-                    $dealer->reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
-
-                    $surveySetting = new Proposalgen_Model_Survey_Setting();
-                    $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings());
-                    $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
-
-                    $dealerReportSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
-                    $dealerReportSetting->reportSettingId = $dealer->reportSettingId;
-                    $dealerReportSetting->dealerId        = $dealer->id;
-                    Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($dealerReportSetting);
-
-                    $dealerSurveySetting                  = new Proposalgen_Model_Dealer_Survey_Setting();
-                    $dealerSurveySetting->surveySettingId = $dealer->surveySettingId;
-                    $dealerSurveySetting->dealerId        = $dealer->id;
-                    Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->insert($dealerSurveySetting);
-
-                    // Create a new quote setting based on the system default quote setting
-                    // Then assigned the dealer quote setting id object it's new id
-                    $quoteSetting = new Quotegen_Model_QuoteSetting();
-                    $quoteSetting->applyOverride(Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting());
-                    $dealer->quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
-
-                    $dealerQuoteSetting                 = new Quotegen_Model_DealerQuoteSetting();
-                    $dealerQuoteSetting->quoteSettingId = $dealer->quoteSettingId;
-                    $dealerQuoteSetting->dealerId       = $dealer->id;
-                    Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->insert($dealerQuoteSetting);
-
-                    // Save the dealer with the id to the database
-                    $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
-
-                    if ($dealerId)
+                    $db = Zend_Db_Table::getDefaultAdapter();
+                    try
                     {
-                        $this->_helper->flashMessenger(array('success' => "Dealer {$dealer->dealerName} successfully created"));
-                        $this->redirector('index');
+                        $db->beginTransaction();
+
+                        // Create a new dealer object
+                        $dealer = new Admin_Model_Dealer();
+                        $dealer->populate($values);
+                        $dealer->dateCreated = date("Y-m-d");
+
+                        // Save the dealer with the id to the database
+                        $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
+
+                        // Create a new report setting based on the system default report setting
+                        // Then assigned the dealer object the new id.
+                        $reportSetting = new Proposalgen_Model_Report_Setting();
+                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting());
+                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+
+                        $surveySetting = new Proposalgen_Model_Survey_Setting();
+                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings());
+                        $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
+
+                        $dealerReportSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
+                        $dealerReportSetting->reportSettingId = $dealer->reportSettingId;
+                        $dealerReportSetting->dealerId        = $dealer->id;
+                        Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($dealerReportSetting);
+
+                        $dealerSurveySetting                  = new Proposalgen_Model_Dealer_Survey_Setting();
+                        $dealerSurveySetting->surveySettingId = $dealer->surveySettingId;
+                        $dealerSurveySetting->dealerId        = $dealer->id;
+                        Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->insert($dealerSurveySetting);
+
+                        // Create a new quote setting based on the system default quote setting
+                        // Then assigned the dealer quote setting id object it's new id
+                        $quoteSetting = new Quotegen_Model_QuoteSetting();
+                        $quoteSetting->applyOverride(Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting());
+                        $dealer->quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
+
+                        $dealerQuoteSetting                 = new Quotegen_Model_DealerQuoteSetting();
+                        $dealerQuoteSetting->quoteSettingId = $dealer->quoteSettingId;
+                        $dealerQuoteSetting->dealerId       = $dealer->id;
+                        Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->insert($dealerQuoteSetting);
+
+
+                        $db->commit();
+
+                        if ($dealerId)
+                        {
+                            $this->_helper->flashMessenger(array('success' => "Dealer {$dealer->dealerName} successfully created"));
+                            $this->redirector('index');
+                        }
+                        else
+                        {
+                            $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        }
                     }
-                    else
+                    catch (Exception $e)
                     {
+                        $db->rollBack();
                         $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        My_Log::logException($e);
                     }
                 }
                 else
