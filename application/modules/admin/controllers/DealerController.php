@@ -18,35 +18,58 @@ class Admin_DealerController extends Tangent_Controller_Action
 
     public function editAction ()
     {
-        $dealerId = $this->_getParam('id');
+        $dealerId = $this->_getParam('id', false);
 
-        if (!$dealerId)
+        if ($dealerId === false)
         {
-            $this->_helper->flashMessenger(array('warning' => 'Error select dealer to edit.'));
+            $this->flashMessenger(array('warning' => 'You must select a dealer to edit.'));
             $this->redirect('index');
         }
+
+        /**
+         * Fetch the dealer
+         */
         $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
         $dealer       = $dealerMapper->find($dealerId);
-        $form         = new Admin_Form_Dealer();
-        $form->populate($dealer->toArray());
-        $request = $this->getRequest();
-        if ($request->isPost())
+
+        if (!$dealer instanceof Admin_Model_Dealer)
         {
-            $values = $request->getPost();
-            if (!isset($values ['cancel']))
+            $this->flashMessenger(array('warning' => 'Invalid dealer selected.'));
+            $this->redirect('index');
+        }
+
+        $form = new Admin_Form_Dealer();
+        $form->populate($dealer->toArray());
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData ['cancel']))
             {
-                if ($form->isValid($values))
-                {
-                    // Create a new dealer object
-                    $dealer->populate($values);
-                    $dealerMapper->save($dealer);
-                    $this->_helper->flashMessenger(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-                    $this->redirector("index");
-                }
+                $this->redirector("index");
             }
             else
             {
-                $this->redirector("index");
+                if ($form->isValid($postData))
+                {
+                    $db = Zend_Db_Table::getDefaultAdapter();
+                    try
+                    {
+                        // Save dealer object
+                        $dealer->populate($form->getValues());
+                        $dealerMapper->save($dealer);
+
+                        // All done
+                        $this->_helper->flashMessenger(array('success' => "{$dealer->dealerName} has been successfully updated!"));
+                        $this->redirector("index");
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        My_Log::logException($e);
+                    }
+                }
             }
         }
         $this->view->form = $form;
