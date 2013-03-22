@@ -2,6 +2,9 @@
 
 class Admin_DealerController extends Tangent_Controller_Action
 {
+    /**
+     * This action lists all the dealers in the system
+     */
     public function indexAction ()
     {
         $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
@@ -16,6 +19,9 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->paginator = $paginator;
     }
 
+    /**
+     * This action is used to edit a dealer
+     */
     public function editAction ()
     {
         $dealerId = $this->_getParam('id', false);
@@ -73,10 +79,11 @@ class Admin_DealerController extends Tangent_Controller_Action
             }
         }
         $this->view->form = $form;
-
-
     }
 
+    /**
+     * This action creates a brand new dealer
+     */
     public function createAction ()
     {
 
@@ -168,6 +175,9 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * This action deletes a dealer
+     */
     public function deleteAction ()
     {
         $dealerId = $this->_getParam('id');
