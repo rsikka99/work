@@ -4554,32 +4554,21 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 }
 
                                 // Loop through the file and save.
+                                $inputFilter = new Zend_Filter_Input(array(
+                                                                          'cost' => array(
+                                                                              'StringTrim',
+                                                                          )
+                                                                     ), array(
+                                                                             'cost' => array(
+                                                                                 'Float',
+                                                                                 array(
+                                                                                     'name' => 'GreaterThan',
+                                                                                     'options' => array(
+                                                                                         'min' => 0,
+                                                                                     )
+                                                                                 )
+                                                                             )));
 
-                                /**
-                                 *  Sample data for toner
-                                 *
-                                 *  $value =
-                                 * array(9) {
-                                ["Toner ID"]=>
-                                string(3) "316"
-                                ["Manufacturer"]=>
-                                string(7) "Brother"
-                                ["Part Type"]=>
-                                string(4) "COMP"
-                                ["SKU"]=>
-                                string(6) "699639"
-                                ["Color"]=>
-                                string(5) "BLACK"
-                                ["Yield"]=>
-                                string(4) "2500"
-                                ["Current Price"]=>
-                                float(31.4)
-                                ["New Price"]=>
-                                string(0) ""
-                                ["Dealer Sku"]=>
-                                string(4) "test"
-                                }
-                                 */
                                 foreach ($results as $key => $value)
                                 {
 
@@ -4752,45 +4741,76 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     {
                                         if (in_array("System Admin", $this->privilege) && $company == 1)
                                         {
-
+                                            $inputFilter->setData(array('cost' => $value ['New Price']));
                                             // Filter the data -
-                                            $toner_id = $value ['Toner ID'];
+                                            $importTonerId   = $value ['Toner ID'];
+                                            $importDealerSku = trim($value ['Dealer Sku']);
+                                            $importCost      = $inputFilter->cost;
 
                                             $dataArray = array(
-                                                'tonerId'   => $toner_id,
-                                                'dealerSku' => $value ['Dealer Sku'],
-                                                'cost'      => $value ['New Price'],
+                                                'tonerId'   => $importTonerId,
+                                                'dealerSku' => $importDealerSku,
+                                                'cost'      => $importCost,
                                                 'dealerId'  => $dealerId,
                                             );
 
                                             $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
                                             if (count($toner->toArray()) > 0)
                                             {
-                                                $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id);
+                                                $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($importTonerId);
                                                 // Does the toner attribute exists ?
                                                 if ($tonerAttribute)
                                                 {
-                                                    $tonerAttribute->populate($dataArray);
-                                                    // Do we have a new price and greater than 0,
-//                                                    echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-//                                                    var_dump($value ['New Price'] . 'toner cost' . $toner->cost);
-//                                                    die();
-                                                    if (($toner->cost != $value ['New Price']) && ($value ['New Price'] > 0 || empty($value ['New Price'])))
-                                                    {
-                                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
-                                                    }
-                                                    else if(empty($tonerAttribute->cost) && empty($tonerAttribute->dealerSku))
+                                                    // If cost && sku are empty  or cost = 0 -> delete.
+                                                    // Delete
+                                                    if (empty($importCost) && empty($importDealerSku))
                                                     {
                                                         // If the attributes are empty after being found, delete them.
                                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
                                                     }
+                                                    else
+                                                    {
+                                                        // Have any values changed
+                                                        $hasChanged = false;
+
+                                                        if (!$inputFilter->isValid('cost'))
+                                                        {
+                                                            $importCost = null;
+                                                        }
+
+                                                        if ((float)$importCost !== (float)$tonerAttribute->cost)
+                                                        {
+                                                            if ($importCost === null)
+                                                            {
+                                                                $importCost = new Zend_Db_Expr('NULL');
+                                                            }
+                                                            $tonerAttribute->cost = $importCost;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ($tonerAttribute->dealerSku != $importDealerSku)
+                                                        {
+                                                            if (empty($importDealerSku))
+                                                            {
+                                                                $importDealerSku = new Zend_Db_Expr('NULL');
+                                                            }
+                                                            $tonerAttribute->dealerSku = $importDealerSku;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ($hasChanged)
+                                                        {
+                                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+
+                                                        }
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                                    $tonerAttribute->populate($dataArray);
-                                                    if ($tonerAttribute->cost > 0 || !empty($tonerAttribute->dealerSku))
+                                                    if ($importCost > 0 || !empty($importDealerSku))
                                                     {
+                                                        $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                                        $tonerAttribute->populate($dataArray);
                                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
                                                     }
                                                 }
@@ -5129,7 +5149,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                    ), 'pt.id = t.partTypeId', 'name AS part_type')
                         ->joinLeft(array(
                                         'dta' => 'dealer_toner_attributes'
-                                   ), 'dta.tonerId = t.id', array('cost','dealerSku'))
+                                   ), 'dta.tonerId = t.id', array('cost', 'dealerSku'))
                         ->where("t.id > 0")
                         ->group('t.id')
                         ->order(array(
