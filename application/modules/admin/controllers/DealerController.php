@@ -183,36 +183,71 @@ class Admin_DealerController extends Tangent_Controller_Action
         $dealerId = $this->_getParam('id');
         $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
 
+        if (!$dealer instanceof Admin_Model_Dealer)
+        {
+            $this->flashMessenger(array('warning' => 'Invalid dealer selected.'));
+            $this->redirect('index');
+        }
+
+
         $message = "Are you sure you want to delete {$dealer->dealerName}";
         $form    = new Application_Form_Delete($message);
 
-        $request = $this->getRequest();
-        if ($request->isPost())
+        if ($this->getRequest()->isPost())
         {
-            $values = $request->getPost();
-            if ($form->isValid($values))
+            $postData = $this->getRequest()->getPost();
+            if ($form->isValid($postData))
             {
-                if (!isset($values ['cancel']))
+                if (isset($postData ['cancel']))
                 {
-                    // Delete the dealer and the related report setting
-                    $reportSettingDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
-                    $quoteSettingDeleted  = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
-                    $dealerDeleted        = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
-
-                    // If we have successfully deleted it then redirect and display message
-                    if ($dealerDeleted > 0 && $reportSettingDeleted > 0 && $quoteSettingDeleted > 0)
-                    {
-                        $this->_helper->flashMessenger(array("success" => "Successfully delete {$dealer->dealerName}."));
-                    }
-                    else
-                    {
-                        $this->_helper->flashMessenger(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
-                    }
                     $this->redirector("index");
                 }
                 else
                 {
-                    $this->redirector("index");
+                    $db = Zend_Db_Table::getDefaultAdapter();
+                    try
+                    {
+                        $db->beginTransaction();
+
+                        // Delete the dealer and the related report setting
+                        $reportSettingDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
+                        $quoteSettingDeleted  = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
+                        $dealerDeleted        = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
+
+
+                        /**
+                         * Deleting did not work. Throw an exception so that we can roll back the database
+                         */
+                        if ($dealerDeleted == 0 || $reportSettingDeleted == 0 || $quoteSettingDeleted == 0)
+                        {
+                            $message = "Error Deleting Dealer. ";
+                            if ($dealerDeleted == 0)
+                            {
+                                $message .= "Dealer row did not exist.";
+                            }
+                            if ($reportSettingDeleted == 0)
+                            {
+                                $message .= "Report setting row did not exist.";
+                            }
+                            if ($quoteSettingDeleted == 0)
+                            {
+                                $message .= "Quote setting row did not exist.";
+                            }
+                            throw new Exception($message);
+                        }
+
+                        $db->commit();
+
+                        // We have successfully deleted it then redirect and display message
+                        $this->_helper->flashMessenger(array("success" => "Successfully deleted {$dealer->dealerName}."));
+                        $this->redirector("index");
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        My_Log::logException($e);
+                        $this->_helper->flashMessenger(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
+                    }
                 }
             }
         }
