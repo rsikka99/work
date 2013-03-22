@@ -619,12 +619,19 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             {
                                 // Set reports modified flag
                                 $reportTableMapper = Proposalgen_Model_Mapper_Assessment::getInstance();
-                                $reportTableMapper->setDevicesModifiedFlagOnReports($master_device_id);
+                                $reportTableMapper->setDevicesModifiedFlagOnAssessments($master_device_id);
 
                                 // DELETE MASTER DEVICE
                                 $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
                                 $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                                 $master_deviceTable->delete($where);
+
+                                // Delete the master device attribute data
+                                $deviceAttributes = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                $deviceAttributes->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                $deviceAttributes->masterDeviceId = $master_device_id;
+                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($deviceAttributes);
+//
 
                                 $db->commit();
                                 $form_mode                 = 'delete';
