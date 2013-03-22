@@ -1717,7 +1717,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
 CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     `tonerId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
-    `cost` INT NULL ,
+    `cost` DOUBLE NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     PRIMARY KEY (`tonerId`, `dealerId`) ,
     INDEX `dealer_toner_attributes_ibfk1_idx` (`tonerId` ASC) ,
