@@ -4229,6 +4229,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $key_master_printer_id = null;
                         $key_printer_model     = null;
                         $key_dealer_sku        = null;
+                        $key_parts_cpp         = null;
+                        $key_labor_cpp         = null;
 
                         /**
                          * Finds where each column is located inside the CSV
@@ -4274,9 +4276,17 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 $key_printer_model = $array_key;
                             }
-                            else if (strtolower($value) == "dealersku")
+                            else if (strtolower($value) == "dealer sku")
                             {
                                 $key_dealer_sku = $array_key;
+                            }
+                            else if (strtolower($value) == "labor cpp")
+                            {
+                                $key_labor_cpp = $array_key;
+                            }
+                            else if (strtolower($value) == "parts cpp")
+                            {
+                                $key_parts_cpp = $array_key;
                             }
                             $array_key += 1;
                         }
@@ -4305,8 +4315,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                             $columns [0] = "Master Printer ID";
                                             $columns [1] = "Manufacturer";
                                             $columns [2] = "Printer Model";
-                                            $columns [3] = "Current Price";
-                                            $columns [4] = "New Price";
+                                            $columns [3] = "Price";
+                                            $columns [4] = "Dealer Sku";
+                                            $columns [5] = "Labor CPP";
+                                            $columns [6] = "Parts CPP";
+
 
                                             $table   = new Proposalgen_Model_DbTable_MasterDevice();
                                             $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
@@ -4314,15 +4327,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                             if (count($printer) > 0)
                                             {
-                                                // get current costs
-                                                $current_device_price = $printer ['cost'];
-
                                                 // save into array
                                                 $final_devices [0] = $master_device_id;
                                                 $final_devices [1] = $devices [$key] [$key_manufacturer];
                                                 $final_devices [2] = $devices [$key] [$key_printer_model];
-                                                $final_devices [3] = $current_device_price;
-                                                $final_devices [4] = $devices [$key] [$key_new_price];
+                                                $final_devices [3] = $devices [$key] [$key_new_price];
+                                                $final_devices [4] = $devices [$key] [$key_dealer_sku];
+                                                $final_devices [5] = $devices [$key] [$key_labor_cpp];
+                                                $final_devices [6] = $devices [$key] [$key_parts_cpp];
                                             }
                                         }
                                         else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
@@ -4562,7 +4574,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                              'cost' => array(
                                                                                  'Float',
                                                                                  array(
-                                                                                     'name' => 'GreaterThan',
+                                                                                     'name'    => 'GreaterThan',
                                                                                      'options' => array(
                                                                                          'min' => 0,
                                                                                      )
@@ -4586,20 +4598,35 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                         // 4=parts_cost_per_page; 5=labor_cost_per_page
                                         if (in_array("System Admin", $this->privilege))
                                         {
-                                            $master_device_id  = $results[$key] ['Master Printer ID'];
-                                            $manufacturer_name = $results[$key] ['Manufacturer'];
-                                            $printer_model     = $results[$key] ['Printer Model'];
-                                            $device_price      = $results[$key] ['New Price'];
+                                            // Set the data inside the input filter to hold the various costs that
+                                            // have been inputted
 
-                                            $table = new Proposalgen_Model_DbTable_MasterDevice();
-                                            $data  = array(
-                                                'cost' => $device_price
+                                            $inputFilter->setData(array('cost' => $value ['Price']));
+                                            $inputFilter->setData(array('laborCpp' => $value ['Labor CPP']));
+                                            $inputFilter->setData(array('partsCpp' => $value ['Parts CPP']));
+
+
+                                            $importCost      = $inputFilter->cost;
+                                            $importLaborCpp  = $inputFilter->laborCpp;
+                                            $importPartsCpp  = $inputFilter->partsCpp;
+                                            $importDealerSku = $value ['Dealer Sku'];
+
+                                            $master_device_id = $value ['Master Printer ID'];
+
+                                            $dataArray = array(
+                                                'masterDeviceId'   => $master_device_id,
+                                                'dealerId'         => $dealerId,
+                                                'dealerSku'        => $importDealerSku,
+                                                'cost'             => $importCost,
+                                                'laborCostPerPage' => $importLaborCpp,
+                                                'partsCostPerPage' => $importPartsCpp,
                                             );
-                                            $where = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
 
-                                            // check to see if it exists - no inserts in the
-                                            // Master Tables
-                                            $toner = $table->fetchRow($where);
+                                            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                                            var_dump($dataArray);
+                                            die();
+
+
                                             if (count($toner) > 0)
                                             {
                                                 $exists = true;
@@ -4785,7 +4812,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                 $importCost = new Zend_Db_Expr('NULL');
                                                             }
                                                             $tonerAttribute->cost = $importCost;
-                                                            $hasChanged = true;
+                                                            $hasChanged           = true;
                                                         }
 
                                                         if ($tonerAttribute->dealerSku != $importDealerSku)
@@ -4795,7 +4822,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                 $importDealerSku = new Zend_Db_Expr('NULL');
                                                             }
                                                             $tonerAttribute->dealerSku = $importDealerSku;
-                                                            $hasChanged = true;
+                                                            $hasChanged                = true;
                                                         }
 
                                                         if ($hasChanged)
@@ -5024,7 +5051,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Manufacturer',
                     'Printer Model',
                     'Price',
-                    'DealerSku'
+                    'Dealer Sku',
+                    'Labor CPP',
+                    'Parts CPP',
                 );
                 if (in_array("System Admin", $this->privilege))
                 {
@@ -5046,6 +5075,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             array(
                                  'dealerSku',
                                  'cost',
+                                 'laborCostPerPage',
+                                 'partsCostPerPage',
                             ))
                         ->order(array(
                                      'm.fullname',
@@ -5105,10 +5136,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['modelName'],
                         $price,
                         $value ['dealerSku'],
+                        $value ['laborCostPerPage'],
+                        $value ['partsCostPerPage'],
                     );
                 }
 
             }
+            /* Begin toner export export logic here */
             else
             {
                 $fieldTitles = array(
@@ -5119,7 +5153,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Color',
                     'Yield',
                     'Price',
-                    'DealerSku'
+                    'Dealer Sku'
                 );
 
                 if (in_array("System Admin", $this->privilege))
