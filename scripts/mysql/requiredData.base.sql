@@ -16,12 +16,12 @@ INSERT INTO `users` (`id`, `dealerId`, `username`, `password`, `firstname`, `las
 	(9, 2, 'triehl', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Tyson', 'Riehl', 'triehl@tangentmtw.com');
 	
 INSERT INTO `roles` VALUES
-    (1, 'System Administrator'),
-    (2, 'Assessment Administrator'),
-    (3, 'Assessment User'),
-    (4, 'Quote Administrator'),
-    (5, 'Quote User'),
-    (6, 'Dealer Administrator');
+    (1, 'System Administrator', 1),
+    (2, 'Assessment Administrator', 0),
+    (3, 'Assessment User', 0),
+    (4, 'Quote Administrator', 0),
+    (5, 'Quote User', 0),
+    (6, 'Dealer Administrator', 1);
 
 /* Add roles to users */
 INSERT INTO `user_roles` (`userId`, `roleId`) VALUES

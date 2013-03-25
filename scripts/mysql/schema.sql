@@ -1275,6 +1275,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_user_quote_settings` (
 CREATE  TABLE IF NOT EXISTS `roles` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
+    `systemRole` TINYINT NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) )
     ENGINE = InnoDB
     AUTO_INCREMENT = 5

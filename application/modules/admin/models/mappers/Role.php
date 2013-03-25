@@ -6,6 +6,7 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
      */
     public $col_id = 'id';
     public $col_name = 'name';
+    public $col_systemRole = 'systemRole';
 
     /**
      * The default db table class to use
@@ -97,7 +98,7 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
         if ($object instanceof Admin_Model_Role)
         {
             $whereClause = array(
-                "{$this->col_id} = ?" => $object->getId()
+                "{$this->col_id} = ?" => $object->id
             );
         }
         else
@@ -231,7 +232,12 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->getId();
+        return $object->id;
+    }
+
+    public function getRolesAvailableForDealers ()
+    {
+        return $this->fetchAll(array("{$this->col_systemRole} = ?" => 0));
     }
 }
 
