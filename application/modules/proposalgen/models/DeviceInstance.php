@@ -1380,10 +1380,17 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Returns percent of maximum recommended print volume they are printing.
      * If their recommended max is 1000, and they print 2000. This returns 200 (Without % Sign)
+     *
      * @return float
      */
-    public function calculatePercentOfMaximumRecommendedMaxVolume()
+    public function calculatePercentOfMaximumRecommendedMaxVolume ()
     {
-        return ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume()*100);
+        $percent = 0;
+        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+        {
+            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 100);
+        }
+
+        return $percent;
     }
 }
