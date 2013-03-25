@@ -42,16 +42,15 @@ class Preferences_Service_ReportSetting
     /**
      * Gets the report setting form with default values populated
      *
-     * @param $dealerSettings array
+     * @param $populateSettings array
      *
      * @return Preferences_Form_ReportSetting
      */
-    public function getFormWithDefaults ($dealerSettings)
+    public function getFormWithDefaults ($populateSettings)
     {
         if (!isset($this->_form))
         {
             $this->_form      = new Preferences_Form_ReportSetting();
-            $populateSettings = $dealerSettings;//array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
