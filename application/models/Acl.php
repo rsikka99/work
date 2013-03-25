@@ -44,10 +44,10 @@ class Application_Model_Acl extends Zend_Acl
     /**
      * Admin Constants
      */
-    const RESOURCE_ADMIN_INDEX_INDEX   = "admin__index__index";
-    const RESOURCE_ADMIN_USER_PROFILE  = "admin__user__profile";
-    const RESOURCE_ADMIN_USER_WILDCARD = "admin__user__%";
-    const RESOURCE_ADMIN_CLIENT_WILDCARD = "admin__client__%";
+    const RESOURCE_ADMIN_INDEX_INDEX            = "admin__index__index";
+    const RESOURCE_ADMIN_USER_PROFILE           = "admin__user__profile";
+    const RESOURCE_ADMIN_USER_WILDCARD          = "admin__user__%";
+    const RESOURCE_ADMIN_CLIENT_WILDCARD        = "admin__client__%";
     const RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD = "admin__leasingschema__%";
 
     /**
@@ -107,10 +107,10 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PREFERENCES_WILDCARD          = "preferences__%";
     const RESOURCE_PREFERENCES_INDEX_INDEX       = "preferences__index__index";
     const RESOURCE_PREFERENCES_PROPOSAL_WILDCARD = "preferences__proposal__%";
-    const RESOURCE_PREFERENCES_PROPOSAL_INDEX    = "preferences__proposal__index";
+    const RESOURCE_PREFERENCES_PROPOSAL_USER     = "preferences__proposal__user";
     const RESOURCE_PREFERENCES_PROPOSAL_SYSTEM   = "preferences__proposal__system";
     const RESOURCE_PREFERENCES_QUOTE_WILDCARD    = "preferences__quote__%";
-    const RESOURCE_PREFERENCES_QUOTE_INDEX       = "preferences__quote__index";
+    const RESOURCE_PREFERENCES_QUOTE_USER        = "preferences__quote__user";
     const RESOURCE_PREFERENCES_QUOTE_SYSTEM      = "preferences__quote__system";
 
 
@@ -427,10 +427,10 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PREFERENCES_WILDCARD);
         $this->addResource(self::RESOURCE_PREFERENCES_INDEX_INDEX);
         $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_WILDCARD);
-        $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_INDEX);
+        $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_USER);
         $this->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM);
         $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_WILDCARD);
-        $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_INDEX);
+        $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_USER);
         $this->addResource(self::RESOURCE_PREFERENCES_QUOTE_SYSTEM);
 
         /**
@@ -542,7 +542,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_PROPOSAL_INDEX, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, self::PRIVILEGE_VIEW);
 
 
     }
@@ -600,7 +600,7 @@ class Application_Model_Acl extends Zend_Acl
 //        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_INDEX, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, self::PRIVILEGE_VIEW);
     }
 
     protected function _setupDealerAdminRole ()

@@ -158,17 +158,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_helper->flashMessenger(array(
-                                                'warning' => 'Please select a user to delete first.'
-                                           ));
+            $this->_helper->flashMessenger(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId === '1')
         {
-            $this->_helper->flashMessenger(array(
-                                                'danger' => 'Insufficient Privilege: You cannot delete the root user.'
-                                           ));
+            $this->_helper->flashMessenger(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
             $this->redirector('index');
         }
 
@@ -178,9 +174,7 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_helper->flashMessenger(array(
-                                                'danger' => 'There was an error selecting the user to delete.'
-                                           ));
+            $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
@@ -199,17 +193,13 @@ class Admin_UserController extends Tangent_Controller_Action
                 {
                     $mapper->delete($user);
 
-                    $this->_helper->flashMessenger(array(
-                                                        'success' => "User deleted."
-                                                   ));
+                    $this->_helper->flashMessenger(array('success' => "User deleted."));
 
                     $this->redirector('index');
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array(
-                                                        'danger' => 'There was an error while deleting the user'
-                                                   ));
+                    $this->_helper->flashMessenger(array('danger' => 'There was an error while deleting the user'));
                     $this->redirector('index');
                 }
             }
@@ -233,17 +223,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_helper->flashMessenger(array(
-                                                'warning' => 'Please select a user to delete first.'
-                                           ));
+            $this->_helper->flashMessenger(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_helper->flashMessenger(array(
-                                                'danger' => 'Insufficient Privilege: You cannot edit the root user.'
-                                           ));
+            $this->_helper->flashMessenger(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
             $this->redirector('index');
         }
 
@@ -256,9 +242,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $roles      = $roleMapper->fetchAll();
 
         $userRoleMapper = new Admin_Model_Mapper_UserRole();
-        $userRoles      = $userRoleMapper->fetchAll(array(
-                                                         'userId = ?' => $userId
-                                                    ));
+        $userRoles      = $userRoleMapper->fetchAll(array('userId = ?' => $userId));
 
         // We need to get the current users roles
         $currentUserRoles = array();
@@ -270,9 +254,7 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_helper->flashMessenger(array(
-                                                'danger' => 'There was an error selecting the user to delete.'
-                                           ));
+            $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
