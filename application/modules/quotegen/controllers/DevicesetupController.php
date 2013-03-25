@@ -968,6 +968,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     if ($optionId && $masterDeviceId)
                     {
                         $deviceOption->masterDeviceId   = $masterDeviceId;
+                        $deviceOption->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $deviceOption->optionId         = $optionId;
                         $deviceOption->includedQuantity = 0;
 
@@ -1027,6 +1028,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     $this->_flashMessenger->addMessage(array(
                                                         'error' => "An error has occurred."
                                                    ));
+                    echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                    var_dump($e);
+                    die();
                 }
                 catch (InvalidArgumentException $e)
                 {
@@ -1091,12 +1095,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         {
             $where = array_merge((array)$where, $filterWhere);
         }
-
+        $whereDealer = array(
+            'dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId
+        );
+        $where = array_merge((array)$where,$whereDealer);
         $this->view->view_filter = $view;
 
         // Display filterd list of options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
-
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
 

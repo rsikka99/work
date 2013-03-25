@@ -908,9 +908,11 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
 CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
     `masterDeviceId` INT(11) NOT NULL ,
     `optionId` INT(11) NOT NULL ,
+    `dealerId` INT(11) NOT NULL ,
     `includedQuantity` INT(11) NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`masterDeviceId`, `optionId`) ,
     INDEX `optionId` (`optionId` ASC) ,
+    INDEX `quotegen_device_options_ibfk_3_idx` (`dealerId` ASC) ,
     CONSTRAINT `quotegen_device_options_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `qgen_devices` (`masterDeviceId` )
@@ -919,6 +921,11 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
     CONSTRAINT `quotegen_device_options_ibfk_2`
     FOREIGN KEY (`optionId` )
     REFERENCES `qgen_options` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `quotegen_device_options_ibfk_3`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB

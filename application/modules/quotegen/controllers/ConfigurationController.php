@@ -143,7 +143,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         else 
         {
             // Get first master device id from list
-            foreach ( Quotegen_Model_Mapper_device::getInstance()->fetchAll() as $quoteDevice ){
+            foreach ( Quotegen_Model_Mapper_device::getInstance()->fetchQuoteDeviceListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId) as $quoteDevice ){
                 $masterDeviceId = $quoteDevice->masterDeviceId;
                 break;
             
@@ -155,8 +155,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 	        }
 	        */
         }
-        $where = "masterDeviceId = {$masterDeviceId}";
-        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAll($where);
+        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchDeviceOptionListForDealerAndDevice($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId);
         // Get device options
         $request = $this->getRequest();
         if ($request->isPost())

@@ -23,7 +23,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal form-center-actions');
         
         $masterDeviceList = array ();
-        foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $device )
+        foreach ( Quotegen_Model_Mapper_Device::getInstance()->fetchQuoteDeviceListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId) as $device )
         {
             $masterDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
         }

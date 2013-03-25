@@ -442,5 +442,17 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
 
         return $entries;
     }
+
+    /**
+     * Fetches a list of options for the dealer
+     * @param int dealer id
+     *
+     * @return Quotegen_Model_Option[]
+     */
+    public function fetchOptionListForDealer ($dealerId)
+    {
+        $options = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $options;
+    }
 }
 

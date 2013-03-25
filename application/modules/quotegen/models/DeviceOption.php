@@ -9,6 +9,11 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     /**
      * @var int
      */
+    public $dealerId;
+
+    /**
+     * @var int
+     */
     public $optionId;
 
     /**
@@ -45,6 +50,11 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
             $this->masterDeviceId = $params->masterDeviceId;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->optionId) && !is_null($params->optionId))
         {
             $this->optionId = $params->optionId;
@@ -64,6 +74,7 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     {
         return array(
             "masterDeviceId"   => $this->masterDeviceId,
+            "dealerId"   => $this->dealerId,
             "optionId"         => $this->optionId,
             "includedQuantity" => $this->includedQuantity,
         );
