@@ -33,8 +33,8 @@ CREATE  TABLE IF NOT EXISTS `clients` (
     CONSTRAINT `clients_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 5
     DEFAULT CHARACTER SET = utf8;
@@ -150,8 +150,8 @@ CREATE  TABLE IF NOT EXISTS `users` (
     CONSTRAINT `users_ibfk1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 13
     DEFAULT CHARACTER SET = latin1
@@ -614,8 +614,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
     CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
-        ON DELETE RESTRICT
-        ON UPDATE RESTRICT,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` )
@@ -648,10 +648,14 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
     INDEX `survey_setting_id` (`surveySettingId` ASC) ,
     CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
-    REFERENCES `assessments` (`id` ),
+    REFERENCES `assessments` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
-    REFERENCES `pgen_survey_settings` (`id` ))
+    REFERENCES `pgen_survey_settings` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
@@ -825,13 +829,20 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
 CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `masterDeviceId` INT(11) NOT NULL ,
+    `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     `description` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `masterDeviceId` (`masterDeviceId` ASC) ,
+    INDEX `qgen_device_configurations_ibfk_2_idx` (`dealerId` ASC) ,
     CONSTRAINT `quotegen_device_configurations_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `qgen_devices` (`masterDeviceId` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `qgen_device_configurations_ibfk_2`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1641,13 +1652,13 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_report_settings` (
     CONSTRAINT `proposalgenerator_dealer_report_settings_ibfk_1`
     FOREIGN KEY (`reportSettingId` )
     REFERENCES `pgen_report_settings` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `proposalgenerator_dealer_report_settings_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
@@ -1662,13 +1673,13 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_settings` (
     CONSTRAINT `proposalgenerator_dealer_survey_settings_ibfk1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `proposalgenerator_dealer_survey_settings_ibfk2`
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `pgen_survey_settings` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
@@ -1683,13 +1694,13 @@ CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
     CONSTRAINT `qgen_dealer_quote_settings_ibkf1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `qgen_dealer_quote_settings_ibkf2`
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `qgen_quote_settings` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 

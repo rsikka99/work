@@ -16,7 +16,7 @@ class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
         ));
         
         // Get configurations from database
-        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll();
+        $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchDeviceConfigurationListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         
         // Populate array with configuraions
         $data = array ();

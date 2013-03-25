@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
 
     /**
      * Gets an instance of the mapper
@@ -302,6 +303,18 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->masterDeviceId;
+    }
+
+    /**
+     * Fetches a list of device configurations for the dealer
+     * @param int dealer id
+     *
+     * @return Quotegen_Model_DeviceConfiguration[]
+     */
+    public function fetchDeviceConfigurationListForDealer ($dealerId)
+    {
+        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $devices;
     }
 }
 

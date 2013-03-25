@@ -229,7 +229,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
-                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($quoteDeviceConfiguration->masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId);
+                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDeviceConfiguration->masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
             }
         }
 

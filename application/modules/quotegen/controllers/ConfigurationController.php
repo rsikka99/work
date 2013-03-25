@@ -15,7 +15,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
     {
         // Display all of the deviceConfigurations
         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper,"dealerId = " . Zend_Auth::getInstance()->getIdentity()->dealerId));
         
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -174,6 +174,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
                         $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
                         $values ['masterDeviceId'] = $masterDeviceId;
+                        $values ['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $deviceConfiguration->populate($values);
 
                         $deviceConfigurationId = $mapper->insert($deviceConfiguration);

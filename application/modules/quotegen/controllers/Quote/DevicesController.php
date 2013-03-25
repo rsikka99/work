@@ -66,7 +66,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($this->_userId);
                             $quoteSetting->applyOverride($userQuoteSetting);
 
-                            $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId);
+                            $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
                             // Create Quote Device
                             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
 
@@ -172,10 +172,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
 
-        // Get the device
-        var_dump("hi");
-        $device = Quotegen_Model_Mapper_Device::getInstance()->find(79,Zend_Auth::getInstance()->getIdentity()->dealerId);
-//        $device = $quoteDevice->getDevice();
+//        $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDevice->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $device = $quoteDevice->getDevice();
         // If the device doesn't exist, we send them back to the normal page
         if (! $device)
         {

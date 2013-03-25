@@ -415,7 +415,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // Populate SKU
         $oemSku                     = null;
         $devicemapper               = new Quotegen_Model_Mapper_Device();
-        $device                     = $devicemapper->find($masterDeviceId);
+        $device                     = $devicemapper->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $device;
         if ($device)
         {
@@ -952,7 +952,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
 
         // Get the device and assigned options
-        $quoteDevice            = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $quoteDevice            = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $quoteDevice->getMasterDevice()->getFullDeviceName();
 
         // Get device options list
@@ -1149,12 +1149,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
 
         // Get the device
-        $device                 = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $device                 = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $device->getMasterDevice()->getFullDeviceName();
 
         // Get device configurations list
         $deviceConfiguration    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array(
-                                                                                                          'masterDeviceId = ?' => $masterDeviceId
+                                                                                                          'masterDeviceId = ?' => $masterDeviceId,
+                                                                                                          'dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId
                                                                                                      ));
         $assignedConfigurations = array();
         foreach ($deviceConfiguration as $configuration)
