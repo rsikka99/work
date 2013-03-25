@@ -87,7 +87,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($this->_quoteId);
             if (! $this->_quote)
             {
-                $this->_helper->flashMessenger(array (
+                $this->_flashMessenger->addMessage(array (
                         'danger' => 'Could not find the selected quote.' 
                 ));
                 $this->redirector('index', 'index');
@@ -362,7 +362,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         // Make sure they passed an id to us
         if (! $quoteDeviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
             $this->redirector('index', null, null, array (
@@ -375,7 +375,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         // Validate that we have a quote device that is associated with the quote
         if (! $quoteDevice || $quoteDevice->quoteId !== $this->_quoteId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'You may only edit devices associated with this quote.' 
             ));
             $this->redirector('index', null, null, array (
@@ -395,7 +395,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         // Redirect if we don't have a quote id or a quote
         if (! $this->_quoteId || ! $this->_quote)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.' 
             ));
             $this->redirector('index', 'index');
@@ -411,7 +411,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         // Redirect if we don't have a quote id or a quote
         if (! $this->_quoteId || ! $this->_quote)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'Invalid quote group selected!' 
             ));
             $this->redirector('index', null, null, array (

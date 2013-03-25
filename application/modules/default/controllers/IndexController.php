@@ -85,7 +85,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'Invalid Client'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'Invalid Client'));
                 }
 
 
@@ -221,7 +221,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'success' => "Client was successfully created."
                                                ));
                 $this->_mpsSession->selectedClientId = $clientId;
@@ -246,7 +246,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
         if (!$client)
         {
-            $this->_helper->flashMessenger(array('warning' => 'Please select a client first.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a client first.'));
             $this->redirector('index');
         }
 
@@ -274,7 +274,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'success' => "Client {$client->companyName} successfully updated."
                                                ));
                 // Redirect with client id so that the client is preselected
@@ -284,7 +284,7 @@ class Default_IndexController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => "Please correct the errors below."
                                                ));
             }

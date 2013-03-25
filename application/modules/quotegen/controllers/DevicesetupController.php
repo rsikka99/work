@@ -244,7 +244,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
                             if ($exists)
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
                                                                ));
                             }
@@ -282,7 +282,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $devicemapper->insert($device);
                                 }
 
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
                                                                ));
 
@@ -294,7 +294,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'danger' => $tonerErrorMessage
                                                            ));
                         }
@@ -308,7 +308,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -360,7 +360,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // page
         if (!$masterDeviceId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
             $this->redirector('index');
@@ -374,7 +374,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (!$masterDevice)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the master device to edit.'
                                            ));
             $this->redirector('index');
@@ -470,7 +470,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         // Save to the database with cascade insert turned on
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
 
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "The device has been updated sucessfully."
                                                        ));
                     }
@@ -483,7 +483,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -506,7 +506,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         if (!$deviceId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a device to delete first.'
                                            ));
             $this->redirector('index');
@@ -515,7 +515,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($deviceId);
         if (!$device)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the device to delete.'
                                            ));
             $this->redirector('index');
@@ -559,7 +559,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete($device);
 
                     // Display Message and return
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'success' => "{$deviceName} was deleted successfully."
                                                    ));
                     $this->redirector('index');
@@ -590,7 +590,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all master device page
         if (!$masterDeviceId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
             $this->redirector('index');
@@ -604,7 +604,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If the master device doesn't exist, send them back to the view all master devices page
         if (!$masterDevice)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the master device to edit.'
                                            ));
             $this->redirector('index');
@@ -674,13 +674,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 $deviceToner->masterDeviceId = $masterDeviceId;
                                 $deviceTonerMapper->save($deviceToner);
 
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "The toner was assigned successfully."
                                                                ));
                             }
                             else
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'danger' => "The toner is an invalid toner for this device."
                                                                ));
                             }
@@ -730,13 +730,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                                             'master_device_id = ?' => $masterDeviceId
                                                        ));
 
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The toner was unassigned successfully."
                                                            ));
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'danger' => 'You must have at least 1 complete set of toners for this device. If you must unassign this toner you will need to assign a new one before being able to unassign this one.'
                                                            ));
                         }
@@ -790,7 +790,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -878,7 +878,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all masterDevice page
         if (!$masterDeviceId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
             $this->redirector('index');
@@ -929,7 +929,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
                             $assignedOptions [] = $deviceOption->optionId;
 
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The option was assigned successfully."
                                                            ));
                         }
@@ -947,7 +947,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 unset($assignedOptions [$key]);
                             }
 
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The option was unassigned successfully."
                                                            ));
                         }
@@ -975,13 +975,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => "An error has occurred."
                                                    ));
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -1075,7 +1075,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all masterDevice page
         if (!$masterDeviceId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a master device to edit first.'
                                            ));
             $this->redirector('index');
@@ -1111,13 +1111,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => "An error has occurred."
                                                    ));
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }

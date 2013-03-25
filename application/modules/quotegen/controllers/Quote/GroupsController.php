@@ -46,7 +46,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Group '{$quoteDeviceGroup->name}' successfully created."
                         ));
                         
@@ -57,7 +57,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'Please correct the errors below:' 
                         ));
                     }
@@ -71,7 +71,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->delete($form->getSubForm('deviceQuantity')
                             ->getValue('deleteGroup'));
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => 'Group Deleted.' 
                         ));
                         
@@ -82,7 +82,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'You cannot delete this group.' 
                         ));
                     }
@@ -125,7 +125,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insert($quoteDeviceGroupDevice);
                         }
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Added the devices successfully." 
                         ));
                         
@@ -136,7 +136,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'Please correct the errors below:' 
                         ));
                     }
@@ -150,7 +150,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->delete($keyPair);
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => 'Device deleted successfully.' 
                         ));
                         
@@ -161,7 +161,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'You cannot delete this device.' 
                         ));
                     }
@@ -210,7 +210,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             
                             if ($quantityUpdates > 0)
                             {
-                                $this->_helper->flashMessenger(array (
+                                $this->_flashMessenger->addMessage(array (
                                         'success' => 'Your changes to the device quantities have been saved.' 
                                 ));
                             }
@@ -230,14 +230,14 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             // Log the error
                             My_Log::logException($e);
                             
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.' 
                             ));
                         }
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'Please correct the errors below:' 
                         ));
                     }

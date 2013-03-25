@@ -182,14 +182,14 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "Your changes were saved successfully."
                                                        ));
                     }
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'Please correct the errors below before continuing.'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below before continuing.'));
                 }
 
             }

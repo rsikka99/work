@@ -16,7 +16,7 @@ class Admin_TonerController extends Tangent_Controller_Action
         // Set max items per page
         $paginator->setItemCountPerPage(25);
 
-        // Save entries to view paginatior
+        // Save entries to view paginator
         $this->view->paginator = $paginator;
     }
 
@@ -29,7 +29,7 @@ class Admin_TonerController extends Tangent_Controller_Action
 
         if (!$tonerId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a toner to delete first.'
                                            ));
             $this->redirector('index');
@@ -40,7 +40,7 @@ class Admin_TonerController extends Tangent_Controller_Action
 
         if (!$toner)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the toner to delete.'
                                            ));
             $this->redirector('index');
@@ -62,7 +62,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                     {
                         $tonerMapper->delete($toner);
 
-                        $this->_helper->flashMessenger(array('success' => "The toner was deleted successfully."));
+                        $this->_flashMessenger->addMessage(array('success' => "The toner was deleted successfully."));
                         $this->redirector('index');
                     }
                 }
@@ -75,7 +75,7 @@ class Admin_TonerController extends Tangent_Controller_Action
         }
         else
         {
-            $this->_helper->flashMessenger(array('warning' => "This toner is being used by devices. Please remove it from devices before proceeding."));
+            $this->_flashMessenger->addMessage(array('warning' => "This toner is being used by devices. Please remove it from devices before proceeding."));
             $this->redirector('index');
         }
     }
@@ -120,7 +120,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -146,7 +146,7 @@ class Admin_TonerController extends Tangent_Controller_Action
         // If not idea is set then back to index page
         if (!$tonerId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a toner first'
                                            ));
             // Redirect
@@ -178,7 +178,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                         $toner->id = $tonerId;
 
                         $mapper->save($toner, $tonerId);
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "The toner was updated sucessfully."
                                                        ));
 
@@ -191,7 +191,7 @@ class Admin_TonerController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
