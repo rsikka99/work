@@ -15,7 +15,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'error' => 'That schema does not exist'
                                            ));
             $this->redirector('index');
@@ -31,7 +31,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'error' => 'That schema does not exist'
                                            ));
             $this->redirector('index');
@@ -58,7 +58,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchema->populate($values);
                         $leasingSchemaMapper->save($leasingSchema);
                         $db->commit();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "{$leasingSchema->name} has been saved successfully."
                                                        ));
                         $this->redirector('index');
@@ -66,7 +66,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => $e->getMessage()
                                                        ));
                     }
@@ -134,7 +134,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchemaRateModel->rate                 = $rate;
                         $leasingSchemaRateId                          = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
                         $db->commit();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "{$leasingSchema->name} has been created successfully."
                                                        ));
                         $this->redirector('index');
@@ -142,7 +142,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => $e->getMessage()
                                                        ));
                     }
@@ -162,7 +162,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a leasing schema to delete first.'
                                            ));
             $this->redirector('index');
@@ -188,13 +188,13 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     }
                     catch (Exception $e)
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => "Failed to delete"
                                                        ));
                         $this->redirector('index');
                     }
 
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'success' => "Leasing Schema  {$leasingSchema->name} was deleted successfully."
                                                    ));
                     $this->redirector('index');
@@ -221,7 +221,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchema)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'The leasing schema does not exist.'
                                            ));
             $this->redirector('index');
@@ -232,7 +232,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchemaRanges)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'No ranges exist.'
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -287,14 +287,14 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The term {$months} months was added successfully."
                                                            ));
                         }
                         else
                         {
                             $db->rollBack();
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'danger' => "The term {$months} months already exists."
                                                            ));
                         }
@@ -307,7 +307,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $db->rollback();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -347,7 +347,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchema)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'The leasing schema does not exist.'
                                            ));
             $this->redirector('index');
@@ -358,7 +358,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchemaRanges)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'No ranges exist.'
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -418,14 +418,14 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                                 }
                                 $db->commit();
 
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "The term {$months} months was updated successfully."
                                                                ));
                             }
                             else
                             {
                                 $db->rollBack();
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'danger' => "The term {$months} months already exists."
                                                                ));
                             }
@@ -433,7 +433,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                         else
                         {
                             $db->rollBack();
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'error' => "No term was selected. Please try again."
                                                            ));
                         }
@@ -447,7 +447,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                 {
                     // Save Error
                     $db->rollBack();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -470,7 +470,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
                 if (!$leasingSchemaTerm)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'warning' => 'The leasing schema term does not exist.'
                                                    ));
                     $this->redirector('index');
@@ -523,7 +523,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$termId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a term to delete first.'
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -534,7 +534,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$termId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the term to delete.'
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -544,7 +544,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
         if (count($leasingSchemaTerms) <= 1)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -570,7 +570,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                         $months = $term->months;
                         $mapper->delete($term);
                         $db->commit();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "The term {$months} months was deleted successfully."
                                                        ));
                         $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -585,7 +585,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => 'There was an error selecting the term to delete.'
                                                ));
                 $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -607,7 +607,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchema)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'The leasing schema does not exist.'
                                            ));
             $this->redirector('index');
@@ -666,14 +666,14 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                             }
                             $db->commit();
 
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The range \${$startRange} was added successfully."
                                                            ));
                         }
                         else
                         {
                             $db->rollBack();
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'danger' => "The range \${$startRange} already exists."
                                                            ));
                         }
@@ -686,7 +686,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $db->rollBack();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -694,7 +694,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                 {
                     // Insert Error
                     $db->rollBack();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => 'There was an error processing the insert. Please try again.'
                                                    ));
                 }
@@ -734,7 +734,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$leasingSchema)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'The leasing schema does not exist.'
                                            ));
             $this->redirector('index');
@@ -798,14 +798,14 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                                     }
                                     $db->commit();
 
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'success' => "The range was updated successfully."
                                                                    ));
                                 }
                                 else
                                 {
                                     $db->rollBack();
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'danger' => "The range \${$startRange} already exists."
                                                                    ));
                                 }
@@ -814,7 +814,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                             {
                                 // Save Error
                                 $db->rollBack();
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'danger' => 'There was an error processing the update.  Please try again.'
                                                                ));
                             }
@@ -823,7 +823,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     else
                     {
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'error' => "Please review and complete all required fields."
                                                        ));
                     }
@@ -852,7 +852,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
                 if (!$leasingSchemaRange)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'warning' => 'The leasing schema range does not exist.'
                                                    ));
                     $this->redirector('index');
@@ -905,7 +905,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$rangeId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a range to delete first.'
                                            ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
@@ -916,7 +916,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 
         if (!$rangeId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the range to delete.'
                                            ));
             $this->redirector('index');
@@ -926,7 +926,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaRanges = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
         if (count($leasingSchemaRanges) <= 1)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."
                                            ));
             $this->redirector('index');
@@ -951,7 +951,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     {
                         $mapper->delete($range);
                         $db->commit();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "The range \${$this->view->escape($range->startRange)} was deleted successfully."
                                                        ));
                         $this->redirector('index');
@@ -966,7 +966,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => 'There was an error selecting the term to delete.'
                                                ));
                 $this->redirector('index');
@@ -1036,7 +1036,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                         $db->commit();
 
                         // Send success message to the screen
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "The leasing schema has been successfully reset."
                                                        ));
                     }
@@ -1044,7 +1044,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
                     {
                         // Delete current failed
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'error' => "An error occured while deleting the current schema."
                                                        ));
                     }
@@ -1059,7 +1059,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
             {
                 // Delete current failed
                 $db->rollBack();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => "An error occured while deleting the current schema."
                                                ));
             }
@@ -1197,7 +1197,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //                                        {
 //                                            // Cancel import
 //                                            $db->rollback();
-//                                            $this->_helper->flashMessenger(array (
+//                                            $this->_flashMessenger->addMessage(array (
 //                                                                                 'error' => "Range of \${$range} has been defined more than once in the file. Please correct it and try again."
 //                                                                           ));
 //                                            $this->redirector('index');
@@ -1232,7 +1232,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //                                        {
 //                                            // Cancel import
 //                                            $db->rollBack();
-//                                            $this->_helper->flashMessenger(array (
+//                                            $this->_flashMessenger->addMessage(array (
 //                                                                                 'error' => "The term {$months} months has been defined more than once in the file. Please correct it and try again."
 //                                                                           ));
 //                                            $this->redirector('index');
@@ -1267,7 +1267,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //                        $db->commit();
 //
 //                        // Send success message to the screen
-//                        $this->_helper->flashMessenger(array (
+//                        $this->_flashMessenger->addMessage(array (
 //                                                             'success' => "The leasing schema import was completed successfully."
 //                                                       ));
 //                    }
@@ -1275,7 +1275,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //                    {
 //                        // Delete current terms and ranges failed
 //                        $db->rollBack();
-//                        $this->_helper->flashMessenger(array (
+//                        $this->_flashMessenger->addMessage(array (
 //                                                             'error' => "An error has occurred deleting the existing schema."
 //                                                       ));
 //                    }
@@ -1291,7 +1291,7 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //                    else
 //                    {
 //                        // Display errors to screen
-//                        $this->_helper->flashMessenger(array (
+//                        $this->_flashMessenger->addMessage(array (
 //                                                             'error' => "An error has occurred and the import was not completed. Please double check the format of your file and try again."
 //                                                       ));
 //                    }
@@ -1300,14 +1300,14 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
 //            catch ( Zend_Db_Statement_Mysqli_Exception $e )
 //            {
 //                $db->rollback();
-//                $this->_helper->flashMessenger(array (
+//                $this->_flashMessenger->addMessage(array (
 //                                                     'error' => "There was an error saving the leasing schema to the database."
 //                                               ));
 //            }
 //            catch ( Exception $e )
 //            {
 //                $db->rollback();
-//                $this->_helper->flashMessenger(array (
+//                $this->_flashMessenger->addMessage(array (
 //                                                     'error' => "An error has occurred and the updates were not saved."
 //                                               ));
 //            }

@@ -15,11 +15,11 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
             if ($success)
             {
-                $this->_helper->flashMessenger(array('success' => 'Report settings updated successfully'));
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
             }
             else
             {
-                $this->_helper->flashMessenger(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
             }
         }
 
@@ -40,11 +40,11 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
             if ($success)
             {
-                $this->_helper->flashMessenger(array('success' => 'Report settings updated successfully'));
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
             }
             else
             {
-                $this->_helper->flashMessenger(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
             }
         }
 
@@ -65,11 +65,11 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
             if ($success)
             {
-                $this->_helper->flashMessenger(array('success' => 'Report settings updated successfully'));
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
             }
             else
             {
-                $this->_helper->flashMessenger(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
             }
         }
 

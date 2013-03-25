@@ -88,7 +88,7 @@ class Admin_UserController extends Tangent_Controller_Action
                                         $userRoleMapper->insert($userRole);
                                     }
                                 }
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
                                                                ));
 
@@ -105,12 +105,12 @@ class Admin_UserController extends Tangent_Controller_Action
                             {
                                 // Duplicate column
                                 case 1062 :
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'danger' => 'Username already exists.'
                                                                    ));
                                     break;
                                 default :
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'danger' => 'Error saving to database.  Please try again.'
                                                                    ));
                                     break;
@@ -122,7 +122,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         {
                             $db->rollBack();
                             My_Log::logException($e);
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'danger' => 'There was an error processing this request.  Please try again.'
                                                            ));
                             $form->populate($request->getPost());
@@ -130,14 +130,14 @@ class Admin_UserController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
                                                        ));
                     }
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => 'Please correct the errors below'
                                                    ));
                     $form->populate($request->getPost());
@@ -158,13 +158,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_helper->flashMessenger(array('warning' => 'Please select a user to delete first.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId === '1')
         {
-            $this->_helper->flashMessenger(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
+            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
             $this->redirector('index');
         }
 
@@ -174,7 +174,7 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
@@ -193,13 +193,13 @@ class Admin_UserController extends Tangent_Controller_Action
                 {
                     $mapper->delete($user);
 
-                    $this->_helper->flashMessenger(array('success' => "User deleted."));
+                    $this->_flashMessenger->addMessage(array('success' => "User deleted."));
 
                     $this->redirector('index');
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'There was an error while deleting the user'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error while deleting the user'));
                     $this->redirector('index');
                 }
             }
@@ -223,13 +223,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_helper->flashMessenger(array('warning' => 'Please select a user to delete first.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_helper->flashMessenger(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
+            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
             $this->redirector('index');
         }
 
@@ -254,7 +254,7 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
@@ -400,7 +400,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         {
                         }
 
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "User '" . $this->view->escape($formValues ["username"]) . "' saved successfully."
                                                        ));
                     }
@@ -411,7 +411,7 @@ class Admin_UserController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => $e->getMessage()
                                                    ));
                 }
@@ -433,7 +433,7 @@ class Admin_UserController extends Tangent_Controller_Action
 
         if (!$userId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a user to delete first.'
                                            ));
             $this->redirector('index');
@@ -471,7 +471,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         $identity->lastname  = $values ['lastname'];
                         $identity->email     = $values ['email'];
 
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => "User {$user->username} has been updated successfully."
                                                        ));
                     }
@@ -479,7 +479,7 @@ class Admin_UserController extends Tangent_Controller_Action
                     // If anything goes wrong show error message
                 catch (Exception $e)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'warning' => "User was not updated successfully please try again.	"
                                                    ));
                 }

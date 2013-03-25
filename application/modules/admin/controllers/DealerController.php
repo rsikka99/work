@@ -66,13 +66,13 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $dealerMapper->save($dealer);
 
                         // All done
-                        $this->_helper->flashMessenger(array('success' => "{$dealer->dealerName} has been successfully updated!"));
+                        $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
                         $this->redirector("index");
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
                         My_Log::logException($e);
                     }
                 }
@@ -146,24 +146,24 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         if ($dealerId)
                         {
-                            $this->_helper->flashMessenger(array('success' => "Dealer {$dealer->dealerName} successfully created"));
+                            $this->_flashMessenger->addMessage(array('success' => "Dealer {$dealer->dealerName} successfully created"));
                             $this->redirector('index');
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                            $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
                         }
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_helper->flashMessenger(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
                         My_Log::logException($e);
                     }
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'Errors on form, please correct and try again'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'Errors on form, please correct and try again'));
                 }
             }
             else
@@ -245,14 +245,14 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->commit();
 
                         // We have successfully deleted it then redirect and display message
-                        $this->_helper->flashMessenger(array("success" => "Successfully deleted {$dealer->dealerName}."));
+                        $this->_flashMessenger->addMessage(array("success" => "Successfully deleted {$dealer->dealerName}."));
                         $this->redirector("index");
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
                         My_Log::logException($e);
-                        $this->_helper->flashMessenger(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
+                        $this->_flashMessenger->addMessage(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
                     }
                 }
             }
