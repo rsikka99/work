@@ -576,6 +576,8 @@ $(document).ready(function ()
                     $("#ppm_black").val(data.ppm_black);
                     $("#ppm_color").val(data.ppm_color);
                     $("#duty_cycle").val(data.duty_cycle);
+                    $("#partsCostPerPage").val(data.partsCostPerPage);
+                    $("#laborCostPerPage").val(data.laborCostPerPage);
                 }
             },
             error     : function ()
@@ -632,7 +634,6 @@ $(document).ready(function ()
                 break;
         }
     });
-
     $("#criteria_filter").change(function ()
     {
         var url = '';

@@ -134,6 +134,33 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                      ));
 
         /*
+         * Device Price
+         */
+        $this->addElement('text', 'cost', array(
+                                               'label'      => 'Device Cost:',
+                                               'class'      => 'span1',
+                                               'prepend'    => '$',
+                                               'dimension'  => 1,
+                                               'maxlength'  => 8,
+                                               'required'   => false,
+                                               'allowEmpty' => false,
+                                               'filters'    => array(
+                                                   'StringTrim',
+                                                   'StripTags'
+                                               ),
+                                               'validators' => array(
+                                                   new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                                                                                 new Zend_Validate_NotEmpty(),
+                                                                                                                 new Zend_Validate_Float(),
+                                                                                                                 new Zend_Validate_Between(array(
+                                                                                                                                                'min' => 1,
+                                                                                                                                                'max' => 30000
+                                                                                                                                           ))
+                                                                                                            ))
+                                               )
+                                          ));
+
+        /*
          * Toner Configuration
          */
         $tonerConfigs = array();
@@ -252,33 +279,6 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                              )
                                                          )
                                                     ));
-
-        /*
-         * Device Price
-         */
-        $this->addElement('text', 'cost', array(
-                                               'label'      => 'Device Cost:',
-                                               'class'      => 'span1',
-                                               'prepend'    => '$',
-                                               'dimension'  => 1,
-                                               'maxlength'  => 8,
-                                               'required'   => false,
-                                               'allowEmpty' => false,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                 new Zend_Validate_NotEmpty(),
-                                                                                                                 new Zend_Validate_Float(),
-                                                                                                                 new Zend_Validate_Between(array(
-                                                                                                                                                'min' => 1,
-                                                                                                                                                'max' => 30000
-                                                                                                                                           ))
-                                                                                                            ))
-                                               )
-                                          ));
 
         /*
          * Parts Cost Per Page

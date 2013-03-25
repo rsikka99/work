@@ -14,22 +14,12 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
     /**
      * @var Float
      */
-    public $cost;
-
-    /**
-     * @var Float
-     */
     public $partsCostPerPage;
 
     /**
      * @var Float
      */
     public $laborCostPerPage;
-
-    /**
-     * @var string
-     */
-    public $dealerSku;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -51,11 +41,6 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
             $this->dealerId = $params->dealerId;
         }
 
-        if (isset($params->cost) && !is_null($params->cost))
-        {
-            $this->cost = $params->cost;
-        }
-
         if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
         {
             $this->partsCostPerPage = $params->partsCostPerPage;
@@ -64,11 +49,6 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
         {
             $this->laborCostPerPage = $params->laborCostPerPage;
-        }
-
-        if (isset($params->dealerSku) && !is_null($params->dealerSku))
-        {
-            $this->dealerSku = $params->dealerSku;
         }
     }
 
@@ -80,10 +60,8 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         return array(
             "masterDeviceId" => $this->masterDeviceId,
             "dealerId" => $this->dealerId,
-            "cost" => $this->cost,
             "partsCostPerPage" => $this->partsCostPerPage,
             "laborCostPerPage" => $this->laborCostPerPage,
-            "dealerSku" => $this->dealerSku,
         );
     }
 }

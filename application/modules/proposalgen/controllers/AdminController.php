@@ -563,6 +563,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'ppm_black'             => $row [0] ['ppmBlack'],
                     'ppm_color'             => $row [0] ['ppmColor'],
                     'duty_cycle'            => $row [0] ['dutyCycle'],
+                    'partsCostPerPage'      => $row [0] ['partsCostPerPage'],
+                    'laborCostPerPage'      => $row [0] ['laborCostPerPage'],
                 );
             }
             else
@@ -5064,7 +5066,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     't' => 'pgen_toners'), array(
                                                                 'id AS toners_id', 'sku', 'yield', 'cost'
                                                            )
-                    )
+                        )
                         ->joinLeft(array(
                                         'dt' => 'pgen_device_toners'
                                    ), 'dt.toner_id = t.id', array(
@@ -5454,8 +5456,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             if ($filter == "manufacturerId")
             {
                 $filter = "tm.id";
-                $where = ' AND ' . $filter . ' = ' . $criteria;
-            }else
+                $where  = ' AND ' . $filter . ' = ' . $criteria;
+            }
+            else
             {
                 $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
             }
@@ -6047,14 +6050,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => $errorMessage
-                                 ));
+                                 'error' => $errorMessage
+                            ));
         }
         else
         {
             $this->sendJson(array(
-                                      'success' => true
-                                 ));
+                                 'success' => true
+                            ));
         }
     }
 
@@ -6105,7 +6108,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                       )
                                                                  ));
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
-            if ($searchCriteria != 'onlyUnmapped' &&( $searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
+            if ($searchCriteria != 'onlyUnmapped' && ($searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
                 $searchCriteria = null;
                 $searchValue    = null;
@@ -6135,8 +6138,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => 'Sorting parameters are invalid'
-                                 ));
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
         }
     }
 
@@ -6554,7 +6557,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             ->joinLeft(array(
                             'up' => 'user_roles'
                        ), 'u.id = up.userId'
-        );
+            );
         if ($where)
         {
             $select->where($where);

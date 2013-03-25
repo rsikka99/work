@@ -414,12 +414,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
                                 'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
                                 'isLeased'           => $formData ["is_leased"],
-                                'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null)
-                            );
-
-                            // Dealer master device attributes
-                            $masterAttributes = array(
-                                'cost'             => ($formData["cost"] === "") ? new Zend_Db_Expr('NULL') : $formData["cost"],
+                                'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null),
                                 'partsCostPerPage' => ($formData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["partsCostPerPage"],
                                 'laborCostPerPage' => ($formData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["laborCostPerPage"],
                             );
@@ -433,14 +428,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                 // edit device
                                 $master_deviceTable->update($master_deviceData, $where);
-
-
-                                // Create a new master device attribute object, populate and insert
-                                $dealerMasterAttributes = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                $dealerMasterAttributes->populate($masterAttributes);
-                                $dealerMasterAttributes->masterDeviceId = $master_device_id;
-                                $dealerMasterAttributes->dealerId       = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                                $dealer_master_device_attribute_id      = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($dealerMasterAttributes);
 
                                 // remove all device_toners for master
                                 // device
@@ -507,13 +494,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         // Get the current date for the devices date created.
                                         $masterDevice->dateCreated = $date;
                                         $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
-
-                                        // Create a new master device attribute object, populate and insert
-                                        $dealerMasterAttributes = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                        $dealerMasterAttributes->populate($masterAttributes);
-                                        $dealerMasterAttributes->masterDeviceId = $master_device_id;
-                                        $dealerMasterAttributes->dealerId       = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                                        $dealer_master_device_attribute_id      = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($dealerMasterAttributes);
 
                                         $this->_helper->flashMessenger(array(
                                                                             'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
@@ -684,7 +664,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 $form->getElement('new_printer')->setValue($formData ['new_printer']);
                 $form->getElement('launch_date')->setValue($formData ['launch_date']);
-                $form->getElement('cost')->setValue($formData ['cost']);
                 $form->getElement('partsCostPerPage')->setValue($formData ['partsCostPerPage']);
                 $form->getElement('laborCostPerPage')->setValue($formData ['laborCostPerPage']);
                 $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
@@ -702,6 +681,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 $form->getElement('ppm_black')->setValue($formData ['ppm_black']);
                 $form->getElement('ppm_color')->setValue($formData ['ppm_color']);
                 $form->getElement('duty_cycle')->setValue($formData ['duty_cycle']);
+                $form->getElement('partsCostPerPage')->setValue($formData ['partsCostPerPage']);
+                $form->getElement('laborCostPerPage')->setValue($formData ['laborCostPerPage']);
             }
         }
         $this->view->deviceform = $form;
@@ -1104,7 +1085,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     'isDuplex'           => $formData ["is_duplex"],
                                     'wattsPowerNormal'   => $formData ["watts_power_normal"],
                                     'wattsPowerIdle'     => $formData ["watts_power_idle"],
-                                    'cost'               => ($formData ["device_price"] == 0 ? null : $formData ["device_price"]),
                                     'ppmBlack'           => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
                                     'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
                                     'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
@@ -1315,7 +1295,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $deviceData ['masterDeviceId']     = $masterDevice->id;
                         $deviceData ['launch_date']        = $masterDevice->launchDate;
                         $deviceData ['toner_config_id']    = $masterDevice->tonerConfigId;
-                        $deviceData ['device_price']       = $masterDevice->cost;
                         $deviceData ['is_copier']          = $masterDevice->isCopier;
                         $deviceData ['is_scanner']         = $masterDevice->isScanner;
                         $deviceData ['reportsTonerLevels'] = $masterDevice->reportsTonerLevels;
@@ -1341,7 +1320,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $deviceData ['manufacturer_id']    = $rmsRow->manufacturerId;
                         $deviceData ['launch_date']        = $rmsRow->launchDate;
                         $deviceData ['toner_config_id']    = $rmsRow->tonerConfigId;
-                        $deviceData ['device_price']       = $rmsRow->cost;
                         $deviceData ['is_copier']          = $rmsRow->isCopier;
                         $deviceData ['is_scanner']         = $rmsRow->isScanner;
                         $deviceData ['reportsTonerLevels'] = $deviceInstance->reportsTonerLevels;

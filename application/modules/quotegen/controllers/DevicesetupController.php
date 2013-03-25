@@ -276,20 +276,20 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                         'masterDeviceId' => $masterDeviceId,
                                         'oemSku'         => $oemSku,
                                         'dealerSku'      => $dealerSku,
-                                        'description'    => $values ['description']
+                                        'description'    => $values ['description'],
+                                        'cost'           => $values['cost']
                                     );
                                     $device->populate($devicevalues);
                                     $devicemapper->insert($device);
                                 }
-
                                 $this->_helper->flashMessenger(array(
                                                                     'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
                                                                ));
 
                                 // Redirect them here so that the form reloads
                                 $this->redirector('edit', null, null, array(
-                                                                                    'id' => $masterDeviceId
-                                                                               ));
+                                                                           'id' => $masterDeviceId
+                                                                      ));
                             }
                         }
                         else
@@ -371,7 +371,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $masterDevice           = $mapper->find($masterDeviceId);
         $this->view->devicename = $masterDevice->getFullDeviceName();
 
-        // If the masterDevice doesn't exist, send them back t the view all masterDevices page
+        // If the masterDevice doesn't exist, send them back to the view all masterDevices page
         if (!$masterDevice)
         {
             $this->_helper->flashMessenger(array(
@@ -385,7 +385,33 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Prepare the data for the form
         $form->populate($masterDevice->toArray());
+        $isSystemAdmin = $this->view->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if (!$isSystemAdmin)
+        {
+            $tempAttribute = $masterDevice->getDealerAttributes();
+            if($tempAttribute)
+            {
+                $form->getElement('partsCostPerPage')->setValue($tempAttribute->partsCostPerPage);
+                $form->getElement('laborCostPerPage')->setValue($tempAttribute->laborCostPerPage);
+            }
 
+            /**
+             * @var $element Zend_Form_Element
+             */
+            foreach ($form->getElements() as $element)
+            {
+                $element->setAttrib('readonly', 'true');
+            }
+            $form->getElement('can_sell')->setAttrib('readonly', null);
+            $form->getElement('oemSku')->setAttrib('readonly', null);
+            $form->getElement('description')->setAttrib('readonly', null);
+            $form->getElement('dealerSku')->setAttrib('readonly', null);
+            $form->getElement('cost')->setAttrib('readonly', null);
+            $form->getElement('submit')->setAttrib('readonly', null);
+            $form->getElement('cancel')->setAttrib('readonly', null);
+            $form->getElement('partsCostPerPage')->setAttrib('readonly', null);
+            $form->getElement('laborCostPerPage')->setAttrib('readonly', null);
+        }
         // Populate SKU
         $oemSku                     = null;
         $devicemapper               = new Quotegen_Model_Mapper_Device();
@@ -397,9 +423,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $form->getElement('can_sell')->setValue(true);
             $form->getElement('oemSku')->setValue($oemSku);
             $form->getElement('dealerSku')->setValue($device->dealerSku);
-
-            $description = $device->description;
-            $form->getElement('description')->setValue($description);
+            $form->getElement('cost')->setValue($device->cost);
+            $form->getElement('description')->setValue($device->description);
         }
 
         // Make sure we are posting data
@@ -430,7 +455,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 'masterDeviceId' => $masterDeviceId,
                                 'oemSku'         => $values ['oemSku'],
                                 'dealerSku'      => $values ['dealerSku'],
-                                'description'    => $values ['description']
+                                'description'    => $values ['description'],
+                                'cost'           => $values['cost']
                             );
                             $device->populate($devicevalues);
 
@@ -453,23 +479,64 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $devicemapper->delete($device);
                             $this->view->quotegendevice = null;
                         }
-
-                        // Save Master Device
-                        $mapper       = new Proposalgen_Model_Mapper_MasterDevice();
-                        $masterDevice = new Proposalgen_Model_MasterDevice();
-                        foreach ($values as &$value)
+                        if ($isSystemAdmin)
                         {
-                            if (strlen($value) < 1)
+                            // Save Master Device
+                            $mapper       = new Proposalgen_Model_Mapper_MasterDevice();
+                            $masterDevice = new Proposalgen_Model_MasterDevice();
+                            foreach ($values as &$value)
                             {
-                                $value = null;
+                                if (strlen($value) < 1)
+                                {
+                                    $value = null;
+                                }
+                            }
+                            $masterDevice->populate($values);
+                            $masterDevice->id = $masterDeviceId;
+
+                            // Save to the database with cascade insert turned on
+                            $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
+                        }
+                        // We are within a dealer and we may want to save partsCostPerPage and laborCostPerPage to the dealer attributes
+                        else
+                        {
+
+                            if ($values['partsCostPerPage'] || $values['laborCostPerPage'])
+                            {
+                                // Save to Dealer Attribute
+                                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+                                if ($masterDevice)
+                                {
+                                    $attribute = $masterDevice->getDealerAttributes();
+                                    // If we do not have an attribute lets create one, populate, and then save
+                                    if (!$attribute)
+                                    {
+                                        $attribute                 = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                        $attribute->dealerId       = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                        $attribute->masterDeviceId = $masterDeviceId;
+                                        $attribute->populate($values);
+                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($attribute);
+                                    }
+                                    // We have one, lets populate then save it!
+                                    else
+                                    {
+                                        $attribute->populate($values);
+                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($attribute);
+                                    }
+
+                                }
+                            }
+                            //If they are not set, lets make sure we delete our current one
+                            else
+                            {
+                                $attribute = $masterDevice->getDealerAttributes();
+                                // If we do not have an attribute lets create one, populate, and then save
+                                if ($attribute)
+                                {
+                                    Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($attribute);
+                                }
                             }
                         }
-                        $masterDevice->populate($values);
-                        $masterDevice->id = $masterDeviceId;
-
-                        // Save to the database with cascade insert turned on
-                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
-
                         $this->_helper->flashMessenger(array(
                                                             'success' => "The device has been updated sucessfully."
                                                        ));

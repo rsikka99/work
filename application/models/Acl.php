@@ -37,6 +37,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_CLIENT_WILDCARD               = "quotegen__client__%";
     const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD        = "quotegen__configuration__%";
     const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD         = "quotegen__quote_devices__%";
+    const RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD         = "quotegen__devicesetup__%";
     const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD         = "quotegen__quote_reports__%";
 
 
@@ -346,6 +347,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
+        $this->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD);
 
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGIN);
         $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGOUT);
@@ -609,6 +611,7 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
     /**

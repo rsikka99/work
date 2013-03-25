@@ -78,19 +78,19 @@ INSERT INTO `qgen_options` (`id`, `name`, `description`, `cost`, `dealerSku`, `o
 (64, 'Kyocera Printing System Interface Kit (A)', 'Interface kit for Printing System(12), includes mounting kit and circuit board', 450, '', '1503NR0KL2'),
 (65, 'Kyocera Copy Tray(D)', 'Copy Tray', 27, '', '1902LF0UN1');
 
-INSERT INTO `qgen_devices` (`masterDeviceId`, `dealerSku`, `oemSku`, `description`) VALUES
-(79, '', '8870/DN', ''),
-(95, '', 'CC395A', ''),
-(401, '', 'Q3939A', '- Fax accessory'),
-(445, 'S7938341', '8570/DN', ''),
-(459, '', 'CF116A', ''),
-(471, 'S8145808', 'CE504A', ''),
-(478, '', 'CE992A', ''),
-(479, '', 'CE504A', ''),
-(480, '', '1102M92US0', 'Standard: 4-in-1, Copy, Scan, Network Print, Fax\r\nDocument Processor (Reversing 50 sheets), Duplex, 1GB RAM'),
-(481, '', '1102LV2US0', '62ppm A4 Monochrome Printer\r\nStd. Duplex, Ethernet Network, 256MB RAM'),
-(482, '', '1102LH2US0', '55 PPM A3 B&W MFP'),
-(483, '', '1102LB2US0', '65/65 PPM A3 Color MFP');
+INSERT INTO `qgen_devices` (`masterDeviceId`,`dealerId`, `dealerSku`, `oemSku`, `description`) VALUES
+(79, 2, '', '8870/DN', ''),
+(95, 2, '', 'CC395A', ''),
+(401, 2, '', 'Q3939A', '- Fax accessory'),
+(445, 2, 'S7938341', '8570/DN', ''),
+(459, 2, '', 'CF116A', ''),
+(471, 2, 'S8145808', 'CE504A', ''),
+(478, 2, '', 'CE992A', ''),
+(479, 2, '', 'CE504A', ''),
+(480, 2, '', '1102M92US0', 'Standard: 4-in-1, Copy, Scan, Network Print, Fax\r\nDocument Processor (Reversing 50 sheets), Duplex, 1GB RAM'),
+(481, 2, '', '1102LV2US0', '62ppm A4 Monochrome Printer\r\nStd. Duplex, Ethernet Network, 256MB RAM'),
+(482, 2, '', '1102LH2US0', '55 PPM A3 B&W MFP'),
+(483, 2, '', '1102LB2US0', '65/65 PPM A3 Color MFP');
 
 INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`, `includedQuantity`) VALUES
 (79, 9, 0),

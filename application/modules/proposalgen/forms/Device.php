@@ -253,48 +253,6 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //device price
-        $device_price = new Zend_Form_Element_Text('cost');
-        $device_price->setLabel('Price:')
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'device_price')
-            ->setAttrib('style', 'text-align: right')
-            ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-            ->setOrder($elementCounter)
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_GreaterThan(0))
-            ->setDescription('$')
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'device_price-element'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        $device_price->getValidator('Float')->setMessage('Please enter a number.');
-        $device_price->getValidator('GreaterThan')->setMessage('Value must be greater then zero.');
-        array_push($elements, $device_price);
-        $elementCounter++;
-
         //override price
         $override_price = new Zend_Form_Element_Text('override_price');
         $override_price->setLabel('Override Price:')

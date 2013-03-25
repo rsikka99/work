@@ -61,11 +61,12 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         // Save to the database
                         try
                         {
+
                             $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
                             $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($this->_userId);
                             $quoteSetting->applyOverride($userQuoteSetting);
 
-                            $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+                            $device = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId);
                             // Create Quote Device
                             $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
 
@@ -75,7 +76,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
                             $quoteDevice->packageMarkup = 0;
                             $quoteDevice->residual = 0;
-
+                            $quoteDevice->cost = $device->cost;
                             // Save our device
                             $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
 
@@ -108,11 +109,13 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             My_Log::logException($e);
                         }
                     }
+
                 }
                 else
                 {
                     throw new Zend_Validate_Exception("Form Validation Failed");
                 }
+
             }
             else if (isset($values ['saveAndContinue']))
             {
@@ -170,8 +173,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $quoteDevice = $this->getQuoteDevice('id');
 
         // Get the device
-        $device = $quoteDevice->getDevice();
-
+        var_dump("hi");
+        $device = Quotegen_Model_Mapper_Device::getInstance()->find(79,Zend_Auth::getInstance()->getIdentity()->dealerId);
+//        $device = $quoteDevice->getDevice();
         // If the device doesn't exist, we send them back to the normal page
         if (! $device)
         {

@@ -408,7 +408,6 @@ CREATE  TABLE IF NOT EXISTS `pgen_toner_configs` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
-    `cost` DOUBLE NULL ,
     `dateCreated` DATETIME NOT NULL ,
     `dutyCycle` INT(11) NULL ,
     `isCopier` TINYINT(4) NOT NULL DEFAULT 0 ,
@@ -423,7 +422,8 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
     `leasedTonerYield` INT(11) NULL ,
     `ppmBlack` DOUBLE NULL ,
     `ppmColor` DOUBLE NULL ,
-    `serviceCostPerPage` DOUBLE NULL ,
+    `partsCostPerPage` DOUBLE NULL ,
+    `laborCostPerPage` DOUBLE NULL ,
     `tonerConfigId` INT(11) NOT NULL ,
     `wattsPowerNormal` DOUBLE NULL ,
     `wattsPowerIdle` DOUBLE NULL ,
@@ -797,16 +797,24 @@ CREATE  TABLE IF NOT EXISTS `qgen_categories` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_devices` (
     `masterDeviceId` INT(11) NOT NULL ,
+    `dealerId` INT(11) NOT NULL ,
+    `cost` DOUBLE NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
     `description` TEXT NULL ,
-    PRIMARY KEY (`masterDeviceId`) ,
+    PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
     INDEX `quotegen_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
+    INDEX `quotegen_devices_ibfk_2_idx` (`dealerId` ASC) ,
     CONSTRAINT `quotegen_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
+        ON UPDATE CASCADE,
+    CONSTRAINT `quotegen_devices_ibfk_2`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
@@ -1691,10 +1699,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
 CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
     `masterDeviceId` INT NOT NULL ,
     `dealerId` INT NOT NULL ,
-    `cost` DOUBLE NULL ,
     `laborCostPerPage` DOUBLE NULL ,
     `partsCostPerPage` DOUBLE NULL ,
-    `dealerSku` VARCHAR(45) NULL ,
     PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
     INDEX `dealer_master_device_attributes_ibk1_idx` (`dealerId` ASC) ,
     INDEX `dealer_master_device_attributes_ibk2_idx` (`masterDeviceId` ASC) ,
@@ -1717,7 +1723,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
 CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     `tonerId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
-    `cost` INT NULL ,
+    `cost` DOUBLE NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     PRIMARY KEY (`tonerId`, `dealerId`) ,
     INDEX `dealer_toner_attributes_ibfk1_idx` (`tonerId` ASC) ,
