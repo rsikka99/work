@@ -115,7 +115,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
     /**
      * Finds a DealerMasterDeviceAttribute based on it's primaryKey
      *
-     * @param $id int
+     * @param $id array - masterDeviceId, dealerId
      *            The id of the DealerMasterDeviceAttribute to find
      *
      * @return Proposalgen_Model_Dealer_Master_Device_Attribute
