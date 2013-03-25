@@ -210,26 +210,26 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Delete the dealer and the related report setting
-                        $reportSettingDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
-                        $quoteSettingDeleted  = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
-                        $dealerDeleted        = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
+                        $reportSettingRowsDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
+                        $quoteSettingRowsDeleted  = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
+                        $dealerRowsDeleted        = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
 
 
                         /**
                          * Deleting did not work. Throw an exception so that we can roll back the database
                          */
-                        if ($dealerDeleted == 0 || $reportSettingDeleted == 0 || $quoteSettingDeleted == 0)
+                        if ($dealerRowsDeleted == 0 || $reportSettingRowsDeleted == 0 || $quoteSettingRowsDeleted == 0)
                         {
                             $message = "Error Deleting Dealer. ";
-                            if ($dealerDeleted == 0)
+                            if ($dealerRowsDeleted == 0)
                             {
                                 $message .= "Dealer row did not exist.";
                             }
-                            if ($reportSettingDeleted == 0)
+                            if ($reportSettingRowsDeleted == 0)
                             {
                                 $message .= "Report setting row did not exist.";
                             }
-                            if ($quoteSettingDeleted == 0)
+                            if ($quoteSettingRowsDeleted == 0)
                             {
                                 $message .= "Quote setting row did not exist.";
                             }
