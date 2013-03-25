@@ -202,7 +202,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     }
 
                                     $hasValidToners    = false;
-                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);
+                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);;
                                     $repopulateForm    = 1;
                                     break;
                                 }
@@ -1063,7 +1063,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
      */
     public function configurationsAction ()
     {
-        // Get master device 
+        // Get master device
         $masterDeviceId = $this->_getParam('id', false);
         $this->view->id = $masterDeviceId;
 

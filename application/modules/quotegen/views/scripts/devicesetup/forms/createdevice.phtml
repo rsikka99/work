@@ -44,6 +44,24 @@ $form = $this->form;
     		$("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
    		<?php } ?>
     });
+
+    function update_leased()
+    {
+        if ($('#isLeased').is(":checked"))
+        {
+            $('#leasedTonerYield').removeAttr('disabled');
+        }
+        else
+        {
+            $('#leasedTonerYield').attr('disabled','disabled');
+        }
+    }
+
+
+    $(isLeased).change(function(){
+        update_leased();
+    });
+    update_leased();
     
     function removeA(arr) {
 	    var what, a= arguments, L= a.length, ax;
