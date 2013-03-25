@@ -4213,12 +4213,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $db->beginTransaction();
                     try
                     {
-
                         $lines = file($upload->getFileName(), FILE_IGNORE_NEW_LINES);
 
                         // grab the first row of items(the column headers)
                         $headers = str_getcsv(strtolower($lines [0]));
-
 
                         // default column keys
                         $key_toner_id          = null;
@@ -4569,11 +4567,17 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                 // Loop through the file and save.
                                 $inputFilter = new Zend_Filter_Input(array(
-                                                                          'cost' => array(
+                                                                          'cost'             => array(
                                                                               'StringTrim',
-                                                                          )
+                                                                          ),
+                                                                          'laborCostPerPage' => array(
+                                                                              'StringTrim',
+                                                                          ),
+                                                                          'partsCostPerPage' => array(
+                                                                              'StringTrim',
+                                                                          ),
                                                                      ), array(
-                                                                             'cost' => array(
+                                                                             'cost'             => array(
                                                                                  'Float',
                                                                                  array(
                                                                                      'name'    => 'GreaterThan',
@@ -4581,7 +4585,27 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                                          'min' => 0,
                                                                                      )
                                                                                  )
-                                                                             )));
+                                                                             ),
+                                                                             'laborCostPerPage' => array(
+                                                                                 'Float',
+                                                                                 array(
+                                                                                     'name'    => 'GreaterThan',
+                                                                                     'options' => array(
+                                                                                         'min' => 0,
+                                                                                     )
+                                                                                 )
+                                                                             ),
+                                                                             'partsCostPerPage' => array(
+                                                                                 'Float',
+                                                                                 array(
+                                                                                     'name'    => 'GreaterThan',
+                                                                                     'options' => array(
+                                                                                         'min' => 0,
+                                                                                     )
+                                                                                 )
+                                                                             ),
+                                                                        )
+                                );
 
                                 foreach ($results as $key => $value)
                                 {
@@ -4594,25 +4618,20 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     // update records
                                     if ($import_type == 'printer')
                                     {
-
-                                        // 0=master_device_id; 1=manufacturer_name;
-                                        // 2=printer_model; 3=device_price;
-                                        // 4=parts_cost_per_page; 5=labor_cost_per_page
                                         if (in_array("System Admin", $this->privilege))
                                         {
                                             // Set the data inside the input filter to hold the various costs that
                                             // have been inputted
-
                                             $inputFilter->setData(array('cost' => $value ['Price']));
-                                            $inputFilter->setData(array('laborCpp' => $value ['Labor CPP']));
-                                            $inputFilter->setData(array('partsCpp' => $value ['Parts CPP']));
+                                            $importCost = $inputFilter->cost;
 
+                                            $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
+                                            $importLaborCpp = $inputFilter->laborCostPerPage;
 
-                                            $importCost      = $inputFilter->cost;
-                                            $importLaborCpp  = $inputFilter->laborCpp;
-                                            $importPartsCpp  = $inputFilter->partsCpp;
-                                            $importDealerSku = $value ['Dealer Sku'];
+                                            $inputFilter->setData(array('partsCostPerPage' => $value ['Parts CPP']));
+                                            $importPartsCpp = $inputFilter->partsCostPerPage;
 
+                                            $importDealerSku  = $value ['Dealer Sku'];
                                             $master_device_id = $value ['Master Printer ID'];
 
                                             $dataArray = array(
@@ -4624,25 +4643,103 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                 'partsCostPerPage' => $importPartsCpp,
                                             );
 
-                                            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                                            var_dump($dataArray);
-                                            die();
-
-
-                                            if (count($toner) > 0)
+                                            // Does the master device exist in our database?
+                                            $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($master_device_id);
+                                            if (count($masterDevice->toArray()) > 0)
                                             {
-                                                $exists = true;
-
-                                                // don't allow price of 0
-                                                if ($device_price == 0)
+                                                // Do we have the master device already in this dealer device table
+                                                $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($master_device_id, $dealerId));
+                                                if ($masterDeviceAttribute)
                                                 {
-                                                    $device_price = null;
+                                                    // If we have a master device attribute and the row is empty, delete the row
+                                                    if (empty($importCost) && empty($importDealerSku))
+                                                    {
+                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
+                                                    }
+                                                    else
+                                                    {
+                                                        // Have any values changed
+                                                        $hasChanged = false;
+
+                                                        if(!$inputFilter->isValid('cost'))
+                                                        {
+                                                            $importCost = null;
+                                                        }
+                                                        if(!$inputFilter->isValid('partsCostPerPage'))
+                                                        {
+                                                            $importPartsCpp = null;
+                                                        }
+                                                        if(!$inputFilter->isValid('laborCostPerPage'))
+                                                        {
+                                                            $importLaborCpp = null;
+                                                        }
+
+                                                        if ((float)$importCost !== (float)$masterDeviceAttribute->cost)
+                                                        {
+                                                            if($importCost === null)
+                                                            {
+                                                                $importCost = new Zend_Db_Expr('null');
+                                                            }
+                                                            $masterDeviceAttribute->cost = $importCost;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
+                                                        {
+                                                            if($importPartsCpp === null)
+                                                            {
+                                                                $importPartsCpp = new Zend_Db_Expr('null');
+                                                            }
+                                                            $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ((float)$importLaborCpp !== (float)$masterDeviceAttribute->laborCostPerPage)
+                                                        {
+                                                            if($importLaborCpp === null)
+                                                            {
+                                                                $importLaborCpp = new Zend_Db_Expr('null');
+                                                            }
+                                                            $masterDeviceAttribute->laborCostPerPage = $importLaborCpp;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
+                                                        {
+                                                            if($importPartsCpp === null)
+                                                            {
+                                                                $importPartsCpp = new Zend_Db_Expr('null');
+                                                            }
+                                                            $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
+                                                            $hasChanged = true;
+
+                                                        }
+                                                        if ($importDealerSku !== $masterDeviceAttribute->dealerSku)
+                                                        {
+                                                            if($importDealerSku === null)
+                                                            {
+                                                                $importDealerSku = new Zend_Db_Expr('null');
+                                                            }
+                                                            $masterDeviceAttribute->dealerSku = $importDealerSku;
+                                                            $hasChanged = true;
+                                                        }
+
+                                                        if ($hasChanged)
+                                                        {
+                                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
+
+                                                        }
+                                                    }
                                                 }
-
-                                                // don't update if values match
-                                                if ($toner ['cost'] != $device_price)
+                                                else
                                                 {
-                                                    $update = true;
+                                                    if ($importCost > 0 || !empty($importDealerSku))
+                                                    {
+                                                        $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                                        $masterDeviceAttribute->populate($dataArray);
+                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
+                                                    }
+
                                                 }
                                             }
                                         }
@@ -4786,7 +4883,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                             $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
                                             if (count($toner->toArray()) > 0)
                                             {
-                                                $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($importTonerId);
+
+                                                $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($importTonerId, $dealerId));
                                                 // Does the toner attribute exists ?
                                                 if ($tonerAttribute)
                                                 {
