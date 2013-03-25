@@ -128,7 +128,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTE_INDEX                       = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE                      = "quotegen__quote__delete";
 
-    const RESOURCE_DEALERMANAGEMENT                        = "dealermanagement__index__index";
+    const RESOURCE_DEALERMANAGEMENT_INDEX                  = "dealermanagement__index__index";
     const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";
     const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD        = "dealermanagement__client__%";
     const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
@@ -436,7 +436,7 @@ class Application_Model_Acl extends Zend_Acl
         /**
          * Dealermanagement Resources
          */
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT);
+        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_INDEX);
         $this->addResource(self::RESOURCE_DEALERMANAGEMENT_WILDCARD);
         $this->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD);
         $this->addResource(self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD);
