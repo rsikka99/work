@@ -122,42 +122,42 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             // validate fields
             if ($formData ["manufacturer_id"] == 0)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'You must select a manufacturer.'
                                                ));
                 $repop_form = 1;
             }
             else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'You must select a printer model.'
                                                ));
                 $repop_form = 1;
             }
             else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'You must enter a printer model name.'
                                                ));
                 $repop_form = 1;
             }
             else if ($formData ["toner_config_id"] == 0)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'Toner Config not selected. Please try again.'
                                                ));
                 $repop_form = 1;
             }
             else if ($formData ["watts_power_normal"] < 1)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'Power Consumption Normal must be greater then zero.'
                                                ));
                 $repop_form = 1;
             }
             else if ($formData ["watts_power_idle"] < 1)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'error' => 'Power Consumption Idle must be greater then zero.'
                                                ));
                 $repop_form = 1;
@@ -453,7 +453,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                 $repop_form                = 1;
                                 $this->view->printer_model = $master_device_id;
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => 'Device "' . $printer_model . '" has been updated.'
                                                                ));
                                 $isPrintModelSet = true;
@@ -479,7 +479,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     {
                                         $master_device_id = $master_device_flagged ['id'];
 //                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                        $this->_helper->flashMessenger(array(
+                                        $this->_flashMessenger->addMessage(array(
                                                                             'error' => "The printer you're trying to add already exists."
                                                                        ));
 
@@ -492,7 +492,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         // Get the current date for the devices date created.
                                         $masterDevice->dateCreated = $date;
                                         $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
-                                        $this->_helper->flashMessenger(array(
+                                        $this->_flashMessenger->addMessage(array(
                                                                             'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
                                                                        ));
                                         if ($has_toner)
@@ -528,7 +528,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 }
                                 else
                                 {
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'error' => 'Error: No manufacturer has been selected.'
                                                                    ));
                                 }
@@ -541,7 +541,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             $db->rollback();
                             $repop_form                = 1;
                             $this->view->printer_model = $formData ['printer_model'];
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'error' => $toner_errors
                                                            ));
                         }
@@ -549,7 +549,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
                                                        ));
                         Throw new exception("Critical Device Update Error.", 0, $e);
@@ -588,7 +588,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             if (count($replacement_devices) > 0)
                             {
                                 $db->rollback();
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'warning' => "This printer is currently configured as a replacement printer. Please remove it as a replacement printer and try again."
                                                                ));
                             }
@@ -606,7 +606,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 $db->commit();
                                 $form_mode                 = 'delete';
                                 $this->view->printer_model = 0;
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "Printer " . $printer_model . " has been deleted."
                                                                ));
                             }
@@ -614,7 +614,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         else
                         {
                             $db->rollback();
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'error' => "No printer was selected. Please select a printer and try again."
                                                            ));
                         }
@@ -622,7 +622,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'error' => "There was an error and the printer was not deleted."
                                                        ));
                     }
@@ -783,42 +783,42 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 // validate fields
                 if ($formData ["manufacturer_id"] == 0)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must select a manufacturer.'
                                                    ));
                     $repop_form = 1;
                 }
                 else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must select a printer model.'
                                                    ));
                     $repop_form = 1;
                 }
                 else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must enter a printer model name.'
                                                    ));
                     $repop_form = 1;
                 }
                 else if ($formData ["toner_config_id"] == 0)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Toner Config not selected. Please try again.'
                                                    ));
                     $repop_form = 1;
                 }
                 else if ($formData ["watts_power_normal"] < 1)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Power Consumption Normal must be greater then zero.'
                                                    ));
                     $repop_form = 1;
                 }
                 else if ($formData ["watts_power_idle"] < 1)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Power Consumption Idle must be greater then zero.'
                                                    ));
                     $repop_form = 1;
@@ -1115,7 +1115,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                     $repop_form                = 1;
                                     $this->view->printer_model = $master_device_id;
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'success' => 'Device "' . $printer_model . '" has been updated.'
                                                                    ));
                                     $isPrintModelSet = true;
@@ -1141,7 +1141,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         {
                                             $master_device_id = $master_device_flagged ['id'];
 //                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                            $this->_helper->flashMessenger(array(
+                                            $this->_flashMessenger->addMessage(array(
                                                                                 'error' => "The printer you're trying to add already exists."
                                                                            ));
 
@@ -1221,7 +1221,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     }
                                     else
                                     {
-                                        $this->_helper->flashMessenger(array(
+                                        $this->_flashMessenger->addMessage(array(
                                                                             'error' => 'Error: No manufacturer has been selected.'
                                                                        ));
                                     }
@@ -1235,7 +1235,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 $db->rollback();
                                 $repop_form                = 1;
                                 $this->view->printer_model = $formData ['printer_model'];
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'error' => $toner_errors
                                                                ));
                             }
@@ -1243,7 +1243,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         catch (Zend_Db_Exception $e)
                         {
                             $db->rollback();
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
                                                            ));
                             Throw new exception("Critical Device Update Error.", 0, $e);

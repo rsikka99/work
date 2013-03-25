@@ -36,7 +36,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
 
         if (!$clientId)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'warning' => 'Please select a client to delete first.'
                                            ));
             $this->redirector('index');
@@ -46,7 +46,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
         $client       = $clientMapper->find($clientId);
         if (!$client)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 'danger' => 'There was an error selecting the client to delete.'
                                            ));
             $this->redirector('index');
@@ -76,13 +76,13 @@ class Quotegen_ClientController extends Tangent_Controller_Action
                     }
                     catch (Exception $e)
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
                                                        ));
                         $this->redirector('index');
                     }
 
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'success' => "Client  {$client->companyName} was deleted successfully."
                                                    ));
                     $this->redirector('index');
@@ -122,7 +122,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'success' => "Client successfully created."
                                                ));
                 // Redirect with client id so that the client is preselected
@@ -132,7 +132,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => "Please correct the errors below."
                                                ));
             }
@@ -177,7 +177,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'success' => "Client {$client->companyName} successfully updated."
                                                ));
                 // Redirect with client id so that the client is preselected
@@ -187,7 +187,7 @@ class Quotegen_ClientController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => "Please correct the errors below."
                                                ));
             }

@@ -107,7 +107,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             // update company
                             $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $dealer_company_id, 'INTEGER');
                             $dealer_companyTable->update($companyData, $where);
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 "success" => 'Company "' . $dealer_company_name . '" has been updated'
                                                            ));
                         }
@@ -118,14 +118,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                             if (count($dealer_company) > 0)
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => 'company "' . $dealer_company_name . '" already exists.'
                                                                ));
                             }
                             else
                             {
                                 $dealer_companyTable->insert($companyData);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => 'Company "' . $dealer_company_name . '" Added.'
                                                                ));
                             }
@@ -149,7 +149,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                 if (!$status)
                                 {
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "error" => "An error has occurred while deleting the companies users and the company was not deleted. Please try again. If the problem persists, please contact your administrator."
                                                                    ));
                                     exit();
@@ -174,7 +174,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 // delete dealer companay
                                 $where = $dealer_companyTable->getAdapter()->quoteInto($criteria, null);
                                 $dealer_companyTable->delete($where);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => "\"" . $dealer_company_name . "\" was successfully deleted."
                                                                ));
                             }
@@ -199,7 +199,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 catch (Zend_Db_Exception $e)
                 {
                     $db->rollback();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         "error" => 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.'
                                                    ));
                 }
@@ -213,7 +213,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             else
             {
                 $this->view->repop = true;
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => 'Error: Invalid data. Please review your entries and try again.'
                                                ));
             }
@@ -1479,7 +1479,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             }
                         }
                     }
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         "success" => "The toner has been replaced and deleted successfully."
                                                    ));
                 }
@@ -1760,7 +1760,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         {
                             if (count($manufacturer) > 0)
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
                                                                ));
                             }
@@ -1768,7 +1768,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
                                 $manufacturersTable->update($manufacturerData, $where);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated'
                                                                ));
                             }
@@ -1785,13 +1785,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     );
                                     $where            = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer ['id'], 'INTEGER');
                                     $manufacturersTable->update($manufacturerData, $where);
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
                                                                    ));
                                 }
                                 else
                                 {
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
                                                                    ));
                                 }
@@ -1799,7 +1799,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             else
                             {
                                 $manufacturersTable->insert($manufacturerData);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
                                                                ));
                             }
@@ -1840,13 +1840,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 );
                                 $manufacturersTable->update($manufacturerData, $where);
                             }
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Deleted.'
                                                            ));
                         }
                         else
                         {
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 "error" => "No manufacturer was selected to be deleted."
                                                            ));
                         }
@@ -3121,7 +3121,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $response  = $this->deleteReport($report_id);
                             if ($response == 0)
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => "There was an error while trying to delete the report " . $report_id . ". Please contact your administrator."
                                                                ));
                                 exit();
@@ -3130,7 +3130,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
                     if ($response == 1)
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             "success" => "The report(s) were successfully deleted."
                                                        ));
                     }
@@ -3140,7 +3140,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "There was an error while trying to delete the reports. Please contact your administrator."
                                                ));
             }
@@ -3331,7 +3331,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 if ($price == "0")
                                 {
                                     $passvalid = 1;
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "error" => "All values must be greater than 0. Please correct it and try again."
                                                                    ));
                                     break;
@@ -3339,7 +3339,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 else if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid = 1;
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "error" => "All values must be numeric. Please correct it and try again."
                                                                    ));
                                     break;
@@ -3360,7 +3360,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                         if ($passvalid == 0)
                         {
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 "success" => "The toner pricing updates have been applied successfully."
                                                            ));
                         }
@@ -3401,7 +3401,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid = 1;
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         "error" => "All values must be numeric. Please correct it and try again."
                                                                    ));
                                     break;
@@ -3443,13 +3443,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         {
                             if (!empty($summary))
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => "The device pricing updates have been applied successfully."
                                                                ));
                             }
                             else
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => "You have not updated any pricing. Please enter a new price and try again."
                                                                ));
                             }
@@ -3484,7 +3484,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "Error: The updates were not saved."
                                                ));
             }
@@ -4887,7 +4887,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                         $table->insert($data);
                                     }
                                 }
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => "Your pricing updates have been applied successfully."
                                                                ));
                                 $db->commit();
@@ -4896,7 +4896,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
 
                                 $db->rollback();
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."
                                                                ));
                             }
@@ -4910,7 +4910,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             "error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."
                                                        ));
                     }
@@ -5942,7 +5942,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         unset($master_matchup_pfData);
                     }
                     $db->commit();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         "success" => "The matchups have been saved."
                                                    ));
                 }
@@ -5962,7 +5962,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 throw new Exception("Passing Exception Up The Chain", null, $e);
                 $db->rollback();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "Error."
                                                ));
             }
@@ -6197,13 +6197,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
                                 $replacementTable->delete($where);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => "The selected printer(s) are no longer marked as replacement printers."
                                                                ));
                             }
                             else
                             {
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "error" => "Could not delete all replacement printers as one or more was the last printer for it's replacement category."
                                                                ));
                             }
@@ -6511,7 +6511,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     // Perform the update.
                     //$udiTable->update($data, $where);
 
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         "success" => "Report Transfer Complete."
                                                    ));
                 }
@@ -6527,7 +6527,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
 
 
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         "success" => "Report Cloning Complete."
                                                    ));
                 }
@@ -6536,7 +6536,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollback();
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "There was an error while trying to transfer the report. Please contact your administrator."
                                                ));
 

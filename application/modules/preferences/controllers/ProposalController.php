@@ -76,24 +76,24 @@ class Preferences_ProposalController extends Tangent_Controller_Action
                         $reportSettings->populate($formData);
                         Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings, $reportSettings->id);
 
-                        $this->_helper->flashMessenger(array("success" => "Your settings have been updated."));
+                        $this->_flashMessenger->addMessage(array("success" => "Your settings have been updated."));
                         $db->commit();
                     }
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings.{$e->getMessage()}"));
+                        $this->_flashMessenger->addMessage(array("error" => "An error occurred while saving your settings.{$e->getMessage()}"));
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occurred while saving your settings."));
+                        $this->_flashMessenger->addMessage(array("error" => "An error occurred while saving your settings."));
                     }
                 }
             }
             else
             {
-                $this->_helper->flashMessenger(array("error" => "Please review the errors below."));
+                $this->_flashMessenger->addMessage(array("error" => "Please review the errors below."));
                 $form->populate($formData);
             }
         }
@@ -154,7 +154,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
                         $systemReportSettings->populate($formData);
                         Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($systemReportSettings, $systemReportSettings->id);
 
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             "success" => "Your settings have been updated."
                                                        ));
                         $db->commit();
@@ -162,18 +162,18 @@ class Preferences_ProposalController extends Tangent_Controller_Action
                     catch (Zend_Db_Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
+                        $this->_flashMessenger->addMessage(array("error" => "An error occured while saving your settings."));
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_helper->flashMessenger(array("error" => "An error occured while saving your settings."));
+                        $this->_flashMessenger->addMessage(array("error" => "An error occured while saving your settings."));
                     }
                 }
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "Please review the errors below."
                                                ));
                 $form->populate($formData);

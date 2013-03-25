@@ -51,7 +51,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'Please correct the errors below.' 
                     ));
                 }
