@@ -30,7 +30,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         
         if (! $masterDeviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a master device to delete first.' 
             ));
             $this->redirector('index');
@@ -41,7 +41,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         
         if (! $masterDeviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error selecting the master device to delete.' 
             ));
             $this->redirector('index');
@@ -60,7 +60,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                 if ($form->isValid($values))
                 {
                     $mapper->delete($masterDevice);
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'success' => "Master device  '{$masterDevice->getFullDeviceName()}' was deleted successfully." 
                     ));
                     $this->redirector('index');
@@ -109,7 +109,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                             $masterDevice->populate($values);
                             $masterDeviceId = $mapper->insert($masterDevice);
                             
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'success' => "MasterDevice " . $this->view->escape($masterDevice->getFullDeviceName()) . " was added successfully." 
                             ));
                             
@@ -119,7 +119,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         catch ( Exception $e )
                         {
                             throw new Exception($e);
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));
                             $form->populate($request->getPost());
@@ -152,7 +152,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         // page
         if (! $masterDeviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a masterDevice to edit first.' 
             ));
             $this->redirector('index');
@@ -165,7 +165,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         // If the masterDevice doesn't exist, send them back t the view all masterDevices page
         if (! $masterDevice)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error selecting the masterDevice to edit.' 
             ));
             $this->redirector('index');
@@ -205,7 +205,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         // Save to the database with cascade insert turned on
                         $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
                         ));
                     }
@@ -216,7 +216,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => $e->getMessage() 
                     ));
                 }

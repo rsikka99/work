@@ -123,14 +123,14 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         if ($changesMade)
                         {
                             $this->saveQuote();
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'success' => 'Changes saved successfully.' 
                             ));
                         }
                         
                         if (! $changesMade && isset($values ['save']))
                         {
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'info' => 'There were no changes to save.' 
                             ));
                         }
@@ -157,7 +157,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'Please correct the errors below.'
                     ));
                 }

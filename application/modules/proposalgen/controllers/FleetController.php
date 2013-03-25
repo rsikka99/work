@@ -58,7 +58,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             default :
                                 $uploadCsvService = null;
                                 $uploadProviderId = null;
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'success' => "Invalid RMS Provider Selected"
                                                                ));
                                 break;
@@ -298,7 +298,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 }
                                 else
                                 {
-                                    $this->_helper->flashMessenger(array(
+                                    $this->_flashMessenger->addMessage(array(
                                                                         'error' => "There was an error importing your file. $processCsvMessage"
                                                                    ));
                                 }
@@ -309,7 +309,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 My_Log::logException($e);
                                 $db->rollBack();
 
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     'danger' => "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . My_Log::getUniqueId()
                                                                ));
                             }
@@ -318,7 +318,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         // Only when we are successful will we display a success message
                         if ($importSuccessful === true)
                         {
-                            $this->_helper->flashMessenger(array(
+                            $this->_flashMessenger->addMessage(array(
                                                                 'success' => "Your file was imported successfully."
                                                            ));
                             $this->saveReport();
@@ -327,14 +327,14 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => "Upload Failed. Please try again."
                                                        ));
                     }
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => "Upload Failed. Please check the errors below."
                                                    ));
                 }
@@ -344,7 +344,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($report->getRmsUpload()->id);
                 if ($count < 2)
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => "You must have at least 2 valid devices to continue."
                                                    ));
                 }
@@ -667,7 +667,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 if ($reportSettingsService->update($values))
                 {
                     $this->saveReport();
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'success' => 'Settings saved.'
                                                    ));
 
@@ -679,7 +679,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => 'Please correct the errors below.'
                                                    ));
                 }
@@ -710,7 +710,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceIds[0]);
             if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance)
             {
-                $this->_helper->flashMessenger(array('danger' => 'There was an error selecting the device you wanted to add.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the device you wanted to add.'));
 
                 // Send back to the mapping page
                 $this->_helper->redirector('mapping');
@@ -778,7 +778,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             }
                             $db->commit();
 
-                            $this->_helper->flashMessenger(array("success" => "Device successfully mapped!"));
+                            $this->_flashMessenger->addMessage(array("success" => "Device successfully mapped!"));
                             $this->redirector("mapping");
                         }
                         catch (Exception $e)
@@ -788,7 +788,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                              */
                             $db->rollBack();
                             My_Log::logException($e);
-                            $this->_helper->flashMessenger(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . My_Log::getUniqueId()));
+                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . My_Log::getUniqueId()));
                         }
                     }
                     else
@@ -796,7 +796,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         /**
                          * Form is INVALID
                          */
-                        $this->_helper->flashMessenger(array("danger" => "Please check the errors below and resubmit your request."));
+                        $this->_flashMessenger->addMessage(array("danger" => "Please check the errors below and resubmit your request."));
                     }
                 }
             }
@@ -804,7 +804,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         }
         else
         {
-            $this->_helper->flashMessenger(array("warning" => "Invalid Device Specified."));
+            $this->_flashMessenger->addMessage(array("warning" => "Invalid Device Specified."));
             $this->redirector("mapping");
         }
     }

@@ -31,7 +31,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         
         if (! $categoryId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a category to delete first.' 
             ));
             $this->redirector('index');
@@ -42,7 +42,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         
         if (! $category)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error selecting the category to delete.' 
             ));
             $this->redirector('index');
@@ -66,7 +66,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         // Delete the entry from the category table.
                         Quotegen_Model_Mapper_Category::getInstance()->delete($category);
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Category  {$this->view->escape ( $category->name )} was deleted successfully."
                         ));
                         
@@ -76,7 +76,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                 }
                 catch ( Exception $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'There was an error deleting this category.  Please try again.' 
                     ));
                 }
@@ -116,14 +116,14 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'Please correct the errors below.' 
                         ));
                     }
                 }
                 catch ( Exception $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'There was an error creating this category.  Please try again..' 
                     ));
                 }
@@ -142,7 +142,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         
         if (! $categoryId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a category first.' 
             ));
             $this->redirector('index');
@@ -169,7 +169,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         $category->id = $categoryId;
                         Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Category was updated sucessfully." 
                         ));
                         
@@ -177,14 +177,14 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'danger' => 'Please correct the errors below' 
                         ));
                     }
                 }
                 catch ( Exception $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'There was an error updating this category.  Please try again' 
                     ));
                 }

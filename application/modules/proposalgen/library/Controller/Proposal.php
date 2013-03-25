@@ -84,7 +84,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "A client is not selected."
                                                ));
                 $this->_redirect('/');
@@ -169,7 +169,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 
         if ($this->_reportId < 1)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 "error" => "Please select a report first."
                                            ));
             // Send user to the index
@@ -179,7 +179,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->_report = Proposalgen_Model_Mapper_Assessment::getInstance()->find($this->_reportId);
         if ($this->_report === null)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 "error" => "Please select a report first."
                                            ));
             // Send user to the index

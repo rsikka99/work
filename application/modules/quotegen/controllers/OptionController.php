@@ -30,7 +30,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         
         if (! $optionId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select an option to delete first.' 
             ));
             $this->redirector('index');
@@ -41,7 +41,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         
         if (! $option)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error finding that option to delete.' 
             ));
             $this->redirector('index');
@@ -62,7 +62,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByOptionId($option->id);
                     $optionMapper->delete($option);
                     
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'success' => "Option  {$this->view->escape ( $option->name )} was deleted successfully."
                     ));
                     $this->redirector('index');
@@ -113,7 +113,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                             $optionCategory->categoryId = $categoryId;
                             Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                                              'success' => "Option {$values['name']} Created"
                                                        ));
                         if ($page == "options")
@@ -136,7 +136,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 }
                 catch ( Exception $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => $e->getMessage() 
                     ));
                 }
@@ -168,7 +168,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         // If not idea is set then back to index page
         if (! $optionId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select an option first.' 
             ));
             // Redirect
@@ -236,7 +236,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                             }
                         }
                         $optionMapper->save($option, $optionId);
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Category setting was updated sucessfully." 
                         ));
                         
@@ -249,7 +249,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => $e->getMessage() 
                     ));
                 }

@@ -55,7 +55,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         
         if (! $deviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a device to delete first.' 
             ));
             $this->redirector('index');
@@ -64,7 +64,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         $device = $this->getDevice($deviceId);
         if (! $device)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error selecting the device to delete.' 
             ));
             $this->redirector('index');
@@ -102,7 +102,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                         Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->delete($deviceConfiguration);
                     }
                     $this->getDeviceMapper()->delete($device);
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'success' => "Device  '{$device->getMasterDevice()->getFullDeviceName()}' was deleted successfully." 
                     ));
                     $this->redirector('index');
@@ -141,7 +141,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                             $device->populate($values);
                             $deviceId = $this->getDeviceMapper()->insert($device);
                             
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'success' => "Device {$device->masterDeviceId} was added successfully."
                             ));
                             
@@ -152,7 +152,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                         }
                         catch ( Exception $e )
                         {
-                            $this->_helper->flashMessenger(array (
+                            $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));
                             $form->populate($request->getPost());
@@ -187,7 +187,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all device page
         if (! $deviceId)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'warning' => 'Please select a device to edit first.' 
             ));
             $this->redirector('index');
@@ -200,7 +200,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         // If the device doesn't exist, send them back t the view all devices page
         if (! $device)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error selecting the device to edit.' 
             ));
             $this->redirector('index');
@@ -242,7 +242,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                             $deviceOptionMapper->save($object->deviceOption);                            
                         }
 
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated sucessfully."
                         ));
                         
@@ -264,7 +264,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => $e->getMessage() 
                     ));
                 }
@@ -288,7 +288,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAllAvailableOptionsForDevice($deviceId);
         if (count($availableOptions) < 1)
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'info' => "There are no more options to add to this device." 
             ));
             $this->redirector('edit', null, null, array (
@@ -339,7 +339,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                             }
                         }
                         
-                        $this->_helper->flashMessenger(array (
+                        $this->_flashMessenger->addMessage(array (
                                 'success' => "Successfully added {$insertedOptions} options to {$device->getMasterDevice()->getFullDeviceName()} successfully." 
                         ));
                         $this->redirector('edit', null, null, array (
@@ -353,7 +353,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                 }
                 catch ( InvalidArgumentException $e )
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => $e->getMessage() 
                     ));
                 }
@@ -385,13 +385,13 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $deviceOption->masterDeviceId = $id;
             $deviceOption->optionId = $optionId;
             Quotegen_Model_Mapper_DeviceOption::getInstance()->delete($deviceOption);
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'success' => "Option deleted successfully." 
             ));
         }
         catch ( Exception $e )
         {
-            $this->_helper->flashMessenger(array (
+            $this->_flashMessenger->addMessage(array (
                     'error' => "Could not delete that option." 
             ));
         }
