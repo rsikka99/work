@@ -4,7 +4,7 @@
         <sysadmin>
             <order>99999</order>
             <id>adminmenu</id>
-            <label>Administration</label>
+            <label>System Administration</label>
             <class>dropdown</class>
             <module>admin</module>
             <controller>index</controller>

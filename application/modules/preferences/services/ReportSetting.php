@@ -42,16 +42,15 @@ class Preferences_Service_ReportSetting
     /**
      * Gets the report setting form with default values populated
      *
-     * @param $dealerSettings array
+     * @param $populateSettings array
      *
      * @return Preferences_Form_ReportSetting
      */
-    public function getFormWithDefaults ($dealerSettings)
+    public function getFormWithDefaults ($populateSettings)
     {
         if (!isset($this->_form))
         {
             $this->_form      = new Preferences_Form_ReportSetting();
-            $populateSettings = $dealerSettings;//array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
@@ -72,9 +71,9 @@ class Preferences_Service_ReportSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
-                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
+//                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
+//                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
+//                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
                 $this->_form->getElement("grossMarginPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['grossMarginPricingConfigId']]);
                 // Re-load the settings into report settings

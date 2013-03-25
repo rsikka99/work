@@ -183,6 +183,12 @@ class Admin_DealerController extends Tangent_Controller_Action
         $dealerId = $this->_getParam('id');
         $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
 
+        if ($dealerId == 1)
+        {
+            $this->flashMessenger(array('danger' => 'You cannot delete the root dealer company.'));
+            $this->redirect('index');
+        }
+
         if (!$dealer instanceof Admin_Model_Dealer)
         {
             $this->flashMessenger(array('warning' => 'Invalid dealer selected.'));

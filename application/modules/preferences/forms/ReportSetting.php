@@ -128,36 +128,36 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'laborCostPerPage', array(
-                                                             'label'      => 'Labor Cost',
-                                                             'append'     => '$ / page',
-                                                             'validators' => $cppValidator
-                                                        ));
+                                                           'label'      => 'Labor Cost',
+                                                           'append'     => '$ / page',
+                                                           'validators' => $cppValidator
+                                                      ));
         $this->addElement('text', 'partsCostPerPage', array(
-                                                             'label'      => 'Parts Cost',
-                                                             'append'     => '$ / page',
-                                                             'validators' => $cppValidator
-                                                        ));
+                                                           'label'      => 'Parts Cost',
+                                                           'append'     => '$ / page',
+                                                           'validators' => $cppValidator
+                                                      ));
         $grossMarginPricingConfig = $this->createElement('select', 'grossMarginPricingConfigId', array(
                                                                                                       'label' => 'Toner Preference',
                                                                                                       'class' => 'span3 '
                                                                                                  ));
 
         // Hardware Optimization Elements
-        $this->addElement('text', 'costThreshold', array(
-                                                        'label'      => 'Cost Threshold',
-                                                        'append'     => '$',
-                                                        'validators' => $costValidator
-                                                   ));
-        $this->addElement('text', 'targetMonochromeCostPerPage', array(
-                                                                      'label'      => 'Target Monochrome Cost Per Page',
-                                                                      'append'     => '$ / page',
-                                                                      'validators' => $cppValidator
-                                                                 ));
-        $this->addElement('text', 'targetColorCostPerPage', array(
-                                                                 'label'      => 'Target Color Cost Per Page',
-                                                                 'append'     => '$ / page',
-                                                                 'validators' => $cppValidator
-                                                            ));
+//        $this->addElement('text', 'costThreshold', array(
+//                                                        'label'      => 'Cost Threshold',
+//                                                        'append'     => '$',
+//                                                        'validators' => $costValidator
+//                                                   ));
+//        $this->addElement('text', 'targetMonochromeCostPerPage', array(
+//                                                                      'label'      => 'Target Monochrome Cost Per Page',
+//                                                                      'append'     => '$ / page',
+//                                                                      'validators' => $cppValidator
+//                                                                 ));
+//        $this->addElement('text', 'targetColorCostPerPage', array(
+//                                                                 'label'      => 'Target Color Cost Per Page',
+//                                                                 'append'     => '$ / page',
+//                                                                 'validators' => $cppValidator
+//                                                            ));
 
 
         // Set a span 2 to all elements that do not have a class
@@ -183,8 +183,8 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'kilowattsPerHour',
                                      $assessmentPricingConfig,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
-        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage','partsCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
-        $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage'), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
+        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
+//        $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage'), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
                                          'FieldSize',

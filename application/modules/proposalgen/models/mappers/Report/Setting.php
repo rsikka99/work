@@ -338,7 +338,8 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
 
         if (!$reportSetting)
         {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
+            // Take a copy
+            $reportSetting   = $this->fetchSystemReportSetting();
             $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
 
             if ($reportDealerSetting)
