@@ -635,6 +635,9 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $this->_helper->flashMessenger(array(
                                                             'error' => "There was an error and the printer was not deleted."
                                                        ));
+                        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                        var_dump($e);
+                        die();
                     }
                 }
             }

@@ -360,12 +360,12 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         if($canSell){
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
                 ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
-                ->joinRight($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`", $deviceColumns);
+                ->join($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName .  '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
         else{
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
                 ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
-                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`", $deviceColumns);
+                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName .  '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
         // Apply our where clause
         foreach ($whereClause as $cond => $value)
@@ -379,7 +379,6 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
             $zendDbSelect->limit($limit, $offset);
         }
         // TODO: Process a where clause here
-
 
         // If we're just counting we only need to return the count
         if ($justCount)

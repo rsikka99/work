@@ -287,10 +287,10 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     UPDATE assessments
 	SET assessments.devicesModified=1
 	WHERE assessments.id IN (
-		SELECT di.reportId FROM pgen_device_instances AS di
+		SELECT di.rmsUploadId FROM pgen_device_instances AS di
         LEFT JOIN pgen_device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
         WHERE dimd.masterDeviceId = ?
-		GROUP BY di.reportId
+		GROUP BY di.rmsUploadId
 	);";
         $query  = $this->getDbTable()->getAdapter()->query($sql, $masterDeviceId);
         $result = $query->execute();

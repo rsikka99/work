@@ -84,7 +84,6 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
             $jqGrid->setRows($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord, $canSell));
 
-
         }
         $this->sendJson($jqGrid->createPagerResponseArray());
     }
@@ -389,7 +388,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$isSystemAdmin)
         {
             $tempAttribute = $masterDevice->getDealerAttributes();
-            if($tempAttribute)
+            if ($tempAttribute)
             {
                 $form->getElement('partsCostPerPage')->setValue($tempAttribute->partsCostPerPage);
                 $form->getElement('laborCostPerPage')->setValue($tempAttribute->laborCostPerPage);
@@ -415,7 +414,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // Populate SKU
         $oemSku                     = null;
         $devicemapper               = new Quotegen_Model_Mapper_Device();
-        $device                     = $devicemapper->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $device                     = $devicemapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $device;
         if ($device)
         {
@@ -456,10 +455,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 'oemSku'         => $values ['oemSku'],
                                 'dealerSku'      => $values ['dealerSku'],
                                 'description'    => $values ['description'],
-                                'cost'           => $values['cost']
+                                'cost'           => $values['cost'],
+                                'dealerId'       => Zend_Auth::getInstance()->getIdentity()->dealerId
                             );
                             $device->populate($devicevalues);
-
                             // If $oemSku set above, then record exists to update
                             if ($oemSku)
                             {
@@ -603,27 +602,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 // delete device from database
                 if ($form->isValid($values))
                 {
-                    // Delete device options, configurations and configuration options
-                    Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->deleteConfigurationByDeviceId($deviceId);
-
-                    // Delete the device options and device
-                    Quotegen_Model_Mapper_DeviceOption::getInstance()->deleteOptionsByDeviceId($deviceId);
-
                     // Get the Quotegen Device Object
                     $quotegenDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
-                    $quotegenDevice       = $quotegenDeviceMapper->find($deviceId);
+                    $quotegenDevice       = $quotegenDeviceMapper->find(array($deviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
                     Quotegen_Model_Mapper_Device::getInstance()->delete($quotegenDevice);
-
-                    // Delete toners for Master Device
-                    $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll("master_device_id = {$deviceId}");
-                    foreach ($deviceToners as $toner)
-                    {
-                        $tonerId = $toner->tonerId;
-                        Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete("toner_id = {$tonerId}");
-                    }
-
-                    // Delete Master Device
-                    Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete($device);
 
                     // Display Message and return
                     $this->_helper->flashMessenger(array(
@@ -952,7 +934,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
 
         // Get the device and assigned options
-        $quoteDevice            = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $quoteDevice            = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $quoteDevice->getMasterDevice()->getFullDeviceName();
 
         // Get device options list
@@ -1149,13 +1131,13 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
 
         // Get the device
-        $device                 = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $device                 = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->devicename = $device->getMasterDevice()->getFullDeviceName();
 
         // Get device configurations list
         $deviceConfiguration    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array(
                                                                                                           'masterDeviceId = ?' => $masterDeviceId,
-                                                                                                          'dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId
+                                                                                                          'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
                                                                                                      ));
         $assignedConfigurations = array();
         foreach ($deviceConfiguration as $configuration)

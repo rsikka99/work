@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
     */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
 
     /**
      * Gets an instance of the mapper
@@ -225,6 +226,20 @@ class Quotegen_Model_Mapper_Category extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Gets all the categories for the specific dealer
+     *
+     * @param int $dealerId
+     *
+     * @return Quotegen_Model_Category[]
+     */
+    public function fetchAllForDealer ($dealerId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_dealerId} = ?" => $dealerId
+                               ));
     }
 }
 

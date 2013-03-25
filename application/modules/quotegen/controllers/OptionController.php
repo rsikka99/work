@@ -12,7 +12,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
     {
         // Get all current items in categories table
         $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper,array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
         
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -101,6 +101,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         
                         $option = new Quotegen_Model_Option();
                         $option->populate($values);
+                        $option->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $optionId = $optionMapper->insert($option);
                         
                         // Create optionCategory with $optionId to save 

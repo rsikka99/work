@@ -788,9 +788,16 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_toner_overrides` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_categories` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
+    `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     `description` TEXT NOT NULL ,
-    PRIMARY KEY (`id`) )
+    PRIMARY KEY (`id`) ,
+    INDEX `qgen_categories_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `qgen_categories_ibfk_1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 5
     DEFAULT CHARACTER SET = utf8;
@@ -802,7 +809,7 @@ CREATE  TABLE IF NOT EXISTS `qgen_categories` (
 CREATE  TABLE IF NOT EXISTS `qgen_devices` (
     `masterDeviceId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
-    `cost` DOUBLE NULL ,
+    `cost` DOUBLE NOT NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
     `description` TEXT NULL ,
@@ -854,12 +861,19 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `qgen_options` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
+    `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     `description` TEXT NOT NULL ,
     `cost` DOUBLE NOT NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
-    PRIMARY KEY (`id`) )
+    PRIMARY KEY (`id`) ,
+    INDEX `qgen_options_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `qgen_options_ibfk_1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 7
     DEFAULT CHARACTER SET = utf8;

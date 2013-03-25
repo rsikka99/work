@@ -13,7 +13,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
     {
         // Get all current items in categories table
         $categoryMapper = new Quotegen_Model_Mapper_Category();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($categoryMapper));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($categoryMapper,array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
         
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -107,6 +107,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     {
                         // Attempt to save the category to the database.
                         $category = new Quotegen_Model_Category();
+                        $category->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $category->populate($values);
                         Quotegen_Model_Mapper_Category::getInstance()->insert($category);
                         
