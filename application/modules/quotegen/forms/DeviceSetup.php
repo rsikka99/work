@@ -296,7 +296,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                  array(
                                                                      'validator' => 'Between',
                                                                      'options'   => array(
-                                                                         'min' => 0.0001,
+                                                                                                                                                'min' => 500,
                                                                          'max' => 5
                                                                      )
                                                                  )
@@ -319,7 +319,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                  array(
                                                                      'validator' => 'Between',
                                                                      'options'   => array(
-                                                                         'min' => 0.0001,
+                                                                         'min' => 0,
                                                                          'max' => 5
                                                                      )
                                                                  )
@@ -446,7 +446,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                                                                              new Zend_Validate_Int(),
                                                                                                                              new Zend_Validate_Between(array(
                                                                                                                                                             'min' => 0,
-                                                                                                                                                            'max' => 1000
+                                                                                                                                                            'max' => 100000
                                                                                                                                                        ))
                                                                                                                         ))
                                                            )
