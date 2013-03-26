@@ -3559,4 +3559,84 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
 
         return $averageAge;
     }
+
+    /**
+     * Calculates the total Average Cost For Oem Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemMonochromeMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleMonochromeMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemColorMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleColorMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
+    }
+
+    /**
+     * Calculates the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
+    }
+
+    /**
+     * Calculates half the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
+    }
 }

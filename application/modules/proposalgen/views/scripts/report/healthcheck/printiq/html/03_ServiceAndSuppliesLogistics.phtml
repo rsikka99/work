@@ -68,25 +68,25 @@ $graphs   = $this->healthcheck->getGraphs();
             <td><strong>Black Toner</strong></td>
             <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly) ?></td>
             <td class="right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)) ?></td>
             <td class="right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageTotalCostCompatibleMonochromeMonthly(), array('precision' => 2)) ?></td>
         </tr>
         <tr>
             <td><strong>Color Toner</strong></td>
             <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly) ?></td>
             <td class="right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)) ?></td>
             <td class="right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)) ?></td>
+            <td class="shaded right"><?php echo $this->currency($proposal->calculateAverageTotalCostCompatibleColorMonthly(), array('precision' => 2)) ?></td>
         </tr>
         <tr>
             <td><strong>TOTAL (Monthly)</strong></td>
             <td></td>
             <td></td>
-            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)) ?></strong></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageTotalCostOemCombinedMonthly(), array('precision' => 2)) ?></strong></td>
             <td></td>
-            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)) ?></strong></td>
+            <td class="shaded right"><strong><?php echo $this->currency($proposal->calculateAverageTotalCostCompatibleCombinedMonthly(), array('precision' => 2)) ?></strong></td>
         </tr>
         <tr>
             <td><strong>TOTAL (Annual)</strong></td>
@@ -98,9 +98,9 @@ $graphs   = $this->healthcheck->getGraphs();
         </tr>
     </tbody>
 </table>
-<div class="pheader">DIFFERENCE<span style="text-align:right;float:right"><?php echo $this->currency(($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12, array('precision' => 2)) ?></span></div>
+<div class="pheader">DIFFERENCE<span style="text-align:right;float:right"><?php echo $this->currency($proposal->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)) ?></span></div>
 <p>
-        Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner, you can save an estimated <strong><?php echo $this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 0)) ?>
+        Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner, you can save an estimated <strong><?php echo $this->currency($proposal->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 0)) ?>
     per year</strong> in toner costs.
     </p>
 <div class="center">
