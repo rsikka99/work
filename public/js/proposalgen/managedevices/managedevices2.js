@@ -94,7 +94,7 @@ $(document).ready(function ()
         height      : 'auto',
         gridComplete: function ()
         {
-            var toner_array = '';
+            var toner_array = $("#toner_array").val();
             var ids = $(this).jqGrid('getDataIDs');
             for (var i = 0; i < ids.length; i++)
             {
@@ -142,6 +142,7 @@ function do_add(id)
         }
         toner_array = toner_array + "'" + id + "'";
         $("#toner_array").val(toner_array);
+
         update_applied();
         $("#btnAdd" + id).attr('disabled', 'disabled');
     }
@@ -178,5 +179,15 @@ function do_remove(id)
         tonerArrayElement.val(toner_array);
         update_applied();
         $("#btnAdd" + id).removeAttr('disabled');
+    }
+}
+
+function view_device_list(type,id) {
+    if(document.getElementById(type+'inner_'+id).style.display == 'none') {
+        document.getElementById(type+'inner_'+id).style.display = 'block';
+        document.getElementById(type+'view_link_'+id).innerHTML = 'Collapse...';
+    } else {
+        document.getElementById(type+'inner_'+id).style.display = 'none';
+        document.getElementById(type+'view_link_'+id).innerHTML = 'View All...';
     }
 }
