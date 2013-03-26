@@ -6667,7 +6667,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $id_list           = null;
 
         //$User = Proposalgen_Model_Mapper_User::getInstance();
-        $isAdmin = $this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->view->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6847,7 +6847,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
             }
 
-            if ($this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, Application_Model_Acl::PRIVILEGE_ADMIN))
+            if ($this->view->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, Application_Model_Acl::PRIVILEGE_ADMIN))
             {
 
             }
@@ -6927,7 +6927,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $db       = Zend_Db_Table::getDefaultAdapter();
         $filter   = $this->_getParam('filter', 'all');
         $formdata = new stdClass();
-        $isAdmin  = $this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin  = $this->view->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
