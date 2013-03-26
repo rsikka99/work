@@ -336,6 +336,16 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                 $this->redirector('index');
             }
         }
+        // If there is a device configuration but it's not with our dealer
+        else if($deviceConfiguration->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+
+            // User has cancelled. Go back to the edit page
+            $this->redirector('index');
+        }
         
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_Configuration($deviceConfigurationId);

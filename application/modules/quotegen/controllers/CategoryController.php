@@ -47,7 +47,15 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
             ));
             $this->redirector('index');
         }
-        
+        // If we are trying to access a category from another dealer, kick them back to index
+        if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+            // Redirect
+            $this->redirector('index');
+        }
         $message = "Are you sure you want to delete {$category->name}?";
         $form = new Application_Form_Delete($message);
         $request = $this->getRequest();
@@ -151,6 +159,16 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         // Find client and pass form object
         $form = new Quotegen_Form_Category();
         $category = Quotegen_Model_Mapper_Category::getInstance()->find($categoryId);
+
+        // If we are trying to access a category from another dealer, kick them back to index
+        if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+            // Redirect
+            $this->redirector('index');
+        }
         $form->populate($category->toArray());
         
         $request = $this->getRequest();
@@ -205,6 +223,15 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         // Get the client
         $mapper = new Quotegen_Model_Mapper_Category();
         $category = $mapper->find($categoryId);
+        // If we are trying to access a category from another dealer, kick them back to index
+        if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+            // Redirect
+            $this->redirector('index');
+        }
         $this->view->category = $category;
     }
 }
