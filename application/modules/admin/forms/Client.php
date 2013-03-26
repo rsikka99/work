@@ -64,7 +64,7 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setAllowEmpty(true);
         $dealerSelect  = null;
         // If they have admin privileges for this, and are not within the dealer form
-        if ($this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN) && $this->_dealerManagement == false)
+        if ($this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN) && $this->_dealerManagement == false)
         {
             $firstDealerId = null;
             $dealers       = array();

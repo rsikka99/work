@@ -53,7 +53,7 @@ class Admin_Form_LeasingSchema extends EasyBib_Form
                                           ));
 
         $dealerSelect  = null;
-        $isAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         if ($isAdmin && $this->_dealerManagement == false)
         {
             $firstDealerId = null;
