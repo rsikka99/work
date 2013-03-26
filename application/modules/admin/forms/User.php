@@ -157,7 +157,7 @@ class Admin_Form_User extends EasyBib_Form
             }
             $this->addElement($userRoles);
         }
-        $isAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->getView()->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         if ($isAdmin && $this->dealerManagement == false)
         {
             $firstDealerId = null;
