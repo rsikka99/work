@@ -1409,9 +1409,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $this->_averageOemOnlyCostPerPage = $costPerPage;
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $this->_averageOemOnlyCostPerPage   = $costPerPage;
         }
 
         return $this->_averageOemOnlyCostPerPage;
@@ -1447,8 +1447,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 
@@ -2139,11 +2139,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 }
                 else
                 {
-                    // $legendItems[] =
+//                    $labels[$device->getMasterDevice()->modelName]            = $device->getMasterDevice()->modelName;
                     $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
                 }
             }
-            $uniqueDevicesGraph = new gchart\gPie3DChart(350, 270);
+            $uniqueDevicesGraph = new gchart\gPie3DChart(700, 270);
             $uniqueDevicesGraph->addDataSet($uniqueModelArray);
             $uniqueDevicesGraph->addColors(array(
                                                 "E21736",
@@ -2161,7 +2161,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                 "00ff00",
                                                 "000000"
                                            ));
-            // $uniqueDevicesGraph->setLegend($legendItems);
+//             $uniqueDevicesGraph->setLegend($labels);
+//            $uniqueDevicesGraph->setLabels($labels);
             // Graphs[3]
             $this->Graphs [] = $uniqueDevicesGraph->getUrl();
 

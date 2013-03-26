@@ -4,6 +4,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
     /**@var Proposalgen_Model_Proposal_OfficeDepot */
     public $proposal;
     protected $_graphs = array();
+    const GALLONS_WATER_PER_PAGE = 0.121675; // Number of pages * this gives amount of gallons
+    const TREE_PER_PAGE = 7800;//Number of pages divided by this, gives amount of trees
     public $reportSettings;
 
     /**

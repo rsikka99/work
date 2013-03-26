@@ -33,10 +33,10 @@ $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 7800))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
+$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / Proposalgen_Model_HealthCheck_HealthCheck::TREE_PER_PAGE))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 8.2186))),"forestWaterFont");
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly * Proposalgen_Model_HealthCheck_HealthCheck::GALLONS_WATER_PER_PAGE))),"forestWaterFont");
 
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
