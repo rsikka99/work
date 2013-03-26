@@ -101,13 +101,6 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTE_INDEX                       = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE                      = "quotegen__quote__delete";
 
-    const RESOURCE_DEALERMANAGEMENT_INDEX                  = "dealermanagement__index__index";
-    const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD        = "dealermanagement__client__%";
-    const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
-    const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD          = "dealermanagement__user__%";
-
-
     /**
      * This is what kind of access we want to allow. We can use this to provide dynamic pages based on acl
      */
@@ -387,14 +380,6 @@ class Application_Model_Acl extends Zend_Acl
 
 
 
-        /**
-         * Dealermanagement Resources
-         */
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_INDEX);
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_WILDCARD);
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD);
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD);
-        $this->addResource(self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD);
     }
 
     /**
@@ -548,7 +533,7 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, self::PRIVILEGE_VIEW);
+
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_VIEW);
     }
 
