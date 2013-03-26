@@ -81,22 +81,19 @@ class Application_Model_Acl extends Zend_Acl
      */
     public function __construct ()
     {
-        /**
-         * Setup our available resources
-         */
-        $this->_setupResources();
-
         /*
          * Add our various roles
          */
-        $this->_setupGuestRole();
-        $this->_setupAuthenticatedUserRole();
-        $this->_setupProposalUserRole();
-        $this->_setupProposalAdminRole();
-        $this->_setupQuoteUserRole();
-        $this->_setupQuoteAdminRole();
-        $this->_setupSystemAdminRole();
-        $this->_setupDealerAdminRole();
+        $this->addRole(self::ROLE_GUEST);
+        $this->addRole(self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_PROPOSAL_USER, self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_PROPOSAL_ADMIN, self::ROLE_PROPOSAL_USER);
+        $this->addRole(self::ROLE_QUOTE_USER, self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_QUOTE_ADMIN, self::ROLE_QUOTE_USER);
+        $this->addRole(self::ROLE_DEALER_ADMIN, self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_PROPOSAL_ADMIN, self::ROLE_QUOTE_ADMIN));
+
+        // Resources and access is defined in module ACL models
     }
 
     /**
@@ -236,120 +233,4 @@ class Application_Model_Acl extends Zend_Acl
 
         return $isAllowed;
     }
-
-
-    /**
-     * Handles setting up all our available resources that we will use for ACL
-     */
-    protected function _setupResources ()
-    {
-        $this->addResource(self::RESOURCE_QUOTEGEN_WILDCARD);
-        $this->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
-        $this->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD);
-        $this->addResource(self::RESOURCE_QUOTEGEN);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD);
-        $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE);
-        $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT);
-        $this->addResource(self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_INDEX);
-        $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_DELETE);
-        $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
-    }
-
-    /**
-     * Sets up the guest role
-     */
-    protected function _setupGuestRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_GUEST);
-    }
-
-    /**
-     * Sets up the guest role
-     */
-    protected function _setupAuthenticatedUserRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_AUTHENTICATED_USER);
-    }
-
-    /**
-     * Sets up the proposal admin role
-     */
-    protected function _setupProposalAdminRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_PROPOSAL_ADMIN, self::ROLE_PROPOSAL_USER);
-    }
-
-    /**
-     * Sets up the proposal user role
-     */
-    protected function _setupProposalUserRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_PROPOSAL_USER, self::ROLE_AUTHENTICATED_USER);
-    }
-
-    /**
-     * Sets up the quote admin role
-     */
-    protected function _setupQuoteAdminRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_QUOTE_ADMIN, self::ROLE_QUOTE_USER);
-
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
-    }
-
-    /**
-     * Sets up the quote user role
-     */
-    protected function _setupQuoteUserRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_QUOTE_USER, self::ROLE_AUTHENTICATED_USER);
-
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
-    }
-
-    protected function _setupDealerAdminRole ()
-    {
-        // Add our role
-        $this->addRole(self::ROLE_DEALER_ADMIN, self::ROLE_AUTHENTICATED_USER);
-
-        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_VIEW);
-    }
-
-    /**
-     * Sets up the system admin role
-     */
-    protected function _setupSystemAdminRole ()
-    {
-        $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_PROPOSAL_ADMIN, self::ROLE_QUOTE_ADMIN));
-
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_ADMIN);
-
-    }
-
-
 }
