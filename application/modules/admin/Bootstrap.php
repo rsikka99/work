@@ -1,5 +1,4 @@
 <?php
-
 class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
@@ -10,6 +9,15 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
         /* @var $container Zend_Navigation */
         $container = Zend_Registry::get('Zend_Navigation');
         $container->addPages($config);
+    }
+
+    protected function _initAddToAcl()
+    {
+        $acl = Zend_Registry::get('Zend_Acl');
+        if ($acl instanceof Application_Model_Acl)
+        {
+            Admin_Model_Acl::setupAcl($acl);
+        }
     }
 }
 

@@ -25,10 +25,6 @@ class Application_Model_Acl extends Zend_Acl
      * Resources
      * These are module controller action combinations
      */
-    const RESOURCE_ADMIN_WILDCARD       = "admin__%__%";
-    const RESOURCE_ADMIN_TONER_WILDCARD = "admin__toner__%";
-
-
     const RESOURCE_DEFAULT_WILDCARD                       = "default__%__%";
     const RESOURCE_PROPOSALGEN_WILDCARD                   = "proposalgen__%__%";
     const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD            = "proposalgen__survey__%";
@@ -39,16 +35,6 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD         = "quotegen__quote_devices__%";
     const RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD          = "quotegen__devicesetup__%";
     const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD         = "quotegen__quote_reports__%";
-
-
-    /**
-     * Admin Constants
-     */
-    const RESOURCE_ADMIN_INDEX_INDEX            = "admin__index__index";
-    const RESOURCE_ADMIN_USER_PROFILE           = "admin__user__profile";
-    const RESOURCE_ADMIN_USER_WILDCARD          = "admin__user__%";
-    const RESOURCE_ADMIN_CLIENT_WILDCARD        = "admin__client__%";
-    const RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD = "admin__leasingschema__%";
 
     /**
      * Default constants
@@ -325,8 +311,7 @@ class Application_Model_Acl extends Zend_Acl
      */
     protected function _setupResources ()
     {
-        $this->addResource(self::RESOURCE_ADMIN_WILDCARD);
-        $this->addResource(self::RESOURCE_ADMIN_TONER_WILDCARD);
+
         $this->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
 
         $this->addResource(self::RESOURCE_DEFAULT_WILDCARD);
@@ -400,12 +385,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_QUOTEGEN_QUOTE_DELETE);
         $this->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
 
-        $this->addResource(self::RESOURCE_ADMIN_USER_PROFILE);
-        $this->addResource(self::RESOURCE_ADMIN_USER_WILDCARD);
-        $this->addResource(self::RESOURCE_ADMIN_CLIENT_WILDCARD);
-        $this->addResource(self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD);
 
-        $this->addResource(self::RESOURCE_ADMIN_INDEX_INDEX);
 
         /**
          * Dealermanagement Resources
@@ -443,7 +423,7 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_USER_PROFILE, self::PRIVILEGE_VIEW);
+
 
     }
 
@@ -480,10 +460,6 @@ class Application_Model_Acl extends Zend_Acl
          */
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, self::PRIVILEGE_VIEW);
 
-//        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_BULKUSERPRICING, self::PRIVILEGE_VIEW);
-//        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_USERDEVICES, self::PRIVILEGE_VIEW);
-//        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_USERTONERS, self::PRIVILEGE_VIEW);
-//        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, self::PRIVILEGE_VIEW);
@@ -526,9 +502,8 @@ class Application_Model_Acl extends Zend_Acl
         // Add our privileges
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, self::PRIVILEGE_VIEW);
+
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_VIEW);
-//        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
 
 
     }
@@ -564,10 +539,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, self::PRIVILEGE_VIEW);
-
-//        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
-
-
     }
 
     protected function _setupDealerAdminRole ()
@@ -591,13 +562,6 @@ class Application_Model_Acl extends Zend_Acl
 
         // Add our privileges
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, self::PRIVILEGE_ADMIN);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_CLIENT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_CLIENT_WILDCARD, self::PRIVILEGE_ADMIN);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, self::PRIVILEGE_ADMIN);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_ADMIN);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, self::PRIVILEGE_ADMIN);
     }
