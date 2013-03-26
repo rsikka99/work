@@ -247,6 +247,25 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Searches for a client by the company name field.
+     *
+     * @param string $searchTerm
+     *
+     * @param        $dealerId
+     *
+     * @return Quotegen_Model_Client[]
+     */
+    public function searchForClientByCompanyNameAndDealer ($searchTerm, $dealerId)
+    {
+        $searchTerm = trim($searchTerm, "%");
+
+        return $this->fetchAll(array(
+                                    "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%",
+                                    "{$this->col_dealerId} = ?" => $dealerId
+                               ));
+    }
+
+    /**
      * Fetches a list of clients for the dealer
      * @param int dealer id
      *

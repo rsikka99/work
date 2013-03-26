@@ -384,8 +384,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Prepare the data for the form
         $form->populate($masterDevice->toArray());
-        $isSystemAdmin = $this->view->IsAllowed(Application_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if (!$isSystemAdmin)
+        $isAdmin = $this->view->IsAllowed(Application_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if (!$isAdmin)
         {
             $tempAttribute = $masterDevice->getDealerAttributes();
             if ($tempAttribute)
@@ -478,7 +478,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $devicemapper->delete($device);
                             $this->view->quotegendevice = null;
                         }
-                        if ($isSystemAdmin)
+                        if ($isAdmin)
                         {
                             // Save Master Device
                             $mapper       = new Proposalgen_Model_Mapper_MasterDevice();

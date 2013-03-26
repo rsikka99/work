@@ -280,14 +280,14 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of users for the dealer
-     * @param bool $includeRootUser
+     *
+     * @param $dealerId
      *
      * @return Application_Model_User[]
      */
     public function fetchUserListForDealer ($dealerId)
     {
-        $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
-        return $users;
+        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
     }
 }
 

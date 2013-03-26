@@ -51,7 +51,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             /**
              * If the quote has a leasing schema term already selected we should grab the values from the schema it's from
              */
-            if ($this->getQuote()->getLeasingSchemaTerm() && $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id)
+            if ($this->getQuote()->getLeasingSchemaTerm() && $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id && $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
             {
                 $leasingSchemaId = $this->getQuote()->getLeasingSchemaTerm()->getLeasingSchema()->id;
             }

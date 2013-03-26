@@ -37,7 +37,8 @@ class Default_IndexController extends Tangent_Controller_Action
         if (isset($this->_mpsSession->selectedClientId))
         {
             $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            if ($client)
+            // Make sure the selected client is ours!
+            if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
             {
                 $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
                 $this->view->selectedClientId = $this->_selectedClientId;
@@ -58,8 +59,6 @@ class Default_IndexController extends Tangent_Controller_Action
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableQuotes = $availableQuotes;
         }
-
-
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
@@ -217,6 +216,7 @@ class Default_IndexController extends Tangent_Controller_Action
             }
 
             // Create Client
+            $values['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $clientId = $clientService->create($values);
 
             if ($clientId)
@@ -294,7 +294,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
 
     /**
-     * JSON ACTION: Handles searching for a client by name.
+     * JSON ACTION: Handles searching for a client by name and dealerId
      */
     public function searchForClientAction ()
     {
@@ -302,7 +302,7 @@ class Default_IndexController extends Tangent_Controller_Action
         $results    = array();
         if ($searchTerm !== false)
         {
-            $clients = Quotegen_Model_Mapper_Client::getInstance()->searchForClientByCompanyName($searchTerm);
+            $clients = Quotegen_Model_Mapper_Client::getInstance()->searchForClientByCompanyNameAndDealer($searchTerm, Zend_Auth::getInstance()->getIdentity()->dealerId);
             foreach ($clients as $client)
             {
                 $results[] = array(

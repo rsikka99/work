@@ -108,8 +108,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $dealer_company_id, 'INTEGER');
                             $dealer_companyTable->update($companyData, $where);
                             $this->_flashMessenger->addMessage(array(
-                                                                "success" => 'Company "' . $dealer_company_name . '" has been updated'
-                                                           ));
+                                                                    "success" => 'Company "' . $dealer_company_name . '" has been updated'
+                                                               ));
                         }
                         else
                         {
@@ -119,15 +119,15 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             if (count($dealer_company) > 0)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => 'company "' . $dealer_company_name . '" already exists.'
-                                                               ));
+                                                                        "error" => 'company "' . $dealer_company_name . '" already exists.'
+                                                                   ));
                             }
                             else
                             {
                                 $dealer_companyTable->insert($companyData);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => 'Company "' . $dealer_company_name . '" Added.'
-                                                               ));
+                                                                        "success" => 'Company "' . $dealer_company_name . '" Added.'
+                                                                   ));
                             }
                         }
                     }
@@ -150,8 +150,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 if (!$status)
                                 {
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "An error has occurred while deleting the companies users and the company was not deleted. Please try again. If the problem persists, please contact your administrator."
-                                                                   ));
+                                                                            "error" => "An error has occurred while deleting the companies users and the company was not deleted. Please try again. If the problem persists, please contact your administrator."
+                                                                       ));
                                     exit();
                                 }
                             }
@@ -175,8 +175,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 $where = $dealer_companyTable->getAdapter()->quoteInto($criteria, null);
                                 $dealer_companyTable->delete($where);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => "\"" . $dealer_company_name . "\" was successfully deleted."
-                                                               ));
+                                                                        "success" => "\"" . $dealer_company_name . "\" was successfully deleted."
+                                                                   ));
                             }
                         }
                     }
@@ -200,8 +200,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 {
                     $db->rollback();
                     $this->_flashMessenger->addMessage(array(
-                                                        "error" => 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.'
-                                                   ));
+                                                            "error" => 'Database Error: Company "' . $formData ["company_name"] . '" could not be saved.'
+                                                       ));
                 }
                 catch (Exception $e)
                 {
@@ -214,8 +214,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $this->view->repop = true;
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => 'Error: Invalid data. Please review your entries and try again.'
-                                               ));
+                                                        "error" => 'Error: Invalid data. Please review your entries and try again.'
+                                                   ));
             }
         }
 
@@ -1478,8 +1478,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         }
                     }
                     $this->_flashMessenger->addMessage(array(
-                                                        "success" => "The toner has been replaced and deleted successfully."
-                                                   ));
+                                                            "success" => "The toner has been replaced and deleted successfully."
+                                                       ));
                 }
                 else
                 {
@@ -1759,16 +1759,16 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             if (count($manufacturer) > 0)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
-                                                               ));
+                                                                        "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                                   ));
                             }
                             else
                             {
                                 $where = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer_id, 'INTEGER');
                                 $manufacturersTable->update($manufacturerData, $where);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated'
-                                                               ));
+                                                                        "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Updated'
+                                                                   ));
                             }
                         }
                         else
@@ -1784,22 +1784,22 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     $where            = $manufacturersTable->getAdapter()->quoteInto('id = ?', $manufacturer ['id'], 'INTEGER');
                                     $manufacturersTable->update($manufacturerData, $where);
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
-                                                                   ));
+                                                                            "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                                       ));
                                 }
                                 else
                                 {
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
-                                                                   ));
+                                                                            "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
+                                                                       ));
                                 }
                             }
                             else
                             {
                                 $manufacturersTable->insert($manufacturerData);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
-                                                               ));
+                                                                        "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Added.'
+                                                                   ));
                             }
                         }
                     }
@@ -1839,14 +1839,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 $manufacturersTable->update($manufacturerData, $where);
                             }
                             $this->_flashMessenger->addMessage(array(
-                                                                "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Deleted.'
-                                                           ));
+                                                                    "success" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" Deleted.'
+                                                               ));
                         }
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                "error" => "No manufacturer was selected to be deleted."
-                                                           ));
+                                                                    "error" => "No manufacturer was selected to be deleted."
+                                                               ));
                         }
                     }
                     $db->commit();
@@ -3120,8 +3120,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             if ($response == 0)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => "There was an error while trying to delete the report " . $report_id . ". Please contact your administrator."
-                                                               ));
+                                                                        "error" => "There was an error while trying to delete the report " . $report_id . ". Please contact your administrator."
+                                                                   ));
                                 exit();
                             }
                         }
@@ -3129,8 +3129,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     if ($response == 1)
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            "success" => "The report(s) were successfully deleted."
-                                                       ));
+                                                                "success" => "The report(s) were successfully deleted."
+                                                           ));
                     }
                 }
                 $db->commit();
@@ -3139,8 +3139,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $db->rollback();
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "There was an error while trying to delete the reports. Please contact your administrator."
-                                               ));
+                                                        "error" => "There was an error while trying to delete the reports. Please contact your administrator."
+                                                   ));
             }
         }
     }
@@ -3330,16 +3330,16 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 {
                                     $passvalid = 1;
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "All values must be greater than 0. Please correct it and try again."
-                                                                   ));
+                                                                            "error" => "All values must be greater than 0. Please correct it and try again."
+                                                                       ));
                                     break;
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid = 1;
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "All values must be numeric. Please correct it and try again."
-                                                                   ));
+                                                                            "error" => "All values must be numeric. Please correct it and try again."
+                                                                       ));
                                     break;
                                 }
                                 else if ($price != '')
@@ -3359,8 +3359,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         if ($passvalid == 0)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                "success" => "The toner pricing updates have been applied successfully."
-                                                           ));
+                                                                    "success" => "The toner pricing updates have been applied successfully."
+                                                               ));
                         }
                         else
                         {
@@ -3400,8 +3400,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 {
                                     $passvalid = 1;
                                     $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "All values must be numeric. Please correct it and try again."
-                                                                   ));
+                                                                            "error" => "All values must be numeric. Please correct it and try again."
+                                                                       ));
                                     break;
                                 }
                                 else if ($price != '')
@@ -3442,14 +3442,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             if (!empty($summary))
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => "The device pricing updates have been applied successfully."
-                                                               ));
+                                                                        "success" => "The device pricing updates have been applied successfully."
+                                                                   ));
                             }
                             else
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => "You have not updated any pricing. Please enter a new price and try again."
-                                                               ));
+                                                                        "error" => "You have not updated any pricing. Please enter a new price and try again."
+                                                                   ));
                             }
                         }
                         else
@@ -3483,8 +3483,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $db->rollback();
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "Error: The updates were not saved."
-                                               ));
+                                                        "error" => "Error: The updates were not saved."
+                                                   ));
             }
         }
     }
@@ -4661,67 +4661,67 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                         // Have any values changed
                                                         $hasChanged = false;
 
-                                                        if(!$inputFilter->isValid('cost'))
+                                                        if (!$inputFilter->isValid('cost'))
                                                         {
                                                             $importCost = null;
                                                         }
-                                                        if(!$inputFilter->isValid('partsCostPerPage'))
+                                                        if (!$inputFilter->isValid('partsCostPerPage'))
                                                         {
                                                             $importPartsCpp = null;
                                                         }
-                                                        if(!$inputFilter->isValid('laborCostPerPage'))
+                                                        if (!$inputFilter->isValid('laborCostPerPage'))
                                                         {
                                                             $importLaborCpp = null;
                                                         }
 
                                                         if ((float)$importCost !== (float)$masterDeviceAttribute->cost)
                                                         {
-                                                            if($importCost === null)
+                                                            if ($importCost === null)
                                                             {
                                                                 $importCost = new Zend_Db_Expr('null');
                                                             }
                                                             $masterDeviceAttribute->cost = $importCost;
-                                                            $hasChanged = true;
+                                                            $hasChanged                  = true;
                                                         }
 
                                                         if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
                                                         {
-                                                            if($importPartsCpp === null)
+                                                            if ($importPartsCpp === null)
                                                             {
                                                                 $importPartsCpp = new Zend_Db_Expr('null');
                                                             }
                                                             $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
-                                                            $hasChanged = true;
+                                                            $hasChanged                              = true;
                                                         }
 
                                                         if ((float)$importLaborCpp !== (float)$masterDeviceAttribute->laborCostPerPage)
                                                         {
-                                                            if($importLaborCpp === null)
+                                                            if ($importLaborCpp === null)
                                                             {
                                                                 $importLaborCpp = new Zend_Db_Expr('null');
                                                             }
                                                             $masterDeviceAttribute->laborCostPerPage = $importLaborCpp;
-                                                            $hasChanged = true;
+                                                            $hasChanged                              = true;
                                                         }
 
                                                         if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
                                                         {
-                                                            if($importPartsCpp === null)
+                                                            if ($importPartsCpp === null)
                                                             {
                                                                 $importPartsCpp = new Zend_Db_Expr('null');
                                                             }
                                                             $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
-                                                            $hasChanged = true;
+                                                            $hasChanged                              = true;
 
                                                         }
                                                         if ($importDealerSku !== $masterDeviceAttribute->dealerSku)
                                                         {
-                                                            if($importDealerSku === null)
+                                                            if ($importDealerSku === null)
                                                             {
                                                                 $importDealerSku = new Zend_Db_Expr('null');
                                                             }
                                                             $masterDeviceAttribute->dealerSku = $importDealerSku;
-                                                            $hasChanged = true;
+                                                            $hasChanged                       = true;
                                                         }
 
                                                         if ($hasChanged)
@@ -5085,8 +5085,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 }
                                 $this->_flashMessenger->addMessage(array(
 
-                                                                    "success" => "Your pricing updates have been applied successfully."
-                                                               ));
+                                                                        "success" => "Your pricing updates have been applied successfully."
+                                                                   ));
                                 $db->commit();
                             }
                             catch
@@ -5095,8 +5095,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                 $db->rollback();
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."
-                                                               ));
+                                                                        "error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."
+                                                                   ));
                             }
 
 
@@ -5110,8 +5110,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     {
                         $db->rollback();
                         $this->_flashMessenger->addMessage(array(
-                                                            "error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."
-                                                       ));
+                                                                "error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."
+                                                           ));
                     }
 
                     // delete the file we just uploaded
@@ -6140,8 +6140,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
                     $db->commit();
                     $this->_flashMessenger->addMessage(array(
-                                                        "success" => "The matchups have been saved."
-                                                   ));
+                                                            "success" => "The matchups have been saved."
+                                                       ));
                 }
                 else
                 {
@@ -6160,8 +6160,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 throw new Exception("Passing Exception Up The Chain", null, $e);
                 $db->rollback();
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "Error."
-                                               ));
+                                                        "error" => "Error."
+                                                   ));
             }
         }
     }
@@ -6395,14 +6395,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
                                 $replacementTable->delete($where);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => "The selected printer(s) are no longer marked as replacement printers."
-                                                               ));
+                                                                        "success" => "The selected printer(s) are no longer marked as replacement printers."
+                                                                   ));
                             }
                             else
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "error" => "Could not delete all replacement printers as one or more was the last printer for it's replacement category."
-                                                               ));
+                                                                        "error" => "Could not delete all replacement printers as one or more was the last printer for it's replacement category."
+                                                                   ));
                             }
                         }
                     }
@@ -6667,7 +6667,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $id_list           = null;
 
         //$User = Proposalgen_Model_Mapper_User::getInstance();
-        $isSystemAdmin = $this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
         //*************************************************
         // postback
         //*************************************************
@@ -6701,8 +6701,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $reportMapper->save($report);
 
                     $this->_flashMessenger->addMessage(array(
-                                                        "success" => "Report Transfer Complete."
-                                                   ));
+                                                            "success" => "Report Transfer Complete."
+                                                       ));
                 }
                 else if ($formData ['transfertype'] == 'clone')
                 {
@@ -6717,8 +6717,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
 
                     $this->_flashMessenger->addMessage(array(
-                                                        "success" => "Report Cloning Complete."
-                                                   ));
+                                                            "success" => "Report Cloning Complete."
+                                                       ));
                 }
                 $db->commit();
             }
@@ -6726,8 +6726,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $db->rollback();
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "There was an error while trying to transfer the report. Please contact your administrator."
-                                               ));
+                                                        "error" => "There was an error while trying to transfer the report. Please contact your administrator."
+                                                   ));
 
             }
         }
@@ -6739,7 +6739,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         // if system admin (all users) else if dealer admin or standard user (company users only)
         $where = null;
-        if ($isSystemAdmin)
+        if ($isAdmin)
         {
 
         }
@@ -6791,7 +6791,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         // if system admin (show all reports) else if dealer admin (above users reports only) else if standard user (show only users reports)
         $where = null;
-        if ($isSystemAdmin)
+        if ($isAdmin)
         {
             //build id string
             foreach ($this->view->users_list as $key)
@@ -6847,7 +6847,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
             }
 
-            if ($this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, Application_Model_Acl::PRIVILEGE_ADMIN))
+            if ($this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERREPORTSLIST, Application_Model_Acl::PRIVILEGE_ADMIN))
             {
 
             }
@@ -6924,14 +6924,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     {
         // disable the default layout
         $this->_helper->layout->disableLayout();
-        $db            = Zend_Db_Table::getDefaultAdapter();
-        $filter        = $this->_getParam('filter', 'all');
-        $formdata      = new stdClass();
-        $isSystemAdmin = $this->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $filter   = $this->_getParam('filter', 'all');
+        $formdata = new stdClass();
+        $isAdmin  = $this->view->isAllowed(Application_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
         try
         {
             $where = null;
-            if ($isSystemAdmin)
+            if ($isAdmin)
             {
 
             }
@@ -7063,32 +7063,4 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($jsonResponse);
 
     }
-
-    /**
-     * Checks to see if the currently logged in user has access to the resource.
-     *
-     * @param $resource
-     * @param $privilege
-     *
-     * @return bool
-     */
-    public function isAllowed ($resource, $privilege = null)
-    {
-        $userId = null;
-        if (Zend_Auth::getInstance()->hasIdentity())
-        {
-            $userId = Zend_Auth::getInstance()->getIdentity()->id;
-        }
-
-        $acl = Application_Model_Acl::getInstance();
-
-        if ($acl->isAllowed($userId, $resource, $privilege))
-        {
-            return true;
-        }
-
-
-        return false;
-    }
-
 } //end class AdminController

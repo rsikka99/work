@@ -17,7 +17,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
 
         $selectedLeasingSchemaId = $this->_getParam('leasingSchemaId', null);
         $form = new Quotegen_Form_Quote_Profitability($this->_quote, $selectedLeasingSchemaId);
-        
+
         $request = $this->getRequest();
         if ($request->isPost())
         {
@@ -92,10 +92,11 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
 
                             // Get the leasing schema id to have the form populate the select box options properly
                             $leasingSchemaTerm = $this->_quote->getLeasingSchemaTerm();
-                            
+
                             // Save the leasing schema term
                             if (! $leasingSchemaTerm || (int)$form->getValue('leasingSchemaTermId') != (int)$leasingSchemaTerm->id)
                             {
+
                                 $quoteLeaseTerm = new Quotegen_Model_QuoteLeaseTerm();
                                 $quoteLeaseTerm->quoteId = $this->_quote->id;
                                 
@@ -157,9 +158,18 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array (
-                            'danger' => 'Please correct the errors below.'
-                    ));
+                    if(!isset($values['leasingSchemaId']))
+                    {
+                        $this->_flashMessenger->addMessage(array (
+                                                                 'danger' => 'Select a Lease Term'
+                                                           ));
+                    }else
+                    {
+
+                        $this->_flashMessenger->addMessage(array (
+                                                                 'danger' => 'Please correct the errors below.'
+                                                           ));
+                    }
                 }
             }
         }
