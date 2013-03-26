@@ -4,6 +4,8 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     // Column Names
     public $col_id = "id";
     public $col_dealerId = "dealerId";
+    public $col_username = "username";
+    public $col_email = "email";
     /**
      * The default db table class to use
      *
@@ -259,6 +261,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of users in the system
+     *
      * @param bool $includeRootUser
      *
      * @return Application_Model_User[]
@@ -280,14 +283,40 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of users for the dealer
-     * @param bool $includeRootUser
+     *
+     * @param $dealerId
      *
      * @return Application_Model_User[]
      */
     public function fetchUserListForDealer ($dealerId)
     {
         $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
         return $users;
+    }
+
+    /**
+     * Fetches users by username
+     *
+     * @param $username
+     *
+     * @return Application_Model_User[]
+     */
+    public function fetchUserByUsername ($username)
+    {
+        return $this->fetchAll(array("{$this->col_username} = ?" => $username));
+    }
+
+    /**
+     * * Fetches users by email
+     *
+     * @param $email
+     *
+     * @return Application_Model_User[]
+     */
+    public function fetchUserByEmail ($email)
+    {
+        return $this->fetchAll(array("{$this->col_email} = ?" => $email));
     }
 }
 

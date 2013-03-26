@@ -39,9 +39,8 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $userService = new Dealermanagement_Service_User();
         $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
-        $form        = $userService->getForm($roles, true);
+        $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId, true);
 
         if ($this->getRequest()->isPost())
         {
@@ -59,16 +58,21 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 }
                 else
                 {
+                    foreach ($userService->getErrors() as $message)
+                    {
+                        $this->_flashMessenger->addMessage(array('danger' => $message));
+                    }
                     $db->rollBack();
                 }
             }
             catch (Exception $e)
             {
                 $db->rollBack();
+                My_Log::logException($e);
             }
         }
 
-        $this->view->form = $form;
+        $this->view->form = $userService->getForm();
     }
 
     /**
@@ -76,65 +80,94 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $userId   = $this->_getParam('id', false);
-        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-        // If they haven't provided an id, send them back to the view all users page
+        $userId = $this->_getParam('id', false);
+
+        /**
+         * Require ID
+         */
         if (!$userId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
-        if ($userId === '1')
+        /**
+         * Never delete yourself
+         */
+        if ($userId == $this->_identity->id)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'You cannot delete yourself.'));
             $this->redirector('index');
         }
 
-        // Get the user
-        $mapper = new Application_Model_Mapper_User();
-        $user   = $mapper->find($userId);
-        if ($user->dealerId != $dealerId)
+        /**
+         * Never delete the root user
+         */
+        if ($userId == '1')
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit this user.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
-        // If the user doesn't exist, send them back t the view all users page
+
+
+        /**
+         * Fetch the user
+         */
+        $mapper = new Application_Model_Mapper_User();
+        $user   = $mapper->find($userId);
+
+        /**
+         * Ensure the user exists
+         */
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
+            $this->redirector('index');
+        }
+
+        /**
+         * Ensure the user belongs to the same dealership
+         */
+        if ($user->dealerId != $this->_identity->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         $form = new Application_Form_Delete("Are you sure you want to delete {$user->username} ({$user->firstname} {$user->lastname})?");
 
-        $request = $this->getRequest();
-
-        if ($request->isPost())
+        if ($this->getRequest()->isPost())
         {
-            $values = $request->getPost();
-
-            if (!isset($values ['cancel']))
+            $postData = $this->getRequest()->getPost();
+            if (!isset($postData ['cancel']))
             {
-
-                if ($form->isValid($values))
+                $db          = Zend_Db_table::getDefaultAdapter();
+                $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
+                $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId, true);
+                try
                 {
-                    $mapper->delete($user);
+                    $db->beginTransaction();
 
-                    $this->_flashMessenger->addMessage(array('success' => "User deleted."));
-
-                    $this->redirector('index');
+                    if ($userService->delete($userId))
+                    {
+                        $this->_flashMessenger->addMessage(array('success' => "User deleted."));
+                        $db->commit();
+                        $this->redirector('index');
+                    }
+                    else
+                    {
+                        foreach ($userService->getErrors() as $message)
+                        {
+                            $this->_flashMessenger->addMessage(array('danger' => $message));
+                        }
+                        $db->rollBack();
+                    }
                 }
-                else
+                catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error while deleting the user'));
-                    $this->redirector('index');
+                    $db->rollBack();
+                    My_Log::logException($e);
                 }
-            }
-            else
-            {
-                // User has cancelled.
-                $this->redirector('index');
             }
         }
 
@@ -146,214 +179,79 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
-        $userId   = $this->_getParam('id', false);
-        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $userId = $this->_getParam('id', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
             $this->redirector('index');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
             $this->redirector('index');
         }
 
-
-        // Get the user
+        /**
+         * Fetch the user
+         */
         $mapper = new Application_Model_Mapper_User();
         $user   = $mapper->find($userId);
-        if ($user->dealerId != $dealerId)
-        {
-            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit this user.'));
-            $this->redirector('index');
-        }
 
-        // Get all available roles. In theory this should be a manageable amount
-        $roleMapper = new Admin_Model_Mapper_Role();
-        $roles      = $roleMapper->fetchAll();
-
-        $userRoleMapper = new Admin_Model_Mapper_UserRole();
-        $userRoles      = $userRoleMapper->fetchAll(array('userId = ?' => $userId));
-
-        // We need to get the current users roles
-        $currentUserRoles = array();
-        foreach ($userRoles as $userRole)
-        {
-            $currentUserRoles [] = $userRole->roleId;
-        }
-
-        // If the user doesn't exist, send them back t the view all users page
+        /**
+         * Ensure the user exists
+         */
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
             $this->redirector('index');
         }
 
-        // Create a new form with the mode and roles set
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles);
-
-        // Prepare the data for the form
-        $values               = $user->toArray();
-        $values ['userRoles'] = $currentUserRoles;
-
-        $form->populate($values);
-
-        $request = $this->getRequest();
-
-        // Make sure we are posting data
-        if ($request->isPost())
+        /**
+         * Ensure the user belongs to the same dealership
+         */
+        if ($user->dealerId != $this->_identity->dealerId)
         {
-            // Get the post data
-            $postData = $request->getPost();
-
-            // If we cancelled we don't need to validate anything
-            if (!isset($postData ['cancel']))
-            {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($postData))
-                    {
-                        $formValues = $form->getValues();
-                        // Validate the roles
-                        if (isset($formValues ["userRoles"]))
-                        {
-                            foreach ($formValues ["userRoles"] as $roleId)
-                            {
-                                $roleIsValid = false;
-                                /* @var $role Admin_Model_Role */
-                                foreach ($roles as $role)
-                                {
-                                    if ($role->id == $roleId)
-                                    {
-                                        $roleIsValid = true;
-                                        break;
-                                    }
-                                }
-
-                                // Give an error if a role was not valid
-                                if (!$roleIsValid)
-                                {
-                                    throw new Exception("Invalid Role Selected!");
-                                }
-                            }
-                        }
-
-                        // Set the password values if we checked the reset password box
-                        if (isset($formValues ["password"]) && !empty($formValues ["password"]) && $formValues ["reset_password"])
-                        {
-                            unset($formValues ["passwordconfirm"]);
-                            $formValues ["password"] = Application_Model_User::cryptPassword($formValues ["password"]);
-                        }
-                        else
-                        {
-                            // This whole password area could be done in a more logical sequence
-                            if ($formValues ["reset_password"])
-                            {
-                                throw new InvalidArgumentException("You must specify a new password");
-                            }
-                            unset($formValues ["password"]);
-                            unset($formValues ["passwordconfirm"]);
-                        }
-
-                        // Unset an empty date
-                        if (isset($formValues ["frozenUntil"]) && empty($formValues ["frozenUntil"]))
-                        {
-                            unset($formValues ["frozenUntil"]);
-                        }
-
-                        // Unset an empty date
-                        if (isset($formValues ["eulaAccepted"]) && empty($formValues ["eulaAccepted"]))
-                        {
-                            unset($formValues ["eulaAccepted"]);
-                        }
-
-                        $mapper = new Application_Model_Mapper_User();
-                        $user   = new Application_Model_User();
-                        $user->populate($formValues);
-                        $user->id = $userId;
-
-                        // Save to the database with cascade insert turned on
-                        $mapper->save($user, $userId);
-
-                        // Save changes to the user roles
-                        if (isset($formValues ["userRoles"]))
-                        {
-                            $userRole         = new Admin_Model_UserRole();
-                            $userRole->userId = $userId;
-
-                            // Loop through our new roles
-                            foreach ($formValues ["userRoles"] as $roleId)
-                            {
-                                $hasRole = false;
-
-                                foreach ($userRoles as $existingUserRole)
-                                {
-                                    if ($existingUserRole->roleId == $roleId)
-                                    {
-                                        $hasRole = true;
-                                        break;
-                                    }
-                                }
-
-                                // If the role is new
-                                if (!$hasRole)
-                                {
-                                    $userRole->roleId = $roleId;
-                                    $userRoleMapper->insert($userRole);
-                                }
-                            }
-
-
-                            // Loop through our old roles to see which were removed
-                            /* @var $userRole Admin_Model_UserRole */
-                            foreach ($userRoles as $userRole)
-                            {
-                                $hasRole = false;
-                                foreach ($formValues ["userRoles"] as $roleId)
-                                {
-                                    if ($userRole->roleId == $roleId)
-                                    {
-                                        $hasRole = true;
-                                        break;
-                                    }
-                                }
-
-                                // If the old role is no longer needed
-                                if (!$hasRole)
-                                {
-                                    // Delete role
-                                    $userRoleMapper->delete($userRole);
-                                }
-                            }
-                        }
-                        else
-                        {
-                        }
-
-                        $this->_flashMessenger->addMessage(array('success' => "User '" . $this->view->escape($formValues ["username"]) . "' saved successfully."));
-                    }
-                    else
-                    {
-                        throw new InvalidArgumentException("Please correct the errors below");
-                    }
-                }
-                catch (InvalidArgumentException $e)
-                {
-                    $this->_flashMessenger->addMessage(array('danger' => $e->getMessage()));
-                }
-            }
-            else
-            {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
-            }
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to edit.'));
+            $this->redirector('index');
         }
 
+        $roles       = Admin_Model_Mapper_Role::getInstance()->getRolesAvailableForDealers();
+        $userService = new Dealermanagement_Service_User($roles, $this->_identity->dealerId);
+
+        $form = $userService->getForm($user);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+
+            $db = Zend_Db_table::getDefaultAdapter();
+            try
+            {
+                $db->beginTransaction();
+
+                if ($userService->update($postData, $userId))
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'User saved.'));
+                    $db->commit();
+                }
+                else
+                {
+                    foreach ($userService->getErrors() as $message)
+                    {
+                        $this->_flashMessenger->addMessage(array('danger' => $message));
+                    }
+                    $db->rollBack();
+                }
+            }
+            catch (Exception $e)
+            {
+                $db->rollBack();
+                My_Log::logException($e);
+            }
+        }
 
         $this->view->form = $form;
     }

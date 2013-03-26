@@ -4,9 +4,9 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
     /**
      * @var Admin_Model_Role[]
      */
-    protected $_roles;
+    public $roles;
 
-    protected $_createMode = false;
+    protected $_createMode;
 
     /**
      * @param null $roles
@@ -16,7 +16,12 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
     public function __construct ($roles = null, $createMode = false, $options = null)
     {
         $this->_createMode = $createMode;
-        $this->_roles      = $roles;
+        $this->roles       = $roles;
+        $this->addPrefixPath(
+            'My_Form_Element',
+            'My/Form/Element',
+            'element'
+        );
 
         parent::__construct($options);
     }
@@ -24,6 +29,7 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
     public function init ()
     {
         $this->setMethod('POST');
+
 
         // Filters
         $alphaNumericWithSpaces = new Zend_Filter_Alnum(true);
@@ -118,17 +124,19 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                                                 )
                                            ));
 
-        if (count($this->_roles) > 0)
+        if (count($this->roles) > 0)
         {
-            $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
-            $userRoles->setLabel("User Roles:");
-            $userRoles->setRequired(true);
-
-            foreach ($this->_roles as $role)
+            $roleMultiOptions = array();
+            foreach ($this->roles as $role)
             {
-                $userRoles->addMultiOption($role->id, $role->name);
+                $roleMultiOptions[$role->id] = $role->name;
             }
-            $this->addElement($userRoles);
+
+            $userRoles = $this->addElement('multiCheckbox', 'userRoles', array(
+                                                                              'label'        => 'User Roles:',
+                                                                              'required'     => true,
+                                                                              'multiOptions' => $roleMultiOptions,
+                                                                         ));
         }
 
         // No need to edit this when creating a user
@@ -145,22 +153,23 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                                                                      'required' => true
                                                                 ));
 
-            $minYear     = (int)date('Y') - 2;
-            $maxYear     = $minYear + 4;
-            $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
-            $frozenUntil->setLabel('Frozen Until:')
-                ->addValidator($datetimeValidator)
-                ->setRequired(false)
-                ->setDescription('yyyy-mm-dd hh:mm')
-                ->setJQueryParam('dateFormat', 'yy-mm-dd')
+            $minYear = (int)date('Y') - 2;
+            $maxYear = $minYear + 4;
+            /* @var $frozenUntil My_Form_Element_DateTimePicker */
+            $frozenUntil = $this->createElement('DateTimePicker', 'frozenUntil');
+            $frozenUntil->setJQueryParam('dateFormat', 'yy-mm-dd')
                 ->setJqueryParam('timeFormat', 'hh:mm')
                 ->setJQueryParam('changeYear', 'true')
                 ->setJqueryParam('changeMonth', 'true')
-                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}");
-            $frozenUntil->addFilters(array(
-                                          'StringTrim',
-                                          'StripTags'
-                                     ));
+                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                ->setLabel('Frozen Until:')
+                ->addValidator($datetimeValidator)
+                ->setRequired(false)
+                ->setDescription('yyyy-mm-dd hh:mm')
+                ->addFilters(array(
+                                  'StringTrim',
+                                  'StripTags'
+                             ));
 
             $this->addElement($frozenUntil);
 
@@ -179,52 +188,54 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
         }
 
 
-        $password = new Zend_Form_Element_Password('password', array(
-                                                                    'label'      => 'Password:',
-                                                                    'required'   => true,
-                                                                    'filters'    => array(
-                                                                        'StringTrim'
-                                                                    ),
-                                                                    'validators' => array(
-                                                                        array(
-                                                                            'validator' => 'StringLength',
-                                                                            'options'   => array(
-                                                                                6,
-                                                                                255
-                                                                            )
-                                                                        )
-                                                                    )
-                                                               ));
+        $password = $this->createElement('password', 'password', array(
+                                                                      'label'      => 'Password:',
+                                                                      'required'   => true,
+                                                                      'filters'    => array(
+                                                                          'StringTrim'
+                                                                      ),
+                                                                      'validators' => array(
+                                                                          array(
+                                                                              'validator' => 'StringLength',
+                                                                              'options'   => array(
+                                                                                  6,
+                                                                                  255
+                                                                              )
+                                                                          )
+                                                                      )
+                                                                 ));
 
-        $passwordConfirm = new Zend_Form_Element_Password('password_confirm', array(
-                                                                                   'label'         => 'Confirm Password:',
-                                                                                   'required'      => true,
-                                                                                   'filters'       => array(
-                                                                                       'StringTrim'
-                                                                                   ),
-                                                                                   'validators'    => array(
-                                                                                       array(
-                                                                                           'validator' => 'StringLength',
-                                                                                           'options'   => array(
-                                                                                               6,
-                                                                                               255
-                                                                                           )
-                                                                                       ),
-                                                                                       array(
-                                                                                           'validator' => 'Identical',
-                                                                                           'options'   => array(
-                                                                                               'token' => 'password'
-                                                                                           )
-                                                                                       )
-                                                                                   ),
-                                                                                   'errorMessages' => array(
-                                                                                       'Identical' => 'Passwords must match.'
-                                                                                   )
-                                                                              ));
+        $passwordConfirm = $this->createElement('password', 'password_confirm', array(
+                                                                                     'label'         => 'Confirm Password:',
+                                                                                     'required'      => true,
+                                                                                     'filters'       => array(
+                                                                                         'StringTrim'
+                                                                                     ),
+                                                                                     'validators'    => array(
+                                                                                         array(
+                                                                                             'validator' => 'StringLength',
+                                                                                             'options'   => array(
+                                                                                                 6,
+                                                                                                 255
+                                                                                             )
+                                                                                         ),
+                                                                                         array(
+                                                                                             'validator' => 'Identical',
+                                                                                             'options'   => array(
+                                                                                                 'token' => 'password'
+                                                                                             )
+                                                                                         )
+                                                                                     ),
+                                                                                     'errorMessages' => array(
+                                                                                         'Identical' => 'Passwords must match.'
+                                                                                     )
+                                                                                ));
 
-        $password->setRequired(false);
-        $passwordConfirm->setRequired(false);
-
+        if (!$this->_createMode)
+        {
+            $password->setRequired(false);
+            $passwordConfirm->setRequired(false);
+        }
         $this->addElement($password);
         $this->addElement($passwordConfirm);
 
@@ -238,7 +249,5 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                                                    'ignore' => true,
                                                    'label'  => 'Save'
                                               ));
-
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit');
     }
 }
