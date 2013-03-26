@@ -150,9 +150,9 @@ class Admin_Form_User extends EasyBib_Form
             /* @var $role Admin_Model_Role */
             foreach ($this->roles as $role)
             {
-                if ($role->getId() != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->getId() == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
+                if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
                 {
-                    $userRoles->addMultiOption($role->getId(), $role->getName());
+                    $userRoles->addMultiOption($role->id, $role->name);
                 }
             }
             $this->addElement($userRoles);

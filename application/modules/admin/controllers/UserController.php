@@ -293,7 +293,7 @@ class Admin_UserController extends Tangent_Controller_Action
                                 /* @var $role Admin_Model_Role */
                                 foreach ($roles as $role)
                                 {
-                                    if ($role->getId() == $roleId)
+                                    if ($role->id == $roleId)
                                     {
                                         $roleIsValid = true;
                                         break;
