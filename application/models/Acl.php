@@ -25,7 +25,6 @@ class Application_Model_Acl extends Zend_Acl
      * Resources
      * These are module controller action combinations
      */
-    const RESOURCE_DEFAULT_WILDCARD                       = "default__%__%";
     const RESOURCE_PROPOSALGEN_WILDCARD                   = "proposalgen__%__%";
     const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD            = "proposalgen__survey__%";
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
@@ -35,14 +34,6 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD         = "quotegen__quote_devices__%";
     const RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD          = "quotegen__devicesetup__%";
     const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD         = "quotegen__quote_reports__%";
-
-    /**
-     * Default constants
-     */
-    const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
-    const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
-    const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
-    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD  = "default__auth__resetpassword";
 
     /**
      * Hardware Library Constants
@@ -307,17 +298,14 @@ class Application_Model_Acl extends Zend_Acl
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
 
-        $this->addResource(self::RESOURCE_DEFAULT_WILDCARD);
+
         $this->addResource(self::RESOURCE_PROPOSALGEN_WILDCARD);
         $this->addResource(self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
         $this->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD);
 
-        $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGIN);
-        $this->addResource(self::RESOURCE_DEFAULT_AUTH_LOGOUT);
-        $this->addResource(self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD);
-        $this->addResource(self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD);
+
 
 
         /**
@@ -391,10 +379,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_GUEST);
 
         // Add our privileges
-        //$this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_LOGIN, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, self::PRIVILEGE_VIEW);
-        $this->allow(self::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD, self::PRIVILEGE_VIEW);
+
     }
 
     /**
@@ -406,10 +391,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_AUTHENTICATED_USER);
 
         // Add our privileges
-        $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, self::PRIVILEGE_VIEW);
-
-
     }
 
     /**
@@ -438,7 +420,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_PROPOSAL_USER, self::ROLE_AUTHENTICATED_USER);
 
         // Add our privileges
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
+
 
         /**
          * Hardware Library
@@ -485,7 +467,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_QUOTE_ADMIN, self::ROLE_QUOTE_USER);
 
         // Add our privileges
-        $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, self::PRIVILEGE_VIEW);
@@ -502,7 +483,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_QUOTE_USER, self::ROLE_AUTHENTICATED_USER);
 
         // Add our privileges
-        $this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         //$this->allow(self::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_WILDCARD, self::PRIVILEGE_VIEW)
 
         /**
@@ -532,7 +512,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_DEALER_ADMIN, self::ROLE_AUTHENTICATED_USER);
 
         // Add our privileges
-        $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
 
         $this->allow(self::ROLE_DEALER_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_VIEW);
     }
@@ -546,7 +525,6 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_PROPOSAL_ADMIN, self::ROLE_QUOTE_ADMIN));
 
         // Add our privileges
-        $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, self::PRIVILEGE_ADMIN);
         $this->allow(self::ROLE_SYSTEM_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, self::PRIVILEGE_ADMIN);
     }
