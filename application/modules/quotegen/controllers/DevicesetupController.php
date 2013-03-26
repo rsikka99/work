@@ -102,6 +102,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Populate manufacturers drop down
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $toner_array   = array();
 
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_DeviceSetup();
@@ -112,7 +113,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         {
             // Get the post data
             $values         = $request->getPost();
-            $assignedToners = $values ['hdnToners'];
+            $assignedToners = $values ['toner_array'];
 
             // If we cancelled we don't need to validate anything
             if (!isset($values ['cancel']))
@@ -157,7 +158,12 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     else if ($form->isValid($values))
                     {
                         $toner_config_id = $values ['tonerConfigId'];
-                        $toners          = explode(',', $values ['hdnToners']);
+                        $toner_array     = $values['toner_array'];
+                        $toners          = explode(',', $values ['toner_array']);
+                        foreach ($toners as $key => $toner_id)
+                        {
+                            $toners[$key] = str_replace("'", "", $toner_id);
+                        }
 
                         // An array of required toners
                         $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($toner_config_id);
@@ -201,8 +207,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     }
 
                                     $hasValidToners    = false;
-                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);;
-                                    $repopulateForm    = 1;
+                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);
+                                    ;
+                                    $repopulateForm = 1;
                                     break;
                                 }
                             }
@@ -244,8 +251,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             if ($exists)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
-                                                               ));
+                                                                        'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
+                                                                   ));
                             }
                             else
                             {
@@ -282,8 +289,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $devicemapper->insert($device);
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
-                                                               ));
+                                                                        'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
+                                                                   ));
 
                                 // Redirect them here so that the form reloads
                                 $this->redirector('edit', null, null, array(
@@ -294,8 +301,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                'danger' => $tonerErrorMessage
-                                                           ));
+                                                                    'danger' => $tonerErrorMessage
+                                                               ));
                         }
                     }
 
@@ -308,8 +315,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -360,8 +367,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a master device to edit first.'
-                                           ));
+                                                    'warning' => 'Please select a master device to edit first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -374,8 +381,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the master device to edit.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the master device to edit.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -537,8 +544,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             }
                         }
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "The device has been updated sucessfully."
-                                                       ));
+                                                                'success' => "The device has been updated sucessfully."
+                                                           ));
                     }
 
                     // Error
@@ -550,8 +557,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -573,8 +580,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$deviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a device to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a device to delete first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -582,8 +589,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$device)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the device to delete.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the device to delete.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -609,8 +616,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
                     // Display Message and return
                     $this->_flashMessenger->addMessage(array(
-                                                        'success' => "{$deviceName} was deleted successfully."
-                                                   ));
+                                                            'success' => "{$deviceName} was deleted successfully."
+                                                       ));
                     $this->redirector('index');
                 }
             }
@@ -640,8 +647,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a master device to edit first.'
-                                           ));
+                                                    'warning' => 'Please select a master device to edit first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -654,8 +661,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the master device to edit.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the master device to edit.'
+                                               ));
             $this->redirector('index');
         }
         $tonerConfig = $masterDevice->getTonerConfig()->tonerConfigName;
@@ -724,14 +731,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 $deviceTonerMapper->save($deviceToner);
 
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The toner was assigned successfully."
-                                                               ));
+                                                                        'success' => "The toner was assigned successfully."
+                                                                   ));
                             }
                             else
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => "The toner is an invalid toner for this device."
-                                                               ));
+                                                                        'danger' => "The toner is an invalid toner for this device."
+                                                                   ));
                             }
                         }
                     }
@@ -780,14 +787,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                                        ));
 
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The toner was unassigned successfully."
-                                                           ));
+                                                                    'success' => "The toner was unassigned successfully."
+                                                               ));
                         }
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'You must have at least 1 complete set of toners for this device. If you must unassign this toner you will need to assign a new one before being able to unassign this one.'
-                                                           ));
+                                                                    'danger' => 'You must have at least 1 complete set of toners for this device. If you must unassign this toner you will need to assign a new one before being able to unassign this one.'
+                                                               ));
                         }
                     }
 
@@ -840,8 +847,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -928,8 +935,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a master device to edit first.'
-                                           ));
+                                                    'warning' => 'Please select a master device to edit first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -980,8 +987,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $assignedOptions [] = $deviceOption->optionId;
 
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The option was assigned successfully."
-                                                           ));
+                                                                    'success' => "The option was assigned successfully."
+                                                               ));
                         }
 
                         // Unassign Option
@@ -998,8 +1005,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             }
 
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The option was unassigned successfully."
-                                                           ));
+                                                                    'success' => "The option was unassigned successfully."
+                                                               ));
                         }
                     }
 
@@ -1026,8 +1033,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'error' => "An error has occurred."
-                                                   ));
+                                                            'error' => "An error has occurred."
+                                                       ));
                     echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
                     var_dump($e);
                     die();
@@ -1035,8 +1042,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -1131,8 +1138,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a master device to edit first.'
-                                           ));
+                                                    'warning' => 'Please select a master device to edit first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -1168,14 +1175,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'error' => "An error has occurred."
-                                                   ));
+                                                            'error' => "An error has occurred."
+                                                       ));
                 }
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else

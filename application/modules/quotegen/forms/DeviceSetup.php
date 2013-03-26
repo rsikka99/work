@@ -452,6 +452,8 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                            )
                                                       ));
 
+        $this->addElement('hidden', 'toner_array');
+
         // Add the submit button
         $this->addElement('submit', 'submit', array(
                                                    'label' => 'Save'

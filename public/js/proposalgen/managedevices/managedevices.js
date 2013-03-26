@@ -543,7 +543,6 @@ $(document).ready(function ()
         $('#applied_toners_list').clearGridData();
 
         var master_device_id = $("#printer_model").val();
-        console.log(master_device_id);
         if (form_mode == "add")
         {
             master_device_id = 0;
