@@ -284,9 +284,6 @@ FROM `pgen_toners`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `pgen_toners`.`manufacturerId`
 WHERE `pgen_device_toners`.`master_device_id` = ?';
         $sql = $db->quoteInto($sql, $masterDeviceId);
-        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-        var_dump($sql);
-        die();
 
         $query = $db->query($sql);
 
