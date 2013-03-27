@@ -1045,6 +1045,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Takes the monthly rate and multiplies it by 12
+     *
+     * @return float
+     */
+    public function getYearlyRate ()
+    {
+        return $this->getMonthlyRate() * 12;
+    }
+
+    /**
      * @param $monthlyTotalCost
      *
      * @return float
@@ -1333,7 +1343,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            The master device to use
      *
      * @return number
@@ -1348,7 +1358,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The setting used to calculate cost per page
-     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to us
      *
      * @return number
@@ -1365,7 +1375,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            the setting used to calculate cost per page
-     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to use, or null for current instance of device
      *
      * @return number
@@ -1399,9 +1409,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @param int $totalPageVolume
      *              The Total Page Volume
+     *
      * @return float
      */
-    public function calculateMonthlyPercentOfTotalVolume($totalPageVolume)
+    public function calculateMonthlyPercentOfTotalVolume ($totalPageVolume)
     {
         return $this->getAverageMonthlyPageCount() / $totalPageVolume * 100;
     }
@@ -1411,7 +1422,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return int
      */
-    public function calculateEstimatedMaxLifeCount()
+    public function calculateEstimatedMaxLifeCount ()
     {
         return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
     }
