@@ -328,141 +328,52 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      */
     public function devicetonersAction ()
     {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
+        $gridFormData   = new stdClass();
+        $toners         = array();
+        $masterDeviceId = $this->_getParam('deviceid', false);
+        $tonerArray     = $this->_getParam('list', '');
 
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $deviceID = $this->_getParam('deviceid', false);
-
-        if ($deviceID !== false)
+        /**
+         * If we passed a list of toners, it means those are all the toners assigned to a device.
+         * Otherwise we'll fetch the toners that are assigned to the device already.
+         */
+        if ($tonerArray != '')
         {
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerArray);
+        }
+        else if ($masterDeviceId !== false)
+        {
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDevice($masterDeviceId);
+        }
 
-            $toner_array = $this->_getParam('list', false);
-
-            $formdata = null;
-            $page     = $_GET ['page'];
-            $limit    = $_GET ['rows'];
-            $sidx     = $_GET ['sidx'];
-            $sord     = $_GET ['sord'];
-            if (!$sidx)
+        if (count($toners) > 0)
+        {
+            $gridFormData->page    = 1;
+            $gridFormData->total   = 1;
+            $gridFormData->records = 50;
+            $gridFormData->rows    = array();
+            foreach ($toners as $row)
             {
-                $sidx = 1;
-            }
+                $formDataRow       = new stdClass();
+                $formDataRow->id   = $row['id'];
+                $formDataRow->cell = array(
+                    $row ['id'],
+                    $row ['sku'],
+                    $row ['manufacturer_name'],
+                    Proposalgen_Model_PartType::$PartTypeNames[$row ['partTypeId']],
+                    Proposalgen_Model_TonerColor::$ColorNames[$row['tonerColorId']],
+                    $row ['yield'],
+                    $row ['cost'],
+                    $row ['master_device_id'],
+                    $row ['master_device_id'],
+                    null
+                );
 
-            try
-            {
-                $where = '';
-                if ($toner_array != '')
-                {
-                    $fieldList = array(
-                        'fullname AS manufacturer_name',
-                        '(null) AS master_device_id'
-                    );
-                    $where     = 't.id IN(' . $toner_array . ')';
-                }
-                else
-                {
-                    $fieldList = array(
-                        'fullname AS manufacturer_name'
-                    );
-                    $where     = 'dt.master_device_id = ' . $deviceID;
-                }
-
-                $select = new Zend_Db_Select($db);
-                $select = $db->select();
-                $select->from(array(
-                                   't' => 'pgen_toners'
-                              ));
-                if ($toner_array == '')
-                {
-                    $select->joinLeft(array(
-                                           'dt' => 'pgen_device_toners'
-                                      ), 't.id = dt.toner_id');
-                }
-                $select->joinLeft(array(
-                                       'pt' => 'pgen_part_types'
-                                  ), 'pt.id = t.partTypeId', array(
-                                                                  'name AS type_name'
-                                                             ));
-                $select->joinLeft(array(
-                                       'tc' => 'pgen_toner_colors'
-                                  ), 'tc.id = t.tonerColorId', array(
-                                                                    'name AS toner_color_name'
-                                                               ));
-                $select->joinLeft(array(
-                                       'm' => 'manufacturers'
-                                  ), 'm.id = t.manufacturerId', $fieldList);
-                $select->where($where);
-                $stmt   = $db->query($select);
-                $result = $stmt->fetchAll();
-                $count  = count($result);
-
-                if ($count > 0)
-                {
-                    $total_pages = ceil($count / $limit);
-                }
-                else
-                {
-                    $total_pages = 0;
-                }
-
-                if ($page > $total_pages)
-                {
-                    $page = $total_pages;
-                }
-                $start = $limit * $page - $limit;
-
-                if ($count > 0)
-                {
-                    $i                 = 0;
-                    $type_name         = '';
-                    $formdata->page    = $page;
-                    $formdata->total   = $total_pages;
-                    $formdata->records = $count;
-                    foreach ($result as $row)
-                    {
-                        // Always uppercase OEM, but just captialize everything else
-                        $type_name = ucwords(strtolower($row ['type_name']));
-                        if ($type_name == "Oem")
-                        {
-                            $type_name = "OEM";
-                        }
-
-                        $formdata->rows [$i] ['id']   = $row ['id'];
-                        $formdata->rows [$i] ['cell'] = array(
-                            $row ['id'],
-                            $row ['sku'],
-                            ucwords(strtolower($row ['manufacturer_name'])),
-                            $type_name,
-                            ucwords(strtolower($row ['toner_color_name'])),
-                            $row ['yield'],
-                            $row ['cost'],
-                            $row ['master_device_id'],
-                            $row ['master_device_id'],
-                            null
-                        );
-                        $i++;
-                    }
-                }
-                else
-                {
-                    // empty form values
-                    $formdata = array();
-                }
-            }
-            catch (Exception $e)
-            {
-                // critical exception
-                throw new Exception("Passing Exception Up The Chain", null, $e);
+                $gridFormData->rows[] = $formDataRow;
             }
         }
-        else
-        {
-            $formdata = array();
-        }
-        // encode user data to return to the client:
-        $json             = Zend_Json::encode($formdata);
-        $this->view->data = $json;
+
+        $this->sendJson($gridFormData);
     }
 
     public function replacementtonersAction ()
@@ -5704,4 +5615,4 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         return false;
     }
 
-} //end class AdminController
+}
