@@ -606,4 +606,44 @@ class Proposalgen_Model_HealthCheck_HealthCheck
         }
         return $this->_graphs;
     }
+
+    /**
+     * Calculates the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateNumberOfTreesUsed()
+    {
+        return $this->proposal->getPageCounts()->Total->Combined->Yearly / self::TREE_PER_PAGE;
+    }
+
+    /**
+     * Calculates 25% of the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateQuarterOfNumberOfTreesUsed()
+    {
+        return $this->calculateNumberOfTreesUsed() * .25;
+    }
+
+    /**
+     * Calculates the number of Gallons of water used.
+     *
+     * @return float
+     */
+    public function calculateNumberOfGallonsWaterUsed()
+    {
+        return $this->proposal->getPageCounts()->Total->Combined->Yearly * self::GALLONS_WATER_PER_PAGE;
+    }
+
+    /**
+     * Calculates 25% of the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateQuarterOfNumberOfGallonsWaterUsed()
+    {
+        return $this->calculateNumberOfGallonsWaterUsed() * .25;
+    }
 }

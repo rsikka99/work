@@ -1393,4 +1393,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         return $percent;
     }
+
+    /**
+     * Calculates the percent monthly page volume of total page volume
+     *
+     * @param int $totalPageVolume
+     *              The Total Page Volume
+     * @return float
+     */
+    public function calculateMonthlyPercentOfTotalVolume($totalPageVolume)
+    {
+        return $this->getAverageMonthlyPageCount() / $totalPageVolume * 100;
+    }
 }
