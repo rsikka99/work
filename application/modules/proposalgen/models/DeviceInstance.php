@@ -754,6 +754,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceName))
         {
+
             if ($this->getIsMappedToMasterDevice())
             {
                 $this->_deviceName = $this->getMasterDevice()->getManufacturer()->fullname . " " . $this->getMasterDevice()->modelName;
@@ -1111,9 +1112,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             if ($this->getIsMappedToMasterDevice())
             {
-                $masterDeviceMapper         = Proposalgen_Model_Mapper_MasterDevice::getInstance();
                 $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
-                $this->_masterDevice        = $masterDeviceMapper->find($deviceInstanceMasterDevice->masterDeviceId);
+                $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $this->_masterDevice        = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId);
             }
             else
             {

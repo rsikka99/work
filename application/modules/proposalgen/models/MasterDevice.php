@@ -114,6 +114,45 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public $laborCostPerPage;
 
+    /**
+     * @var int
+     */
+    public $calculatedLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDealerLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDeviceLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingReportLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $calculatedPartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDealerPartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDevicePartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingReportPartsCostPerPag;
     /*
      * Related Objects
      */
@@ -369,6 +408,45 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             $this->laborCostPerPage = $params->laborCostPerPage;
         }
+        if (isset($params->calculatedLaborCostPerPage) && !is_null($params->calculatedLaborCostPerPage))
+        {
+            $this->calculatedLaborCostPerPage = $params->calculatedLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingDealerLaborCostPerPage) && !is_null($params->isUsingDealerLaborCostPerPage))
+        {
+            $this->isUsingDealerLaborCostPerPage = $params->isUsingDealerLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingDeviceLaborCostPerPage) && !is_null($params->isUsingDeviceLaborCostPerPage))
+        {
+            $this->isUsingDeviceLaborCostPerPage = $params->isUsingDeviceLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingReportLaborCostPerPage) && !is_null($params->isUsingReportLaborCostPerPage))
+        {
+            $this->isUsingReportLaborCostPerPage = $params->isUsingReportLaborCostPerPage;
+        }
+
+        if (isset($params->calculatedPartsCostPerPage) && !is_null($params->calculatedPartsCostPerPage))
+        {
+            $this->calculatedPartsCostPerPage = $params->calculatedPartsCostPerPage;
+        }
+
+        if (isset($params->isUsingDealerPartsCostPerPage) && !is_null($params->isUsingDealerPartsCostPerPage))
+        {
+            $this->isUsingDealerPartsCostPerPage = $params->isUsingDealerPartsCostPerPage;
+        }
+
+        if (isset($params->isUsingDevicePartsCostPerPage) && !is_null($params->isUsingDevicePartsCostPerPage))
+        {
+            $this->isUsingDevicePartsCostPerPage = $params->isUsingDevicePartsCostPerPage;
+        }
+
+        if (isset($params->isUsingReportPartsCostPerPag) && !is_null($params->isUsingReportPartsCostPerPag))
+        {
+            $this->isUsingReportPartsCostPerPag = $params->isUsingReportPartsCostPerPag;
+        }
     }
 
     /**
@@ -592,8 +670,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
             $laborCostPerPage = 0;
             $partsCostPerPage = 0;
-            $attribute = $this->getDealerAttributes();
-            if($attribute)
+            $attribute        = $this->getDealerAttributes();
+            if ($attribute)
             {
                 $laborCostPerPage = $attribute->laborCostPerPage;
                 $partsCostPerPage = $attribute->partsCostPerPage;

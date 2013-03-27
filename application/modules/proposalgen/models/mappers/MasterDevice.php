@@ -221,10 +221,10 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     /**
      * Get all the printer model with the wild cards %<modelName>%
      *
-     * @param string  $criteria
-     * @param null    $order
-     * @param int     $count
-     * @param null    $offset
+     * @param string $criteria
+     * @param null   $order
+     * @param int    $count
+     * @param null   $offset
      *
      * @return Proposalgen_Model_MasterDevice[]
      */
@@ -236,10 +236,10 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     /**
      * Get all master devices that match the manufacturer id that has been passed.
      *
-     * @param string      $criteria
-     * @param null        $order
-     * @param int         $count
-     * @param null        $offset
+     * @param string $criteria
+     * @param null   $order
+     * @param int    $count
+     * @param null   $offset
      *
      * @return Proposalgen_Model_MasterDevice[]
      */
@@ -285,38 +285,38 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      * This function fetches match up devices
      *
      * @param string  $sortColumn
-     *            The column to sort by
+     *              The column to sort by
      * @param string  $sortDirection
-     *            The direction to sort
+     *              The direction to sort
      * @param string  $filterByColumn
-     *            The column to filter by
+     *              The column to filter by
      * @param string  $filterValue
-     *            The value to filter with
+     *              The value to filter with
      * @param number  $limit
-     *            The number of records to retrieve
+     *              The number of records to retrieve
      * @param number  $offset
-     *            The record to start at
+     *              The record to start at
      * @param boolean $canSell
      *              If the we are searching for sellable devices
      * @param boolean $justCount
-     *            If set to true this function will return an integer of the row count of all available rows
+     *              If set to true this function will return an integer of the row count of all available rows
      *
      * @return number|array Returns an array, or if justCount is true then it will count how many rows are
      *         available
      */
-    public function getCanSellMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null,$canSell = false, $justCount = false)
+    public function getCanSellMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $canSell = false, $justCount = false)
     {
-        $db                         = Zend_Db_Table::getDefaultAdapter();
-        $masterDevicesTableName     = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
-        $manufacturerTableName      = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
-        $deviceTableName     = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
+        $db                     = Zend_Db_Table::getDefaultAdapter();
+        $masterDevicesTableName = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
+        $manufacturerTableName  = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
+        $deviceTableName        = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
 
-        $whereClause = '';//["{$deviceTableName}.masterDeviceId = ?"] = new Zend_Db_Expr('NULL');
-        if (strcasecmp($filterByColumn, 'deviceName') === 0 && $filterValue !=='')
+        $whereClause = ''; //["{$deviceTableName}.masterDeviceId = ?"] = new Zend_Db_Expr('NULL');
+        if (strcasecmp($filterByColumn, 'deviceName') === 0 && $filterValue !== '')
         {
             $whereClause ["CONCAT({$manufacturerTableName}.displayname, \" \", {$masterDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
         }
-        elseif (strcasecmp($filterByColumn, 'oemSku') === 0 && $filterValue !=='')
+        elseif (strcasecmp($filterByColumn, 'oemSku') === 0 && $filterValue !== '')
         {
             $whereClause ["oemSku LIKE ?"] = "%{$filterValue}%";
         }
@@ -328,28 +328,29 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         {
 
             // Make sure we don't select any other columns
-            if($canSell){
-                $deviceColumns     = array('count' => 'COUNT(*)');
+            if ($canSell)
+            {
+                $deviceColumns       = array('count' => 'COUNT(*)');
                 $masterDeviceColumns = null;
             }
             else
             {
-                $masterDeviceColumns     = array('count' => 'COUNT(*)');
-                $deviceColumns = null;
+                $masterDeviceColumns = array('count' => 'COUNT(*)');
+                $deviceColumns       = null;
             }
 
         }
         else
         {
-            $masterDeviceColumns     = array(
+            $masterDeviceColumns = array(
                 'id',
                 'modelName'
             );
-            $deviceColumns     = array(
+            $deviceColumns       = array(
                 'oemSku',
                 'dealerSku'
             );
-            $manufacturerColumns     = array(
+            $manufacturerColumns = array(
                 'displayname'
             );
         }
@@ -357,15 +358,17 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         /*
          * Here we create our select statement
          */
-        if($canSell){
+        if ($canSell)
+        {
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
-                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
-                ->join($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName .  '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
+                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
+                ->join($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
-        else{
+        else
+        {
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
-                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`",$manufacturerColumns)
-                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName .  '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
+                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
+                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
         // Apply our where clause
         foreach ($whereClause as $cond => $value)
@@ -475,5 +478,40 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $result = $stmt->fetchAll();
 
         return $result;
+    }
+
+
+    public function fetchAllForReports ($masterDeviceId, $dealerId)
+    {
+        $db     = Zend_Db_Table::getDefaultAdapter();
+        $select = $db->select()
+            ->from(array('pmd' => 'pgen_master_devices'), array(
+                                                               'pmd.*',
+                                                          ))
+            ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), 'pmd.id = dmda.masterDeviceId', array(
+                                                                                                                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, 0.0045)",
+                                                                                                                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, 0.0045)",
+                                                                                                                "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
+                                                                                                                "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
+                                                                                                                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
+                                                                                                                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
+                                                                                                           ))
+            ->where("pmd.id = ? ", $masterDeviceId)
+            ->where("dmda.dealerId = ? OR dmda.dealerId IS NULL", $dealerId);
+
+        $stmt = $db->query($select);
+
+        $result = $stmt->fetch();
+        $object = false;
+
+        if ($result)
+        {
+            $object = new Proposalgen_Model_MasterDevice($result);
+            $this->saveItemToCache($object);
+        }
+
+        return $object;
     }
 }
