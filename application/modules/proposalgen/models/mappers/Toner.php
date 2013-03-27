@@ -260,4 +260,66 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         return $toners;
     }
 
+    /**
+     * Fetches a list of toners for a device. (Used by Proposalgen_AdminController::devicetonersAction()
+     *
+     * @param $masterDeviceId
+     *
+     * @return array
+     */
+    public function fetchTonersAssignedToDevice ($masterDeviceId)
+    {
+        $db = $this->getDbTable()->getAdapter();
+
+        $sql = 'SELECT
+    `pgen_toners`.*,
+    `pgen_part_types`.`name`                AS `type_name`,
+    `pgen_toner_colors`.`name`              AS `toner_color_name`,
+    `manufacturers`.`fullname`              AS `manufacturer_name`,
+    `pgen_device_toners`.`master_device_id` AS `master_device_id`
+FROM `pgen_toners`
+    LEFT JOIN `pgen_device_toners` ON `pgen_device_toners`.`toner_id` = `pgen_toners`.`id`
+    LEFT JOIN `pgen_part_types` ON `pgen_part_types`.`id` = `pgen_toners`.`partTypeId`
+    LEFT JOIN `pgen_toner_colors` ON `pgen_toner_colors`.`id` = `pgen_toners`.`tonerColorId`
+    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `pgen_toners`.`manufacturerId`
+WHERE `pgen_device_toners`.`master_device_id` = ?';
+        $sql = $db->quoteInto($sql, $masterDeviceId);
+        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+        var_dump($sql);
+        die();
+
+        $query = $db->query($sql);
+
+        return $query->fetchAll();
+    }
+
+    /**
+     * Fetches a list of toners. (Used by Proposalgen_AdminController::devicetonersAction()
+     *
+     * @param $tonerIdList A string of id's (comma separated)
+     *
+     * @return array
+     */
+    public function fetchListOfToners ($tonerIdList)
+    {
+        $db = $this->getDbTable()->getAdapter();
+
+        $sql = "SELECT
+    `pgen_toners`.*,
+    `pgen_part_types`.`name`   AS `type_name`,
+    `pgen_toner_colors`.`name` AS `toner_color_name`,
+    `manufacturers`.`fullname` AS `manufacturer_name`,
+    NULL                       AS `master_device_id`
+FROM `pgen_toners`
+    LEFT JOIN `pgen_part_types` ON `pgen_part_types`.`id` = `pgen_toners`.`partTypeId`
+    LEFT JOIN `pgen_toner_colors` ON `pgen_toner_colors`.`id` = `pgen_toners`.`tonerColorId`
+    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `pgen_toners`.`manufacturerId`
+WHERE `pgen_toners`.`id` IN ({$tonerIdList});";
+
+        $query = $db->query($sql);
+
+        return $query->fetchAll();
+
+    }
+
 }
