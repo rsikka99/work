@@ -32,7 +32,7 @@ $proposal = $this->proposal;
     </tr>
     <tr>
         <td class="bold">TOTAL ESTIMATED ANNUAL PRINTING COSTS</td>
-        <td class="right bold">$<?php echo number_format($proposal->getEstimatedAnnualCostOfLeaseMachines() + $proposal->getTotalPurchasedAnnualCost()); ?></td>
+        <td class="right bold">$<?php echo number_format($proposal->calculateEstimatedAnnualCostOfPrinting()); ?></td>
     </tr>
 </table>
 <br />

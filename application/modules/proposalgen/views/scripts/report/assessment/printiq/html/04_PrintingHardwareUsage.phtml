@@ -14,8 +14,8 @@ $graphs = $proposal->getGraphs();
 </table>
 <br />
 <div class="pheader">Print Volume and Number of Printing Devices</div>
-<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
-</strong>pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format($proposal->calculateAveragePagesPerDeviceMonthly()); ?>
+</strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
 Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
 <div class="center graphs">

@@ -51,11 +51,11 @@ $proposal = $this->proposal;
     </tr>
     <tr>
         <td>Cost of monochrome pages</td>
-        <td class="right">$<?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly * $proposal->getMPSBlackAndWhiteCPP()); ?></td>
+        <td class="right">$<?php echo number_format($proposal->calculateTotalCostOfMonochromePagesAnnually()); ?></td>
     </tr>
     <tr>
         <td>Cost of color pages</td>
-        <td class="right">$<?php echo number_format($proposal->getPageCounts()->Purchased->Color->Yearly * $proposal->getMPSColorCPP()); ?></td>
+        <td class="right">$<?php echo number_format($proposal->calculateTotalCostOfColorPagesAnnually()); ?></td>
     </tr>
     <tr>
         <td>Annual internal administration cost<br/><em>Processing 1 invoice/month @ <?php echo $this->currency($proposal->report->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em></td>
@@ -67,7 +67,7 @@ $proposal = $this->proposal;
     </tr>
     <tr>
         <td>Annual cost of internal IT supporting printing devices<br/><em>Assume reduction of 50%</em></td>
-        <td class="right">$<?php echo number_format($proposal->getAnnualITCost() * 0.5);?></td>
+        <td class="right">$<?php echo number_format($proposal->getHalfOfAnnualITCost());?></td>
     </tr>
     <tr>
         <td>Annual cost of new hardware purchases<br/><em>Assume no change</em></td>

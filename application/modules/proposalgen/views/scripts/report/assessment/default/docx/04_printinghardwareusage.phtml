@@ -22,7 +22,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format(count($this->proposal->getDevices())), number_format(($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->DeviceCount)), number_format($this->proposal->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($proposal->getDeviceCount()), number_format($proposal->calculateAveragePagesPerDeviceMonthly()), number_format($this->proposal->getPageCounts()->Total->Combined->Monthly)));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();

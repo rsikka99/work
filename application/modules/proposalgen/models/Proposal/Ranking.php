@@ -305,31 +305,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             // array($valueToCheck => $ranking)
             $this->RankingCriteria = array(
                 "ServiceAndSuppliesLogistics"              => array(
-                    "InkJetPrinting"       => array(
-                        10 => 10,
-                        7  => 25,
-                        4  => 50,
-                        1  => 100
-                    ),
-                    "EfficiencyOfBreakFix" => array(
-                        10 => 4.35,
-                        9  => 5.12,
-                        8  => 6.02,
-                        7  => 7.08,
-                        6  => 8.33,
-                        5  => 9.58,
-                        4  => 11.02,
-                        3  => 12.67,
-                        2  => 14.58,
-                        1  => 16.76
-                    ),
-                    "TimeToRepair"         => array(
-                        9 => 0.5,
-                        7 => 1.5,
-                        5 => 2.5,
-                        3 => 5,
-                        1 => 365
-                    ),
+
                     "AverageAge"           => array(
                         2  => 10,
                         3  => 9,
@@ -361,31 +337,6 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
                         8  => 95,
                         10 => 99,
                     ),
-
-                    "OrdersPerMonth"       => array(
-                        10 => 1,
-                        9  => 2,
-                        8  => 3,
-                        7  => 4,
-                        6  => 5,
-                        5  => 8,
-                        4  => 11,
-                        3  => 14,
-                        2  => 17,
-                        1  => 18
-                    ),
-                    "ModelPercentage"      => array(
-                        10 => 10,
-                        9  => 20,
-                        8  => 30,
-                        7  => 40,
-                        6  => 50,
-                        5  => 60,
-                        4  => 70,
-                        3  => 80,
-                        2  => 90,
-                        1  => 100
-                    )
                 ),
                 "PrintingHardwareUsage"                    => array(
                     "AverageMonthlyPrintVolumePerPrinter"  => array(

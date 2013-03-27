@@ -4,6 +4,8 @@ class Proposalgen_Model_HealthCheck_HealthCheck
     /**@var Proposalgen_Model_Proposal_OfficeDepot */
     public $proposal;
     protected $_graphs = array();
+    const GALLONS_WATER_PER_PAGE = 0.121675; // Number of pages * this gives amount of gallons
+    const TREE_PER_PAGE = 7800;//Number of pages divided by this, gives amount of trees
     public $reportSettings;
 
     /**
@@ -603,5 +605,45 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             $this->_graphs = array_merge($healthgraphs,$this->_graphs);
         }
         return $this->_graphs;
+    }
+
+    /**
+     * Calculates the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateNumberOfTreesUsed()
+    {
+        return $this->proposal->getPageCounts()->Total->Combined->Yearly / self::TREE_PER_PAGE;
+    }
+
+    /**
+     * Calculates 25% of the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateQuarterOfNumberOfTreesUsed()
+    {
+        return $this->calculateNumberOfTreesUsed() * .25;
+    }
+
+    /**
+     * Calculates the number of Gallons of water used.
+     *
+     * @return float
+     */
+    public function calculateNumberOfGallonsWaterUsed()
+    {
+        return $this->proposal->getPageCounts()->Total->Combined->Yearly * self::GALLONS_WATER_PER_PAGE;
+    }
+
+    /**
+     * Calculates 25% of the number of trees used.
+     *
+     * @return float
+     */
+    public function calculateQuarterOfNumberOfGallonsWaterUsed()
+    {
+        return $this->calculateNumberOfGallonsWaterUsed() * .25;
     }
 }
