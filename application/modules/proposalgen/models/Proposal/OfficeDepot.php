@@ -3659,4 +3659,44 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
     }
+
+    /**
+     * calculate Estimated Annual Cost Of Printing
+     *
+     * @return float
+     */
+    public function calculateEstimatedAnnualCostOfPrinting()
+    {
+        return $this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost();
+    }
+
+    /**
+     * Calculates Total Cost Of Monochrome pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfMonochromePagesAnnually()
+    {
+        return $this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP();
+    }
+
+    /**
+     * Calculates Total Cost Of Color pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfColorPagesAnnually()
+    {
+        return $this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP();
+    }
+
+    /**
+     * Calculates half of annual it cost
+     *
+     * @return float
+     */
+    public function getHalfOfAnnualITCost()
+    {
+        return $this->getAnnualITCost() * .5;
+    }
 }

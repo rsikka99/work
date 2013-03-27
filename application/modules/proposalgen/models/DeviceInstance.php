@@ -1405,4 +1405,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         return $this->getAverageMonthlyPageCount() / $totalPageVolume * 100;
     }
+
+    /**
+     * Calculates the max estimated life count
+     *
+     * @return int
+     */
+    public function calculateEstimatedMaxLifeCount()
+    {
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+    }
 }

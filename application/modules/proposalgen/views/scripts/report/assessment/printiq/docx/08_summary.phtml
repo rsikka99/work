@@ -76,11 +76,11 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $t
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('Cost of monochrome pages'), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly * $proposal->getMPSBlackAndWhiteCPP()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->calculateTotalCostOfMonochromePagesAnnually()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('Cost of color pages'), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getPageCounts()->Purchased->Color->Yearly * $proposal->getMPSColorCPP()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->calculateTotalCostOfColorPagesAnnually()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
@@ -98,7 +98,7 @@ $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText($this->translate('Annual cost of internal IT supporting printing devices'), null, 'nospacing');
 $cell->addText($this->translate('Assume reduction of 50%'), 'small_italic_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getAnnualITCost() * 0.5), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getHalfOfAnnualITCost()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border);
