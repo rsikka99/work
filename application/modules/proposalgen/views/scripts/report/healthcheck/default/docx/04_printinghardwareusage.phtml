@@ -49,7 +49,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 
 $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of pages per device, per month'), null, null);
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount()), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($proposal->calculateAveragePagesPerDeviceMonthly()), null, 'nospacing_rightalign');
 $section->addTextBreak();
 $section->addText($this->translate('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.'), null, array('spaceAfter' => 20));
 $section->addText($this->translate('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.'), null, 'nospacing');
@@ -92,7 +92,7 @@ foreach ($proposal->getLeastUsedDevices() as $device)
     $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume()), null, 'nospacing_centeralign');
-    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format(($device->getAverageMonthlyPageCount() / $device->getMasterDevice()->getMaximumMonthlyPageVolume()) * 100, 1) . '%', null, 'nospacing_centeralign');
+    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume(), 1) . '%', null, 'nospacing_centeralign');
 }
 
 $section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
@@ -114,14 +114,14 @@ foreach ($proposal->getMostUsedDevices() as $device)
     $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber)) ? : "Unknown", null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume()), null, 'nospacing_centeralign');
-    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format(($device->getAverageMonthlyPageCount() / $device->getMasterDevice()->getMaximumMonthlyPageVolume()) * 100, 1) . '%', null, 'nospacing_centeralign');
+    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume(), 1) . '%', null, 'nospacing_centeralign');
 }
 $section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
 $section->addTextBreak();
 
 $section->addTitle($this->translate('Color Usage'), 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapablePurchasedDevices()), number_format($proposal->getPageCounts()->Purchased->Color->Monthly), number_format(($proposal->getPageCounts()->Purchased->Color->Monthly / $proposal->getPageCounts()->Purchased->Combined->Monthly * 100), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($proposal->getNumberOfColorCapablePurchasedDevices()), number_format($proposal->getPageCounts()->Purchased->Color->Monthly), number_format($proposal->calculatePercentOfTotalVolumePurchasedColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

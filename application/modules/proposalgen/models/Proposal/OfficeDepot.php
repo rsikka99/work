@@ -3640,8 +3640,23 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
     }
 
+    /**
+     * Calculates the average pages per device monthly
+     *
+     * @return float
+     */
     public function calculateAveragePagesPerDeviceMonthly()
     {
         return $this->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount();
+    }
+
+    /**
+     * Calculates the percent of total volume of purchased devices that are color
+     *
+     * @return float
+     */
+    public function calculatePercentOfTotalVolumePurchasedColorMonthly()
+    {
+        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
     }
 }
