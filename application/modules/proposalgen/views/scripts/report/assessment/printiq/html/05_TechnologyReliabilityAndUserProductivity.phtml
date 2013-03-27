@@ -41,7 +41,7 @@ $graphs = $proposal->getGraphs();
             <td class="column3"><div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div></td>
             <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></div></td>
             <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div></td>
-            <td class="column6"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * 36); ?></div></td>
+            <td class="column6"><div class=" center"><?php echo number_format($deviceInstance->calculateEstimatedMaxLifeCount()); ?></div></td>
         </tr>
     <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
     </tbody>
