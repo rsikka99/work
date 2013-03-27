@@ -718,7 +718,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
             $this->view->rmsUploadRow = $rmsUploadRow;
-            $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels()));
+            $form->populate(array('reportsTonerLevels' => $deviceInstance->reportsTonerLevels));
             $form->populate($rmsUploadRow->toArray());
 
 

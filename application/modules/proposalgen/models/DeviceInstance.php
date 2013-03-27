@@ -1046,6 +1046,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Takes the monthly rate and multiplies it by 12
+     *
+     * @return float
+     */
+    public function getYearlyRate ()
+    {
+        return $this->getMonthlyRate() * 12;
+    }
+
+    /**
      * @param $monthlyTotalCost
      *
      * @return float
@@ -1283,7 +1293,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
                 $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting));
 
-                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->getDealerAttributes()->laborCostPerPage + $masterDevice->getDealerAttributes()->partsCostPerPage + $costPerPageSetting->adminCostPerPage;
+                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->laborCostPerPage + $masterDevice->partsCostPerPage + $costPerPageSetting->adminCostPerPage;
                 if ($masterDevice->isColor())
                 {
                     $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
@@ -1332,9 +1342,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for this instance
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            The master device to use
      *
      * @return number
@@ -1347,9 +1357,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for monochrome printing
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The setting used to calculate cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to us
      *
      * @return number
@@ -1364,9 +1374,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for color printing
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            the setting used to calculate cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to use, or null for current instance of device
      *
      * @return number
@@ -1393,5 +1403,28 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         }
 
         return $percent;
+    }
+
+    /**
+     * Calculates the percent monthly page volume of total page volume
+     *
+     * @param int $totalPageVolume
+     *              The Total Page Volume
+     *
+     * @return float
+     */
+    public function calculateMonthlyPercentOfTotalVolume ($totalPageVolume)
+    {
+        return $this->getAverageMonthlyPageCount() / $totalPageVolume * 100;
+    }
+
+    /**
+     * Calculates the max estimated life count
+     *
+     * @return int
+     */
+    public function calculateEstimatedMaxLifeCount ()
+    {
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
     }
 }

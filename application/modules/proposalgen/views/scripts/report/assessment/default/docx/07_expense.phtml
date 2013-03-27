@@ -35,7 +35,7 @@ $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->c
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($proposal->getTotalPurchasedAnnualCost()), null, 'nospacing_rightalign');
 $annualPrintingCostsTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('TOTAL ESTIMATED ANNUAL PRINTING COSTS'), 'bold_text', 'nospacing');
-$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getEstimatedAnnualCostOfLeaseMachines() + $proposal->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
+$annualPrintingCostsTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->calculateEstimatedAnnualCostOfPrinting()), 'bold_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Cost of Hardware Assumed to be Leased'), 2);

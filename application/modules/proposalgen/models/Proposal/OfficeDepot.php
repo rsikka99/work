@@ -1409,9 +1409,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $this->_averageOemOnlyCostPerPage = $costPerPage;
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $this->_averageOemOnlyCostPerPage   = $costPerPage;
         }
 
         return $this->_averageOemOnlyCostPerPage;
@@ -1447,8 +1447,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage =  Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage,$this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->report->getReportSettings()->assessmentReportMargin);
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 
@@ -2139,11 +2139,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                 }
                 else
                 {
-                    // $legendItems[] =
+//                    $labels[$device->getMasterDevice()->modelName]            = $device->getMasterDevice()->modelName;
                     $uniqueModelArray [$device->getMasterDevice()->modelName] = 1;
                 }
             }
-            $uniqueDevicesGraph = new gchart\gPie3DChart(350, 270);
+            $uniqueDevicesGraph = new gchart\gPie3DChart(700, 270);
             $uniqueDevicesGraph->addDataSet($uniqueModelArray);
             $uniqueDevicesGraph->addColors(array(
                                                 "E21736",
@@ -2161,7 +2161,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                                 "00ff00",
                                                 "000000"
                                            ));
-            // $uniqueDevicesGraph->setLegend($legendItems);
+//             $uniqueDevicesGraph->setLegend($labels);
+//            $uniqueDevicesGraph->setLabels($labels);
             // Graphs[3]
             $this->Graphs [] = $uniqueDevicesGraph->getUrl();
 
@@ -3557,5 +3558,145 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         }
 
         return $averageAge;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemMonochromeMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleMonochromeMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemColorMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleColorMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
+    }
+
+    /**
+     * Calculates the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
+    }
+
+    /**
+     * Calculates half the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
+    }
+
+    /**
+     * Calculates the average pages per device monthly
+     *
+     * @return float
+     */
+    public function calculateAveragePagesPerDeviceMonthly()
+    {
+        return $this->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount();
+    }
+
+    /**
+     * Calculates the percent of total volume of purchased devices that are color
+     *
+     * @return float
+     */
+    public function calculatePercentOfTotalVolumePurchasedColorMonthly()
+    {
+        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
+    }
+
+    /**
+     * calculate Estimated Annual Cost Of Printing
+     *
+     * @return float
+     */
+    public function calculateEstimatedAnnualCostOfPrinting()
+    {
+        return $this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost();
+    }
+
+    /**
+     * Calculates Total Cost Of Monochrome pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfMonochromePagesAnnually()
+    {
+        return $this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP();
+    }
+
+    /**
+     * Calculates Total Cost Of Color pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfColorPagesAnnually()
+    {
+        return $this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP();
+    }
+
+    /**
+     * Calculates half of annual it cost
+     *
+     * @return float
+     */
+    public function getHalfOfAnnualITCost()
+    {
+        return $this->getAnnualITCost() * .5;
     }
 }

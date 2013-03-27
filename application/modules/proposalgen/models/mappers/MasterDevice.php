@@ -324,6 +324,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         {
             $whereClause ["dealerSku LIKE ?"] = "%{$filterValue}%";
         }
+        
         if ($justCount)
         {
 
