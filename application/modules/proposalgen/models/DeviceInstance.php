@@ -1331,9 +1331,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for this instance
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
      *            The master device to use
      *
      * @return number
@@ -1346,9 +1346,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for monochrome printing
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The setting used to calculate cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
      *            the master device to us
      *
      * @return number
@@ -1363,9 +1363,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the monthly cost for color printing
      *
-     * @param Application_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            the setting used to calculate cost per page
-     * @param Application_Model_MasterDevice       $masterDevice
+     * @param Proposalgen_Model_MasterDevice                                              $masterDevice
      *            the master device to use, or null for current instance of device
      *
      * @return number
