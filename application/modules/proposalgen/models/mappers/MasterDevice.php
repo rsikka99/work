@@ -324,7 +324,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         {
             $whereClause ["dealerSku LIKE ?"] = "%{$filterValue}%";
         }
-        
+
         if ($justCount)
         {
 
@@ -485,25 +485,25 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     public function findForReports ($masterDeviceId, $dealerId, $defaultLaborCostPerPage = 0, $defaultPartsCostPerPage = 0)
     {
 
-        $db     = Zend_Db_Table::getDefaultAdapter();
-        $defaultPartsCostPerPage = $db->quote($defaultPartsCostPerPage,'FLOAT');
-        $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage,'FLOAT');
-        $select = $db->select()
+        $db                      = Zend_Db_Table::getDefaultAdapter();
+        $defaultPartsCostPerPage = $db->quote($defaultPartsCostPerPage, 'FLOAT');
+        $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage, 'FLOAT');
+        $dealerId                = $db->quote($dealerId, 'INT');
+        $select                  = $db->select()
             ->from(array('pmd' => 'pgen_master_devices'), array(
                                                                'pmd.*',
                                                           ))
-            ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), 'pmd.id = dmda.masterDeviceId', array(
-                                                                                                                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
-                                                                                                                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
-                                                                                                                "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
-                                                                                                                "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                                                                                                                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
-                                                                                                                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
-                                                                                                           ))
-            ->where("pmd.id = ? ", $masterDeviceId)
-            ->where("dmda.dealerId = ? OR dmda.dealerId IS NULL", $dealerId);
+            ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
+                                                                                                                                                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
+                                                                                                                                                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
+                                                                                                                                                "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
+                                                                                                                                                "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
+                                                                                                                                                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                                                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
+                                                                                                                                                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                                                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
+                                                                                                                                           ))
+            ->where("pmd.id = ? ", $masterDeviceId);
 
         $stmt = $db->query($select);
 
