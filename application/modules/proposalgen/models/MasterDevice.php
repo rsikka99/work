@@ -216,42 +216,27 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                  * Check for a user override
                  */
                 $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
-
-            }
-
-            // Handle Toners
-            // Toner Overrides + Margin
-            foreach ($this->getToners() as $tonersByPartType)
-            {
-                foreach ($tonersByPartType as $tonersByColor)
+                // Handle Toners
+                // Toner Overrides + Margin
+                foreach ($this->getToners() as $tonersByPartType)
                 {
-                    /* @var $toner Proposalgen_Model_Toner */
-                    foreach ($tonersByColor as $toner)
+                    foreach ($tonersByPartType as $tonersByColor)
                     {
-                        if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
+                        /* @var $toner Proposalgen_Model_Toner */
+                        foreach ($tonersByColor as $toner)
                         {
-                            Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
+                            if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
+                            {
+                                Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
+                            }
+
+                            // Process the overrides
+                            $toner->processOverrides($report);
                         }
-
-                        // Process the overrides
-                        $toner->processOverrides($report);
                     }
-                }
-            } // End of toners loop
-
-
-            // Parts cost per page / labor cost per page
-            if ($this->getDealerAttributes())
-            {
-                if ($this->getDealerAttributes()->laborCostPerPage <= 0)
-                {
-                    $this->getDealerAttributes()->laborCostPerPage = $report->getReportSettings()->laborCostPerPage;
-                }
-                if ($this->getDealerAttributes()->partsCostPerPage <= 0)
-                {
-                    $this->getDealerAttributes()->partsCostPerPage = $report->getReportSettings()->partsCostPerPage;
-                }
+                } // End of toners loop
             }
+
 
             // Admin Charge
             $this->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
