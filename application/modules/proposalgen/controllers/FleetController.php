@@ -864,6 +864,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $isExcluded = true;
         }
+        else
+        {
+            $isExcluded = false;
+        }
         $errorMessage = false;
 
         if ($deviceInstanceId !== false)
