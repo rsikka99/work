@@ -756,13 +756,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 }
                             }
 
-                            // Update the rms upload row
-                            $rmsUploadRow->populate($formValues);
-                            $rmsUploadRow->hasCompleteInformation = true;
-
-
-                            $rmsUploadRowMapper->save($rmsUploadRow);
-
                             /**
                              * Save each of our devices
                              */
@@ -770,10 +763,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             {
                                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
 
+                                // Update the rms upload row
+                                $rmsUploadRow = $deviceInstance->getRmsUploadRow();
+                                $rmsUploadRow->populate($formValues);
+                                $rmsUploadRow->hasCompleteInformation = true;
+                                $rmsUploadRowMapper->save($rmsUploadRow);
+
 
                                 $deviceInstance->useUserData        = true;
                                 $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
-                                //$deviceInstance->reportsTonerLevels = $formValues["reportsTonerLevels"];
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                             $db->commit();
