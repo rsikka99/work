@@ -45,11 +45,11 @@
             </form>
 
             <hr>
-            <strong>All Clients</strong>
+            <strong>Recently Viewed Clients</strong>
 
             <form method="POST">
                 <table class="table table-condensed">
-                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client) : ?>
+                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchRecentlyViewed($this->userId) as $client) : ?>
                     <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
                         <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
                         <td style="width: 50px;">

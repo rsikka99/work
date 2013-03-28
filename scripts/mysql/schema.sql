@@ -1580,7 +1580,27 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
-
+-- -----------------------------------------------------
+-- Table `user_viewed_clients`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `user_viewed_clients` (
+    `userId` INT NOT NULL ,
+    `clientId` INT NOT NULL ,
+    `dateViewed` DATETIME NULL ,
+    PRIMARY KEY (`userId`, `clientId`) ,
+    INDEX `user_viewed_clients_ibfk_1_idx` (`clientId` ASC) ,
+    INDEX `user_viewed_clients_ibfk_2_idx` (`userId` ASC) ,
+    CONSTRAINT `user_viewed_clients_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `user_viewed_clients_ibfk_2`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
