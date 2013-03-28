@@ -421,18 +421,17 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // Populate SKU
         $oemSku                     = null;
         $devicemapper               = new Quotegen_Model_Mapper_Device();
-        $device                     = $devicemapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
-        $this->view->quotegendevice = $device;
-        if ($device)
+        $quoteDevice                     = $devicemapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $this->view->quotegendevice = $quoteDevice;
+        if ($quoteDevice)
         {
-            $oemSku = $device->oemSku;
+            $oemSku = $quoteDevice->oemSku;
             $form->getElement('can_sell')->setValue(true);
             $form->getElement('oemSku')->setValue($oemSku);
-            $form->getElement('dealerSku')->setValue($device->dealerSku);
-            $form->getElement('cost')->setValue($device->cost);
-            $form->getElement('description')->setValue($device->description);
+            $form->getElement('dealerSku')->setValue($quoteDevice->dealerSku);
+            $form->getElement('cost')->setValue($quoteDevice->cost);
+            $form->getElement('description')->setValue($quoteDevice->description);
         }
-
         // Make sure we are posting data
         $request = $this->getRequest();
         if ($request->isPost())
@@ -456,7 +455,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($formValues ['can_sell'])
                         {
                             // Save Device SKU
-                            $device       = new Quotegen_Model_Device();
+                            $quoteDevice       = new Quotegen_Model_Device();
                             $devicevalues = array(
                                 'masterDeviceId' => $masterDeviceId,
                                 'oemSku'         => $values ['oemSku'],
@@ -465,24 +464,31 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 'cost'           => $values['cost'],
                                 'dealerId'       => Zend_Auth::getInstance()->getIdentity()->dealerId
                             );
-                            $device->populate($devicevalues);
+                            $quoteDevice->populate($devicevalues);
                             // If $oemSku set above, then record exists to update
                             if ($oemSku)
                             {
-                                $deviceId = $devicemapper->save($device, $masterDeviceId);
+                                $deviceId = $devicemapper->save($quoteDevice, $masterDeviceId);
                             }
 
                             // Else no record, so insert it
                             else
                             {
-                                $deviceId = $devicemapper->insert($device);
+                                $deviceId = $devicemapper->insert($quoteDevice);
                             }
 
-                            $this->view->quotegendevice = $device;
+                            $this->view->quotegendevice = $quoteDevice;
                         }
                         else
                         {
-                            $devicemapper->delete($device);
+                            if($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'])
+                            {
+                                $this->_flashMessenger->addMessage(array(
+                                                                        'warning' => "Can Sell must be selected to save Oem Sku, Dealer Sku, Standard Features or Device Cost."
+                                                                   ));
+                            }
+
+                            $devicemapper->delete($quoteDevice);
                             $this->view->quotegendevice = null;
                         }
                         if ($isAdmin)
