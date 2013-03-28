@@ -860,9 +860,11 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     {
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
         $isExcluded       = $this->_getParam("isExcluded", false);
-        $booleanFilter    = new Zend_Filter_Boolean();
-        $isExcluded       = $booleanFilter->filter($isExcluded);
-        $errorMessage     = false;
+        if ($isExcluded == 'true')
+        {
+            $isExcluded = true;
+        }
+        $errorMessage = false;
 
         if ($deviceInstanceId !== false)
         {
