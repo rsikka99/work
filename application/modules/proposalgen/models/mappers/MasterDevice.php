@@ -482,11 +482,12 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     }
 
 
-    public function fetchAllForReports ($masterDeviceId, $dealerId, $defaultLaborCostPerPage = 0, $defaultPartsCostPerPage = 0)
+    public function findForReports ($masterDeviceId, $dealerId, $defaultLaborCostPerPage = 0, $defaultPartsCostPerPage = 0)
     {
+
         $db     = Zend_Db_Table::getDefaultAdapter();
-        $defaultPartsCostPerPage = $db->quote($defaultPartsCostPerPage,'INTEGER');
-        $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage,'INTEGER');
+        $defaultPartsCostPerPage = $db->quote($defaultPartsCostPerPage,'FLOAT');
+        $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage,'FLOAT');
         $select = $db->select()
             ->from(array('pmd' => 'pgen_master_devices'), array(
                                                                'pmd.*',
