@@ -1343,7 +1343,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     $form->getElement('form_mode')->setValue($form_mode);
                     $form->getElement('manufacturer_id')->setValue($deviceData ['manufacturer_id']);
                     $form->getElement('launch_date')->setValue($deviceData ['launch_date']);
-                    $form->getElement('device_price')->setValue($deviceData ['device_price']);
                     $form->getElement('toner_config_id')->setValue($deviceData ['toner_config_id']);
                     $form->getElement('is_copier')->setAttrib('checked', $deviceData ['is_copier']);
                     $form->getElement('is_scanner')->setAttrib('checked', $deviceData ['is_scanner']);
@@ -1387,7 +1386,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     }
                     $form->getElement('new_printer')->setValue($formData ['new_printer']);
                     $form->getElement('launch_date')->setValue($formData ['launch_date']);
-                    $form->getElement('device_price')->setValue($formData ['device_price']);
                     $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
                     $form->getElement('is_copier')->setAttrib('checked', $formData ['is_copier']);
                     $form->getElement('is_scanner')->setAttrib('checked', $formData ['is_scanner']);
