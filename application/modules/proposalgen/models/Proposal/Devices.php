@@ -50,6 +50,8 @@ class Proposalgen_Model_Proposal_Devices
     public function __construct (Proposalgen_Model_Assessment $report)
     {
         $this->_report = $report;
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $report->getReportSettings()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $report->getReportSettings()->partsCostPerPage;
         $this->_fetchAndSortAllDevices($report->getRmsUpload()->id);
     }
 
@@ -64,6 +66,7 @@ class Proposalgen_Model_Proposal_Devices
     {
         if (!$this->_devicesFetchedAndSorted)
         {
+
             $this->allDeviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
 
             /*

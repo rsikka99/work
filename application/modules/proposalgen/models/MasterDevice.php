@@ -4,6 +4,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     private static $ReportMargin;
     private static $PricingConfig;
     private static $GrossMarginPricingConfig;
+    static $ReportLaborCostPerPage = 0;
+    static $ReportPartsCostPerPage = 0;
+
 
     /*
      * Database fields

@@ -1124,7 +1124,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             {
                 $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
                 $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_masterDevice        = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId);
+                $this->_masterDevice        = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId, Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage, Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage);
             }
             else
             {
