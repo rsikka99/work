@@ -656,32 +656,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = 0;
             $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = 0;
 
-            // If unknown device instance manually process overrides
-            if ($this->id > 0)
-            {
-                $laborCostPerPage = $this->calculatedLaborCostPerPage;
-                $partsCostPerPage = $this->calculatedPartsCostPerPage;
-            }
-            else
-            {
-                if (!isset($this->laborCostPerPage))
-                {
-                    $laborCostPerPage = Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage;
-                }
-                else
-                {
-                    $laborCostPerPage = $this->laborCostPerPage;
-                }
-                if (!isset($this->partsCostPerPage))
-                {
-                    $partsCostPerPage = Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage;
-                }
-                else
-                {
-                    $partsCostPerPage = $this->partsCostPerPage;
-                }
-            }
-            
+            $laborCostPerPage = $this->calculatedLaborCostPerPage;
+            $partsCostPerPage = $this->calculatedPartsCostPerPage;
+
             $ServicePlusAdminCPP                    = $laborCostPerPage + $partsCostPerPage + $this->adminCostPerPage;
             $ServiceCPP                             = $laborCostPerPage + $partsCostPerPage;
             $costPerPage->Actual->Raw->ServiceCPP   = $laborCostPerPage + $partsCostPerPage;

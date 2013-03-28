@@ -281,6 +281,22 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
                 // Unset the id for the master device to ensure that this device is a 'user mapped' master device
                 $masterDevice->id = null;
 
+                if (!isset($masterDevice->laborCostPerPage))
+                {
+                    $masterDevice->calculatedLaborCostPerPage = Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage;
+                }
+                else
+                {
+                    $masterDevice->calculatedLaborCostPerPage = $masterDevice->laborCostPerPage;
+                }
+                if (!isset($masterDevice->partsCostPerPage))
+                {
+                    $masterDevice->calculatedPartsCostPerPage = Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage;
+                }
+                else
+                {
+                    $masterDevice->calculatedPartsCostPerPage = $masterDevice->partsCostPerPage;
+                }
                 $toners = array();
 
                 $requiredTonerColorList = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($rmsUploadRow->tonerConfigId);
