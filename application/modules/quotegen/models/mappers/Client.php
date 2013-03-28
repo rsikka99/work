@@ -276,4 +276,42 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
         return $users;
     }
+
+    /**
+     * Fetches the most recently viewed clients for a user.
+     *
+     * @param     $userId
+     *
+     * @param int $limit
+     *
+     * @return Quotegen_Model_Client[]
+     */
+    public function fetchRecentlyViewed ($userId, $limit = 5)
+    {
+        $userViewedClientMapper  = Quotegen_Model_Mapper_UserViewedClient::getInstance();
+        $recentlyViewedTableName = $userViewedClientMapper->getTableName();
+        $db                      = $this->getDbTable()->getAdapter();
+        $select                  = $db->select();
+        $select->from($this->getTableName())
+            ->joinLeft($recentlyViewedTableName, "{$recentlyViewedTableName}.{$userViewedClientMapper->col_clientId} = {$this->getTableName()}.{$this->col_id}")
+            ->where("{$recentlyViewedTableName}.{$userViewedClientMapper->col_userId} = ?", $userId)
+            ->order("{$userViewedClientMapper->col_dateViewed} DESC")
+            ->limit($limit);
+
+        $resultSet = $db->fetchAll($select);
+
+        $entries = array();
+        foreach ($resultSet as $row)
+        {
+            $object = new Quotegen_Model_Client($row);
+
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+
+            $entries [] = $object;
+        }
+
+        return $entries;
+
+    }
 }

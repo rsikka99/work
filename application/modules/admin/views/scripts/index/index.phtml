@@ -1,5 +1,7 @@
 <div class="page-header">
     <h1>Administration</h1>
 </div>
-<?php echo $this->Subnav("nav nav-tabs nav-stacked", 0); ?>
-
+<a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "admin")); ?>"><i class="icon-star icon-4x"></i><br/><br/> Clients</a>
+<a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "dealer", "module" => "admin")); ?>"><i class="icon-briefcase icon-4x"></i><br/><br/> Dealers</a>
+<a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "admin")); ?>"><i class="icon-money icon-4x"></i><br/><br/> Lease Rates</a>
+<a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "admin")); ?>"><i class="icon-group icon-4x"></i><br/><br/> Users</a>

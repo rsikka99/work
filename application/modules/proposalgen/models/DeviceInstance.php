@@ -1293,7 +1293,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
                 $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting));
 
-                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->laborCostPerPage + $masterDevice->partsCostPerPage + $costPerPageSetting->adminCostPerPage;
+                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->calculatedLaborCostPerPage + $masterDevice->calculatedPartsCostPerPage + $costPerPageSetting->adminCostPerPage;
                 if ($masterDevice->isColor())
                 {
                     $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
