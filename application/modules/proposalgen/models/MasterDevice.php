@@ -206,36 +206,36 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!$this->_overridesProcessed)
         {
-            /*
-             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
-             */
-            if ($this->id > 0)
-            {
-                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-                /*
-                 * Check for a user override
-                 */
-                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
-                // Handle Toners
-                // Toner Overrides + Margin
-                foreach ($this->getToners() as $tonersByPartType)
-                {
-                    foreach ($tonersByPartType as $tonersByColor)
-                    {
-                        /* @var $toner Proposalgen_Model_Toner */
-                        foreach ($tonersByColor as $toner)
-                        {
-                            if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
-                            {
-                                Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
-                            }
-
-                            // Process the overrides
-                            $toner->processOverrides($report);
-                        }
-                    }
-                } // End of toners loop
-            }
+//            /*
+//             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
+//             */
+//            if ($this->id > 0)
+//            {
+//                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
+//                /*
+//                 * Check for a user override
+//                 */
+//                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
+//                // Handle Toners
+//                // Toner Overrides + Margin
+//                foreach ($this->getToners() as $tonersByPartType)
+//                {
+//                    foreach ($tonersByPartType as $tonersByColor)
+//                    {
+//                        /* @var $toner Proposalgen_Model_Toner */
+//                        foreach ($tonersByColor as $toner)
+//                        {
+//                            if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
+//                            {
+//                                Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
+//                            }
+//
+//                            // Process the overrides
+//                            $toner->processOverrides($report);
+//                        }
+//                    }
+//                } // End of toners loop
+//            }
 
 
             // Admin Charge
@@ -538,7 +538,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         $cheapestToner    = null;
         $tonersByPartType = $this->getToners(); // Grab this devices toners
 
-
         // If we have a preferred part type and the device has toners of that type
         if (isset($preferredPartType) &&
             is_array($tonersByPartType) &&
@@ -719,6 +718,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Estimated->BasePlusMargin->BlackAndWhite = $costPerPage->Estimated->Base->BlackAndWhite / $ReportMargin;
             $costPerPage->Estimated->BasePlusMargin->Color         = $costPerPage->Estimated->Base->Color / $ReportMargin;
 
+
             // Add the device's costs to the base cost per page
             $costPerPage->Actual->BasePlusService->BlackAndWhite += $costPerPage->Actual->Base->BlackAndWhite + $ServicePlusAdminCPP;
             $costPerPage->Actual->BasePlusService->Color += $costPerPage->Actual->Base->Color + $ServicePlusAdminCPP;
@@ -813,7 +813,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (!isset($this->_toners))
         {
             // Get the toners for the device
-            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->id);
+            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getReportToners($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         }
 
         return $this->_toners;
