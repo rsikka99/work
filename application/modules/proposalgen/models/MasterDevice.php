@@ -671,15 +671,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = 0;
             $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = 0;
 
-            $laborCostPerPage = 0;
-            $partsCostPerPage = 0;
-            $attribute        = $this->getDealerAttributes();
-            if ($attribute)
-            {
-                $laborCostPerPage = $attribute->laborCostPerPage;
-                $partsCostPerPage = $attribute->partsCostPerPage;
-            }
-
+            $laborCostPerPage = $this->calculatedLaborCostPerPage;
+            $partsCostPerPage = $this->calculatedPartsCostPerPage;
 
             $ServicePlusAdminCPP                    = $laborCostPerPage + $partsCostPerPage + $this->adminCostPerPage;
             $ServiceCPP                             = $laborCostPerPage + $partsCostPerPage;
