@@ -2373,33 +2373,17 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        // FIXME: Hardcoded default price and default service
+        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $reportSettings = $dealer->getReportSettings();
 
-        $this->view->default_price   = 1000;
-        $this->view->default_service = 0.0035;
-        // fill companies
-        //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        //$dealer_companies = $dealer_companyTable->fetchAll('isDeleted = false', 'company_name');
-        //$this->view->company_list = $dealer_companies;
-
+        $this->view->default_labor = $reportSettings['laborCostPerPage'];
+        $this->view->default_parts = $reportSettings['partsCostPerPage'];
 
         // fill manufacturers dropdown
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullName');
         $this->view->manufacturer_list = $manufacturers;
 
-        // get default prices
-        //$dealer_companyTable = new Proposalgen_Model_DbTable_DealerCompany();
-        //$where = $dealer_companyTable->getAdapter()->quoteInto('dealer_company_id = ?', $this->dealer_company_id, 'INTEGER');
-        //$dealer_company = $dealer_companyTable->fetchRow($where);
-
-        /*
-        if (count($dealer_company) > 0)
-        {
-            $this->view->default_price = money_format('%i', $dealer_company ['dc_default_printer_cost']);
-            $this->view->default_service = money_format('%.4n', $dealer_company ['dc_service_cost_per_page']);
-        }
-        */
         if ($this->_request->isPost())
         {
             $summary   = "";
@@ -2498,66 +2482,62 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         foreach ($formData as $key => $value)
                         {
 
-                            if (strstr($key, "txtDevicePrice"))
+                            // This can either be partsCostPerPage or laborCostPerPage.
+                            // Regardless we can get the mater device it from the end of the element
+
+                            // Find out the cost we are dealing with
+                            $element = false;
+                            if (strstr($key, "laborCostPerPage"))
                             {
-                                $master_device_id = str_replace("txtDevicePrice", "", $key);
-                                $price            = $formData ['txtDevicePrice' . $master_device_id];
-                                // check if new price is populated.
+                                $element        = (strstr($key, "laborCostPerPage")) ? 'laborCostPerPage' : false;
+                                $masterDeviceId = str_replace("laborCostPerPage", "", $key);
+                            }
+                            else if (strstr($key, "partsCostPerPage"))
+                            {
+                                $element        = (strstr($key, "partsCostPerPage")) ? 'partsCostPerPage' : false;
+                                $masterDeviceId = str_replace("partsCostPerPage", "", $key);
+                            }
+
+                            // If we have an element;
+                            if ($element)
+                            {
+                                // Get the master device id
+                                $price = $value;
                                 if ($price != '' && !is_numeric($price))
                                 {
                                     $passvalid = 1;
-                                    $this->_flashMessenger->addMessage(array(
-                                                                            "error" => "All values must be numeric. Please correct it and try again."
-                                                                       ));
+                                    $this->_flashMessenger->addMessage(array("error" => "All values must be numeric. Please correct it and try again."));
                                     break;
                                 }
                                 else if ($price != '')
                                 {
                                     if ($price == 0)
                                     {
-                                        $price = null;
+                                        $price = new Zend_Db_Expr('NULL');
                                     }
-                                    $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
 
-                                    if ($formData ['pricing_filter'] == 'labor')
+                                    $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+                                    // Do we have the master device
+                                    if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                                     {
-                                        $master_deviceData = array(
-                                            'labor_cost_per_page' => $price
-                                        );
-                                    }
-                                    else if ($formData ['pricing_filter'] == 'parts')
-                                    {
-                                        $master_deviceData = array(
-                                            'parts_cost_per_page' => $price
-                                        );
+                                        $masterDevice->$element = $price;
+                                        Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
                                     }
                                     else
                                     {
-                                        $master_deviceData = array(
-                                            'cost' => $price
-                                        );
+                                        $passvalid = 1;
+                                        $this->_flashMessenger->addMessage(array("error" => "There was and error finding a master device. Please try again"));
+                                        break;
                                     }
-                                    $where = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                    $master_deviceTable->update($master_deviceData, $where);
-                                    $summary .= "Updated " . $key ['fullname'] . ' ' . $key ['printer_model'] . ' from ' . $key ['cost'] . ' to ' . $price . '<br />';
                                 }
                             }
                         }
 
                         if ($passvalid == 0)
                         {
-                            if (!empty($summary))
-                            {
-                                $this->_flashMessenger->addMessage(array(
-                                                                        "success" => "The device pricing updates have been applied successfully."
-                                                                   ));
-                            }
-                            else
-                            {
-                                $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "You have not updated any pricing. Please enter a new price and try again."
-                                                                   ));
-                            }
+                            $this->_flashMessenger->addMessage(array(
+                                                                    "success" => "The device pricing updates have been applied successfully."
+                                                               ));
                         }
                         else
                         {
@@ -4555,7 +4535,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $response->rows [$i] ['cell'] = array(
                         $masterDevice->getManufacturer()->fullname,
                         $masterDevice->modelName,
-                        $masterDevice->cost
+                        number_format($masterDevice->laborCostPerPage,4),
+                        number_format($masterDevice->partsCostPerPage,4),
                     );
                     $i++;
                 }
