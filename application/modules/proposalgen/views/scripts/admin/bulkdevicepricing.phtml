@@ -12,7 +12,8 @@
 <?php $this->headScript()->captureStart('append','text/javascript') ?>
 	var repop = '<?php echo isset($this->pricing_filter); ?>';
 	var refilter = '<?php echo !empty($this->search_criteria); ?>';
-	var default_price = <?php echo $this->default_price; ?>;
+    var default_labor = <?php echo $this->default_labor; ?>;
+    var default_parts  = <?php echo $this->default_parts; ?>;
 	var repop_array = '<?php echo $this->repop_array; ?>';
 	var repop_page = '<?php echo $this->repop_page; ?>';
 
@@ -27,16 +28,17 @@
 		jQuery("#devices_list").jqGrid({
 			url:'<?php echo $this->baseUrl("/proposalgen/admin/masterdeviceslist"); ?>?type=printers&compid=1',
 			datatype:'json',
-			colNames:['Manufacturer','Printer Model','Printer Price','New Price'],
+			colNames:['Manufacturer','Printer Model','Labor CPP','Parts CPP','New Labor CPP','New Parts CPP'],
 			colModel:[
 				{width: 150, name:'manufacturer_name', index:'manufacturerId', editable:true, editoptions:{disabled:true}},
-				{width: 350, name:'printer_model', index:'modelName', editable:true, editoptions:{disabled:true}},
-				{width: 100, name:'device_price', index:'cost', id:'master_device_id', editable:true, editoptions:{disabled:true}, align: 'right', sorttype: 'int'},
-				{width: 100, name:'new_device_price', index:'new_device_price', align:'right'}
+				{width: 250, name:'printer_model', index:'modelName', editable:true, editoptions:{disabled:true}},
+				{width: 100, name:'labor_cost_per_page', index:'laborCostPerPage', id:'master_device_id', editable:true, editoptions:{disabled:true}, align: 'right', sorttype: 'int'},
+				{width: 100, name:'parts_cost_per_page', index:'partsCostPerPage', id:'master_device_id', editable:true, editoptions:{disabled:true}, align: 'right', sorttype: 'int'},
+				{width: 150, name:'new_labor_cost_per_page', index:'new_labor_cost_per_page', align:'right'},
+				{width: 150, name:'new_parts_cost_per_page', index:'new_parts_cost_per_page', align:'right'}
 			],
 			height:'auto',
 			width:940,
-			multiselect:true,
 			rowNum:10,
 			rowList:[10,20,30],
 			pager:'#devices_pager',
@@ -48,22 +50,33 @@
 				var ids = jQuery("#devices_list").jqGrid('getDataIDs');
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
-					var cur_price = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-					if(cur_price == 0) {
-						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ -";
-					} else {
-						document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + cur_price;
-					}
-					hidden_price_element = "<input type='hidden' name='hdnDevicePrice"+cur_row+"' id='hdnDevicePrice"+cur_row+"' value='" + cur_price + "' class='span1' maxlength='8' />";
-					new_price_element = "$ <input type='text' name='txtDevicePrice"+cur_row+"' id='txtDevicePrice"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />"; 
-					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_device_price: hidden_price_element + new_price_element});
-				}
-				
+
+                    var laborCostPerPage = document.getElementById("devices_list").rows[i+1].cells[2].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+                    if(laborCostPerPage == 0) {
+                        document.getElementById("devices_list").rows[i+1].cells[2].innerHTML = "$ -";
+                    } else {
+                        document.getElementById("devices_list").rows[i+1].cells[2].innerHTML = "$ " + laborCostPerPage;
+                    }
+
+                    var partsCostPerPage = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+                    if(partsCostPerPage == 0) {
+                        document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ -";
+                    } else {
+                        document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + partsCostPerPage;
+                    }
+
+                    hidden_price_element_parts = "<input type='hidden' name='hdnDevicePriceParts"+cur_row+"' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
+					hidden_price_element_labor = "<input type='hidden' name='hdnDevicePriceLabor"+cur_row+"' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
+                    new_labor_cost_per_page_element = "$ <input type='text' name='laborCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+                    new_parts_cost_per_page_element = "$ <input type='text' name='partsCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_labor_cost_per_page: hidden_price_element_labor + new_labor_cost_per_page_element});
+                    jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_parts_cost_per_page: hidden_price_element_parts + new_parts_cost_per_page_element});
+                    }
+
 				$("#default_price").show();
 				
         		if(repop_array != '') {
         			repop_form('Device');
-        			
         		}
 			},
 			editurl:'dummy.php'
@@ -292,19 +305,8 @@
 		$('#toners_table').hide();
 
 		//update column headers
-		if($('#pricing_filter').val() == 'labor') {
-			default_price = <?php echo ($this->default_labor > 0 ? $this->default_labor : 0); ?>;
-			$("#default_price").html('Default Price: $<?php echo number_format($this->default_labor, 4, '.', ','); ?>');
-			$("#devices_list").jqGrid('setLabel','device_price','Labor CPP');
-			$("#devices_list").jqGrid('setLabel','new_price','New Labor CPP');
-		} else if($('#pricing_filter').val() == 'parts') {
-			default_price = <?php echo ($this->default_parts > 0 ? $this->default_parts : 0); ?>;
-			$("#default_price").html('Default Price: $<?php echo number_format($this->default_parts, 4, '.', ','); ?>');
-			$("#devices_list").jqGrid('setLabel','device_price','Parts CPP');
-			$("#devices_list").jqGrid('setLabel','new_price','New Parts CPP');
-		} else if($('#pricing_filter').val() == 'printer') {
-			default_price = <?php echo $this->default_price; ?>;
-			$("#default_price").html('Default Price: $<?php echo number_format($this->default_price, 2, '.', ','); ?>');
+         if($('#pricing_filter').val() == 'printer') {
+            $("#default_price").html('Default Labor: $<?php echo number_format($this->default_labor, 4, '.', ','); ?> Default Parts: $<?php echo number_format($this->default_parts, 4, '.', ','); ?>');
 			$("#devices_list").jqGrid('setLabel','device_price','Printer Price');
 			$("#devices_list").jqGrid('setLabel','new_price','New Price');
 		} else if($('#pricing_filter').val() == 'toner') {
