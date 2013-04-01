@@ -119,16 +119,14 @@ class Admin_Model_Dealer extends My_Model_Abstract
     /**
      * Gets the report and survey settings for the user
      *
-     * @param $dealerId
-     *
      * @return array
      */
-    public function getReportSettings ($dealerId)
+    public function getReportSettings ()
     {
         if (!isset($this->_reportSettings))
         {
-            $dealerReportSetting                      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($dealerId);
-            $dealerSurveySetting                      = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchDealerSurveySetting($dealerId);
+            $dealerReportSetting                      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($this->id);
+            $dealerSurveySetting                      = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchDealerSurveySetting($this->id);
             $this->_reportSettings                    = array_merge($dealerReportSetting->toArray(), $dealerSurveySetting->toArray());
             $this->_reportSettings['reportSettingId'] = $dealerReportSetting->id;
             $this->_reportSettings['surveySettingId'] = $dealerSurveySetting->id;
