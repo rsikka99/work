@@ -2,19 +2,19 @@
  * Least/Most Used Devices
  */
 #htmlReportContainer #MostUsedDevicesTable .column1, #htmlReportContainer #LeastUsedDevicesTable .column1 {
-	
+    width: 175px;
 }
 
 #htmlReportContainer #MostUsedDevicesTable .column2, #htmlReportContainer #LeastUsedDevicesTable .column2 {
-	width: 105px;
+	width: 175px;
 }
 
 #htmlReportContainer #MostUsedDevicesTable .column3,#htmlReportContainer #LeastUsedDevicesTable .column3 {
-	width: 105px;
+	/*width: 105px;*/
 }
 
 #htmlReportContainer #MostUsedDevicesTable .column4, #htmlReportContainer #LeastUsedDevicesTable .column4 {
-	width: 105px;
+	/*width: 105px;*/
 }
 
 #htmlReportContainer .annualSavings {
