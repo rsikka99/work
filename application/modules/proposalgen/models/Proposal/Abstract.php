@@ -7,7 +7,7 @@ class Proposalgen_Model_Proposal_Abstract
     protected $_devices;
 
     /**
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Assessment
      */
     public $report;
 
@@ -31,17 +31,17 @@ class Proposalgen_Model_Proposal_Abstract
     /**
      * Constructor
      *
-     * @param int|Proposalgen_Model_Report $report The report model, or the id of our report
+     * @param int|Proposalgen_Model_Assessment $report The report model, or the id of our report
      */
     public function __construct ($report)
     {
-        if ($report instanceof Proposalgen_Model_Report)
+        if ($report instanceof Proposalgen_Model_Assessment)
         {
             $this->report = $report;
         }
         else
         {
-            $this->report = Proposalgen_Model_Mapper_Report::getInstance()->find($report);
+            $this->report = Proposalgen_Model_Mapper_Assessment::getInstance()->find($report);
         }
     }
 

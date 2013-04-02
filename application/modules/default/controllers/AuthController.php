@@ -130,12 +130,12 @@ class Default_AuthController extends Tangent_Controller_Action
                             // I'm using this in the custom adapter, so messages will be user friendly coming out of it.
                             foreach ($result->getMessages() as $message)
                             {
-                                $this->_helper->flashMessenger(array('danger' => $message));
+                                $this->_flashMessenger->addMessage(array('danger' => $message));
                             }
                             break;
                         default :
                             // Put a generic invalid credential message
-                            $this->_helper->flashMessenger(array('danger' => 'The username/password combination you entered was invalid.'));
+                            $this->_flashMessenger->addMessage(array('danger' => 'The username/password combination you entered was invalid.'));
 
                             break;
                     }
@@ -223,7 +223,7 @@ class Default_AuthController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array(
+                    $this->_flashMessenger->addMessage(array(
                                                         'danger' => "There are no users with the username '" . $username . "'"
                                                    ));
                     $this->redirector('index', 'index');
@@ -232,7 +232,7 @@ class Default_AuthController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     'danger' => 'A username is required to use forgot password'
                                                ));
                 $this->redirector('index', 'index');
@@ -312,7 +312,7 @@ class Default_AuthController extends Tangent_Controller_Action
                         $identity->resetPasswordOnNextLogin = false;
                         $auth->getStorage()->write($identity);
 
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'success' => 'Password Changed Successfully'
                                                        ));
 
@@ -322,7 +322,7 @@ class Default_AuthController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
+                        $this->_flashMessenger->addMessage(array(
                                                             'danger' => 'You entered the incorrect current password!'
                                                        ));
                     }
@@ -396,7 +396,7 @@ class Default_AuthController extends Tangent_Controller_Action
                                 $user->password = (Application_Model_User::cryptPassword($this->_request->getParam('password')));
                                 Application_Model_Mapper_User::getInstance()->save($user);
                                 Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
-                                $this->_helper->flashMessenger(array(
+                                $this->_flashMessenger->addMessage(array(
                                                                     "success" => 'Password has been updated'
                                                                ));
                                 $this->redirector('index', 'index');

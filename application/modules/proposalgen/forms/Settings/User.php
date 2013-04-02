@@ -1,24 +1,15 @@
 <?php
-
-/**
- * User Form: Used for managing user settings
- *
- * @version v1.0
- */
 class Proposalgen_Form_Settings_User extends Zend_Form
 {
 
     /**
      * Constructor builds the form
      *
-     * @param $options -
-     *                 not used (required)
-     *
-     * @return \Proposalgen_Form_Settings_User markup for the from is automatically returned by zend_form
+     * @param $options - not used (required)
      */
     public function __construct ($options = null)
     {
-        //call parent contsructor
+        //call parent constructor
         parent::__construct($options);
         $this->setAttrib('id', 'settings_table');
 
@@ -709,106 +700,6 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $elementCounter++;
         $formElements->addElement($pricing_config);
 
-        $cost_threshold = new Zend_Form_Element_Text('costThreshold');
-        $cost_threshold->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $cost_threshold);
-        $elementCounter++;
-        $formElements->addElement($cost_threshold);
-
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
-        $target_monochrome->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $target_monochrome);
-        $elementCounter++;
-        $formElements->addElement($target_monochrome);
-
-        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
-        $target_color->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $target_color);
-        $elementCounter++;
-        $formElements->addElement($target_color)
-            ->setAttrib('class', 'input-mini');
-        $target_monochrome->setLabel('Target Monochrome')
-            ->setAttrib('class', 'input-mini');
-        $target_color->setLabel('Target Color')
-            ->setAttrib('class', 'input-mini');
         //save button
         $element = new Zend_Form_Element_Submit('save_settings', array(
                                                                       'disableLoadDefaultDecorators' => true
@@ -852,4 +743,5 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $this->addElements($elements);
     }
 }
+
 ?>

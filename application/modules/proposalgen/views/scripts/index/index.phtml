@@ -1,17 +1,8 @@
-<?php
-/**
- * Default view: index.phtml
- */
-$session = new Zend_Session_Namespace('report');
-$session->url = $this->baseUrl();
-$session->surveyurl = $this->baseUrl('/survey');
-$session->PNsurveyurl = $this->baseUrl('/partsnow');
-$session->generalurl = $this->baseUrl() . "/survey/general";
-?>
 <div class="page-header">
     <h1>Assessment/Proposals</h1>
 </div>
-<div class="well">
-    <?php echo $this->selectForm; ?>
-    <?php echo $this->selectReportForm; ?>
+<div class="hero-unit">
+    <h1>Deprecated Action</h1>
+
+    <p>Our apologies. This action is no longer used. Please let us know how you got here so that we can fix it.</p>
 </div>

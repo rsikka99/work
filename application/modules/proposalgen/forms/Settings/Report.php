@@ -206,9 +206,9 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         
-        // PrintIQ MPS Cost Per Page (Monochrome)
+        // MPS Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
-        $element->setLabel('PrintIQ Monochrome Cost')
+        $element->setLabel('MPS Monochrome Cost')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
@@ -225,9 +225,9 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         
-        // PrintIQ MPS Cost Per Page (Color)
+        // MPS Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
-        $element->setLabel('PrintIQ Color Cost')
+        $element->setLabel('MPS Color Cost')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('page', 'page')

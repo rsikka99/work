@@ -116,7 +116,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => "There was an error selecting your quote. Please try again." 
                     ));
                 }
@@ -184,7 +184,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array (
+                $this->_flashMessenger->addMessage(array (
                         'success' => "Client was successfully created."
                 ));
                 

@@ -100,27 +100,27 @@ $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->ro
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Black Toner'), 'bold_text', 'nospacing');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //Color Toner
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Color Toner'), 'bold_text', 'nospacing');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($proposal->getPageCounts()->Purchased->Color->Monthly), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly, array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //TOTAL (Monthly)
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('TOTAL (Monthly)'), 'bold_text', 'nospacing');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText($this->translate(''), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //TOTAL (Annual)
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
@@ -136,9 +136,9 @@ $tcStyle         = $this->styles->tables->twoColumnHeader;
 $twoColumnHeader = $section->addTable($tcStyle->tablestyle);
 $twoColumnHeader->addRow(null);
 $twoColumnHeader->addCell($tcStyle->cell1Width, $tcStyle->cell1->cellStyle)->addText($this->translate('DIFFERENCE '), $tcStyle->cell1->fontStyle, $tcStyle->cell1->paragraphStyle);
-$twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($proposal->calculateEstimatedOemTonerCostAnnually() - $proposal->calculateEstimatedCompTonerCostAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
+$twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($proposal->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
 $textrun = $section->createTextRun();
-$textrun->addText(sprintf($this->translate('Where compatible substitutes are available, we estimate that by switching even 50%% of your OEM toner to compatible toner, you can save approximately %1$s per year in toner costs.'), $this->currency((($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12 - ($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $proposal->getPageCounts()->Purchased->Color->Monthly + ($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12) / 2, array('precision' => 0))));
+$textrun->addText(sprintf($this->translate('Where compatible substitutes are available, we estimate that by switching even 50%% of your OEM toner to compatible toner, you can save approximately %1$s per year in toner costs.'), $this->currency($proposal->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 0))));
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();

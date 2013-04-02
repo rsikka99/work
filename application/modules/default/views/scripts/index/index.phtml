@@ -33,7 +33,7 @@
 
             <hr>
             <form id="searchForClientForm" class="form-inline" method="POST">
-                <label for="searchClientByName"><strong>Search By Name</strong></label>
+                <label for="searchClientByName"><strong>Search By Name</strong></label> <a href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>">(View All)</a>
                 <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?php echo $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="input-block-level">
                 <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
             </form>
@@ -45,11 +45,11 @@
             </form>
 
             <hr>
-            <strong>All Clients</strong>
+            <strong>Recently Viewed Clients</strong>
 
             <form method="POST">
                 <table class="table table-condensed">
-                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchAll() as $client) : ?>
+                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchRecentlyViewed($this->userId) as $client) : ?>
                         <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
                         <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
                         <td style="width: 50px;">
@@ -95,12 +95,12 @@
                                     <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
                                 </td>
                             </tr>
-                            <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Report */ ?>
-                                <tr class="<?php echo ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Assessment */ ?>
+                            <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
                                 <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
                                 <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
 
-                                    <?php if ($report->reportStage == Proposalgen_Model_Report_Step::STEP_FINISHED) : ?>
+                                <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
                                         <td>Finished</td>
 
                                     <?php else : ?>

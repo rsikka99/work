@@ -14,7 +14,7 @@ $graphs = $this->healthcheck->getGraphs();
 </table>
 <br />
 <div class="pheader">Print Volume and Number of Printing Devices</div>
-<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount())); ?>
+<p>You currently have <strong><?php echo $proposal->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format($proposal->calculateAveragePagesPerDeviceMonthly()); ?>
 </strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
 Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
@@ -38,7 +38,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
     </tr>
         <tr>
         <td width="400px">Average number of pages per device, per month</td>
-        <td width="400px" style="text-align:right"><?php echo number_format($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getDeviceCount()); ?></td>
+        <td width="400px" style="text-align:right"><?php echo number_format($proposal->calculateAveragePagesPerDeviceMonthly()); ?></td>
     </tr>
 </table>
     <br />
@@ -70,7 +70,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
             <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div></td>
-            <td class="column5"><div class=" center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,1) ?>%</div></td>
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume(), 1) ?>%</div></td>
 
         </tr>
         <?php endforeach; ?>
@@ -94,7 +94,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown' ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
             <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div></td>
-            <td class="column5"><div class=" center"><?php echo number_format(($deviceInstance->getAverageMonthlyPageCount() / $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())*100,1) ?>%</div></td>
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume(), 1) ?>%</div></td>
 
         </tr>
         <?php endforeach; ?>
@@ -104,7 +104,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <br /> <br />
 
 <div class="pheader">Color Usage</div>
-<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapablePurchasedDevices(); ?></strong> color printing devices(excluding leased devices) that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($proposal->getPageCounts()->Purchased->Color->Monthly / $proposal->getPageCounts()->Purchased->Combined->Monthly  * 100),2); ?>%</strong> of your total monthly print volume.</p>
+<p>You currently have <strong><?php echo $proposal->getNumberOfColorCapablePurchasedDevices(); ?></strong> color printing devices(excluding leased devices) that print a monthly average of <strong><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format($proposal->calculatePercentOfTotalVolumePurchasedColorMonthly(),2); ?>%</strong> of your total monthly print volume.</p>
 <br />
     <div class="center">
     <table>

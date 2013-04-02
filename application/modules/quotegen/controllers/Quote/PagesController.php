@@ -108,7 +108,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                 // form invalid : show error messages 
                 else
                 {
-                    $this->_helper->flashMessenger(array (
+                    $this->_flashMessenger->addMessage(array (
                             'danger' => 'Please correct the errors below.' 
                     ));
                 }

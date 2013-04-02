@@ -5,7 +5,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
-    public $col_reportId = 'reportId';
+    public $col_rmsUploadId = 'rmsUploadId';
     public $col_rmsUploadRowId = 'rmsUploadRowId';
     public $col_useUserData = 'useUserData';
 
@@ -283,13 +283,13 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     /**
      * Counts how many device instance rows we have for the report
      *
-     * @param $reportId
+     * @param $rmsUploadId
      *
      * @return int
      */
-    public function countRowsForReport ($reportId)
+    public function countRowsForRmsUpload ($rmsUploadId)
     {
-        return $this->count(array("{$this->col_reportId} = ?" => $reportId));
+        return $this->count(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
     }
 
     /**
@@ -299,9 +299,9 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      *
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function fetchAllForReport ($reportId)
+    public function fetchAllForRmsUpload ($reportId)
     {
-        return $this->fetchAll(array("{$this->col_reportId} = ?" => $reportId), null, 1000);
+        return $this->fetchAll(array("{$this->col_rmsUploadId} = ?" => $reportId), null, 1000);
     }
 
     /**
@@ -359,7 +359,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param      $reportId
+     * @param      $rmsUploadId
      * @param      $sortColumn
      * @param      $sortDirection
      * @param null $limit
@@ -368,7 +368,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      *
      * @return Proposalgen_Model_DeviceInstance[]|int
      */
-    public function getMappedDeviceInstances ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function getMappedDeviceInstances ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
     {
         $dbTable                          = $this->getDbTable();
         $deviceInstanceTableName          = $this->getTableName();
@@ -391,7 +391,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
             ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
             ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
             ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
-            ->where("di.{$this->col_reportId} = ?", $reportId)
+            ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
             ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
 

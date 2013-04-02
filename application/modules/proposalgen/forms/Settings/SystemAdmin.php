@@ -1,38 +1,30 @@
 <?php
-
-/**
- * SystemAdmin Form: Used for managing master company settings
- *
- * @version v1.0
- */
 class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
 {
 
     /**
      * Constructor builds the form
      *
-     * @param $options -
-     *            not used (required)
-     * @return HTML markup for the from is automatically returned by zend_form
+     * @param array|null $options - not used (required)
      */
     public function __construct ($options = null)
     {
-        //call parent contsructor
+        //call parent constructor
         parent::__construct($options);
 
-        $elements = array ();
+        $elements       = array();
         $elementCounter = 0;
-        $formElements = new Zend_Form();
+        $formElements   = new Zend_Form();
         $this->setName('settings_form');
 
-        $config = Zend_Registry::get('config');
+        $config         = Zend_Registry::get('config');
         $MPSProgramName = $config->app->MPSProgramName;
 
         $this->setAction("");
         $this->setMethod("POST");
         $this->setAttrib('class', 'well');
 
-        $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+        $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
         $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
@@ -47,8 +39,8 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $page_coverage->setLabel('Page Coverage Monochrome:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -57,34 +49,34 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'page_coverage')
             ->setDescription('%')
             ->setRequired(true)
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'page_coverage-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'page_coverage-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         array_push($elements, $page_coverage);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($page_coverage);
 
         //page coverage color
@@ -92,8 +84,8 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $page_coverageColor->setLabel('Page Coverage Color:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -102,36 +94,36 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'page_coverage')
             ->setDescription('%')
             ->setRequired(true)
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'page_coverage-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'page_coverage-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $page_coverageColor->getValidator('Float')->setMessage('Please enter a number.');
         $page_coverageColor->getValidator('greaterThan')->setMessage('Please enter a number, cannot be zero.');
         array_push($elements, $page_coverageColor);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($page_coverageColor);
 
         //actual page coverage black & white
@@ -139,8 +131,8 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $actual_page_coverage->setLabel('Page Coverage Monochrome:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -149,34 +141,34 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'actual_page_coverage')
             ->setDescription('%')
             ->setRequired(true)
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'page_coverage-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'page_coverage-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         array_push($elements, $actual_page_coverage);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($actual_page_coverage);
 
         //actual page coverage color
@@ -184,8 +176,8 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $actual_page_coverage_color->setLabel('Page Coverage Color:')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -194,43 +186,43 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'actual_page_coverage_color')
             ->setDescription('%')
             ->setRequired(true)
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'page_coverage-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'page_coverage-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         array_push($elements, $actual_page_coverage_color);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($actual_page_coverage_color);
 
         //page pricing margin
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin:')
             ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(array (
-                                                           'min' => 0,
-                                                           'max' => 99
+            ->addValidator(new Zend_Validate_Between(array(
+                                                          'min' => 0,
+                                                          'max' => 99
                                                      )))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
@@ -240,35 +232,35 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setDescription('%')
             ->setRequired(true)
             ->setValue('20')
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'pricing_margin-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'pricing_margin-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
         array_push($elements, $pricing_margin);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($pricing_margin);
 
         //page service cost
@@ -283,38 +275,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'service_cost')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'service_cost-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'service_cost-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $service_cost->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $service_cost);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($service_cost);
 
         //page admin charge
@@ -329,38 +321,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'admin_charge')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'admin_charge-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'admin_charge-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $admin_charge);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($admin_charge);
 
         //monthly lease payment
@@ -374,38 +366,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'monthly_lease_payment')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'monthly_lease_payment-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'monthly_lease_payment-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //average non-leased printer cost
@@ -420,38 +412,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'average_nonlease_printer_cost')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'average_nonlease_printer_cost-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'average_nonlease_printer_cost-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //leased bw per page
@@ -466,38 +458,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'leased_bw_per_page')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'leased_bw_per_page-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'leased_bw_per_page-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //leased color per page
@@ -512,38 +504,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'leased_color_per_page')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'leased_color_per_page-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'leased_color_per_page-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //kilowatts per hour
@@ -558,38 +550,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'kilowatts_per_hour')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'kilowatts_per_hour-element'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'kilowatts_per_hour-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //BW cost per page
@@ -604,38 +596,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'mps_bw_per_page')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'mps_bw_per_page'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'mps_bw_per_page'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //BW cost per page
@@ -650,38 +642,38 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setAttrib('id', 'mps_color_per_page')
             ->setDescription('$')
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'mps_color_per_page'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'mps_color_per_page'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
 
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($element);
 
         //pricing config
@@ -690,154 +682,56 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setOrder($elementCounter)
             ->setAttrib('id', 'pricing_config_id')
             ->setAttrib('class', 'wide-select')
-            ->setAttribs(array (
-                               'style' => 'width: 130px;'
+            ->setAttribs(array(
+                              'style' => 'width: 130px;'
                          ))
             ->setRequired(true)
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ))
-            ->setDecorators(array (
-                                  array (
-                                      'Description',
-                                      array (
-                                          'escape' => false,
-                                          'tag' => false
-                                      )
-                                  ),
-                                  'ViewHelper',
-                                  'Errors',
-                                  array (
-                                      'HtmlTag',
-                                      array (
-                                          'tag' => 'dd',
-                                          'id' => 'pricing_config_id'
-                                      )
-                                  ),
-                                  array (
-                                      'Label',
-                                      array (
-                                          'tag' => 'dt',
-                                          'class' => 'forms_label'
-                                      )
-                                  )
+            ->setDecorators(array(
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'ViewHelper',
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'pricing_config_id'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
                             ));
         array_push($elements, $pricing_config);
-        $elementCounter ++;
+        $elementCounter++;
         $formElements->addElement($pricing_config);
-        $cost_threshold = new Zend_Form_Element_Text('costThreshold');
-        $cost_threshold->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span1')
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $cost_threshold);
-        $elementCounter++;
-        $formElements->addElement($cost_threshold);
-
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
-        $target_monochrome->setLabel('Target Monochrome')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span1')
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $target_monochrome);
-        $elementCounter++;
-        $formElements->addElement($target_monochrome);
-
-        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
-        $target_color->setLabel('Target Color')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'span1')
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'mps_color_per_page'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $target_color);
-        $elementCounter++;
-        $formElements->addElement($target_color);
 
 
         //save button
-        $element = new Zend_Form_Element_Submit('save_settings', array (
-                                                                       'disableLoadDefaultDecorators' => true
+        $element = new Zend_Form_Element_Submit('save_settings', array(
+                                                                      'disableLoadDefaultDecorators' => true
                                                                  ));
         $element->setLabel('Save')
             ->setAttrib('class', 'btn btn-primary')
             ->setOrder($elementCounter)
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  'Errors'
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 'Errors'
                             ));
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
 
         //back button
         $element = new Zend_Form_Element_Button('back_button');
@@ -845,24 +739,24 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
             ->setOrder($elementCounter)
             ->setAttrib('class', 'btn')
             ->setAttrib('onClick', 'javascript: document.location.href="../admin";')
-            ->setDecorators(array (
-                                  'ViewHelper',
-                                  'Errors'
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 'Errors'
                             ));
         array_push($elements, $element);
-        $elementCounter ++;
+        $elementCounter++;
 
         //add all defined elements to the form
-        $this->setDecorators(array (
-                                   'FormElements',
-                                   array (
-                                       'HtmlTag',
-                                       array (
-                                           'tag' => 'table',
-                                           'cellspacing' => '10'
-                                       )
-                                   ),
-                                   'Form'
+        $this->setDecorators(array(
+                                  'FormElements',
+                                  array(
+                                      'HtmlTag',
+                                      array(
+                                          'tag'         => 'table',
+                                          'cellspacing' => '10'
+                                      )
+                                  ),
+                                  'Form'
                              ));
 
         $this->addElements($elements);
@@ -871,7 +765,7 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
         foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
         {
-            if($pricingConfig->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
+            if ($pricingConfig->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
             {
                 $pricingConfigOptions [] = $pricingConfig->configName;
             }
@@ -880,5 +774,3 @@ class Proposalgen_Form_Settings_SystemAdmin extends Zend_Form
         $pricing_config->addMultiOptions($pricingConfigOptions);
     }
 }
-?>
-

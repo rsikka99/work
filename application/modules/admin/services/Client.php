@@ -159,6 +159,7 @@ class Admin_Service_Client
         }
         catch ( Exception $e )
         {
+            Throw new exception("Failed to delete client.", 0, $e);
         }
         return false;
     }

@@ -12,26 +12,7 @@ if (!is_dir($savePath))
     }
 }
 $savePath = $savePath . $filename;
-
 $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->quoteId}/{$filename}");
-
-$testArray =  array();
-
-$stdClass = new stdClass();
-$stdClass->termId = "53";
-$stdClass->name = 'cat';
-$stdClass->slug = '33';
-$stdClass->term_group = '33';
-$stdClass->term_taxonomy_id = '33';
-$testArray [53] = $stdClass;
-$newArray = $testArray;
-echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-var_dump(array_shift($newArray)->name);
-var_dump($testArray);
-die();
-//{ [53]=> object(stdClass)#448 (10) { ["term_id"]=> string(2) "53" ["name"]=> string(22) "Trade Show & Kiosk" ["slug"]=> string(20) "trade-show-and-kiosk" ["term_group"]=> string(1) "0" ["term_taxonomy_id"]=> string(2) "53" ["taxonomy"]=> string(18) "portfolio-category" ["description"]=> string(0) "" ["parent"]=> string(1) "0" ["count"]=> string(1) "5" ["object_id"]=> string(3) "934" } }
-
-
 
 // This may not need to be removed from here
 // Base path to the files used to render the document
@@ -78,6 +59,44 @@ $section = $phpword->createSection();
 // Render our style defaults?
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
+
+$phpword->addParagraphStyle('titleStyle1', array(
+                                                'align'      => 'center',
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '004990'
+                                           ));
+$phpword->addParagraphStyle('titleStyle2', array(
+                                                'spaceAfter'  => 100,
+                                                'spaceBefore' => 100,
+                                                'bgColor'     => '4C4C4C'
+                                           ));
+$phpword->addParagraphStyle('titleStyle3', array(
+                                                'spaceAfter' => 200,
+                                                'bgColor'    => '7F7F7F'
+                                           ));
+$phpword->addFontStyle('titlepage_title', array(
+                                               'size'  => 24,
+                                               'bold'  => true,
+                                               'color' => 'FFFFFF'
+                                          ));
+
+$phpword->addFontStyle('titlepage_subtitle', array(
+                                                  'size'  => 16,
+                                                  'bold'  => true,
+                                                  'color' => 'FFFFFF'
+                                             ));
+
+$phpword->addFontStyle('titlepage_address', array(
+                                                 'size'  => 12,
+                                                 'color' => 'FFFFFF'
+                                            ));
+$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+$phpword->addParagraphStyle('titlepageHeader1', array(
+                                                     'spaceAfter' => 0,
+
+                                                ));
 
 
 /**
@@ -688,42 +707,7 @@ $purchaseQuoteTable = (object)array (
                                 'nospacing' => true, 
                                 'align' => 'right' 
                         ) 
-                ), 
-                
-                /*
-                "cell2" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1, 
-                                "borderRightSize" => 1, 
-                                "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1, 
-                                "valign" => 'center', 
-                                "borderColor" => 'BFBFBF' 
-                        ), 
-                        "fontStyle" => array (
-                                'name' => 'Calibri', 
-                                'size' => 11 
-                        ), 
-                        "paragraphStyle" => array (
-                                'nospacing' => true 
-                        ) 
-                ), 
-                "cell3" => (object)array (
-                        "cellStyle" => array (
-                                "borderTopSize" => 1, 
-                                "borderRightSize" => 1, 
-                                "borderBottomSize" => 1, 
-                                "borderLeftSize" => 1, 
-                                "borderColor" => 'BFBFBF' 
-                        ), 
-                        "fontStyle" => array (
-                                'name' => 'Calibri', 
-                                'size' => 11 
-                        ), 
-                        "paragraphStyle" => array (
-                                'nospacing' => true 
-                        ) 
-                ),*/
+                ),
                  
                 "cell2" => (object)array (
                         "cellStyle" => array (

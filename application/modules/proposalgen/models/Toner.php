@@ -135,7 +135,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     /**
      * Handles processing overrides for a toner
      *
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
     public function processOverrides ($report)
     {
@@ -149,9 +149,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
              */
             if ($this->id > 0)
             {
-
-                $tonerOverride = $userTonerOverrideMapper->findOverrideForToner($report->userId, $this->id);
-
+                $tonerOverride = $userTonerOverrideMapper->findOverrideForToner(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
             }
             // If we found a toner override, apply it
             if ($tonerOverride)

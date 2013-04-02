@@ -125,31 +125,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      */
     public $grossMarginPricingConfigId;
 
-    /**
-     * Cost delta is used withing optimization report for a minimum savings
-     *
-     * @var int
-     */
-    public $costThreshold;
-
-    /**
-     * Target Monochrome is the desired cost per page looking to obtain for the fleet
-     *
-     * @var int
-     */
     public $targetMonochromeCostPerPage;
-
-    /**
-     *  Target Color is the desired cost per page looking to obtain for the fleet
-     *
-     * @var int
-     */
     public $targetColorCostPerPage;
-    /**
-     * The assessment pricing configuration
-     *
-     * @var Proposalgen_Model_PricingConfig
-     */
     protected $_assessmentPricingConfig;
     /**
      * The gross margin pricing configuration
@@ -265,20 +242,10 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
         }
 
-        if (isset($params->costThreshold) && !is_null($params->costThreshold))
-        {
-            $this->costThreshold = $params->costThreshold;
-        }
-
         if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
-        {
             $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
-        }
-
         if (isset($params->targetColorCostPerPage) && !is_null($params->targetColorCostPerPage))
-        {
             $this->targetColorCostPerPage = $params->targetColorCostPerPage;
-        }
     }
 
     /**

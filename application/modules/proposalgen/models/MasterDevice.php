@@ -152,7 +152,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_overridesProcessed;
 
     /**
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
     public function processOverrides ($report)
     {
@@ -167,7 +167,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 /*
                  * Check for a user override
                  */
-                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice($report->userId, $this->id);
+                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
 
                 /*
                  * Check to see if we found an override.

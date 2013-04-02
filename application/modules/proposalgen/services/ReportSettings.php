@@ -40,13 +40,13 @@ class Proposalgen_Service_ReportSettings
     /**
      * The report
      *
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Assessment
      */
     protected $_report;
 
     public function __construct ($reportId, $userId)
     {
-        $this->_report         = Proposalgen_Model_Mapper_Report::getInstance()->find($reportId);
+        $this->_report         = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
         $this->_systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting();
         $this->_userSettings   = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
         $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchReportReportSetting($reportId);
@@ -129,7 +129,7 @@ class Proposalgen_Service_ReportSettings
         {
             $reportDate                = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
             $this->_report->reportDate = $reportDate;
-            Proposalgen_Model_Mapper_Report::getInstance()->save($this->_report);
+            Proposalgen_Model_Mapper_Assessment::getInstance()->save($this->_report);
 
             foreach ($validData as $key => $value)
             {

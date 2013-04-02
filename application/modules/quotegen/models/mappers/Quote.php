@@ -13,7 +13,6 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
-    public $col_userId = 'userId';
     public $col_clientId = 'clientId';
     public $col_quoteDate = 'quoteDate';
 
@@ -206,20 +205,6 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all quotes that belong to a user
-     *
-     * @param int $userId
-     *
-     * @return Quotegen_Model_Quote[]
-     */
-    public function fetchAllForUser ($userId)
-    {
-        return $this->fetchAll(array(
-                                    "{$this->col_userId} = ?" => $userId
-                               ));
-    }
-
-    /**
      * Gets all the quotes for the specific client
      *
      * @param int $clientId
@@ -231,22 +216,6 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?" => $clientId
                                ));
-    }
-
-    /**
-     * Gets all the quotes for a specific client that belongs to the user
-     *
-     * @param int $clientId
-     * @param int $userId
-     *
-     * @return Quotegen_Model_Quote[]
-     */
-    public function fetchAllForClientByUser ($clientId, $userId)
-    {
-        return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?" => $clientId,
-                                    "{$this->col_userId} = ?"   => $userId
-                               ), "{$this->col_quoteDate} DESC");
     }
 
     /**

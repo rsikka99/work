@@ -21,7 +21,7 @@ class Custom_Common {
     	$session = new Zend_Session_Namespace('report');
 	    $report_id = $session->report_id;
 	    
-		$reportTable = new Proposalgen_Model_DbTable_Report();
+		$reportTable = new Proposalgen_Model_DbTable_Assessment();
 		$where = $reportTable->getAdapter()->quoteInto('id = ?', $report_id, 'INTEGER');
 		$report = $reportTable->fetchRow($where);
 		$page = $report['report_stage'];

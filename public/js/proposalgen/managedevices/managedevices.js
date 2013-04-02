@@ -128,8 +128,20 @@ $(document).ready(function ()
     var master_device_id = $("#printer_model").val();
     var lastsel;
 
+    var toner_array = $("#toner_array").val();
+    var createMode = (!master_device_id > 0);
+    var assignedTonersUrl = TMTW_BASEURL + '/proposalgen/admin/devicetoners?list=' + toner_array.replace(/'/gi, '');
+    if (createMode)
+    {
+        assignedTonersUrl += '&deviceid=' + 0;
+    }
+    else
+    {
+        assignedTonersUrl += '&deviceid=' + master_device_id;
+    }
+
     jQuery("#applied_toners_list").jqGrid({
-        url         : TMTW_BASEURL + '/proposalgen/admin/devicetoners?deviceid=' + master_device_id,
+        url         : assignedTonersUrl,
         datatype    : 'json',
         colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Action'],
         colModel    : [
@@ -148,24 +160,33 @@ $(document).ready(function ()
         height      : 'auto',
         gridComplete: function ()
         {
-            var toner_array = '';
-            var ids = jQuery("#applied_toners_list").jqGrid('getDataIDs');
+            var tonerArrayElement = $("#toner_array");
+            var toner_array = tonerArrayElement.val();
+
+            var populateTonerArray = (toner_array == '');
+
+            var grid = $(this).jqGrid();
+            var ids = grid.getDataIDs();
+
             for (var i = 0; i < ids.length; i++)
             {
-                var cur_row = ids[i];
-                var is_added = document.getElementById("applied_toners_list").rows[i + 1].cells[8].innerHTML;
+                var currentRowId = ids[i];
+                var currentRow = grid.getRowData(currentRowId);
 
-                remove_button = '<input type="button" name="btnRemove' + cur_row + '" id="btnRemove' + cur_row + '" tag="Remove" value="Remove" class="btn" onclick="javascript: do_remove(' + cur_row + ');" />';
-                jQuery("#applied_toners_list").jqGrid('setRowData', ids[i], {action: remove_button});
+                currentRow.action = '<input type="button" name="btnRemove' + currentRowId + '" id="btnRemove' + currentRowId + '" tag="Remove" value="Remove" class="btn" onclick="javascript: do_remove(' + currentRowId + ');" />';
 
-                if (toner_array != '')
+                if (populateTonerArray)
                 {
-                    toner_array = toner_array + ",";
+                    if (toner_array != '')
+                    {
+                        toner_array = toner_array + ",";
+                    }
+                    toner_array = toner_array + "'" + currentRow.toner_id + "'";
                 }
-                toner_array = toner_array + "'" + cur_row + "'";
 
+                grid.setRowData(currentRowId, currentRow);
             }
-            $("#toner_array").val(toner_array);
+            tonerArrayElement.val(toner_array);
         }
     });
 
@@ -203,7 +224,7 @@ $(document).ready(function ()
     jQuery("#available_toners_list").jqGrid({
         url         : TMTW_BASEURL + '/proposalgen/admin/tonerslist?deviceid=' + master_device_id,
         datatype    : 'json',
-        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added','Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compabibility'],
+        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compabibility'],
         colModel    : [
             {tag: 0, width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
             {tag: 1, width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
@@ -214,7 +235,7 @@ $(document).ready(function ()
             {tag: 6, width: 80, name: 'toner_price', index: 'toner_price', editable: true, editoptions: {size: 10, maxlength: 8}, align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}, sorttype: 'int'},
             {tag: 7, width: 50, name: 'master_device_id', index: 'master_device_id', hidden: true, editable: true, editoptions: {size: 12}},
             {tag: 8, width: 50, name: 'is_added', index: 'is_added', editable: true, hidden: true, editoptions: {size: 12}},
-            {tag: 9, width:225, name:'device_list', index:'device_list'},
+            {tag: 9, width: 225, name: 'device_list', index: 'device_list'},
 
             {tag: 10, width: 60, name: 'action', index: 'action', editable: false, align: 'center'},
             {tag: 11, width: 50, name: 'machine_compatibility', index: 'machine_compatibility', hidden: true},
@@ -229,44 +250,62 @@ $(document).ready(function ()
         pager       : '#available_toners_pager',
         gridComplete: function ()
         {
-            var ids = jQuery("#available_toners_list").jqGrid('getDataIDs');
+            var grid = $(this).jqGrid();
+            var ids = grid.getDataIDs();
             var toner_array = $("#toner_array").val();
 
             for (var i = 0; i < ids.length; i++)
             {
-                var cur_row = ids[i];
-                var is_added = document.getElementById("available_toners_list").rows[i+1].cells[9].innerHTML;
+                var currentRowId = ids[i];
+                var currentRow = grid.getRowData(currentRowId);
+                var isAdded = currentRow.is_added;
 
-                add_button = '<input type="button" name="btnAdd' + cur_row + '" id="btnAdd' + cur_row + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + cur_row + ');" />';
-                disabled_button = '<input type="button" name="btnAdd' + cur_row + '" id="btnAdd' + cur_row + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + cur_row + ');" disabled="disabled" />';
 
-                if (toner_array.indexOf("'" + cur_row + "'") != -1)
+                /**
+                 * Add a button depending if the toner is added
+                 */
+                if (toner_array.indexOf("'" + currentRowId + "'") != -1)
                 {
-                    jQuery("#available_toners_list").jqGrid('setRowData', ids[i], {action: disabled_button});
+                    // Disabled Assign Button
+                    currentRow.action = '<input type="button" name="btnAdd' + currentRowId + '" id="btnAdd' + currentRowId + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + currentRow.toner_id + ');" disabled="disabled" />';
                 }
                 else
                 {
-                    jQuery("#available_toners_list").jqGrid('setRowData', ids[i], {action: add_button});
-                }
-                var min = 4;
-                var max = 1;
-                var output = '';
-                device_list = document.getElementById("available_toners_list").rows[i+1].cells[9].innerHTML;
-                var pieces = device_list.split("; ");
-                output += '<div id="outer_'+ids[i]+'" style="text-align: left; width: 200px;">';
-                for(var j=0; j < pieces.length; j++) {
-                    device = pieces[j];
-                    if(j == max) {
-                        output += '<div id="inner_'+ids[i]+'" style="display: none;">';
-                    }
-                    output += device + '<br />';
-                    if(j > max && j == pieces.length - 1) {
-                        output += '</div>';
-                        output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'\','+ids[i]+');">View All...</a>';
-                    }
+                    // Assign Button
+                    currentRow.action = '<input type="button" name="btnAdd' + currentRowId + '" id="btnAdd' + currentRowId + '" tag="Add" value="Assign" class="btn" onclick="javascript: do_add(' + currentRowId + ');" />';
                 }
 
-                jQuery("#available_toners_list").jqGrid('setRowData',ids[i],{device_list:output});
+                /**
+                 * Not sure what this max variable is actually used for.
+                 * @type {number}
+                 */
+                var max = 1;
+
+                /**
+                 * This is the final container that everything will be in
+                 * @type {string}
+                 */
+                var deviceListCollapsibleContainer = '<div id="outer_' + ids[i] + '" style="text-align: left; width: 200px;">';
+                var compatibleDevices = currentRow.device_list.split("; ");
+
+                // Loop through each device and add it to the container
+                for (var j = 0; j < compatibleDevices.length; j++)
+                {
+                    device = compatibleDevices[j];
+                    if (j == max)
+                    {
+                        deviceListCollapsibleContainer += '<div id="inner_' + ids[i] + '" style="display: none;">';
+                    }
+                    deviceListCollapsibleContainer += device + '<br />';
+                    if (j > max && j == compatibleDevices.length - 1)
+                    {
+                        deviceListCollapsibleContainer += '</div>';
+                        deviceListCollapsibleContainer += '<a id="view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'\',' + ids[i] + ');">View All...</a>';
+                    }
+                }
+                currentRow.device_list = deviceListCollapsibleContainer;
+
+                grid.setRowData(currentRowId, currentRow);
             }
 
         },
@@ -543,7 +582,6 @@ $(document).ready(function ()
         $('#applied_toners_list').clearGridData();
 
         var master_device_id = $("#printer_model").val();
-        console.log(master_device_id);
         if (form_mode == "add")
         {
             master_device_id = 0;
@@ -823,15 +861,26 @@ function update_label()
         $("#devicename").html('Toner Assignment:');
     }
 }
-function view_device_list(type,id) {
-    if(document.getElementById(type+'inner_'+id).style.display == 'none') {
-        document.getElementById(type+'inner_'+id).style.display = 'block';
-        document.getElementById(type+'view_link_'+id).innerHTML = 'Collapse...';
-    } else {
-        document.getElementById(type+'inner_'+id).style.display = 'none';
-        document.getElementById(type+'view_link_'+id).innerHTML = 'View All...';
+
+/**
+ * Handles toggling the collapsed "Machine Compatibility" Column
+ * @param type
+ * @param id
+ */
+function view_device_list(type, id)
+{
+    if (document.getElementById(type + 'inner_' + id).style.display == 'none')
+    {
+        document.getElementById(type + 'inner_' + id).style.display = 'block';
+        document.getElementById(type + 'view_link_' + id).innerHTML = 'Collapse...';
+    }
+    else
+    {
+        document.getElementById(type + 'inner_' + id).style.display = 'none';
+        document.getElementById(type + 'view_link_' + id).innerHTML = 'View All...';
     }
 }
+
 function add_printer(mode)
 {
     if (repop != 1 && $("#manufacturer_id").val() > 0)
@@ -973,33 +1022,31 @@ function show_message(message)
     $("#message_container").html(message).show();
 }
 
-function do_add(id)
+/**
+ * Adds a toner to our list
+ * @param tonerId
+ */
+function do_add(tonerId)
 {
     $('#message_container').html('');
 
-    var isvalid = true;
-    var toner_id = id;
-    var toner_sku = $("#toner_sku").val();
-    var part_type_id = $("#part_type_id").val();
-    var manufacturer_id = $("#new_manufacturer_id").val();
-    var toner_color_id = $("#toner_color_id").val();
-    var toner_yield = $("#toner_yield").val();
-    var toner_price = $("#toner_price").val();
+    var tonerArrayElement = $("#toner_array");
+    var toner_array = tonerArrayElement.val();
 
-    //update array
-    var toner_array = $("#toner_array").val();
-
-    //check to see if toner exists
-    if (toner_array.indexOf("'" + id + "'") == -1)
+    /**
+     * We only need to add it if it doesn't already exist.
+     */
+    if (toner_array.indexOf("'" + tonerId + "'") == -1)
     {
         if (toner_array != '')
         {
             toner_array += ",";
         }
-        toner_array = toner_array + "'" + id + "'";
-        $("#toner_array").val(toner_array);
+        toner_array = toner_array + "'" + tonerId + "'";
+        tonerArrayElement.val(toner_array);
+
         update_applied();
-        $("#btnAdd" + id).attr('disabled', 'disabled');
+        $("#btnAdd" + tonerId).attr('disabled', 'disabled');
     }
     else
     {
@@ -1007,22 +1054,25 @@ function do_add(id)
     }
 }
 
-function do_remove(id)
+/**
+ * Removes a toner from the assigned list.
+ * @param tonerId
+ */
+function do_remove(tonerId)
 {
     $('#message_container').html('');
 
     if (confirm("Are you sure you want to remove this toner?"))
     {
         //update array
-        var toner_array = $("#toner_array").val();
-        toner_array = toner_array.replace("'" + id + "',", "").replace(",'" + id + "'", "").replace("'" + id + "'", "");
-        if (toner_array == '')
-        {
-            toner_array = '0';
-        }
-        $("#toner_array").val(toner_array);
+        var tonerArrayElement = $("#toner_array");
+        var toner_array = tonerArrayElement.val();
+        toner_array = toner_array.replace("'" + tonerId + "',", "").replace(",'" + tonerId + "'", "").replace("'" + tonerId + "'", "");
+
+        tonerArrayElement.val(toner_array);
+
         update_applied();
-        $("#btnAdd" + id).removeAttr('disabled');
+        $("#btnAdd" + tonerId).removeAttr('disabled');
     }
 }
 
@@ -1103,18 +1153,29 @@ function update_grids()
     update_available('clear');
 }
 
+/**
+ * Handles updates to the assigned toners. Refreshes the jqGrid.
+ */
 function update_applied()
 {
     var toner_array = $("#toner_array").val();
+
     var master_device_id = $("#printer_model").val();
 
-    if (form_mode == 'add')
+
+    var appliedToners = $('#applied_toners_list');
+
+    if (master_device_id > 0)
     {
-        master_device_id = 0;
+        appliedToners.setGridParam({url: TMTW_BASEURL + '/proposalgen/admin/devicetoners?deviceid=' + master_device_id + '&list=' + toner_array.replace(/'/gi, '')});
+
+    }
+    else
+    {
+        appliedToners.setGridParam({url: TMTW_BASEURL + '/proposalgen/admin/devicetoners?list=' + toner_array.replace(/'/gi, '')});
     }
 
-    $('#applied_toners_list').setGridParam({url: TMTW_BASEURL + '/proposalgen/admin/devicetoners?deviceid=' + master_device_id + '&list=' + toner_array.replace(/'/gi, '')});
-    $('#applied_toners_list').trigger('reloadGrid');
+    appliedToners.trigger('reloadGrid');
 }
 
 function update_available(action)

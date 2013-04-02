@@ -33,10 +33,10 @@ $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 7800))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
+$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($this->healthcheck->calculateNumberOfTreesUsed()))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($proposal->getPageCounts()->Total->Combined->Yearly / 8.2186))),"forestWaterFont");
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($this->healthcheck->calculateNumberOfGallonsWaterUsed()))),"forestWaterFont");
 
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
@@ -77,7 +77,7 @@ $section->addTitle($this->translate('Green Features: Duplex Printing and Scannin
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner and e-mailing documents instead of printing copies for distribution.'));
 $textrun = $section->createTextRun();
 $textrun->addText($this->translate('By printing 25% more documents on both sides of the page than you are now, you could save '));
-$textrun->addText(sprintf($this->translate('%1$s trees and %2$s gallons of water used in paper production per year.'),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 7800),number_format(($proposal->getPageCounts()->Total->Combined->Yearly * .25) / 8.2186)));
+$textrun->addText(sprintf($this->translate('%1$s trees and %2$s gallons of water used in paper production per year.'),number_format($this->healthcheck->calculateQuarterOfNumberOfTreesUsed()),number_format($this->healthcheck->calculateQuarterOfNumberOfGallonsWaterUsed())));
 $section->addText($this->translate('The following charts show how many of your printing devices have duplex printing and scanning capabilities:'));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

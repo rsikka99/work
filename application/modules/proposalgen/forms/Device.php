@@ -1,11 +1,4 @@
 <?php
-
-/**
- * Device Form: Used for Adding / Editing Devices
- *
- * @author  John Sadler
- * @version v1.0
- */
 class Proposalgen_Form_Device extends Zend_Form
 {
 
@@ -22,7 +15,7 @@ class Proposalgen_Form_Device extends Zend_Form
      */
     public function __construct ($options = null, $type = null)
     {
-        //call parent contsructor
+        //call parent constructor
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
         parent::__construct($options);
         $elements       = array();
@@ -1053,6 +1046,9 @@ class Proposalgen_Form_Device extends Zend_Form
 
     public function set_validation ($data)
     {
+        /**
+         * Changes validation based on what's coming in
+         */
         if (isset($data ['is_leased']) && $data ['is_leased'] == "1")
         {
             $this->leased_toner_yield->setRequired(true);
@@ -1071,6 +1067,3 @@ class Proposalgen_Form_Device extends Zend_Form
         return $data;
     }
 }
-
-?>
-

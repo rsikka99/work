@@ -41,11 +41,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public $quoteDate;
 
     /**
-     * @var int
-     */
-    public $userId;
-
-    /**
      * @var string
      */
     public $clientDisplayName;
@@ -181,11 +176,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->quoteDate = $params->quoteDate;
         }
 
-        if (isset($params->userId) && !is_null($params->userId))
-        {
-            $this->userId = $params->userId;
-        }
-
         if (isset($params->clientDisplayName) && !is_null($params->clientDisplayName))
         {
             $this->clientDisplayName = $params->clientDisplayName;
@@ -264,7 +254,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             "dateCreated"             => $this->dateCreated,
             "dateModified"            => $this->dateModified,
             "quoteDate"               => $this->quoteDate,
-            "userId"                  => $this->userId,
             "clientDisplayName"       => $this->clientDisplayName,
             "leaseTerm"               => $this->leaseTerm,
             "leaseRate"               => $this->leaseRate,

@@ -112,12 +112,12 @@ if ($reportHasDevicesToReplace)
                     $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getUploadDataCollectorRow()->modelName, $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
                     $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? 'Unknown' : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
                     $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-                    $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate() * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+                    $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getYearlyRate()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
                     $table->addCell($tc->col5Width, $tc->body->cell5->cellStyle)->addText('$' . number_format($replacementDevice->monthlyRate * 12), $tc->body->cell5->fontStyle, $tc->body->cell5->paragraphStyle);
-                    $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
+                    $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getYearlyRate()) - ($replacementDevice->monthlyRate * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
 
-                    $replacementSavings += ($device->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12);
-                    $currentCost += $device->getMonthlyRate() * 12;
+                    $replacementSavings += ($device->getYearlyRate()) - ($replacementDevice->monthlyRate * 12);
+                    $currentCost += $device->getYearlyRate();
                     $printIQCost += $replacementDevice->monthlyRate * 12;
                 }
 
@@ -173,7 +173,7 @@ if ($reportHasDevicesToReplace)
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getLeftOverColorPageCount() * $proposal->getMPSColorCPP()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf($this->translate('Processing 1 invoice/month @ $%1$s'), number_format($proposal->getCostOfExecutingSuppliesOrder())), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf($this->translate('Processing 1 invoice/month @ %1$s'), $this->currency($proposal->report->getSurvey()->costToExecuteSuppliesOrder)), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($proposal->getInternalAdminCost()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);

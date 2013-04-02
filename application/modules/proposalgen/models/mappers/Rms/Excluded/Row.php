@@ -5,7 +5,9 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
-    public $col_reportId = 'reportId';
+    public $col_rmsUploadId = 'rmsUploadId';
+    public $col_modelName = 'modelName';
+    public $col_manufacturer = 'manufacturerName';
 
     /**
      * The default db table class to use
@@ -230,24 +232,97 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     /**
      * Deletes all rows related to a report
      *
-     * @param int $reportId The report id
+     * @param int $rmsUploadId The report id
      *
      * @return int The number of rows  deleted
      */
-    public function deleteAllForReport ($reportId)
+    public function deleteAllForRmsUpload ($rmsUploadId)
     {
-        return $this->getDbTable()->delete(array("{$this->col_reportId} = ?" => $reportId));
+        return $this->getDbTable()->delete(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
+    }
+
+
+    /**
+     * @param      $rmsUploadId
+     * @param      $sortColumn
+     * @param      $sortDirection
+     * @param null $limit
+     * @param null $offset
+     * @param bool $justCount
+     *
+     * @return array|int
+     */
+    public function fetchAllForRmsUpload ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    {
+        $db          = $this->getDbTable()->getAdapter();
+        $rmsUploadId = $db->quote($rmsUploadId, 'INTEGER');
+
+        if ($justCount)
+        {
+            $select = $db->select()->from('pgen_rms_excluded_rows', "COUNT(*)")->where('rmsUploadId = ?', $rmsUploadId);
+
+            return $db->query($select)->fetchColumn();
+        }
+        else
+        {
+            /*
+             * Parse our order
+             */
+
+            $order = array();
+            if ($sortColumn != $this->col_modelName && $sortColumn != $this->col_manufacturer)
+            {
+                $order[] = "{$sortColumn} {$sortDirection}";
+                $order[] = "{$this->col_manufacturer} ASC";
+                $order[] = "{$this->col_modelName} ASC";
+            }
+            else if ($sortColumn == $this->col_manufacturer)
+            {
+                $order[] = "{$this->col_manufacturer} {$sortDirection}";
+                $order[] = "{$this->col_modelName} ASC";
+            }
+            else if ($sortColumn == $this->col_modelName)
+            {
+                $order[] = "{$this->col_manufacturer} ASC";
+                $order[] = "{$this->col_modelName} {$sortDirection}";
+            }
+            /*
+             * Parse our Limit
+             */
+
+            if (!$limit)
+            {
+                $limit  = "25";
+                $offset = ($offset > 0) ? $offset : 0;
+            }
+
+            $select = $db->select()->from('pgen_rms_excluded_rows', array('*', 'model' => "CONCAT(manufacturerName, ' ' , modelName)"))->where('rmsUploadId = ?', $rmsUploadId)->order($order)->limit($limit, $offset);
+
+            $query = $db->query($select);
+
+            $excludedRows = array();
+
+            foreach ($query->fetchAll() as $row)
+            {
+
+                $excludedRow          = new Proposalgen_Model_Rms_Excluded_Row($row);
+                $excludedRow->model = $row ['model'];
+                $excludedRows[]       = $excludedRow;
+            }
+
+            return $excludedRows;
+        }
     }
 
     /**
      * Counts how many excluded rows we have for the report
      *
-     * @param $reportId
+     * @param $rmsUploadId
      *
      * @return int
      */
-    public function countRowsForReport ($reportId)
+    public function countRowsForRmsUpload ($rmsUploadId)
     {
-        return $this->count(array("{$this->col_reportId} = ?" => $reportId));
+        return $this->count(array("{$this->col_rmsUploadId} = ?" => $rmsUploadId));
     }
 }

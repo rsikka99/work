@@ -41,11 +41,11 @@ $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
 $titlepageSection = $phpword->createSection(array (
-        'orientation' => null, 
-        'marginLeft' => 720, 
-        'marginRight' => 720, 
-        'marginTop' => 720, 
-        'marginBottom' => 720 
+        'orientation' => null,
+        'marginLeft' => 720,
+        'marginRight' => 720,
+        'marginTop' => 720,
+        'marginBottom' => 720
 ));
 $section = $phpword->createSection();
 
@@ -61,6 +61,44 @@ $section = $phpword->createSection();
 // Render our style defaults?
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
+
+$phpword->addParagraphStyle('titleStyle1', array(
+                                                      'align'      => 'center',
+                                                      'spaceAfter' => 100,
+                                                      'bgColor'    => '004990'
+                                                 ));
+$phpword->addParagraphStyle('titleStyle2', array(
+                                                      'spaceAfter'  => 100,
+                                                      'spaceBefore' => 100,
+                                                      'bgColor'     => '4C4C4C'
+                                                 ));
+$phpword->addParagraphStyle('titleStyle3', array(
+                                                      'spaceAfter' => 200,
+                                                      'bgColor'    => '7F7F7F'
+                                                 ));
+$phpword->addFontStyle('titlepage_title', array(
+                                                     'size'  => 24,
+                                                     'bold'  => true,
+                                                     'color' => 'FFFFFF'
+                                                ));
+
+$phpword->addFontStyle('titlepage_subtitle', array(
+                                                        'size'  => 16,
+                                                        'bold'  => true,
+                                                        'color' => 'FFFFFF'
+                                                   ));
+
+$phpword->addFontStyle('titlepage_address', array(
+                                                       'size'  => 12,
+                                                       'color' => 'FFFFFF'
+                                                  ));
+$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+$phpword->addParagraphStyle('titlepageHeader1', array(
+                                                     'spaceAfter' => 0,
+
+                                                ));
 /**
  * Paragraph styles
  */
@@ -729,7 +767,7 @@ $data = array (
         "phpword" => $phpword, 
         "section" => $section, 
         "quote" => $quote, 
-        "styles" => $styles 
+        "styles" => $styles
 );
 
 // Actual document pages

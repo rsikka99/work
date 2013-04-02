@@ -55,7 +55,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var int
      */
-    public $reportId;
+    public $rmsUploadId;
 
     /**
      * @var int
@@ -336,7 +336,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Applies overrides to settings, device prices, toner prices
      *
-     * @param Proposalgen_Model_Report $report
+     * @param Proposalgen_Model_Assessment $report
      */
     public function processOverrides ($report)
     {
@@ -377,9 +377,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->id = $params->id;
         }
 
-        if (isset($params->reportId) && !is_null($params->reportId))
+        if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
-            $this->reportId = $params->reportId;
+            $this->rmsUploadId = $params->rmsUploadId;
         }
 
         if (isset($params->rmsUploadRowId) && !is_null($params->rmsUploadRowId))
@@ -426,7 +426,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         return array(
             "id"                 => $this->id,
-            "reportId"           => $this->reportId,
+            "rmsUploadId"        => $this->rmsUploadId,
             "rmsUploadRowId"     => $this->rmsUploadRowId,
             "ipAddress"          => $this->ipAddress,
             "isExcluded"         => $this->isExcluded,
@@ -1081,6 +1081,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Takes the monthly rate and multiplies it by 12
+     *
+     * @return float
+     */
+    public function getYearlyRate ()
+    {
+        return $this->getMonthlyRate() * 12;
+    }
+
+    /**
      * @param $monthlyTotalCost
      *
      * @return float
@@ -1475,7 +1485,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function isCapableOfReportingTonerLevels ()
     {
         // Always use the master device record. This way administrators can control which devices can and can not report toner levels.
-        $reportsTonerLevels = $this->getMasterDevice()->reportsTonerLevels;
+        $reportsTonerLevels = (!$this->getMasterDevice()) ? false : $this->getMasterDevice()->reportsTonerLevels;
 
         return $reportsTonerLevels;
     }
@@ -1527,6 +1537,46 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
 
         return $colorCostPerPage * $this->getAverageMonthlyColorPageCount();
+    }
+
+    /**
+     * Returns percent of maximum recommended print volume they are printing.
+     * If their recommended max is 1000, and they print 2000. This returns 200 (Without % Sign)
+     *
+     * @return float
+     */
+    public function calculatePercentOfMaximumRecommendedMaxVolume ()
+    {
+        $percent = 0;
+        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+        {
+            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 100);
+        }
+
+        return $percent;
+    }
+
+    /**
+     * Calculates the percent monthly page volume of total page volume
+     *
+     * @param int $totalPageVolume
+     *              The Total Page Volume
+     *
+     * @return float
+     */
+    public function calculateMonthlyPercentOfTotalVolume ($totalPageVolume)
+    {
+        return $this->getAverageMonthlyPageCount() / $totalPageVolume * 100;
+    }
+
+    /**
+     * Calculates the max estimated life count
+     *
+     * @return int
+     */
+    public function calculateEstimatedMaxLifeCount ()
+    {
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
     }
 
     /**

@@ -273,7 +273,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                                                                  new Zend_Validate_NotEmpty(),
                                                                                                                  new Zend_Validate_Float(),
                                                                                                                  new Zend_Validate_Between(array(
-                                                                                                                                                'min' => 1,
+                                                                                                                                                'min' => 500,
                                                                                                                                                 'max' => 30000
                                                                                                                                            ))
                                                                                                             ))
@@ -296,7 +296,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                  array(
                                                                      'validator' => 'Between',
                                                                      'options'   => array(
-                                                                         'min' => 0.0001,
+                                                                         'min' => 0,
                                                                          'max' => 5
                                                                      )
                                                                  )
@@ -423,11 +423,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                                                                              new Zend_Validate_Int(),
                                                                                                                              new Zend_Validate_Between(array(
                                                                                                                                                             'min' => 0,
-                                                                                                                                                            'max' => 1000
+                                                                                                                                                            'max' => 100000
                                                                                                                                                        ))
                                                                                                                         ))
                                                            )
                                                       ));
+
+        $this->addElement('hidden', 'toner_array');
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(

@@ -1,8 +1,6 @@
 <?php
-
 class Tangent_Controller_Action extends Zend_Controller_Action
 {
-
     /**
      * We always get an http request here
      *
@@ -18,6 +16,11 @@ class Tangent_Controller_Action extends Zend_Controller_Action
     protected $_response = null;
 
     /**
+     * @var Zend_Controller_Action_Helper_FlashMessenger
+     */
+    protected $_flashMessenger;
+
+    /**
      * View object
      *
      * @var Zend_View
@@ -30,6 +33,23 @@ class Tangent_Controller_Action extends Zend_Controller_Action
      * @var Zend_Controller_Action_HelperBroker
      */
     protected $_helper = null;
+
+    /**
+     * Overridden Constructor.
+     *
+     * @see Zend_Controller_Action::__construct()
+     *
+     * @param Zend_Controller_Request_Abstract  $request
+     * @param Zend_Controller_Response_Abstract $response
+     * @param array                             $invokeArgs
+     */
+    public function __construct (Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array())
+    {
+        parent::__construct($request, $response, $invokeArgs);
+
+        $this->_flashMessenger = new Zend_Controller_Action_Helper_FlashMessenger();
+    }
+
 
     /**
      * Return the Request object

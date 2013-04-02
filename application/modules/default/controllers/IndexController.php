@@ -50,9 +50,11 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->userId = $this->_userId;
+
         if ($this->_selectedClientId > 0)
         {
-            $availableReports                 = Proposalgen_Model_Mapper_Report::getInstance()->fetchAllReportsForClient($this->_selectedClientId);
+            $availableReports                 = Proposalgen_Model_Mapper_Assessment::getInstance()->fetchAllAssessmentsForClient($this->_selectedClientId);
             $this->view->availableAssessments = $availableReports;
 
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
@@ -78,14 +80,30 @@ class Default_IndexController extends Tangent_Controller_Action
                 $client      = Quotegen_Model_Mapper_Client::getInstance()->find($newClientId);
                 if ($client)
                 {
+                    $userViewedClient = Quotegen_Model_Mapper_UserViewedClient::getInstance()->find(array($this->_userId, $client->id));
+                    if ($userViewedClient instanceof Quotegen_Model_UserViewedClient)
+                    {
+                        $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
+                        Quotegen_Model_Mapper_UserViewedClient::getInstance()->save($userViewedClient);
+                    }
+                    else
+                    {
+                        $userViewedClient             = new Quotegen_Model_UserViewedClient();
+                        $userViewedClient->clientId   = $client->id;
+                        $userViewedClient->userId     = $this->_userId;
+                        $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
+                        Quotegen_Model_Mapper_UserViewedClient::getInstance()->insert($userViewedClient);
+                    }
+
+
                     $this->_mpsSession->selectedClientId = $newClientId;
 
                     // Reload the page
-                    $this->redirector();
+                    $this->redirector('index');
                 }
                 else
                 {
-                    $this->_helper->flashMessenger(array('danger' => 'Invalid Client'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'Invalid Client'));
                 }
 
 
@@ -126,8 +144,6 @@ class Default_IndexController extends Tangent_Controller_Action
                 else
                 {
                     // Creating a new one
-
-
                 }
             }
             else if (isset($postData['createLeasedQuote']))
@@ -221,9 +237,24 @@ class Default_IndexController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
-                                                    'success' => "Client was successfully created."
-                                               ));
+                $userViewedClient = Quotegen_Model_Mapper_UserViewedClient::getInstance()->find(array($this->_userId, $clientId));
+                if ($userViewedClient instanceof Quotegen_Model_UserViewedClient)
+                {
+                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
+                    Quotegen_Model_Mapper_UserViewedClient::getInstance()->save($userViewedClient);
+                }
+                else
+                {
+                    $userViewedClient             = new Quotegen_Model_UserViewedClient();
+                    $userViewedClient->clientId   = $clientId;
+                    $userViewedClient->userId     = $this->_userId;
+                    $userViewedClient->dateViewed = new Zend_Db_Expr("NOW()");
+                    Quotegen_Model_Mapper_UserViewedClient::getInstance()->insert($userViewedClient);
+                }
+
+                $this->_flashMessenger->addMessage(array(
+                                                        'success' => "Client was successfully created."
+                                                   ));
                 $this->_mpsSession->selectedClientId = $clientId;
 
                 // Redirect with client id so that the client is preselected
@@ -246,7 +277,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
         if (!$client)
         {
-            $this->_helper->flashMessenger(array('warning' => 'Please select a client first.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a client first.'));
             $this->redirector('index');
         }
 
@@ -274,9 +305,9 @@ class Default_IndexController extends Tangent_Controller_Action
 
             if ($clientId)
             {
-                $this->_helper->flashMessenger(array(
-                                                    'success' => "Client {$client->companyName} successfully updated."
-                                               ));
+                $this->_flashMessenger->addMessage(array(
+                                                        'success' => "Client {$client->companyName} successfully updated."
+                                                   ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
                                                             'clientId' => $clientId
@@ -284,9 +315,9 @@ class Default_IndexController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
-                                                    'danger' => "Please correct the errors below."
-                                               ));
+                $this->_flashMessenger->addMessage(array(
+                                                        'danger' => "Please correct the errors below."
+                                                   ));
             }
         }
         $this->view->form = $clientService->getForm();
@@ -313,5 +344,13 @@ class Default_IndexController extends Tangent_Controller_Action
         }
 
         $this->sendJson($results);
+    }
+
+    /**
+     * Allows a user to view all of the clients available
+     */
+    public function viewAllClientsAction ()
+    {
+        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchAll(null, null, 150);
     }
 }

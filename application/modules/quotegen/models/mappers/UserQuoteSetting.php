@@ -1,5 +1,4 @@
 <?php
-
 class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
 {
     /**

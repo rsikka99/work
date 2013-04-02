@@ -2,7 +2,7 @@
 class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 {
     /**
-     * @var Proposalgen_Model_Report
+     * @var Proposalgen_Model_Assessment
      */
     protected $_report;
 
@@ -17,7 +17,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     protected $_mpsSession;
 
     /**
-     * @var Proposalgen_Model_Report_Step
+     * @var Proposalgen_Model_Assessment_Step
      */
     protected $_reportSteps;
 
@@ -34,7 +34,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * The current step that the user is viewing.
      *
-     * @var Proposalgen_Model_Report_Step
+     * @var Proposalgen_Model_Assessment_Step
      */
     protected $_activeStep;
 
@@ -79,7 +79,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             }
             else
             {
-                $this->_helper->flashMessenger(array(
+                $this->_flashMessenger->addMessage(array(
                                                     "error" => "A client is not selected."
                                                ));
                 $this->_redirect('/');
@@ -173,29 +173,24 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 
         if ($this->_reportId < 1)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 "error" => "Please select a report first."
                                            ));
             // Send user to the index
-            $this->_redirect('/');
+            $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->_report = Proposalgen_Model_Mapper_Report::getInstance()->find($this->_reportId);
+        $this->_report = Proposalgen_Model_Mapper_Assessment::getInstance()->find($this->_reportId);
         if ($this->_report === null)
         {
-            $this->_helper->flashMessenger(array(
+            $this->_flashMessenger->addMessage(array(
                                                 "error" => "Please select a report first."
                                            ));
             // Send user to the index
-            $this->_redirect('/');
+            $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->view->reportMenu = new Custom_Report_Menu($this->_report);
-        if (!$this->view->reportMenu->canAccessPage('finished'))
-        {
-            // Redirect to the last page that the user is allowed seeing
-            $this->_redirect($this->view->reportMenu->currentPage());
-        }
+
 
         // Setup the different file formats
         $this->_csvFormat  = (object)array(
@@ -477,8 +472,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->reportStage) ? : Proposalgen_Model_Report_Step::STEP_SURVEY;
-        Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
+        $stage = ($this->getReport()->stepName) ? : Proposalgen_Model_Assessment_Step::STEP_SURVEY;
+        Proposalgen_Model_Assessment_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
@@ -487,7 +482,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
      * Gets the report object that we are working with
      *
      * @throws Exception
-     * @return Proposalgen_Model_Report
+     * @return Proposalgen_Model_Assessment
      */
     protected function getReport ()
     {
@@ -496,7 +491,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             // Fetch the existing report, or create a new one if the session id isn't set
             if (isset($this->_reportSession->reportId) && $this->_reportSession->reportId > 0)
             {
-                $this->_report = Proposalgen_Model_Mapper_Report::getInstance()->find((int)$this->_reportSession->reportId);
+                $this->_report = Proposalgen_Model_Mapper_Assessment::getInstance()->find((int)$this->_reportSession->reportId);
                 if ($this->_report === null)
                 {
                     throw new Exception("Error selecting the report with an id of '{$this->_reportSession->reportId}'.");
@@ -505,10 +500,10 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             else
             {
                 $identity                   = Zend_Auth::getInstance()->getIdentity();
-                $this->_report              = new Proposalgen_Model_Report();
+                $this->_report              = new Proposalgen_Model_Assessment();
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
-                $this->_report->reportStage = Proposalgen_Model_Report_Step::STEP_SURVEY;
+                $this->_report->stepName = Proposalgen_Model_Assessment_Step::STEP_SURVEY;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
@@ -523,7 +518,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
      */
     protected function saveReport ($updateReportStage = true)
     {
-        $reportMapper                = Proposalgen_Model_Mapper_Report::getInstance();
+        $reportMapper                = Proposalgen_Model_Mapper_Assessment::getInstance();
         $this->_report->lastModified = date('Y-m-d H:i:s');
 
         if ($updateReportStage)
@@ -532,10 +527,10 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
             if ($newStep !== false)
             {
-                $this->_report->reportStage = $newStep->enumValue;
+                $this->_report->stepName = $newStep->enumValue;
 
                 // We need to adjust the menu just in case we're not redirecting
-                Proposalgen_Model_Report_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
+                Proposalgen_Model_Assessment_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
 
@@ -555,19 +550,19 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * Gets an array of report steps.
      *
-     * @return Proposalgen_Model_Report_Step[]
+     * @return Proposalgen_Model_Assessment_Step[]
      */
     protected function getReportSteps ()
     {
         $report      = $this->getReport();
         $reportSteps = null;
-        if ($report === null)
+        if ($report instanceof Proposalgen_Model_Assessment)
         {
-            $reportSteps = Proposalgen_Model_Report_Step::getSteps();
+            $reportSteps = $report->getReportSteps();
         }
         else
         {
-            $reportSteps = $report->getReportSteps();
+            $reportSteps = Proposalgen_Model_Assessment_Step::getSteps();
         }
 
         return $reportSteps;
@@ -576,9 +571,9 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * Checks to see if the next step is a new step.
      *
-     * @param Proposalgen_Model_Report_Step $step
+     * @param Proposalgen_Model_Assessment_Step $step
      *
-     * @return Proposalgen_Model_Report_Step Step Name. Returns FALSE if the step is not new.
+     * @return Proposalgen_Model_Assessment_Step Step Name. Returns FALSE if the step is not new.
      */
     protected function checkIfNextStepIsNew ($step)
     {
@@ -600,13 +595,13 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * Gets the last available step for a report
      *
-     * @return Proposalgen_Model_Report_Step
+     * @return Proposalgen_Model_Assessment_Step
      */
     protected function getLatestAvailableReportStep ()
     {
         $latestStep = null;
 
-        /* @var $step Proposalgen_Model_Report_Step */
+        /* @var $step Proposalgen_Model_Assessment_Step */
         foreach ($this->getReportSteps() as $step)
         {
             /*
