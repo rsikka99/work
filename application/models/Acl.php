@@ -21,27 +21,6 @@ class Application_Model_Acl extends Zend_Acl
     const WILDCARD  = "%";
 
     /**
-     * Quotegen constants
-     */
-    const RESOURCE_QUOTEGEN_WILDCARD                          = "quotegen__%__%";
-    const RESOURCE_QUOTEGEN_CLIENT_WILDCARD                   = "quotegen__client__%";
-    const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD            = "quotegen__configuration__%";
-    const RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD             = "quotegen__quote_devices__%";
-    const RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD              = "quotegen__devicesetup__%";
-    const RESOURCE_QUOTEGEN_QUOTEREPORTS_WILDCARD             = "quotegen__quote_reports__%";
-    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST                    = "proposalgen__fleet__excluded-list";
-    const RESOURCE_QUOTEGEN                                   = "quotegen__index__index";
-    const RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX                 = "quotegen__quote_groups__index";
-    const RESOURCE_QUOTEGEN_QUOTEPAGES_INDEX                  = "quotegen__quote_pages__index";
-    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_INDEX          = "quotegen__quote_profitability__index";
-    const RESOURCE_QUOTEGEN_QUOTEPROFITABILITY_LEASINGDETAILS = "quotegen__quote_profitability__leasingdetails";
-    const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE               = "quotegen__index__existing-quote";
-    const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT         = "quotegen__index__get-reports-for-client";
-    const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT                = "quotegen__index__create-client";
-    const RESOURCE_QUOTEGEN_QUOTE_INDEX                       = "quotegen__quote__index";
-    const RESOURCE_QUOTEGEN_QUOTE_DELETE                      = "quotegen__quote__delete";
-
-    /**
      * This is what kind of access we want to allow. We can use this to provide dynamic pages based on acl
      */
     const PRIVILEGE_ADMIN = "Admin";
@@ -234,6 +213,4 @@ class Application_Model_Acl extends Zend_Acl
 
         return $isAllowed;
     }
-        $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST);
-        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST, self::PRIVILEGE_VIEW);
 }

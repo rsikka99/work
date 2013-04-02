@@ -20,6 +20,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING                         = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_SUMMARY                         = "proposalgen__fleet__summary";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST               = "proposalgen__fleet__device-summary-list";
+    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST                    = "proposalgen__fleet__excluded-list";
     const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS                  = "proposalgen__fleet__reportsettings";
     const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES              = "proposalgen__fleet__edit-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST               = "proposalgen__fleet__device-mapping-list";
@@ -74,6 +75,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_MAPPING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SUMMARY);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST);
@@ -114,6 +116,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_MAPPING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_SUMMARY, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST, Application_Model_Acl::PRIVILEGE_VIEW);
