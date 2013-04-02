@@ -417,8 +417,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 'dutyCycle'          => ($postData ["duty_cycle"] > 0) ? $postData ["duty_cycle"] : null,
                                 'isLeased'           => $postData ["is_leased"],
                                 'leasedTonerYield'   => ($postData ["is_leased"] ? $postData ["leased_toner_yield"] : null),
-                                'partsCostPerPage'   => ($formData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["partsCostPerPage"],
-                                'laborCostPerPage'   => ($formData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["laborCostPerPage"],
+                                'partsCostPerPage'   => ($postData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["partsCostPerPage"],
+                                'laborCostPerPage'   => ($postData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["laborCostPerPage"],
                             );
 
                             if ($master_device_id > 0)
@@ -677,13 +677,13 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 $form->getElement('is_duplex')->setAttrib('checked', $postData ['is_duplex']);
                 $form->getElement('watts_power_normal')->setValue($postData ['watts_power_normal']);
                 $form->getElement('watts_power_idle')->setValue($postData ['watts_power_idle']);
-
                 $form->getElement('is_leased')->setAttrib('checked', $postData ['is_leased']);
                 $form->getElement('leased_toner_yield')->setValue($postData ['leased_toner_yield']);
-
                 $form->getElement('ppm_black')->setValue($postData ['ppm_black']);
                 $form->getElement('ppm_color')->setValue($postData ['ppm_color']);
                 $form->getElement('duty_cycle')->setValue($postData ['duty_cycle']);
+                $form->getElement('partsCostPerPage')->setValue($postData ['partsCostPerPage']);
+                $form->getElement('laborCostPerPage')->setValue($postData ['laborCostPerPage']);
             }
         }
         $this->view->deviceform = $form;
