@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <nav>
+        <menu>
+            <label>Hardware Optimization</label>
+            <class>dropdown</class>
+            <module>hardwareoptimization</module>
+            <controller>index</controller>
+            <action>index</action>
+            <resource>hardwareoptimization__index__index</resource>
+            <order>100</order>
+            <visible>0</visible>
+        </menu>
+    </nav>
+</config>

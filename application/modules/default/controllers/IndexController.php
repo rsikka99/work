@@ -156,6 +156,10 @@ class Default_IndexController extends Tangent_Controller_Action
                 $selectedQuoteId = $this->_createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED);
                 $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
             }
+            else if (isset($postData['createHardwareOptimization']))
+            {
+                $this->redirector('index', 'index', 'hardwareoptimization');
+            }
         }
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/default/clientSearch.js'));
