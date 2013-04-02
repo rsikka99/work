@@ -1,0 +1,33 @@
+<div class="page-header">
+    <h1>All Clients</h1>
+</div>
+<a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>" class="btn"><i class="icon-arrow-left"></i> Go Back</a>
+<hr>
+<form method="POST" action="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>">
+    <table class="table table-bordered table-condensed table-striped table-hover">
+        <thead>
+        <tr>
+            <th style="width: 50px;"></th>
+            <th>Client Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if ($this->clients && count($this->clients) > 0) : ?>
+            <?php foreach ($this->clients as $client) : /* @var $client Quotegen_Model_Client */ ?>
+                <tr>
+                    <td>
+                        <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
+                    </td>
+                    <td><?php echo $this->escape($client->companyName); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <tr>
+                <td colspan="2">You have no clients.</td>
+            </tr>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</form>
+<hr>
+<a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'default')); ?>" class="btn"><i class="icon-arrow-left"></i> Go Back</a>
