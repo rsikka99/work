@@ -189,7 +189,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *
      * @return Quotegen_Model_Client[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         if ($order === null)
         {

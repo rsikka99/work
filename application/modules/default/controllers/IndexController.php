@@ -351,6 +351,6 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function viewAllClientsAction ()
     {
-        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchAll(null, null, 150);
+        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchClientListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
     }
 }
