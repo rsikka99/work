@@ -3,6 +3,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 {
     /**
      * The application configuration
+     *
      * @var Zend_Config
      */
     protected $config;
@@ -721,15 +722,15 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
 
         // grab all variables from $_POST
-        $id                = $this->_getParam('id', null);
-        $toner_id          = $this->_getParam('toner_id', null);
-        $toner_sku         = $this->_getParam('toner_sku', null);
-        $part_type_id      = $this->_getParam('part_type_id', null);
-        $manufacturer_id   = $this->_getParam('manufacturer_id', null);
-        $toner_color_id    = $this->_getParam('toner_color_id', null);
-        $toner_yield       = $this->_getParam('toner_yield', null);
-        $toner_price       = $this->_getParam('toner_price', null);
-        $operation              = $this->_getParam('oper', null);
+        $id              = $this->_getParam('id', null);
+        $toner_id        = $this->_getParam('toner_id', null);
+        $toner_sku       = $this->_getParam('toner_sku', null);
+        $part_type_id    = $this->_getParam('part_type_id', null);
+        $manufacturer_id = $this->_getParam('manufacturer_id', null);
+        $toner_color_id  = $this->_getParam('toner_color_id', null);
+        $toner_yield     = $this->_getParam('toner_yield', null);
+        $toner_price     = $this->_getParam('toner_price', null);
+        $operation       = $this->_getParam('oper', null);
 
 
         $message = '';
@@ -1315,7 +1316,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      */
     public function manufacturerdetailsAction ()
     {
-        $manufacturerId = $this->_getParam('manufacturerid', false);
+        $manufacturerId    = $this->_getParam('manufacturerid', false);
         $manufacturerTable = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturer      = $manufacturerTable->fetchRow(array('id = ?' . $manufacturerId));
 
@@ -1498,7 +1499,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $reportSettings = $dealer->getReportSettings();
 
         $this->view->default_labor = $reportSettings['laborCostPerPage'];
@@ -2984,8 +2985,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $response->rows [$i] ['cell'] = array(
                         $masterDevice->getManufacturer()->fullname,
                         $masterDevice->modelName,
-                        number_format($masterDevice->laborCostPerPage,4),
-                        number_format($masterDevice->partsCostPerPage,4),
+                        number_format($masterDevice->laborCostPerPage, 4),
+                        number_format($masterDevice->partsCostPerPage, 4),
                     );
                     $i++;
                 }
