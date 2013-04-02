@@ -52,7 +52,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
     const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";
-    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD = "default__auth__resetpassword";
+    const RESOURCE_DEFAULT_AUTH_RESETPASSWORD  = "default__auth__resetpassword";
 
     /**
      * Hardware Library Constants
@@ -87,6 +87,7 @@ class Application_Model_Acl extends Zend_Acl
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG              = "proposalgen__fleet__toggle-excluded-flag";
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE             = "proposalgen__fleet__remove-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO                     = "proposalgen__fleet__set-mapped-to";
+    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST                    = "proposalgen__fleet__excluded-list";
     const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD                 = "proposalgen__manufacturer__%";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
     const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
@@ -374,6 +375,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE);
         $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO);
+        $this->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST);
 
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
         $this->addResource(self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD);
@@ -507,6 +509,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, self::PRIVILEGE_VIEW);
+        $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, self::PRIVILEGE_VIEW);
         $this->allow(self::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD, self::PRIVILEGE_VIEW);
