@@ -132,8 +132,9 @@
 						}
 						output += device + '<br />';
 						if(j > max && j == pieces.length - 1) {
+                            doubleQuotes = "''";
 							output += '</div>';
-							output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'\','+ids[i]+');">View All...</a>';
+							output += '<a id="view_link_'+ids[i]+'" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(doubleQuotes,'+ids[i]+');">View All...</a>';
 						}
 					}
 					output += '</div>';
