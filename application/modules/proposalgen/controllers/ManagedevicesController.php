@@ -2,18 +2,20 @@
 class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 {
 
+    protected $config;
+    protected $user_id;
+    protected $MPSProgramName;
+    protected $ApplicationName;
+
     function init ()
     {
         $this->view->title = 'Manage Printers and Toners';
         $this->config      = Zend_Registry::get('config');
         $this->initView();
-        $this->view->app     = $this->config->app;
-        $this->view->user    = Zend_Auth::getInstance()->getIdentity();
-        $this->view->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        //$this->view->privilege      = Zend_Auth::getInstance()->getIdentity()->privileges;
-        $this->user_id = Zend_Auth::getInstance()->getIdentity()->id;
-        //$this->privilege            = Zend_Auth::getInstance()->getIdentity()->privileges;
-        //$this->dealer_company_id    = Zend_Auth::getInstance()->getIdentity()->dealer_company_id;
+        $this->view->app            = $this->config->app;
+        $this->view->user           = Zend_Auth::getInstance()->getIdentity();
+        $this->view->user_id        = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->user_id              = Zend_Auth::getInstance()->getIdentity()->id;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
@@ -25,7 +27,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
     public function managedevicesAction ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
         $db = Zend_Db_Table::getDefaultAdapter();
 
         // add device form
@@ -113,49 +114,50 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         if ($this->_request->isPost())
         {
             $repop_form = 0;
-            $formData   = $this->_request->getPost();
+            $postData   = $this->_request->getPost();
             // conditional requirements
-            $form->set_validation($formData);
+            $form->set_validation($postData);
             // get form mode
-            $form_mode = $formData ['form_mode'];
+            $form_mode = $postData ['form_mode'];
             $date      = date('Y-m-d H:i:s');
+
             // validate fields
-            if ($formData ["manufacturer_id"] == 0)
+            if ($postData ["manufacturer_id"] == 0)
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must select a manufacturer.'
                                                    ));
                 $repop_form = 1;
             }
-            else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
+            else if ($form_mode == "edit" && $postData ["printer_model"] == 0)
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must select a printer model.'
                                                    ));
                 $repop_form = 1;
             }
-            else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
+            else if ($form_mode == "add" && trim($postData ["new_printer"]) == "")
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'You must enter a printer model name.'
                                                    ));
                 $repop_form = 1;
             }
-            else if ($formData ["toner_config_id"] == 0)
+            else if ($postData ["toner_config_id"] == 0)
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Toner Config not selected. Please try again.'
                                                    ));
                 $repop_form = 1;
             }
-            else if ($formData ["watts_power_normal"] < 1)
+            else if ($postData ["watts_power_normal"] < 1)
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Power Consumption Normal must be greater then zero.'
                                                    ));
                 $repop_form = 1;
             }
-            else if ($formData ["watts_power_idle"] < 1)
+            else if ($postData ["watts_power_idle"] < 1)
             {
                 $this->_flashMessenger->addMessage(array(
                                                         'error' => 'Power Consumption Idle must be greater then zero.'
@@ -164,7 +166,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             }
             else
             {
-                if ($formData ['save_flag'] == "save")
+                if ($postData ['save_flag'] == "save")
                 {
                     // update the selected device
                     $db->beginTransaction();
@@ -173,7 +175,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $master_device_id = 0;
                         if ($form_mode == "edit")
                         {
-                            $master_device_id = $formData ['printer_model'];
+                            $master_device_id = $postData ['printer_model'];
                         }
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
 
@@ -187,8 +189,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $has_4color   = false;
                         $toners_valid = false;
 
-                        $toner_config_id = $formData ['toner_config_id'];
-                        $toner_array     = explode(",", $formData ["toner_array"]);
+                        $toner_config_id = $postData ['toner_config_id'];
+                        $toner_array     = explode(",", $postData ["toner_array"]);
                         foreach ($toner_array as $key)
                         {
                             $toner_id = str_replace("'", "", $key);
@@ -383,7 +385,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         else
                         {
                             // if leased, then toners not required
-                            if ($formData ["is_leased"])
+                            if ($postData ["is_leased"])
                             {
                                 $toners_valid = true;
                             }
@@ -397,26 +399,26 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         if ($toners_valid == true)
                         {
                             $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-                            $launch_date       = new Zend_Date($formData ["launch_date"]);
+                            $launch_date       = new Zend_Date($postData ["launch_date"]);
 
                             // save master device
                             $master_deviceData = array(
                                 'launchDate'         => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
                                 'tonerConfigId'      => $toner_config_id,
-                                'isCopier'           => $formData ["is_copier"],
-                                'isScanner'          => $formData ["is_scanner"],
-                                'reportsTonerLevels' => $formData ["reportsTonerLevels"],
-                                'isFax'              => $formData ["is_fax"],
-                                'isDuplex'           => $formData ["is_duplex"],
-                                'wattsPowerNormal'   => $formData ["watts_power_normal"],
-                                'wattsPowerIdle'     => $formData ["watts_power_idle"],
-                                'ppmBlack'           => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
-                                'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
-                                'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
-                                'isLeased'           => $formData ["is_leased"],
-                                'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null),
-                                'partsCostPerPage'   => ($formData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["partsCostPerPage"],
-                                'laborCostPerPage'   => ($formData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["laborCostPerPage"],
+                                'isCopier'           => $postData ["is_copier"],
+                                'isScanner'          => $postData ["is_scanner"],
+                                'reportsTonerLevels' => $postData ["reportsTonerLevels"],
+                                'isFax'              => $postData ["is_fax"],
+                                'isDuplex'           => $postData ["is_duplex"],
+                                'wattsPowerNormal'   => $postData ["watts_power_normal"],
+                                'wattsPowerIdle'     => $postData ["watts_power_idle"],
+                                'ppmBlack'           => ($postData ["ppm_black"] > 0) ? $postData ["ppm_black"] : null,
+                                'ppmColor'           => ($postData ["ppm_color"] > 0) ? $postData ["ppm_color"] : null,
+                                'dutyCycle'          => ($postData ["duty_cycle"] > 0) ? $postData ["duty_cycle"] : null,
+                                'isLeased'           => $postData ["is_leased"],
+                                'leasedTonerYield'   => ($postData ["is_leased"] ? $postData ["leased_toner_yield"] : null),
+                                'partsCostPerPage'   => ($postData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["partsCostPerPage"],
+                                'laborCostPerPage'   => ($postData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["laborCostPerPage"],
                             );
 
                             if ($master_device_id > 0)
@@ -466,15 +468,15 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             else
                             {
                                 // How does it get meters when it saves it get printer_model
-                                $manufacturer_id = $formData ['manufacturer_id'];
+                                $manufacturer_id = $postData ['manufacturer_id'];
                                 if ($manufacturer_id > 0)
                                 {
                                     // Add creation_date to array.
                                     $master_deviceData ["manufacturerId"] = $manufacturer_id;
-                                    $master_deviceData ["modelName"]      = $formData ["new_printer"];
+                                    $master_deviceData ["modelName"]      = $postData ["new_printer"];
                                     $master_deviceData ["dateCreated"]    = $date;
                                     // Check for master device flagged as deleted.
-                                    $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $formData ["new_printer"]);
+                                    $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $postData ["new_printer"]);
                                     $master_device_flagged = $master_deviceTable->fetchRow($where);
 
                                     if (count($master_device_flagged) > 0)
@@ -496,7 +498,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
 
                                         $this->_flashMessenger->addMessage(array(
-                                                                                'success' => 'Printer "' . $formData ["new_printer"] . '" has been saved.'
+                                                                                'success' => 'Printer "' . $postData ["new_printer"] . '" has been saved.'
                                                                            ));
                                         if ($has_toner)
                                         {
@@ -543,7 +545,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             // invalid toners - return message
                             $db->rollback();
                             $repop_form                = 1;
-                            $this->view->printer_model = $formData ['printer_model'];
+                            $this->view->printer_model = $postData ['printer_model'];
                             $this->_flashMessenger->addMessage(array(
                                                                     'error' => $toner_errors
                                                                ));
@@ -553,7 +555,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     {
                         $db->rollback();
                         $this->_flashMessenger->addMessage(array(
-                                                                'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
+                                                                'error' => 'Database Error: "' . $postData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
                                                            ));
                         Throw new exception("Critical Device Update Error.", 0, $e);
                     }
@@ -564,7 +566,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         Throw new exception("Critical Device Update Error.", 0, $e);
                     } // end catch
                 }
-                else if ($formData ['save_flag'] == 'delete')
+                else if ($postData ['save_flag'] == 'delete')
                 {
                     // always attempt to repop after delete
                     $repop_form = 1;
@@ -575,7 +577,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                         $printer_model      = '';
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                        $master_device_id   = $formData ['printer_model'];
+                        $master_device_id   = $postData ['printer_model'];
                         $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                         $master_device      = $master_deviceTable->fetchRow($where);
 
@@ -646,44 +648,42 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             if ($repop_form == 1)
             {
                 $this->view->repop = true;
-                $form->getElement('hdnID')->setValue($formData ['hdnID']);
-                $form->getElement('hdnItem')->setValue($formData ['hdnItem']);
-                $form->getElement('devices_pf_id')->setValue($formData ['devices_pf_id']);
-                $form->getElement('unknown_device_instance_id')->setValue($formData ['unknown_device_instance_id']);
-                $form->getElement('save_flag')->setValue($formData ['save_flag']);
-                $form->getElement('toner_array')->setValue($formData ['toner_array']);
+                $form->getElement('hdnID')->setValue($postData ['hdnID']);
+                $form->getElement('hdnItem')->setValue($postData ['hdnItem']);
+                $form->getElement('devices_pf_id')->setValue($postData ['devices_pf_id']);
+                $form->getElement('unknown_device_instance_id')->setValue($postData ['unknown_device_instance_id']);
+                $form->getElement('save_flag')->setValue($postData ['save_flag']);
+                $form->getElement('toner_array')->setValue($postData ['toner_array']);
                 $form->getElement('form_mode')->setValue($form_mode);
-                $form->getElement('manufacturer_id')->setValue($formData ['manufacturer_id']);
+                $form->getElement('manufacturer_id')->setValue($postData ['manufacturer_id']);
 
-                if (isset($formData ['printer_model']))
+                if (isset($postData ['printer_model']))
                 {
-                    $form->getElement('printer_model')->setValue($formData ['printer_model']);
+                    $form->getElement('printer_model')->setValue($postData ['printer_model']);
                     // If we didn't successfully update the database, get the printer model from the form.
                     // If we successfully update the database, this is already set.
                     if (!$isPrintModelSet)
                     {
-                        $this->view->printer_model = $formData ['printer_model'];
+                        $this->view->printer_model = $postData ['printer_model'];
                     }
                 }
-                $form->getElement('new_printer')->setValue($formData ['new_printer']);
-                $form->getElement('launch_date')->setValue($formData ['launch_date']);
-                $form->getElement('partsCostPerPage')->setValue($formData ['partsCostPerPage']);
-                $form->getElement('laborCostPerPage')->setValue($formData ['laborCostPerPage']);
-                $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
-                $form->getElement('is_copier')->setAttrib('checked', $formData ['is_copier']);
-                $form->getElement('is_scanner')->setAttrib('checked', $formData ['is_scanner']);
-                $form->getElement('reportsTonerLevels')->setAttrib('checked', $formData ['reportsTonerLevels']);
-                $form->getElement('is_fax')->setAttrib('checked', $formData ['is_fax']);
-                $form->getElement('is_duplex')->setAttrib('checked', $formData ['is_duplex']);
-                $form->getElement('watts_power_normal')->setValue($formData ['watts_power_normal']);
-                $form->getElement('watts_power_idle')->setValue($formData ['watts_power_idle']);
-
-                $form->getElement('is_leased')->setAttrib('checked', $formData ['is_leased']);
-                $form->getElement('leased_toner_yield')->setValue($formData ['leased_toner_yield']);
-
-                $form->getElement('ppm_black')->setValue($formData ['ppm_black']);
-                $form->getElement('ppm_color')->setValue($formData ['ppm_color']);
-                $form->getElement('duty_cycle')->setValue($formData ['duty_cycle']);
+                $form->getElement('new_printer')->setValue($postData ['new_printer']);
+                $form->getElement('launch_date')->setValue($postData ['launch_date']);
+                $form->getElement('toner_config_id')->setValue($postData ['toner_config_id']);
+                $form->getElement('is_copier')->setAttrib('checked', $postData ['is_copier']);
+                $form->getElement('is_scanner')->setAttrib('checked', $postData ['is_scanner']);
+                $form->getElement('reportsTonerLevels')->setAttrib('checked', $postData ['reportsTonerLevels']);
+                $form->getElement('is_fax')->setAttrib('checked', $postData ['is_fax']);
+                $form->getElement('is_duplex')->setAttrib('checked', $postData ['is_duplex']);
+                $form->getElement('watts_power_normal')->setValue($postData ['watts_power_normal']);
+                $form->getElement('watts_power_idle')->setValue($postData ['watts_power_idle']);
+                $form->getElement('is_leased')->setAttrib('checked', $postData ['is_leased']);
+                $form->getElement('leased_toner_yield')->setValue($postData ['leased_toner_yield']);
+                $form->getElement('ppm_black')->setValue($postData ['ppm_black']);
+                $form->getElement('ppm_color')->setValue($postData ['ppm_color']);
+                $form->getElement('duty_cycle')->setValue($postData ['duty_cycle']);
+                $form->getElement('partsCostPerPage')->setValue($postData ['partsCostPerPage']);
+                $form->getElement('laborCostPerPage')->setValue($postData ['laborCostPerPage']);
             }
         }
         $this->view->deviceform = $form;

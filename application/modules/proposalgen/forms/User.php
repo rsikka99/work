@@ -21,7 +21,7 @@ class Proposalgen_Form_User extends Zend_Form
      */
     public function __construct ($options = null, $type = null)
     {
-        // call parent contsructor
+        // call parent constructor
         parent::__construct($options);
         $elements = array ();
         $elementCounter = 0;

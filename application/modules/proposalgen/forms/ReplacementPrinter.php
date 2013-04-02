@@ -1,19 +1,12 @@
 <?php
-
-/**
- * Replacement Printer Form: Used for Adding / Editing Replacement Printers
- *
- * @author John Sadler
- * @version v1.0
- */
 class Proposalgen_Form_ReplacementPrinter extends Zend_Form
 {
 
     public function __construct ($options = null, $type = null)
     {
-        //call parent contsructor
-        $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+        // Call parent constructor
         parent::__construct($options);
+        $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
         $elements = array ();
         $elementCounter = 0;
         

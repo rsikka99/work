@@ -7,19 +7,6 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
         $this->setAttrib('class', 'form-horizontal');
 
         /*
@@ -219,15 +206,14 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         $maxYear    = date('Y') + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
 
-        $launchDate->setLabel('Launch Date:')
-            ->setJQueryParam('dateFormat', 'yy-mm-dd')
+        $launchDate->setJQueryParam('dateFormat', 'yy-mm-dd')
             ->setJqueryParam('timeFormat', 'hh:mm')
             ->setJQueryParam('changeYear', 'true')
             ->setJqueryParam('changeMonth', 'true')
             ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
             ->setDescription('yyyy-mm-dd')
             ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-            ->setRequired(true);
+            ->setRequired(true)->setLabel('Launch Date:');
         $launchDate->addFilters(array(
                                      'StringTrim',
                                      'StripTags'
