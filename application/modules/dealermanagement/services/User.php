@@ -90,7 +90,11 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                 $user = new Application_Model_User();
                 $user->populate($filteredData);
                 $user->dealerId = $this->_dealerId;
-                $userId         = Application_Model_Mapper_User::getInstance()->insert($user);
+
+                // Make sure the users password is encrypted.
+                $user->password = $user->cryptPassword($user->password);
+
+                $userId = Application_Model_Mapper_User::getInstance()->insert($user);
                 if ($userId > 0)
                 {
                     $userRoleMapper   = Admin_Model_Mapper_UserRole::getInstance();
@@ -146,7 +150,24 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
 
             if ($filteredData !== false)
             {
-                $user->populate($filteredData);
+                $user->firstname                = $filteredData['firstname'];
+                $user->lastname                 = $filteredData['lastname'];
+                $user->email                    = $filteredData['email'];
+                $user->frozenUntil              = $filteredData['frozenUntil'];
+                $user->locked                   = $filteredData['locked'];
+                $user->resetPasswordOnNextLogin = $filteredData['resetPasswordOnNextLogin'];
+
+                if ($filteredData['resetLoginAttempts'])
+                {
+                    $user->loginAttempts = 0;
+                }
+
+                if ($filteredData['reset_password'])
+                {
+                    // Make sure the users password is encrypted.
+                    $user->password = $user->cryptPassword($filteredData['password']);
+                }
+
                 $rowsAffected = $userMapper->save($user);
 
                 $userRoles = $user->getUserRoles();
