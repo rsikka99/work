@@ -59,8 +59,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $uploadCsvService = null;
                                 $uploadProviderId = null;
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Invalid RMS Provider Selected"
-                                                               ));
+                                                                        'success' => "Invalid RMS Provider Selected"
+                                                                   ));
                                 break;
                         }
 
@@ -299,8 +299,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 else
                                 {
                                     $this->_flashMessenger->addMessage(array(
-                                                                        'error' => "There was an error importing your file. $processCsvMessage"
-                                                                   ));
+                                                                            'error' => "There was an error importing your file. $processCsvMessage"
+                                                                       ));
                                 }
 
                             }
@@ -310,8 +310,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 $db->rollBack();
 
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . My_Log::getUniqueId()
-                                                               ));
+                                                                        'danger' => "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . My_Log::getUniqueId()
+                                                                   ));
                             }
                         }
 
@@ -319,8 +319,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                         if ($importSuccessful === true)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Your file was imported successfully."
-                                                           ));
+                                                                    'success' => "Your file was imported successfully."
+                                                               ));
                             $this->saveReport();
                             $this->gotoNextStep();
                         }
@@ -328,15 +328,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "Upload Failed. Please try again."
-                                                       ));
+                                                                'danger' => "Upload Failed. Please try again."
+                                                           ));
                     }
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "Upload Failed. Please check the errors below."
-                                                   ));
+                                                            'danger' => "Upload Failed. Please check the errors below."
+                                                       ));
                 }
             }
             else if (isset($values ["saveAndContinue"]))
@@ -345,8 +345,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 if ($count < 2)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "You must have at least 2 valid devices to continue."
-                                                   ));
+                                                            'danger' => "You must have at least 2 valid devices to continue."
+                                                       ));
                 }
                 else
                 {
@@ -728,8 +728,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 {
                     $this->saveReport();
                     $this->_flashMessenger->addMessage(array(
-                                                        'success' => 'Settings saved.'
-                                                   ));
+                                                            'success' => 'Settings saved.'
+                                                       ));
 
 
                     if (isset($values ['saveAndContinue']))
@@ -740,8 +740,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'Please correct the errors below.'
-                                                   ));
+                                                            'danger' => 'Please correct the errors below.'
+                                                       ));
                 }
             }
         }
@@ -930,26 +930,34 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
             if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
             {
-                if ($deviceInstance->reportId == $this->getReport()->id)
+                $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                if ($rmsUpload)
                 {
-                    $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-                    $db->beginTransaction();
-                    try
+                    if ($rmsUpload->id == $this->getReport()->rmsUploadId)
                     {
-                        $deviceInstance->isExcluded = $isExcluded;
-                        $deviceInstanceMapper->save($deviceInstance);
-                        $db->commit();
+                        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                        $db->beginTransaction();
+                        try
+                        {
+                            $deviceInstance->isExcluded = $isExcluded;
+                            $deviceInstanceMapper->save($deviceInstance);
+                            $db->commit();
+                        }
+                        catch (Exception $e)
+                        {
+                            $db->rollBack();
+                            My_Log::logException($e);
+                            $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                        }
                     }
-                    catch (Exception $e)
+                    else
                     {
-                        $db->rollBack();
-                        My_Log::logException($e);
-                        $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                        $errorMessage = "You can only exclude device instances that belong to the same assessment." . $rmsUpload->id . " - " . $this->getReport()->rmsUploadId;
                     }
                 }
                 else
                 {
-                    $errorMessage = "You can only exclude device instances that belong to the same assessment." . $deviceInstance->reportId . " - " . $this->getReport()->id;
+                    $errorMessage = "Invalid Rms Upload.";
                 }
             }
             else
