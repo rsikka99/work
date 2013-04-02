@@ -2043,12 +2043,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->setLegend(array(
                                       "Current",
-                                      "PrintIQ"
+                                      "MPSToolbox"
                                  ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
             $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("r");
+            $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
@@ -2062,7 +2062,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              * -- LeasedVsPurchasedBarGraph
              */
             $highest  = ($this->getLeasedDeviceCount() > $this->getPurchasedDeviceCount()) ? $this->getLeasedDeviceCount() : $this->getPurchasedDeviceCount();
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(225, 265);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
@@ -2077,7 +2077,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(70, 10);
+            $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -2095,7 +2095,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              * -- LeasedVsPurchasedPageCountBarGraph
              */
             $highest  = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2111,7 +2111,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
-            $barGraph->setBarScale(70, 10);
+            $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -2171,7 +2171,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $averagePageCount = round($pageCounts->Total->Combined->Monthly / $this->getDeviceCount(), 0);
             $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
-            $barGraph         = new gchart\gBarChart(200, 300);
+            $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2208,7 +2208,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $pagesPerEmployee = round($pageCounts->Total->Combined->Monthly / $employeeCount);
             $highest          = ($OD_AverageMonthlyPagesPerEmployee > $pagesPerEmployee) ? $OD_AverageMonthlyPagesPerEmployee : $pagesPerEmployee;
-            $barGraph         = new gchart\gBarChart(200, 300);
+            $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2244,7 +2244,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $devicesPerEmployee = round($employeeCount / $this->getDeviceCount(), 2);
             $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
-            $barGraph           = new gchart\gBarChart(200, 300);
+            $barGraph           = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Employees per|printing device");
             $barGraph->setVisibleAxes(array(
                                            'y'
