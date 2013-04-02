@@ -10,30 +10,21 @@ $(function ()
             jsonReader  : { repeatitems: false },
             colModel    : [
                 {
-                    width   : 200,
-                    name    : 'manufacturerName',
-                    index   : 'manufacturerName',
-                    label   : 'Manufacturer Name',
-                    title   : true,
-                    sortable: true,
-                    align   : 'center'
-                },
-                {
-                    width   : 200,
-                    name    : 'modelName',
-                    index   : 'modelName',
+                    width   : 250,
+                    name    : 'model',
+                    index   : 'model',
                     label   : 'Model Name',
                     title   : true,
                     sortable: true,
-                    align   : 'center'
+                    align   : 'left'
                 },
                 {
-                    width   : 350,
+                    width   : 300,
                     name    : 'reason',
                     index   : 'reason',
                     label   : 'Reason',
                     title   : true,
-                    sortable: false,
+                    sortable: true,
                     align   : 'center'
                 },
                 {
@@ -42,7 +33,7 @@ $(function ()
                     index   : 'serialNumber',
                     label   : 'Serial Number',
                     title   : true,
-                    sortable: false,
+                    sortable: true,
                     align   : 'center'
                 },
                 {
@@ -51,7 +42,7 @@ $(function ()
                     index   : 'ipAddress',
                     label   : 'IP Address',
                     title   : true,
-                    sortable: false,
+                    sortable: true,
                     align   : 'center'
                 },
                 {
@@ -60,7 +51,7 @@ $(function ()
                     index: 'csvLineNumber',
                     label: 'CSV Line Number',
                     title: true,
-                    sortable: false,
+                    sortable: true,
                     align: 'center'
                 }
             ],

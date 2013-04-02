@@ -475,6 +475,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Set up validation arrays
         $blankModel  = new Proposalgen_Model_Rms_Excluded_Row();
         $sortColumns = array_keys($blankModel->toArray());
+        $sortColumns[] = "model";
 
         $jqGrid->parseJQGridPagingRequest($jqGridParameters);
         $jqGrid->setValidSortColumns($sortColumns);
