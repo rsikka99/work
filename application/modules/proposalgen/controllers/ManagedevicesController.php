@@ -417,7 +417,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 'ppmColor'           => ($postData ["ppm_color"] > 0) ? $postData ["ppm_color"] : null,
                                 'dutyCycle'          => ($postData ["duty_cycle"] > 0) ? $postData ["duty_cycle"] : null,
                                 'isLeased'           => $postData ["is_leased"],
-                                'leasedTonerYield'   => ($postData ["is_leased"] ? $postData ["leased_toner_yield"] : null)
+                                'leasedTonerYield'   => ($postData ["is_leased"] ? $postData ["leased_toner_yield"] : null),
                                 'partsCostPerPage'   => ($formData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["partsCostPerPage"],
                                 'laborCostPerPage'   => ($formData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $formData["laborCostPerPage"],
                             );
