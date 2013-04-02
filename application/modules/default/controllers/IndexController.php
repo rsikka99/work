@@ -345,4 +345,12 @@ class Default_IndexController extends Tangent_Controller_Action
 
         $this->sendJson($results);
     }
+
+    /**
+     * Allows a user to view all of the clients available
+     */
+    public function viewAllClientsAction ()
+    {
+        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchAll(null, null, 150);
+    }
 }

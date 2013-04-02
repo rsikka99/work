@@ -33,7 +33,7 @@
 
             <hr>
             <form id="searchForClientForm" class="form-inline" method="POST">
-                <label for="searchClientByName"><strong>Search By Name</strong></label>
+                <label for="searchClientByName"><strong>Search By Name</strong></label> <a href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>">(View All)</a>
                 <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?php echo $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="input-block-level">
                 <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
             </form>

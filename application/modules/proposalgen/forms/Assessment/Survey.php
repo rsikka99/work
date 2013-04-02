@@ -194,7 +194,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
                                                                                                                    new Zend_Validate_NotEmpty(),
-                                                                                                                   new Zend_Validate_Float()
+                                                                                                                   new Zend_Validate_Digits()
                                                                                                               )), true)
             ->setLabel("How many hours per week do IT personnel spend servicing and supporting printers? If you select \"I don't know\", an average of 15 minutes per week per printer will be used.");
         $this->addElement($itHours);
@@ -209,7 +209,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
                                                                                                           new Zend_Validate_NotEmpty(),
-                                                                                                          new Zend_Validate_Float()
+                                                                                                          new Zend_Validate_Digits()
                                                                                                      )), true)
             ->setLabel("How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet? If you select \"I don't know\", an average of 1 repair per month for every 20 printers will be used.");
         $this->addElement($monthlyBreakdown);
