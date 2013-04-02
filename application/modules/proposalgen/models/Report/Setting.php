@@ -119,6 +119,11 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $assessmentPricingConfigId;
 
     /**
+     * @var float
+     */
+    public $costThreshold;
+
+    /**
      * The id of the gross margin pricing configuration
      *
      * @var int
@@ -243,9 +248,17 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         }
 
         if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
+        {
             $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
+        }
         if (isset($params->targetColorCostPerPage) && !is_null($params->targetColorCostPerPage))
+        {
             $this->targetColorCostPerPage = $params->targetColorCostPerPage;
+        }
+        if (isset($params->costThreshold) && !is_null($params->costThreshold))
+        {
+            $this->costThreshold = $params->costThreshold;
+        }
     }
 
     /**
@@ -273,6 +286,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
+            "costThreshold"               => $this->costThreshold,
         );
     }
 

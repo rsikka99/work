@@ -307,7 +307,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     /**
      * This function fetches match up devices
      *
-     * @param int     $reportId
+     * @param int     $rmsUploadId
      * @param string  $sortColumn
      *            The column to sort by
      * @param string  $sortDirection
@@ -322,13 +322,13 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      * @return number|Proposalgen_Model_DeviceInstance[] Returns an array, or if justCount is true then it will count how many rows are
      *           available
      */
-    public function fetchDevicesInstancesForMapping ($reportId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function fetchDevicesInstancesForMapping ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
     {
         /*
          * Setup our where clause
          */
         $whereClause = array(
-            "{$this->col_reportId} = ?" => $reportId
+            "{$this->col_rmsUploadId} = ?" => $rmsUploadId
         );
 
 

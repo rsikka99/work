@@ -12,7 +12,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         $form = new Proposalgen_Form_DeviceSwapChoice($this->getProposal());
 
         // Get all devices
-        $devices = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchDevicesInstancesForMapping($this->_report->id, 'reportId', 'asc');
+        $devices = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchDevicesInstancesForMapping($this->getProposal()->report->rmsUploadId, 'id', 'asc');
 
         if ($this->_request->isPost())
         {
@@ -279,6 +279,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         $db       = Zend_Db_Table::getDefaultAdapter();
         $proposal = $this->getProposal();
 
+
         $savingsThreshold                = $proposal->report->getReportSettings()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
         try
@@ -291,16 +292,15 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 throw new Exception("Error resetting replacements!");
             }
 
-            $idCount                    = array();
             $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices(false);
             $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices(false);
             $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices(false);
             $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices(false);
 
-            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
-            {
-                $replacementMasterDevice->processOverrides($proposal->report);
-            }
+//            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
+//            {
+//                $replacementMasterDevice->processOverrides($proposal->report);
+//            }
 
             $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
 
@@ -331,7 +331,6 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                         $suggestedDevice = $this->_findReplacement($deviceInstance, $colorReplacementDevices, $costPerPageSetting, $savingsThreshold);
                     }
                 }
-
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
 
