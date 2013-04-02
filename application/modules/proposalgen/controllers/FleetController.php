@@ -359,6 +359,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         $this->view->form = $form;
 
         $this->view->rmsUpload = $rmsUpload;
+//        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
+//        {
+//            $this->view->populateGrid = true;
+//        }
 
         $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
@@ -437,6 +441,62 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
             $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+    }
+
+    /**
+     * Generates a list of devices that were not mapped automatically
+     */
+    public function excludedListAction ()
+    {
+        $jqGrid            = new Tangent_Service_JQGrid();
+        $excludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
+
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'manufacturerName'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
+
+        // Set up validation arrays
+        $blankModel  = new Proposalgen_Model_Rms_Excluded_Row();
+        $sortColumns = array_keys($blankModel->toArray());
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
+        {
+            $jqGrid->setRecordCount($excludedRowMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $jqGrid->setRows($excludedRowMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
             $this->sendJson($jqGrid->createPagerResponseArray());
