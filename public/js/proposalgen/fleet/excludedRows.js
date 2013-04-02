@@ -53,6 +53,15 @@ $(function ()
                     title   : true,
                     sortable: false,
                     align   : 'center'
+                },
+                {
+                    width: 50,
+                    name: 'csvLineNumber',
+                    index: 'csvLineNumber',
+                    label: 'CSV Line Number',
+                    title: true,
+                    sortable: false,
+                    align: 'center'
                 }
             ],
             scrollOffset: 0,
