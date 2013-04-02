@@ -136,7 +136,7 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                                 ));
         $deviceDetailElements[] = 'reportsTonerLevels';
         $this->addElement('checkbox', 'reportsTonerLevels', array(
-                                                     'label'    => 'reportsTonerLevels',
+                                                     'label'    => 'Reports Toner Levels',
                                                      'filters'  => array(
                                                          'Boolean'
                                                      ),
