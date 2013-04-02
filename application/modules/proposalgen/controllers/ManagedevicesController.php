@@ -412,7 +412,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 'isDuplex'           => $postData ["is_duplex"],
                                 'wattsPowerNormal'   => $postData ["watts_power_normal"],
                                 'wattsPowerIdle'     => $postData ["watts_power_idle"],
-                                'cost'               => ($postData ["device_price"] == 0 ? null : $postData ["device_price"]),
                                 'ppmBlack'           => ($postData ["ppm_black"] > 0) ? $postData ["ppm_black"] : null,
                                 'ppmColor'           => ($postData ["ppm_color"] > 0) ? $postData ["ppm_color"] : null,
                                 'dutyCycle'          => ($postData ["duty_cycle"] > 0) ? $postData ["duty_cycle"] : null,
@@ -670,7 +669,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 $form->getElement('new_printer')->setValue($postData ['new_printer']);
                 $form->getElement('launch_date')->setValue($postData ['launch_date']);
-                $form->getElement('device_price')->setValue($postData ['device_price']);
                 $form->getElement('toner_config_id')->setValue($postData ['toner_config_id']);
                 $form->getElement('is_copier')->setAttrib('checked', $postData ['is_copier']);
                 $form->getElement('is_scanner')->setAttrib('checked', $postData ['is_scanner']);
