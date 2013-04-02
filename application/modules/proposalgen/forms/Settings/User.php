@@ -1,24 +1,15 @@
 <?php
-
-/**
- * User Form: Used for managing user settings
- *
- * @version v1.0
- */
 class Proposalgen_Form_Settings_User extends Zend_Form
 {
 
     /**
      * Constructor builds the form
      *
-     * @param $options -
-     *                 not used (required)
-     *
-     * @return \Proposalgen_Form_Settings_User markup for the from is automatically returned by zend_form
+     * @param $options - not used (required)
      */
     public function __construct ($options = null)
     {
-        //call parent contsructor
+        //call parent constructor
         parent::__construct($options);
         $this->setAttrib('id', 'settings_table');
 
@@ -752,4 +743,5 @@ class Proposalgen_Form_Settings_User extends Zend_Form
         $this->addElements($elements);
     }
 }
+
 ?>

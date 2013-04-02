@@ -1,27 +1,17 @@
 <?php
-
-/**
- * Manufacturers Form: Used for Adding / Editing Manufacturers
- *
- * @author John Sadler
- * @version v1.0
- */
 class Proposalgen_Form_Manufacturers extends Zend_Form
 {
-
     /**
      * Constructor builds the form
-     * 
-     * @param $options -
-     *            not used (required)
-     * @param $type -
-     *            can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a
-     *            new instructor.
-     * @return HTML markup for the from is automatically returned by zend_form
+     *
+     * @param array|null  $options - not used (required)
+     * @param string|null $type    - can be set to 'edit', or null. Different form elements are added for editing an instructor and adding a
+     *                             new instructor.
+     *
+     * @return \Proposalgen_Form_Manufacturers markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null, $type = null)
     {
-        //call parent contsructor
         parent::__construct($options);
         $elements = array ();
         $elementCounter = 0;
@@ -30,7 +20,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         $this->setAttrib('id', 'manufacturers_form');
         
         //*****************************************************************
-        //MANUFACTURER FIELDS
+        // MANUFACTURER FIELDS
         //*****************************************************************
         
 
@@ -95,8 +85,8 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -131,8 +121,8 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
                 array (
                         'Description', 
                         array (
-                                'escape' => false, 
-                                'tag' => false 
+                                'escape' => false,
+                                'tag' => false
                         ) 
                 ), 
                 'Errors', 
@@ -192,7 +182,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         
         //save button
         $update = new Zend_Form_Element_Submit('save_manufacturer', array (
-                'disableLoadDefaultDecorators' => true 
+                'disableLoadDefaultDecorators' => true
         ));
         $update->setLabel('Save')
             ->setOrder($elementCounter)
@@ -215,7 +205,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
                         ), 
                         array (
                                 'tag' => 'tr', 
-                                'openOnly' => true 
+                                'openOnly' => true
                         ) 
                 ) 
         ));
@@ -224,7 +214,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         
         //delete button
         $element = new Zend_Form_Element_Submit('delete_manufacturer', array (
-                'disableLoadDefaultDecorators' => true 
+                'disableLoadDefaultDecorators' => true
         ));
         $element->setLabel('Delete')
             ->setOrder($elementCounter)
@@ -294,7 +284,5 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
         ));
         //add all defined elements to the form
         $this->addElements($elements);
-    } //end function __construct
+    }
 }
-?>
-
