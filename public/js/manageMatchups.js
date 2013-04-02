@@ -63,7 +63,7 @@ $(document).ready(function ()
             repeatitems: false
         },
         rowNum      : 10,
-        rowList     : [ 10, 20, 30 ],
+        rowList     : [ 10, 20, 30, 50, 100, 500 ],
         pager       : '#grid_pager',
         gridComplete: function ()
         {
