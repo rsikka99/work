@@ -1780,6 +1780,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $key_dealer_sku        = null;
                         $key_parts_cpp         = null;
                         $key_labor_cpp         = null;
+                        $key_system_cost       = null;
 
                         $import_type = false;
                         /**
@@ -1813,7 +1814,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 $key_yield = $array_key;
                             }
-                            else if (strtolower($value) == "price")
+                            else if (strtolower($value) == "dealer price")
                             {
                                 $key_new_price = $array_key;
                             }
@@ -1837,6 +1838,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             else if (strtolower($value) == "parts cpp")
                             {
                                 $key_parts_cpp = $array_key;
+                            }
+                            else if(strtolower($value) == "system price")
+                            {
+                                $key_system_cost = $array_key;
                             }
                             $array_key += 1;
                         }
@@ -1976,7 +1981,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                             $columns [3] = "SKU";
                                             $columns [4] = "Color";
                                             $columns [5] = "Yield";
-                                            $columns [6] = "Current Price";
+                                            $columns [6] = "System Price";
                                             $columns [7] = "New Price";
                                             $columns [8] = "Dealer Sku";
 
@@ -1987,7 +1992,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                             if (count($toner) > 0)
                                             {
                                                 // get current costs
-                                                $current_toner_price = $toner ['cost'];
+//                                                $current_toner_price = $toner ['systemCost'];
                                                 // save into array
                                                 $final_devices [0] = $toner_id;
                                                 $final_devices [1] = $devices [$key] [$key_manufacturer];
@@ -1995,7 +2000,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                 $final_devices [3] = $devices [$key] [$key_sku];
                                                 $final_devices [4] = $devices [$key] [$key_color];
                                                 $final_devices [5] = $devices [$key] [$key_yield];
-                                                $final_devices [6] = $current_toner_price;
+                                                $final_devices [6] = $devices [$key] [$key_system_cost];
                                                 $final_devices [7] = $devices [$key] [$key_new_price];
                                                 $final_devices [8] = $devices [$key] [$key_dealer_sku];
                                             }
@@ -2802,7 +2807,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'SKU',
                     'Color',
                     'Yield',
-                    'Price',
+                    'System Price',
+                    'Dealer Price',
                     'Dealer Sku'
                 );
 
@@ -2812,7 +2818,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $select = $db->select()
                         ->from(array(
                                     't' => 'pgen_toners'), array(
-                                                                'id AS toners_id', 'sku', 'yield'
+                                                                'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
                                                            )
                         )
                         ->joinLeft(array(
@@ -2899,6 +2905,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['sku'],
                         $value ['toner_color'],
                         $value ['yield'],
+                        $value ['systemCost'],
                         $price,
                         $value ['dealerSku'],
                     );
