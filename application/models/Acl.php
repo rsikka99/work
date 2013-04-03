@@ -21,6 +21,7 @@ class Application_Model_Acl extends Zend_Acl
     const WILDCARD  = "%";
 
     /**
+
      * This is what kind of access we want to allow. We can use this to provide dynamic pages based on acl
      */
     const PRIVILEGE_ADMIN = "Admin";
@@ -213,4 +214,7 @@ class Application_Model_Acl extends Zend_Acl
 
         return $isAllowed;
     }
+    
+
+
 }

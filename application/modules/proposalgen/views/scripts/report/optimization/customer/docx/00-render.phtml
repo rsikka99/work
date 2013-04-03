@@ -1,0 +1,479 @@
+<?php
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+// Initialize some properties
+$properties = $phpWord->getProperties();
+$properties->setCreator('MPS Toolbox');
+$properties->setTitle('Hardware Optimization');
+$properties->setDescription('Hardware Optimization Report');
+$properties->setCategory('Report');
+$properties->setLastModifiedBy('MPS Toolbox');
+
+$section          = $phpWord->createSection(array(
+                                                 'orientation'  => null,
+                                                 'marginLeft'   => 375,
+                                                 'marginRight'  => 375,
+                                                 'marginTop'    => 375,
+                                                 'marginBottom' => 375
+                                            ));
+$titlepageSection = $section;
+
+/**
+ * Paragraph styles
+ */
+$phpWord->addParagraphStyle('titlepageHeaderParagraph', array('spaceAfter' => 200));
+$phpWord->addParagraphStyle('nospacing', array('spaceBefore' => 0, 'spaceAfter' => 0));
+
+$phpWord->addParagraphStyle('nospacing_rightalign', array(
+                                                         'align'       => 'right',
+                                                         'spaceBefore' => 0,
+                                                         'spaceAfter'  => 0
+                                                    ));
+$phpWord->addParagraphStyle('nospacing_centeralign', array(
+                                                          'align'       => 'center',
+                                                          'spaceBefore' => 0,
+                                                          'spaceAfter'  => 0
+                                                     ));
+
+$phpWord->addParagraphStyle('rightalign', array('align' => 'right'));
+
+$phpWord->addParagraphStyle('gradeParagraph', array(
+                                                   'align'       => 'center',
+                                                   'spaceBefore' => 0,
+                                                   'spaceAfter'  => 0
+                                              ));
+
+$phpWord->addParagraphStyle('savingsParagraph', array(
+                                                     'align'       => 'center',
+                                                     'spaceBefore' => 0,
+                                                     'spaceAfter'  => 0
+                                                ));
+/**
+ * Header/Title Styles
+ */
+// H1 Style
+$phpWord->addTitleStyle(1, array(
+                                'size'  => 15,
+                                'color' => 'F0003C',
+                                'bold'  => true
+                           ), array(
+                                   'borderBottomSize' => 1
+                              ));
+// H2 Style #5881BC
+$phpWord->addTitleStyle(2, array(
+                                'size'   => 12,
+                                'color'  => 'FFFFFF',
+                                'bold'   => true,
+                                'italic' => true
+                           ), array(
+                                   'bgColor' => '0096d6'
+                              ));
+// H3 Style #5881BC
+$phpWord->addTitleStyle(3, array(
+                                'size'  => 10,
+                                'color' => 'FF0000',
+                                'bold'  => true
+                           ), array(
+                                   'spaceBefore' => 100,
+                                   'spaceAfter'  => 100
+                              ));
+
+// H3 Style #5881BC
+$phpWord->addFontStyle('heading3', array(
+                                        'size'  => 10,
+                                        'color' => 'FF0000',
+                                        'bold'  => true
+                                   ));
+
+$phpWord->addFontStyle('pageHeader', array(
+                                          'size' => 15,
+                                          'bold' => true,
+                                     ));
+
+// Title page
+$phpWord->addParagraphStyle('titleStyle1', array(
+                                                'align'      => 'center',
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '004990'
+                                           ));
+$phpWord->addParagraphStyle('titleStyle2', array(
+                                                'spaceAfter'  => 50,
+                                                'spaceBefore' => 50,
+                                                'bgColor'     => '4C4C4C'
+                                           ));
+$phpWord->addParagraphStyle('titleStyle3', array(
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '7F7F7F'
+                                           ));
+$phpWord->addFontStyle('titlepage_title', array(
+                                               'size'  => 24,
+                                               'bold'  => true,
+                                               'color' => 'FFFFFF'
+                                          ));
+
+$phpWord->addFontStyle('titlepage_subtitle', array(
+                                                  'size'  => 16,
+                                                  'bold'  => true,
+                                                  'color' => 'FFFFFF'
+                                             ));
+
+$phpWord->addFontStyle('titlepage_address', array(
+                                                 'size'  => 12,
+                                                 'color' => 'FFFFFF'
+                                            ));
+$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+$phpWord->addParagraphStyle('titlepageHeader1', array(
+                                                     'spaceAfter' => 0,
+
+                                                ));
+
+/**
+ * Setup some styles to be used across the report
+ */
+$styles = (object)array(
+    "tables" => (object)array(
+        "singleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            )
+        ),
+        "doubleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+        "tripleimage"        => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            ),
+            "cell3"      => array(
+                "valign" => "center"
+            )
+        ),
+        "twoColumnDataTable" => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => null,
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+    ),
+    "images" => (object)array(
+        "center" => array(
+            "align" => "center"
+        )
+    ),
+);
+
+/* Tables for the device layouts */
+$widthTwips       = 11111;
+$header_color     = "B8CCE3";
+$sub_header_color = "0096A6";
+$even_color       = "EFEFEF";
+$odd_color        = "FCFCFC";
+$footer_color     = "b8cce3";
+$highlight_color  = "ebc7a4";
+
+$standard_cell = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+
+$standard_cell_vcenter = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+        "valign"           => 'center'
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+        "valign"           => 'center'
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center',
+    )
+);
+
+$standard_cell_vcenter_no_right_border = (object)array(
+    "even"           => array(
+        "bgColor" => $even_color,
+        "valign"  => 'center'
+    ),
+    "odd"            => array(
+        "bgColor" => $odd_color,
+        "valign"  => 'center'
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center',
+    )
+);
+
+
+$standard_cell_left = (object)array(
+    "even"             => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"              => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"        => null,
+    "paragraphStyle"   => array(
+        'spaceAfter' => 0,
+        'align'      => 'left'
+    ),
+    "manufacturerName" => (object)array(
+        "fontStyle"      => array('italic' => true),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
+        ),
+    ),
+    "modelName"        => (object)array(
+        "fontStyle"      => array('bold' => true),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
+        ),
+    ),
+);
+
+$standard_cell_no_right_border = (object)array(
+    "even"           => array(
+        "bgColor" => $even_color,
+    ),
+    "odd"            => array(
+        "bgColor" => $odd_color,
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+
+$standard_header = (object)array(
+    "cellStyle"      => array(
+        'bgColor' => $header_color
+    ),
+    "fontStyle"      => array(
+        'bold' => true
+    ),
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center'
+    )
+);
+
+$suggestedDevices = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.20,
+    "col2Width"  => $widthTwips * 0.20,
+    "col3Width"  => $widthTwips * 0.15,
+    "col4Width"  => $widthTwips * 0.30,
+    "col5Width"  => $widthTwips * 0.075,
+    "col6Width"  => $widthTwips * 0.075,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter,
+        "cell6"     => $standard_cell_vcenter_no_right_border
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+$flaggedDevices   = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.15,
+    "col3Width"  => $widthTwips * 0.10,
+    "col4Width"  => $widthTwips * 0.125,
+    "col5Width"  => $widthTwips * 0.125,
+    "col6Width"  => $widthTwips * 0.125,
+    "col7Width"  => $widthTwips * 0.125,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter,
+        "cell6"     => $standard_cell_vcenter,
+        "cell7"     => $standard_cell_vcenter_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+$retiredDevices   = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.35,
+    "col2Width"  => $widthTwips * 0.25,
+    "col3Width"  => $widthTwips * 0.166,
+    "col4Width"  => $widthTwips * 0.166,
+    "col5Width"  => $widthTwips * 0.166,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter,
+        "cell5"     => $standard_cell_vcenter_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+
+$acceptableDevices = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.25,
+    "col2Width"  => $widthTwips * 0.25,
+    "col3Width"  => $widthTwips * 0.25,
+    "col4Width"  => $widthTwips * 0.25,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell_left,
+        "cell3"     => $standard_cell_vcenter,
+        "cell4"     => $standard_cell_vcenter_no_right_border,
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
+
+$deviceTables = (object)array(
+    "tables" => (object)array(
+        "replacement" => $suggestedDevices,
+        "acceptable"  => $acceptableDevices,
+        "retire"      => $retiredDevices,
+        "flagged"     => $flaggedDevices,
+    ));
+
+$doubleCenterTable = (object)array(
+    "tablestyle" => array(),
+    "col1Width"  => $widthTwips * 0.50,
+    "col2Width"  => $widthTwips * 0.50,
+    "body"       => (object)array(
+        "cell1" => array(
+            "valign" => "center"
+        ),
+        "cell2" => array(
+            "valign" => "center"
+        )
+    ),
+    "image"      => (object)array(
+        "cell1" => array(
+            'align' => 'right'
+        ),
+        "cell2" => array(
+            'align' => 'left'
+        ),
+    )
+);
+
+$titleData = array(
+    "phpword"  => $phpWord,
+    "section"  => $titlepageSection,
+    "proposal" => $this->proposal,
+    "styles"   => $styles,
+);
+
+$profitabilityDevices = new Proposalgen_Model_Optimization_Customer($this->proposal);
+
+$data = array(
+    "phpword"              => $phpWord,
+    "section"              => $section,
+    "proposal"             => $this->proposal,
+    "styles"               => $styles,
+    "graphs"               => $this->graphs,
+    "devicetables"         => $deviceTables,
+    "profitabilityDevices" => $profitabilityDevices,
+    "twocenter"            => $doubleCenterTable,
+
+);
+// Actual document pages
+$this->partial("report/optimization/customer/docx/01_titlepage.phtml", $titleData);
+$this->partial("report/optimization/customer/docx/02_optimizationsummary.phtml", $data);
+$this->partial("report/optimization/customer/docx/03_replacement.phtml", $data);
+$this->partial("report/optimization/customer/docx/04_flagged.phtml", $data);
+$this->partial("report/optimization/customer/docx/05_retire.phtml", $data);
+$this->partial("report/optimization/customer/docx/06_acceptable.phtml", $data);
+$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
+$objWriter->save($this->savePath);
+
+echo $this->baseUrl($this->publicFileName);

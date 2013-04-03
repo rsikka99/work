@@ -296,6 +296,20 @@
                                     <action>index</action>
                                     <resource>proposalgen__report_toners__index</resource>
                                 </toners>
+                                <dealerhardwareoptimization>
+                                    <label>Dealer Hardware Optimization</label>
+                                    <module>proposalgen</module>
+                                    <controller>report_optimization_dealer</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_optimization_dealer__index</resource>
+                                </dealerhardwareoptimization>
+                                <customerhardwareoptimization>
+                                    <label>Dealer Hardware Optimization</label>
+                                    <module>proposalgen</module>
+                                    <controller>report_optimization_customer</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_optimization_customer__index</resource>
+                                </customerhardwareoptimization>
                                 <healthcheck>
                                     <label>Health Check</label>
                                     <module>proposalgen</module>

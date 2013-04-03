@@ -1,6 +1,21 @@
 <?php
 class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 {
+
+    /*
+     *
+        */
+    const ACTION_KEEP    = 'Keep';
+    const ACTION_REPLACE = 'Replace';
+    const ACTION_RETIRE  = 'Retire';
+
+    /*
+     *
+     */
+    const RETIREMENT_AGE           = 10;
+    const RETIREMENT_MAXPAGECOUNT  = 500;
+    const REPLACEMENT_AGE          = 10;
+    const REPLACEMENT_MINPAGECOUNT = 500;
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
      *
@@ -77,7 +92,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $useUserData;
 
-
     /*
      * ********************************************************************************
      * Related Objects
@@ -89,6 +103,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_DeviceInstanceMeter[]
      */
     protected $_meters;
+
+    /**
+     * Used in determining actions for replacement devices.
+     *
+     * @var String
+     */
+    protected $_deviceAction;
 
     /**
      * @var Proposalgen_Model_MasterDevice
@@ -286,6 +307,20 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var string
      */
     public $_exclusionReason;
+
+    /**
+     * The reason why we are replacing a device.
+     *
+     * @var string
+     */
+    public $_reason;
+
+    /**
+     * The reason why we are replacing a device based on a customer report.
+     *
+     * @var string
+     */
+    public $_customerReason;
 
     /**
      * @var bool
@@ -583,12 +618,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $meters       = $this->getMeters();
             $avgPageCount = 0.0;
 
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            // FIXME: Removed necessity to check master device for black only capability to allow none mapped devices to calculate page count properly.  May Break.
+            // if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]) && $this->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
             {
                 /* @var $meter Proposalgen_Model_DeviceInstanceMeter */
                 $meter        = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR];
                 $avgPageCount = $meter->calculateAverageDailyPageVolume();
-
             }
             $this->_averageDailyColorPageCount = $avgPageCount;
         }
@@ -1257,6 +1293,140 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Gets whether or not the device is leased
+     *
+     * @return bool
+     */
+    public function getIsLeased ()
+    {
+        if ($this->getIsMappedToMasterDevice())
+        {
+            $isLeased = $this->getMasterDevice()->isLeased;
+        }
+        else
+        {
+            $isLeased = $this->getRmsUploadRow()->isLeased;
+        }
+
+        return $isLeased;
+    }
+
+    /**
+     * The action of the device
+     *
+     * @return String $Action
+     */
+    public function getAction ()
+    {
+        if (!isset($this->Action))
+        {
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT)
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
+            }
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT)
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
+            }
+            else
+            {
+                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
+            }
+        }
+
+        return $this->Action;
+    }
+
+    /**
+     * Getter for $_reason
+     *
+     * @return string
+     */
+    public function getReason ()
+    {
+        if (!isset($this->_reason))
+        {
+            $this->_reason = "Okay.";
+
+            if ($this->getReplacementMasterDevice())
+            {
+                $this->_reason = "Current CPP greater than target CPP.";
+            }
+            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            {
+                $this->_reason = "Device not consistent with MPS program.  AMPV is significant.";
+            }
+            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            {
+                $this->_reason = "Device no longer reliable, AMPV not significant.";
+            }
+        }
+
+        return $this->_reason;
+    }
+
+    /**
+     * Gets the reason for the customer replacement
+     *
+     * @return string
+     */
+    public function getCustomerReason ()
+    {
+        if (!isset($this->_customerReason))
+        {
+            $replacementDevice          = $this->getReplacementMasterDevice();
+            $deviceInstanceMasterDevice = $this->getMasterDevice();
+            // $newFeatures is used to store all of the new features of the new device
+            $newFeatures = array();
+
+            $this->_customerReason = "";
+
+            if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                if (!$deviceInstanceMasterDevice->reportsTonerLevels && $replacementDevice->reportsTonerLevels)
+                {
+                    $newFeatures [] = "JIT compatibility";
+                }
+                if (!$deviceInstanceMasterDevice->isCopier && $replacementDevice->isCopier || !$deviceInstanceMasterDevice->isScanner && $replacementDevice->isScanner)
+                {
+                    $newFeatures [] = "copying / scanning";
+                }
+                if (!$deviceInstanceMasterDevice->isDuplex && $replacementDevice->isDuplex)
+                {
+                    $newFeatures [] = "duplex capabilities";
+                }
+                if (!$deviceInstanceMasterDevice->isColor() && $replacementDevice->isColor())
+                {
+                    $newFeatures [] = "color compatibility";
+                }
+
+                if (empty($newFeatures))
+                {
+                    $this->_customerReason = "Device has a high cost per page.";
+                }
+                else
+                {
+                    $this->_customerReason = "Replacement device adds " . implode(", ", $newFeatures) . ". ";
+
+                    $deviceAgeDifference = $deviceInstanceMasterDevice->getAge() - $replacementDevice->getAge();
+                    if ($deviceAgeDifference > 5)
+                    {
+                        $this->_customerReason .= "Device was at least 5+ years old.  Replaced with a newer device to lessen breakdowns.";
+                    }
+
+                }
+            }
+        }
+
+
+
+        return $this->_customerReason;
+    }
+
+    /*****************************************************
+     ***************Device Calculations*******************
+     *****************************************************/
+    /**
      * Calculates the cost per page for a master device.
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
@@ -1307,24 +1477,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Gets whether or not the device is leased
-     *
-     * @return bool
-     */
-    public function getIsLeased ()
-    {
-        if ($this->getIsMappedToMasterDevice())
-        {
-            $isLeased = $this->getMasterDevice()->isLeased;
-        }
-        else
-        {
-            $isLeased = $this->getRmsUploadRow()->isLeased;
-        }
-
-        return $isLeased;
-    }
-
 
     /**
      * Figures out if the device can report toner levels
@@ -1427,4 +1579,19 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
     }
+
+    /**
+     * Calculates a cost per page for a replacement device
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDevice());
+    }
+
+
 }

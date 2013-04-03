@@ -58,7 +58,10 @@ foreach ($proposal->getPurchasedDevices() as $deviceInstance) /* @var $deviceIns
     $completeColorToners = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
     $blackToner = null;
     $colorToner = null;
-    
+
+
+
+
     switch ($tonerConfig)
     {
         case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
@@ -77,7 +80,7 @@ foreach ($proposal->getPurchasedDevices() as $deviceInstance) /* @var $deviceIns
             $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
             break;
     }
-    
+
     // Black Toner
     $blackCost = "$" . number_format($blackToner->cost, 2);
     $blackYield = number_format($blackToner->yield);
@@ -102,7 +105,7 @@ foreach ($proposal->getPurchasedDevices() as $deviceInstance) /* @var $deviceIns
     $table->addRow($tcStyle->cell->rowheight);
     $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
     $column1 ->addText( $this->translate(str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ), $tcStyle->row->fontStyle, $tcStyle->leftalign);
-    $column1 ->addText("(" . $deviceInstance->IPAddress . " - " . $deviceInstance->SerialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    $column1 ->addText("(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
     
     // Mono
     $table->addCell($tcStyle->col2Width, $mono_toner_class)->addText(number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
@@ -122,7 +125,7 @@ foreach ($proposal->getPurchasedDevices() as $deviceInstance) /* @var $deviceIns
 
 // Table footer (totals row)
 $table->addRow($tcStyle->footer->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $proposal->PurchasedDeviceCount. ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $proposal->getPurchasedDeviceCount(). ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText(number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col4Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

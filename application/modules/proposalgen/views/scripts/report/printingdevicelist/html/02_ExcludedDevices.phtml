@@ -1,0 +1,45 @@
+<?php
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+//echo $this->pageStart;
+?>
+<h4 class="paraHeader">Other Printing Devices Not Included in Assessment:</h4>
+<?php if (count($proposal->getExcludedDevices()) > 0) :?>
+<table class="genericTable" id="ExcludedDevicesTable" style="font-size: 9pt;">
+    		<thead>
+    			<tr>
+    				<th class="left">Manufacturer</th>
+    				<th class="left">Model</th>
+    				<th class="center">Serial Number</th>
+    				<th class="center">IP Address</th>
+    				<th class="center">Exclusion Reason</th>
+    			</tr>
+    		</thead>
+    		<tbody>
+    		<?php foreach($proposal->getExcludedDevices() as $device):
+                /* @var $device Proposalgen_Model_DeviceInstance */ ?>
+                <?php $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?>
+            <tr>
+                        <?php if($device->getIsMappedToMasterDevice()) : ?>
+                <td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
+                <td><div class=" left"><?php echo $device->getMasterDevice()->modelName; ?></div></td>
+                <?php else : ?>
+                <td><div class=" left"><?php echo $device->getRmsUploadRow()->manufacturer; ?></div></td>
+                <td><div class=" left"><?php echo $device->getRmsUploadRow()->modelName; ?></div></td>
+                <?php endif; ?>
+                <td><div class=" center"><?php echo $SerialNumber; ?></div></td>
+    					<td><div class=" left"><?php if ($device->ipAddress) echo $device->ipAddress; else echo 'Unknown IP';?></div></td>
+    					<td><div class=" left"><?php echo ($device->isExcluded) ? 'Manually excluded.' : 'Not mapped.'; ?></div></td>
+    				</tr>
+                <?php endforeach; ?>
+    		</tbody>
+    	</table>
+<?php else: ?>
+<br/><p><em>No devices were excluded from this report.</em></p>
+<?php endif?>
+
+
+<?php echo $this->noBreakEnd; ?>
+<?php
+echo $this->pageEnd;
+?>

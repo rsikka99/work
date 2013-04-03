@@ -1,0 +1,64 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+/* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
+$optimizationDevices = $this->profitabilityDevices;
+
+$section->addTextBreak();
+$headerTextRun = $section->createTextRun();
+$headerTextRun->addText($this->translate('Retired Devices'),'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($optimizationDevices->retired). $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
+$section->addText("Devices with both low volume and age of over 8 years have been targeted for retirement. We suggest migrating the page volume to another device in your fleet. ");
+
+// Table with values
+$tcStyle = $this->styles->tables->retire;
+$table   = $section->addTable($tcStyle->tablestyle);
+// Table header
+$table->addRow($tcStyle->body->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Life Page Count'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Age (years)'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('JIT Compatible'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col8Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col9Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col10Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Monthly Cost'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+// Begin with data rows
+foreach ($optimizationDevices->retired as $device)
+{
+    $masterDevice = $device->getMasterDevice();
+    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+
+    $table->addRow($tcStyle->body->rowheight);
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
+
+    $table->addRow($tcStyle->body->rowheight);
+    $cell = $table->addCell($tcStyle->collWidth, $style);
+    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+
+    $cell2 = $table->addCell($tcStyle->col2Width, $style);
+    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+
+    $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getLifePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(number_format($device->getAge()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col7Width, $style)->addText(($isColor) ? $device->getAverageMonthlyColorPageCount() : 'N/A', $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+    $table->addCell($tcStyle->col8Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
+    $table->addCell($tcStyle->col9Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)), $tcStyle->body->cell9->fontStyle, $tcStyle->body->cell9->paragraphStyle);
+    $table->addCell($tcStyle->col10Width, $style)->addText($this->currency($device->calculateMonthlyCost($proposal->getCostPerPageSettingForDealer())), $tcStyle->body->cell10->fontStyle, $tcStyle->body->cell10->paragraphStyle);
+}

@@ -48,11 +48,14 @@ class Admin_Service_Client
                 $contact           = new Quotegen_Model_Contact($data);
                 if (!$contact->isEmpty())
                 {
-                    $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                    Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
                 }
 
                 $address   = new Quotegen_Model_Address($data);
-                $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+                Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+
+                // Created a hardware optimization for the client
+                Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->insert(new Proposalgen_Model_Hardware_Optimization(array("clientId" => $clientId)));
                 $db->commit();
             }
             catch (Exception $e)

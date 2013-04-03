@@ -6,9 +6,9 @@
     <div class="span3">
         <div class="well well-small">
             <?php if (isset($this->selectedClientId)) :
-            $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
-            ?>
-            <form method="POST">
+                $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
+                ?>
+                <form method="POST">
                 <button class="btn btn-primary btn-mini pull-right" name="editClient">Edit</button>
                 <p>
                     <strong><?php echo (strlen($selectedClient->companyName) > 20) ? substr($selectedClient->companyName, 0, 20) . "..." : $selectedClient->companyName; ?></strong>
@@ -19,7 +19,7 @@
                     $truncatedAddressLines = array();
                     foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
                         <?php $truncatedAddressLines[] = (strlen($addressLine) > 26) ? substr($addressLine, 0, 26) . "..." : $addressLine; ?>
-                        <?php
+                    <?php
                     endforeach;
 
                     echo implode("<br>", $truncatedAddressLines);
@@ -50,7 +50,7 @@
             <form method="POST">
                 <table class="table table-condensed">
                     <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchRecentlyViewed($this->userId) as $client) : ?>
-                    <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
+                        <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
                         <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
                         <td style="width: 50px;">
                             <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
@@ -67,10 +67,14 @@
     <div class="span9">
 
         <?php if (isset($this->selectedClientId)) : ?>
-        <div class="tabbable">
+            <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
                 <li><a href="#quoteTabPane" data-toggle="tab">Quote</a></li>
+                <li><a href="#healthCheckTabPane" data-toggle="tab">Health Check</a></li>
+                <li><a href="#hardwareOptimizationTabPane" data-toggle="tab">Hardware Optimize</a></li>
+                <li><a href="#suppliesTabPane" data-toggle="tab">Supplies</a></li>
+                <li><a href="#serviceTabPane" data-toggle="tab">Service</a></li>
             </ul>
 
             <div class="tab-content">
@@ -97,12 +101,12 @@
                                 <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
 
                                 <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
-                                <td>Finished</td>
+                                        <td>Finished</td>
 
-                                <?php else : ?>
-                                <td>In Progress</td>
-                                <?php endif; ?>
-                                <td style="text-align: center;">
+                                    <?php else : ?>
+                                        <td>In Progress</td>
+                                    <?php endif; ?>
+                                    <td style="text-align: center;">
                                     <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
                                 </td>
                             </tr>
@@ -112,7 +116,6 @@
 
                 </div>
                 <div class="tab-pane" id="quoteTabPane">
-
                     <form method="POST">
                         <p>
                             <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
@@ -127,16 +130,16 @@
                             </tr>
 
                             <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
-                            <tr>
+                                <tr>
                                 <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)); ?></td>
                                 <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
 
-                                <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
-                                <td>Leased</td>
-                                <?php else : ?>
-                                <td>Purchased</td>
-                                <?php endif; ?>
-                                <td>
+                                    <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
+                                        <td>Leased</td>
+                                    <?php else : ?>
+                                        <td>Purchased</td>
+                                    <?php endif; ?>
+                                    <td>
                                     <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
                                 </td>
                             </tr>
@@ -144,10 +147,39 @@
                         </table>
                     </form>
                 </div>
+                <div class="tab-pane" id="healthCheckTabPane">
+                    <div class="hero-unit">
+                        <h1>Coming Soon...</h1>
+
+                        <p>Gain the ability to perform quarterly reviews of your clients fleet.</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="hardwareOptimizationTabPane">
+                    <div class="hero-unit">
+                        <h1>Coming Soon...</h1>
+
+                        <p>Find out how profitable your clients really are. Once you review a fleet you can likely change a few key devices for a huge boost in
+                            profit!</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="suppliesTabPane">
+                    <div class="hero-unit">
+                        <h1>Coming Soon...</h1>
+
+                        <p>View supplies usage and handle automatic replenishment here?</p>
+                    </div>
+                </div>
+                <div class="tab-pane" id="serviceTabPane">
+                    <div class="hero-unit">
+                        <h1>Coming Soon...</h1>
+
+                        <p>See what needs to be fixed within your fleet!</p>
+                    </div>
+                </div>
             </div>
         </div>
         <?php else : ?>
-        <div class="well">
+            <div class="well">
             <div class="alert alert-info"><strong>Important:</strong> Please select a client from the left menu to proceed.</div>
         </div>
         <?php endif; ?>

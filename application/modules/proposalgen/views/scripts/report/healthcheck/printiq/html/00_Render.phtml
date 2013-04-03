@@ -2,16 +2,6 @@
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
-// Title page image
-echo '<style type="text/css">
-        #htmlReportContainer div.titlepage {
-            height: 500px;
-            padding-left: 300px;
-            padding-top: 350px;
-            background-image: url(' . $this->serverUrl($this->theme("proposalgenerator/reports/images/healthcheck.jpg")) . ');
-            background-repeat: no-repeat;
-        }
-     </style>';
 ?>
 <div class="container" id="htmlReportContainer">
 <?php

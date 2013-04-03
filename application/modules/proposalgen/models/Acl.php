@@ -29,6 +29,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE             = "proposalgen__fleet__remove-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO                     = "proposalgen__fleet__set-mapped-to";
     const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD                 = "proposalgen__manufacturer__%";
+    const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD                 = "proposalgen__optimization__%";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
     const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = "proposalgen__report_grossmargin__%";
@@ -57,6 +58,7 @@ class Proposalgen_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
@@ -102,9 +104,11 @@ class Proposalgen_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
+
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_ADMIN);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
+
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMYREPORTS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_MYREPORTSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_ADMIN_TRANSFERREPORTS, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -133,7 +137,10 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERUSERSLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
     }
 }

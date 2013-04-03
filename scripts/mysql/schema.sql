@@ -1545,7 +1545,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     `deviceInstanceId` INT(11) NOT NULL ,
-    `hardwareOptimizationId` INT(11) NOT NULL ,
+     `hardwareOptimizationId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
     INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
@@ -1562,11 +1562,11 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     REFERENCES `pgen_device_instances` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
-    FOREIGN KEY (`hardwareOptimizationId` )
-    REFERENCES `hardware_optimizations` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
+     CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
+     FOREIGN KEY (`hardwareOptimizationId` )
+     REFERENCES `assessments` (`id` )
+         ON DELETE CASCADE
+         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 

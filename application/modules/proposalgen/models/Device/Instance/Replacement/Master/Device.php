@@ -12,6 +12,11 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
     public $masterDeviceId;
 
     /**
+     * @var int
+     */
+    public $hardwareOptimizationId;
+
+    /**
      * @var Proposalgen_Model_DeviceInstance
      */
     protected $_deviceInstance;
@@ -42,6 +47,11 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
             $this->masterDeviceId = $params->masterDeviceId;
         }
 
+        if (isset($params->hardwareOptimizationId) && !is_null($params->hardwareOptimizationId))
+        {
+            $this->hardwareOptimizationId = $params->hardwareOptimizationId;
+        }
+
     }
 
     /**
@@ -52,6 +62,7 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
         return array(
             "deviceInstanceId" => $this->deviceInstanceId,
             "masterDeviceId"   => $this->masterDeviceId,
+            "hardwareOptimizationId"   => $this->hardwareOptimizationId,
         );
     }
 
