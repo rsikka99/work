@@ -2,9 +2,9 @@
 --
 -- You can begin populating the database with the following SQL statements.
 -- $6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0
-INSERT INTO `dealers` (`id`, `dealerName`, `userLicenses`, `quoteSettingId`, `reportSettingId`,`surveySettingId`, `dateCreated`)
-    VALUES (1, 'Root Company', 1000, 1, 1, 1, '2013-03-12'),
-           (2, 'Tangent MTW', 1000, 1, 1, 1, '2013-03-12');
+INSERT INTO `dealers` (`id`, `dealerName`, `userLicenses`, `dateCreated`)
+    VALUES (1, 'Root Company', 1000, '2013-03-12'),
+           (2, 'Tangent MTW', 1000, '2013-03-12');
 
 INSERT INTO `users` (`id`, `dealerId`, `username`, `password`, `firstname`, `lastname`, `email`) VALUES
 	(1, 1, 'root', '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Root', 'User', 'lrobert@tangentmtw.com'),

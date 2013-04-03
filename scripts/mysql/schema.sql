@@ -10,9 +10,6 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `dealerName` VARCHAR(255) NOT NULL ,
     `userLicenses` INT NOT NULL ,
-    `reportSettingId` INT NOT NULL ,
-    `quoteSettingId` INT NOT NULL ,
-    `surveySettingId` INT NOT NULL ,
     `dateCreated` DATE NOT NULL ,
     PRIMARY KEY (`id`) )
     ENGINE = InnoDB;
@@ -597,7 +594,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
     REFERENCES `pgen_pricing_configs` (`id` ),
     CONSTRAINT `proposalgenerator_report_settings_ibfk_2`
     FOREIGN KEY (`grossMarginPricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` ))
+    REFERENCES `pgen_pricing_configs` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT)
     ENGINE = InnoDB
     AUTO_INCREMENT = 2
     DEFAULT CHARACTER SET = utf8;
@@ -824,8 +823,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
     CONSTRAINT `quotegen_devices_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
@@ -1517,35 +1516,11 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
 
 
 -- -----------------------------------------------------
--- Table `hardware_optimizations`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
-    `id` INT NOT NULL ,
-    `clientId` INT(11) NOT NULL ,
-    `rmsUploadId` INT(11) NULL ,
-    `name` VARCHAR(255) NULL ,
-    PRIMARY KEY (`id`) ,
-    INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
-    INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
-    CONSTRAINT `hardware_optimization_ibfk_1`
-    FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `hardware_optimization_ibfk_2`
-    FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
-        ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `device_instance_replacement_master_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     `deviceInstanceId` INT(11) NOT NULL ,
-     `hardwareOptimizationId` INT(11) NOT NULL ,
+    `hardwareOptimizationId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
     INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
@@ -1562,11 +1537,11 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     REFERENCES `pgen_device_instances` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-     CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
-     FOREIGN KEY (`hardwareOptimizationId` )
-     REFERENCES `assessments` (`id` )
-         ON DELETE CASCADE
-         ON UPDATE CASCADE)
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
+    FOREIGN KEY (`hardwareOptimizationId` )
+    REFERENCES `assessments` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
@@ -1614,6 +1589,30 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`sessionId` )
     REFERENCES `sessions` (`id` )
         ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `hardware_optimizations`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
+    `id` INT NOT NULL ,
+    `clientId` INT(11) NOT NULL ,
+    `rmsUploadId` INT(11) NULL ,
+    `name` VARCHAR(255) NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
+    INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    CONSTRAINT `hardware_optimization_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `hardware_optimization_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `pgen_rms_uploads` (`id` )
+        ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
@@ -1773,6 +1772,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+
 -- -----------------------------------------------------
 -- Table `user_viewed_clients`
 -- -----------------------------------------------------
@@ -1794,6 +1794,8 @@ CREATE  TABLE IF NOT EXISTS `user_viewed_clients` (
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

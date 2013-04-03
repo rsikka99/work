@@ -216,31 +216,19 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Delete the dealer and the related report setting
-                        $reportSettingRowsDeleted = Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealer->reportSettingId);
-                        $quoteSettingRowsDeleted  = Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealer->quoteSettingId);
-                        $dealerRowsDeleted        = Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
-
-
-                        /**
-                         * Deleting did not work. Throw an exception so that we can roll back the database
-                         */
-                        if ($dealerRowsDeleted == 0 || $reportSettingRowsDeleted == 0 || $quoteSettingRowsDeleted == 0)
+                        $dealerReportSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealer->id);
+                        if($dealerReportSetting instanceof Proposalgen_Model_Dealer_Report_Setting)
                         {
-                            $message = "Error Deleting Dealer. ";
-                            if ($dealerRowsDeleted == 0)
-                            {
-                                $message .= "Dealer row did not exist.";
-                            }
-                            if ($reportSettingRowsDeleted == 0)
-                            {
-                                $message .= "Report setting row did not exist.";
-                            }
-                            if ($quoteSettingRowsDeleted == 0)
-                            {
-                                $message .= "Quote setting row did not exist.";
-                            }
-                            throw new Exception($message);
+                            Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealerReportSetting->reportSettingId);
                         }
+
+                        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->find($dealer->id);
+                        if($dealerQuoteSetting instanceof Quotegen_Model_DealerQuoteSetting)
+                        {
+                            Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealerQuoteSetting->quoteSettingId);
+                        }
+
+                        Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
 
                         $db->commit();
 
