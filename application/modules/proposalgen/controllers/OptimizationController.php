@@ -5,10 +5,8 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_OPTIMIZATION);
-        // Get all devices
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
-
         $form = new Proposalgen_Form_DeviceSwapChoice($this->getProposal());
 
         // Get all devices
@@ -297,10 +295,11 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
             $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices(false);
             $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices(false);
 
-//            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
-//            {
-//                $replacementMasterDevice->processOverrides($proposal->report);
-//            }
+            // FIXME: When merge in with master fix overrides
+            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
+            {
+                $replacementMasterDevice->processOverrides($proposal->report);
+            }
 
             $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
 
@@ -331,6 +330,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                         $suggestedDevice = $this->_findReplacement($deviceInstance, $colorReplacementDevices, $costPerPageSetting, $savingsThreshold);
                     }
                 }
+
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
                     $newDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
@@ -340,6 +340,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
+
             $db->commit();
         }
         catch (Exception $e)
