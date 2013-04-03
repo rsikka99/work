@@ -29,8 +29,11 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
         $userMapper = new Application_Model_Mapper_User();
         $users      = $userMapper->fetchUserListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
+
         // Display all of the users
         $this->view->users = $users;
+        // Get the max users allowed for this dealer
+        $this->view->maxUsers = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId)->userLicenses;
     }
 
 
@@ -49,20 +52,30 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             $db = Zend_Db_table::getDefaultAdapter();
             try
             {
-                $db->beginTransaction();
-
-                if ($userService->create($postData))
+                $dealer           = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+                $currentUserCount = count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($dealer->id));
+                $maxLicenses      = $dealer->userLicenses;
+                if ($currentUserCount < $maxLicenses)
                 {
-                    $this->_flashMessenger->addMessage(array('success' => 'User created.'));
-                    $db->commit();
+                    $db->beginTransaction();
+                    if ($userService->create($postData))
+                    {
+                        $this->_flashMessenger->addMessage(array('success' => 'User created.'));
+                        $db->commit();
+                        $this->redirector('index');
+                    }
+                    else
+                    {
+                        foreach ($userService->getErrors() as $message)
+                        {
+                            $this->_flashMessenger->addMessage(array('danger' => $message));
+                        }
+                        $db->rollBack();
+                    }
                 }
                 else
                 {
-                    foreach ($userService->getErrors() as $message)
-                    {
-                        $this->_flashMessenger->addMessage(array('danger' => $message));
-                    }
-                    $db->rollBack();
+                    $this->_flashMessenger->addMessage(array('danger' => 'Allocated user licenses exceed.'));
                 }
             }
             catch (Exception $e)
