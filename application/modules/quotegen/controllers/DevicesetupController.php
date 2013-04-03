@@ -391,7 +391,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Prepare the data for the form
         $form->populate($masterDevice->toArray());
-        $isAdmin = $this->view->IsAllowed(Application_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->view->IsAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         if (!$isAdmin)
         {
             $tempAttribute = $masterDevice->getDealerAttributes();

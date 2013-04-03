@@ -13,7 +13,7 @@ $id = $this->id;
     	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
 
         <?php
-        $isAdmin = $this->isAllowed(Application_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin = $this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         if ( $isAdmin) {
             ?>
     	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
