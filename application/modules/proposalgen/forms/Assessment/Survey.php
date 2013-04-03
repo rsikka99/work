@@ -268,7 +268,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
          * Repair Time Question
          */
         $repairTimeRadio = $this->createElement('radio', 'repairTime');
-        $repairTimeRadio->setLabel("How long does it take, on average, for a printer to {be} fixed after it has broken down?")
+        $repairTimeRadio->setLabel("How long does it take, on average, for a printer to be fixed after it has broken down?")
 
             ->setRequired(true)
             ->addFilter('StringTrim')
