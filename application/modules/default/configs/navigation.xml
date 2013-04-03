@@ -214,6 +214,20 @@
                                     <action>index</action>
                                     <resource>proposalgen__fleet__index</resource>
                                 </upload>
+                                <optimization>
+                                    <label>Survey</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>survey</action>
+                                    <resource>proposalgen__survey__survey</resource>
+                                </optimization>
+                                <survey>
+                                    <label>Optimization</label>
+                                    <module>proposalgen</module>
+                                    <controller>optimization</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__optimization__index</resource>
+                                </survey>
                                 <devicemapping>
                                     <label>Map Devices</label>
                                     <module>proposalgen</module>
