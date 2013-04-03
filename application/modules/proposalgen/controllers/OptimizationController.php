@@ -333,10 +333,10 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 }
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-
-                    $newDevice                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                    $newDevice->masterDeviceId   = $suggestedDevice->id;
-                    $newDevice->deviceInstanceId = $deviceInstance->id;
+                    $newDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                    $newDevice->masterDeviceId         = $suggestedDevice->id;
+                    $newDevice->deviceInstanceId       = $deviceInstance->id;
+                    $newDevice->hardwareOptimizationId = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->findHardwareOptimizationByClientId($this->getProposal()->report->clientId)->id;
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
@@ -362,7 +362,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         try
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-            $deviceInstanceReplacementMapper->deleteAllDeviceInstancesForReport($this->getReport()->id);
+            $deviceInstanceReplacementMapper->deleteAllDeviceInstancesByHardwareOptimizationId(1);
         }
         catch (Exception $e)
         {
