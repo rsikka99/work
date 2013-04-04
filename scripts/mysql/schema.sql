@@ -515,16 +515,23 @@ CREATE  TABLE IF NOT EXISTS `pgen_pricing_configs` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
     `masterDeviceId` INT(11) NOT NULL ,
+    `dealerId` INT NOT NULL ,
     `replacementCategory` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
     `printSpeed` INT(11) NULL DEFAULT NULL ,
     `resolution` INT(11) NULL DEFAULT NULL ,
     `monthlyRate` DOUBLE NULL DEFAULT NULL ,
     PRIMARY KEY (`masterDeviceId`) ,
-    CONSTRAINT `proposalgenerator_replacement_devices_ibfk_1`
+    INDEX `pgen_replacement_devices_ibfk_2_idx` (`dealerId` ASC) ,
+    CONSTRAINT `pgen_replacement_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `pgen_master_devices` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT)
+        ON UPDATE RESTRICT,
+    CONSTRAINT `pgen_replacement_devices_ibfk_2`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
