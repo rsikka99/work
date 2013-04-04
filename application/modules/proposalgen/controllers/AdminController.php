@@ -186,6 +186,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($formdata);
     }
 
+    /**
+     * @throws exceptionThis action seems to provide json lists for the following:
+     * - Manufacturers
+     * - Toner Colors
+     * - Part Types
+     */
     public function filterlistitemsAction ()
     {
         $db       = Zend_Db_Table::getDefaultAdapter();
@@ -197,7 +203,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             switch ($list)
             {
                 case "man" :
-                    $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array(
                                        'm' => 'manufacturers'
@@ -229,7 +234,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     break;
 
                 case "color" :
-                    $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array(
                                        'tc' => 'pgen_toner_colors'
@@ -260,7 +264,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     break;
 
                 case "type" :
-                    $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array(
                                        'pt' => 'pgen_part_types'
@@ -3006,157 +3009,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($response);
     }
 
-    public function userdevicesAction ()
-    {
-        // disable the default layout
-        $this->_helper->layout->disableLayout();
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $type     = $this->_getParam('type', 'printers');
-        $user_id  = $this->user_id;
-        $filter   = $this->_getParam('filter', false);
-        $criteria = $this->_getParam('criteria', false);
-        $formData = new stdClass();
-        $page     = $_GET ['page'];
-        $limit    = $_GET ['rows'];
-        $sidx     = $_GET ['sidx'];
-        $sord     = $_GET ['sord'];
-        if (!$sidx)
-        {
-            $sidx = 'm.fullname';
-        }
-
-        $where = '';
-        if (!empty($filter) && !empty($criteria))
-        {
-            if ($filter == 'manufacturer_name')
-            {
-                $filter = "fullname";
-            }
-            $where = $filter . ' LIKE("%' . $criteria . '%")';
-        }
-
-        try
-        {
-            // select master devices
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            'md' => 'pgen_master_devices'
-                       ), array(
-                               'id',
-                               'manufacturerId',
-                               'modelName',
-                               'cost'
-                          ))
-                ->joinLeft(array(
-                                'm' => 'manufacturers'
-                           ), 'm.id = md.manufacturerId', array(
-                                                               'fullname'
-                                                          ))
-                ->joinLeft(array(
-                                'udo' => 'pgen_user_device_overrides'
-                           ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
-                                                                                                 'cost as override_cost'
-                                                                                            ));
-            if ($where != '')
-            {
-                $select->where($where);
-            }
-            $select->order(array(
-                                'm.fullname',
-                                'md.modelName'
-                           ));
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            $count = count($result);
-            if ($count > 0)
-            {
-                $total_pages = ceil($count / $limit);
-            }
-            else
-            {
-                $total_pages = 0;
-            }
-            if ($page > $total_pages)
-            {
-                $page = $total_pages;
-            }
-            $start = $limit * $page - $limit;
-            if ($start < 0)
-            {
-                $start = 0;
-            }
-
-            // select master devices
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            'md' => 'pgen_master_devices'
-                       ), array(
-                               'id AS master_id',
-                               'manufacturerId',
-                               'modelName',
-                               'cost'
-                          ))
-                ->joinLeft(array(
-                                'm' => 'manufacturers'
-                           ), 'm.id = md.manufacturerId', array(
-                                                               'fullname'
-                                                          ))
-                ->joinLeft(array(
-                                'udo' => 'pgen_user_device_overrides'
-                           ), 'udo.master_device_id = md.id AND udo.user_id = ' . $user_id, array(
-                                                                                                 'cost as override_cost'
-                                                                                            ));
-            if ($where != '')
-            {
-                $select->where($where);
-            }
-            $select->order($sidx . ' ' . $sord);
-            $select->limit($limit, $start);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            $formData->page    = $page;
-            $formData->total   = $total_pages;
-            $formData->records = $count;
-
-            if (count($result) > 0)
-            {
-                $i = 0;
-
-                $price_margin = 1; //($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
-                foreach ($result as $row)
-                {
-                    $printer_cost = 0;
-
-                    $price = number_format(($row ['cost'] * $price_margin), 2, '.', '');
-
-                    $formData->rows [$i] ['id']   = $row ['master_id'];
-                    $formData->rows [$i] ['cell'] = array(
-                        ucwords(strtolower($row ['fullname'])),
-                        ucwords(strtolower($row ['modelName'])),
-                        $price,
-                        ($row ['override_cost'] > 0 ? (float)$row ['override_cost'] : null)
-                    );
-                    $i++;
-                }
-            }
-            else
-            {
-                $formData = array();
-            }
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Passing Exception Up The Chain", null, $e);
-        }
-
-        // encode user data to return to the client:
-        $this->sendJson($formData);
-    }
-
     public function tonerslistAction ()
     {
         $db               = Zend_Db_Table::getDefaultAdapter();
@@ -3348,237 +3200,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             throw new Exception("Passing Exception Up The Chain", null, $e);
         }
 
-        $this->sendJson($formData);
-    }
-
-    public function usertonersAction ()
-    {
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $user_id  = $this->user_id;
-        $filter   = $this->_getParam('filter', false);
-        $criteria = $this->_getParam('criteria', false);
-        $formData = new stdClass();
-
-        $page  = $_GET ['page'];
-        $limit = $_GET ['rows'];
-        $sidx  = $_GET ['sidx'];
-        $sord  = $_GET ['sord'];
-        if (!$sidx)
-        {
-            $sidx = 1;
-        }
-
-        $where            = '';
-        $where_compatible = '';
-        if (!empty($filter) && !empty($criteria) && $filter != 'machine_compatibility')
-        {
-
-            if ($filter == "manufacturer_name")
-            {
-                $filter = "tm.fullname";
-            }
-            else
-            {
-                if ($filter == "toner_sku")
-                {
-                    $filter = "t.sku";
-                }
-            }
-
-
-            $where = $filter . ' LIKE("%' . $criteria . '%")';
-        }
-        else if (!empty($filter) && $filter == 'machine_compatibility')
-        {
-            if (strtolower($criteria) == "hp")
-            {
-                $criteria = "hewlett-packard";
-            }
-            $where_compatible = $criteria;
-        }
-
-        try
-        {
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            't' => 'pgen_toners'
-                       ), array(
-                               't.id AS toners_id',
-                               't.sku',
-                               't.yield',
-                               't.cost',
-                               'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.printer_model) SEPARATOR "; ") AS machine_compatibility'
-                          ))
-                ->joinLeft(array(
-                                'tm' => 'manufacturers'
-                           ), 'tm.id = t.manufacturerId', array(
-                                                               'tm.fullname AS toner_manufacturer'
-                                                          ))
-                ->joinLeft(array(
-                                'dt' => 'pgen_device_toners'
-                           ), 'dt.toner_id = t.id')
-                ->joinLeft(array(
-                                'md' => 'pgen_master_devices'
-                           ), 'md.id = dt.master_device_id')
-                ->joinLeft(array(
-                                'mdm' => 'manufacturers'
-                           ), 'mdm.id = md.manufacturerId', array(
-                                                                 'mdm.fullname'
-                                                            ))
-                ->joinLeft(array(
-                                'tc' => 'pgen_toner_colors'
-                           ), 'tc.id = t.tonerColorId')
-                ->joinLeft(array(
-                                'pt' => 'pgen_part_types'
-                           ), 'pt.id = t.partTypeId')
-                ->joinLeft(array(
-                                'uto' => 'pgen_user_toner_overrides'
-                           ), 'uto.toner_id = t.id AND uto.user_id = ' . $user_id, array(
-                                                                                        'user_id',
-                                                                                        'cost AS override_cost'
-                                                                                   ));
-            if ($where != '')
-            {
-                $select->where($where);
-            }
-            if (!empty($where_compatible))
-            {
-                $select->where("CONCAT(mdm.fullname,' ',md.printer_model) LIKE '%" . $where_compatible . "%'");
-            }
-            $select->group('t.id');
-            $select->order(array(
-                                'tm.fullname',
-                                'md.printer_model',
-                                't.sku'
-                           ));
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            $count = count($result);
-            if ($count > 0)
-            {
-                $total_pages = ceil($count / $limit);
-            }
-            else
-            {
-                $total_pages = 0;
-            }
-            if ($page > $total_pages)
-            {
-                $page = $total_pages;
-            }
-            $start = $limit * $page - $limit;
-            if ($start < 0)
-            {
-                $start = 0;
-            }
-
-            $select = new Zend_Db_Select($db);
-            $select = $db->select()
-                ->from(array(
-                            't' => 'pgen_toners'
-                       ), array(
-                               't.id AS toners_id',
-                               't.sku',
-                               't.yield',
-                               't.cost AS toner_cost',
-                               'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.printer_model) SEPARATOR "; ") AS machine_compatibility'
-                          ))
-                ->joinLeft(array(
-                                'tm' => 'manufacturers'
-                           ), 'tm.id = t.manufacturerId', array(
-                                                               'tm.fullname AS toner_manufacturer'
-                                                          ))
-                ->joinLeft(array(
-                                'dt' => 'pgen_device_toners'
-                           ), 'dt.toner_id = t.id')
-                ->joinLeft(array(
-                                'md' => 'pgen_master_devices'
-                           ), 'md.id = dt.master_device_id', array(
-                                                                  'md.id AS master_id'
-                                                             ))
-                ->joinLeft(array(
-                                'mdm' => 'manufacturers'
-                           ), 'mdm.id = md.manufacturerId', array(
-                                                                 'mdm.fullname'
-                                                            ))
-                ->joinLeft(array(
-                                'tc' => 'pgen_toner_colors'
-                           ), 'tc.id = t.tonerColorId', array(
-                                                             'tc.name AS color_name'
-                                                        ))
-                ->joinLeft(array(
-                                'pt' => 'pgen_part_types'
-                           ), 'pt.id = t.partTypeId', array(
-                                                           'name as type_name'
-                                                      ))
-                ->joinLeft(array(
-                                'uto' => 'pgen_user_toner_overrides'
-                           ), 'uto.toner_id = t.id AND uto.user_id = ' . $user_id, array(
-                                                                                        'user_id',
-                                                                                        'cost AS override_cost'
-                                                                                   ));
-            if ($where != '')
-            {
-                $select->where($where);
-            }
-            if (!empty($where_compatible))
-            {
-                $select->where("CONCAT(mdm.fullname,' ',md.printer_model) LIKE '%" . $where_compatible . "%'");
-            }
-            $select->group('t.id');
-            $select->order($sidx . ' ' . $sord);
-            $select->limit($limit, $start);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            $formData->page    = $page;
-            $formData->total   = $total_pages;
-            $formData->records = $count;
-            if (count($result) > 0)
-            {
-                $i = 0;
-                // FIXME: Hardcoded price margin
-                $price_margin = 1; //($this->getPricingMargin('dealer', $this->dealer_company_id) / 100) + 1;
-                foreach ($result as $row)
-                {
-                    $type_name = ucwords(strtolower($row ['type_name']));
-                    if ($type_name == "Oem")
-                    {
-                        $type_name = "OEM";
-                    }
-                    $formData->rows [$i] ['id']   = $row ['toners_id'];
-                    $formData->rows [$i] ['cell'] = array(
-                        $row ['toners_id'],
-                        $row ['sku'],
-                        ucwords(strtolower($row ['toner_manufacturer'])),
-                        $type_name,
-                        ucwords(strtolower($row ['color_name'])),
-                        $row ['yield'],
-                        $row ['toner_cost'] * $price_margin,
-                        ($row ['override_cost'] > 0 ? (float)$row ['override_cost'] : null),
-                        null,
-                        $row ['master_id'],
-                        ucwords(strtolower($row ['machine_compatibility']))
-                    );
-                    $i++;
-                }
-            }
-            else
-            {
-                $formData = array();
-            }
-        }
-        catch (Exception $e)
-        {
-            // critical exception
-            echo $e->getMessage();
-
-
-        }
-
-        // encode user data to return to the client:
         $this->sendJson($formData);
     }
 
