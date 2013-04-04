@@ -2,19 +2,31 @@ INSERT INTO `clients` (`id`, `dealerId`, `accountNumber`, `companyName`, `legalN
 (1, 1, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated', 12),
 (2, 1, '0000002', 'Starbucks', 'Starbucks', 12000),
 (3, 1, '0000003', 'Novellis', 'Novellis co-operatives', 1200),
-(4, 1, '0000004', 'Samsung', 'Samsung Incorporated', 9800);
+(4, 1, '0000004', 'Samsung', 'Samsung Incorporated', 9800),
+(5, 2, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated', 12),
+(6, 2, '0000002', 'Starbucks', 'Starbucks', 12000),
+(7, 2, '0000003', 'Novellis', 'Novellis co-operatives', 1200),
+(8, 2, '0000004', 'Samsung', 'Samsung Incorporated', 9800);
 
 INSERT INTO `contacts` (`id`, `clientId`, `firstName`, `lastName`, `countryCode`, `areaCode`, `exchangeCode`, `number`, `extension`) VALUES
 (1, 1, 'Norm', 'McConkey', 1, 613, 507, 5151, null),
 (2, 2, 'Tyson', 'Riehl', 1, 613, 333, 4444, null),
 (3, 3, 'Shawn', 'Wilder', 1, 613, 666, 6666, null),
-(4, 4, 'Lee', 'Robert', 1, 613, 123, 1234, null);
+(4, 4, 'Lee', 'Robert', 1, 613, 123, 1234, null),
+(5, 5, 'Norm', 'McConkey', 1, 613, 507, 5151, null),
+(6, 6, 'Tyson', 'Riehl', 1, 613, 333, 4444, null),
+(7, 7, 'Shawn', 'Wilder', 1, 613, 666, 6666, null),
+(8, 8, 'Lee', 'Robert', 1, 613, 123, 1234, null);
 
 INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`, `city`, `region`, `postCode`, `countryId`) VALUES
 (1, 1, '945 Princess Street', 'Suite 234', 'Kingston', '9', 'K7L3N6', 1),
 (2, 2, 'Tyson Avenue', '', 'Kingston', '9', 'k7n2s1', 1),
 (3, 3, 'Shawn Lane', '', 'Kingston', '9', 'k2h7s6', 1),
-(4, 4, 'Lee Street', '', 'Kingston', '9', 'k1b2s7', 1);
+(4, 4, 'Lee Street', '', 'Kingston', '9', 'k1b2s7', 1),
+(5, 5, '945 Princess Street', 'Suite 234', 'Kingston', '9', 'K7L3N6', 1),
+(6, 6, 'Tyson Avenue', '', 'Kingston', '9', 'k7n2s1', 1),
+(7, 7, 'Shawn Lane', '', 'Kingston', '9', 'k2h7s6', 1),
+(8, 8, 'Lee Street', '', 'Kingston', '9', 'k1b2s7', 1);
 
 
 INSERT INTO `qgen_options` (`id`, `dealerId`, `name`, `description`, `cost`, `dealerSku`, `oemSku`) VALUES
