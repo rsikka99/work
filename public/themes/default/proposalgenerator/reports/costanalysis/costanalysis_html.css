@@ -28,18 +28,26 @@ table {
     width : 100%;
 }
 
-.mainTable tr , .mainTable td {
-    padding : 2px;
+.mainTable tr, .mainTable td {
+    padding : 10px;
     border  : 1px solid #ccc;
 }
 
-td.cpp {
-    width: 100px;
+.mainTable tr:nth-child(odd) {
+    background-color : #EFEFEF;
+}
+
+.mainTable tr:nth-child(even) {
+    background-color : #FCFCFC;
 }
 
 th {
-    padding          : 2px;
+    padding-right    : 2px;
     background-color : #f2f2f2;
+}
+
+td.cpp {
+    width : 100px;
 }
 
 td:first-child {
@@ -47,6 +55,7 @@ td:first-child {
 }
 
 td.number {
+    padding-right    : 2px;
     text-align : right;
 }
 

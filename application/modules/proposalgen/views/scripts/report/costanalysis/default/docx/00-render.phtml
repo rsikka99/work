@@ -1,0 +1,69 @@
+<?php
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+
+/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+$proposal = $this->proposal;
+
+// Initialize some properties
+$properties = $phpWord->getProperties();
+$properties->setCreator('Customer Cost Analysis');
+$properties->setCompany('Customer Cost Analysis');
+$properties->setTitle('Customer Cost Analysis');
+$properties->setDescription('Customer Cost Analysis');
+$properties->setCategory('Customer Cost Analysis');
+$properties->setLastModifiedBy('Customer Cost Analysis');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Customer Cost Analysis');
+$properties->setKeywords('Customer Cost Analysis');
+
+/**
+ * Define the different Sections
+ */
+
+// This section is landscape with 0.5" margins insead of 1"
+$mainSection = $phpWord->createSection(array (
+    'orientation' => 'landscape', 
+    'marginLeft' => 720, 
+    'marginRight' => 720, 
+    'marginTop' => 720, 
+    'marginBottom' => 720 
+));
+
+/**
+ * Here we put all our table styles into an object that gets passed to each of
+ * the view scripts
+ */
+$styles = (object)array (
+    "tables" => (object)array (
+        "settings" => $settingsTable,
+        "grossMargin" => $grossMarginTable
+    )
+);
+
+/**
+ * An array of view variables to pass to the partial scripts
+ */
+$data = array (
+    "phpword" => $this->phpword,
+    "proposal" => $this->proposal,
+    "section" => $mainSection,
+    "styles" => $styles,
+    "brandName" => 'MPSToolbox.com',
+    "companyName" => 'MPSToolbox.com'
+);
+
+/**
+ * Render each of the view scripts for different parts of the document
+ */
+$this->partial("report/costanalysis/" . $this->App()->theme . "/docx/01_header.phtml", $data);
+$this->partial("report/costanalysis/" . $this->App()->theme . "/docx/02_maintable.phtml", $data);
+
+$objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
+$objWriter->save($this->savePath);
+
+/**
+ * Finally we write out the url to the file we just generated.
+ */
+echo $this->baseUrl($this->publicFileName);

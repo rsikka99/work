@@ -33,6 +33,39 @@ class Proposalgen_Report_CostanalysisController extends Proposalgen_Library_Cont
 
     public function generateAction ()
     {
+        $format = $this->_getParam("format", "csv");
 
+        switch ($format)
+        {
+            case "csv" :
+                $this->_helper->layout->disableLayout();
+                $this->initCSVGrossMargin();
+                break;
+            case "docx" :
+                require_once ('PHPWord.php');
+                $this->view->phpword = new PHPWord();
+                $this->_helper->layout->disableLayout();
+                break;
+            case "pdf" :
+                throw new Exception("PDF Format not available through this page yet!");
+                break;
+            default :
+                throw new Exception("Invalid Format Requested!");
+                break;
+        }
+
+        $filename = "costanalysis.$format";
+
+        $this->initReportVariables($filename);
+
+        // Render early
+        try
+        {
+            $this->render($this->view->App()->theme . '/' . $format  . "/00-render");
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Controller caught the exception!", 0, $e);
+        }
     }
 }
