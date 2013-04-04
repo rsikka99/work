@@ -3683,6 +3683,49 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->_dealerWeightedAverageMonthlyCostPerPage;
     }
 
+
+    /**
+     * The weighted average monthly cost per page for customers
+     *
+     * @var Proposalgen_Model_CostPerPage
+     */
+    protected $_customerWeightedAverageMonthlyCostPerPage;
+
+    /**
+     * Calculates the weighted average monthly cost per page of the current fleet
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCustomerWeightedAverageMonthlyCostPerPage ()
+    {
+        if (!isset($this->_customerWeightedAverageMonthlyCostPerPage))
+        {
+            $this->_customerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
+
+            $costPerPageSetting            = $this->getCostPerPageSettingForCustomer();
+            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
+            $colorCpp                      = 0;
+            $monoCpp                       = 0;
+
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
+                $monoCpp += ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
+                {
+                    $colorCpp += ($deviceInstance->getAverageMonthlyColorPageCount() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                }
+            }
+
+            $this->_customerWeightedAverageMonthlyCostPerPage->monochromeCostPerPage = $monoCpp;
+            $this->_customerWeightedAverageMonthlyCostPerPage->colorCostPerPage      = $colorCpp;
+        }
+
+        return $this->_customerWeightedAverageMonthlyCostPerPage;
+    }
+
+
     /**
      * Calculates the dealers monthly cost
      *
