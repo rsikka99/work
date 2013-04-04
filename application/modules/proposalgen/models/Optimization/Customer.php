@@ -115,7 +115,7 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $barGraph->addDataSet(array(20));
             $barGraph->addColors(array("E21736"));
             $barGraph->addColors(array("000000"));
-            $barGraph->addColors(array("EF6B18"));
+            $barGraph->addColors(array("0194D2"));
             $barGraph->addColors(array("FFFFFF"));
             $barGraph->addColors(array("FFFFFF"));
             $barGraph->setLegend(array(

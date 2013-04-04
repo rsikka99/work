@@ -1274,6 +1274,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
 
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return Proposalgen_Model_DeviceInstance []
+     */
     public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         if (!isset($this->highCostPurchasedDevices))
