@@ -6,6 +6,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
     const RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING       = "proposalgen__admin__bulkdevicepricing";
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS            = "proposalgen__admin__devicetoners";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS         = "proposalgen__admin__filterlistitems";
     const RESOURCE_PROPOSALGEN_ADMIN_INDEX                   = "proposalgen__admin__index";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS      = "proposalgen__admin__managereplacements";
@@ -66,6 +67,7 @@ class Proposalgen_Model_Acl
     {
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_INDEX);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST);
@@ -127,6 +129,7 @@ class Proposalgen_Model_Acl
          * Proposal Admin
          */
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS, Application_Model_Acl::PRIVILEGE_VIEW);
