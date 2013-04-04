@@ -209,6 +209,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                         $deviceInstanceReplacement                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
                         $deviceInstanceReplacement->masterDeviceId   = (int)$masterDeviceId;
                         $deviceInstanceReplacement->deviceInstanceId = $deviceInstance->id;
+                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_dealerId;
                         $deviceInstanceReplacementMapper->insert($deviceInstanceReplacement);
                     }
                 }
