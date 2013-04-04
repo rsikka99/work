@@ -11,10 +11,10 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     /**
      * Column Definitions
      */
+    public $col_dealerId = 'dealerId';
     public $col_masterDeviceId = 'masterDeviceId';
     public $col_replacementCategory = 'replacementCategory';
     public $col_monthlyRate = 'monthlyRate';
-    public $col_dealerId = 'dealerId';
 
     /**
      * The default db table class to use
@@ -48,13 +48,8 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
         // Get an array of data to save
         $data = $this->unsetNullValues($object->toArray());
 
-        // Remove the id
-        unset($data ["{$this->col_masterDeviceId}"]);
-
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-
-        $object->masterDeviceId = $id;
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -78,12 +73,13 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_mas];
+            $primaryKey = array($data [$this->col_dealerId], $data [$this->col_masterDeviceId]);
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey
+                                                                "{$this->col_dealerId} = ?" => $primaryKey[0],
+                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey[1]
                                                            ));
 
         // Save the object into the cache
@@ -106,13 +102,15 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
         if ($object instanceof Proposalgen_Model_ReplacementDevice)
         {
             $whereClause = array(
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId
             );
         }
         else
         {
             $whereClause = array(
-                "{$this->col_masterDeviceId} = ?" => $object
+                "{$this->col_dealerId} = ?"       => $object[0],
+                "{$this->col_masterDeviceId} = ?" => $object[1]
             );
         }
 
@@ -139,7 +137,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id[0], $id[1]);
         if (0 == count($result))
         {
             return false;
@@ -233,33 +231,39 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->masterDeviceId;
+        return array($object->dealerId, $object->masterDeviceId);
     }
 
     /**
      * Fetches the cheapest replacement device for each category
      *
+     * @param $dealerId
+     *
      * @return Proposalgen_Model_ReplacementDevice[]
      */
-    public function fetchCheapestForEachCategory ()
+    public function fetchCheapestForEachCategory ($dealerId)
     {
         $replacementDevices                                                             = array();
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $this->fetch(array(
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW
+                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW,
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $this->fetch(array(
+                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $this->fetch(array(
+                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $this->fetch(array(
+                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
@@ -271,14 +275,15 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     /**
      * Gets the replacement devices that are eligible for replacing Black Devices
      *
+     * @param      $dealerId
      * @param bool $allowUpgrades
      *
      * @return Proposalgen_Model_MasterDevice []
      */
-    public function getBlackReplacementDevices ($allowUpgrades = true)
+    public function getBlackReplacementDevices ($dealerId, $allowUpgrades = true)
     {
         $deviceArray        = array();
-        $replacementDevices = $this->fetchAll();
+        $replacementDevices = $this->fetchAllForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
             if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
@@ -297,14 +302,15 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     /**
      * Gets the replacement devices that are eligible for replacing Black MFP Devices
      *
+     * @param      $dealerId
      * @param bool $allowUpgrades
      *
      * @return Proposalgen_Model_MasterDevice []
      */
-    public function getBlackMfpReplacementDevices ($allowUpgrades = true)
+    public function getBlackMfpReplacementDevices ($dealerId, $allowUpgrades = true)
     {
         $deviceArray        = array();
-        $replacementDevices = $this->fetchAll();
+        $replacementDevices = $this->fetchAllForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
             if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP])
@@ -323,14 +329,15 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     /**
      * Gets the replacement devices that are eligible for replacing Color Devices
      *
+     * @param      $dealerId
      * @param bool $allowUpgrades
      *
      * @return Proposalgen_Model_MasterDevice []
      */
-    public function getColorReplacementDevices ($allowUpgrades = true)
+    public function getColorReplacementDevices ($dealerId, $allowUpgrades = true)
     {
         $deviceArray        = array();
-        $replacementDevices = $this->fetchAll();
+        $replacementDevices = $this->fetchAllForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
             if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
@@ -349,20 +356,17 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     /**
      * Gets the replacement devices that are eligible for replacing Color MFP Devices
      *
+     * @param $dealerId
+     *
      * @return Proposalgen_Model_MasterDevice []
      */
-    public function getColorMfpReplacementDevices ()
+    public function getColorMfpReplacementDevices ($dealerId)
     {
         $deviceArray        = array();
-        $replacementDevices = $this->fetchAll();
+        $replacementDevices = $this->fetchAllForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
-            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]) {
-                ;
-            }
-            {
-                $deviceArray [] = $replacementDevice->getMasterDevice();
-            }
+            $deviceArray [] = $replacementDevice->getMasterDevice();
         }
 
         return $deviceArray;

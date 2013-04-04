@@ -2971,6 +2971,10 @@ INSERT INTO `pgen_rms_master_matchups` (`rmsProviderId`, `rmsModelId`, `masterDe
 
 
 INSERT INTO `pgen_replacement_devices` (`dealerId`, `masterDeviceId`, `replacementCategory`, `printSpeed`, `resolution`, `monthlyRate`) VALUES
+(1, 78, 'COLOR MFP', 1, 1, 249),
+(1, 43, 'BLACK & WHITE', 1, 1, 99),
+(1, 460, 'BLACK & WHITE MFP', 1, 1, 199),
+(1, 79, 'COLOR', 1, 1, 199),
 (2, 78, 'COLOR MFP', 1, 1, 249),
 (2, 43, 'BLACK & WHITE', 1, 1, 99),
 (2, 460, 'BLACK & WHITE MFP', 1, 1, 199),

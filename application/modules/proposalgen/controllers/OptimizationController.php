@@ -290,10 +290,10 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 throw new Exception("Error resetting replacements!");
             }
 
-            $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices(false);
-            $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices(false);
-            $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices(false);
-            $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices(false);
+            $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->_dealerId, false);
+            $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->_dealerId, false);
+            $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId, false);
+            $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
 
             // FIXME: When merge in with master fix overrides
             foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
