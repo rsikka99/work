@@ -21,6 +21,11 @@ class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
     /**
      * @var int
      */
+    public $dealerId;
+
+    /**
+     * @var int
+     */
     public $masterDeviceId;
 
     /**
@@ -57,6 +62,11 @@ class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
         if (is_array($params))
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
         }
 
         if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
@@ -97,6 +107,7 @@ class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
     public function toArray ()
     {
         return array(
+            "dealerId"            => $this->dealerId,
             "masterDeviceId"      => $this->masterDeviceId,
             "replacementCategory" => $this->replacementCategory,
             "printSpeed"          => $this->printSpeed,

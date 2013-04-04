@@ -14,6 +14,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
     public $col_masterDeviceId = 'masterDeviceId';
     public $col_replacementCategory = 'replacementCategory';
     public $col_monthlyRate = 'monthlyRate';
+    public $col_dealerId = 'dealerId';
 
     /**
      * The default db table class to use
@@ -356,11 +357,28 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
         $replacementDevices = $this->fetchAll();
         foreach ($replacementDevices as $replacementDevice)
         {
-            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]);
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]) {
+                ;
+            }
             {
                 $deviceArray [] = $replacementDevice->getMasterDevice();
             }
         }
+
         return $deviceArray;
+    }
+
+    /**
+     * @param $dealerId
+     *
+     * @param $order
+     * @param $count
+     * @param $offset
+     *
+     * @return Proposalgen_Model_ReplacementDevice[]
+     */
+    public function fetchAllForDealer ($dealerId, $order = null, $count = null, $offset = null)
+    {
+        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), $order, $count, $offset);
     }
 }

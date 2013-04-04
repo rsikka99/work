@@ -1842,7 +1842,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             {
                                 $key_parts_cpp = $array_key;
                             }
-                            else if(strtolower($value) == "system price")
+                            else if (strtolower($value) == "system price")
                             {
                                 $key_system_cost = $array_key;
                             }
@@ -3514,7 +3514,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $form                         = new Proposalgen_Form_ReplacementPrinter(null, '');
         $this->view->replacement_form = $form;
 
-        // fill manufacturer dropdown
+        // fill manufacturer drop down
         $list               = "";
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers      = $manufacturersTable->fetchAll('isDeleted = 0', 'fullname');
@@ -3646,6 +3646,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
 
                 $replacement_devicesData = array(
+                    'dealerId'            => Zend_Auth::getInstance()->getIdentity()->dealerId,
                     'replacementCategory' => strtoupper($replacement_category),
                     'printSpeed'          => $print_speed,
                     'resolution'          => $resolution,
@@ -3730,7 +3731,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         try
         {
             // get pf device list filter by manufacturer
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAll();
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAllForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
             // return results
             if (count($replacementDevices) > 0)
