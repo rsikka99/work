@@ -1,20 +1,20 @@
-INSERT INTO `clients` (`id`, `dealerId`, `accountNumber`, `companyName`,`legalName`,`employeeCount`) VALUES
+INSERT INTO `clients` (`id`, `dealerId`, `accountNumber`, `companyName`, `legalName`, `employeeCount`) VALUES
 (1, 1, '0000001', 'Tangent MTW', 'Tangent MTW Incorporated', 12),
 (2, 1, '0000002', 'Starbucks', 'Starbucks', 12000),
 (3, 1, '0000003', 'Novellis', 'Novellis co-operatives', 1200),
 (4, 1, '0000004', 'Samsung', 'Samsung Incorporated', 9800);
 
-INSERT INTO `contacts` (`id`,`clientId`, `firstName`, `lastName`,`countryCode`,`areaCode`,`exchangeCode`,`number`,`extension`) VALUES
-(1,1, 'Norm', 'McConkey', 1,613,507,5151,null),
-(2,2, 'Tyson', 'Riehl', 1,613,333,4444,null),
-(3,3, 'Shawn', 'Wilder', 1,613,666,6666,null),
-(4,4, 'Lee', 'Robert', 1,613,123,1234,null);
+INSERT INTO `contacts` (`id`, `clientId`, `firstName`, `lastName`, `countryCode`, `areaCode`, `exchangeCode`, `number`, `extension`) VALUES
+(1, 1, 'Norm', 'McConkey', 1, 613, 507, 5151, null),
+(2, 2, 'Tyson', 'Riehl', 1, 613, 333, 4444, null),
+(3, 3, 'Shawn', 'Wilder', 1, 613, 666, 6666, null),
+(4, 4, 'Lee', 'Robert', 1, 613, 123, 1234, null);
 
-INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`,`city`,`region`,`postCode`,`countryId`) VALUES
-(1,1, '945 Princess Street','Suite 234','Kingston','9','K7L3N6',1),
-(2,2, 'Tyson Avenue','','Kingston','9','k7n2s1',1),
-(3,3, 'Shawn Lane','','Kingston','9','k2h7s6',1),
-(4,4, 'Lee Street','','Kingston','9','k1b2s7',1);
+INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`, `city`, `region`, `postCode`, `countryId`) VALUES
+(1, 1, '945 Princess Street', 'Suite 234', 'Kingston', '9', 'K7L3N6', 1),
+(2, 2, 'Tyson Avenue', '', 'Kingston', '9', 'k7n2s1', 1),
+(3, 3, 'Shawn Lane', '', 'Kingston', '9', 'k2h7s6', 1),
+(4, 4, 'Lee Street', '', 'Kingston', '9', 'k1b2s7', 1);
 
 
 INSERT INTO `qgen_options` (`id`, `dealerId`, `name`, `description`, `cost`, `dealerSku`, `oemSku`) VALUES
@@ -79,19 +79,19 @@ INSERT INTO `qgen_options` (`id`, `dealerId`, `name`, `description`, `cost`, `de
 (65, 2, 'Kyocera Copy Tray(D)', 'Copy Tray', 27, '', '1902LF0UN1');
 
 
-INSERT INTO `qgen_devices` (`masterDeviceId`,`dealerId`, `dealerSku`, `oemSku`, `description`) VALUES
-(79, 2, '', '8870/DN', ''),
-(95, 2, '', 'CC395A', ''),
-(401, 2, '', 'Q3939A', '- Fax accessory'),
-(445, 2, 'S7938341', '8570/DN', ''),
-(459, 2, '', 'CF116A', ''),
-(471, 2, 'S8145808', 'CE504A', ''),
-(478, 2, '', 'CE992A', ''),
-(479, 2, '', 'CE504A', ''),
-(480, 2, '', '1102M92US0', 'Standard: 4-in-1, Copy, Scan, Network Print, Fax\r\nDocument Processor (Reversing 50 sheets), Duplex, 1GB RAM'),
-(481, 2, '', '1102LV2US0', '62ppm A4 Monochrome Printer\r\nStd. Duplex, Ethernet Network, 256MB RAM'),
-(482, 2, '', '1102LH2US0', '55 PPM A3 B&W MFP'),
-(483, 2, '', '1102LB2US0', '65/65 PPM A3 Color MFP');
+INSERT INTO `qgen_devices` (`masterDeviceId`, `dealerId`, `cost`, `dealerSku`, `oemSku`, `description`) VALUES
+(79, 2, 1000, '', '8870/DN', ''),
+(95, 2, 1500, '', 'CC395A', ''),
+(401, 2, 3000, '', 'Q3939A', '- Fax accessory'),
+(445, 2, 5000, 'S7938341', '8570/DN', ''),
+(459, 2, 2500, '', 'CF116A', ''),
+(471, 2, 4699.99, 'S8145808', 'CE504A', ''),
+(478, 2, 1299.99, '', 'CE992A', ''),
+(479, 2, 3806.79, '', 'CE504A', ''),
+(480, 2, 2595, '', '1102M92US0', 'Standard: 4-in-1, Copy, Scan, Network Print, Fax\r\nDocument Processor (Reversing 50 sheets), Duplex, 1GB RAM'),
+(481, 2, 1569, '', '1102LV2US0', '62ppm A4 Monochrome Printer\r\nStd. Duplex, Ethernet Network, 256MB RAM'),
+(482, 2, 4941, '', '1102LH2US0', '55 PPM A3 B&W MFP'),
+(483, 2, 14500, '', '1102LB2US0', '65/65 PPM A3 Color MFP');
 
 INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`, `dealerId`, `includedQuantity`) VALUES
 (79, 9, 2, 0),
