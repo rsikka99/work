@@ -29,11 +29,16 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     (1,1),
    
     -- lrobert
+    (2,2),
     (2,3),
+    (2,4),
     (2,5),
+    (2,6),
 
     -- swilder
+    (4,2),
     (4,3),
+    (4,4),
     (4,5),
 
     -- jlarochelle
@@ -43,14 +48,20 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
     (5,5),
 
     -- nmcconkey
+    (6,2),
     (6,3),
+    (6,4),
     (6,5),
+    (6,6),
 
     -- standarduser
+    (8,3),
     (8,5),
 
     -- triehl
+    (9,2),
     (9,3),
+    (9,4),
     (9,5);
     
 /* Add privileges to the roles */
