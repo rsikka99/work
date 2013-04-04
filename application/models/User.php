@@ -17,13 +17,6 @@ class Application_Model_User extends My_Model_Abstract
     public $id;
 
     /**
-     * The user's username
-     *
-     * @var string
-     */
-    public $username;
-
-    /**
      * The user's encrypted password
      *
      * @var string
@@ -128,10 +121,6 @@ class Application_Model_User extends My_Model_Abstract
         {
             $this->id = $params->id;
         }
-        if (isset($params->username) && !is_null($params->username))
-        {
-            $this->username = $params->username;
-        }
         if (isset($params->password) && !is_null($params->password))
         {
             $this->password = $params->password;
@@ -181,7 +170,6 @@ class Application_Model_User extends My_Model_Abstract
     {
         return array(
             'id'                       => $this->id,
-            'username'                 => $this->username,
             'password'                 => $this->password,
             'firstname'                => $this->firstname,
             'lastname'                 => $this->lastname,

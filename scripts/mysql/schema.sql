@@ -130,11 +130,10 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
 CREATE  TABLE IF NOT EXISTS `users` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `dealerId` INT NOT NULL ,
-    `username` VARCHAR(255) NOT NULL ,
+    `email` VARCHAR(255) NOT NULL ,
     `password` VARCHAR(255) NOT NULL ,
     `firstname` VARCHAR(255) NOT NULL ,
     `lastname` VARCHAR(255) NOT NULL ,
-    `email` VARCHAR(255) NOT NULL ,
     `loginAttempts` INT(11) NOT NULL DEFAULT '0' ,
     `frozenUntil` DATETIME NULL DEFAULT NULL ,
     `locked` TINYINT(4) NOT NULL DEFAULT '0' ,
@@ -142,7 +141,6 @@ CREATE  TABLE IF NOT EXISTS `users` (
     `resetPasswordOnNextLogin` TINYINT(4) NOT NULL DEFAULT '0' ,
     `passwordResetRequest` DATETIME NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
-    UNIQUE INDEX `username` (`username` ASC) ,
     INDEX `users_ibfk1_idx` (`dealerId` ASC) ,
     CONSTRAINT `users_ibfk1`
     FOREIGN KEY (`dealerId` )

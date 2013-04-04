@@ -472,7 +472,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         $identity->email     = $values ['email'];
 
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "User {$user->username} has been updated successfully."
+                                                            'success' => "Your profile has been updated successfully."
                                                        ));
                     }
                 }
@@ -480,7 +480,7 @@ class Admin_UserController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'warning' => "User was not updated successfully please try again.	"
+                                                        'warning' => "Your profile was not updated successfully please try again."
                                                    ));
                 }
             }

@@ -20,7 +20,7 @@
         </th>
     </tr>
     <tr>
-        <th>Username</th>
+        <th>Email</th>
         <th>Name</th>
         <th style="width: 70px;">Login Attempts</th>
         <th style="width: 100px;">Frozen Until</th>
@@ -31,7 +31,7 @@
     <tbody>
         <?php foreach ($this->users as $user) : /* @var $user Application_Model_User */ ?>
     <tr>
-        <td><?php echo $user->username; ?></td>
+        <td><?php echo $user->email; ?></td>
         <td><?php echo $user->firstname; ?> <?php echo $user->lastname; ?></td>
         <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
         <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>

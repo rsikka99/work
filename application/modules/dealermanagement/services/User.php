@@ -83,9 +83,8 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
         $filteredData = $this->validateAndFilterData($data);
         if ($filteredData !== false)
         {
-            $usersByUsername = Application_Model_Mapper_User::getInstance()->fetchUserByUsername($filteredData['username']);
-            $usersByEmail    = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($filteredData['email']);
-            if (count($usersByUsername) === 0 && count($usersByEmail) === 0)
+            $usersByEmail = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($filteredData['email']);
+            if (count($usersByEmail) === 0)
             {
                 $user = new Application_Model_User();
                 $user->populate($filteredData);
@@ -112,12 +111,7 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
             }
             else
             {
-                if (count($usersByUsername) > 0)
-                {
-                    $this->addError(self::ERROR_USERNAME_EXISTS, "A user with this name already exists");
-                    $this->_form->getElement('username')->addError("Username already exists");
-                }
-                else if (count($usersByEmail) > 0)
+                if (count($usersByEmail) > 0)
                 {
                     $this->addError(self::ERROR_USEREMAIL_EXISTS, "A user with this email already exists");
                     $this->_form->getElement('email')->addError("Email already exists");

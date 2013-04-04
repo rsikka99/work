@@ -8,8 +8,8 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
         // Add an email element
-        $this->addElement('text', 'username', array(
-                                                   'label'      => 'Username:',
+        $this->addElement('text', 'email', array(
+                                                   'label'      => 'Email:',
                                                    'required'   => true,
                                                    'filters'    => array('StringTrim', 'StripTags'),
                                                    'validators' => array(
@@ -20,7 +20,7 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
                                                                'max' => 255
                                                            )
                                                        ),
-                                                       'Alnum'
+                                                       'EmailAddress'
                                                    )
                                               ));
 
