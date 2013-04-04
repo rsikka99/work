@@ -58,20 +58,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLoggerToRegistry ()
     {
         $this->bootstrap('Log');
-        $this->bootstrap('Db');
+//        $this->bootstrap('Db');
         if ($this->hasResource('Log'))
         {
             $logger = $this->getResource('Log');
-            assert($logger != null);
-            $db = Zend_Db_Table::getDefaultAdapter();
-            // Set up the logging system and put it in the Zend Registry.
-            $columnMapping = array (
-                    'priority' => 'priority', 
-                    'message' => 'message', 
-                    'logTypeId' => 'logTypeId', 
-                    'userId' => 'userId' 
-            );
-            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
+//            assert($logger != null);
+//            $db = Zend_Db_Table::getDefaultAdapter();
+//            // Set up the logging system and put it in the Zend Registry.
+//            $columnMapping = array (
+//                    'priority' => 'priority',
+//                    'message' => 'message',
+//                    'logTypeId' => 'logTypeId',
+//                    'userId' => 'userId'
+//            );
+//            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
             
             Zend_Registry::set('Zend_Log', $this->getResource('Log'));
         }
