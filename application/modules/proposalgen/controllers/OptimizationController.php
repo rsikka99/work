@@ -338,7 +338,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                     $newDevice->deviceInstanceId       = $deviceInstance->id;
 
                     // FIXME: This is set to the assessment id for now. It will need to change to the HWO id when we separate the two reports.
-                    $newDevice->hardwareOptimizationId = $this->getProposal()->report->id;
+                    $newDevice->hardwareOptimizationId = $this->_reportId;
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
@@ -365,7 +365,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         try
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-            $deviceInstanceReplacementMapper->deleteAllDeviceInstancesByHardwareOptimizationId(1);
+            $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_reportId);
         }
         catch (Exception $e)
         {

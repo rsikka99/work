@@ -85,8 +85,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "A client is not selected."
-                                               ));
+                                                        "error" => "A client is not selected."
+                                                   ));
                 $this->_redirect('/');
             }
 
@@ -96,7 +96,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->_reportId         = (int)$this->_reportSession->reportId;
         $this->view->reportSteps = $this->getReportSteps();
         $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->_dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $this->_dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
 
         $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;
@@ -118,7 +118,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
-            "Reports"            => (object)array(
+            "Reports"                      => (object)array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
@@ -143,7 +143,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "Toners"             => (object)array(
+            "Toners"                       => (object)array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_toners/index')
@@ -158,7 +158,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_optimization_customer/index')
             ),
-            "HealthCheck"        => (object)array(
+            "HealthCheck"                  => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
@@ -180,8 +180,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         if ($this->_reportId < 1)
         {
             $this->_flashMessenger->addMessage(array(
-                                                "error" => "Please select a report first."
-                                           ));
+                                                    "error" => "Please select a report first."
+                                               ));
             // Send user to the index
             $this->_helper->redirector('index', 'index', 'index');
         }
@@ -190,12 +190,11 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         if ($this->_report === null)
         {
             $this->_flashMessenger->addMessage(array(
-                                                "error" => "Please select a report first."
-                                           ));
+                                                    "error" => "Please select a report first."
+                                               ));
             // Send user to the index
             $this->_helper->redirector('index', 'index', 'index');
         }
-
 
 
         // Setup the different file formats
@@ -509,8 +508,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->_report              = new Proposalgen_Model_Assessment();
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
-                $this->_report->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_report->stepName = Proposalgen_Model_Assessment_Step::STEP_SURVEY;
+                $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $this->_report->stepName    = Proposalgen_Model_Assessment_Step::STEP_SURVEY;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
