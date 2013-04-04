@@ -62,6 +62,7 @@ class Quotegen_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -76,6 +77,8 @@ class Quotegen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
+
         $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
     }
