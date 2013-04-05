@@ -4,7 +4,9 @@ class Quotegen_Model_Acl
 
     const RESOURCE_QUOTEGEN_CLIENT_WILDCARD                   = "quotegen__client__%";
     const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD            = "quotegen__configuration__%";
+    const RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST        = "quotegen__devicesetup__all-devices-list";
     const RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS        = "quotegen__devicesetup__configurations";
+    const RESOURCE_QUOTEGEN_DEVICESETUP_CREATE                = "quotegen__devicesetup__create";
     const RESOURCE_QUOTEGEN_DEVICESETUP_EDIT                  = "quotegen__devicesetup__edit";
     const RESOURCE_QUOTEGEN_DEVICESETUP_INDEX                 = "quotegen__devicesetup__index";
     const RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS               = "quotegen__devicesetup__options";
@@ -44,7 +46,9 @@ class Quotegen_Model_Acl
     {
         $acl->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
         $acl->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_CREATE);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS);
@@ -73,6 +77,7 @@ class Quotegen_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
