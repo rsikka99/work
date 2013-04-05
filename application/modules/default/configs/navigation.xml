@@ -349,6 +349,15 @@
                     <uri>#</uri>
                     <visible>0</visible>
                     <pages>
+                        <edituserprofile>
+                            <label>My Profile</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>profile</action>
+                            <resource>admin__user__profile</resource>
+                            <icon>pencil</icon>
+                            <visible>1</visible>
+                        </edituserprofile>
                         <changepassword>
                             <label>Change Password</label>
                             <module>default</module>
