@@ -3,6 +3,7 @@ class Quotegen_Model_Acl
 {
 
     const RESOURCE_QUOTEGEN_CLIENT_WILDCARD                   = "quotegen__client__%";
+    const RESOURCE_QUOTEGEN_CONFIGURATION_INDEX               = "quotegen__configuration__index";
     const RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD            = "quotegen__configuration__%";
     const RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST        = "quotegen__devicesetup__all-devices-list";
     const RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS        = "quotegen__devicesetup__configurations";
@@ -15,6 +16,7 @@ class Quotegen_Model_Acl
     const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE               = "quotegen__index__existing-quote";
     const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT         = "quotegen__index__get-reports-for-client";
     const RESOURCE_QUOTEGEN_INDEX_CREATECLIENT                = "quotegen__index__create-client";
+    const RESOURCE_QUOTEGEN_OPTION_INDEX                      = "quotegen__option__index";
     const RESOURCE_QUOTEGEN_OPTION_WILDCARD                   = "quotegen__option__%";
     const RESOURCE_QUOTEGEN_QUOTE_INDEX                       = "quotegen__quote__index";
     const RESOURCE_QUOTEGEN_QUOTE_DELETE                      = "quotegen__quote__delete";
@@ -45,6 +47,7 @@ class Quotegen_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS);
@@ -57,6 +60,7 @@ class Quotegen_Model_Acl
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE);
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT);
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX_CREATECLIENT);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_OPTION_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_OPTION_WILDCARD);
         $acl->addResource(self::RESOURCE_QUOTEGEN_QUOTE_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_QUOTE_DELETE);

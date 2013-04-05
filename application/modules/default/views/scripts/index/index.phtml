@@ -29,20 +29,19 @@
                     <p><strong>Organization Size:</strong><br><strong><?php echo number_format($selectedClient->employeeCount); ?></strong> employees</p>
                 </form>
             <?php endif; ?>
+        </div>
+        <div class="well well-small">
+            <div class="btn-group pull-right">
+                <a class="btn btn-mini btn-primary" title="View Client List" href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-list-ul"></i>
+                    List</a>
+                <a class="btn btn-mini btn-success" href="<?php echo $this->url(array('action' => 'create-client', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-plus"></i>
+                    New</a>
+            </div>
+            <p><strong>Clients</strong></p>
 
-
-            <hr>
-            <form id="searchForClientForm" class="form-inline" method="POST">
-                <label for="searchClientByName"><strong>Search By Name</strong></label>
-                <a href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>">(View All)</a>
+            <form id="searchForClientForm" class="form-search" method="POST">
                 <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?php echo $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="input-block-level">
                 <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
-            </form>
-
-            <hr>
-
-            <form method="POST">
-                <button class="btn btn-success btn-small " name="createClient">Create New Client</button>
             </form>
 
             <hr>
