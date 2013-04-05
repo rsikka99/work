@@ -1,4 +1,15 @@
 <div class="page-header">
     <h1>Dealer Management</h1>
 </div>
-<?php echo $this->Subnav("nav nav-tabs nav-stacked", 0); ?>
+<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD)) : ?>
+    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
+        Clients</a>
+<?php endif; ?>
+<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
+    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
+        Lease Rates</a>
+<?php endif; ?>
+<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
+    <a class="btn btn-large" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
+        Users</a>
+<?php endif; ?>
