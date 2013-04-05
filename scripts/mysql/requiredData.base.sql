@@ -2,9 +2,11 @@
 --
 -- You can begin populating the database with the following SQL statements.
 -- $6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0
-INSERT INTO `dealers` (`id`, `dealerName`, `userLicenses`, `dateCreated`)
-    VALUES (1, 'Root Company', 1000, '2013-03-12'),
-    (2, 'Tangent MTW', 1000, '2013-03-12');
+INSERT INTO `dealers` (`id`, `dealerName`, `userLicenses`, `dateCreated`) VALUES
+(1, 'Root Company', 25, '2013-03-12'),
+(2, 'Tangent MTW', 25, '2013-03-12'),
+(3, 'Office Depot', 25, '2013-04-05'),
+(4, 'Canon USA', 5, '2013-04-05');
 
 INSERT INTO `users` (`id`, `dealerId`, `password`, `firstname`, `lastname`, `email`) VALUES
 (1, 1, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Root', 'User', 'root@tangentmtw.com'),
@@ -13,7 +15,9 @@ INSERT INTO `users` (`id`, `dealerId`, `password`, `firstname`, `lastname`, `ema
 (5, 2, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Jay', 'Larochelle', 'jlarochelle@tangentmtw.com'),
 (6, 2, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Norm', 'McConkey', 'nmcconkey@tangentmtw.com'),
 (8, 2, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Standard', 'User', 'standarduser@tangentmtw.com'),
-(9, 2, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Tyson', 'Riehl', 'triehl@tangentmtw.com');
+(9, 2, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Tyson', 'Riehl', 'triehl@tangentmtw.com'),
+(10, 3, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'OD', 'Admin', 'odadmin@tangentmtw.com'),
+(11, 4, '$6$rounds=5000$lunchisdabest$T0ehTHDo0LbN/rxeeo/7JlKK0LhRZa5DdSMhXg2Si/24RWYC8gVZtsPUiW2fzMx.5zF6WjQdOngF2tcYul2Vi0', 'Canon', 'Admin', 'canon@tangentmtw.com');
 
 INSERT INTO `roles` VALUES
 (1, 'System Administrator', 1),
@@ -40,12 +44,14 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (4, 3),
 (4, 4),
 (4, 5),
+(4, 6),
 
 -- jlarochelle
 (5, 2),
 (5, 3),
 (5, 4),
 (5, 5),
+(5, 6),
 
 -- nmcconkey
 (6, 2),
@@ -62,7 +68,22 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (9, 2),
 (9, 3),
 (9, 4),
-(9, 5);
+(9, 5),
+(9, 6),
+
+-- odadmin
+(10, 2),
+(10, 3),
+(10, 4),
+(10, 5),
+(10, 6),
+
+-- canon
+(11, 2),
+(11, 3),
+(11, 4),
+(11, 5),
+(11, 6);
 
 /* Add privileges to the roles */
 -- INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
