@@ -1,6 +1,7 @@
 <?php
     /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
     $proposal = $this->proposal;
+
     $customerCostPerPageSetting = $proposal->getCostPerPageSettingForCustomer();
     $deviceInstances = $proposal->getMonthlyHighCostPurchasedDevice($customerCostPerPageSetting);
 ?>

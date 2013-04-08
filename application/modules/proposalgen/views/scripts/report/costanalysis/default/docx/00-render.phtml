@@ -23,35 +23,157 @@ $properties->setKeywords('Customer Cost Analysis');
  */
 
 // This section is landscape with 0.5" margins insead of 1"
-$mainSection = $phpWord->createSection(array (
-    'orientation' => 'landscape', 
-    'marginLeft' => 720, 
-    'marginRight' => 720, 
-    'marginTop' => 720, 
-    'marginBottom' => 720 
-));
+$mainSection = $phpWord->createSection(array(
+                                            'orientation'  => 'portrait',
+                                            'marginLeft'   => 720,
+                                            'marginRight'  => 720,
+                                            'marginTop'    => 720,
+                                            'marginBottom' => 720
+                                       ));
+
+$phpWord->addTitleStyle(1, array(
+                                "bold"  => true,
+                                "size"  => 15,
+                                "color" => "0096d6",
+                                array(
+                                    'borderBottomSize' => 1,
+                                )
+                           ));
+
+
+/* Tables for the device layouts */
+$widthTwips       = 11111;
+$header_color     = "B8CCE3";
+$sub_header_color = "0096A6";
+$even_color       = "EFEFEF";
+$odd_color        = "FCFCFC";
+$footer_color     = "b8cce3";
+$highlight_color  = "ebc7a4";
+
+$standard_cell = (object)array(
+    "even"           => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20,
+    ),
+    "odd"            => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+
+$standard_cell_left = (object)array(
+    "even"             => array(
+        "bgColor"          => $even_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "odd"              => array(
+        "bgColor"          => $odd_color,
+        "borderRightColor" => 'FFFFFF',
+        "borderRightSize"  => 20
+    ),
+    "fontStyle"        => null,
+    "paragraphStyle"   => array(
+        'spaceAfter' => 0,
+        'align'      => 'left'
+    ),
+    "manufacturerName" => (object)array(
+        "fontStyle"      => array('italic' => true),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
+        ),
+    ),
+    "modelName"        => (object)array(
+        "fontStyle"      => array('bold' => true),
+        "paragraphStyle" => array(
+            'spaceAfter' => 0,
+            'align'      => 'left'
+        ),
+    ),
+);
+
+$standard_cell_no_right_border = (object)array(
+    "even"           => array(
+        "bgColor" => $even_color,
+    ),
+    "odd"            => array(
+        "bgColor" => $odd_color,
+    ),
+    "fontStyle"      => null,
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'right'
+    )
+);
+
+$standard_header = (object)array(
+    "cellStyle"      => array(
+        'bgColor' => $header_color
+    ),
+    "fontStyle"      => array(
+        'bold' => true
+    ),
+    "paragraphStyle" => array(
+        'spaceAfter' => 0,
+        'align'      => 'center'
+    )
+);
+
+$costAnalysis = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"  => $widthTwips * 0.20,
+    "col2Width"  => $widthTwips * 0.1333,
+    "col3Width"  => $widthTwips * 0.1333,
+    "col4Width"  => $widthTwips * 0.1333,
+    "col5Width"  => $widthTwips * 0.1333,
+    "col6Width"  => $widthTwips * 0.1333,
+    "col7Width"  => $widthTwips * 0.1333,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => $standard_cell_left,
+        "cell2"     => $standard_cell,
+        "cell3"     => $standard_cell,
+        "cell4"     => $standard_cell,
+        "cell5"     => $standard_cell,
+        "cell6"     => $standard_cell,
+        "cell7"     => $standard_cell_no_right_border
+    ),
+    "header"     => (object)array(
+        'header'     => $standard_header,
+        'sub_header' => $standard_sub_header,
+    ),
+);
 
 /**
- * Here we put all our table styles into an object that gets passed to each of
- * the view scripts
+ * Here we put all our table styles into an object that gets passed to each of the view scripts
  */
-$styles = (object)array (
-    "tables" => (object)array (
-        "settings" => $settingsTable,
-        "grossMargin" => $grossMarginTable
+$styles = (object)array(
+    "tables" => (object)array(
+        "costanalysis" => $costAnalysis,
     )
 );
 
 /**
  * An array of view variables to pass to the partial scripts
  */
-$data = array (
-    "phpword" => $this->phpword,
-    "proposal" => $this->proposal,
-    "section" => $mainSection,
-    "styles" => $styles,
-    "brandName" => 'MPSToolbox.com',
-    "companyName" => 'MPSToolbox.com'
+$data = array(
+    "phpword"  => $this->phpword,
+    "proposal" => $proposal,
+    "section"  => $mainSection,
+    "styles"   => $styles,
 );
 
 /**

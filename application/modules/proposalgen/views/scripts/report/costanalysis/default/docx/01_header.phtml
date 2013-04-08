@@ -7,18 +7,15 @@
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
-
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-/**
- * Variables
- */
-// Add any variables that are needed throughout the page here.
+$section->addTitle($this->translate('Customer Cost Analysis'),1);
 
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate("Average Monochrome CPP: "), array("bold" => true));
+$textRun->addText($this->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4)));
 
-/**
- * Section starts here
- */
-
-$section->addTitle($this->translate('Gross Margin Report'));
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate("Average Color CPP: "), array("bold" => true));
+$textRun->addText($this->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4)));
