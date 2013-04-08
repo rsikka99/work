@@ -362,8 +362,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
     `manufacturerId` INT(11) NOT NULL ,
     `tonerColorId` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    UNIQUE INDEX `sku` (`sku` ASC) ,
-    UNIQUE INDEX `sku_2` (`sku` ASC, `manufacturerId` ASC, `partTypeId` ASC, `yield` ASC, `tonerColorId` ASC) ,
+    UNIQUE INDEX `sku` (`sku` ASC, `manufacturerId` ASC) ,
     INDEX `part_type_id` (`partTypeId` ASC) ,
     INDEX `toner_color_id` (`tonerColorId` ASC) ,
     INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturerId` ASC) ,
@@ -517,7 +516,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
     `replacementCategory` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
     `printSpeed` INT(11) NULL ,
     `resolution` INT(11) NULL DEFAULT NULL ,
-    `monthlyRate` DOUBLE NULL DEFAULT NULL ,
+    `monthlyRate` DOUBLE NULL ,
     INDEX `pgen_replacement_devices_ibfk_2_idx` (`dealerId` ASC) ,
     PRIMARY KEY (`dealerId`, `masterDeviceId`) ,
     CONSTRAINT `pgen_replacement_devices_ibfk_1`
