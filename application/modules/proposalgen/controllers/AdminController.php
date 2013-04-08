@@ -1515,7 +1515,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $summary   = "";
             $passvalid = 0;
             $formData  = $this->_request->getPost();
 
@@ -1571,7 +1570,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                     $where = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                                     $tonerTable->update($tonerData, $where);
-                                    $summary .= "Updated part from " . $key ['cost'] . " to " . $price . "<br />";
                                 }
                             }
                         }

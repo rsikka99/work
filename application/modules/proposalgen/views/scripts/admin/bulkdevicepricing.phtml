@@ -40,6 +40,7 @@
 			height:'auto',
 			width:940,
 			rowNum:10,
+            multiselect:true,
 			rowList:[10,20,30],
 			pager:'#devices_pager',
 			onPaging:function() {
@@ -51,24 +52,24 @@
 				for(var i=0; i < ids.length; i++) {
 					var cur_row = ids[i];
 
-                    var laborCostPerPage = document.getElementById("devices_list").rows[i+1].cells[2].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+                    var laborCostPerPage = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
                     if(laborCostPerPage == 0) {
-                        document.getElementById("devices_list").rows[i+1].cells[2].innerHTML = "$ -";
-                    } else {
-                        document.getElementById("devices_list").rows[i+1].cells[2].innerHTML = "$ " + laborCostPerPage;
-                    }
-
-                    var partsCostPerPage = document.getElementById("devices_list").rows[i+1].cells[3].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
-                    if(partsCostPerPage == 0) {
                         document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ -";
                     } else {
-                        document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + partsCostPerPage;
+                        document.getElementById("devices_list").rows[i+1].cells[3].innerHTML = "$ " + laborCostPerPage;
                     }
 
-                    hidden_price_element_parts = "<input type='hidden' name='hdnDevicePriceParts"+cur_row+"' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
-					hidden_price_element_labor = "<input type='hidden' name='hdnDevicePriceLabor"+cur_row+"' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
-                    new_labor_cost_per_page_element = "$ <input type='text' name='laborCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
-                    new_parts_cost_per_page_element = "$ <input type='text' name='partsCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+                    var partsCostPerPage = document.getElementById("devices_list").rows[i+1].cells[4].innerHTML.replace("$","").replace(/,/gi,"").replace(/ /gi,"");
+                    if(partsCostPerPage == 0) {
+                        document.getElementById("devices_list").rows[i+1].cells[4].innerHTML = "$ -";
+                    } else {
+                        document.getElementById("devices_list").rows[i+1].cells[4].innerHTML = "$ " + partsCostPerPage;
+                    }
+
+                    hidden_price_element_parts = "<input type='hidden' id='hdnDevicePriceParts"+cur_row+"' name='hdnDevicePriceParts"+cur_row+"' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
+					hidden_price_element_labor = "<input type='hidden' id='hdnDevicePriceLabor"+cur_row+"' name='hdnDevicePriceLabor"+cur_row+"' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
+                    new_labor_cost_per_page_element = "$ <input type='text' id='laborCostPerPage"+cur_row+"' name='laborCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
+                    new_parts_cost_per_page_element = "$ <input type='text' id='partsCostPerPage"+cur_row+"' name='partsCostPerPage"+cur_row+"' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
 					jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_labor_cost_per_page: hidden_price_element_labor + new_labor_cost_per_page_element});
                     jQuery("#devices_list").jqGrid('setRowData',ids[i],{new_parts_cost_per_page: hidden_price_element_parts + new_parts_cost_per_page_element});
                     }
@@ -355,7 +356,7 @@
 		var decimals = 2;
 
 		//find decimal places
-		if($('#pricing_filter').val() != 'printer' && $('#pricing_filter').val() != 'toner') {
+		if($('#pricing_filter').val() != 'Toner Costs') {
 			decimals = 4;
 		}
 		
@@ -373,24 +374,53 @@
 		
 		if(percentage > 0) {
 			var ids = jQuery("#"+grid+list+"_list").jqGrid('getDataIDs');
-			for(var i=0; i < ids.length; i++) { 
+			for(var i=0; i < ids.length; i++) {
 				var cur_row = ids[i];
-				var old_price = $("#hdn"+company+type+"Price"+cur_row).val();
-				
-				if(old_price == 0) {
-					old_price = default_price;
+                var old_price = $("#hdn"+company+type+"Price"+cur_row).val();
+				var old_price_labor = $("#hdn"+type+"PriceLabor"+cur_row).val();
+				var old_price_parts = $("#hdn"+type+"PriceParts"+cur_row).val();
+				if(old_price_labor == 0) {
+					old_price_labor = <?php echo $this->default_labor; ?>;
 				}
-				
-				if ($("#jqg_"+grid+list+"_list_"+cur_row).is(':checked') && old_price > 0) {
-					if(sign == "-") {
-						new_price = old_price - (old_price * (percentage/100));
-						$("#txt"+company+type+"Price"+cur_row).css('color','black');
-						$("#txt"+company+type+"Price"+cur_row).val(new_price.toFixed(decimals));
-					} else {
-						new_price = (old_price * ((percentage/100)+1));
-						$("#txt"+company+type+"Price"+cur_row).css('color','black');
-						$("#txt"+company+type+"Price"+cur_row).val(new_price.toFixed(decimals));
-					}
+                if(old_price_parts == 0) {
+                    old_price_parts = <?php echo $this->default_parts; ?>;
+                }
+                if(old_price == 0) {
+                    old_price = default_price;
+                }
+                if ($("#jqg_"+grid+list+"_list_"+cur_row).is(':checked')) {
+                    if(type == 'Device'){
+                        if(sign == "-") {
+                            //Labor
+                            new_price = old_price_labor - (old_price_labor * (percentage/100));
+                            $("#laborCostPerPage"+cur_row).css('color','black');
+                            $("#laborCostPerPage"+cur_row).val(new_price.toFixed(decimals));
+                            //Parts
+                            new_price = old_price_parts - (old_price_parts * (percentage/100));
+                            $("#partsCostPerPage"+cur_row).css('color','black');
+                            $("#partsCostPerPage"+cur_row).val(new_price.toFixed(decimals));
+                        } else {
+                            new_price = (old_price_labor * ((percentage/100)+1));
+                            $("#laborCostPerPage"+cur_row).css('color','black');
+                            $("#laborCostPerPage"+cur_row).val(new_price.toFixed(decimals));
+
+                            new_price = (old_price_parts * ((percentage/100)+1));
+                            $("#partsCostPerPage"+cur_row).css('color','black');
+                            $("#partsCostPerPage"+cur_row).val(new_price.toFixed(decimals));
+                        }
+                    } else {
+                        if(sign == "-") {
+                            new_price = old_price - (old_price * (percentage/100));
+                            $("#txt"+company+type+"Price"+cur_row).css('color','black');
+                            $("#txt"+company+type+"Price"+cur_row).val(new_price.toFixed(decimals));
+                        } else {
+                            new_price = (old_price * ((percentage/100)+1));
+                            $("#txt"+company+type+"Price"+cur_row).css('color','black');
+                            $("#txt"+company+type+"Price"+cur_row).val(new_price.toFixed(decimals));
+                        }
+
+                    }
+
 				}
 				
 			}
