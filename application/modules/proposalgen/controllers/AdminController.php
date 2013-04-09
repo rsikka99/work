@@ -1566,11 +1566,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id);
                                     if ($tonerAttribute)
                                     {
+
                                         $tonerAttribute->cost = $price;
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
                                     }
                                     else
                                     {
+
                                         $tonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
                                         $tonerAttribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                                         $tonerAttribute->tonerId  = $toner_id;
@@ -1752,6 +1754,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             catch
             (Exception $e)
             {
+                throw new Exception("Passing exception up the chain.", 0, $e);
                 $db->rollback();
                 $this->_flashMessenger->addMessage(array(
                                                         "error" => "Error: The updates were not saved."
@@ -3261,6 +3264,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 {
                     $response->rows [$i] ['id']   = $masterDevice->id;
                         $response->rows [$i]  = array(
+                            "masterID" => $masterDevice->id,
                             "manufacturerId" => $masterDevice->getManufacturer()->fullname,
                             "printer_model" => $masterDevice->modelName,
                             "labor_cost_per_page" => number_format($masterDevice->laborCostPerPage, 4),
@@ -3288,7 +3292,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $limit            = $this->_getParam('rows');
         $sortIndex        = $this->_getParam('sidx', 1);
         $sortOrder        = $this->_getParam('sord');
-        $dealerPricing    = $this->_getParam('dealerpricing',false);
         $where            = '';
         $where_compatible = '';
 
@@ -3393,14 +3396,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 'pt' => 'pgen_part_types'
                            ), 'pt.id = t.partTypeId', array(
                                                            'pt.name AS type_name'
-                                                      ));
-            if($dealerPricing)
-            {
-                $select->joinLeft(array(
+                                                      ))
+                ->joinLeft(array(
                                 'dta' => 'dealer_toner_attributes'
-                           ), 't.id = dta.tonerId', array('cost AS toner_dealer_price', 'dealerSku'));
-            }
-                $select->where('t.id > 0' . $where);
+                           ), 't.id = dta.tonerId', array('cost AS toner_dealer_price', 'dealerSku'))
+                    ->where('t.id > 0' . $where);
 
             if ($where_compatible)
             {
@@ -3450,18 +3450,18 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
 
                     $formData->rows [$i] ['id']   = $row ['toner_id'];
-                        $formData->rows [$i] ['cell'] = array(
-                            $row ['toner_id'],
-                            $row ['toner_SKU'],
-                            ucwords(strtolower($row ['toner_manufacturer'])),
-                            $type_name,
-                            ucwords(strtolower($row ['toner_color_name'])),
-                            $row ['toner_yield'],
-                            $row ['toner_price'],
-                            $row ['toner_dealer_price'],
-                            $row ['master_device_id'],
-                            $row ['is_added'],
-                            ucwords(strtolower($row ['device_list'])),
+                        $formData->rows [$i]  = array(
+                            "toner_id" => $row ['toner_id'],
+                            "toner_SKU" => $row ['toner_SKU'],
+                            "manufacturer_name" => ucwords(strtolower($row ['toner_manufacturer'])),
+                            "part_type_id" => $type_name,
+                            "toner_color_name" => ucwords(strtolower($row ['toner_color_name'])),
+                            "toner_yield" => $row ['toner_yield'],
+                            "toner_price" => $row ['toner_price'],
+                            "toner_dealer_price" => $row ['toner_dealer_price'],
+                            "new_toner_price" => $row ['master_device_id'],
+                            "is_added" => $row ['is_added'],
+                            "device_list" => ucwords(strtolower($row ['device_list'])),
 
                         );
                     $i++;

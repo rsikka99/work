@@ -21,26 +21,123 @@ $(document).ready(function ()
     jQuery("#availableToners").jqGrid({
         url         : TMTW_BASEURL + 'proposalgen/admin/tonerslist?deviceid=' + master_device_id,
         datatype    : 'json',
-        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compatibility'],
+//        colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compatibility'],
         colModel    : [
-            {tag: 0, width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
-            {tag: 1, width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
-            {tag: 2, width: 120, name: 'manufacturer_id', index: 'toner_manufacturer'},
-            {tag: 3, width: 120, name: 'part_type_id', index: 'part_type_id'},
-            {tag: 4, width: 100, name: 'toner_color_id', index: 'tonerColorId'},
-            {tag: 5, width: 60, name: 'toner_yield', index: 'yield'},
-            {tag: 6, width: 80, name: 'toner_price', index: 'toner_price'},
-            {tag: 7, width: 50, name: 'master_device_id', index: 'master_device_id', hidden: true},
-            {tag: 8, width: 50, name: 'is_added', index: 'is_added', hidden: true},
-            {tag: 9, width: 225, name: 'device_list', index: 'device_list'},
-            {tag: 10, width: 60, name: 'action', index: 'action', editable: false, align: 'center'},
-            {tag: 11, width: 50, name: 'machine_compatibility', index: 'machine_compatibility', hidden: true},
-            {tag: 12, width: 60, name: 'apply', index: 'apply', hidden: true, edittype: 'checkbox', editable: true, align: 'center'}
+            {
+                width      : 30,
+                name       : 'toner_id',
+                index      : 'toner_id',
+                label      : 'Toner Id',
+                sorttype   : 'int',
+                hidden     : true,
+                editable   : true,
+                editoptions: {readonly: true, size: 12}
+            },
+            {
+                width      : 60,
+                name       : 'toner_SKU',
+                index      : 'toner_SKU',
+                label      : 'SKU',
+                editable   : true,
+                editoptions: {size: 12, maxlength: 30}
+            },
+            {
+                width      : 120,
+                name       : 'manufacturer_name',
+                index      : 'manufacturerId',
+                label      : 'Manufacturer',
+                editable   : true,
+                editoptions: {size: 20, maxlength: 30}
+            },
+            {
+                width      : 120,
+                name       : 'part_type_id',
+                index      : 'part_type_id',
+                label      : 'Type',
+                editable   : true,
+                editoptions: {size: 20, maxlength: 30}
+            },
+            {
+                width      : 100,
+                name       : 'toner_color_name',
+                index      : 'toner_color_name',
+                label      : 'Color',
+                editable   : true,
+                editoptions: {size: 12, maxlength: 30}
+            },
+            {
+                width      : 60,
+                name       : 'toner_yield',
+                index      : 'yield',
+                label      : 'Yield',
+                editable   : true,
+                editoptions: {size: 10, maxlength: 4},
+                align      : 'right'
+            },
+            {
+                width      : 60,
+                name       : 'toner_price',
+                index      : 'toner_price',
+                label      : 'Price',
+                editable   : true,
+                editoptions: {size: 10, maxlength: 4},
+                align      : 'right'
+            },
+            {
+                width      : 80,
+                name       : 'master_device_id',
+                index      : 'master_device_id',
+                label      : 'MasterID',
+                hidden     : true,
+                editable   : true,
+                editoptions: {size: 12}
+            },
+            {
+                width      : 50,
+                name       : 'is_added',
+                index      : 'is_added',
+                label      : 'Added',
+                hidden     : true,
+                editable   : true,
+                editoptions: {size: 12}
+            },
+            {
+                width: 225,
+                name : 'device_list',
+                index: 'device_list',
+                label: 'Machine Compatibility'
+            },
+            {
+                width: 60,
+                name: 'action',
+                index: 'action',
+                editable: false,
+                align: 'center'
+            },
+            {
+                width: 50,
+                name: 'machine_compatibility',
+                index: 'machine_compatibility',
+                hidden: true
+            },
+            {
+                width   : 60,
+                name    : 'apply',
+                index   : 'apply',
+                label   : "Apply To Printer",
+                hidden  : true,
+                edittype: 'checkbox',
+                editable: true,
+                align   : 'center'
+            }
 
         ],
         width       : 940,
         height      : 500,
         rowNum      : 15,
+        jsonReader  : {
+            repeatitems: false
+        },
         rowList     : [15, 35, 50],
         pager       : '#availableTonersPager',
         gridComplete: function ()

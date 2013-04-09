@@ -19,6 +19,13 @@ $(document).ready(function ()
         datatype    : 'json',
         colModel    : [
             {
+                width:30,
+                name: 'masterID',
+                index: 'masterId',
+                label: "MasterId",
+                hidden: true
+            },
+            {
                 width: 150,
                 name : 'manufacturerId',
                 index: 'manufacturerId',
@@ -77,34 +84,34 @@ $(document).ready(function ()
         gridComplete: function ()
         {
             var ids = jQuery("#devices_list").jqGrid('getDataIDs');
+            var grid = $(this).jqGrid();
             for (var i = 0; i < ids.length; i++)
             {
                 var cur_row = ids[i];
-
-                var laborCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[3].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
+                var laborCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
                 if (laborCostPerPage == 0)
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[3].innerHTML = "$ -";
-                }
-                else
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[3].innerHTML = "$ " + laborCostPerPage;
-                }
-
-                var partsCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                if (partsCostPerPage == 0)
                 {
                     document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML = "$ -";
                 }
                 else
                 {
-                    document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML = "$ " + partsCostPerPage;
+                    document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML = "$ " + laborCostPerPage;
                 }
 
-                hidden_price_element_parts = "<input type='hidden' id='hdnDevicePriceParts" + cur_row + "' name='hdnDevicePriceParts" + cur_row + "' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
-                hidden_price_element_labor = "<input type='hidden' id='hdnDevicePriceLabor" + cur_row + "' name='hdnDevicePriceLabor" + cur_row + "' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
-                new_labor_cost_per_page_element = "$ <input type='text' id='laborCostPerPage" + cur_row + "' name='laborCostPerPage" + cur_row + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
-                new_parts_cost_per_page_element = "$ <input type='text' id='partsCostPerPage" + cur_row + "' name='partsCostPerPage" + cur_row + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
+                var partsCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
+                if (partsCostPerPage == 0)
+                {
+                    document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML = "$ -";
+                }
+                else
+                {
+                    document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML = "$ " + partsCostPerPage;
+                }
+
+                hidden_price_element_parts = "<input type='hidden' id='hdnDevicePriceParts" + grid.getRowData(i+1).masterID + "' name='hdnDevicePriceParts" + grid.getRowData(i+1).masterID + "' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
+                hidden_price_element_labor = "<input type='hidden' id='hdnDevicePriceLabor" + grid.getRowData(i+1).masterID + "' name='hdnDevicePriceLabor" + grid.getRowData(i+1).masterID + "' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
+                new_labor_cost_per_page_element = "$ <input type='text' id='laborCostPerPage" + grid.getRowData(i+1).masterID + "' name='laborCostPerPage" + grid.getRowData(i+1).masterID + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
+                new_parts_cost_per_page_element = "$ <input type='text' id='partsCostPerPage" + grid.getRowData(i+1).masterID + "' name='partsCostPerPage" + grid.getRowData(i+1).masterID + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
                 jQuery("#devices_list").jqGrid('setRowData', ids[i], {new_labor_cost_per_page: hidden_price_element_labor + new_labor_cost_per_page_element});
                 jQuery("#devices_list").jqGrid('setRowData', ids[i], {new_parts_cost_per_page: hidden_price_element_parts + new_parts_cost_per_page_element});
             }
@@ -140,7 +147,7 @@ $(document).ready(function ()
                 width      : 60,
                 name       : 'toner_id',
                 index      : 'toner_id',
-                label : 'Toner Id',
+                label      : 'Toner Id',
                 sorttype   : 'int',
                 hidden     : true,
                 editable   : true,
@@ -150,7 +157,7 @@ $(document).ready(function ()
                 width      : 80,
                 name       : 'toner_SKU',
                 index      : 'toner_SKU',
-                label : 'SKU',
+                label      : 'SKU',
                 editable   : true,
                 editoptions: {size: 12, maxlength: 30}
             },
@@ -158,7 +165,7 @@ $(document).ready(function ()
                 width      : 200,
                 name       : 'manufacturer_name',
                 index      : 'manufacturerId',
-                label : 'Manufacturer',
+                label      : 'Manufacturer',
                 editable   : true,
                 editoptions: {size: 20, maxlength: 30}
             },
@@ -166,7 +173,7 @@ $(document).ready(function ()
                 width      : 50,
                 name       : 'part_type_id',
                 index      : 'part_type_id',
-                label : 'Type',
+                label      : 'Type',
                 editable   : true,
                 editoptions: {size: 20, maxlength: 30}
             },
@@ -174,7 +181,7 @@ $(document).ready(function ()
                 width      : 60,
                 name       : 'toner_color_name',
                 index      : 'toner_color_name',
-                label : 'Color',
+                label      : 'Color',
                 editable   : true,
                 editoptions: {size: 12, maxlength: 30}
             },
@@ -182,7 +189,7 @@ $(document).ready(function ()
                 width      : 50,
                 name       : 'toner_yield',
                 index      : 'yield',
-                label : 'Yield',
+                label      : 'Yield',
                 editable   : true,
                 editoptions: {size: 10, maxlength: 4},
                 align      : 'right'
@@ -191,7 +198,7 @@ $(document).ready(function ()
                 width        : 100,
                 name         : 'toner_price',
                 index        : 'toner_dealer_price',
-                label : 'Default Price',
+                label        : 'Default Price',
                 editable     : true,
                 editoptions  : {size: 10, maxlength: 8},
                 formatter    : 'currency',
@@ -203,7 +210,7 @@ $(document).ready(function ()
                 width        : 60,
                 name         : 'toner_dealer_price',
                 index        : 'toner_price',
-                label : 'Price',
+                label        : 'Price',
                 editable     : true,
                 editoptions  : {size: 10, maxlength: 8},
                 formatter    : 'currency',
@@ -215,14 +222,14 @@ $(document).ready(function ()
                 width: 100,
                 name : 'new_toner_price',
                 index: 'new_toner_price',
-                label : 'New Price',
+                label: 'New Price',
                 align: 'right'
             },
             {
                 width      : 50,
                 name       : 'master_device_id',
                 index      : 'master_device_id',
-                label : 'MasterID',
+                label      : 'MasterID',
                 hidden     : true,
                 editable   : true,
                 editoptions: {size: 12}
@@ -231,7 +238,7 @@ $(document).ready(function ()
                 width      : 50,
                 name       : 'is_added',
                 index      : 'is_added',
-                label : 'Added',
+                label      : 'Added',
                 hidden     : true,
                 editable   : true,
                 editoptions: {size: 12}
@@ -240,7 +247,7 @@ $(document).ready(function ()
                 width: 225,
                 name : 'device_list',
                 index: 'device_list',
-                label : 'Machine Compatibility'
+                label: 'Machine Compatibility'
             }
         ],
         hidegrid    : false,
@@ -262,18 +269,19 @@ $(document).ready(function ()
         gridComplete: function ()
         {
             var ids = jQuery("#toners_list").jqGrid('getDataIDs');
+            var grid = $(this).jqGrid();
             for (var i = 0; i < ids.length; i++)
             {
                 var cur_row = ids[i];
                 var cur_price = document.getElementById("toners_list").rows[i + 1].cells[7].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + cur_row + "' id='hdnTonerPrice" + cur_row + "' value='" + cur_price + "' class='span1' maxlength='8' />";
-                new_price_element = "$ <input type='text' name='txtTonerPrice" + cur_row + "' id='txtTonerPrice" + cur_row + "' class='span1' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+                hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
+                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_toner_price: hidden_price_element + new_price_element});
 
                 var min = 4;
                 var max = 2;
                 var output = '';
-                device_list = document.getElementById("toners_list").rows[i + 1].cells[11].innerHTML;
+                device_list = document.getElementById("toners_list").rows[i + 1].cells[12].innerHTML;
                 var pieces = device_list.split("; ");
                 output += '<div id="outer_' + ids[i] + '" style="text-align: left; width: 200px;">';
                 for (var j = 0; j < pieces.length; j++)
