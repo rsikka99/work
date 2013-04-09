@@ -3450,8 +3450,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
 
                     $formData->rows [$i] ['id']   = $row ['toner_id'];
-                    if($dealerPricing)
-                    {
                         $formData->rows [$i] ['cell'] = array(
                             $row ['toner_id'],
                             $row ['toner_SKU'],
@@ -3466,23 +3464,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             ucwords(strtolower($row ['device_list'])),
 
                         );
-                    }
-                    else
-                    {
-                        $formData->rows [$i] ['cell'] = array(
-                            $row ['toner_id'],
-                            $row ['toner_SKU'],
-                            ucwords(strtolower($row ['toner_manufacturer'])),
-                            $type_name,
-                            ucwords(strtolower($row ['toner_color_name'])),
-                            $row ['toner_yield'],
-                            $row ['toner_price'],
-                            $row ['master_device_id'],
-                            $row ['is_added'],
-                            ucwords(strtolower($row ['device_list'])),
-                        );
-                    }
-
                     $i++;
                 }
             }
