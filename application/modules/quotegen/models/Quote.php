@@ -105,16 +105,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public $adminCostPerPage;
 
     /**
-     * @var float
-     */
-    public $laborCostPerPage;
-
-    /**
-     * @var float
-     */
-    public $partsCostPerPage;
-
-    /**
      * @var int
      */
     public $pricingConfigId;
@@ -231,16 +221,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
 
-        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
-        {
-            $this->laborCostPerPage = $params->laborCostPerPage;
-        }
-
-        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
-        {
-            $this->partsCostPerPage = $params->partsCostPerPage;
-        }
-
         if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
         {
             $this->pricingConfigId = $params->pricingConfigId;
@@ -274,8 +254,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             "monochromeOverageMargin" => $this->monochromeOverageMargin,
             "colorOverageMargin"      => $this->colorOverageMargin,
             "adminCostPerPage"        => $this->adminCostPerPage,
-            "laborCostPerPage"        => $this->laborCostPerPage,
-            "partsCostPerPage"        => $this->partsCostPerPage,
             "pricingConfigId"         => $this->pricingConfigId,
             "quoteType"               => $this->quoteType,
         );

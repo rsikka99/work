@@ -57,8 +57,6 @@ class Preferences_Service_QuoteSetting
                 $this->_form->getElement('deviceMargin')->setDescription($populateSettings['deviceMargin']);
                 $this->_form->getElement('pageMargin')->setDescription($populateSettings['pageMargin']);
                 $this->_form->getElement('adminCostPerPage')->setDescription($populateSettings['adminCostPerPage']);
-                $this->_form->getElement('laborCostPerPage')->setDescription($populateSettings['laborCostPerPage']);
-                $this->_form->getElement('partsCostPerPage')->setDescription($populateSettings['partsCostPerPage']);
                 $this->_form->getElement('pricingConfigId')->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['pricingConfigId']]);
 
                 // Re-load the settings into report settings

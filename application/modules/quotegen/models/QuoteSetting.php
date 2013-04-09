@@ -36,16 +36,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     /**
      * @var float
      */
-    public $laborCostPerPage;
-
-    /**
-     * @var float
-     */
-    public $partsCostPerPage;
-
-    /**
-     * @var float
-     */
     public $adminCostPerPage;
 
     /**
@@ -95,16 +85,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->pricingConfigId = $params->pricingConfigId;
         }
 
-        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
-        {
-            $this->partsCostPerPage = $params->partsCostPerPage;
-        }
-
-        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
-        {
-            $this->laborCostPerPage = $params->laborCostPerPage;
-        }
-
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
@@ -149,14 +129,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $this->pageMargin = $settings->pageMargin;
         }
-        if (isset($settings->laborCostPerPage) && !is_null($settings->laborCostPerPage))
-        {
-            $this->laborCostPerPage = $settings->laborCostPerPage;
-        }
-        if (isset($settings->partsCostPerPage) && !is_null($settings->partsCostPerPage))
-        {
-            $this->partsCostPerPage = $settings->partsCostPerPage;
-        }
         if (isset($settings->adminCostPerPage) && !is_null($settings->adminCostPerPage))
         {
             $this->adminCostPerPage = $settings->adminCostPerPage;
@@ -183,8 +155,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             "deviceMargin"           => $this->deviceMargin,
             "pageMargin"             => $this->pageMargin,
             "pricingConfigId"        => $this->pricingConfigId,
-            "laborCostPerPage"     => $this->laborCostPerPage,
-            "partsCostPerPage"     => $this->partsCostPerPage,
             "adminCostPerPage"       => $this->adminCostPerPage,
         );
     }
