@@ -1,7 +1,7 @@
 -- System Quote settings
-INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`, `laborCostPerPage`,`partsCostPerPage`) VALUES
-(1, 4.5, 20, 15, 20, 2, 0.0035, 0.002,0.0015),
-(2, 4.5, 20, 15, 20, 2, 0.0035, 0.002,0.0015);
+INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`) VALUES
+(1, 4.5, 20, 15, 20, 2, 0.0035),
+(2, 4.5, 20, 15, 20, 2, 0.0035);
 
 INSERT INTO `qgen_dealer_quote_settings` (`dealerId`, `quoteSettingId`) VALUES
 (1,1),

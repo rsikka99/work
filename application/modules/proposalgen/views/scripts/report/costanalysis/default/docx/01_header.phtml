@@ -1,0 +1,21 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+$section->addTitle($this->translate('Customer Cost Analysis'),1);
+
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate("Average Monochrome CPP: "), array("bold" => true));
+$textRun->addText($this->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4)));
+
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate("Average Color CPP: "), array("bold" => true));
+$textRun->addText($this->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4)));

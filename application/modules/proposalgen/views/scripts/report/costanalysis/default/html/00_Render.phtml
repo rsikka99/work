@@ -1,0 +1,42 @@
+<?php
+    /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+    $proposal = $this->proposal;
+
+    $customerCostPerPageSetting = $proposal->getCostPerPageSettingForCustomer();
+    $deviceInstances = $proposal->getMonthlyHighCostPurchasedDevice($customerCostPerPageSetting);
+?>
+
+<div class="container" id="htmlReportContainer">
+    <h2 class="reportTitle">Customer Cost Analysis</h2><br />
+
+    <p><strong>Average Black CPP:</strong> $<?php echo number_format($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, 4);?></p>
+    <p><strong>Average Color CPP:</strong> $<?php echo number_format($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, 4);?></p>
+
+    <table class="mainTable">
+        <tr>
+            <th>Device Name</th>
+            <th>% Of Monthly Cost</th>
+            <th>Monthly Black Volume</th>
+            <th>Monthly Color Volume</th>
+            <th>Black CPP</th>
+            <th>Color CPP</th>
+            <th>Estimated Monthly Cost</th>
+        </tr>
+
+        <?php foreach ($deviceInstances as $deviceInstance) : ?>
+            <?php
+            $isColor = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+            $percentOfMonthlyCost = ($proposal->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting) / $proposal->calculateTotalMonthlyCost() * 100, 2) : 0;
+            ?>
+            <tr>
+                <td><?php echo $deviceInstance->getDeviceName();?></td>
+                <td class='number'><?php echo $percentOfMonthlyCost;?>%</td>
+                <td class='number'><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount());?></td>
+                <td class='number'><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A';?></td>
+                <td class='number cpp'><?php echo $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->monochromeCostPerPage, array("precision" => 4));?></td>
+                <td class='number cpp'><?php echo ($isColor) ? $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->colorCostPerPage, array("precision" => 4)) : 'N/A';?></td>
+                <td class='number'><?php echo $this->currency($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting));?></td>
+            </tr>
+        <?php endforeach;?>
+    </table>
+</div>

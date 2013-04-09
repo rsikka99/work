@@ -152,4 +152,22 @@ class Quotegen_Model_Device extends My_Model_Abstract
 
         return $this;
     }
+
+
+    public function saveObject ()
+    {
+        // Do we have an instance of it in our database?
+        $quoteDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
+
+        if ($quoteDeviceMapper->find(array($this->masterDeviceId, $this->dealerId)))
+        {
+            $quoteDeviceMapper->save($this);
+        }
+        else
+        {
+            $quoteDeviceMapper->insert($this);
+        }
+
+        return $this;
+    }
 }
