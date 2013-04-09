@@ -1,19 +1,19 @@
 <?php
 
-class My_Form_Decorator_ColumnHeader extends Zend_Form_Decorator_Abstract{
-
-    public function render($content)
+class My_Form_Decorator_ColumnHeader extends Zend_Form_Decorator_Abstract
+{
+    public function render ($content)
     {
         $data = $this->getOption('data');
 
         $rowData = '';
-        foreach($data as $column)
+        foreach ($data as $column)
         {
-            $rowData .= '<td class="headerData">' . $column. '</td>';
+            $rowData .= '<td class="headerData">' . $column . '</td>';
         }
 
 
-        $output =  '<tr class="headerRow control-group">' . $rowData . '</tr>';
+        $output = '<tr class="headerRow control-group">' . $rowData . '</tr>';
 
         $placement = $this->getPlacement();
 
