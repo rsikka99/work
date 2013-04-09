@@ -1228,8 +1228,6 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
     `deviceMargin` DOUBLE NULL DEFAULT NULL ,
     `pageMargin` DOUBLE NULL DEFAULT NULL ,
     `pricingConfigId` INT(11) NULL DEFAULT NULL ,
-    `partsCostPerPage` DOUBLE NULL ,
-    `laborCostPerPage` DOUBLE NULL ,
     `adminCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `quotegen_quote_settings_ibfk1_idx` (`pricingConfigId` ASC) ,
