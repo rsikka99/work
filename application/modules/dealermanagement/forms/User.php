@@ -37,29 +37,6 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
         // Validators
         $datetimeValidator = new My_Validate_DateTime();
 
-        if ($this->_createMode)
-        {
-            $this->addElement('text', 'username', array(
-                                                       'label'      => 'Username:',
-                                                       'required'   => true,
-                                                       'filters'    => array(
-                                                           'StringTrim',
-                                                           'StripTags',
-                                                           'Alnum'
-                                                       ),
-                                                       'validators' => array(
-                                                           array(
-                                                               'validator' => 'StringLength',
-                                                               'options'   => array(
-                                                                   4,
-                                                                   30
-                                                               ),
-                                                               'Alnum'
-                                                           )
-                                                       )
-                                                  ));
-        }
-
 
         $this->addElement('text', 'firstname', array(
                                                     'label'      => 'First Name:',

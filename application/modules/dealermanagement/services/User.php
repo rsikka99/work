@@ -84,7 +84,7 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
         if ($filteredData !== false)
         {
             $usersByEmail = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($filteredData['email']);
-            if (count($usersByEmail) === 0)
+            if ($usersByEmail === false)
             {
                 $user = new Application_Model_User();
                 $user->populate($filteredData);

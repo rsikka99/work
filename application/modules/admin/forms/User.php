@@ -56,29 +56,6 @@ class Admin_Form_User extends EasyBib_Form
         // Validators
         $datetimeValidator = new My_Validate_DateTime();
 
-        if ($this->getFormMode() !== self::MODE_USER_EDIT)
-        {
-            $this->addElement('text', 'username', array(
-                                                       'label'      => 'Username:',
-                                                       'required'   => true,
-                                                       'filters'    => array(
-                                                           'StringTrim',
-                                                           'StripTags',
-                                                           'Alnum'
-                                                       ),
-                                                       'validators' => array(
-                                                           array(
-                                                               'validator' => 'StringLength',
-                                                               'options'   => array(
-                                                                   4,
-                                                                   30
-                                                               ),
-                                                               'Alnum'
-                                                           )
-                                                       )
-                                                  ));
-        }
-
         $this->addElement('text', 'firstname', array(
                                                     'label'      => 'First Name:',
                                                     'required'   => true,
