@@ -106,29 +106,6 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                                            'validators' => $cppValidator
                                                       ));
 
-        $this->addElement('text', 'laborCostPerPage', array(
-                                                             'label'      => 'Labor Cost:',
-                                                             'required'   => true,
-                                                             'append'     => '$ / per page',
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'validators' => $cppValidator
-                                                        ));
-
-        $this->addElement('text', 'partsCostPerPage', array(
-                                                             'label'      => 'Parts Cost Per Page:',
-                                                             'required'   => true,
-                                                             'append'     => '$ / per page',
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'validators' => $cppValidator
-                                                        ));
-
-
 
         $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array('label' => 'Toner Preference:', 'class' => 'span3'));
         /* @var $pricingConfig Proposalgen_Model_PricingConfig */
@@ -143,7 +120,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement($pricingConfigDropdown);
 
         // Display groups and decoratos
-        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'deviceMargin', 'pageMargin', 'adminCostPerPage', 'laborCostPerPage' , 'partsCostPerPage', $pricingConfigDropdown), 'quoteSetting', array('legend' => 'Quote Settings'));
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'deviceMargin', 'pageMargin', 'adminCostPerPage', $pricingConfigDropdown), 'quoteSetting', array('legend' => 'Quote Settings'));
         $this->setElementDecorators(array(
                                          'FieldSize',
                                          'ViewHelper',
