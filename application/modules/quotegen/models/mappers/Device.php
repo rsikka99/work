@@ -65,13 +65,14 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey [] = $data[$this->col_masterDeviceId];
+            $primaryKey [] = $data [$this->col_masterDeviceId];
             $primaryKey [] = $data [$this->col_dealerId];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey
+                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey[0],
+                                                                "{$this->col_dealerId} = ?"       => $primaryKey[1]
                                                            ));
 
         // Save the object into the cache
@@ -95,7 +96,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
-                "{$this->col_dealerId} = ?" => $object->dealerId,
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
 
             );
         }
@@ -103,7 +104,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object[0],
-                "{$this->col_dealerId} = ?" => $object[1],
+                "{$this->col_dealerId} = ?"       => $object[1],
             );
         }
 
@@ -128,6 +129,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         {
             return $result;
         }
+
         // Assuming we don't have a cached object, lets go get it.
         $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
@@ -209,7 +211,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param int $id
+     * @param array $id
      *
      * @return array
      */
@@ -217,7 +219,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     {
         return array(
             "{$this->col_masterDeviceId} = ?" => $id [0],
-            "{$this->col_dealerId} = ?" => $id [1],
+            "{$this->col_dealerId} = ?"       => $id [1],
         );
     }
 
@@ -229,13 +231,14 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return array(
-            $object->masterDeviceId,
-            $object->dealerId
+            (int)$object->masterDeviceId,
+            (int)$object->dealerId
         );
     }
 
     /**
      * Fetches a list of devices for the dealer
+     *
      * @param int dealer id
      *
      * @return Quotegen_Model_Device[]
@@ -243,6 +246,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     public function fetchQuoteDeviceListForDealer ($dealerId)
     {
         $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
         return $devices;
     }
 }
