@@ -58,10 +58,34 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "masterDeviceId" => $this->masterDeviceId,
-            "dealerId" => $this->dealerId,
+            "masterDeviceId"   => $this->masterDeviceId,
+            "dealerId"         => $this->dealerId,
             "partsCostPerPage" => $this->partsCostPerPage,
             "laborCostPerPage" => $this->laborCostPerPage,
         );
+    }
+
+    public function saveObject ()
+    {
+        // Do we have an instance of it in our database?
+        $dealerMasterDeviceAttributeMapper = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance();
+
+        if (empty($this->laborCostPerPage) && empty($this->partsCostPerPage))
+        {
+            $dealerMasterDeviceAttributeMapper->delete($this);
+        }
+        else
+        {
+            if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId(array($this->masterDeviceId,$this->dealerId))))
+            {
+                $dealerMasterDeviceAttributeMapper->save($this);
+            }
+            else
+            {
+                $dealerMasterDeviceAttributeMapper->insert($this);
+            }
+        }
+
+        return $this;
     }
 }
