@@ -284,47 +284,45 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Parts Cost Per Page
          */
         $this->addElement('text', 'partsCostPerPage', array(
-                                                             'label'      => 'Parts Cost Per Page:',
-                                                             'class'      => 'span1',
-                                                             'maxlength'  => 8,
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'validators' => array(
-                                                                 'Float',
-                                                                 array(
-                                                                     'validator' => 'Between',
-                                                                     'options'   => array(
-                                                                                                                                                'min' => 0,
-                                                                         'max' => 5
-                                                                     )
-                                                                 )
-                                                             )
-                                                        ));
+                                                           'label'      => 'Parts Cost Per Page:',
+                                                           'class'      => 'span1',
+                                                           'maxlength'  => 8,
+                                                           'allowEmpty' => false,
+                                                           'filters'    => array(
+                                                               'StringTrim',
+                                                               'StripTags'
+                                                           ),
+                                                           'validators' => array( new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                                                                                                          new Zend_Validate_NotEmpty(),
+                                                                                                                                          new Zend_Validate_Float(),
+                                                                                                                                          new Zend_Validate_Between(array(
+                                                                                                                                                                         'min' => 0,
+                                                                                                                                                                         'max' => 5
+                                                                                                                                                                    ))
+                                                                                                                                     )))
+                                                      ));
 
         /*
         * Labor Cost Per Page
         */
         $this->addElement('text', 'laborCostPerPage', array(
-                                                             'label'      => 'Labor Cost Per Page:',
-                                                             'class'      => 'span1',
-                                                             'maxlength'  => 8,
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'validators' => array(
-                                                                 'Float',
-                                                                 array(
-                                                                     'validator' => 'Between',
-                                                                     'options'   => array(
-                                                                         'min' => 0,
-                                                                         'max' => 5
-                                                                     )
-                                                                 )
-                                                             )
-                                                        ));
+                                                           'label'      => 'Labor Cost Per Page:',
+                                                           'class'      => 'span1',
+                                                           'maxlength'  => 8,
+                                                           'allowEmpty' => false,
+                                                           'filters'    => array(
+                                                               'StringTrim',
+                                                               'StripTags'
+                                                           ),
+                                                           'validators' => array( new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                                                                                                                new Zend_Validate_NotEmpty(),
+                                                                                                                                                new Zend_Validate_Float(),
+                                                                                                                                                new Zend_Validate_Between(array(
+                                                                                                                                                                               'min' => 0,
+                                                                                                                                                                               'max' => 5
+                                                                                                                                                                          ))
+                                                                                                                                           )))
+                                                      ));
 
         /*
          * Launch Date /
