@@ -194,7 +194,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_dealerAttributes))
         {
-            $this->_dealerAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->fetch(Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId)));
+
+            $where = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId));
+            $this->_dealerAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->fetch($where);
         }
 
         return $this->_dealerAttributes;
