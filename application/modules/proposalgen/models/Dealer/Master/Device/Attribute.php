@@ -70,13 +70,15 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         // Do we have an instance of it in our database?
         $dealerMasterDeviceAttributeMapper = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance();
 
-        if (empty($this->laborCostPerPage) && empty($this->partsCostPerPage))
+        $this->_filterData();
+
+        if ($this->laborCostPerPage instanceof Zend_Db_Expr && $this->partsCostPerPage instanceof Zend_Db_Expr)
         {
             $dealerMasterDeviceAttributeMapper->delete($this);
         }
         else
         {
-            if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId(array($this->masterDeviceId,$this->dealerId))))
+            if ($dealerMasterDeviceAttributeMapper->fetch($dealerMasterDeviceAttributeMapper->getWhereId(array($this->masterDeviceId, $this->dealerId))))
             {
                 $dealerMasterDeviceAttributeMapper->save($this);
             }
@@ -87,5 +89,18 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         }
 
         return $this;
+    }
+
+    protected function _filterData ()
+    {
+        if ($this->laborCostPerPage < 0)
+        {
+            $this->laborCostPerPage = new Zend_Db_Expr("null");
+        }
+
+        if ($this->partsCostPerPage < 0)
+        {
+            $this->partsCostPerPage = new Zend_Db_Expr("null");
+        }
     }
 }

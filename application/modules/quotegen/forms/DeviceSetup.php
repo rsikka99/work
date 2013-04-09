@@ -292,14 +292,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StringTrim',
                                                                'StripTags'
                                                            ),
-                                                           'validators' => array( new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                          new Zend_Validate_NotEmpty(),
-                                                                                                                                          new Zend_Validate_Float(),
-                                                                                                                                          new Zend_Validate_Between(array(
-                                                                                                                                                                         'min' => 0,
-                                                                                                                                                                         'max' => 5
-                                                                                                                                                                    ))
-                                                                                                                                     )))
+                                                           'validators' => array(new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                                                                                                               new Zend_Validate_NotEmpty(),
+                                                                                                                                               new Zend_Validate_Float(),
+                                                                                                                                               new Zend_Validate_Between(array(
+                                                                                                                                                                              'min' => 0,
+                                                                                                                                                                              'max' => 5,
+                                                                                                                                                                         ))
+                                                                                                                                          )))
                                                       ));
 
         /*
@@ -314,14 +314,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StringTrim',
                                                                'StripTags'
                                                            ),
-                                                           'validators' => array( new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                                new Zend_Validate_NotEmpty(),
-                                                                                                                                                new Zend_Validate_Float(),
-                                                                                                                                                new Zend_Validate_Between(array(
-                                                                                                                                                                               'min' => 0,
-                                                                                                                                                                               'max' => 5
-                                                                                                                                                                          ))
-                                                                                                                                           )))
+                                                           'validators' => array(new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                                                                                                               new Zend_Validate_NotEmpty(),
+                                                                                                                                               new Zend_Validate_Float(),
+                                                                                                                                               new Zend_Validate_Between(array(
+                                                                                                                                                                              'min' => 0,
+                                                                                                                                                                              'max' => 5,
+                                                                                                                                                                         ))
+                                                                                                                                          )))
                                                       ));
 
         /*
