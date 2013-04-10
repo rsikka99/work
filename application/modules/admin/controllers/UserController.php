@@ -178,7 +178,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->redirector('index');
         }
 
-        $form = new Application_Form_Delete("Are you sure you want to delete {$user->username} ({$user->firstname} {$user->lastname})?");
+        $form = new Application_Form_Delete("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
 
         $request = $this->getRequest();
 
