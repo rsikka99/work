@@ -130,7 +130,9 @@ INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`, `isDeleted`) VALUE
 (26, 'Panasonic', 'Panasonic', 0),
 (27, 'Copystar', 'Copystar', 0),
 (28, 'Lanier', 'Lanier', 0),
-(29, 'Media Science', 'Media Science', 0);
+(29, 'Media Science', 'Media Science', 0),
+(30, 'Print Rite', 'Print Rite', 0),
+(31, 'Memjet', 'Memjet', 0);
 
 INSERT INTO `countries` (`id`, `name`, `locale`) VALUES
 (1, 'Canada', 'en_CA'),

@@ -1763,13 +1763,13 @@ CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     CONSTRAINT `dealer_toner_attributes_ibfk1`
     FOREIGN KEY (`tonerId` )
     REFERENCES `pgen_toners` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `dealer_toner_attributes_ibfk2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 

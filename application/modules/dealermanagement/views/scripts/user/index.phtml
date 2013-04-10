@@ -15,7 +15,8 @@
         <th colspan="6">
             <p><?php echo count($this->users);?> of <?php echo $this->maxUsers; ?> Users Created</p>
             <div class="progress progress-striped">
-                <div class="bar <?php echo (count($this->users) < $this->maxUsers) ? '' : 'bar-danger';?>" style="width: <?php echo count($this->users) / $this->maxUsers  * 100 . '%'?>;"></div>
+                <?php $width =  count($this->users) / $this->maxUsers  * 100;?>
+                <div class="bar <?php echo (count($this->users) < $this->maxUsers) ? '' : 'bar-danger';?>" style="width: <?php echo ($width > 100) ? 100 : $width .'%'?>;"></div>
             </div>
         </th>
     </tr>

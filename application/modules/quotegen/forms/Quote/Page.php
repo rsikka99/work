@@ -240,54 +240,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         ));
         $this->addElement($adminCostPerPage);
         
-        // laborCostPerPage : Quotegen_Model_Quote->laborCostPerPage
-        // laborCostPerPage is a flat CPP that is used to add an additional charge per page to recoop service related fees
-        $laborCostPerPage = $this->createElement('text', 'laborCostPerPage', array (
-                'label' => 'Labor Cost Per Page:',
-                'value' => $this->_quote->laborCostPerPage,
-                'required' => true,
-                'class' => 'input-mini',
-                'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                ),
-                'validators' => array (
-                        array (
-                                'validator' => 'Between',
-                                'options' => array (
-                                        'min' => 0,
-                                        'max' => 5
-                                )
-                        ),
-                        'Float'
-                )
-        ));
-        $this->addElement($laborCostPerPage);
 
-        // partsCostPerPage : Quotegen_Model_Quote->partsCostPerPage
-        // partsCostPerPage is a flat CPP that is used to add an additional charge per page to recoop service related fees
-        $partsCostPerPage = $this->createElement('text', 'partsCostPerPage', array (
-                                                                                       'label' => 'Parts Cost Per Page:',
-                                                                                       'value' => $this->_quote->partsCostPerPage,
-                                                                                       'required' => true,
-                                                                                       'class' => 'input-mini',
-                                                                                       'filters' => array (
-                                                                                           'StringTrim',
-                                                                                           'StripTags'
-                                                                                       ),
-                                                                                       'validators' => array (
-                                                                                           array (
-                                                                                               'validator' => 'Between',
-                                                                                               'options' => array (
-                                                                                                   'min' => 0,
-                                                                                                   'max' => 5
-                                                                                               )
-                                                                                           ),
-                                                                                           'Float'
-                                                                                       )
-                                                                                 ));
-        $this->addElement($partsCostPerPage);
-        
         // pricingConfigId : Quotegen_Model_Quote->pricingConfigId
         // pricingConfigId is used to determine the users prefernce for toners when it comes to calculating a devices CPP
         $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (
