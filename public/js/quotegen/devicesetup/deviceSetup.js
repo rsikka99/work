@@ -69,7 +69,7 @@ $(function ()
             mType       : "GET",
             postData: {
                 canSell: function() {
-                    return $("#chkCanSell").attr('checked')=='checked'; // or other method which read the value
+                    return document.getElementById('chkCanSell').checked; // or other method which read the value
                 },
                 criteriaFilter: function() {
                     return $("#criteria_filter").val(); // or other method which read the value
