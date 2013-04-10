@@ -3462,7 +3462,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             "new_toner_price" => $row ['master_device_id'],
                             "is_added" => $row ['is_added'],
                             "device_list" => ucwords(strtolower($row ['device_list'])),
-
+                            "dealer_sku" => $row['dealerSku']
                         );
                     $i++;
                 }
