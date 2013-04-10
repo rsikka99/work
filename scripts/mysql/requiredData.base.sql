@@ -26,9 +26,9 @@ INSERT INTO `roles` VALUES
 (4, 'Quote Administrator', 0),
 (5, 'Quote User', 0),
 (6, 'Dealer Administrator', 0),
-(7, 'Hardware Admin', 0),
-(8, 'Client Admin', 0),
-(9, 'Lease Rate Admin', 0),
+(7, 'Hardware Administrator', 0),
+(8, 'Client Administrator', 0),
+(9, 'Lease Rate Administrator', 0),
 (10, 'Hardware Optimization User', 0),
 (11, 'Healthcheck User', 0);
 
