@@ -104,7 +104,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/jquery-ui-1.8.20.custom.min.js"));
     }
 
     /**
