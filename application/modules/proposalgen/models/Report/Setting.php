@@ -125,6 +125,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      */
     public $assessmentPricingConfigId;
 
+    public $replacementPricingConfigId;
+
     /**
      * @var float
      */
@@ -140,12 +142,20 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $targetMonochromeCostPerPage;
     public $targetColorCostPerPage;
     protected $_assessmentPricingConfig;
+
     /**
      * The gross margin pricing configuration
      *
      * @var Proposalgen_Model_PricingConfig
      */
     protected $_grossMarginPricingConfig;
+
+    /**
+     * Pricing config used for designated which tones to use for replacement devices
+     *
+     * @var Proposalgen_Model_PricingConfig
+     */
+    protected $_replacementPricingConfig;
 
     /**
      * Overrides all the settings.
@@ -253,6 +263,10 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         {
             $this->costThreshold = $params->costThreshold;
         }
+        if (isset($params->replacementPricingConfigId) && !is_null($params->replacementPricingConfigId))
+        {
+            $this->replacementPricingConfigId = $params->replacementPricingConfigId;
+        }
     }
 
     /**
@@ -281,7 +295,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "costThreshold"               => $this->costThreshold,
+            "replacementPricingConfigId"               => $this->replacementPricingConfigId,
         );
     }
 
@@ -298,6 +312,16 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         }
 
         return $this->_assessmentPricingConfig;
+    }
+
+    public function getReplacementPricingConfig()
+    {
+        if(!isset($this->_replacementPricingConfig))
+        {
+            $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
+        }
+
+        return $this->_replacementPricingConfig;
     }
 
     /**
