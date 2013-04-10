@@ -9,9 +9,11 @@ class Quotegen_Model_Acl
     const RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS        = "quotegen__devicesetup__configurations";
     const RESOURCE_QUOTEGEN_DEVICESETUP_CREATE                = "quotegen__devicesetup__create";
     const RESOURCE_QUOTEGEN_DEVICESETUP_EDIT                  = "quotegen__devicesetup__edit";
+    const RESOURCE_QUOTEGEN_DEVICESETUP_DELETE                = "quotegen__devicesetup__delete";
     const RESOURCE_QUOTEGEN_DEVICESETUP_INDEX                 = "quotegen__devicesetup__index";
     const RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS               = "quotegen__devicesetup__options";
     const RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD              = "quotegen__devicesetup__%";
+    const RESOURCE_QUOTEGEN_CATEGORY_WILDCARD                 = "quotegen__category__%";
     const RESOURCE_QUOTEGEN_INDEX                             = "quotegen__index__index";
     const RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE               = "quotegen__index__existing-quote";
     const RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT         = "quotegen__index__get-reports-for-client";
@@ -53,9 +55,11 @@ class Quotegen_Model_Acl
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_CREATE);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS);
         $acl->addResource(self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD);
+        $acl->addResource(self::RESOURCE_QUOTEGEN_CATEGORY_WILDCARD);
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX);
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX_EXISTINGQUOTE);
         $acl->addResource(self::RESOURCE_QUOTEGEN_INDEX_GETREPORTSFORCLIENT);
@@ -80,6 +84,7 @@ class Quotegen_Model_Acl
      */
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
+        //Quote Admin
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -88,6 +93,7 @@ class Quotegen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_OPTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
+        //Quote User
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEGROUPS_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -102,6 +108,19 @@ class Quotegen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTE_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        //Hardware Admin
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_CATEGORY_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_QUOTEGEN_OPTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
 
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
