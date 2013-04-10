@@ -105,6 +105,20 @@ INSERT INTO `qgen_devices` (`masterDeviceId`, `dealerId`, `cost`, `dealerSku`, `
 (482, 2, 4941, '', '1102LH2US0', '55 PPM A3 B&W MFP'),
 (483, 2, 14500, '', '1102LB2US0', '65/65 PPM A3 Color MFP');
 
+INSERT INTO `dealer_master_device_attributes` (`masterDeviceId`,`dealerId`,`laborCostPerPage`,`partsCostPerPage`) VALUES
+(79, 2, 0, 0),
+(95, 2, 0, 0),
+(401, 2, 0, 0),
+(445, 2, 0, 0),
+(459, 2, 0, 0),
+(471, 2, 0, 0),
+(478, 2, 0, 0),
+(479, 2, 0, 0),
+(480, 2, 0, 0),
+(481, 2, 0, 0),
+(482, 2, 0, 0),
+(483, 2, 0, 0);
+
 INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`, `dealerId`, `includedQuantity`) VALUES
 (79, 9, 2, 0),
 (79, 12, 2, 0),
