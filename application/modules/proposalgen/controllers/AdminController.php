@@ -3873,6 +3873,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $form     = new Proposalgen_Form_ReplacementPrinter(null, '');
         $formData = $this->_getAllParams();
 
+
         $hdnManId             = $formData ['hdnManId'];
         $hdnMasId             = $formData ['hdnMasId'];
         $manufacturer_id      = $formData ['manufacturer_id'];
@@ -3915,9 +3916,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $message = '';
 
+
             $db->beginTransaction();
             try
             {
+
                 $replacementTable         = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
@@ -3932,9 +3935,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                 if ($form_mode == "add")
                 {
-                    // check to see if replacement device exists
 
-                    $where               = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
+                    // check to see if replacement device exists
+                    $where               = array('masterDeviceId = ?' => $printer_model, "dealerId = ?" => Zend_Auth::getInstance()->getIdentity()->dealerId);
                     $replacement_devices = $replacementTableMapper->fetchAll($where, null, 1);
                     if (count($replacement_devices) > 0)
                     {
@@ -3949,6 +3952,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                         $this->view->message = "<p>The replacement printer has been added.</p>";
                     }
+
                 }
                 else if ($form_mode == "edit")
                 {
