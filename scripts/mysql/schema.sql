@@ -4,6 +4,17 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 
 -- -----------------------------------------------------
+-- Table `images`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `images` (
+    `id` INT NOT NULL AUTO_INCREMENT ,
+    `image` MEDIUMBLOB NOT NULL ,
+    `filename` VARCHAR(255) NOT NULL ,
+    PRIMARY KEY (`id`) )
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `dealers`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `dealers` (
@@ -11,7 +22,14 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     `dealerName` VARCHAR(255) NOT NULL ,
     `userLicenses` INT NOT NULL ,
     `dateCreated` DATE NOT NULL ,
-    PRIMARY KEY (`id`) )
+    `dealerLogoImageId` INT NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `dealers_ibfk_1_idx` (`dealerLogoImageId` ASC) ,
+    CONSTRAINT `dealers_ibfk_1`
+    FOREIGN KEY (`dealerLogoImageId` )
+    REFERENCES `images` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
