@@ -6,6 +6,7 @@ class Dealermanagement_Model_Acl
     const RESOURCE_DEALERMANAGEMENT_INDEX                  = "dealermanagement__index__index";
     const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
     const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD          = "dealermanagement__user__%";
+    const RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD          = "dealermanagement__dealer__%";
 
     /**
      * Sets up acl resources and access for a module
@@ -30,6 +31,7 @@ class Dealermanagement_Model_Acl
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_INDEX);
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD);
         $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD);
+        $acl->addResource(self::RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD);
     }
 
     /**
@@ -44,7 +46,8 @@ class Dealermanagement_Model_Acl
 
 
         // Dealer Admin
-        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 
 }

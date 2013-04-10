@@ -52,11 +52,11 @@ class Preferences_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         // Proposal Admin
-        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Proposal User
-        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PROPOSAL_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Quote Admin
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
