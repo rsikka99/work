@@ -417,6 +417,16 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $this->addElement($target_color);
         $optimization->elements [] = $target_color;
 
+        // Toner preference for the assessment
+        $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
+        $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
+            ->setAttrib('class', 'span2')
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getReplacementPricingConfig()
+                ->configName)
+            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
+        $this->addElement($replacementDeviceTonerPreference);
+        $optimization->elements [] = $replacementDeviceTonerPreference;
+
         $target_monochrome->setLabel('Target Monochrome')
             ->setAttrib('class', 'input-mini');
         $target_color->setLabel('Target Color')
@@ -425,35 +435,18 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         //*****************************************************************
         // BUTTONS
         //*****************************************************************
-        
-
-        // Save button
         $element = new Zend_Form_Element_Submit('save_settings', array (
                 'disableLoadDefaultDecorators' => true
         ));
         $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
         $this->addElement($element);
-        
-        //back button
+
         $element = new Zend_Form_Element_Button('back_button');
         $element->setLabel('Back')
             ->setAttrib('class', 'btn')
             ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
         $this->addElement($element);
-        
-        // Add the submit button
-//        $this->addElement('submit', 'submit', array (
-//                'ignore' => true,
-//                'label' => 'Save & Continue'
-//        ));
-//
-//        // Add the cancel button
-//        $this->addElement('submit', 'cancel', array (
-//                'ignore' => true,
-//                'label' => 'Back'
-//        ));
-        
-        //EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+
         Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL, $this);
     }
 
@@ -467,4 +460,3 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         return $this->_formElementGroups;
     }
 }
-?>
