@@ -61,6 +61,54 @@ class Admin_DealerController extends Tangent_Controller_Action
                     $db = Zend_Db_Table::getDefaultAdapter();
                     try
                     {
+                        $dealerLogoImage = $form->getDealerLogoImage();
+                        if ($dealerLogoImage->isUploaded())
+                        {
+                            $dealerLogoImage->setDestination(DATA_PATH . '/uploads/');
+                            if ($dealerLogoImage->receive())
+                            {
+                                $uploadedImagePath = $dealerLogoImage->getFileName();
+                                $uploadedImageFileName = $dealerLogoImage->getFileName(null, false);
+
+                                list($imageWidth, $imageHeight, $imageType) = getimagesize($uploadedImagePath);
+
+                                switch ($imageType)
+                                {
+                                    case "image/gif" :
+                                        $uploadedImage = imagecreatefromgif($uploadedImagePath);
+                                        break;
+                                    case "image/pjpeg" :
+                                    case "image/jpeg" :
+                                    case "image/jpg" :
+                                        $uploadedImage = imagecreatefromjpeg($uploadedImagePath);
+                                        break;
+                                    case "image/png" :
+                                    case "image/x-png" :
+                                        $uploadedImage = imagecreatefrompng($uploadedImagePath);
+                                }
+                                imagepng($uploadedImage, $uploadedImagePath);
+                                $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
+                                $data              = $base64ImageString;
+
+                                /**
+                                 * Insert the image into the database
+                                 */
+                                $image = new Admin_Model_Image();
+                                $image->filename = $uploadedImageFileName;
+                                $image->image = $base64ImageString;
+                                $imageId = Admin_Model_Mapper_Image::getInstance()->insert($image);
+                                if ($imageId)
+                                {
+                                    if ($dealer->dealerLogoImageId > 0)
+                                    {
+                                        Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
+                                    }
+                                    $dealer->dealerLogoImageId = $imageId;
+                                }
+                            }
+                        }
+
+
                         // Save dealer object
                         $dealer->populate($form->getValues());
                         $dealerMapper->save($dealer);
@@ -217,13 +265,13 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // Delete the dealer and the related report setting
                         $dealerReportSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealer->id);
-                        if($dealerReportSetting instanceof Proposalgen_Model_Dealer_Report_Setting)
+                        if ($dealerReportSetting instanceof Proposalgen_Model_Dealer_Report_Setting)
                         {
                             Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealerReportSetting->reportSettingId);
                         }
 
                         $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->find($dealer->id);
-                        if($dealerQuoteSetting instanceof Quotegen_Model_DealerQuoteSetting)
+                        if ($dealerQuoteSetting instanceof Quotegen_Model_DealerQuoteSetting)
                         {
                             Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealerQuoteSetting->quoteSettingId);
                         }
