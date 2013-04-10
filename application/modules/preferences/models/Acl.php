@@ -6,6 +6,7 @@ class Preferences_Model_Acl
      */
     const RESOURCE_PREFERENCES_WILDCARD        = "preferences__%";
     const RESOURCE_PREFERENCES_INDEX_INDEX     = "preferences__index__index";
+    const RESOURCE_PREFERENCES_INDEX_USER     = "preferences__index__user";
     const RESOURCE_PREFERENCES_INDEX_DEALER     = "preferences__index__dealer";
     const RESOURCE_PREFERENCES_PROPOSAL_DEALER = "preferences__proposal__dealer";
     const RESOURCE_PREFERENCES_PROPOSAL_USER   = "preferences__proposal__user";
@@ -37,6 +38,7 @@ class Preferences_Model_Acl
          */
         $acl->addResource(self::RESOURCE_PREFERENCES_WILDCARD);
         $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_INDEX);
+        $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_DEALER);
         $acl->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_DEALER);
         $acl->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_USER);
@@ -58,6 +60,7 @@ class Preferences_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Proposal User
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
@@ -66,6 +69,7 @@ class Preferences_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Quote User
+        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, Application_Model_Acl::PRIVILEGE_VIEW);
     }
