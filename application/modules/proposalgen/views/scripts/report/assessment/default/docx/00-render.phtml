@@ -4,14 +4,14 @@ $phpword = $this->phpword;
 /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
 $proposal = $this->proposal;
 
-
 /**
  * Styles
  */
-$h1Color      = "0096D6";
-$h2Background = "0096D6";
-$h2Color      = "FFFFFF";
-$h3Color      = "000000";
+$h1Color       = $this->wordStyles->default->sectionHeaderFontColor;
+$h1BorderColor = $this->wordStyles->default->sectionHeaderBorderColor;
+$h2Background  = $this->wordStyles->default->subSectionBackgroundColor;
+$h2Color       = $this->wordStyles->default->subSectionFontColor;
+$h3Color       = "000000";
 
 
 /**
@@ -49,6 +49,8 @@ $section          = $phpword->createSection();
 /**
  * Paragraph styles
  */
+
+
 // Title page
 $this->phpword->addParagraphStyle('titleStyle1', array(
                                                       'align'      => 'center',
@@ -169,6 +171,7 @@ $phpword->addTitleStyle(1, array(
                                 'color' => $h1Color,
                                 'bold'  => true
                            ), array(
+                                   'borderBottomColor' => $h1BorderColor,
                                    'borderBottomSize' => 1
                               ));
 // H2 Style #5881BC
@@ -485,13 +488,14 @@ $titledata = array(
 );
 
 $data = array(
-    "phpword"    => $phpword,
-    "section"    => $section,
-    "proposal"   => $this->proposal,
-    "styles"     => $styles,
-    "brandName" => "MPSToolbox.com",
+    "phpword"      => $phpword,
+    "section"      => $section,
+    "proposal"     => $this->proposal,
+    "styles"       => $styles,
+    "brandName"    => "MPSToolbox.com",
     "companayName" => "MPSToolbox.com"
 );
+
 // Actual document pages
 $this->partial("report/assessment/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
 $this->partial("report/assessment/" . $this->App()->theme . "/docx/02_reportcard.phtml", $data);

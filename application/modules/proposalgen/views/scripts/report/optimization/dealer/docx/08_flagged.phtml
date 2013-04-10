@@ -13,6 +13,7 @@ $proposal = $this->proposal;
 /* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
 $optimizationDevices = $this->profitabilityDevices;
 
+$section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText($this->translate('Flagged Devices'),'titlepageHeaderFont');
 $headerTextRun->addText(' (' . count($optimizationDevices->flagged). $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
