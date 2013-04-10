@@ -590,9 +590,11 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
     `targetMonochromeCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `targetColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `costThreshold` DOUBLE NULL DEFAULT NULL ,
+    `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `assessmentPricingConfigId` (`assessmentPricingConfigId` ASC) ,
     INDEX `grossMarginPricingConfigId` (`grossMarginPricingConfigId` ASC) ,
+    INDEX `proposalgenerator_report_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
     CONSTRAINT `proposalgenerator_report_settings_ibfk_1`
     FOREIGN KEY (`assessmentPricingConfigId` )
     REFERENCES `pgen_pricing_configs` (`id` ),
@@ -600,7 +602,12 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
     FOREIGN KEY (`grossMarginPricingConfigId` )
     REFERENCES `pgen_pricing_configs` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT)
+        ON UPDATE RESTRICT,
+    CONSTRAINT `proposalgenerator_report_settings_ibfk_3`
+    FOREIGN KEY (`replacementPricingConfigId` )
+    REFERENCES `pgen_pricing_configs` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
     ENGINE = InnoDB
     AUTO_INCREMENT = 2
     DEFAULT CHARACTER SET = utf8;
