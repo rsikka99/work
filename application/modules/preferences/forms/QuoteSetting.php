@@ -138,7 +138,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                               array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
-                                              'FieldSet'
+                                              'Fieldset'
                                          ));
 
         // Set a span 2 to all elements that do not have a class

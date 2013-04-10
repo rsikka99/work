@@ -217,7 +217,7 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
-                                              'FieldSet'
+                                              'Fieldset'
                                          ));
 
         $pricingConfigOptions = array();
