@@ -46,6 +46,7 @@ class Proposalgen_Report_CostanalysisController extends Proposalgen_Library_Cont
             case "docx" :
                 require_once ('PHPWord.php');
                 $this->view->phpword = new PHPWord();
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

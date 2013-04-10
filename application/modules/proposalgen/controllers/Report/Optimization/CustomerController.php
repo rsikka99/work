@@ -43,6 +43,7 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
                 $this->view->phpword = new PHPWord();
                 $customerOptimization = new Proposalgen_Model_Optimization_Customer($this->getProposal());
                 $graphs   = $this->cachePNGImages($customerOptimization->getGraphs(), true);
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;

@@ -47,6 +47,7 @@ class Proposalgen_Report_Optimization_DealerController extends Proposalgen_Libra
                 $this->view->phpword = new PHPWord();
                 $dealerOptimization = new Proposalgen_Model_Optimization_Dealer($this->getProposal());
                 $graphs   = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;

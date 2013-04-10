@@ -43,6 +43,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
      */
     protected $_activeStep;
 
+    protected $_wordStyles;
+
     /**
      * Report name is the title behind the reports that are being generated.
      *
@@ -163,7 +165,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
             ),
-            "CustomerCostAnalysis" => (object)array(
+            "CustomerCostAnalysis"         => (object)array(
                 "pagetitle" => "Customer Cost Analysis",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_costanalysis/index')
@@ -688,5 +690,23 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
+    }
+
+    public function getWordStyles ()
+    {
+        if (!isset($this->_wordStyles))
+        {
+            // Get the for a dealer styles table
+            $this->_wordStyles                                         = new stdClass();
+            $this->_wordStyles->default->sectionHeaderFontColor        = "0096D6";
+            $this->_wordStyles->default->sectionHeaderBorderColor      = "000000";
+            $this->_wordStyles->default->subSectionBackgroundColor     = "0096D6";
+            $this->_wordStyles->default->subSectionFontColor           = "FFFFFF";
+            $this->_wordStyles->default->tableHeaderBackgroundColor    = "B8CCE3";
+            $this->_wordStyles->default->tableSubHeaderBackgroundColor = "EAF0F7";
+            $this->_wordStyles->default->tableHeaderFontColor          = "FFFFFF";
+        }
+
+        return $this->_wordStyles;
     }
 }
