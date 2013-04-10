@@ -84,15 +84,6 @@ class Quotegen_Model_Acl
      */
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
-        //Quote Admin
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_QUOTEGEN_OPTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-
         //Quote User
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_QUOTEGEN_QUOTEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);

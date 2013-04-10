@@ -80,6 +80,9 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_CLIENT_ADMIN, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_HARDWARE_ADMIN, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_LEASERATE_ADMIN, self::ROLE_AUTHENTICATED_USER);
+        $this->addRole(self::ROLE_HEALTHCHECK_USER, self::ROLE_ASSESSMENT_USER);
+        $this->addRole(self::ROLE_HARDWARE_OPTIMIZATION_USER, self::ROLE_ASSESSMENT_USER);
+
 
         // Resources and access is defined in module ACL models
     }

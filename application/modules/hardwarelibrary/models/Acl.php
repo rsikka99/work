@@ -34,5 +34,10 @@ class Hardwarelibrary_Model_Acl
     {
         //Hardware Admin
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        /**
+         * Quote User
+         */
+        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }
