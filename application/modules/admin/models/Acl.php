@@ -58,9 +58,6 @@ class Admin_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_ADMIN_USER_PROFILE, Application_Model_Acl::PRIVILEGE_VIEW);
 
-        // Quote Admin
-//        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-
         // System Admin
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);

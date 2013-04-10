@@ -78,6 +78,7 @@ class Dealermanagement_Model_Acl
 
         // Lease Rate Admin
         $acl->allow(Application_Model_Acl::ROLE_LEASERATE_ADMIN, self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_LEASERATE_ADMIN, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 
 }
