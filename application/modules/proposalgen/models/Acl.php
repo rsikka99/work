@@ -130,22 +130,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
-         * Proposal Admin
-         */
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTDETAILS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTPRINTERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-
-        /**
-         * Proposal User
+         * Assessment User
          */
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -172,13 +157,6 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
-        /**
-         * Quote Admin
-         */
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
          * Hardware Admin

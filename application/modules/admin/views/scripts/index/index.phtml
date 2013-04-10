@@ -56,7 +56,7 @@
 </div>
 <h3>Account Management</h3>
 <div class="btn-group">
-    <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD)) : ?>
+    <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
         <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
             Clients<br /><br /></a>
     <?php endif; ?>

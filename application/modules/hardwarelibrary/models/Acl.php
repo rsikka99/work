@@ -32,9 +32,6 @@ class Hardwarelibrary_Model_Acl
      */
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-
         //Hardware Admin
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
     }

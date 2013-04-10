@@ -13,9 +13,9 @@
                 <usersettings>
                     <label>My Report Settings</label>
                     <module>preferences</module>
-                    <controller>proposal</controller>
-                    <action>user</action>
-                    <resource>preferences__proposal__user</resource>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>preferences__index__index</resource>
                     <class>dropdown></class>
                     <pages>
                         <userreportsettings>
@@ -37,9 +37,9 @@
                 <dealersettings>
                     <label>Dealer Report Settings</label>
                     <module>preferences</module>
-                    <controller>proposal</controller>
-                    <action>dealer</action>
-                    <resource>preferences__proposal__dealer</resource>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>preferences__index__dealer</resource>
                     <class>dropdown></class>
                     <pages>
                         <dealerreportsettings>
