@@ -39,6 +39,10 @@ class Dealermanagement_Model_Acl
      */
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
+        // Client Admin
+        $acl->allow(Application_Model_Acl::ROLE_CLIENT_ADMIN, self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+
+
         // Dealer Admin
         $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
