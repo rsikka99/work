@@ -2979,7 +2979,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Manufacturer',
                     'Printer Model',
                     'Price',
-                    'Dealer Sku',
                     'Labor CPP',
                     'Parts CPP',
                 );
@@ -3005,9 +3004,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                  'laborCostPerPage',
                                  'partsCostPerPage',
                             ))
-                        ->joinLeft(array(
-                                        'qd' => 'qgen_devices'), 'qd.masterDeviceId = md.id', 'dealerSku'
-                        )
                         ->order(array(
                                      'm.fullname',
                                      'md.modelName',
@@ -3064,7 +3060,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['fullname'],
                         $value ['modelName'],
                         $price,
-                        $value ['dealerSku'],
                         $value ['laborCostPerPage'],
                         $value ['partsCostPerPage'],
                     );
@@ -3083,7 +3078,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Yield',
                     'System Price',
                     'Dealer Price',
-                    'Dealer Sku'
                 );
 
                 if (in_array("System Admin", $this->privilege))
@@ -3113,7 +3107,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                    ), 'pt.id = t.partTypeId', 'name AS part_type')
                         ->joinLeft(array(
                                         'dta' => 'dealer_toner_attributes'
-                                   ), 'dta.tonerId = t.id', array('cost', 'dealerSku'))
+                                   ), 'dta.tonerId = t.id', array('cost'))
                         ->where("t.id > 0")
                         ->group('t.id')
                         ->order(array(
@@ -3181,7 +3175,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['yield'],
                         $value ['systemCost'],
                         $price,
-                        $value ['dealerSku'],
                     );
                 }
             }
