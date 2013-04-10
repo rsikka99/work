@@ -421,8 +421,7 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
         $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getReplacementPricingConfig()
-                ->configName)
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getReplacementPricingConfig() ? $this->_defaultSettings->getReplacementPricingConfig()->configName : null))
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
         $this->addElement($replacementDeviceTonerPreference);
         $optimization->elements [] = $replacementDeviceTonerPreference;
