@@ -44,6 +44,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD = "proposalgen__report_optimization_customer__%";
     const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD   = "proposalgen__report_optimization_dealer__%";
     const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD    = "proposalgen__report_printingdevicelist__%";
+    const RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD    = "proposalgen__report_costanalysis__%";
     const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
     const RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD                = "proposalgen__report_toners__%";
 
@@ -105,6 +106,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_INDEX);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD);
@@ -148,6 +150,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
