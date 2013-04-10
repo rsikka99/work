@@ -14,8 +14,8 @@
                     <label>My Report Settings</label>
                     <module>preferences</module>
                     <controller>index</controller>
-                    <action>index</action>
-                    <resource>preferences__index__index</resource>
+                    <action>user</action>
+                    <resource>preferences__index__user</resource>
                     <class>dropdown></class>
                     <pages>
                         <userreportsettings>
@@ -38,7 +38,7 @@
                     <label>Dealer Report Settings</label>
                     <module>preferences</module>
                     <controller>index</controller>
-                    <action>index</action>
+                    <action>dealer</action>
                     <resource>preferences__index__dealer</resource>
                     <class>dropdown></class>
                     <pages>
