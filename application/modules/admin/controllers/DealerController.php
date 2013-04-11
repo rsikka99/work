@@ -67,9 +67,11 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $dealer->populate($form->getValues());
                         $dealerMapper->save($dealer);
 
+                        $db->commit();
+
                         // All done
                         $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-                        $this->redirector("index");
+//                        $this->redirector("index");
                     }
                     catch (Exception $e)
                     {
@@ -83,9 +85,15 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if ($dealer->dealerLogoImageId > 0)
         {
+            $publicFilePath = '/downloads/dealer' . $dealer->id . '.png';
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            if (file_exists($filePath))
+            {
+                @unlink($filePath);
+            }
             $image = Admin_Model_Mapper_Image::getInstance()->find($dealer->dealerLogoImageId);
-            file_put_contents(PUBLIC_PATH . '/downloads/dealer' . $dealer->id . '.png', base64_decode($image->image));
-            $this->view->dealerLogoImagePath = '/downloads/dealer' . $dealer->id . '.png';
+            file_put_contents($filePath, base64_decode($image->image));
+            $this->view->dealerLogoImagePath = $publicFilePath;
         }
         $this->view->form = $form;
     }
@@ -105,11 +113,13 @@ class Admin_DealerController extends Tangent_Controller_Action
                 $uploadedImagePath     = $dealerLogoImage->getFileName();
                 $uploadedImageFileName = $dealerLogoImage->getFileName(null, false);
 
-                list($imageWidth, $imageHeight, $imageType) = getimagesize($uploadedImagePath);
+                $data = getimagesize($uploadedImagePath);
+
 
                 $uploadedImage = null;
 
-                switch ($imageType)
+
+                switch ($data['mime'])
                 {
                     case "image/gif" :
                         $uploadedImage = imagecreatefromgif($uploadedImagePath);
@@ -123,24 +133,28 @@ class Admin_DealerController extends Tangent_Controller_Action
                     case "image/x-png" :
                         $uploadedImage = imagecreatefrompng($uploadedImagePath);
                 }
-                imagepng($uploadedImage, $uploadedImagePath);
-                $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
-                $data              = $base64ImageString;
 
-                /**
-                 * Insert the image into the database
-                 */
-                $image           = new Admin_Model_Image();
-                $image->filename = $uploadedImageFileName;
-                $image->image    = $base64ImageString;
-                $imageId         = Admin_Model_Mapper_Image::getInstance()->insert($image);
-                if ($imageId)
+                if ($uploadedImage !== null)
                 {
-                    if ($dealer->dealerLogoImageId > 0)
+                    imagepng($uploadedImage, $uploadedImagePath);
+                    $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
+                    $data              = $base64ImageString;
+
+                    /**
+                     * Insert the image into the database
+                     */
+                    $image           = new Admin_Model_Image();
+                    $image->filename = $uploadedImageFileName;
+                    $image->image    = $base64ImageString;
+                    $imageId         = Admin_Model_Mapper_Image::getInstance()->insert($image);
+                    if ($imageId)
                     {
-                        Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
+                        if ($dealer->dealerLogoImageId > 0)
+                        {
+                            Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
+                        }
+                        $dealer->dealerLogoImageId = $imageId;
                     }
-                    $dealer->dealerLogoImageId = $imageId;
                 }
             }
         }

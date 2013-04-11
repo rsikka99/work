@@ -28,7 +28,7 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     CONSTRAINT `dealers_ibfk_1`
     FOREIGN KEY (`dealerLogoImageId` )
     REFERENCES `images` (`id` )
-        ON DELETE CASCADE
+        ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
