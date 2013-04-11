@@ -71,7 +71,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // All done
                         $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-//                        $this->redirector("index");
+                        $this->redirector("index");
                     }
                     catch (Exception $e)
                     {
@@ -85,15 +85,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if ($dealer->dealerLogoImageId > 0)
         {
-            $publicFilePath = '/downloads/dealer' . $dealer->id . '.png';
-            $filePath       = PUBLIC_PATH . $publicFilePath;
-            if (file_exists($filePath))
-            {
-                @unlink($filePath);
-            }
-            $image = Admin_Model_Mapper_Image::getInstance()->find($dealer->dealerLogoImageId);
-            file_put_contents($filePath, base64_decode($image->image));
-            $this->view->dealerLogoImagePath = $publicFilePath;
+            $this->view->dealerLogoImagePath = $dealer->getDealerLogoImageFile();
         }
         $this->view->form = $form;
     }
