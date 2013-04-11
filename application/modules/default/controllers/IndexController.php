@@ -169,6 +169,16 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     protected function _createNewQuote ($quoteType)
     {
+        /**
+         * If we are not allowed here
+         */
+        if(!$this->view->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_QUOTE_INDEX,Application_Model_Acl::PRIVILEGE_VIEW))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
+                                               ));
+            $this->redirector('index', null, null);
+        }
         $quote = new Quotegen_Model_Quote();
 
         // Get the system and user defaults and apply overrides for user settings
