@@ -1948,114 +1948,28 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     // get current pricing
                                     if ($import_type == "printer")
                                     {
-
-                                        $current_device_price = 0;
-                                        $current_parts_cpp    = 0;
-                                        $current_labor_cpp    = 0;
-
                                         $master_device_id = $devices [$key] [0];
-                                        if (in_array("System Admin", $this->privilege))
+                                        $columns [0]      = "Master Printer ID";
+                                        $columns [1]      = "Manufacturer";
+                                        $columns [2]      = "Printer Model";
+                                        $columns [3]      = "Labor CPP";
+                                        $columns [4]      = "Parts CPP";
+
+
+                                        $table   = new Proposalgen_Model_DbTable_MasterDevice();
+                                        $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
+                                        $printer = $table->fetchRow($where);
+
+                                        if (count($printer) > 0)
                                         {
-
-                                            $columns [0] = "Master Printer ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Printer Model";
-                                            $columns [3] = "Price";
-                                            $columns [4] = "Dealer Sku";
-                                            $columns [5] = "Labor CPP";
-                                            $columns [6] = "Parts CPP";
-
-
-                                            $table   = new Proposalgen_Model_DbTable_MasterDevice();
-                                            $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                            $printer = $table->fetchRow($where);
-
-                                            if (count($printer) > 0)
-                                            {
-                                                // save into array
-                                                $final_devices [0] = $master_device_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_printer_model];
-                                                $final_devices [3] = $devices [$key] [$key_new_price];
-                                                $final_devices [4] = $devices [$key] [$key_dealer_sku];
-                                                $final_devices [5] = $devices [$key] [$key_labor_cpp];
-                                                $final_devices [6] = $devices [$key] [$key_parts_cpp];
-                                            }
+                                            // save into array
+                                            $final_devices [0] = $master_device_id;
+                                            $final_devices [1] = $devices [$key] [$key_manufacturer];
+                                            $final_devices [2] = $devices [$key] [$key_printer_model];
+                                            $final_devices [3] = $devices [$key] [$key_labor_cpp];
+                                            $final_devices [4] = $devices [$key] [$key_parts_cpp];
                                         }
-                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
-                                        {
-                                            $columns [0] = "Master Printer ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Printer Model";
-                                            $columns [3] = "Master Price";
-                                            $columns [4] = "Override Price";
-                                            $columns [5] = "New Override Price";
 
-                                            $select  = $db->select()
-                                                ->from(array(
-                                                            'md' => 'pgen_master_devices'
-                                                       ), array(
-                                                               'cost'
-                                                          ))
-                                                ->where('md.id = ' . $master_device_id);
-                                            $stmt    = $db->query($select);
-                                            $printer = $stmt->fetchAll();
-
-                                            if (count($printer) > 0)
-                                            {
-                                                // get current costs
-                                                $current_device_price   = $printer [0] ['cost'];
-                                                $current_override_price = $printer [0] ['override_device_price'];
-
-                                                // save into array
-                                                $final_devices [0] = $master_device_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_printer_model];
-                                                $final_devices [3] = $current_device_price;
-                                                $final_devices [4] = $current_override_price;
-                                                $final_devices [5] = $devices [$key] [$key_new_price];
-                                            }
-                                        }
-                                        else if (in_array("Standard User", $this->privilege) || $this->view->hdnRole == "user")
-                                        {
-
-                                            $columns [0] = "Master Printer ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Printer Model";
-                                            $columns [3] = "Master Price";
-                                            $columns [4] = "Override Price";
-                                            $columns [5] = "New Override Price";
-
-                                            $select  = $db->select()
-                                                ->from(array(
-                                                            'md' => 'pgen_master_devices'
-                                                       ), array(
-                                                               'cost'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'udo' => 'pgen_user_device_overrides'
-                                                           ), 'udo.master_device_id = md.id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                                                       'cost AS overideCost'
-                                                                                                                                  ))
-                                                ->where('md.id = ' . $master_device_id);
-                                            $stmt    = $db->query($select);
-                                            $printer = $stmt->fetchAll();
-
-                                            if (count($printer) > 0)
-                                            {
-                                                // get current costs
-                                                $current_device_price   = $printer [0] ['cost'];
-                                                $current_override_price = $printer [0] ['overideCost'];
-
-                                                // save into array
-                                                $final_devices [0] = $master_device_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_printer_model];
-                                                $final_devices [3] = $current_device_price;
-                                                $final_devices [4] = $current_override_price;
-                                                $final_devices [5] = $devices [$key] [$key_new_price];
-                                            }
-                                        }
                                     }
                                     else
                                     {
@@ -2163,7 +2077,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                 foreach ($results as $key => $value)
                                 {
-
                                     $exists = false;
                                     $insert = false;
                                     $update = false;
@@ -2172,248 +2085,87 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     // update records
                                     if ($import_type == 'printer')
                                     {
-                                        if (in_array("System Admin", $this->privilege))
+                                        $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
+                                        $importLaborCpp = $inputFilter->laborCostPerPage;
+                                        $isLaborValid = $inputFilter->isValid();
+
+                                        $inputFilter->setData(array('partsCostPerPage' => $value ['Parts CPP']));
+                                        $importPartsCpp = $inputFilter->partsCostPerPage;
+                                        $isPartsValid = $inputFilter->isValid();
+
+                                        $masterDeviceId = $value ['Master Printer ID'];
+
+                                        $dataArray = array(
+                                            'masterDeviceId'   => $masterDeviceId,
+                                            'dealerId'         => $dealerId,
+                                            'laborCostPerPage' => $importLaborCpp,
+                                            'partsCostPerPage' => $importPartsCpp,
+                                        );
+
+                                        // Does the master device exist in our database?
+                                        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+                                        if (count($masterDevice->toArray()) > 0)
                                         {
-                                            // Set the data inside the input filter to hold the various costs that
-                                            // have been inputted
-                                            $inputFilter->setData(array('cost' => $value ['Price']));
-                                            $importCost = $inputFilter->cost;
-
-                                            $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
-                                            $importLaborCpp = $inputFilter->laborCostPerPage;
-
-                                            $inputFilter->setData(array('partsCostPerPage' => $value ['Parts CPP']));
-                                            $importPartsCpp = $inputFilter->partsCostPerPage;
-
-                                            $importDealerSku  = $value ['Dealer Sku'];
-                                            $master_device_id = $value ['Master Printer ID'];
-
-                                            $dataArray = array(
-                                                'masterDeviceId'   => $master_device_id,
-                                                'dealerId'         => $dealerId,
-                                                'dealerSku'        => $importDealerSku,
-                                                'cost'             => $importCost,
-                                                'laborCostPerPage' => $importLaborCpp,
-                                                'partsCostPerPage' => $importPartsCpp,
-                                            );
-
-                                            // Does the master device exist in our database?
-                                            $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($master_device_id);
-                                            if (count($masterDevice->toArray()) > 0)
+                                            // Do we have the master device already in this dealer device table
+                                            $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($masterDeviceId, $dealerId));
+                                            if ($masterDeviceAttribute)
                                             {
-                                                // Do we have the master device already in this dealer device table
-                                                $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($master_device_id, $dealerId));
-                                                if ($masterDeviceAttribute)
+                                                // If we have a master device attribute and the row is empty, delete the row
+                                                if (empty($importLaborCpp) && empty($importPartsCpp))
                                                 {
-                                                    // If we have a master device attribute and the row is empty, delete the row
-                                                    if (empty($importCost) && empty($importDealerSku))
-                                                    {
-                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
-                                                    }
-                                                    else
-                                                    {
-                                                        // Have any values changed
-                                                        $hasChanged = false;
-
-                                                        if (!$inputFilter->isValid('cost'))
-                                                        {
-                                                            $importCost = null;
-                                                        }
-                                                        if (!$inputFilter->isValid('partsCostPerPage'))
-                                                        {
-                                                            $importPartsCpp = null;
-                                                        }
-                                                        if (!$inputFilter->isValid('laborCostPerPage'))
-                                                        {
-                                                            $importLaborCpp = null;
-                                                        }
-
-                                                        if ((float)$importCost !== (float)$masterDeviceAttribute->cost)
-                                                        {
-                                                            if ($importCost === null)
-                                                            {
-                                                                $importCost = new Zend_Db_Expr('null');
-                                                            }
-                                                            $masterDeviceAttribute->cost = $importCost;
-                                                            $hasChanged                  = true;
-                                                        }
-
-                                                        if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
-                                                        {
-                                                            if ($importPartsCpp === null)
-                                                            {
-                                                                $importPartsCpp = new Zend_Db_Expr('null');
-                                                            }
-                                                            $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
-                                                            $hasChanged                              = true;
-                                                        }
-
-                                                        if ((float)$importLaborCpp !== (float)$masterDeviceAttribute->laborCostPerPage)
-                                                        {
-                                                            if ($importLaborCpp === null)
-                                                            {
-                                                                $importLaborCpp = new Zend_Db_Expr('null');
-                                                            }
-                                                            $masterDeviceAttribute->laborCostPerPage = $importLaborCpp;
-                                                            $hasChanged                              = true;
-                                                        }
-
-                                                        if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
-                                                        {
-                                                            if ($importPartsCpp === null)
-                                                            {
-                                                                $importPartsCpp = new Zend_Db_Expr('null');
-                                                            }
-                                                            $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
-                                                            $hasChanged                              = true;
-
-                                                        }
-                                                        if ($importDealerSku !== $masterDeviceAttribute->dealerSku)
-                                                        {
-                                                            if ($importDealerSku === null)
-                                                            {
-                                                                $importDealerSku = new Zend_Db_Expr('null');
-                                                            }
-                                                            $masterDeviceAttribute->dealerSku = $importDealerSku;
-                                                            $hasChanged                       = true;
-                                                        }
-
-                                                        if ($hasChanged)
-                                                        {
-                                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
-
-                                                        }
-                                                    }
+                                                    Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
                                                 }
                                                 else
                                                 {
-                                                    if ($importCost > 0 || !empty($importDealerSku))
+                                                    // Have any values changed
+                                                    $hasChanged = false;
+
+                                                    if (!$isLaborValid)
                                                     {
-                                                        $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                                        $masterDeviceAttribute->populate($dataArray);
-                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
+                                                        $importLaborCpp = null;
                                                     }
 
-                                                }
-                                            }
-                                        }
-                                        else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
-                                        {
-                                            $master_device_id  = $results->array [$key] ['Master Printer Id'];
-                                            $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                            $printer_model     = $results->array [$key] ['Printer Model'];
-                                            $device_price      = $results->array [$key] ['New Override Price'];
-
-                                            $table = new Proposalgen_Model_DbTable_DealerDeviceOverride();
-                                            $data  = array(
-                                                'override_device_price' => $device_price
-                                            );
-                                            $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-
-                                            // check to see if it exists
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            'md' => 'master_device'
-                                                       ), array(
-                                                               'device_price'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'ddo' => 'dealer_device_override'
-                                                           ), 'ddo.master_device_id = md.master_device_id AND ddo.dealer_company_id = ' . $company, array(
-                                                                                                                                                         'override_device_price'
-                                                                                                                                                    ))
-                                                ->where('md.master_device_id = ' . $master_device_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
-                                            {
-                                                if ($toner [0] ['override_device_price'] > 0)
-                                                {
-                                                    $exists = true;
-
-                                                    // don't update if values match
-                                                    if ($device_price == 0 || empty($device_price))
+                                                    if (!$isPartsValid)
                                                     {
-                                                        $delete = true;
+                                                        $importPartsCpp = null;
                                                     }
-                                                    else if ($toner [0] ['device_price'] != $device_price)
-                                                    {
-                                                        $update = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $exists = false;
-                                                    if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
-                                                    {
-                                                        $insert = true;
 
-                                                        $data ['dealer_company_id'] = $company;
-                                                        $data ['master_device_id']  = $master_device_id;
+                                                    if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
+                                                    {
+                                                        if ($importPartsCpp === null)
+                                                        {
+                                                            $importPartsCpp = new Zend_Db_Expr('null');
+                                                        }
+                                                        $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
+                                                        $hasChanged                              = true;
+                                                    }
+
+                                                    if ((float)$importLaborCpp !== (float)$masterDeviceAttribute->laborCostPerPage)
+                                                    {
+                                                        if ($importLaborCpp === null)
+                                                        {
+                                                            $importLaborCpp = new Zend_Db_Expr('null');
+                                                        }
+                                                        $masterDeviceAttribute->laborCostPerPage = $importLaborCpp;
+                                                        $hasChanged                              = true;
+                                                    }
+
+                                                    if ($hasChanged)
+                                                    {
+                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
                                                     }
                                                 }
                                             }
-                                        }
-                                        else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
-                                        {
-
-                                            $master_device_id  = $results->array [$key] ['Master Printer Id'];
-                                            $manufacturer_name = $results->array [$key] ['Manufacturer'];
-                                            $printer_model     = $results->array [$key] ['Printer Model'];
-                                            $device_price      = $results->array [$key] ['New Override Price'];
-
-                                            $table = new Proposalgen_Model_DbTable_UserDeviceOverride();
-                                            $data  = array(
-                                                'override_device_price' => $device_price
-                                            );
-                                            $where = $table->getAdapter()->quoteInto('user_id = ' . $this->user_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-
-                                            // check to see if it exists
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            'md' => 'master_device'
-                                                       ), array(
-                                                               'device_price'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'udo' => 'user_device_override'
-                                                           ), 'udo.master_device_id = md.master_device_id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                                                                     'override_device_price'
-                                                                                                                                                ))
-                                                ->where('md.master_device_id = ' . $master_device_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
+                                            else
                                             {
-                                                if ($toner [0] ['override_device_price'] > 0)
-                                                {
-                                                    $exists = true;
 
-                                                    // don't update if values match
-                                                    if ($device_price == 0 || empty($device_price))
-                                                    {
-                                                        $delete = true;
-                                                    }
-                                                    else if ($toner [0] ['device_price'] != $device_price)
-                                                    {
-                                                        $update = true;
-                                                    }
-                                                }
-                                                else
+                                                if ($importLaborCpp > 0 || $importPartsCpp > 0)
                                                 {
-                                                    $exists = false;
-                                                    if ($device_price > 0 && $toner [0] ['device_price'] != $device_price)
-                                                    {
-                                                        $insert = true;
-
-                                                        $data ['user_id']          = $this->user_id;
-                                                        $data ['master_device_id'] = $master_device_id;
-                                                    }
+                                                    $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                                    $masterDeviceAttribute->populate($dataArray);
+                                                    Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
                                                 }
+
                                             }
                                         }
                                     }
@@ -2915,88 +2667,41 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Master Printer ID',
                     'Manufacturer',
                     'Printer Model',
-                    'Price',
                     'Labor CPP',
                     'Parts CPP',
                 );
-                if (in_array("System Admin", $this->privilege))
-                {
-                    $select = $db->select()
-                        ->from(array(
-                                    'md' => 'pgen_master_devices'
-                               ), array(
-                                       'id AS master_id',
-                                       'modelName',
-                                  ))
-                        ->joinLeft(array(
-                                        'm' => 'manufacturers'
-                                   ), 'm.id = md.manufacturerId', array(
-                                                                       'fullname'
-                                                                  ))
-                        ->joinLeft(array(
-                                        'dmda' => 'dealer_master_device_attributes'
-                                   ), 'dmda.masterDeviceId = md.id',
-                            array(
-                                 'cost',
-                                 'laborCostPerPage',
-                                 'partsCostPerPage',
-                            ))
-                        ->order(array(
-                                     'm.fullname',
-                                     'md.modelName',
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
 
-                }
-                else if (in_array("Standard User", $this->privilege))
-                {
-                    $select = $db->select()
-                        ->from(array(
-                                    'md' => 'pgen_master_devices'
-                               ), array(
-                                       'id AS master_id',
-                                       'manufacturer_id',
-                                       'printer_model',
-                                       'cost'
-                                  ))
-                        ->joinLeft(array(
-                                        'm' => 'manufacturers'
-                                   ), 'm.id = md.manufacturerId', array(
-                                                                       'id AS manufacturer_id',
-                                                                       'fullname'
-                                                                  ))
-                        ->joinLeft(array(
-                                        'udo' => 'pgen_user_device_overrides'
-                                   ), 'udo.master_device_id = md.id AND udo.user_id = ' . $this->user_id, array(
-                                                                                                               'cost AS override_cost'
-                                                                                                          ))
-                        ->order(array(
-                                     'm.fullname',
-                                     'md.printer_model'
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-                }
-
+                $select = $db->select()
+                    ->from(array(
+                                'md' => 'pgen_master_devices'
+                           ), array(
+                                   'id AS master_id',
+                                   'modelName',
+                              ))
+                    ->joinLeft(array(
+                                    'm' => 'manufacturers'
+                               ), 'm.id = md.manufacturerId', array(
+                                                                   'fullname'
+                                                              ))
+                    ->joinLeft(array(
+                                    'dmda' => 'dealer_master_device_attributes'
+                               ), 'dmda.masterDeviceId = md.id',
+                        array(
+                             'laborCostPerPage',
+                             'partsCostPerPage',
+                        ))
+                    ->order(array(
+                                 'm.fullname',
+                                 'md.modelName',
+                            ));
+                $stmt   = $db->query($select);
+                $result = $stmt->fetchAll();
                 foreach ($result as $key => $value)
                 {
-                    $price = 0;
-
-                    // prep pricing
-                    if (in_array("System Admin", $this->privilege))
-                    {
-                        $price = $value ['cost'];
-                    }
-                    else
-                    {
-                        $price = $value ['override_cost'];
-                    }
                     $fieldList [] = array(
                         $value ['master_id'],
                         $value ['fullname'],
                         $value ['modelName'],
-                        $price,
                         $value ['laborCostPerPage'],
                         $value ['partsCostPerPage'],
                     );
