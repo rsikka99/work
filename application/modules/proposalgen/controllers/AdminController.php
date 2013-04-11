@@ -2031,127 +2031,35 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     {
                                         $current_toner_price = 0;
 
-                                        $toner_id = $devices [$key] [0];
-                                        if (in_array("System Admin", $this->privilege))
+                                        $toner_id    = $devices [$key] [0];
+                                        $columns [0] = "Toner ID";
+                                        $columns [1] = "Manufacturer";
+                                        $columns [2] = "Part Type";
+                                        $columns [3] = "SKU";
+                                        $columns [4] = "Color";
+                                        $columns [5] = "Yield";
+                                        $columns [6] = "System Price";
+                                        $columns [7] = "Dealer Sku";
+                                        $columns [8] = "New Price";
+
+                                        $table = new Proposalgen_Model_DbTable_Toner();
+                                        $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
+                                        $toner = $table->fetchRow($where);
+
+                                        if (count($toner) > 0)
                                         {
-
-                                            $columns [0] = "Toner ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Part Type";
-                                            $columns [3] = "SKU";
-                                            $columns [4] = "Color";
-                                            $columns [5] = "Yield";
-                                            $columns [6] = "System Price";
-                                            $columns [7] = "New Price";
-                                            $columns [8] = "Dealer Sku";
-
-                                            $table = new Proposalgen_Model_DbTable_Toner();
-                                            $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
-                                            $toner = $table->fetchRow($where);
-
-                                            if (count($toner) > 0)
-                                            {
-                                                // get current costs
+                                            // get current costs
 //                                                $current_toner_price = $toner ['systemCost'];
-                                                // save into array
-                                                $final_devices [0] = $toner_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_part_type];
-                                                $final_devices [3] = $devices [$key] [$key_sku];
-                                                $final_devices [4] = $devices [$key] [$key_color];
-                                                $final_devices [5] = $devices [$key] [$key_yield];
-                                                $final_devices [6] = $devices [$key] [$key_system_cost];
-                                                $final_devices [7] = $devices [$key] [$key_new_price];
-                                                $final_devices [8] = $devices [$key] [$key_dealer_sku];
-                                            }
-                                        }
-                                        else if ($this->view->hdnRole != "user" && (!in_array("Standard User", $this->privilege)))
-                                        {
-
-                                            $columns [0] = "Toner ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Part Type";
-                                            $columns [3] = "SKU";
-                                            $columns [4] = "Color";
-                                            $columns [5] = "Yield";
-                                            $columns [6] = "Master Price";
-                                            $columns [7] = "Override Price";
-                                            $columns [8] = "New Override Price";
-
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            't' => 'pgen_toners'
-                                                       ), array(
-                                                               'cost'
-                                                          ))
-                                                ->where('t.id = ?', $toner_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
-                                            {
-                                                // get current costs
-                                                $current_toner_price    = $toner [0] ['cost'];
-                                                $current_override_price = $toner [0] ['override_toner_price'];
-
-                                                // save into array
-                                                $final_devices [0] = $toner_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_part_type];
-                                                $final_devices [3] = $devices [$key] [$key_sku];
-                                                $final_devices [4] = $devices [$key] [$key_color];
-                                                $final_devices [5] = $devices [$key] [$key_yield];
-                                                $final_devices [6] = $current_toner_price;
-                                                $final_devices [7] = $current_override_price;
-                                                $final_devices [8] = $devices [$key] [$key_new_price];
-                                            }
-                                        }
-                                        else if (in_array("Standard User", $this->privilege) || $this->view->hdnRole == "user")
-                                        {
-                                            $columns [0] = "Toner ID";
-                                            $columns [1] = "Manufacturer";
-                                            $columns [2] = "Part Type";
-                                            $columns [3] = "SKU";
-                                            $columns [4] = "Color";
-                                            $columns [5] = "Yield";
-                                            $columns [6] = "Master Price";
-                                            $columns [7] = "Override Price";
-                                            $columns [8] = "New Override Price";
-
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            't' => 'toner'
-                                                       ), array(
-                                                               'toner_price'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'uto' => 'user_toner_override'
-                                                           ), 'uto.toner_id = t.toner_id AND uto.user_id = ' . $this->user_id, array(
-                                                                                                                                    'override_toner_price'
-                                                                                                                               ))
-                                                ->where('t.toner_id = ?', $toner_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
-                                            {
-                                                // get current costs
-                                                $current_toner_price    = $toner [0] ['toner_price'];
-                                                $current_override_price = $toner [0] ['override_toner_price'];
-
-                                                // save into array
-                                                $final_devices [0] = $toner_id;
-                                                $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                                $final_devices [2] = $devices [$key] [$key_part_type];
-                                                $final_devices [3] = $devices [$key] [$key_sku];
-                                                $final_devices [4] = $devices [$key] [$key_color];
-                                                $final_devices [5] = $devices [$key] [$key_yield];
-                                                $final_devices [6] = $current_toner_price;
-                                                $final_devices [7] = $current_override_price;
-                                                $final_devices [8] = $devices [$key] [$key_new_price];
-                                            }
+                                            // save into array
+                                            $final_devices [0] = $toner_id;
+                                            $final_devices [1] = $devices [$key] [$key_manufacturer];
+                                            $final_devices [2] = $devices [$key] [$key_part_type];
+                                            $final_devices [3] = $devices [$key] [$key_sku];
+                                            $final_devices [4] = $devices [$key] [$key_color];
+                                            $final_devices [5] = $devices [$key] [$key_yield];
+                                            $final_devices [6] = $devices [$key] [$key_system_cost];
+                                            $final_devices [7] = $devices [$key] [$key_dealer_sku];
+                                            $final_devices [8] = $devices [$key] [$key_new_price];
                                         }
                                     }
 
@@ -3076,6 +2984,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Color',
                     'Yield',
                     'System Price',
+                    'Dealer Sku',
                     'Dealer Price',
                 );
                 $dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -3104,7 +3013,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                ), 'pt.id = t.partTypeId', 'name AS part_type')
                     ->joinLeft(array(
                                     'dta' => 'dealer_toner_attributes'
-                               ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost'))
+                               ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
                     ->where("t.id > 0")
                     ->group('t.id')
                     ->order(array(
@@ -3124,6 +3033,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['toner_color'],
                         $value ['yield'],
                         $value ['systemCost'],
+                        $value ['dealerSku'],
                         $value ['cost'],
                     );
                 }
