@@ -1563,10 +1563,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 }
                                 else if ($price != '')
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id);
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, Zend_Auth::getInstance()->getIdentity()->dealerId);
                                     if ($tonerAttribute)
                                     {
-
                                         $tonerAttribute->cost = $price;
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
                                     }
@@ -3079,93 +3078,44 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'System Price',
                     'Dealer Price',
                 );
+                $dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                // Get Count
+                $select = $db->select()
+                    ->from(array(
+                                't' => 'pgen_toners'), array(
+                                                            'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
+                                                       )
+                    )
+                    ->joinLeft(array(
+                                    'dt' => 'pgen_device_toners'
+                               ), 'dt.toner_id = t.id', array(
+                                                             'master_device_id'
+                                                        ))
+                    ->joinLeft(array(
+                                    'tm' => 'manufacturers'
+                               ), 'tm.id = t.manufacturerId', array(
+                                                                   'fullname'
+                                                              ))
+                    ->joinLeft(array(
+                                    'tc' => 'pgen_toner_colors'
+                               ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
+                    ->joinLeft(array(
+                                    'pt' => 'pgen_part_types'
+                               ), 'pt.id = t.partTypeId', 'name AS part_type')
+                    ->joinLeft(array(
+                                    'dta' => 'dealer_toner_attributes'
+                               ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost'))
+                    ->where("t.id > 0")
+                    ->group('t.id')
+                    ->order(array(
+                                 'tm.fullname'
+                            ));
+                $stmt   = $db->query($select);
+                $result = $stmt->fetchAll();
 
-                if (in_array("System Admin", $this->privilege))
-                {
-                    // Get Count
-                    $select = $db->select()
-                        ->from(array(
-                                    't' => 'pgen_toners'), array(
-                                                                'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
-                                                           )
-                        )
-                        ->joinLeft(array(
-                                        'dt' => 'pgen_device_toners'
-                                   ), 'dt.toner_id = t.id', array(
-                                                                 'master_device_id'
-                                                            ))
-                        ->joinLeft(array(
-                                        'tm' => 'manufacturers'
-                                   ), 'tm.id = t.manufacturerId', array(
-                                                                       'fullname'
-                                                                  ))
-                        ->joinLeft(array(
-                                        'tc' => 'pgen_toner_colors'
-                                   ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                        ->joinLeft(array(
-                                        'pt' => 'pgen_part_types'
-                                   ), 'pt.id = t.partTypeId', 'name AS part_type')
-                        ->joinLeft(array(
-                                        'dta' => 'dealer_toner_attributes'
-                                   ), 'dta.tonerId = t.id', array('cost'))
-                        ->where("t.id > 0")
-                        ->group('t.id')
-                        ->order(array(
-                                     'tm.fullname'
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-                }
-                else if (in_array("Standard User", $this->privilege))
-                {
-                    $select = $db->select()
-                        ->from(array(
-                                    't' => 'pgen_toners'
-                               ))
-                        ->joinLeft(array(
-                                        'tm' => 'manufacturer'
-                                   ), 'tm.manufacturer_id = t.manufacturerId', array(
-                                                                                    'manufacturer_name'
-                                                                               ))
-                        ->joinLeft(array(
-                                        'dt' => 'device_toner'
-                                   ), 'dt.toner_id = t.toner_id')
-                        ->joinLeft(array(
-                                        'md' => 'master_device'
-                                   ), 'md.master_device_id = dt.master_device_id')
-                        ->joinLeft(array(
-                                        'tc' => 'toner_color'
-                                   ), 'tc.toner_color_id = t.tonerColorId', 'name AS toner_color')
-                        ->joinLeft(array(
-                                        'pt' => 'part_type'
-                                   ), 'pt.part_type_id = t.partTypeId')
-                        ->joinLeft(array(
-                                        'uto' => 'user_toner_override'
-                                   ), 'uto.toner_id = t.toner_id AND uto.user_id = ' . $this->user_id, array(
-                                                                                                            'user_id',
-                                                                                                            'override_toner_price'
-                                                                                                       ))
-                        ->group('t.toner_id')
-                        ->order(array(
-                                     'tm.manufacturer_name',
-                                     'md.printer_model',
-                                     't.toner_SKU'
-                                ));
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-                }
 
                 foreach ($result as $key => $value)
                 {
-                    // Prepare pricing
-                    if (in_array("System Admin", $this->privilege))
-                    {
-                        $price = $value ['cost'];
-                    }
-                    else
-                    {
-                        $price = $value ['override_toner_price'];
-                    }
                     $fieldList [] = array(
                         $value ['toners_id'],
                         $value ['fullname'],
@@ -3174,7 +3124,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $value ['toner_color'],
                         $value ['yield'],
                         $value ['systemCost'],
-                        $price,
+                        $value ['cost'],
                     );
                 }
             }
@@ -3255,15 +3205,15 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $i = 0;
                 foreach ($masterDevices as $masterDevice)
                 {
-                    $response->rows [$i] ['id']   = $masterDevice->id;
-                        $response->rows [$i]  = array(
-                            "masterID" => $masterDevice->id,
-                            "manufacturerId" => $masterDevice->getManufacturer()->fullname,
-                            "printer_model" => $masterDevice->modelName,
-                            "labor_cost_per_page" => number_format($masterDevice->laborCostPerPage, 4),
-                            "parts_cost_per_page" => number_format($masterDevice->partsCostPerPage, 4),
-                            "labor_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->laborCostPerPage, 4),
-                            "parts_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->partsCostPerPage, 4));
+                    $response->rows [$i] ['id'] = $masterDevice->id;
+                    $response->rows [$i]        = array(
+                        "masterID"                   => $masterDevice->id,
+                        "manufacturerId"             => $masterDevice->getManufacturer()->fullname,
+                        "printer_model"              => $masterDevice->modelName,
+                        "labor_cost_per_page"        => number_format($masterDevice->laborCostPerPage, 4),
+                        "parts_cost_per_page"        => number_format($masterDevice->partsCostPerPage, 4),
+                        "labor_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->laborCostPerPage, 4),
+                        "parts_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->partsCostPerPage, 4));
                     $i++;
                 }
             }
@@ -3355,6 +3305,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         $formData = null;
 
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         try
         {
             // get count
@@ -3392,8 +3343,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                       ))
                 ->joinLeft(array(
                                 'dta' => 'dealer_toner_attributes'
-                           ), 't.id = dta.tonerId', array('cost AS toner_dealer_price', 'dealerSku'))
-                    ->where('t.id > 0' . $where);
+                           ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                ->where('t.id > 0' . $where);
 
             if ($where_compatible)
             {
@@ -3442,21 +3393,21 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $type_name = "OEM";
                     }
 
-                    $formData->rows [$i] ['id']   = $row ['toner_id'];
-                        $formData->rows [$i]  = array(
-                            "toner_id" => $row ['toner_id'],
-                            "toner_SKU" => $row ['toner_SKU'],
-                            "manufacturer_name" => ucwords(strtolower($row ['toner_manufacturer'])),
-                            "part_type_id" => $type_name,
-                            "toner_color_name" => ucwords(strtolower($row ['toner_color_name'])),
-                            "toner_yield" => $row ['toner_yield'],
-                            "toner_price" => $row ['toner_price'],
-                            "toner_dealer_price" => $row ['toner_dealer_price'],
-                            "new_toner_price" => $row ['master_device_id'],
-                            "is_added" => $row ['is_added'],
-                            "device_list" => ucwords(strtolower($row ['device_list'])),
-                            "dealer_sku" => $row['dealerSku']
-                        );
+                    $formData->rows [$i] ['id'] = $row ['toner_id'];
+                    $formData->rows [$i]        = array(
+                        "toner_id"           => $row ['toner_id'],
+                        "toner_SKU"          => $row ['toner_SKU'],
+                        "manufacturer_name"  => ucwords(strtolower($row ['toner_manufacturer'])),
+                        "part_type_id"       => $type_name,
+                        "toner_color_name"   => ucwords(strtolower($row ['toner_color_name'])),
+                        "toner_yield"        => $row ['toner_yield'],
+                        "toner_price"        => $row ['toner_price'],
+                        "toner_dealer_price" => $row ['toner_dealer_price'],
+                        "new_toner_price"    => $row ['master_device_id'],
+                        "is_added"           => $row ['is_added'],
+                        "device_list"        => ucwords(strtolower($row ['device_list'])),
+                        "dealer_sku"         => $row['dealerSku']
+                    );
                     $i++;
                 }
             }

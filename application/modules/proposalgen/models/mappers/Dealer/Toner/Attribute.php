@@ -223,13 +223,14 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
     }
 
     /**
-     * @param $tonerId
+     * @param $tonerId int
+     * @param $dealerId int
      *
      * @return Proposalgen_Model_Dealer_Toner_Attribute
      */
-    public function findTonerAttributeByTonerId($tonerId)
+    public function findTonerAttributeByTonerId($tonerId, $dealerId)
     {
-        return $this->fetch(array("{$this->col_tonerId} = ?" => $tonerId));
+        return $this->fetch(array("{$this->col_tonerId} = ?" => $tonerId, "{$this->col_dealerId} =  ?" => $dealerId));
     }
 
     /**
