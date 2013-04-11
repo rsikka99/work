@@ -1709,17 +1709,19 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     {
                                         $price = new Zend_Db_Expr('NULL');
                                     }
-
-                                    if (isset($dealerMasterDeviceAttribute [$masterDeviceId]))
+                                    if ($value > 0)
                                     {
-                                        $dealerMasterDeviceAttribute[$masterDeviceId]->partsCostPerPage = $price;
-                                    }
-                                    else
-                                    {
-                                        $dealerMasterDeviceAttribute[$masterDeviceId]                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                        $dealerMasterDeviceAttribute[$masterDeviceId]->partsCostPerPage = $price;
-                                        $dealerMasterDeviceAttribute[$masterDeviceId]->dealerId         = $dealerId;
-                                        $dealerMasterDeviceAttribute[$masterDeviceId]->masterDeviceId   = $masterDeviceId;
+                                        if (isset($dealerMasterDeviceAttribute [$masterDeviceId]))
+                                        {
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]->partsCostPerPage = $price;
+                                        }
+                                        else
+                                        {
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]->partsCostPerPage = $price;
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]->dealerId         = $dealerId;
+                                            $dealerMasterDeviceAttribute[$masterDeviceId]->masterDeviceId   = $masterDeviceId;
+                                        }
                                     }
                                 }
 
@@ -2087,11 +2089,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     {
                                         $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
                                         $importLaborCpp = $inputFilter->laborCostPerPage;
-                                        $isLaborValid = $inputFilter->isValid();
+                                        $isLaborValid   = $inputFilter->isValid();
 
                                         $inputFilter->setData(array('partsCostPerPage' => $value ['Parts CPP']));
                                         $importPartsCpp = $inputFilter->partsCostPerPage;
-                                        $isPartsValid = $inputFilter->isValid();
+                                        $isPartsValid   = $inputFilter->isValid();
 
                                         $masterDeviceId = $value ['Master Printer ID'];
 
@@ -3425,13 +3427,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     {
                         if (isset($formData ['jqg_grid_list_' . $key]) && $formData ['jqg_grid_list_' . $key] == "on")
                         {
-                            $replacement_category = $formData ['replacement_category_' . $key];
-                            $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
-                            $where = array(
+                            $replacement_category   = $formData ['replacement_category_' . $key];
+                            $replacementTableMapper = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
+                            $where                  = array(
                                 $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_replacementCategory}= ?", $replacement_category),
                                 $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_dealerId}= ?", $this->dealerId)
                             );
-                            $replacement = $replacementTable->fetchAll($where);
+                            $replacement            = $replacementTable->fetchAll($where);
 
                             if (count($replacement) > 1)
                             {
