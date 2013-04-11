@@ -12,6 +12,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     protected $MPSProgramName;
     protected $privilege;
     protected $user_id;
+    protected $dealerId;
 
     function init ()
     {
@@ -26,6 +27,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->user           = Zend_Auth::getInstance()->getIdentity();
         $this->view->user_id        = Zend_Auth::getInstance()->getIdentity()->id;
         $this->user_id              = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
@@ -1563,7 +1565,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 }
                                 else if ($price != '')
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, Zend_Auth::getInstance()->getIdentity()->dealerId);
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, $this->dealerId);
                                     if ($tonerAttribute)
                                     {
                                         $tonerAttribute->cost = $price;
@@ -1589,7 +1591,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                                 if ($newSku != '')
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id);
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id,$this->dealerId);
                                     if ($tonerAttribute)
                                     {
 
@@ -3101,42 +3103,47 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         // Page that the JQGrid is currently on
         $page = $this->_getParam('page');
 
-        // Set the total pages that we have
-        if ($count > 0)
-        {
-            $totalPages = ceil($count / $limit);
-        }
-        else
-        {
-            $totalPages = 0;
-        }
 
-        // Check to see if page number is greater than total pages, if so set pages to the highest page
-        if ($page > $totalPages)
-        {
-            $page = $totalPages;
-        }
-        // Page, total, and records are needed for the JQgrid to operate
-        $response->page    = $page;
-        $response->total   = $totalPages;
-        $response->records = $count;
 
         $start = $limit * $page - $limit;
         try
         {
             // Based on the filter allow the mappers to return the appropriate device
-            if ($filter === 'manufacturerId')
+            $count = 0;
+            if ($filter === 'manufacturerId' && $criteria != '')
             {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerId($criteria, "{$sortIndex} {$sortOrder}", $limit, $start);
+                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria, "{$sortIndex} {$sortOrder}", 100, $start);
+                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria));
             }
             else if ($filter === 'modelName')
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria, "{$sortIndex} {$sortOrder}", $limit, $start);
+                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria));
             }
             else
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null, "{$sortIndex} {$sortOrder}", $limit, $start);
+                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null));
             }
+            // Set the total pages that we have
+            if ($count > 0)
+            {
+                $totalPages = ceil($count / $limit);
+            }
+            else
+            {
+                $totalPages = 0;
+            }
+
+            // Check to see if page number is greater than total pages, if so set pages to the highest page
+            if ($page > $totalPages)
+            {
+                $page = $totalPages;
+            }
+            // Page, total, and records are needed for the JQgrid to operate
+            $response->page    = $page;
+            $response->total   = $totalPages;
+            $response->records = $count;
 
             if (count($masterDevices) > 0)
             {
@@ -3158,6 +3165,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         catch (Exception $e)
         {
+            throw new Exception("Passing exception up the chain.", 0, $e);
             Throw new Exception($e->getMessage);
         }
         $this->sendJson($response);

@@ -249,6 +249,27 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Get all master devices that match the manufacturer full name that has been passed.
+     *
+     * @param string $criteria
+     * @param null   $order
+     * @param int    $count
+     * @param null   $offset
+     *
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function fetchAllByManufacturerFullName ($criteria, $order = null, $count = 25, $offset = null)
+    {
+        $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+        $manufacturer = $manufacturerMapper->fetch(array("{$manufacturerMapper->col_fullName} = ?" => $criteria));
+        if($manufacturer)
+        {
+            return $this->fetchAll(array("{$this->col_manufacturerId} = ?" => $manufacturer->id), $order, $count, $offset);
+        }
+        return false;
+    }
+
+    /**
      * Fetches all master devices that are available to be used in the quote generator.
      *
      * @return Proposalgen_Model_MasterDevice[]

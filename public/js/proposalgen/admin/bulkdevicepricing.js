@@ -154,14 +154,6 @@ $(document).ready(function ()
                 editoptions: {readonly: true, size: 12}
             },
             {
-                width      : 80,
-                name       : 'toner_SKU',
-                index      : 'toner_SKU',
-                label      : 'SKU',
-                editable   : true,
-                editoptions: {size: 12, maxlength: 30}
-            },
-            {
                 width      : 150,
                 name       : 'manufacturer_name',
                 index      : 'toner_manufacturer',
@@ -172,10 +164,10 @@ $(document).ready(function ()
             {
                 width      : 50,
                 name       : 'part_type_id',
-                index      : 'part_type_id',
+                index      : 'partTypeId',
                 label      : 'Type',
                 editable   : true,
-                sortable : false,
+                sortable : true,
                 editoptions: {size: 20, maxlength: 30}
             },
             {
@@ -194,6 +186,14 @@ $(document).ready(function ()
                 editable   : true,
                 editoptions: {size: 10, maxlength: 4},
                 align      : 'right'
+            },
+            {
+                width      : 80,
+                name       : 'toner_SKU',
+                index      : 'toner_SKU',
+                label      : 'OEM SKU',
+                editable   : true,
+                editoptions: {size: 12, maxlength: 30}
             },
             {
                 width      : 90,
