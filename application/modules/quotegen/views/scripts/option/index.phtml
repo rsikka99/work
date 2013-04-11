@@ -11,7 +11,8 @@
             <th>Name</th>
             <th>Description</th>
             <th style="width: 85px;">Cost</th>
-            <th style="width: 85px;">Sku</th>
+            <th style="width: 85px;">OEM Sku</th>
+            <th style="width: 85px;">Dealer Sku</th>
             <th>Categories</th>
             <th style="width: 55px;">Action</th>
         </tr>
@@ -23,6 +24,7 @@
             <td><?php echo $option->description; ?></td>
             <td style="text-align: right"><?php echo $this->currency($option->cost);?></td>
             <td><?php echo $option->oemSku;?></td>
+            <td><?php echo $option->dealerSku;?></td>
             <?php if (count($option->getCategories()) > 0 ) :
 				$categoryNames = array();
             ?>
