@@ -889,8 +889,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             foreach ($deviceInstanceIds as $deviceInstanceId)
             {
                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-                if ($deviceInstance && $deviceInstance->reportId == $reportId)
+                $assessment = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
+                if ($deviceInstance && $assessment && $assessment->rmsUploadId == $deviceInstance->rmsUploadId)
                 {
+
                     $deviceInstance->useUserData = false;
                     $deviceInstanceMapper->save($deviceInstance);
                 }
