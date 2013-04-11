@@ -55,7 +55,6 @@ class Preferences_Service_ReportSetting
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
             {
-
                 $this->_form->getElement("pageCoverageMono")->setDescription($populateSettings["pageCoverageMono"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
                 $this->_form->getElement("assessmentReportMargin")->setDescription($populateSettings["assessmentReportMargin"]);
@@ -71,11 +70,12 @@ class Preferences_Service_ReportSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-//                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-//                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
-//                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
+                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
+                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
+                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
                 $this->_form->getElement("grossMarginPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['grossMarginPricingConfigId']]);
+                $this->_form->getElement("replacementPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['replacementPricingConfigId']]);
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;
             }
@@ -190,9 +190,13 @@ class Preferences_Service_ReportSetting
             {
                 unset($validData ['assessmentPricingConfigId']);
             }
-            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            if ((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['assessmentPricingConfigId']);
+                unset($validData ['grossMarginPricingConfigId']);
+            }
+            if ((int)$validData ['replacementPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            {
+                unset($validData ['replacementPricingConfigId']);
             }
 
             $reportSetting = new Proposalgen_Model_Report_Setting();
