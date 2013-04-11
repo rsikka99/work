@@ -65,7 +65,7 @@
                                         </delete>
                                     </pages>
                                 </globalconfigurations>
-                                <optionmanagement>
+                                <options>
                                     <label>Option Library</label>
                                     <class>dropdown</class>
                                     <module>quotegen</module>
@@ -79,6 +79,7 @@
                                             <controller>option</controller>
                                             <action>index</action>
                                             <resource>quotegen__option__index</resource>
+                                            <visible>0</visible>
                                         </viewall>
                                         <addnew>
                                             <label>New Option</label>
@@ -86,48 +87,8 @@
                                             <controller>option</controller>
                                             <action>create</action>
                                             <resource>quotegen__option__create</resource>
+                                            <visible>0</visible>
                                         </addnew>
-                                        <categories>
-                                            <label>Option Categories</label>
-                                            <module>quotegen</module>
-                                            <controller>category</controller>
-                                            <action>index</action>
-                                            <resource>quotegen__category__index</resource>
-                                            <pages>
-                                                <create>
-                                                    <label>Create</label>
-                                                    <module>quotegen</module>
-                                                    <controller>category</controller>
-                                                    <action>create</action>
-                                                    <resource>quotegen__category__create</resource>
-                                                    <visible>0</visible>
-                                                </create>
-                                                <view>
-                                                    <label>View</label>
-                                                    <module>quotegen</module>
-                                                    <controller>category</controller>
-                                                    <action>view</action>
-                                                    <resource>quotegen__category__view</resource>
-                                                    <visible>0</visible>
-                                                </view>
-                                                <edit>
-                                                    <label>Edit</label>
-                                                    <module>quotegen</module>
-                                                    <controller>category</controller>
-                                                    <action>edit</action>
-                                                    <resource>quotegen__category__edit</resource>
-                                                    <visible>0</visible>
-                                                </edit>
-                                                <delete>
-                                                    <label>Delete</label>
-                                                    <module>quotegen</module>
-                                                    <controller>category</controller>
-                                                    <action>delete</action>
-                                                    <resource>quotegen__category__delete</resource>
-                                                    <visible>0</visible>
-                                                </delete>
-                                            </pages>
-                                        </categories>
                                         <view>
                                             <label>View</label>
                                             <module>quotegen</module>
@@ -153,7 +114,48 @@
                                             <visible>0</visible>
                                         </delete>
                                     </pages>
-                                </optionmanagement>
+                                </options>
+                                <optioncategories>
+                                    <label>Option Categories</label>
+                                    <module>quotegen</module>
+                                    <controller>category</controller>
+                                    <action>index</action>
+                                    <resource>quotegen__category__index</resource>
+                                    <pages>
+                                        <create>
+                                            <label>Create</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>create</action>
+                                            <resource>quotegen__category__create</resource>
+                                            <visible>0</visible>
+                                        </create>
+                                        <view>
+                                            <label>View</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>view</action>
+                                            <resource>quotegen__category__view</resource>
+                                            <visible>0</visible>
+                                        </view>
+                                        <edit>
+                                            <label>Edit</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>edit</action>
+                                            <resource>quotegen__category__edit</resource>
+                                            <visible>0</visible>
+                                        </edit>
+                                        <delete>
+                                            <label>Delete</label>
+                                            <module>quotegen</module>
+                                            <controller>category</controller>
+                                            <action>delete</action>
+                                            <resource>quotegen__category__delete</resource>
+                                            <visible>0</visible>
+                                        </delete>
+                                    </pages>
+                                </optioncategories>
                             </pages>
                         </quotegenmanagement>
                         <manufacturers>
