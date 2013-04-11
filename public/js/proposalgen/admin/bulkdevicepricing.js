@@ -164,7 +164,7 @@ $(document).ready(function ()
             {
                 width      : 150,
                 name       : 'manufacturer_name',
-                index      : 'manufacturerId',
+                index      : 'toner_manufacturer',
                 label      : 'Manufacturer',
                 editable   : true,
                 editoptions: {size: 20, maxlength: 30}
@@ -175,6 +175,7 @@ $(document).ready(function ()
                 index      : 'part_type_id',
                 label      : 'Type',
                 editable   : true,
+                sortable : false,
                 editoptions: {size: 20, maxlength: 30}
             },
             {
@@ -197,17 +198,25 @@ $(document).ready(function ()
             {
                 width      : 90,
                 name       : 'dealer_sku',
-                index      : 'dealer_sku',
+                index      : 'dealerSku',
                 label      : 'Dealer Sku',
+                sortable : true,
                 editable   : true,
                 editoptions: {size: 10, maxlength: 4},
                 align      : 'right'
             },
             {
+                width: 120,
+                name : 'new_dealer_sku',
+                index: 'new_dealer_sku',
+                label: 'New Dealer Sku',
+                align: 'right'
+            },
+            {
                 width        : 100,
                 name         : 'toner_price',
                 index        : 'toner_dealer_price',
-                label        : 'Default Price',
+                label        : 'System Cost',
                 editable     : true,
                 editoptions  : {size: 10, maxlength: 8},
                 formatter    : 'currency',
@@ -219,7 +228,7 @@ $(document).ready(function ()
                 width        : 60,
                 name         : 'toner_dealer_price',
                 index        : 'toner_price',
-                label        : 'Price',
+                label        : 'Cost',
                 editable     : true,
                 editoptions  : {size: 10, maxlength: 8},
                 formatter    : 'currency',
@@ -284,13 +293,15 @@ $(document).ready(function ()
                 var cur_row = ids[i];
                 var cur_price = document.getElementById("toners_list").rows[i + 1].cells[7].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
                 hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
-                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;' onkeypress='javascript: return numbersonly(this, event);' />";
+                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:60px' onkeypress='javascript: return numbersonly(this, event);' />";
+                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px' onkeypress='javascript: return numbersonly(this, event);' />";
+                jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_dealer_sku: new_dealer_sku_element});
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_toner_price: hidden_price_element + new_price_element});
 
                 var min = 4;
                 var max = 2;
                 var output = '';
-                device_list = document.getElementById("toners_list").rows[i + 1].cells[13].innerHTML;
+                device_list = document.getElementById("toners_list").rows[i + 1].cells[14].innerHTML;
                 var pieces = device_list.split("; ");
                 output += '<div id="outer_' + ids[i] + '" style="text-align: left; width: 200px;">';
                 for (var j = 0; j < pieces.length; j++)

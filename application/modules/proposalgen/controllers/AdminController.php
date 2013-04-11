@@ -1567,6 +1567,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     if ($tonerAttribute)
                                     {
                                         $tonerAttribute->cost = $price;
+
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
                                     }
                                     else
@@ -1576,6 +1577,33 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                         $tonerAttribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                                         $tonerAttribute->tonerId  = $toner_id;
                                         $tonerAttribute->cost     = $price;
+                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
+
+                                    }
+                                }
+                            }
+                            else if (strstr($key, "txtNewDealerSku"))
+                            {
+                                $toner_id = str_replace("txtNewDealerSku", "", $key);
+                                $newSku    = $formData ['txtNewDealerSku' . $toner_id];
+
+                                if ($newSku != '')
+                                {
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id);
+                                    if ($tonerAttribute)
+                                    {
+
+                                        $tonerAttribute->dealerSku = $newSku;
+
+                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+                                    }
+                                    else
+                                    {
+
+                                        $tonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $tonerAttribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                        $tonerAttribute->tonerId  = $toner_id;
+                                        $tonerAttribute->dealerSku     = $newSku;
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
 
                                     }
@@ -3168,6 +3196,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $filter = "tc.name";
             }
+            else if ($filter == "dealer_sku")
+            {
+                $filter = "dta.dealerSku";
+            }
             else if ($filter == "toner_yield")
             {
                 $filter = "t.yield";
@@ -3189,6 +3221,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $criteria = "hewlett-packard";
             }
             $where_compatible = $criteria;
+
         }
 
         if ($master_device_id > 0)
@@ -3287,7 +3320,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $select->limit($limit, $start);
             $stmt   = $db->query($select);
             $result = $stmt->fetchAll();
-
             $formData->page    = $page;
             $formData->total   = $total_pages;
             $formData->records = $count;
