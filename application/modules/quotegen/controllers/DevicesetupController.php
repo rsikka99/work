@@ -986,7 +986,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     else if (isset($values ['btnClearSearch']))
                     {
                         $this->view->view_filter = "all";
-                        $view                    = "assigned";
+                        $view                    = "all";
                     }
                 }
                 catch (Exception $e)
