@@ -256,12 +256,6 @@ class Admin_Form_User extends EasyBib_Form
                                                                                        )
                                                                                   ));
 
-            $password->setRequired(false);
-            $passwordConfirm->setRequired(false);
-
-            $this->addElement($password);
-            $this->addElement($passwordConfirm);
-
             if ($this->getFormMode() === self::MODE_CREATE)
             {
                 $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
@@ -269,6 +263,14 @@ class Admin_Form_User extends EasyBib_Form
                                                                                'required' => true
                                                                           ));
             }
+            else
+            {
+                $password->setRequired(false);
+                $passwordConfirm->setRequired(false);
+            }
+
+            $this->addElement($password);
+            $this->addElement($passwordConfirm);
         }
 
         // Add the submit button
