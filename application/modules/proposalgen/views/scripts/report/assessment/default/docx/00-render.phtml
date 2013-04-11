@@ -172,7 +172,7 @@ $phpword->addTitleStyle(1, array(
                                 'bold'  => true
                            ), array(
                                    'borderBottomColor' => $h1BorderColor,
-                                   'borderBottomSize' => 1
+                                   'borderBottomSize'  => 1
                               ));
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
@@ -481,10 +481,11 @@ $styles = (object)array(
 );
 
 $titledata = array(
-    "phpword"  => $phpword,
-    "section"  => $titlepageSection,
-    "proposal" => $this->proposal,
-    "styles"   => $styles
+    "phpword"        => $phpword,
+    "section"        => $titlepageSection,
+    "proposal"       => $this->proposal,
+    "styles"         => $styles,
+    "dealerLogoFile" => $this->dealerLogoFile,
 );
 
 $data = array(
@@ -493,7 +494,7 @@ $data = array(
     "proposal"     => $this->proposal,
     "styles"       => $styles,
     "brandName"    => "MPSToolbox.com",
-    "companayName" => "MPSToolbox.com"
+    "companayName" => "MPSToolbox.com",
 );
 
 // Actual document pages

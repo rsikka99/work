@@ -205,24 +205,25 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
 
 
         // Setup the different file formats
-        $this->_csvFormat  = (object)array(
+        $this->_csvFormat   = (object)array(
             'extension'      => 'csv',
             'name'           => 'Excel (CSV)',
             'loadingmessage' => '',
             'btnstyle'       => 'success'
         );
-        $this->_pdfFormat  = (object)array(
+        $this->_pdfFormat   = (object)array(
             'extension'      => 'pdf',
             'name'           => 'Adobe PDF',
             'loadingmessage' => 'Please be patient as PDF\'s take a few minutes to generate',
             'btnstyle'       => 'danger'
         );
-        $this->_wordFormat = (object)array(
+        $this->_wordFormat  = (object)array(
             'extension'      => 'docx',
             'name'           => 'Word (DOCX)',
             'loadingmessage' => 'Please wait a moment while we generate your report',
             'btnstyle'       => 'primary'
         );
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
     }
 
     /**
@@ -235,7 +236,32 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->view->publicFileName = $this->_reportCachePath . "/" . $filename;
         $this->view->savePath       = $this->_reportAbsoluteCachePath . "/" . $filename;
 
+
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
+
         $this->view->proposal = $this->getProposal();
+    }
+
+    /**
+     * Gets the dealer logo file relative to the public folder
+     * @return string
+     */
+    public function getDealerLogoFile ()
+    {
+        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find($this->_dealerId);
+        if ($dealer)
+        {
+            if ($dealer->dealerLogoImageId > 0)
+            {
+                $logoFile = $dealer->getDealerLogoImageFile();
+            }
+        }
+        else
+        {
+            $logoFile = $this->view->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg");
+        }
+
+        return $logoFile;
     }
 
     /**

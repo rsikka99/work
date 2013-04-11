@@ -179,17 +179,23 @@ class Admin_Model_Dealer extends My_Model_Abstract
 
     /**
      * Gets the path (relative to the public path) of the dealer report logo
+     *
+     * @return bool|string
      */
     public function getDealerLogoImageFile ()
     {
-        $publicFilePath = '/downloads/dealer-' . $this->id . '-ReportLogo.png';
-        $filePath       = PUBLIC_PATH . $publicFilePath;
-        if (file_exists($filePath))
+        $publicFilePath = false;
+        if ($this->dealerLogoImageId > 0)
         {
-            @unlink($filePath);
+            $publicFilePath = '/downloads/dealer-' . $this->id . '-ReportLogo.png';
+            $filePath       = PUBLIC_PATH . $publicFilePath;
+            if (file_exists($filePath))
+            {
+                @unlink($filePath);
+            }
+            $image = Admin_Model_Mapper_Image::getInstance()->find($this->dealerLogoImageId);
+            file_put_contents($filePath, base64_decode($image->image));
         }
-        $image = Admin_Model_Mapper_Image::getInstance()->find($this->dealerLogoImageId);
-        file_put_contents($filePath, base64_decode($image->image));
 
         return $publicFilePath;
     }
