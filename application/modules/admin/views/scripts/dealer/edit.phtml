@@ -1,6 +1,12 @@
 <div class="page-header">
-        <h1>Dealers - <small>Create Dealer</small></h1>
+    <h1>Dealers -
+        <small>Create Dealer</small>
+    </h1>
 </div>
 <div class='well'>
     <?php echo $this->form; ?>
+    <?php if (isset($this->dealerLogoImagePath)) : ?>
+        <strong>Current Dealer Logo:</strong>
+        <img src="<?php echo $this->baseUrl($this->dealerLogoImagePath); ?>" />
+    <?php endif; ?>
 </div>

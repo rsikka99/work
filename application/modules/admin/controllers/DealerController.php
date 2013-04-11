@@ -28,7 +28,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if ($dealerId === false)
         {
-            $this->flashMessenger(array('warning' => 'You must select a dealer to edit.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
             $this->redirect('index');
         }
 
@@ -40,7 +40,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if (!$dealer instanceof Admin_Model_Dealer)
         {
-            $this->flashMessenger(array('warning' => 'Invalid dealer selected.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
         }
 
@@ -61,53 +61,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     $db = Zend_Db_Table::getDefaultAdapter();
                     try
                     {
-                        $dealerLogoImage = $form->getDealerLogoImage();
-                        if ($dealerLogoImage->isUploaded())
-                        {
-                            $dealerLogoImage->setDestination(DATA_PATH . '/uploads/');
-                            if ($dealerLogoImage->receive())
-                            {
-                                $uploadedImagePath = $dealerLogoImage->getFileName();
-                                $uploadedImageFileName = $dealerLogoImage->getFileName(null, false);
-
-                                list($imageWidth, $imageHeight, $imageType) = getimagesize($uploadedImagePath);
-
-                                switch ($imageType)
-                                {
-                                    case "image/gif" :
-                                        $uploadedImage = imagecreatefromgif($uploadedImagePath);
-                                        break;
-                                    case "image/pjpeg" :
-                                    case "image/jpeg" :
-                                    case "image/jpg" :
-                                        $uploadedImage = imagecreatefromjpeg($uploadedImagePath);
-                                        break;
-                                    case "image/png" :
-                                    case "image/x-png" :
-                                        $uploadedImage = imagecreatefrompng($uploadedImagePath);
-                                }
-                                imagepng($uploadedImage, $uploadedImagePath);
-                                $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
-                                $data              = $base64ImageString;
-
-                                /**
-                                 * Insert the image into the database
-                                 */
-                                $image = new Admin_Model_Image();
-                                $image->filename = $uploadedImageFileName;
-                                $image->image = $base64ImageString;
-                                $imageId = Admin_Model_Mapper_Image::getInstance()->insert($image);
-                                if ($imageId)
-                                {
-                                    if ($dealer->dealerLogoImageId > 0)
-                                    {
-                                        Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
-                                    }
-                                    $dealer->dealerLogoImageId = $imageId;
-                                }
-                            }
-                        }
-
+                        $this->_processDealerLogoImage($form, $dealer);
 
                         // Save dealer object
                         $dealer->populate($form->getValues());
@@ -126,7 +80,70 @@ class Admin_DealerController extends Tangent_Controller_Action
                 }
             }
         }
+
+        if ($dealer->dealerLogoImageId > 0)
+        {
+            $image = Admin_Model_Mapper_Image::getInstance()->find($dealer->dealerLogoImageId);
+            file_put_contents(PUBLIC_PATH . '/downloads/dealer' . $dealer->id . '.png', base64_decode($image->image));
+            $this->view->dealerLogoImagePath = '/downloads/dealer' . $dealer->id . '.png';
+        }
         $this->view->form = $form;
+    }
+
+    /**
+     * @param Admin_Form_Dealer  $form
+     * @param Admin_Model_Dealer $dealer
+     */
+    protected function _processDealerLogoImage ($form, &$dealer)
+    {
+        $dealerLogoImage = $form->getDealerLogoImage();
+        if ($dealerLogoImage->isUploaded())
+        {
+            $dealerLogoImage->setDestination(DATA_PATH . '/uploads/');
+            if ($dealerLogoImage->receive())
+            {
+                $uploadedImagePath     = $dealerLogoImage->getFileName();
+                $uploadedImageFileName = $dealerLogoImage->getFileName(null, false);
+
+                list($imageWidth, $imageHeight, $imageType) = getimagesize($uploadedImagePath);
+
+                $uploadedImage = null;
+
+                switch ($imageType)
+                {
+                    case "image/gif" :
+                        $uploadedImage = imagecreatefromgif($uploadedImagePath);
+                        break;
+                    case "image/pjpeg" :
+                    case "image/jpeg" :
+                    case "image/jpg" :
+                        $uploadedImage = imagecreatefromjpeg($uploadedImagePath);
+                        break;
+                    case "image/png" :
+                    case "image/x-png" :
+                        $uploadedImage = imagecreatefrompng($uploadedImagePath);
+                }
+                imagepng($uploadedImage, $uploadedImagePath);
+                $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
+                $data              = $base64ImageString;
+
+                /**
+                 * Insert the image into the database
+                 */
+                $image           = new Admin_Model_Image();
+                $image->filename = $uploadedImageFileName;
+                $image->image    = $base64ImageString;
+                $imageId         = Admin_Model_Mapper_Image::getInstance()->insert($image);
+                if ($imageId)
+                {
+                    if ($dealer->dealerLogoImageId > 0)
+                    {
+                        Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
+                    }
+                    $dealer->dealerLogoImageId = $imageId;
+                }
+            }
+        }
     }
 
     /**
@@ -152,6 +169,9 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // Create a new dealer object
                         $dealer = new Admin_Model_Dealer();
+
+                        $this->_processDealerLogoImage($form, $dealer);
+
                         $dealer->populate($values);
                         $dealer->dateCreated = date("Y-m-d");
 
@@ -199,13 +219,13 @@ class Admin_DealerController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                            $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
                         }
                     }
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
+                        $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
                         My_Log::logException($e);
                     }
                 }
@@ -233,13 +253,13 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if ($dealerId == 1)
         {
-            $this->flashMessenger(array('danger' => 'You cannot delete the root dealer company.'));
+            $this->_flashMessenger->addMessage(array('danger' => 'You cannot delete the root dealer company.'));
             $this->redirect('index');
         }
 
         if (!$dealer instanceof Admin_Model_Dealer)
         {
-            $this->flashMessenger(array('warning' => 'Invalid dealer selected.'));
+            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
         }
 
