@@ -58,20 +58,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLoggerToRegistry ()
     {
         $this->bootstrap('Log');
-        $this->bootstrap('Db');
+//        $this->bootstrap('Db');
         if ($this->hasResource('Log'))
         {
             $logger = $this->getResource('Log');
-            assert($logger != null);
-            $db = Zend_Db_Table::getDefaultAdapter();
-            // Set up the logging system and put it in the Zend Registry.
-            $columnMapping = array (
-                    'priority' => 'priority', 
-                    'message' => 'message', 
-                    'logTypeId' => 'logTypeId', 
-                    'userId' => 'userId' 
-            );
-            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
+//            assert($logger != null);
+//            $db = Zend_Db_Table::getDefaultAdapter();
+//            // Set up the logging system and put it in the Zend Registry.
+//            $columnMapping = array (
+//                    'priority' => 'priority',
+//                    'message' => 'message',
+//                    'logTypeId' => 'logTypeId',
+//                    'userId' => 'userId'
+//            );
+//            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
             
             Zend_Registry::set('Zend_Log', $this->getResource('Log'));
         }
@@ -95,7 +95,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headLink()->prependStylesheet($view->theme("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
-        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.8.20.custom.css"));
+        $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.10.2.custom.min.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.css"));
         
         // Add default scripts
@@ -104,7 +104,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
-        $view->headScript()->prependFile($view->baseUrl("/js/libs/jquery-ui-1.8.20.custom.min.js"));
     }
 
     /**
@@ -112,7 +111,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initAcl ()
     {
-        $acl = new Application_Model_Acl();
+        $acl = Application_Model_Acl::getInstance();
         Zend_Registry::set('Zend_Acl', $acl);
         return $acl;
     }

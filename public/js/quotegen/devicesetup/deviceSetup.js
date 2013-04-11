@@ -69,7 +69,7 @@ $(function ()
             mType       : "GET",
             postData: {
                 canSell: function() {
-                    return $("#chkCanSell").attr('checked')=='checked'; // or other method which read the value
+                    return document.getElementById('chkCanSell').checked; // or other method which read the value
                 },
                 criteriaFilter: function() {
                     return $("#criteria_filter").val(); // or other method which read the value
@@ -87,12 +87,18 @@ $(function ()
                 var ids = grid.getDataIDs();
                 for (var i = 0; i < ids.length; i++)
                 {
-
                     var row = grid.getRowData(ids[i]);
                     row.modelName = row.displayname + ' ' + row.modelName;
-                    row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:60px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" /></a>';
-                    row.action +=  '<a href= "/quotegen/devicesetup/delete/id/' + row.id + '"><input style="width:60px;" title="Delete Printer" class="btn btn-mini btn-danger" type="button" value="Delete" /></a>';
-                    grid.setRowData(ids[i], row);
+                    if(row.oemSku != "")
+                    {
+                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:60px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" /></a>';
+                        row.action +=  '<a href= "/quotegen/devicesetup/delete/id/' + row.id + '"><input style="width:60px;" title="Delete Printer" class="btn btn-mini btn-danger" type="button" value="Delete" /></a>';
+                    }
+                    else
+                    {
+                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" /></a>';
+                    }
+                        grid.setRowData(ids[i], row);
                 }
             }
         })

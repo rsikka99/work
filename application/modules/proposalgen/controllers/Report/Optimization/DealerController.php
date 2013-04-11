@@ -4,11 +4,11 @@ class Proposalgen_Report_Optimization_DealerController extends Proposalgen_Libra
     public function indexAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FINISHED);
         $this->view->availableReports->DealerHardwareOptimization->active = true;
 
 
@@ -47,6 +47,7 @@ class Proposalgen_Report_Optimization_DealerController extends Proposalgen_Libra
                 $this->view->phpword = new PHPWord();
                 $dealerOptimization = new Proposalgen_Model_Optimization_Dealer($this->getProposal());
                 $graphs   = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;

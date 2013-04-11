@@ -30,9 +30,7 @@
                 <div class="pull-right">
                     <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
                     <div class="btn-group pull-right">
-                        <a class="btn btn-small btn-primary" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'profile'))?>"><i class="icon-user icon-white"></i> <?php echo $this->Username(); ?>
-                        </a>
-                        <a class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog icon-white"></i> <?php echo $this->Username(); ?> <b class="caret"></b></a>
                         <?php echo $this->Usermenu(); ?>
                     </div>
                     <?php else : ?>
@@ -116,7 +114,7 @@ if (APPLICATION_ENV != 'production')
 
 <!-- Load jQuery Libraries -->
 <?php echo $this->jQuery()->enable(); ?>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>');</script>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.1.min.js"><\/script>');</script>
 
 <!-- Scripts concatenated and minified via build script -->
 <?php echo $this->headScript(); ?>

@@ -54,6 +54,7 @@ class Proposalgen_Report_SolutionController extends Proposalgen_Library_Controll
                 $this->view->phpword = new PHPWord();
                 $proposal = $this->getProposal();
                 $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
+                $this->view->wordStyles = $this->getWordStyles();
                 $proposal->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;

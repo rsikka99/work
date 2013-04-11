@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <nav>
+        <page>
+            <label>Dealer - Empty</label>
+            <uri>#</uri>
+            <visible>0</visible>
+        </page>
+    </nav>
+</config>

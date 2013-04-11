@@ -1,6 +1,10 @@
 <div class="page-header">
-    <h1>System Quote Settings</h1>
+    <h1>System Hardware Quote Settings</h1>
 </div>
-<div class="well">
-    <?php echo $this->form; ?>
+<?php echo $this->navigation()->menu()->setUlClass("nav nav-tabs")->renderSubmenu(); ?>
+
+<div class="row">
+    <div class="span10 offset1">
+        <?php echo $this->form; ?>
+    </div>
 </div>

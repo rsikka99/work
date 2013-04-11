@@ -20,7 +20,7 @@ class Default_AuthController extends Tangent_Controller_Action
     {
         $authAdapter = new My_Auth_Adapter();
         $authAdapter->setTableName('users');
-        $authAdapter->setIdentityColumn('username');
+        $authAdapter->setIdentityColumn('email');
         $authAdapter->setCredentialColumn('password');
 
         return $authAdapter;
@@ -41,13 +41,13 @@ class Default_AuthController extends Tangent_Controller_Action
         {
             if ($request->getParam('forgotPassword', false))
             {
-                $this->redirector('forgotpassword', null, null, array('username' => $request->getParam('username', '')));
+                $this->redirector('forgotpassword', null, null, array('email' => $request->getParam('email', '')));
             }
             if ($form->isValid($request->getPost()))
             {
                 $auth        = Zend_Auth::getInstance();
                 $authAdapter = $this->getAuthAdapter();
-                $authAdapter->setIdentity($form->getValue("username"));
+                $authAdapter->setIdentity($form->getValue("email"));
 
                 $password = $form->getValue("password");
                 $authAdapter->setCredential($password);
@@ -135,7 +135,7 @@ class Default_AuthController extends Tangent_Controller_Action
                             break;
                         default :
                             // Put a generic invalid credential message
-                            $this->_flashMessenger->addMessage(array('danger' => 'The username/password combination you entered was invalid.'));
+                            $this->_flashMessenger->addMessage(array('danger' => 'The email/password combination you entered was invalid.'));
 
                             break;
                     }
@@ -177,16 +177,14 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
-
         $request = $this->getRequest();
         if ($request->isGet())
         {
-            $values = $request->getParam('username');
-            if ($values)
+            $email = $this->_getParam('email', false);
+            if ($email !== false)
             {
-                $username = $this->_request->getParam('username');
-                // find user by username
-                $user = Application_Model_Mapper_User::getInstance()->fetch(Application_Model_Mapper_User::getInstance()->getWhereUsername($username));
+                // Find user by email
+                $user = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($email);
 
                 if ($user)
                 {
@@ -216,16 +214,17 @@ class Default_AuthController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        throw new Exception("Error saving password reset request", 0, $e);
+                        My_Log::logException($e);
+
                         // prepare error message stating user not found
-                        $this->view->message = "An error has occurred updating the database. The password was not reset and no email was sent.";
+                        $this->view->message = "An error occurred while resetting your password.";
                     }
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "There are no users with the username '" . $username . "'"
-                                                   ));
+                                                            'danger' => "There are no users with the email '" . $email . "'"
+                                                       ));
                     $this->redirector('index', 'index');
                 }
 
@@ -233,8 +232,8 @@ class Default_AuthController extends Tangent_Controller_Action
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'A username is required to use forgot password'
-                                               ));
+                                                        'danger' => 'A email is required to use forgot password'
+                                                   ));
                 $this->redirector('index', 'index');
             }
         }
@@ -246,6 +245,7 @@ class Default_AuthController extends Tangent_Controller_Action
      *
      * @param int $min The minimum number generated
      * @param int $max The maximum number generated
+     * @return int
      */
     function getRandom ($min, $max)
     {
@@ -313,8 +313,8 @@ class Default_AuthController extends Tangent_Controller_Action
                         $auth->getStorage()->write($identity);
 
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => 'Password Changed Successfully'
-                                                       ));
+                                                                'success' => 'Password Changed Successfully'
+                                                           ));
 
                         // Redirects user to logout screen to login again
                         $r = new Zend_Controller_Action_Helper_Redirector();
@@ -323,8 +323,8 @@ class Default_AuthController extends Tangent_Controller_Action
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'You entered the incorrect current password!'
-                                                       ));
+                                                                'danger' => 'You entered the incorrect current password!'
+                                                           ));
                     }
                 }
                 else
@@ -397,8 +397,8 @@ class Default_AuthController extends Tangent_Controller_Action
                                 Application_Model_Mapper_User::getInstance()->save($user);
                                 Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
                                 $this->_flashMessenger->addMessage(array(
-                                                                    "success" => 'Password has been updated'
-                                                               ));
+                                                                        "success" => 'Password has been updated'
+                                                                   ));
                                 $this->redirector('index', 'index');
 
                             }
@@ -411,7 +411,8 @@ class Default_AuthController extends Tangent_Controller_Action
                     $this->view->errors = "<h3>Link Expired</h3>";
                 }
 
-            }else
+            }
+            else
             {
                 $this->redirector('index', 'index');
             }

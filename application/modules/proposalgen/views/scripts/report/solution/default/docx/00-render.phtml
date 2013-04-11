@@ -7,10 +7,10 @@ $proposal = $this->proposal;
 /**
  * Styles
  */
-$h1Color      = "0096D6";
-$h2Background = "0096D6";
-$h2Color      = "FFFFFF";
-$h3Color      = "0096D6";
+$h1Color       = $this->wordStyles->default->sectionHeaderFontColor;
+$h1BorderColor = $this->wordStyles->default->sectionHeaderBorderColor;
+$h2Background  = $this->wordStyles->default->subSectionBackgroundColor;
+$h2Color       = $this->wordStyles->default->subSectionFontColor;
 
 $textHighlightColor = "0096D6";
 
@@ -1062,7 +1062,8 @@ $titledata = array(
     "phpword"  => $phpword,
     "section"  => $titlepageSection,
     "proposal" => $this->proposal,
-    "styles"   => $styles
+    "styles"   => $styles,
+    "dealerLogoFile"   => $this->dealerLogoFile,
 );
 
 $data = array(

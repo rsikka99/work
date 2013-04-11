@@ -74,7 +74,7 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                                          array(
                                                              'validator' => 'Date',
                                                              'options'   => array(
-                                                                 'format' => 'yyyy-MM-dd hh:mm:ss',
+                                                                 'format'   => 'yyyy-MM-dd hh:mm:ss',
                                                                  'messages' => array(
                                                                      Zend_Validate_Date::INVALID_DATE => 'The date you entered did not match the format(%format%)'
                                                                  )
@@ -101,46 +101,80 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                                )
                                           ));
 
+         /*
+         * parts Cost Per Page
+         */
+        $deviceDetailElements[] = 'partsCostPerPage';
+        $this->addElement('text', 'partsCostPerPage', array(
+                                               'dimension'  => 2,
+                                               'label'      => 'Parts Cost Per Page',
+                                               'prepend'    => '$',
+                                               'validators' => array(
+                                                   'Float',
+                                                   array(
+                                                       'validator' => 'GreaterThan',
+                                                       'options'   => array('min' => 0.00)
+                                                   )
+                                               )
+                                          ));
+
+        /*
+         * labor Cost Per Page
+         */
+        $deviceDetailElements[] = 'laborCostPerPage';
+        $this->addElement('text', 'laborCostPerPage', array(
+                                               'dimension'  => 2,
+                                               'label'      => 'Labor Cost Per Page',
+                                               'prepend'    => '$',
+                                               'validators' => array(
+                                                   'Float',
+                                                   array(
+                                                       'validator' => 'GreaterThan',
+                                                       'options'   => array('min' => 0.00)
+                                                   )
+                                               )
+                                          ));
+
 
         /*
          * Checkboxes for Copier, Duplex, Fax, Scan
          */
         $deviceDetailElements[] = 'isCopier';
         $this->addElement('checkbox', 'isCopier', array(
-                                                       'label'    => 'Copier',
-                                                       'filters'  => array(
+                                                       'label'   => 'Copier',
+                                                       'filters' => array(
                                                            'Boolean'
                                                        ),
                                                   ));
 
         $deviceDetailElements[] = 'isDuplex';
         $this->addElement('checkbox', 'isDuplex', array(
-                                                       'label'    => 'Duplex',
-                                                       'filters'  => array(
+                                                       'label'   => 'Duplex',
+                                                       'filters' => array(
                                                            'Boolean'
                                                        ),
                                                   ));
         $deviceDetailElements[] = 'isFax';
         $this->addElement('checkbox', 'isFax', array(
-                                                    'label'    => 'Fax',
-                                                    'filters'  => array(
+                                                    'label'   => 'Fax',
+                                                    'filters' => array(
                                                         'Boolean'
                                                     ),
                                                ));
         $deviceDetailElements[] = 'isScanner';
         $this->addElement('checkbox', 'isScanner', array(
-                                                     'label'    => 'Scan',
-                                                     'filters'  => array(
-                                                         'Boolean'
-                                                     ),
-                                                ));
+                                                        'label'   => 'Scan',
+                                                        'filters' => array(
+                                                            'Boolean'
+                                                        ),
+                                                   ));
         $deviceDetailElements[] = 'reportsTonerLevels';
         $this->addElement('checkbox', 'reportsTonerLevels', array(
                                                      'label'    => 'Reports Toner Levels',
-                                                     'filters'  => array(
-                                                         'Boolean'
-                                                     ),
-                                                ));
+                                                                 'filters' => array(
+                                                                     'Boolean'
+                                                                 ),
+                                                            ));
 
         /*
          * Print Speed
@@ -226,8 +260,8 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
          */
         $deviceDetailElements[] = 'isLeased';
         $this->addElement('checkbox', 'isLeased', array(
-                                                       'label'    => 'Leased',
-                                                       'filters'  => array(
+                                                       'label'   => 'Leased',
+                                                       'filters' => array(
                                                            'Boolean'
                                                        ),
                                                   ));

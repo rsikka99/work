@@ -35,112 +35,111 @@ class Admin_UserController extends Tangent_Controller_Action
         $db         = Zend_Db_Table_Abstract::getDefaultAdapter();
         $roleMapper = new Admin_Model_Mapper_Role();
         $roles      = $roleMapper->fetchAll();
-        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles);
+        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles, null, false);
 
         $request = $this->getRequest();
 
         if ($request->isPost())
         {
             $values = $request->getPost();
-
             if (!isset($values ['cancel']))
             {
-
                 if ($form->isValid($values))
                 {
-                    // Save to the database
-                    try
+                    $dealer = Admin_Model_Mapper_Dealer::getInstance()->find($values['dealerId']);
+                    if ($dealer && $dealer->getNumberOfLicensesUsed() < $dealer->userLicenses)
                     {
-                        $db->beginTransaction();
-
-
-                        $mapper = new Application_Model_Mapper_User();
-                        $user   = new Application_Model_User();
-                        $user->populate($values);
-                        $user->password = Application_Model_User::cryptPassword($user->password);
-                        $userId         = $mapper->insert($user);
-                        // Save changes to the user roles
-                        if (isset($values ["userRoles"]))
+                        // Save to the database
+                        try
                         {
-                            $userRole         = new Admin_Model_UserRole();
-                            $userRole->userId = $userId;
-                            $userRoleMapper   = new Admin_Model_Mapper_UserRole();
-                            $userRoles        = $userRoleMapper->fetchAll(array(
-                                                                               'userId = ?' => $userId
-                                                                          ));
-                            // Loop through our new roles
-                            foreach ($values ["userRoles"] as $roleId)
+                            $db->beginTransaction();
+                            $mapper = new Application_Model_Mapper_User();
+                            $user   = new Application_Model_User();
+                            $user->populate($values);
+                            $user->password = Application_Model_User::cryptPassword($user->password);
+                            $userId         = $mapper->insert($user);
+                            // Save changes to the user roles
+                            if (isset($values ["userRoles"]))
                             {
-                                $hasRole = false;
-
-                                foreach ($userRoles as $existingUserRole)
+                                $userRole         = new Admin_Model_UserRole();
+                                $userRole->userId = $userId;
+                                $userRoleMapper   = new Admin_Model_Mapper_UserRole();
+                                $userRoles        = $userRoleMapper->fetchAll(array(
+                                                                                   'userId = ?' => $userId
+                                                                              ));
+                                // Loop through our new roles
+                                foreach ($values ["userRoles"] as $roleId)
                                 {
-                                    if ($existingUserRole->roleId == $roleId)
+                                    $hasRole = false;
+
+                                    foreach ($userRoles as $existingUserRole)
                                     {
-                                        $hasRole = true;
-                                        break;
+                                        if ($existingUserRole->roleId == $roleId)
+                                        {
+                                            $hasRole = true;
+                                            break;
+                                        }
+                                    }
+
+                                    // If the role is new
+                                    if (!$hasRole)
+                                    {
+                                        $userRole->roleId = $roleId;
+                                        $userRoleMapper->insert($userRole);
                                     }
                                 }
+                                $this->_flashMessenger->addMessage(array(
+                                                                    'success' => "User '" . $this->view->escape($values ["email"]) . "' saved sucessfully."
+                                                                   ));
 
-                                // If the role is new
-                                if (!$hasRole)
-                                {
-                                    $userRole->roleId = $roleId;
-                                    $userRoleMapper->insert($userRole);
-                                }
+                                // Reset the form after everything is saved successfully
+                                $form->reset();
                             }
-                            $this->_flashMessenger->addMessage(array(
-                                                                'success' => "User '" . $this->view->escape($values ["username"]) . "' saved sucessfully."
-                                                           ));
-
-                            // Reset the form after everything is saved successfully
-                            $form->reset();
+                            $db->commit();
                         }
-
-                        $db->commit();
-
-                        /*
-                         * Send Email
-                         */
-
-
-                    }
-                    catch (Zend_Db_Statement_Mysqli_Exception $e)
-                    {
-                        $db->rollBack();
-                        // Check to see what error code was thrown
-                        switch ($e->getCode())
+                        catch (Zend_Db_Statement_Mysqli_Exception $e)
                         {
-                            // Duplicate column
-                            case 1062 :
-                                $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'Username already exists.'
-                                                               ));
-                                break;
-                            default :
-                                $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'Error saving to database.  Please try again.'
-                                                               ));
-                                break;
-                        }
+                            $db->rollBack();
+                            // Check to see what error code was thrown
+                            switch ($e->getCode())
+                            {
+                                // Duplicate column
+                                case 1062 :
+                                    $this->_flashMessenger->addMessage(array(
+                                                                            'danger' => 'Username already exists.'
+                                                                       ));
+                                    break;
+                                default :
+                                    $this->_flashMessenger->addMessage(array(
+                                                                            'danger' => 'Error saving to database.  Please try again.'
+                                                                       ));
+                                    break;
+                            }
 
-                        $form->populate($request->getPost());
+                            $form->populate($request->getPost());
+                        }
+                        catch (Exception $e)
+                        {
+                            $db->rollBack();
+                            My_Log::logException($e);
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'danger' => 'There was an error processing this request.  Please try again.'
+                                                               ));
+                            $form->populate($request->getPost());
+                        }
                     }
-                    catch (Exception $e)
+                    else
                     {
-                        $db->rollBack();
-                        My_Log::logException($e);
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'There was an error processing this request.  Please try again.'
-                                                       ));
-                        $form->populate($request->getPost());
+                                                                'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
+                                                           ));
                     }
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'Please correct the errors below'
-                                                   ));
+                                                            'danger' => 'Please correct the errors below'
+                                                       ));
                     $form->populate($request->getPost());
                 }
             }
@@ -159,17 +158,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a user to delete first.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId === '1')
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot delete the root user.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot delete the root user.'));
             $this->redirector('index');
         }
 
@@ -179,13 +174,11 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the user to delete.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
-        $form = new Application_Form_Delete("Are you sure you want to delete {$user->username} ({$user->firstname} {$user->lastname})?");
+        $form = new Application_Form_Delete("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
 
         $request = $this->getRequest();
 
@@ -200,17 +193,13 @@ class Admin_UserController extends Tangent_Controller_Action
                 {
                     $mapper->delete($user);
 
-                    $this->_flashMessenger->addMessage(array(
-                                                        'success' => "User deleted."
-                                                   ));
+                    $this->_flashMessenger->addMessage(array('success' => "User deleted."));
 
                     $this->redirector('index');
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'There was an error while deleting the user'
-                                                   ));
+                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error while deleting the user'));
                     $this->redirector('index');
                 }
             }
@@ -234,17 +223,13 @@ class Admin_UserController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a user to delete first.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
             $this->redirector('index');
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot edit the root user.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
             $this->redirector('index');
         }
 
@@ -257,9 +242,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $roles      = $roleMapper->fetchAll();
 
         $userRoleMapper = new Admin_Model_Mapper_UserRole();
-        $userRoles      = $userRoleMapper->fetchAll(array(
-                                                         'userId = ?' => $userId
-                                                    ));
+        $userRoles      = $userRoleMapper->fetchAll(array('userId = ?' => $userId));
 
         // We need to get the current users roles
         $currentUserRoles = array();
@@ -271,14 +254,12 @@ class Admin_UserController extends Tangent_Controller_Action
         // If the user doesn't exist, send them back t the view all users page
         if (!$user)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the user to delete.'
-                                           ));
+            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
             $this->redirector('index');
         }
 
         // Create a new form with the mode and roles set
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles, null, false);
 
         // Prepare the data for the form
         $values               = $user->toArray();
@@ -312,7 +293,7 @@ class Admin_UserController extends Tangent_Controller_Action
                                 /* @var $role Admin_Model_Role */
                                 foreach ($roles as $role)
                                 {
-                                    if ($role->getId() == $roleId)
+                                    if ($role->id == $roleId)
                                     {
                                         $roleIsValid = true;
                                         break;
@@ -420,8 +401,8 @@ class Admin_UserController extends Tangent_Controller_Action
                         }
 
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "User '" . $this->view->escape($formValues ["username"]) . "' saved successfully."
-                                                       ));
+                                                            'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
+                                                           ));
                     }
                     else
                     {
@@ -431,8 +412,8 @@ class Admin_UserController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -453,8 +434,8 @@ class Admin_UserController extends Tangent_Controller_Action
         if (!$userId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a user to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a user to delete first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -462,7 +443,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $userMapper = new Application_Model_Mapper_User();
         $user       = $userMapper->find($userId);
 
-        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT, null, null, false);
         $form->populate($user->toArray());
 
         $request = $this->getRequest();
@@ -483,24 +464,36 @@ class Admin_UserController extends Tangent_Controller_Action
                         // Update the user information
                         $user->populate($values);
                         $userMapper->save($user, $userId);
+                        $usersByEmail = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($values['email']);
+                        if ($usersByEmail === false)
+                        {
 
-                        // Update storage
-                        $identity            = Zend_Auth::getInstance()->getIdentity();
-                        $identity->firstname = $values ['firstname'];
-                        $identity->lastname  = $values ['lastname'];
-                        $identity->email     = $values ['email'];
 
-                        $this->_flashMessenger->addMessage(array(
-                                                            'success' => "User {$user->username} has been updated successfully."
-                                                       ));
+                            // Update storage
+                            $identity            = Zend_Auth::getInstance()->getIdentity();
+                            $identity->firstname = $values ['firstname'];
+                            $identity->lastname  = $values ['lastname'];
+                            $identity->email     = $values ['email'];
+
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'success' => "Your profile has been updated successfully."
+                                                               ));
+                        }
+                        else
+                        {
+                            $form->getElement('email')->addError("Email already exists");
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'warning' => "Your profile was not updated successfully please try again."
+                                                               ));
+                        }
                     }
                 }
                     // If anything goes wrong show error message
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'warning' => "User was not updated successfully please try again.	"
-                                                   ));
+                                                            'warning' => "Your profile was not updated successfully please try again."
+                                                       ));
                 }
             }
             else

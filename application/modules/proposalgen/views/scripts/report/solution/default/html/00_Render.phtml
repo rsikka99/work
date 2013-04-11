@@ -18,12 +18,13 @@ $data = array(
     "pageEnd"        => $this->pageEnd,
     "noBreakStart"   => $this->noBreakStart,
     "noBreakEnd"     => $this->noBreakEnd,
-    "orientation"    => $this->orientation
+    "orientation"    => $this->orientation,
+    "dealerLogoFile" => $this->dealerLogoFile,
 );
 
 ?>
 <div class="container" id="htmlReportContainer">
-<?php
+    <?php
     echo $this->partial('report/solution/' . $this->App()->theme . '/html/01_Title.phtml', $data);
     echo $this->partial('report/solution/' . $this->App()->theme . '/html/02_Description.phtml', $data);
     echo $this->partial('report/solution/' . $this->App()->theme . '/html/03_PrintIQ.phtml', $data);
@@ -33,5 +34,5 @@ $data = array(
         echo $this->partial('report/solution/05_PrintIQPlus_Summary.phtml', $data);
     */
     echo $this->partial('report/solution/' . $this->App()->theme . '/html/06_Summary.phtml', $data);
-?>
+    ?>
 </div>

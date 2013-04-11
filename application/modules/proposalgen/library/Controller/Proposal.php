@@ -29,6 +29,11 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     /**
      * @var int
      */
+    protected $_dealerId;
+
+    /**
+     * @var int
+     */
     protected $_clientId;
 
     /**
@@ -37,6 +42,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
      * @var Proposalgen_Model_Assessment_Step
      */
     protected $_activeStep;
+
+    protected $_wordStyles;
 
     /**
      * Report name is the title behind the reports that are being generated.
@@ -80,8 +87,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    "error" => "A client is not selected."
-                                               ));
+                                                        "error" => "A client is not selected."
+                                                   ));
                 $this->_redirect('/');
             }
 
@@ -91,6 +98,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->_reportId         = (int)$this->_reportSession->reportId;
         $this->view->reportSteps = $this->getReportSteps();
         $this->_userId           = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
 
         $this->_reportAbsoluteCachePath = PUBLIC_PATH . "/cache/reports/" . $this->_reportId;
@@ -112,7 +120,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
-            "Reports"            => (object)array(
+            "Reports"                      => (object)array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
@@ -137,7 +145,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
-            "Toners"             => (object)array(
+            "Toners"                       => (object)array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_toners/index')
@@ -152,10 +160,15 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_optimization_customer/index')
             ),
-            "HealthCheck"        => (object)array(
+            "HealthCheck"                  => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
+            ),
+            "CustomerCostAnalysis"         => (object)array(
+                "pagetitle" => "Customer Cost Analysis",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_costanalysis/index')
             ),
         );
     }
@@ -174,8 +187,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         if ($this->_reportId < 1)
         {
             $this->_flashMessenger->addMessage(array(
-                                                "error" => "Please select a report first."
-                                           ));
+                                                    "error" => "Please select a report first."
+                                               ));
             // Send user to the index
             $this->_helper->redirector('index', 'index', 'index');
         }
@@ -184,33 +197,33 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         if ($this->_report === null)
         {
             $this->_flashMessenger->addMessage(array(
-                                                "error" => "Please select a report first."
-                                           ));
+                                                    "error" => "Please select a report first."
+                                               ));
             // Send user to the index
             $this->_helper->redirector('index', 'index', 'index');
         }
 
 
-
         // Setup the different file formats
-        $this->_csvFormat  = (object)array(
+        $this->_csvFormat           = (object)array(
             'extension'      => 'csv',
             'name'           => 'Excel (CSV)',
             'loadingmessage' => '',
             'btnstyle'       => 'success'
         );
-        $this->_pdfFormat  = (object)array(
+        $this->_pdfFormat           = (object)array(
             'extension'      => 'pdf',
             'name'           => 'Adobe PDF',
             'loadingmessage' => 'Please be patient as PDF\'s take a few minutes to generate',
             'btnstyle'       => 'danger'
         );
-        $this->_wordFormat = (object)array(
+        $this->_wordFormat          = (object)array(
             'extension'      => 'docx',
             'name'           => 'Word (DOCX)',
             'loadingmessage' => 'Please wait a moment while we generate your report',
             'btnstyle'       => 'primary'
         );
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
     }
 
     /**
@@ -223,7 +236,36 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
         $this->view->publicFileName = $this->_reportCachePath . "/" . $filename;
         $this->view->savePath       = $this->_reportAbsoluteCachePath . "/" . $filename;
 
+
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
+
         $this->view->proposal = $this->getProposal();
+    }
+
+    /**
+     * Gets the dealer logo file relative to the public folder
+     *
+     * @return string
+     */
+    public function getDealerLogoFile ()
+    {
+        $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($this->_dealerId);
+        $logoFile = false;
+        if ($dealer)
+        {
+            if ($dealer->dealerLogoImageId > 0)
+            {
+                $logoFile = $dealer->getDealerLogoImageFile();
+            }
+        }
+
+
+        if ($logoFile == false)
+        {
+            $logoFile = $this->view->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg");
+        }
+
+        return $logoFile;
     }
 
     /**
@@ -503,7 +545,8 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->_report              = new Proposalgen_Model_Assessment();
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
-                $this->_report->stepName = Proposalgen_Model_Assessment_Step::STEP_SURVEY;
+                $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $this->_report->stepName    = Proposalgen_Model_Assessment_Step::STEP_SURVEY;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
@@ -677,5 +720,23 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 $this->redirector($prevStep->action, $prevStep->controller);
             }
         }
+    }
+
+    public function getWordStyles ()
+    {
+        if (!isset($this->_wordStyles))
+        {
+            // Get the for a dealer styles table
+            $this->_wordStyles                                         = new stdClass();
+            $this->_wordStyles->default->sectionHeaderFontColor        = "0096D6";
+            $this->_wordStyles->default->sectionHeaderBorderColor      = "000000";
+            $this->_wordStyles->default->subSectionBackgroundColor     = "0096D6";
+            $this->_wordStyles->default->subSectionFontColor           = "FFFFFF";
+            $this->_wordStyles->default->tableHeaderBackgroundColor    = "B8CCE3";
+            $this->_wordStyles->default->tableSubHeaderBackgroundColor = "EAF0F7";
+            $this->_wordStyles->default->tableHeaderFontColor          = "FFFFFF";
+        }
+
+        return $this->_wordStyles;
     }
 }

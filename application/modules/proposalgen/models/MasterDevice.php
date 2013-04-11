@@ -12,6 +12,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     private static $ReportMargin;
     private static $PricingConfig;
     private static $GrossMarginPricingConfig;
+    static $ReportLaborCostPerPage = 0;
+    static $ReportPartsCostPerPage = 0;
+
 
     /*
      * Database fields
@@ -73,16 +76,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public $wattsPowerIdle;
 
     /**
-     * @var float
-     */
-    public $cost;
-
-    /**
-     * @var float
-     */
-    public $serviceCostPerPage;
-
-    /**
      * @var string
      */
     public $launchDate;
@@ -122,6 +115,55 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public $reportsTonerLevels;
 
+    /**
+     * @var float
+     */
+    public $partsCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $laborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $calculatedLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDealerLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDeviceLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingReportLaborCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $calculatedPartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDealerPartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingDevicePartsCostPerPage;
+
+    /**
+     * @var int
+     */
+    public $isUsingReportPartsCostPerPag;
     /*
      * Related Objects
      */
@@ -143,6 +185,22 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_tonersForGrossMargin;
     protected $_requiredTonerColors;
 
+    protected $_dealerAttributes;
+
+    /**
+     * @return Proposalgen_Model_Dealer_Master_Device_Attribute
+     */
+    public function getDealerAttributes ()
+    {
+        if (!isset($this->_dealerAttributes))
+        {
+
+            $where = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId));
+            $this->_dealerAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->fetch($where);
+        }
+
+        return $this->_dealerAttributes;
+    }
 
     /**
      * Whether or not overrides have been processed
@@ -158,54 +216,37 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!$this->_overridesProcessed)
         {
-            /*
-             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
-             */
-            if ($this->id > 0)
-            {
-                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-                /*
-                 * Check for a user override
-                 */
-                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
+//            /*
+//             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
+//             */
+//            if ($this->id > 0)
+//            {
+//                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
+//                /*
+//                 * Check for a user override
+//                 */
+//                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
+//                // Handle Toners
+//                // Toner Overrides + Margin
+//                foreach ($this->getToners() as $tonersByPartType)
+//                {
+//                    foreach ($tonersByPartType as $tonersByColor)
+//                    {
+//                        /* @var $toner Proposalgen_Model_Toner */
+//                        foreach ($tonersByColor as $toner)
+//                        {
+//                            if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
+//                            {
+//                                Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
+//                            }
+//
+//                            // Process the overrides
+//                            $toner->processOverrides($report);
+//                        }
+//                    }
+//                } // End of toners loop
+//            }
 
-                /*
-                 * Check to see if we found an override.
-                 */
-                if ($deviceOverride)
-                {
-                    $this->cost = $deviceOverride->overrideDevicePrice;
-                }
-            }
-
-            // Apply Report Margin to the device price
-            $this->cost = $this->cost / $report->getReportSettings()->assessmentReportMargin;
-
-            // Handle Toners
-            // Toner Overrides + Margin
-            foreach ($this->getToners() as $tonersByPartType)
-            {
-                foreach ($tonersByPartType as $tonersByColor)
-                {
-                    /* @var $toner Proposalgen_Model_Toner */
-                    foreach ($tonersByColor as $toner)
-                    {
-                        if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
-                        {
-                            Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
-                        }
-
-                        // Process the overrides
-                        $toner->processOverrides($report);
-                    }
-                }
-            } // End of toners loop
-
-            // Service Cost Per Page Cost
-            if ($this->serviceCostPerPage <= 0)
-            {
-                $this->serviceCostPerPage = $report->getReportSettings()->serviceCostPerPage;
-            }
 
             // Admin Charge
             $this->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
@@ -213,6 +254,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->_overridesProcessed = true;
         }
     }
+
 
     /**
      * The maximum monthly page volume is calculated using the smallest toner yield
@@ -316,16 +358,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->wattsPowerIdle = $params->wattsPowerIdle;
         }
 
-        if (isset($params->cost) && !is_null($params->cost))
-        {
-            $this->cost = $params->cost;
-        }
-
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
-        {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
-        }
-
         if (isset($params->launchDate) && !is_null($params->launchDate))
         {
             $this->launchDate = $params->launchDate;
@@ -365,6 +397,54 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->reportsTonerLevels = $params->reportsTonerLevels;
         }
 
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $params->partsCostPerPage;
+        }
+
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
+        {
+            $this->laborCostPerPage = $params->laborCostPerPage;
+        }
+        if (isset($params->calculatedLaborCostPerPage) && !is_null($params->calculatedLaborCostPerPage))
+        {
+            $this->calculatedLaborCostPerPage = $params->calculatedLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingDealerLaborCostPerPage) && !is_null($params->isUsingDealerLaborCostPerPage))
+        {
+            $this->isUsingDealerLaborCostPerPage = $params->isUsingDealerLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingDeviceLaborCostPerPage) && !is_null($params->isUsingDeviceLaborCostPerPage))
+        {
+            $this->isUsingDeviceLaborCostPerPage = $params->isUsingDeviceLaborCostPerPage;
+        }
+
+        if (isset($params->isUsingReportLaborCostPerPage) && !is_null($params->isUsingReportLaborCostPerPage))
+        {
+            $this->isUsingReportLaborCostPerPage = $params->isUsingReportLaborCostPerPage;
+        }
+
+        if (isset($params->calculatedPartsCostPerPage) && !is_null($params->calculatedPartsCostPerPage))
+        {
+            $this->calculatedPartsCostPerPage = $params->calculatedPartsCostPerPage;
+        }
+
+        if (isset($params->isUsingDealerPartsCostPerPage) && !is_null($params->isUsingDealerPartsCostPerPage))
+        {
+            $this->isUsingDealerPartsCostPerPage = $params->isUsingDealerPartsCostPerPage;
+        }
+
+        if (isset($params->isUsingDevicePartsCostPerPage) && !is_null($params->isUsingDevicePartsCostPerPage))
+        {
+            $this->isUsingDevicePartsCostPerPage = $params->isUsingDevicePartsCostPerPage;
+        }
+
+        if (isset($params->isUsingReportPartsCostPerPag) && !is_null($params->isUsingReportPartsCostPerPag))
+        {
+            $this->isUsingReportPartsCostPerPag = $params->isUsingReportPartsCostPerPag;
+        }
     }
 
     /**
@@ -384,8 +464,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isReplacementDevice" => $this->isReplacementDevice,
             "wattsPowerNormal"    => $this->wattsPowerNormal,
             "wattsPowerIdle"      => $this->wattsPowerIdle,
-            "cost"                => $this->cost,
-            "serviceCostPerPage"  => $this->serviceCostPerPage,
             "launchDate"          => $this->launchDate,
             "dateCreated"         => $this->dateCreated,
             "dutyCycle"           => $this->dutyCycle,
@@ -394,6 +472,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isLeased"            => $this->isLeased,
             "leasedTonerYield"    => $this->leasedTonerYield,
             "reportsTonerLevels"  => $this->reportsTonerLevels,
+            "partsCostPerPage"    => $this->partsCostPerPage,
+            "laborCostPerPage"    => $this->laborCostPerPage,
         );
     }
 
@@ -467,7 +547,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         }
         $cheapestToner    = null;
         $tonersByPartType = $this->getToners(); // Grab this devices toners
-
 
         // If we have a preferred part type and the device has toners of that type
         if (isset($preferredPartType) &&
@@ -586,9 +665,12 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Estimated->BasePlusServiceAndMargin->BlackAndWhite = 0;
             $costPerPage->Estimated->BasePlusServiceAndMargin->Color         = 0;
 
-            $ServicePlusAdminCPP                    = $this->serviceCostPerPage + $this->adminCostPerPage;
-            $ServiceCPP                             = $this->serviceCostPerPage;
-            $costPerPage->Actual->Raw->ServiceCPP   = $this->serviceCostPerPage;
+            $laborCostPerPage = $this->calculatedLaborCostPerPage;
+            $partsCostPerPage = $this->calculatedPartsCostPerPage;
+
+            $ServicePlusAdminCPP                    = $laborCostPerPage + $partsCostPerPage + $this->adminCostPerPage;
+            $ServiceCPP                             = $laborCostPerPage + $partsCostPerPage;
+            $costPerPage->Actual->Raw->ServiceCPP   = $laborCostPerPage + $partsCostPerPage;
             $costPerPage->Actual->Raw->AdminCPP     = $this->adminCostPerPage;
             $costPerPage->Actual->Raw->ReportMargin = $ReportMargin;
 
@@ -645,6 +727,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->Actual->BasePlusMargin->Color            = $costPerPage->Actual->Base->Color / $ReportMargin;
             $costPerPage->Estimated->BasePlusMargin->BlackAndWhite = $costPerPage->Estimated->Base->BlackAndWhite / $ReportMargin;
             $costPerPage->Estimated->BasePlusMargin->Color         = $costPerPage->Estimated->Base->Color / $ReportMargin;
+
 
             // Add the device's costs to the base cost per page
             $costPerPage->Actual->BasePlusService->BlackAndWhite += $costPerPage->Actual->Base->BlackAndWhite + $ServicePlusAdminCPP;
@@ -740,7 +823,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (!isset($this->_toners))
         {
             // Get the toners for the device
-            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->id);
+            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getReportToners($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         }
 
         return $this->_toners;

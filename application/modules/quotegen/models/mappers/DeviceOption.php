@@ -15,6 +15,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      */
     public $col_masterDeviceId = 'masterDeviceId';
     public $col_optionId = 'optionId';
+    public $col_dealerId = 'dealerId';
 
     /**
      * Gets an instance of the mapper
@@ -272,6 +273,33 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
             $object->masterDeviceId,
             $object->optionId
         );
+    }
+
+    /**
+     * Fetches a list of options for the dealer
+     * @param int $dealerId
+     *
+     * @return Quotegen_Model_DeviceOption[]
+     */
+    public function fetchDeviceOptionListForDealer ($dealerId)
+    {
+        $options = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $options;
+    }
+
+    /**
+     * Fetches a list of device options for the dealer and masterDevice id
+     * @param int $dealerId
+     *
+     * @return Quotegen_Model_DeviceOption[]
+     */
+    public function fetchDeviceOptionListForDealerAndDevice ($masterDeviceId,$dealerId)
+    {
+        $options = $this->fetchAll(array(
+                                        "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
+                                        "{$this->col_dealerId} = ?" => $dealerId)
+                                    );
+        return $options;
     }
 }
 

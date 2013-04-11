@@ -76,7 +76,6 @@ $this->phpword->addFontStyle('table_body', array (
 $this->phpword->addFontStyle('table_footer', array (
     'size' => 8,
     'bold' => true,
-    'color' => '0096d6'
 ));
 
 $this->phpword->addFontStyle('bold_text', array (
@@ -112,12 +111,6 @@ $this->phpword->addTitleStyle(3, array (
     'bold' => true 
 ));
 
-/**
- * Define Table Styles here
- */
-$header_color = "dddddd";
-$footer_color = "dddddd";
-$highlight_color = "f6ff8f";
 
 /* LANDSCAPE FULL WIDTH TABLE = 16000 twips */
 /* PORTRAIT FULL WIDTH TABLE = 10400 twips */
@@ -220,7 +213,6 @@ $grossMarginTable = (object)array (
             "borderRightSize" => 1, 
             "borderBottomSize" => 1, 
             "borderLeftSize" => 1,
-            "bgColor" => $footer_color,
             "valign" => "center"
         )
     )

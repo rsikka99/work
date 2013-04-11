@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
     */
     public $col_masterDeviceId = 'masterDeviceId';
+    public $col_dealerId = 'dealerId';
 
     /**
      * Gets an instance of the mapper
@@ -64,12 +65,14 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_masterDeviceId];
+            $primaryKey [] = $data [$this->col_masterDeviceId];
+            $primaryKey [] = $data [$this->col_dealerId];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey
+                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey[0],
+                                                                "{$this->col_dealerId} = ?"       => $primaryKey[1]
                                                            ));
 
         // Save the object into the cache
@@ -92,13 +95,16 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         if ($object instanceof Quotegen_Model_Device)
         {
             $whereClause = array(
-                "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId
+                "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
+
             );
         }
         else
         {
             $whereClause = array(
-                "{$this->col_masterDeviceId} = ?" => $object
+                "{$this->col_masterDeviceId} = ?" => $object[0],
+                "{$this->col_dealerId} = ?"       => $object[1],
             );
         }
 
@@ -110,7 +116,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Finds a device based on it's primaryKey
      *
-     * @param $id int
+     * @param $id array
      *            The id of the device to find
      *
      * @return Quotegen_Model_Device
@@ -125,7 +131,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id [0], $id [1]);
         if (0 == count($result))
         {
             return false;
@@ -162,6 +168,8 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $object = new Quotegen_Model_Device($row->toArray());
 
         // Save the object into the cache
+        $primaryKey [0] = $object->masterDeviceId;
+        $primaryKey [1] = $object->dealerId;
         $this->saveItemToCache($object);
 
         return $object;
@@ -190,6 +198,8 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
             $object = new Quotegen_Model_Device($row->toArray());
 
             // Save the object into the cache
+            $primaryKey [0] = $object->masterDeviceId;
+            $primaryKey [1] = $object->dealerId;
             $this->saveItemToCache($object);
 
             $entries [] = $object;
@@ -201,14 +211,15 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param int $id
+     * @param array $id
      *
      * @return array
      */
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_masterDeviceId} = ?" => $id
+            "{$this->col_masterDeviceId} = ?" => $id [0],
+            "{$this->col_dealerId} = ?"       => $id [1],
         );
     }
 
@@ -219,7 +230,24 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->masterDeviceId;
+        return array(
+            (int)$object->masterDeviceId,
+            (int)$object->dealerId
+        );
+    }
+
+    /**
+     * Fetches a list of devices for the dealer
+     *
+     * @param int dealer id
+     *
+     * @return Quotegen_Model_Device[]
+     */
+    public function fetchQuoteDeviceListForDealer ($dealerId)
+    {
+        $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
+        return $devices;
     }
 }
 

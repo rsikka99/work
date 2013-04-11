@@ -18,7 +18,7 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
         <div class="header">
             <div class="title-page-logo-box-wrapper">
                 <div class="title-page-logo-box">
-                    <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg")) ?> " />
+                    <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
                 </div>
             </div>
         </div>
@@ -44,9 +44,6 @@ $totalPurchasedDevices = count($proposal->getPurchasedDevices());
     </div>
 </div>
 <div class="container" id="htmlReportContainer">
-    <div class="h1">
-        Hardware Optimization
-    </div>
     <div class="pheader">
         Current Fleet Statistics (before replacements)
     </div>

@@ -105,7 +105,7 @@ class Quotegen_Form_Option extends EasyBib_Form
                 'label' => 'Categories:' 
         ));
         
-        $categories = Quotegen_Model_Mapper_Category::getInstance()->fetchAll();
+        $categories = Quotegen_Model_Mapper_Category::getInstance()->fetchAllForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         /* @var $category Quotegen_Model_Category */
         foreach ( $categories as $category )
         {

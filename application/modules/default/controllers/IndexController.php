@@ -37,7 +37,8 @@ class Default_IndexController extends Tangent_Controller_Action
         if (isset($this->_mpsSession->selectedClientId))
         {
             $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            if ($client)
+            // Make sure the selected client is ours!
+            if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
             {
                 $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
                 $this->view->selectedClientId = $this->_selectedClientId;
@@ -60,8 +61,6 @@ class Default_IndexController extends Tangent_Controller_Action
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableQuotes = $availableQuotes;
         }
-
-
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
@@ -174,6 +173,16 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     protected function _createNewQuote ($quoteType)
     {
+        /**
+         * If we are not allowed here
+         */
+        if(!$this->view->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_QUOTE_INDEX,Application_Model_Acl::PRIVILEGE_VIEW))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
+                                               ));
+            $this->redirector('index', null, null);
+        }
         $quote = new Quotegen_Model_Quote();
 
         // Get the system and user defaults and apply overrides for user settings
@@ -237,6 +246,7 @@ class Default_IndexController extends Tangent_Controller_Action
             }
 
             // Create Client
+            $values['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $clientId = $clientService->create($values);
 
             if ($clientId)
@@ -329,7 +339,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
 
     /**
-     * JSON ACTION: Handles searching for a client by name.
+     * JSON ACTION: Handles searching for a client by name and dealerId
      */
     public function searchForClientAction ()
     {
@@ -337,7 +347,7 @@ class Default_IndexController extends Tangent_Controller_Action
         $results    = array();
         if ($searchTerm !== false)
         {
-            $clients = Quotegen_Model_Mapper_Client::getInstance()->searchForClientByCompanyName($searchTerm);
+            $clients = Quotegen_Model_Mapper_Client::getInstance()->searchForClientByCompanyNameAndDealer($searchTerm, Zend_Auth::getInstance()->getIdentity()->dealerId);
             foreach ($clients as $client)
             {
                 $results[] = array(
@@ -355,6 +365,6 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function viewAllClientsAction ()
     {
-        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchAll(null, null, 150);
+        $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchClientListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
     }
 }

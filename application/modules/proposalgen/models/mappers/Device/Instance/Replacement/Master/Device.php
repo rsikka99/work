@@ -14,6 +14,7 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
      */
     public $col_deviceInstanceId = 'deviceInstanceId';
     public $col_masterDeviceId = 'masterDeviceId';
+    public $col_hardwareOptimizationId = 'hardwareOptimizationId';
 
     /**
      * The default db table class to use
@@ -96,14 +97,14 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         if ($object instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
         {
-            $id = $object->deviceInstanceId;
+            $id          = $object->deviceInstanceId;
             $whereClause = array(
                 "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId
             );
         }
         else
         {
-            $id = $object;
+            $id          = $object;
             $whereClause = array(
                 "{$this->col_deviceInstanceId} = ?" => $object
             );
@@ -206,17 +207,16 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         return $entries;
     }
 
-    public function deleteAllDeviceInstancesForReport ($reportId)
+    /**
+     * Deletes all device instance replacements
+     *
+     * @param $hardwareOptimizationId
+     *
+     * @return int
+     */
+    public function deleteAllDeviceInstanceReplacementsByHardwareOptimizationId ($hardwareOptimizationId)
     {
-        $db    = $this->getDbTable()->getDefaultAdapter();
-        $query = $db->query("
-	        DELETE FROM `device_instance_replacement_master_devices`
-    	    WHERE `deviceInstanceId` IN (
-        	SELECT `id` AS `deviceInstanceId` FROM `pgen_device_instances`
-        	WHERE `reportId` = ?
-        	);", $reportId);
-
-        $rowsAffected = $query->execute();
+        $rowsAffected = $this->getDbTable()->delete(array("{$this->col_hardwareOptimizationId} = ?" => $hardwareOptimizationId));
 
         return $rowsAffected;
     }

@@ -14,6 +14,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      * Define the primary key of the model association
      */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
     public $col_companyName = 'companyName';
     public $col_legalName = 'legalName';
 
@@ -188,7 +189,7 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
      *
      * @return Quotegen_Model_Client[]
      */
-    public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
+    public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
         if ($order === null)
         {
@@ -248,6 +249,37 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         return $this->fetchAll(array(
                                     "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%"
                                ));
+    }
+
+    /**
+     * Searches for a client by the company name field.
+     *
+     * @param string $searchTerm
+     *
+     * @param        $dealerId
+     *
+     * @return Quotegen_Model_Client[]
+     */
+    public function searchForClientByCompanyNameAndDealer ($searchTerm, $dealerId)
+    {
+        $searchTerm = trim($searchTerm, "%");
+
+        return $this->fetchAll(array(
+                                    "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%",
+                                    "{$this->col_dealerId} = ?" => $dealerId
+                               ));
+    }
+
+    /**
+     * Fetches a list of clients for the dealer
+     * @param int dealer id
+     *
+     * @return Application_Model_Client[]
+     */
+    public function fetchClientListForDealer ($dealerId)
+    {
+        $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+        return $users;
     }
 
     /**

@@ -18,16 +18,8 @@ $graphs = $proposal->getGraphs();
 <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
 <div class="center">
-    <table>
-        <tbody>
-            <tr>
-                <td width="70"></td>
-                <td><img src="<?php echo $graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-                <td width="70"></td>
-            </tr>
-        </tbody>
-    </table>
+    <img src="<?php echo $graphs[1]; ?>" /> <!-- Devices leased/Devices Purchased -->
+    <img src="<?php echo $graphs[2]; ?>" /> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
 </div>
 <br />
 <?php
@@ -48,7 +40,7 @@ else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
 <p>Based on your questionnaire, <strong><?php echo $inkjetString; ?> of your printing is done on inkjet devices</strong>. We did not monitor inkjet machines that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.</p>
 <br />
 <?php if (count($proposal->getExcludedDevices()) > 0) :?>
-<p><?php echo count($proposal->getExcludedDevices())?> devices were not included in the analysis due to lack of data or model information. See the Appendix in the <?php echo $this->brandName; ?> Your Solution document for the list of excluded device(s).</p>
+<p><?php echo count($proposal->getExcludedDevices())?> devices were not included in the analysis due to lack of data or model information. </p>
 <?php endif; ?>
 <div class="pheader">Efficiency of Break-Fix Service</div>
 <p>Based on your questionnaire responses, we discovered the following:</p>

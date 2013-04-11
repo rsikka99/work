@@ -318,4 +318,44 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
 
         return $reportSetting;
     }
+
+    /**
+     * Gets a dealer report setting, if none exist it creates one.
+     *
+     * @param $dealerId
+     *
+     * @return bool|\Proposalgen_Model_Report_Setting
+     */
+    public function fetchDealerReportSetting ($dealerId)
+    {
+        $reportSetting       = false;
+        $reportDealerSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealerId);
+
+        if ($reportDealerSetting)
+        {
+            $reportSetting = $this->find($reportDealerSetting->reportSettingId);
+        }
+
+        if (!$reportSetting)
+        {
+            // Take a copy
+            $reportSetting   = $this->fetchSystemReportSetting();
+            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+
+            if ($reportDealerSetting)
+            {
+                $reportDealerSetting->reportSettingId = $reportSettingId;
+                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->save($reportDealerSetting);
+            }
+            else
+            {
+                $reportDealerSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
+                $reportDealerSetting->reportSettingId = $reportSettingId;
+                $reportDealerSetting->dealerId        = $dealerId;
+                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($reportDealerSetting);
+            }
+        }
+
+        return $reportSetting;
+    }
 }

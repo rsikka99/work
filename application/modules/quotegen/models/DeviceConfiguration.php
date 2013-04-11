@@ -9,6 +9,11 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     /**
      * @var int
      */
+    public $dealerId;
+
+    /**
+     * @var int
+     */
     public $masterDeviceId = 0;
 
     /**
@@ -50,6 +55,11 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
             $this->id = $params->id;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
             $this->masterDeviceId = $params->masterDeviceId;
@@ -74,6 +84,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         return array(
             "id"             => $this->id,
+            "dealerId"             => $this->dealerId,
             "masterDeviceId" => $this->masterDeviceId,
             "name"           => $this->name,
             "description"    => $this->description,
@@ -89,7 +100,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         if (!isset($this->_device))
         {
-            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($this->masterDeviceId);
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($this->masterDeviceId,$this->dealerId));
         }
 
         return $this->_device;

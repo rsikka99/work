@@ -21,84 +21,29 @@ $section          = $phpWord->createSection(array(
                                             ));
 $titlepageSection = $section;
 
+
+/* Tables for the device layouts */
+$widthTwips       = 11111;
+$header_color     = $this->wordStyles->default->tableHeaderBackgroundColor;
+$sub_header_color = $this->wordStyles->default->tableSubHeaderBackgroundColor;
+$even_color       = "EFEFEF";
+$odd_color        = "FCFCFC";
+$footer_color     = "b8cce3";
+$highlight_color  = "ebc7a4";
+
 /**
  * Paragraph styles
  */
-$phpWord->addParagraphStyle('titlepageHeaderParagraph', array('spaceAfter' => 200));
-$phpWord->addParagraphStyle('nospacing', array('spaceBefore' => 0, 'spaceAfter' => 0));
-
-$phpWord->addParagraphStyle('nospacing_rightalign', array(
-                                                         'align'       => 'right',
-                                                         'spaceBefore' => 0,
-                                                         'spaceAfter'  => 0
-                                                    ));
-$phpWord->addParagraphStyle('nospacing_centeralign', array(
-                                                          'align'       => 'center',
-                                                          'spaceBefore' => 0,
-                                                          'spaceAfter'  => 0
-                                                     ));
-
-$phpWord->addParagraphStyle('rightalign', array('align' => 'right'));
-
-$phpWord->addParagraphStyle('gradeParagraph', array(
-                                                   'align'       => 'center',
-                                                   'spaceBefore' => 0,
-                                                   'spaceAfter'  => 0
-                                              ));
-
-$phpWord->addParagraphStyle('savingsParagraph', array(
-                                                     'align'       => 'center',
-                                                     'spaceBefore' => 0,
-                                                     'spaceAfter'  => 0
-                                                ));
-/**
- * Header/Title Styles
- */
-// H1 Style
-$phpWord->addTitleStyle(1, array(
-                                'size'  => 15,
-                                'color' => 'F0003C',
-                                'bold'  => true
-                           ), array(
-                                   'borderBottomSize' => 1
-                              ));
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
                                 'size'   => 12,
-                                'color'  => 'FFFFFF',
+                                'color'  => $this->wordStyles->default->subSectionFontColor,
                                 'bold'   => true,
                                 'italic' => true
                            ), array(
-                                   'bgColor' => '0096d6'
-                              ));
-// H3 Style #5881BC
-$phpWord->addTitleStyle(3, array(
-                                'size'  => 10,
-                                'color' => 'FF0000',
-                                'bold'  => true
-                           ), array(
-                                   'spaceBefore' => 100,
-                                   'spaceAfter'  => 100
+                                   'bgColor' => $this->wordStyles->default->subSectionBackgroundColor,
                               ));
 
-// H3 Style #5881BC
-$phpWord->addFontStyle('heading3', array(
-                                        'size'  => 10,
-                                        'color' => 'FF0000',
-                                        'bold'  => true
-                                   ));
-
-$phpWord->addFontStyle('pageHeader', array(
-                                          'size' => 15,
-                                          'bold' => true,
-                                     ));
-
-// Title page
-$phpWord->addParagraphStyle('titleStyle1', array(
-                                                'align'      => 'center',
-                                                'spaceAfter' => 100,
-                                                'bgColor'    => '004990'
-                                           ));
 $phpWord->addParagraphStyle('titleStyle2', array(
                                                 'spaceAfter'  => 50,
                                                 'spaceBefore' => 50,
@@ -124,17 +69,6 @@ $phpWord->addFontStyle('titlepage_address', array(
                                                  'size'  => 12,
                                                  'color' => 'FFFFFF'
                                             ));
-$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
-                                                             'spaceAfter' => 200
-                                                        ));
-$phpWord->addParagraphStyle('titlepageHeader1', array(
-                                                     'spaceAfter' => 0,
-
-                                                ));
-
-/**
- * Setup some styles to be used across the report
- */
 $styles = (object)array(
     "tables" => (object)array(
         "singleimage"        => (object)array(
@@ -186,15 +120,6 @@ $styles = (object)array(
         )
     ),
 );
-
-/* Tables for the device layouts */
-$widthTwips       = 11111;
-$header_color     = "B8CCE3";
-$sub_header_color = "0096A6";
-$even_color       = "EFEFEF";
-$odd_color        = "FCFCFC";
-$footer_color     = "b8cce3";
-$highlight_color  = "ebc7a4";
 
 $standard_cell = (object)array(
     "even"           => array(
@@ -451,6 +376,7 @@ $titleData = array(
     "section"  => $titlepageSection,
     "proposal" => $this->proposal,
     "styles"   => $styles,
+    "dealerLogoFile"   => $this->dealerLogoFile,
 );
 
 $profitabilityDevices = new Proposalgen_Model_Optimization_Customer($this->proposal);

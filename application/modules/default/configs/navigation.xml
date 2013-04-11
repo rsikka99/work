@@ -214,6 +214,20 @@
                                     <action>index</action>
                                     <resource>proposalgen__fleet__index</resource>
                                 </upload>
+                                <optimization>
+                                    <label>Survey</label>
+                                    <module>proposalgen</module>
+                                    <controller>survey</controller>
+                                    <action>survey</action>
+                                    <resource>proposalgen__survey__survey</resource>
+                                </optimization>
+                                <survey>
+                                    <label>Optimization</label>
+                                    <module>proposalgen</module>
+                                    <controller>optimization</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__optimization__index</resource>
+                                </survey>
                                 <devicemapping>
                                     <label>Map Devices</label>
                                     <module>proposalgen</module>
@@ -335,6 +349,15 @@
                     <uri>#</uri>
                     <visible>0</visible>
                     <pages>
+                        <edituserprofile>
+                            <label>My Profile</label>
+                            <module>admin</module>
+                            <controller>user</controller>
+                            <action>profile</action>
+                            <resource>admin__user__profile</resource>
+                            <icon>pencil</icon>
+                            <visible>1</visible>
+                        </edituserprofile>
                         <changepassword>
                             <label>Change Password</label>
                             <module>default</module>

@@ -1274,6 +1274,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     }
 
 
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return Proposalgen_Model_DeviceInstance []
+     */
     public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         if (!isset($this->highCostPurchasedDevices))
@@ -2127,12 +2132,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->setLegend(array(
                                       "Current",
-                                      "PrintIQ"
+                                      "MPSToolbox"
                                  ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
             $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("r");
+            $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
@@ -2146,7 +2151,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              * -- LeasedVsPurchasedBarGraph
              */
             $highest  = ($this->getLeasedDeviceCount() > $this->getPurchasedDeviceCount()) ? $this->getLeasedDeviceCount() : $this->getPurchasedDeviceCount();
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(225, 265);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
@@ -2161,7 +2166,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
-            $barGraph->setBarScale(70, 10);
+            $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -2179,7 +2184,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              * -- LeasedVsPurchasedPageCountBarGraph
              */
             $highest  = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2195,7 +2200,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
-            $barGraph->setBarScale(70, 10);
+            $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -2255,7 +2260,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $averagePageCount = round($pageCounts->Total->Combined->Monthly / $this->getDeviceCount(), 0);
             $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
-            $barGraph         = new gchart\gBarChart(200, 300);
+            $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2292,7 +2297,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $pagesPerEmployee = round($pageCounts->Total->Combined->Monthly / $employeeCount);
             $highest          = ($OD_AverageMonthlyPagesPerEmployee > $pagesPerEmployee) ? $OD_AverageMonthlyPagesPerEmployee : $pagesPerEmployee;
-            $barGraph         = new gchart\gBarChart(200, 300);
+            $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2328,7 +2333,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
              */
             $devicesPerEmployee = round($employeeCount / $this->getDeviceCount(), 2);
             $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
-            $barGraph           = new gchart\gBarChart(200, 300);
+            $barGraph           = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Employees per|printing device");
             $barGraph->setVisibleAxes(array(
                                            'y'
@@ -2847,7 +2852,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->ReplacementDevices))
         {
-            $this->ReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchCheapestForEachCategory();
+            $this->ReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchCheapestForEachCategory($this->report->getClient()->dealerId);
         }
 
         return $this->ReplacementDevices;
@@ -3678,6 +3683,49 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->_dealerWeightedAverageMonthlyCostPerPage;
     }
 
+
+    /**
+     * The weighted average monthly cost per page for customers
+     *
+     * @var Proposalgen_Model_CostPerPage
+     */
+    protected $_customerWeightedAverageMonthlyCostPerPage;
+
+    /**
+     * Calculates the weighted average monthly cost per page of the current fleet
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateCustomerWeightedAverageMonthlyCostPerPage ()
+    {
+        if (!isset($this->_customerWeightedAverageMonthlyCostPerPage))
+        {
+            $this->_customerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
+
+            $costPerPageSetting            = $this->getCostPerPageSettingForCustomer();
+            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
+            $colorCpp                      = 0;
+            $monoCpp                       = 0;
+
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
+                $monoCpp += ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
+                {
+                    $colorCpp += ($deviceInstance->getAverageMonthlyColorPageCount() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                }
+            }
+
+            $this->_customerWeightedAverageMonthlyCostPerPage->monochromeCostPerPage = $monoCpp;
+            $this->_customerWeightedAverageMonthlyCostPerPage->colorCostPerPage      = $colorCpp;
+        }
+
+        return $this->_customerWeightedAverageMonthlyCostPerPage;
+    }
+
+
     /**
      * Calculates the dealers monthly cost
      *
@@ -3811,5 +3859,143 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
     }
 
+    /**
+     * calculate Estimated Annual Cost Of Printing
+     *
+     * @return float
+     */
+    public function calculateEstimatedAnnualCostOfPrinting ()
+    {
+        return $this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost();
+    }
 
+    /**
+     * Calculates Total Cost Of Monochrome pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfMonochromePagesAnnually ()
+    {
+        return $this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP();
+    }
+
+    /**
+     * Calculates Total Cost Of Color pages for purchased devices
+     *
+     * @return float
+     */
+    public function calculateTotalCostOfColorPagesAnnually ()
+    {
+        return $this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP();
+    }
+
+    /**
+     * Calculates half of annual it cost
+     *
+     * @return float
+     */
+    public function getHalfOfAnnualITCost ()
+    {
+        return $this->getAnnualITCost() * .5;
+    }
+
+    /**
+     * Calculates the average pages per device monthly
+     *
+     * @return float
+     */
+    public function calculateAveragePagesPerDeviceMonthly()
+    {
+        return $this->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount();
+    }
+
+    /**
+     * Calculates the percent of total volume of purchased devices that are color
+     *
+     * @return float
+     */
+    public function calculatePercentOfTotalVolumePurchasedColorMonthly()
+    {
+        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemMonochromeMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Monochrome Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleMonochromeMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemColorMonthly()
+    {
+        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Color Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleColorMonthly()
+    {
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
+    }
+
+    /**
+     * Calculates the total Average Cost For Oem Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostOemCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
+    }
+
+    /**
+     * Calculates the total Average Cost For Compatible Combined Printers Monthly
+     *
+     * @return float
+     */
+    public function calculateAverageTotalCostCompatibleCombinedMonthly()
+    {
+        return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
+    }
+
+    /**
+     * Calculates the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
+    }
+
+    /**
+     * Calculates half the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    {
+        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
+    }
 }

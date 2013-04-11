@@ -23,6 +23,13 @@ class Proposalgen_Model_Proposal_Abstract
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForDealer;
+    /**
+     * The cost page setting when selecting replacement devices
+     *
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSettingForReplacements;
+
     protected $PageCoverageBlackAndWhite;
     protected $PageCoverageColor;
     protected $ReportQuestions;
@@ -99,6 +106,28 @@ class Proposalgen_Model_Proposal_Abstract
         }
 
         return $this->_costPerPageSettingForDealer;
+    }
+
+    /**
+     * Gets the cost per page settings for replacement devices
+     *
+     * @return Proposalgen_Model_CostPerPageSetting
+     */
+    public function getCostPerPageSettingForReplacements ()
+    {
+
+        if (!isset($this->_costPerPageSettingForReplacements))
+        {
+            $this->_costPerPageSettingForReplacements = new Proposalgen_Model_CostPerPageSetting();
+
+            $reportSettings                                                   = $this->report->getReportSettings();
+            $this->_costPerPageSettingForReplacements->adminCostPerPage       = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForReplacements->pageCoverageColor      = $reportSettings->actualPageCoverageColor;
+            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $reportSettings->actualPageCoverageMono;
+            $this->_costPerPageSettingForReplacements->pricingConfiguration   = $reportSettings->getReplacementPricingConfig();
+        }
+
+        return $this->_costPerPageSettingForReplacements;
     }
 
 

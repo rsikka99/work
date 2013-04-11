@@ -3,7 +3,8 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 {
     // Column Names
     public $col_id = "id";
-
+    public $col_dealerId = "dealerId";
+    public $col_email = "email";
     /**
      * The default db table class to use
      *
@@ -220,16 +221,30 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets a where clause for filtering by username
+     * Gets a where clause for filtering by email
      *
-     * @param string $username
+     * @param string $email
      *
      * @return array
      */
-    public function getWhereUsername ($username)
+    public function getWhereUsername ($email)
     {
         return array(
-            "username = ?" => $username
+            "{$this->col_email} = ?" => $email
+        );
+    }
+
+    /**
+     * Gets a where clause for filtering by dealerId
+     *
+     * @param string $dealerId
+     *
+     * @return array
+     */
+    public function getWhereDealerId ($dealerId)
+    {
+        return array(
+            "dealerId = ?" => $dealerId
         );
     }
 
@@ -245,6 +260,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of users in the system
+     *
      * @param bool $includeRootUser
      *
      * @return Application_Model_User[]
@@ -262,6 +278,31 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         }
 
         return $users;
+    }
+
+    /**
+     * Fetches a list of users for the dealer
+     *
+     * @param $dealerId
+     *
+     * @return Application_Model_User[]
+     */
+    public function fetchUserListForDealer ($dealerId)
+    {
+        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
+    }
+
+    /**
+     * * Fetches users by email
+     *
+     * @param $email
+     *
+     * @return Application_Model_User
+     */
+    public function fetchUserByEmail ($email)
+    {
+        return $this->fetch(array("{$this->col_email} = ?" => $email));
     }
 }
 

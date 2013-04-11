@@ -262,7 +262,7 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("serviceCostPerPage"); ?>
+	<?php $element = $this->element->getElement("partsCostPerPage"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>
 		<div class="controls">
@@ -273,6 +273,17 @@ $form = $this->form;
 			<?php echo $element->renderErrors(); ?>
 		</div>
 	</div>
+    <?php $element = $this->element->getElement("laborCostPerPage"); ?>
+    <div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
+        <?php echo $element->renderLabel(); ?>
+        <div class="controls">
+            <?php if ( $element->hasErrors() ) {
+                $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+            } ?>
+            <?php echo trim($element->renderViewHelper()); ?>
+            <?php echo $element->renderErrors(); ?>
+        </div>
+    </div>
 	<?php $element = $this->element->getElement("launchDate"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>

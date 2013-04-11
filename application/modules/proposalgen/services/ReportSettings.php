@@ -17,6 +17,13 @@ class Proposalgen_Service_ReportSettings
     protected $_systemSettings;
 
     /**
+     * The system report settings
+     *
+     * @var Proposalgen_Model_Report_Setting
+     */
+    protected $_dealerSettings;
+
+    /**
      * The user report settings
      *
      * @var Proposalgen_Model_Report_Setting
@@ -44,15 +51,17 @@ class Proposalgen_Service_ReportSettings
      */
     protected $_report;
 
-    public function __construct ($reportId, $userId)
+    public function __construct ($reportId, $userId,$dealerId)
     {
         $this->_report         = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
         $this->_systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting();
+        $this->_dealerSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($dealerId);
+
         $this->_userSettings   = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
         $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchReportReportSetting($reportId);
 
         // Calculate the default settings
-        $this->_defaultSettings = new Proposalgen_Model_Report_Setting($this->_systemSettings->toArray());
+        $this->_defaultSettings = new Proposalgen_Model_Report_Setting(array_merge($this->_userSettings->toArray(),$this->_dealerSettings->toArray()));
         $this->_defaultSettings->populate($this->_userSettings->toArray());
     }
 
@@ -68,7 +77,7 @@ class Proposalgen_Service_ReportSettings
             $this->_form = new Proposalgen_Form_Settings_Report($this->_defaultSettings);
 
             // Populate with initial data?
-            $this->_form->populate($this->_reportSettings->toArray());
+            $this->_form->populate(array_merge($this->_userSettings->toArray(),$this->_reportSettings->toArray()));
             $reportDate = date('m/d/Y', strtotime($this->_report->reportDate));
             $this->_form->populate(array(
                                         'reportDate' => $reportDate

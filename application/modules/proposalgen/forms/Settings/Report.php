@@ -264,7 +264,6 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
         // Toner preference for the assessment
         $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
@@ -337,23 +336,42 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $grossMarginGroup->elements [] = $admin_charge;
         
         // Service Cost Per Page
-        $service_cost = new Zend_Form_Element_Text('serviceCostPerPage');
-        $service_cost->setLabel('Service Cost')
+        $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
+        $labor_cost->setLabel('Labor Cost')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->serviceCostPerPage, 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array (
                 'min' => 0 
         ));
-        $service_cost->getValidator('Float')->setMessage('Please enter a number.');
+        $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
         
-        $this->addElement($service_cost);
-        $grossMarginGroup->elements [] = $service_cost;
+        $this->addElement($labor_cost);
+        $grossMarginGroup->elements [] = $labor_cost;
+
+        // Service Cost Per Page
+        $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
+        $parts_cost->setLabel('Parts Cost')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($parts_cost);
+        $grossMarginGroup->elements [] = $parts_cost;
         
         // Toner preference for the gross marginm
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
@@ -399,6 +417,15 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         $this->addElement($target_color);
         $optimization->elements [] = $target_color;
 
+        // Toner preference for the assessment
+        $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
+        $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
+            ->setAttrib('class', 'span2')
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getReplacementPricingConfig() ? $this->_defaultSettings->getReplacementPricingConfig()->configName : null))
+            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
+        $this->addElement($replacementDeviceTonerPreference);
+        $optimization->elements [] = $replacementDeviceTonerPreference;
+
         $target_monochrome->setLabel('Target Monochrome')
             ->setAttrib('class', 'input-mini');
         $target_color->setLabel('Target Color')
@@ -407,35 +434,18 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         //*****************************************************************
         // BUTTONS
         //*****************************************************************
-        
-
-        // Save button
         $element = new Zend_Form_Element_Submit('save_settings', array (
                 'disableLoadDefaultDecorators' => true
         ));
         $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
         $this->addElement($element);
-        
-        //back button
+
         $element = new Zend_Form_Element_Button('back_button');
         $element->setLabel('Back')
             ->setAttrib('class', 'btn')
             ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
         $this->addElement($element);
-        
-        // Add the submit button
-//        $this->addElement('submit', 'submit', array (
-//                'ignore' => true,
-//                'label' => 'Save & Continue'
-//        ));
-//
-//        // Add the cancel button
-//        $this->addElement('submit', 'cancel', array (
-//                'ignore' => true,
-//                'label' => 'Back'
-//        ));
-        
-        //EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
+
         Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL, $this);
     }
 
@@ -449,4 +459,3 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
         return $this->_formElementGroups;
     }
 }
-?>

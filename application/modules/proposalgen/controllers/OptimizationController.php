@@ -5,10 +5,8 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_OPTIMIZATION);
-        // Get all devices
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
-
         $form = new Proposalgen_Form_DeviceSwapChoice($this->getProposal());
 
         // Get all devices
@@ -208,9 +206,10 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                     }
                     else
                     {
-                        $deviceInstanceReplacement                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                        $deviceInstanceReplacement->masterDeviceId   = (int)$masterDeviceId;
-                        $deviceInstanceReplacement->deviceInstanceId = $deviceInstance->id;
+                        $deviceInstanceReplacement                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                        $deviceInstanceReplacement->masterDeviceId         = (int)$masterDeviceId;
+                        $deviceInstanceReplacement->deviceInstanceId       = $deviceInstance->id;
+                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_dealerId;
                         $deviceInstanceReplacementMapper->insert($deviceInstanceReplacement);
                     }
                 }
@@ -233,6 +232,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         catch (Exception $e)
         {
             $db->rollBack();
+            My_Log::logException($e);
 
             return false;
         }
@@ -246,11 +246,12 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
      * @param Proposalgen_Model_DeviceInstance     $deviceInstance
      * @param Proposalgen_Model_MasterDevice[]     $replacementDevices
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting
      * @param number                               $costSavingsThreshold
      *
      * @return Proposalgen_Model_MasterDevice
      */
-    protected function _findReplacement (Proposalgen_Model_DeviceInstance $deviceInstance, $replacementDevices, Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $costSavingsThreshold)
+    protected function _findReplacement (Proposalgen_Model_DeviceInstance $deviceInstance, $replacementDevices, Proposalgen_Model_CostPerPageSetting $costPerPageSetting, Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting, $costSavingsThreshold)
     {
         $suggestedDevice           = null;
         $greatestSavings           = 0;
@@ -259,7 +260,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         /* @var $replacementDevice Proposalgen_Model_MasterDevice */
         foreach ($replacementDevices as $masterDevice)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting, $masterDevice);
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $masterDevice);
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
@@ -282,6 +283,8 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
 
         $savingsThreshold                = $proposal->report->getReportSettings()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+
         try
         {
             $db->beginTransaction();
@@ -292,17 +295,18 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 throw new Exception("Error resetting replacements!");
             }
 
-            $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices(false);
-            $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices(false);
-            $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices(false);
-            $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices(false);
+            $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->_dealerId, false);
+            $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->_dealerId, false);
+            $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId, false);
+            $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
 
-//            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
-//            {
-//                $replacementMasterDevice->processOverrides($proposal->report);
-//            }
+            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
+            {
+                $replacementMasterDevice->processOverrides($proposal->report);
+            }
 
-            $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
+            $costPerPageSetting            = $proposal->getCostPerPageSettingForDealer();
+            $replacementCostPerPageSetting = $proposal->getCostPerPageSettingForReplacements();
 
             foreach ($proposal->getPurchasedDevices() as $deviceInstance)
             {
@@ -313,38 +317,43 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackMfpReplacementDevices, $costPerPageSetting, $savingsThreshold);
+                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackMfpReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
                     }
                     else
                     {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackReplacementDevices, $costPerPageSetting, $savingsThreshold);
+                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
                     }
                 }
                 else
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorMfpReplacementDevices, $costPerPageSetting, $savingsThreshold);
+                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorMfpReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
                     }
                     else
                     {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorReplacementDevices, $costPerPageSetting, $savingsThreshold);
+                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
                     }
                 }
+
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-
                     $newDevice                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
                     $newDevice->masterDeviceId   = $suggestedDevice->id;
                     $newDevice->deviceInstanceId = $deviceInstance->id;
+
+                    // FIXME: This is set to the assessment id for now. It will need to change to the HWO id when we separate the two reports.
+                    $newDevice->hardwareOptimizationId = $this->_reportId;
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
+
             $db->commit();
         }
         catch (Exception $e)
         {
             $db->rollBack();
+            My_Log::logException($e);
 
             return false;
         }
@@ -362,10 +371,12 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         try
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-            $deviceInstanceReplacementMapper->deleteAllDeviceInstancesForReport($this->getReport()->id);
+            $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_reportId);
         }
         catch (Exception $e)
         {
+            My_Log::logException($e);
+
             return false;
         }
 

@@ -200,7 +200,7 @@ class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
     /**
      * Gets a where clause for filtering by id
      *
-     * @param int $id
+     * @param array $id
      *
      * @return array
      */

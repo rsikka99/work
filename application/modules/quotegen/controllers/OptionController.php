@@ -12,7 +12,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
     {
         // Get all current items in categories table
         $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper));
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($optionMapper,array('dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId)));
         
         // Set current page
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
@@ -44,6 +44,15 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array (
                     'danger' => 'There was an error finding that option to delete.' 
             ));
+            $this->redirector('index');
+        }
+        // If we are trying to access a option from another dealer, kick them back
+        else if ($option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+            // Redirect
             $this->redirector('index');
         }
         
@@ -101,6 +110,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         
                         $option = new Quotegen_Model_Option();
                         $option->populate($values);
+                        $option->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $optionId = $optionMapper->insert($option);
                         
                         // Create optionCategory with $optionId to save 
@@ -180,6 +190,18 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         // Find the option by id
         $optionMapper = Quotegen_Model_Mapper_Option::getInstance();
         $option = $optionMapper->find($optionId);
+
+        // If we are trying to access a option from another dealer, kick them back
+        if ($option && $option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+            // Redirect
+            $this->redirector('index');
+        }
+
+
         $optionValues = $option->toArray();
         /* @var $category Quotegen_Model_Category */
         foreach ( $option->getCategories() as $category )

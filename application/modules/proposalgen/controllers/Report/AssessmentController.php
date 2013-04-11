@@ -80,6 +80,7 @@ class Proposalgen_Report_AssessmentController extends Proposalgen_Library_Contro
                 $proposal = $this->getProposal();
                 $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
                 $proposal->setGraphs($graphs);
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;
             case "pdf" :

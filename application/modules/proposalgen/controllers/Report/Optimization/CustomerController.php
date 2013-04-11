@@ -5,7 +5,7 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
     {
         $this->initReportList();
         $this->initHtmlReport();
-        $this->setActiveReportStep(Proposalgen_Model_Report_Step::STEP_FINISHED);
+        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FINISHED);
         $this->view->availableReports->CustomerHardwareOptimization->active = true;
 
         $this->view->formats = array(
@@ -43,6 +43,7 @@ class Proposalgen_Report_Optimization_CustomerController  extends Proposalgen_Li
                 $this->view->phpword = new PHPWord();
                 $customerOptimization = new Proposalgen_Model_Optimization_Customer($this->getProposal());
                 $graphs   = $this->cachePNGImages($customerOptimization->getGraphs(), true);
+                $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;

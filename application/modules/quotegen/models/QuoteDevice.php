@@ -229,7 +229,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
-                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find($quoteDeviceConfiguration->masterDeviceId);
+                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDeviceConfiguration->masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
             }
         }
 
@@ -582,7 +582,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($costPerPageColor > 0)
         {
-            $costPerPageColor += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
+            $deviceAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
+
+            $costPerPageColor += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
         }
 
         return (float)$costPerPageColor;
@@ -631,7 +633,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
          */
         if ($costPerPageMonochrome > 0)
         {
-            $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $this->getQuote()->serviceCostPerPage;
+            $deviceAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
+            $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
         }
 
         return $costPerPageMonochrome;

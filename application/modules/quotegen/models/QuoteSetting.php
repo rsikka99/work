@@ -36,11 +36,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     /**
      * @var float
      */
-    public $serviceCostPerPage;
-
-    /**
-     * @var float
-     */
     public $adminCostPerPage;
 
     /**
@@ -90,11 +85,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->pricingConfigId = $params->pricingConfigId;
         }
 
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
-        {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
-        }
-
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
@@ -139,10 +129,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $this->pageMargin = $settings->pageMargin;
         }
-        if (isset($settings->serviceCostPerPage) && !is_null($settings->serviceCostPerPage))
-        {
-            $this->serviceCostPerPage = $settings->serviceCostPerPage;
-        }
         if (isset($settings->adminCostPerPage) && !is_null($settings->adminCostPerPage))
         {
             $this->adminCostPerPage = $settings->adminCostPerPage;
@@ -169,7 +155,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             "deviceMargin"           => $this->deviceMargin,
             "pageMargin"             => $this->pageMargin,
             "pricingConfigId"        => $this->pricingConfigId,
-            "serviceCostPerPage"     => $this->serviceCostPerPage,
             "adminCostPerPage"       => $this->adminCostPerPage,
         );
     }

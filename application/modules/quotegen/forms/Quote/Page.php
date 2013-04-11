@@ -240,30 +240,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
         ));
         $this->addElement($adminCostPerPage);
         
-        // serviceCostPerPage : Quotegen_Model_Quote->serviceCostPerPage
-        // serviceCostPerPage is a flat CPP that is used to add an additional charge per page to recoop service related fees
-        $serviceCostPerPage = $this->createElement('text', 'serviceCostPerPage', array (
-                'label' => 'Service Cost Per Page:', 
-                'value' => $this->_quote->serviceCostPerPage,
-                'required' => true, 
-                'class' => 'input-mini', 
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'Between', 
-                                'options' => array (
-                                        'min' => 0, 
-                                        'max' => 5 
-                                ) 
-                        ), 
-                        'Float' 
-                ) 
-        ));
-        $this->addElement($serviceCostPerPage);
-        
+
         // pricingConfigId : Quotegen_Model_Quote->pricingConfigId
         // pricingConfigId is used to determine the users prefernce for toners when it comes to calculating a devices CPP
         $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array (

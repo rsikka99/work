@@ -145,7 +145,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 break;
         }
         // Black Toner
-        $blackCost  = "$" . number_format($blackToner->cost, 2);
+        $blackCost  = "$" . number_format($blackToner->calculatedCost, 2);
         $blackYield = number_format($blackToner->yield);
 
         // Color Toner

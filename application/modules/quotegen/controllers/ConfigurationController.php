@@ -15,14 +15,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
     {
         // Display all of the deviceConfigurations
         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
-        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
-        
+        $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper,array("dealerId = ?" => Zend_Auth::getInstance()->getIdentity()->dealerId)));
+
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));
-        
+
         // Set how many items to show
         $paginator->setItemCountPerPage(15);
-        
+
         // Pass the view the paginator
         $this->view->paginator = $paginator;
     }
@@ -143,7 +143,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         else 
         {
             // Get first master device id from list
-            foreach ( Quotegen_Model_Mapper_device::getInstance()->fetchAll() as $quoteDevice ){
+            foreach ( Quotegen_Model_Mapper_device::getInstance()->fetchQuoteDeviceListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId) as $quoteDevice ){
                 $masterDeviceId = $quoteDevice->masterDeviceId;
                 break;
             
@@ -155,8 +155,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 	        }
 	        */
         }
-        $where = "masterDeviceId = {$masterDeviceId}";
-        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchAll($where);
+        $deviceOptions = Quotegen_Model_Mapper_DeviceOption::getInstance()->fetchDeviceOptionListForDealerAndDevice($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId);
         // Get device options
         $request = $this->getRequest();
         if ($request->isPost())
@@ -174,6 +173,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                         $mapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
                         $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();
                         $values ['masterDeviceId'] = $masterDeviceId;
+                        $values ['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
                         $deviceConfiguration->populate($values);
 
                         $deviceConfigurationId = $mapper->insert($deviceConfiguration);
@@ -335,6 +335,16 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                 // User has cancelled. Go back to the edit page
                 $this->redirector('index');
             }
+        }
+        // If there is a device configuration but it's not with our dealer
+        else if($deviceConfiguration->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
+        {
+            $this->_flashMessenger->addMessage(array (
+                                                     'danger' => 'You do not have permission to access this.'
+                                               ));
+
+            // User has cancelled. Go back to the edit page
+            $this->redirector('index');
         }
         
         // Create a new form with the mode and roles set

@@ -17,16 +17,14 @@ class Proposalgen_Form_Device extends Zend_Form
     {
         //call parent constructor
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+
         parent::__construct($options);
         $elements       = array();
         $elementCounter = 0;
-
         $this->setName('device_form');
-
         //*****************************************************************
-        //DEVICE FIELDS
+        //  DEVICE FIELDS
         //*****************************************************************
-
 
         //hidden mode to toggle between add/edit
         $hiddenMode = new Zend_Form_Element_Hidden('form_mode');
@@ -247,48 +245,6 @@ class Proposalgen_Form_Device extends Zend_Form
                             ))
             ->setOrder($elementCounter);
         array_push($elements, $element);
-        $elementCounter++;
-
-        //device price
-        $device_price = new Zend_Form_Element_Text('device_price');
-        $device_price->setLabel('Price:')
-            ->setAttrib('class', 'span1')
-            ->setAttrib('maxlength', 10)
-            ->setAttrib('id', 'device_price')
-            ->setAttrib('style', 'text-align: right')
-            ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-            ->setOrder($elementCounter)
-            ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_GreaterThan(0))
-            ->setDescription('$')
-            ->setDecorators(array(
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'ViewHelper',
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'device_price-element'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        $device_price->getValidator('Float')->setMessage('Please enter a number.');
-        $device_price->getValidator('GreaterThan')->setMessage('Value must be greater then zero.');
-        array_push($elements, $device_price);
         $elementCounter++;
 
         //override price
@@ -741,40 +697,6 @@ class Proposalgen_Form_Device extends Zend_Form
         //LEASED DEVICES BELOW
         //*********************************************************************
 
-
-        //is leased flag
-        $element = new Zend_Form_Element_Checkbox('is_leased');
-        $element->setLabel('Leased:')
-            ->setAttrib('onclick', 'javascript: toggle_leased(this.checked)')
-            ->setOrder($elementCounter)
-            ->setDecorators(array(
-                                 'ViewHelper',
-                                 array(
-                                     'Description',
-                                     array(
-                                         'escape' => false,
-                                         'tag'    => false
-                                     )
-                                 ),
-                                 'Errors',
-                                 array(
-                                     'HtmlTag',
-                                     array(
-                                         'tag' => 'dd',
-                                         'id'  => 'is_leased-element'
-                                     )
-                                 ),
-                                 array(
-                                     'Label',
-                                     array(
-                                         'tag'   => 'dt',
-                                         'class' => 'forms_label'
-                                     )
-                                 )
-                            ));
-        array_push($elements, $element);
-        $elementCounter++;
-
         //leased toner yield
         $element = new Zend_Form_Element_Text('leased_toner_yield');
         $element->setLabel('* Leased Toner Yield:')
@@ -814,164 +736,117 @@ class Proposalgen_Form_Device extends Zend_Form
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
         $elementCounter++;
+
+        $element = new Zend_Form_Element_Text('laborCostPerPage');
+        $element->setLabel('Labor Cost: ')
+            ->setAttrib('maxlength', 6)
+            ->setAttrib('class', 'span1')
+            ->addValidator(new Zend_Validate_Between(array('min' => 0, 'max' => '5')))
+            ->setAttrib('style', 'text-align: right')
+            ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
+            ->setOrder($elementCounter)
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'leased_toner_yield-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
+                            ));
+        array_push($elements, $element);
+        $elementCounter++;
+
+        $element = new Zend_Form_Element_Text('partsCostPerPage');
+        $element->setLabel('Parts Cost: ')
+            ->setAttrib('maxlength', 6)
+            ->setAttrib('class', 'span1')
+            ->addValidator(new Zend_Validate_Between(array('min' => 0, 'max' => '5')))
+            ->setAttrib('style', 'text-align: right')
+            ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
+            ->setOrder($elementCounter)
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'leased_toner_yield-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
+                            ));
+        array_push($elements, $element);
+        $elementCounter++;
+
+        //is leased flag
+        $element = new Zend_Form_Element_Checkbox('is_leased');
+        $element->setLabel('Leased:')
+            ->setAttrib('onclick', 'javascript: toggle_leased(this.checked)')
+            ->setOrder($elementCounter)
+            ->setDecorators(array(
+                                 'ViewHelper',
+                                 array(
+                                     'Description',
+                                     array(
+                                         'escape' => false,
+                                         'tag'    => false
+                                     )
+                                 ),
+                                 'Errors',
+                                 array(
+                                     'HtmlTag',
+                                     array(
+                                         'tag' => 'dd',
+                                         'id'  => 'is_leased-element'
+                                     )
+                                 ),
+                                 array(
+                                     'Label',
+                                     array(
+                                         'tag'   => 'dt',
+                                         'class' => 'forms_label'
+                                     )
+                                 )
+                            ));
+        array_push($elements, $element);
+        $elementCounter++;
+
         $hiddenElement = new Zend_Form_Element_Hidden('deviceInstanceId');
         array_push($elements, $hiddenElement);
-        /**
-         * ********************************************************************
-         * //FOR REPLACEMENT DEVICES BELOW
-         * //*********************************************************************
-         *
-         * //is_replacement
-         * $element = new Zend_Form_Element_Checkbox('is_replacement_device');
-         * $element->setLabel('Replacement Printer:')
-         * ->setAttrib('onclick', 'javascript: toggle_replacement(this.checked)')
-         * ->setOrder($elementCounter);
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //replacement_category
-         * $toner_config = new Zend_Form_Element_Select('replacement_category');
-         * $toner_config->setLabel('* Replacement Category:')
-         * ->setRequired(true)
-         * ->setOrder($elementCounter)
-         * ->setAttrib('id', 'replacement_category');
-         * array_push($elements, $toner_config);
-         * $elementCounter ++;
-         *
-         * //is_letter_legal
-         * $element = new Zend_Form_Element_Checkbox('is_letter_legal');
-         * $element->setLabel('Letter & Legal:')->setOrder($elementCounter);
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //print_speed
-         * $element = new Zend_Form_Element_Text('print_speed');
-         * $element->setLabel('* Print Speed:')
-         * ->setRequired(true)
-         * ->setAttrib('maxlength', 6)
-         * ->setAttrib('size', 6)
-         * ->addValidator(new Zend_Validate_Float())
-         * ->addValidator(new Zend_Validate_GreaterThan(array ( 'min' => 1 ) ) )
-         * ->setAttrib('style', 'text-align: right')
-         * ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-         * ->setOrder($elementCounter)
-         * ->setDescription('ppm')
-         * ->setDecorators(array (
-         * 'ViewHelper',
-         * array ( 'Description', array ( 'escape' => false, 'tag' => false ) ),
-         * 'Errors',
-         * array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'print_speed-element' ) ),
-         * array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) )
-         * ));
-         * $element->getValidator('Float')->setMessage('Please enter a number.');
-         * $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //resolution
-         * $element = new Zend_Form_Element_Text('resolution');
-         * $element->setLabel('* Resolution:')
-         * ->setRequired(true)
-         * ->setAttrib('maxlength', 6)
-         * ->setAttrib('size', 6)
-         * ->addValidator(new Zend_Validate_Float())
-         * ->addValidator(new Zend_Validate_GreaterThan(array ( 'min' => 1 ) ) )
-         * ->setAttrib('style', 'text-align: right')
-         * ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-         * ->setOrder($elementCounter)
-         * ->setDescription('dpi')
-         * ->setDecorators(array (
-         * 'ViewHelper',
-         * array ( 'Description', array ( 'escape' => false, 'tag' => false ) ),
-         * 'Errors',
-         * array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'resolution-element' ) ),
-         * array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) )
-         * ));
-         * $element->getValidator('Float')->setMessage('Please enter a number.');
-         * $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //paper_capacity
-         * $element = new Zend_Form_Element_Text('paper_capacity');
-         * $element->setLabel('* Paper Capacity:')
-         * ->setRequired(true)
-         * ->setAttrib('maxlength', 6)
-         * ->setAttrib('size', 6)
-         * ->addValidator(new Zend_Validate_Float())
-         * ->addValidator(new Zend_Validate_GreaterThan(array ( 'min' => 1 ) ) )
-         * ->setAttrib('style', 'text-align: right')
-         * ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-         * ->setOrder($elementCounter)
-         * ->setDescription('pages')
-         * ->setDecorators(array (
-         * 'ViewHelper',
-         * array ( 'Description', array ( 'escape' => false, 'tag' => false ) ),
-         * 'Errors',
-         * array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'paper_capacity-element' ) ),
-         * array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) )
-         * ));
-         * $element->getValidator('Float')->setMessage('Please enter a number.');
-         * $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //CPP_above_ten_thousand_pages
-         * $element = new Zend_Form_Element_Text('cpp_above');
-         * $element->setLabel('* CPP Above 10000 Pages:')
-         * ->setRequired(true)
-         * ->setAttrib('maxlength', 6)
-         * ->setAttrib('size', 6)
-         * ->addValidator(new Zend_Validate_Float())
-         * ->addValidator(new Zend_Validate_GreaterThan( array ( 'min' => 0 ) ) )
-         * ->setAttrib('style', 'text-align: right')
-         * ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-         * ->setOrder($elementCounter)
-         * ->setDescription('$')
-         * ->setDecorators(array (
-         * array ( 'Description', array ( 'escape' => false, 'tag' => false ) ),
-         * 'ViewHelper',
-         * 'Errors',
-         * array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'cpp_above-element' ) ),
-         * array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) )
-         * ));
-         * $element->getValidator('Float')->setMessage('Please enter a number.');
-         * $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         *
-         * //monthly rate
-         * $element = new Zend_Form_Element_Text('monthly_rate');
-         * $element->setLabel('* Monthly Rate:')
-         * ->setRequired(true)
-         * ->setAttrib('maxlength', 6)
-         * ->setAttrib('size', 6)
-         * ->addValidator(new Zend_Validate_Float())
-         * ->addValidator(new Zend_Validate_GreaterThan( array ('min' => 0 ) ) )
-         * ->setAttrib('style', 'text-align: right')
-         * ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-         * ->setOrder($elementCounter)
-         * ->setDescription('$')
-         * ->setDecorators(array (
-         * array ( 'Description', array ( 'escape' => false, 'tag' => false ) ),
-         * 'ViewHelper',
-         * 'Errors',
-         * array ( 'HtmlTag', array ( 'tag' => 'dd', 'id' => 'monthly_rate-element' ) ),
-         * array ( 'Label', array ( 'tag' => 'dt', 'class' => 'forms_label' ) )
-         * ));
-         * $element->getValidator('Float')->setMessage('Please enter a number.');
-         * $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
-         * array_push($elements, $element);
-         * $elementCounter ++;
-         * //*******************************************************************
-         */
-
         //*********************************************************************
-        //BUTTONS
+        //  BUTTONS
         //*********************************************************************
-
-
-        //save button
         $update = new Zend_Form_Element_Submit('save_device', array(
                                                                    'disableLoadDefaultDecorators' => true
                                                               ));
@@ -994,7 +869,6 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $update);
         $elementCounter++;
 
-        //delete button
         $element = new Zend_Form_Element_Submit('delete_device', array(
                                                                       'disableLoadDefaultDecorators' => true
                                                                  ));
@@ -1018,7 +892,6 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //back button
         $back = new Zend_Form_Element_Button('back_button');
         $back->setLabel('Done')
             ->setOrder($elementCounter)
@@ -1038,11 +911,9 @@ class Proposalgen_Form_Device extends Zend_Form
                                  )
                             ));
         array_push($elements, $back);
-        $elementCounter++;
-
-        //add all defined elements to the form
+        /* Add the elements to the form */
         $this->addElements($elements);
-    } //end function __construct
+    }
 
     public function set_validation ($data)
     {

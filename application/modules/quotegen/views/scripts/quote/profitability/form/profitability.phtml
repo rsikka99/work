@@ -5,37 +5,7 @@
 	$isLeased = $quote->isLeased();
 ?>
 <?php $this->headScript()->captureStart(); ?>
-$(function() 
-{
-	$('#leasingSchema').change(function()
-	{
-		var value = this.value;
-		$('#leasingSchemaTermId').empty().attr('disabled', 'disabled');
-		if (value != 0)
-		{
-    		$.ajax(
-    		{
-    		    url:'<?php echo $this->url(array('format' => 'json', 'action' => 'leasing-schema-terms')); ?>/leasingSchemaId/' + value,
-    		    success: function(data) 
-    		    {
-    		         var terms = data['leasingSchemaTerms'];
-    		         var html = '';
-    		         var len = terms.length;
-    		         for (var i = 0; i < len; i++)
-    		         {
-    		             html += '<option value="' + terms[i].id + '">' + terms[i].months + ' Months</option>';
-    		         }
-    		         $('#leasingSchemaTermId').append(html);
-    		         $('#leasingSchemaTermId').removeAttr('disabled');
-    		    },
-    		    error: function (data) 
-    		    {
-                    alert('Error Occured!');
-    		    }
-    		});
-		}
-	});
-});
+
 <?php $this->headScript()->captureEnd(); ?>
 <table class="table table-condensed table-striped table-bordered">
     <tr>

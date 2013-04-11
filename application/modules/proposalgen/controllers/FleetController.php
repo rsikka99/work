@@ -449,8 +449,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => 'Sorting parameters are invalid'
-                                 ));
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
         }
     }
 
@@ -475,7 +475,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Set up validation arrays
         $blankModel  = new Proposalgen_Model_Rms_Excluded_Row();
         $sortColumns = array_keys($blankModel->toArray());
-        $sortColumns[] = "model";
 
         $jqGrid->parseJQGridPagingRequest($jqGridParameters);
         $jqGrid->setValidSortColumns($sortColumns);
@@ -505,9 +504,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+            $this->sendJson(array('error' => 'Sorting parameters are invalid'));
         }
     }
 
@@ -700,8 +697,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                      'error' => 'Sorting parameters are invalid'
-                                 ));
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
         }
     }
 
@@ -713,7 +710,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_REPORTSETTINGS);
 
-        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId);
+        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
 
         if ($this->getRequest()->isPost())
         {
@@ -779,7 +776,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
             $this->view->rmsUploadRow = $rmsUploadRow;
-            $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels()));
+            $form->populate(array('reportsTonerLevels' => $deviceInstance->reportsTonerLevels));
             $form->populate($rmsUploadRow->toArray());
 
 
@@ -817,13 +814,6 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                                 }
                             }
 
-                            // Update the rms upload row
-                            $rmsUploadRow->populate($formValues);
-                            $rmsUploadRow->hasCompleteInformation = true;
-
-
-                            $rmsUploadRowMapper->save($rmsUploadRow);
-
                             /**
                              * Save each of our devices
                              */
@@ -831,10 +821,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                             {
                                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
 
+                                // Update the rms upload row
+                                $rmsUploadRow = $deviceInstance->getRmsUploadRow();
+                                $rmsUploadRow->populate($formValues);
+                                $rmsUploadRow->hasCompleteInformation = true;
+                                $rmsUploadRowMapper->save($rmsUploadRow);
+
 
                                 $deviceInstance->useUserData        = true;
                                 $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
-                                //$deviceInstance->reportsTonerLevels = $formValues["reportsTonerLevels"];
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                             $db->commit();
@@ -894,8 +889,10 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             foreach ($deviceInstanceIds as $deviceInstanceId)
             {
                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-                if ($deviceInstance && $deviceInstance->reportId == $reportId)
+                $assessment = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
+                if ($deviceInstance && $assessment && $assessment->rmsUploadId == $deviceInstance->rmsUploadId)
                 {
+
                     $deviceInstance->useUserData = false;
                     $deviceInstanceMapper->save($deviceInstance);
                 }
@@ -921,9 +918,15 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
     {
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
         $isExcluded       = $this->_getParam("isExcluded", false);
-        $booleanFilter    = new Zend_Filter_Boolean();
-        $isExcluded       = $booleanFilter->filter($isExcluded);
-        $errorMessage     = false;
+        if ($isExcluded == 'true')
+        {
+            $isExcluded = true;
+        }
+        else
+        {
+            $isExcluded = false;
+        }
+        $errorMessage = false;
 
         if ($deviceInstanceId !== false)
         {

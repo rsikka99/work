@@ -249,8 +249,12 @@ class Quotegen_Model_Mapper_UserQuoteSetting extends My_Model_Mapper_Abstract
             $userQuoteSetting->quoteSettingId = $quoteSettingId;
             $this->insert($userQuoteSetting);
         }
+        else
+        {
+            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($userQuoteSetting->quoteSettingId);
+        }
 
-        return $userQuoteSetting->getQuoteSetting();
+        return $quoteSetting;
     }
 
     /**

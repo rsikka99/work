@@ -1,134 +1,75 @@
 <?php
 class Preferences_QuoteController extends Tangent_Controller_Action
 {
-    /**
-     * This is where the user can edit their quote preferences
-     */
-    public function indexAction ()
+    public function indexAction () { /**Do Nothing*/ }
+
+    public function systemAction ()
     {
-        // Find client and pass form object
-        $form = new Preferences_Form_QuoteSetting(true);
-
-        $quoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-
-        $form->populate($quoteSetting->toArray());
-
-        // Update record if post
+        $quoteService = new Preferences_Service_QuoteSetting();
+        $form         = $quoteService->getForm();
         $request = $this->getRequest();
         if ($request->isPost())
         {
-            $values = $request->getPost();
-            if (!isset($values ['cancel']))
-            {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        foreach ($values as &$value)
-                        {
-                            if (strlen($value) === 0)
-                            {
-                                $value = new Zend_Db_Expr('NULL');
-                            }
-                        }
-                        $quoteSetting->populate($values);
-                        Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($quoteSetting);
+            $values  = $request->getPost();
+            $success = $quoteService->update($values);
 
-                        // Redirect user with message
-                        $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Your quote settings were updated successfully."
-                                                       ));
-                    }
-                    else
-                    {
-                        $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
-                    }
-                }
-                catch (Exception $e)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'Error editing quote setting.  Please try again.'
-                                                   ));
-                }
-            }
-            else // Client hit cancel redirect
+            if ($success)
             {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+            }
+            else
+            {
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
             }
         }
+
         $this->view->form = $form;
     }
 
-    /**
-     * This is where the admin can edit the system quote preferences
-     */
-    public function systemAction ()
+    public function userAction ()
     {
-        $quoteSettingId = 1;
-
-        // Find client and pass form object
-        $form               = new Preferences_Form_QuoteSetting();
-        $quoteSettingMapper = Quotegen_Model_Mapper_QuoteSetting::getInstance();
-        $quoteSetting       = $quoteSettingMapper->find($quoteSettingId);
-
-        $form->populate($quoteSetting->toArray());
-        // update record if post
+        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->fetchDealerQuoteSetting(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $userQuoteSettings = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
+        $quoteService = new Preferences_Service_QuoteSetting($userQuoteSettings->toArray());
+        $form         = $quoteService->getFormWithDefaults($dealerQuoteSetting);
         $request = $this->getRequest();
         if ($request->isPost())
         {
-            $values = $request->getPost();
-            if (!isset($values ['cancel']))
+            $values  = $request->getPost();
+            $success = $quoteService->update($values);
+
+            if ($success)
             {
-                try
-                {
-                    // Validate the form
-                    if ($form->isValid($values))
-                    {
-                        // Set nulls where needed.
-                        foreach ($values as $key => &$value)
-                        {
-                            if (empty($value))
-                            {
-                                // Only admin and service cost per page should be allowed to be set to 0?
-                                if (!((float)$value === 0.0 && ($key === "adminCostPerPage" || $key === "serviceCostPerPage")))
-                                {
-                                    $value = new Zend_Db_Expr('NULL');
-                                }
-                            }
-                        }
-                        // Update quoteSetting and message to confirm
-                        $quoteSetting->populate($values);
-                        $quoteSetting->id = $quoteSettingId;
-
-                        $quoteSettingMapper->save($quoteSetting, $quoteSettingId);
-                        $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Default quote settings were updated successfully."
-                                                       ));
-
-                    }
-                    else
-                    {
-                        $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below'
-                                                       ));
-                    }
-                }
-                catch (Exception $e)
-                {
-                    My_Log::logException($e);
-                    $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'Error saving configuration.  Please try again.'
-                                                   ));
-                }
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
             }
-            else // Client hit cancel redirect
+            else
             {
-                // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+            }
+        }
+
+        $this->view->form = $form;
+    }
+
+    public function dealerAction ()
+    {
+        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->fetchDealerQuoteSetting(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $quoteService = new Preferences_Service_QuoteSetting($dealerQuoteSetting->toArray());
+        $form         = $quoteService->getForm();
+
+        $request = $this->getRequest();
+        if ($request->isPost())
+        {
+            $values  = $request->getPost();
+            $success = $quoteService->update($values);
+
+            if ($success)
+            {
+                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+            }
+            else
+            {
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
             }
         }
 

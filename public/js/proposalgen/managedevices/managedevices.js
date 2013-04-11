@@ -226,23 +226,141 @@ $(document).ready(function ()
         datatype    : 'json',
         colNames    : ['Toner ID', 'SKU', 'Manufacturer', 'Type', 'Color', 'Yield', 'Price', 'MasterID', 'Added', 'Machine Compatibility', 'Action', 'Apply To Printer', 'Machine Compabibility'],
         colModel    : [
-            {tag: 0, width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
-            {tag: 1, width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
-            {tag: 2, width: 120, name: 'manufacturer_id', index: 'toner_manufacturer', edittype: 'select', editable: true, editoptions: {value: manufacturerList}},
-            {tag: 3, width: 120, name: 'part_type_id', index: 'part_type_id', edittype: 'select', editable: true, editoptions: {value: partTypeList}},
-            {tag: 4, width: 100, name: 'toner_color_id', index: 'tonerColorId', edittype: 'select', editable: true, editoptions: {value: colorList}},
-            {tag: 5, width: 60, name: 'toner_yield', index: 'yield', editable: true, editoptions: {size: 10, maxlength: 5}, align: 'right', sorttype: 'int'},
-            {tag: 6, width: 80, name: 'toner_price', index: 'toner_price', editable: true, editoptions: {size: 10, maxlength: 8}, align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}, sorttype: 'int'},
-            {tag: 7, width: 50, name: 'master_device_id', index: 'master_device_id', hidden: true, editable: true, editoptions: {size: 12}},
-            {tag: 8, width: 50, name: 'is_added', index: 'is_added', editable: true, hidden: true, editoptions: {size: 12}},
-            {tag: 9, width: 225, name: 'device_list', index: 'device_list'},
+            {
+                tag        : 0,
+                width      : 30,
+                name       : 'toner_id',
+                index      : 'toner_id',
+                label : 'Toner Id',
+                sorttype   : 'int',
+                hidden     : true,
+                editable   : true,
+                editoptions: {readonly: true, size: 12}
+            },
+            {
+                tag        : 1,
+                width      : 60,
+                name       : 'toner_SKU',
+                index      : 'toner_SKU',
+                label : 'SKU',
+                editable   : true,
+                editoptions: {size: 12, maxlength: 30}
+            },
+            {
+                tag        : 2,
+                width      : 120,
+                name       : 'manufacturer_name',
+                index      : 'manufacturer_name',
+                label : 'Manufacturer',
+                edittype   : 'select',
+                editable   : true,
+                editoptions: {value: manufacturerList}
+            },
+            {
+                tag        : 3,
+                width      : 120,
+                name       : 'part_type_id',
+                index      : 'part_type_id',
+                label : 'Type',
+                edittype   : 'select',
+                editable   : true,
+                editoptions: {value: partTypeList}
+            },
+            {
+                tag        : 4,
+                width      : 100,
+                name       : 'toner_color_name',
+                index      : 'toner_color_name',
+                label : 'Color',
+                edittype   : 'select',
+                editable   : true,
+                editoptions: {value: colorList}
+            },
+            {
+                tag        : 5,
+                width      : 60,
+                name       : 'toner_yield',
+                index      : 'yield',
+                label : 'Yield',
+                editable   : true,
+                editoptions: {size: 10, maxlength: 5},
+                align      : 'right',
+                sorttype   : 'int'
+            },
+            {
+                tag          : 6,
+                width        : 80,
+                name         : 'toner_price',
+                index        : 'toner_price',
+                label : 'Price',
+                editable     : true,
+                editoptions  : {size: 10, maxlength: 8},
+                align        : 'right',
+                formatter    : 'currency',
+                formatoptions: {prefix: "$", thousandsSeparator: ","},
+                sorttype     : 'int'
+            },
+            {
+                tag        : 7,
+                width      : 50,
+                name       : 'master_device_id',
+                index      : 'master_device_id',
+                label : 'MasterID',
+                hidden     : true,
+                editable   : true,
+                editoptions: {size: 12}
+            },
+            {
+                tag        : 8,
+                width      : 50,
+                name       : 'is_added',
+                index      : 'is_added',
+                label : 'Added',
+                editable   : true,
+                hidden     : true,
+                editoptions: {size: 12}
+            },
+            {
+                tag  : 9,
+                width: 225,
+                name : 'device_list',
+                index: 'device_list',
+                label : 'Machine Compatibility'
+            },
 
-            {tag: 10, width: 60, name: 'action', index: 'action', editable: false, align: 'center'},
-            {tag: 11, width: 50, name: 'machine_compatibility', index: 'machine_compatibility', hidden: true},
+            {
+                tag     : 10,
+                width   : 60,
+                name    : 'action',
+                index   : 'action',
+                label : 'Action',
+                editable: false,
+                align   : 'center'
+            },
+            {
+                tag   : 11,
+                width : 50,
+                name  : 'machine_compatibility',
+                index : 'machine_compatibility',
+                label : 'Apply To Printer',
+                hidden: true
+            },
 
-            {tag: 12, width: 60, name: 'apply', index: 'apply', hidden: true, edittype: 'checkbox', editable: true, align: 'center'}
-
+            {
+                tag     : 12,
+                width   : 60,
+                name    : 'apply',
+                index   : 'apply',
+                label : 'Machine Compatibility',
+                hidden  : true,
+                edittype: 'checkbox',
+                editable: true,
+                align   : 'center'
+            }
         ],
+        jsonReader  : {
+            repeatitems: false
+        },
         width       : 940,
         height      : 150,
         rowNum      : 10,
@@ -614,6 +732,8 @@ $(document).ready(function ()
                     $("#ppm_black").val(data.ppm_black);
                     $("#ppm_color").val(data.ppm_color);
                     $("#duty_cycle").val(data.duty_cycle);
+                    $("#partsCostPerPage").val(data.partsCostPerPage);
+                    $("#laborCostPerPage").val(data.laborCostPerPage);
                 }
             },
             error     : function ()
@@ -670,7 +790,6 @@ $(document).ready(function ()
                 break;
         }
     });
-
     $("#criteria_filter").change(function ()
     {
         var url = '';
@@ -935,6 +1054,8 @@ function empty_form()
     $("#watts_power_normal").val('');
     $("#watts_power_idle").val('');
     $("#is_leased").removeAttr('checked');
+    $("#laborCostPerPage").removeAttr('');
+    $("#partsCostPerPage").removeAttr('');
     $("#leased_toner_yield").val('');
     $("#btnSave").attr('disabled', 'disabled');
     $("#btnRefresh").attr('disabled', 'disabled');
@@ -969,6 +1090,8 @@ function disable_form()
     $("#watts_power_normal").attr('disabled', 'disabled');
     $("#watts_power_idle").attr('disabled', 'disabled');
     $("#is_leased").attr('disabled', 'disabled');
+    $("#laborCostPerPage").attr('disabled', 'disabled');
+    $("#partsCostPerPage").attr('disabled', 'disabled');
     $("#leased_toner_yield").attr('disabled', 'disabled');
     $("#btnSave").attr('disabled', 'disabled');
     $("#btnRefresh").attr('disabled', 'disabled');
@@ -993,6 +1116,8 @@ function enable_form()
     $("#is_scanner").removeAttr('disabled');
     $("#reportsTonerLevels").removeAttr('disabled');
     $("#is_fax").removeAttr('disabled');
+    $("#laborCostPerPage").removeAttr('disabled');
+    $("#partsCostPerPage").removeAttr('disabled');
     $("#is_duplex").removeAttr('disabled');
     $("#ppm_black").removeAttr('disabled');
     $("#ppm_color").removeAttr('disabled');

@@ -101,7 +101,7 @@ class Quotegen_QuotesettingController extends Tangent_Controller_Action
                             if (empty($value))
                             {
                                 // Only admin and service cost per page should be allowed to be set to 0?
-                                if (! ((float)$value === 0.0 && ($key === "adminCostPerPage" || $key === "serviceCostPerPage")))
+                                if (! ((float)$value === 0.0 && ($key === "adminCostPerPage" || $key === "laborCostPerPage" || $key === "partsCostPerPage")))
                                 {
                                     $value = new Zend_Db_Expr('NULL');
                                 }

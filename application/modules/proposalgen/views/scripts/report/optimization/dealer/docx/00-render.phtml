@@ -30,8 +30,8 @@ $mainSection = $phpWord->createSection(array(
  * Define Table Styles here
  */
 $widthTwips       = 15297;
-$header_color     = "B8CCE3";
-$sub_header_color = "EAF0F7";
+$header_color     = $this->wordStyles->default->tableHeaderBackgroundColor;
+$sub_header_color = $this->wordStyles->default->tableSubHeaderBackgroundColor;
 $even_color       = "EFEFEF";
 $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
@@ -40,45 +40,39 @@ $highlight_color  = "ebc7a4";
 $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12));
 $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
 $phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
-
-// Title page
-$phpWord->addParagraphStyle('titleStyle1', array(
-                                                      'align'      => 'center',
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => '004990'
-                                                 ));
 $phpWord->addParagraphStyle('titleStyle2', array(
-                                                      'spaceAfter'  => 50,
-                                                      'spaceBefore' => 50,
-                                                      'bgColor'     => '4C4C4C'
-                                                 ));
+                                                'spaceAfter'  => 50,
+                                                'spaceBefore' => 50,
+                                                'bgColor'     => '4C4C4C'
+                                           ));
 $phpWord->addParagraphStyle('titleStyle3', array(
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => '7F7F7F'
-                                                 ));
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '7F7F7F'
+                                           ));
 $phpWord->addFontStyle('titlepage_title', array(
-                                                     'size'  => 24,
-                                                     'bold'  => true,
-                                                     'color' => 'FFFFFF'
-                                                ));
+                                               'size'  => 24,
+                                               'bold'  => true,
+                                               'color' => 'FFFFFF'
+                                          ));
 
 $phpWord->addFontStyle('titlepage_subtitle', array(
-                                                        'size'  => 16,
-                                                        'bold'  => true,
-                                                        'color' => 'FFFFFF'
-                                                   ));
+                                                  'size'  => 16,
+                                                  'bold'  => true,
+                                                  'color' => 'FFFFFF'
+                                             ));
 
 $phpWord->addFontStyle('titlepage_address', array(
-                                                       'size'  => 12,
-                                                       'color' => 'FFFFFF'
-                                                  ));
-$phpWord->addParagraphStyle('titlepageHeaderParagraph', array(
-                                                             'spaceAfter' => 200
-                                                        ));
-$phpWord->addParagraphStyle('titlepageHeader1', array(
-                                                     'spaceAfter' => 0,
-
-                                                ));
+                                                 'size'  => 12,
+                                                 'color' => 'FFFFFF'
+                                            ));
+$phpWord->addTitleStyle(2, array(
+                                'size'   => 12,
+                                'color'  => $this->wordStyles->default->subSectionFontColor,
+                                'bold'   => true,
+                                'italic' => true
+                           ), array(
+                                   'bgColor' => $this->wordStyles->default->subSectionBackgroundColor,
+                              ));
 
 // Classes that describe standard cells
 $standard_cell                  = (object)array(

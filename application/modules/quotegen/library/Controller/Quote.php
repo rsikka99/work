@@ -246,8 +246,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         $quoteDevice->name = $masterDevice->getFullDeviceName();
         $quoteDevice->oemSku = $device->oemSku;
         $quoteDevice->dealerSku = $device->dealerSku;
-        $quoteDevice->cost = $masterDevice->cost;
         $quoteDevice->tonerConfigId = $masterDevice->tonerConfigId;
+        $quoteDevice->cost = $device->cost;
 
         // Sync Cost Per Page
         $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);

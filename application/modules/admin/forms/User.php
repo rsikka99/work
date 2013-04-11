@@ -14,18 +14,19 @@ class Admin_Form_User extends EasyBib_Form
      */
     protected $formMode = self::MODE_CREATE;
     protected $roles;
+    protected $dealerManagement;
 
     /*
      * (non-PHPdoc) @see Zend_Form::__construct()
      */
-    public function __construct ($formMode = null, $roles = null, $options = null)
+    public function __construct ($formMode = null, $roles = null, $options = null, $dealerManagement = true)
     {
         if (null !== $formMode)
         {
             $this->formMode = $formMode;
         }
-
-        $this->roles = $roles;
+        $this->dealerManagement = $dealerManagement;
+        $this->roles            = $roles;
 
         parent::__construct($options);
     }
@@ -54,29 +55,6 @@ class Admin_Form_User extends EasyBib_Form
 
         // Validators
         $datetimeValidator = new My_Validate_DateTime();
-
-        if ($this->getFormMode() !== self::MODE_USER_EDIT)
-        {
-            $this->addElement('text', 'username', array(
-                                                       'label'      => 'Username:',
-                                                       'required'   => true,
-                                                       'filters'    => array(
-                                                           'StringTrim',
-                                                           'StripTags',
-                                                           'Alnum'
-                                                       ),
-                                                       'validators' => array(
-                                                           array(
-                                                               'validator' => 'StringLength',
-                                                               'options'   => array(
-                                                                   4,
-                                                                   30
-                                                               ),
-                                                               'Alnum'
-                                                           )
-                                                       )
-                                                  ));
-        }
 
         $this->addElement('text', 'firstname', array(
                                                     'label'      => 'First Name:',
@@ -149,11 +127,37 @@ class Admin_Form_User extends EasyBib_Form
             /* @var $role Admin_Model_Role */
             foreach ($this->roles as $role)
             {
-                $userRoles->addMultiOption($role->getId(), $role->getName());
+                if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
+                {
+                    $userRoles->addMultiOption($role->id, $role->name);
+                }
             }
             $this->addElement($userRoles);
         }
-
+        $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        if ($isAdmin && $this->dealerManagement == false)
+        {
+            $firstDealerId = null;
+            $dealers       = array();
+            foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+            {
+                // Use this to grab the first id in the leasing schema dropdown
+                if (!$firstDealerId)
+                {
+                    $firstDealerId = $dealer->id;
+                }
+                $dealers [$dealer->id] = $dealer->dealerName;
+            }
+            if ($dealers)
+            {
+                $this->addElement('select', 'dealerId', array(
+                                                             'label'        => 'Dealer:',
+                                                             'class'        => 'input-medium',
+                                                             'multiOptions' => $dealers,
+                                                             'required'     => true,
+                                                             'value'        => $firstDealerId));
+            }
+        }
         // No need to edit this when creating a user
         if ($this->getFormMode() === self::MODE_EDIT)
         {
@@ -252,12 +256,6 @@ class Admin_Form_User extends EasyBib_Form
                                                                                        )
                                                                                   ));
 
-            $password->setRequired(false);
-            $passwordConfirm->setRequired(false);
-
-            $this->addElement($password);
-            $this->addElement($passwordConfirm);
-
             if ($this->getFormMode() === self::MODE_CREATE)
             {
                 $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
@@ -265,6 +263,14 @@ class Admin_Form_User extends EasyBib_Form
                                                                                'required' => true
                                                                           ));
             }
+            else
+            {
+                $password->setRequired(false);
+                $passwordConfirm->setRequired(false);
+            }
+
+            $this->addElement($password);
+            $this->addElement($passwordConfirm);
         }
 
         // Add the submit button

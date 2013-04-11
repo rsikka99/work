@@ -16,8 +16,9 @@
         <dt>Is Replacement Device</dt><dd><?php echo ($masterDevice->isReplacementDevice) ? "Yes" : "No"; ?></dd>
         <dt>Watts Power Normal</dt><dd><?php echo ($masterDevice->wattsPowerNormal) ?: 'Not Set'; ?></dd>
         <dt>Watts Power Idle</dt><dd><?php echo ($masterDevice->wattsPowerIdle) ?: 'Not Set'; ?></dd>
-        <dt>Device Price</dt><dd><?php echo ($masterDevice->cost) ? $this->currency($masterDevice->cost) : 'No Price Defined'; ?></dd>
-        <dt>Service Cost Per Page</dt><dd><?php echo ($masterDevice->serviceCostPerPage) ? $this->currency($masterDevice->serviceCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
+        <dt>Device Price</dt><dd><?php echo ($masterDevice->getDealerAttributes()->cost) ? $this->currency($masterDevice->getDealerAttributes()->cost) : 'No Price Defined'; ?></dd>
+        <dt>Parts Cost Per Page</dt><dd><?php echo ($masterDevice->getDealerAttributes()->partsCostPerPage) ? $this->currency($masterDevice->getDealerAttributes()->partsCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
+        <dt>Labor Cost Per Page</dt><dd><?php echo ($masterDevice->getDealerAttributes()->laborCostPerPage) ? $this->currency($masterDevice->getDealerAttributes()->laborCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
         <dt>Launch Date</dt><dd><?php echo ($masterDevice->launchDate) ?: 'Not Set'; ?></dd>
         <dt>Date Created</dt><dd><?php echo ($masterDevice->dateCreated) ?: 'Not Set'; ?></dd>
         <dt>Duty Cycle</dt><dd><?php echo ($masterDevice->dutyCycle) ?: 'Not Set'; ?></dd>

@@ -1,12 +1,17 @@
 -- System Quote settings
-INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`, `serviceCostPerPage`) VALUES
-(1, 4.5, 20, 15, 20, 2, 0.0035, 0.0016);
+INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`) VALUES
+(1, 4.5, 20, 15, 20, 2, 0.0035),
+(2, 4.5, 20, 15, 20, 2, 0.0035);
+
+INSERT INTO `qgen_dealer_quote_settings` (`dealerId`, `quoteSettingId`) VALUES
+(1,1),
+(2,2);
 
 -- ---------------------------------
 -- Create a default leasing schema
 -- ---------------------------------
-INSERT INTO `qgen_leasing_schemas` (`id`, `name`) VALUES
-(1,'default');
+INSERT INTO `qgen_leasing_schemas` (`id`, `dealerId`, `name`) VALUES
+(1,2,'default');
 
 INSERT INTO `qgen_leasing_schema_ranges` (`id`, `leasingSchemaId`, `startRange`) VALUES
 (1, 1, 0),

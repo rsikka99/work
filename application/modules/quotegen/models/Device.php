@@ -7,6 +7,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public $masterDeviceId;
 
     /**
+     * @var int
+     */
+    public $dealerId;
+
+    /**
      * @var string
      */
     public $oemSku;
@@ -25,6 +30,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
      * @var Proposalgen_Model_MasterDevice
      */
     protected $masterDevice;
+
+    /**
+     * @var float
+     */
+    public $cost;
 
     /**
      * @var multitype: Quotegen_Model_DeviceOption
@@ -47,6 +57,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
             $this->masterDeviceId = $params->masterDeviceId;
         }
 
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
+
         if (isset($params->oemSku) && !is_null($params->oemSku))
         {
             $this->oemSku = $params->oemSku;
@@ -61,6 +76,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
         {
             $this->description = $params->description;
         }
+
+        if (isset($params->cost) && !is_null($params->cost))
+        {
+            $this->cost = $params->cost;
+        }
     }
 
     /**
@@ -70,9 +90,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
     {
         return array(
             "masterDeviceId" => $this->masterDeviceId,
+            "dealerId"       => $this->dealerId,
             "oemSku"         => $this->oemSku,
             "dealerSku"      => $this->dealerSku,
-            "description"    => $this->description
+            "description"    => $this->description,
+            "cost"           => $this->cost
         );
     }
 
@@ -127,6 +149,24 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public function setOptions ($_options)
     {
         $this->_options = $_options;
+
+        return $this;
+    }
+
+
+    public function saveObject ()
+    {
+        // Do we have an instance of it in our database?
+        $quoteDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
+
+        if ($quoteDeviceMapper->find(array($this->masterDeviceId, $this->dealerId)))
+        {
+            $quoteDeviceMapper->save($this);
+        }
+        else
+        {
+            $quoteDeviceMapper->insert($this);
+        }
 
         return $this;
     }

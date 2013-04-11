@@ -35,11 +35,18 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $actualPageCoverageColor;
 
     /**
-     * The service cost per page
+     * The labor cost per page
      *
      * @var int
      */
-    public $serviceCostPerPage;
+    public $laborCostPerPage;
+
+    /**
+     * The parts cost per page
+     *
+     * @var int
+     */
+    public $partsCostPerPage;
 
     /**
      * The admin cost per page
@@ -118,6 +125,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      */
     public $assessmentPricingConfigId;
 
+    public $replacementPricingConfigId;
+
     /**
      * @var float
      */
@@ -133,12 +142,20 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
     public $targetMonochromeCostPerPage;
     public $targetColorCostPerPage;
     protected $_assessmentPricingConfig;
+
     /**
      * The gross margin pricing configuration
      *
      * @var Proposalgen_Model_PricingConfig
      */
     protected $_grossMarginPricingConfig;
+
+    /**
+     * Pricing config used for designated which tones to use for replacement devices
+     *
+     * @var Proposalgen_Model_PricingConfig
+     */
+    protected $_replacementPricingConfig;
 
     /**
      * Overrides all the settings.
@@ -166,87 +183,74 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-
         if (isset($params->id) && !is_null($params->id))
         {
             $this->id = $params->id;
         }
-
         if (isset($params->actualPageCoverageMono) && !is_null($params->actualPageCoverageMono))
         {
             $this->actualPageCoverageMono = $params->actualPageCoverageMono;
         }
-
         if (isset($params->actualPageCoverageColor) && !is_null($params->actualPageCoverageColor))
         {
             $this->actualPageCoverageColor = $params->actualPageCoverageColor;
         }
-
-        if (isset($params->serviceCostPerPage) && !is_null($params->serviceCostPerPage))
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
         {
-            $this->serviceCostPerPage = $params->serviceCostPerPage;
+            $this->laborCostPerPage = $params->laborCostPerPage;
         }
-
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $params->partsCostPerPage;
+        }
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
-
         if (isset($params->assessmentReportMargin) && !is_null($params->assessmentReportMargin))
         {
             $this->assessmentReportMargin = $params->assessmentReportMargin;
         }
-
         if (isset($params->grossMarginReportMargin) && !is_null($params->grossMarginReportMargin))
         {
             $this->grossMarginReportMargin = $params->grossMarginReportMargin;
         }
-
         if (isset($params->monthlyLeasePayment) && !is_null($params->monthlyLeasePayment))
         {
             $this->monthlyLeasePayment = $params->monthlyLeasePayment;
         }
-
         if (isset($params->defaultPrinterCost) && !is_null($params->defaultPrinterCost))
         {
             $this->defaultPrinterCost = $params->defaultPrinterCost;
         }
-
         if (isset($params->leasedBwCostPerPage) && !is_null($params->leasedBwCostPerPage))
         {
             $this->leasedBwCostPerPage = $params->leasedBwCostPerPage;
         }
-
         if (isset($params->leasedColorCostPerPage) && !is_null($params->leasedColorCostPerPage))
         {
             $this->leasedColorCostPerPage = $params->leasedColorCostPerPage;
         }
-
         if (isset($params->mpsBwCostPerPage) && !is_null($params->mpsBwCostPerPage))
         {
             $this->mpsBwCostPerPage = $params->mpsBwCostPerPage;
         }
-
         if (isset($params->mpsColorCostPerPage) && !is_null($params->mpsColorCostPerPage))
         {
             $this->mpsColorCostPerPage = $params->mpsColorCostPerPage;
         }
-
         if (isset($params->kilowattsPerHour) && !is_null($params->kilowattsPerHour))
         {
             $this->kilowattsPerHour = $params->kilowattsPerHour;
         }
-
         if (isset($params->assessmentPricingConfigId) && !is_null($params->assessmentPricingConfigId))
         {
             $this->assessmentPricingConfigId = $params->assessmentPricingConfigId;
         }
-
         if (isset($params->grossMarginPricingConfigId) && !is_null($params->grossMarginPricingConfigId))
         {
             $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
         }
-
         if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
         {
             $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
@@ -259,6 +263,10 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         {
             $this->costThreshold = $params->costThreshold;
         }
+        if (isset($params->replacementPricingConfigId) && !is_null($params->replacementPricingConfigId))
+        {
+            $this->replacementPricingConfigId = $params->replacementPricingConfigId;
+        }
     }
 
     /**
@@ -270,7 +278,8 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "id"                          => $this->id,
             "actualPageCoverageMono"      => $this->actualPageCoverageMono,
             "actualPageCoverageColor"     => $this->actualPageCoverageColor,
-            "serviceCostPerPage"          => $this->serviceCostPerPage,
+            "laborCostPerPage"            => $this->laborCostPerPage,
+            "partsCostPerPage"            => $this->partsCostPerPage,
             "adminCostPerPage"            => $this->adminCostPerPage,
             "assessmentReportMargin"      => $this->assessmentReportMargin,
             "grossMarginReportMargin"     => $this->grossMarginReportMargin,
@@ -286,7 +295,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "costThreshold"               => $this->costThreshold,
+            "replacementPricingConfigId"               => $this->replacementPricingConfigId,
         );
     }
 
@@ -295,8 +304,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public
-    function getAssessmentPricingConfig ()
+    public function getAssessmentPricingConfig ()
     {
         if (!isset($this->_assessmentPricingConfig))
         {
@@ -304,6 +312,16 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         }
 
         return $this->_assessmentPricingConfig;
+    }
+
+    public function getReplacementPricingConfig()
+    {
+        if(!isset($this->_replacementPricingConfig))
+        {
+            $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
+        }
+
+        return $this->_replacementPricingConfig;
     }
 
     /**
@@ -314,8 +332,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public
-    function setAssessmentPricingConfig ($AssessmentPricingConfig)
+    public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
         $this->_assessmentPricingConfig = $AssessmentPricingConfig;
 
@@ -327,8 +344,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public
-    function getGrossMarginPricingConfig ()
+    public function getGrossMarginPricingConfig ()
     {
         if (!isset($this->_grossMarginPricingConfig))
         {
@@ -346,8 +362,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      *
      * @return \Proposalgen_Model_Report_Setting
      */
-    public
-    function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
+    public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {
         $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
 
