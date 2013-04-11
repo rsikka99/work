@@ -516,7 +516,7 @@ table.quoteDeviceTable tr.optionRow td {
   left: 0px;
   min-width: 100%;
   min-height: 100%;
-  z-index: 1000;
+  z-index: 49;
 }
 #lightbox-panel {
   display: none;
@@ -526,7 +526,7 @@ table.quoteDeviceTable tr.optionRow td {
   background: #FFFFFF;
   padding: 10px 15px 10px 15px;
   border: 2px solid #CCCCCC;
-  z-index: 1001;
+  z-index: 50;
 }
 html {
   overflow-y: scroll;
