@@ -881,7 +881,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
     {
         // Default filter
         $filterBy       = self::OPTION_FILTER_ASSIGNED;
-        $view           = "assigned";
+        $view           = "all";
         $where          = null;
         $filterWhere    = null;
         $optionId       = null;
