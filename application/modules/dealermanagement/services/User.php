@@ -175,9 +175,10 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                  */
                 foreach ($userRoles as $userRole)
                 {
+
                     if (!in_array($userRole->roleId, $filteredData['userRoles']))
                     {
-                        $userRoleMapper->delete($userRole->roleId);
+                        $userRoleMapper->delete($userRole);
                     }
                 }
 
