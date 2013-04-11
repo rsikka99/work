@@ -253,7 +253,6 @@ function do_action(inAction, man_id, mas_id)
             empty_form();
         }
         $("#manufacturer_id").val(man_id);
-        $("#manufacturer_id").combobox("destroy");
         $("#manufacturer_id").change();
         $("#manufacturer_id").hide();
         $("#manufacturer_html").html($("#manufacturer_id option:selected").text());
@@ -261,7 +260,6 @@ function do_action(inAction, man_id, mas_id)
         setTimeout(function ()
         {
             $("#printer_model").val(mas_id);
-            $("#printer_model").combobox("destroy");
             $("#printer_model").change();
             $("#printer_model").hide();
             $("#printer_model_html").html($("#printer_model option:selected").text());

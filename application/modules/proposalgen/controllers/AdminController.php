@@ -27,7 +27,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->user           = Zend_Auth::getInstance()->getIdentity();
         $this->view->user_id        = Zend_Auth::getInstance()->getIdentity()->id;
         $this->user_id              = Zend_Auth::getInstance()->getIdentity()->id;
-        $this->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $this->dealerId             = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
@@ -1504,7 +1504,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
         $reportSettings = $dealer->getReportSettings();
 
         $this->view->default_labor = $reportSettings['laborCostPerPage'];
@@ -1576,7 +1576,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     {
 
                                         $tonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                        $tonerAttribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                        $tonerAttribute->dealerId = $this->dealerId;
                                         $tonerAttribute->tonerId  = $toner_id;
                                         $tonerAttribute->cost     = $price;
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
@@ -1587,11 +1587,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             else if (strstr($key, "txtNewDealerSku"))
                             {
                                 $toner_id = str_replace("txtNewDealerSku", "", $key);
-                                $newSku    = $formData ['txtNewDealerSku' . $toner_id];
+                                $newSku   = $formData ['txtNewDealerSku' . $toner_id];
 
                                 if ($newSku != '')
                                 {
-                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id,$this->dealerId);
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, $this->dealerId);
                                     if ($tonerAttribute)
                                     {
 
@@ -1602,10 +1602,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                     else
                                     {
 
-                                        $tonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                        $tonerAttribute->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                                        $tonerAttribute->tonerId  = $toner_id;
-                                        $tonerAttribute->dealerSku     = $newSku;
+                                        $tonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $tonerAttribute->dealerId  = $this->dealerId;
+                                        $tonerAttribute->tonerId   = $toner_id;
+                                        $tonerAttribute->dealerSku = $newSku;
                                         Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
 
                                     }
@@ -1648,7 +1648,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         /* @var $dealerMasterDeviceAttribute Proposalgen_Model_Dealer_Master_Device_Attribute [] */
 
                         $dealerMasterDeviceAttribute = array();
-                        $dealerId                    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                        $dealerId                    = $this->dealerId;
                         foreach ($formData as $key => $value)
                         {
 
@@ -1728,7 +1728,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                         foreach ($dealerMasterDeviceAttribute as $key => $value)
                         {
-                            $masterAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($key, Zend_Auth::getInstance()->getIdentity()->dealerId));
+                            $masterAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($key, $this->dealerId));
                             if ($masterAttribute)
                             {
                                 if (isset($value->laborCostPerPage))
@@ -1797,7 +1797,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         Zend_Session::start();
         $this->view->title = "Import & Export Pricing";
         $db                = Zend_Db_Table::getDefaultAdapter();
-        $dealerId          = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $dealerId          = $this->dealerId;
 
         if ($this->_request->isPost())
         {
@@ -2691,7 +2691,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
-        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
         $reportSettings = $dealer->getReportSettings();
 
         $this->view->default_labor = $reportSettings['laborCostPerPage'];
@@ -3017,7 +3017,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'Dealer Sku',
                     'Dealer Price',
                 );
-                $dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $dealerId    = $this->dealerId;
                 // Get Count
                 $select = $db->select()
                     ->from(array(
@@ -3104,7 +3104,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $page = $this->_getParam('page');
 
 
-
         $start = $limit * $page - $limit;
         try
         {
@@ -3113,17 +3112,17 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             if ($filter === 'manufacturerId' && $criteria != '')
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria, "{$sortIndex} {$sortOrder}", 100, $start);
-                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria));
+                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria));
             }
             else if ($filter === 'modelName')
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria));
+                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria));
             }
             else
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null));
+                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null));
             }
             // Set the total pages that we have
             if ($count > 0)
@@ -3256,7 +3255,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         $formData = null;
 
-        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $dealerId = $this->dealerId;
         try
         {
             // get count
@@ -3326,8 +3325,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
             $select->order($sortIndex . ' ' . $sortOrder);
             $select->limit($limit, $start);
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
+            $stmt              = $db->query($select);
+            $result            = $stmt->fetchAll();
             $formData->page    = $page;
             $formData->total   = $total_pages;
             $formData->records = $count;
@@ -3722,12 +3721,19 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         if (isset($formData ['jqg_grid_list_' . $key]) && $formData ['jqg_grid_list_' . $key] == "on")
                         {
                             $replacement_category = $formData ['replacement_category_' . $key];
-                            $where                = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $replacement_category);
-                            $replacement          = $replacementTable->fetchAll($where);
+                            $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
+                            $where = array(
+                                $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_replacementCategory}= ?", $replacement_category),
+                                $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_dealerId}= ?", $this->dealerId)
+                            );
+                            $replacement = $replacementTable->fetchAll($where);
 
                             if (count($replacement) > 1)
                             {
-                                $where = $replacementTable->getAdapter()->quoteInto('masterDeviceId = ?', $key, 'INTEGER');
+                                $where = array(
+                                    $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_masterDeviceId}= ?", $key),
+                                    $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_dealerId}= ?", $this->dealerId)
+                                );
                                 $replacementTable->delete($where);
                                 $this->_flashMessenger->addMessage(array(
                                                                         "success" => "The selected printer(s) are no longer marked as replacement printers."
@@ -3820,7 +3826,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $replacementTableMapper   = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
 
                 $replacement_devicesData = array(
-                    'dealerId'            => Zend_Auth::getInstance()->getIdentity()->dealerId,
+                    'dealerId'            => $this->dealerId,
                     'replacementCategory' => strtoupper($replacement_category),
                     'printSpeed'          => $print_speed,
                     'resolution'          => $resolution,
@@ -3831,7 +3837,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 {
 
                     // check to see if replacement device exists
-                    $where               = array('masterDeviceId = ?' => $printer_model, "dealerId = ?" => Zend_Auth::getInstance()->getIdentity()->dealerId);
+                    $where               = array('masterDeviceId = ?' => $printer_model, "dealerId = ?" => $this->dealerId);
                     $replacement_devices = $replacementTableMapper->fetchAll($where, null, 1);
                     if (count($replacement_devices) > 0)
                     {
@@ -3854,7 +3860,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     if (strtoupper($hdnOriginalCategory) !== strtoupper($replacement_category))
                     {
 
-                        $where       = $replacementTable->getAdapter()->quoteInto('replacementCategory = ?', $hdnOriginalCategory);
+                        $where = array(
+                            $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_replacementCategory}= ?", $hdnOriginalCategory),
+                            $replacementTable->getAdapter()->quoteInto("{$replacementTableMapper->col_dealerId}= ?", Zend_Auth::getInstance()->getIdentity()->dealerId)
+                        );
+
                         $replacement = $replacementTableMapper->fetchAll($where);
                         if (count($replacement) > 1)
                         {
@@ -3869,8 +3879,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                     if ($is_valid === true)
                     {
-                        $where = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
-                        $replacement_devicesTable->update($replacement_devicesData, $where);
+                        $where             = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
+                        $replacementDevice = new Proposalgen_Model_ReplacementDevice();
+                        $replacementDevice->populate($replacement_devicesData);
+                        $replacementDevice->dealerId       = $this->dealerId;
+                        $replacementDevice->masterDeviceId = $printer_model;
+                        $replacementTableMapper->save($replacementDevice);
                         $this->view->message = "<p>The replacement printer has been updated.</p>";
                     }
                 }
@@ -3906,7 +3920,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         try
         {
             // get pf device list filter by manufacturer
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAllForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAllForDealer($this->dealerId);
 
             // return results
             if (count($replacementDevices) > 0)
@@ -3952,7 +3966,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     ->from(array(
                                 'rd' => 'pgen_replacement_devices'
                            ))
-                    ->where('masterDeviceId = ?', $device_id, 'INTEGER');
+                    ->where('masterDeviceId = ?', $device_id, 'INTEGER')
+                    ->where('dealerId =  ?', $this->dealerId);
                 $stmt   = $db->query($select);
                 $row    = $stmt->fetchAll();
 
