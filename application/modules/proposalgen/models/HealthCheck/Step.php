@@ -1,12 +1,8 @@
 <?php
 class Proposalgen_Model_HealthCheck_Step extends My_Model_Abstract
 {
-    const STEP_SURVEY               = 'survey';
     const STEP_FLEETDATA_UPLOAD     = 'upload';
-    const STEP_FLEETDATA_MAPDEVICES = 'mapdevices';
-    const STEP_FLEETDATA_SUMMARY    = 'summary';
     const STEP_REPORTSETTINGS       = 'reportsettings';
-    const STEP_OPTIMIZATION         = 'optimization';
     const STEP_FINISHED             = 'finished';
     const GROUP_SURVEY              = 'Survey';
     const GROUP_FLEETDATA           = 'Fleet Data';
@@ -17,41 +13,17 @@ class Proposalgen_Model_HealthCheck_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_SURVEY               => array(
-            'name'       => 'Survey',
-            'group'      => self::GROUP_SURVEY,
-            'controller' => 'survey',
-            'action'     => 'survey'
-        ),
         self::STEP_FLEETDATA_UPLOAD     => array(
             'name'       => 'Upload',
             'group'      => self::GROUP_FLEETDATA,
-            'controller' => 'fleet',
+            'controller' => 'healthcheck',
             'action'     => 'index'
-        ),
-        self::STEP_FLEETDATA_MAPDEVICES => array(
-            'name'       => 'Map Devices',
-            'group'      => self::GROUP_FLEETDATA,
-            'controller' => 'fleet',
-            'action'     => 'mapping'
-        ),
-        self::STEP_FLEETDATA_SUMMARY    => array(
-            'name'       => 'Summary',
-            'group'      => self::GROUP_FLEETDATA,
-            'controller' => 'fleet',
-            'action'     => 'summary'
         ),
         self::STEP_REPORTSETTINGS       => array(
             'name'       => 'Report Settings',
             'group'      => null,
-            'controller' => 'fleet',
+            'controller' => 'healthcheck',
             'action'     => 'reportsettings'
-        ),
-        self::STEP_OPTIMIZATION       => array(
-            'name'       => 'Optimization',
-            'group'      => null,
-            'controller' => 'optimization',
-            'action'     => 'index'
         ),
         self::STEP_FINISHED             => array(
             'name'       => 'Reports',

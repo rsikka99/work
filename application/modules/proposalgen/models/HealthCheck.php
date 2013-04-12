@@ -174,7 +174,7 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->stepName) ? : Proposalgen_Model_HealthCheck_Step::STEP_SURVEY;
+            $stage = ($this->stepName) ? : Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD;
 
             $this->_reportSteps = Proposalgen_Model_HealthCheck_Step::getSteps();
             Proposalgen_Model_HealthCheck_Step::updateAccessibleSteps($this->_reportSteps, $stage);
