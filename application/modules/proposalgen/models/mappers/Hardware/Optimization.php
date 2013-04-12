@@ -236,4 +236,24 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
     {
         return $object->id;
     }
+
+    /**
+     * Gets and returns a Quotegen_Model_Client if found.  Else returns false.
+     *
+     * @param $hardwareOptimizationId int
+     *
+     * @return bool|\Quotegen_Model_Client
+     */
+    public function getClientIdByHardwareOptimizationId ($hardwareOptimizationId)
+    {
+        $clientId             = false;
+        $hardwareOptimization = $this->fetch(array("{$this->col_id} = ?" => $hardwareOptimizationId));
+
+        if ($hardwareOptimization instanceof Proposalgen_Model_Hardware_Optimization)
+        {
+            $clientId = Quotegen_Model_Mapper_Client::getInstance()->find($hardwareOptimization->clientId)->id;
+        }
+
+        return $clientId;
+    }
 }
