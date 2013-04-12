@@ -511,7 +511,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage, 'FLOAT');
         $dealerId                = $db->quote($dealerId, 'INT');
         $select                  = $db->select()
-            ->from(array('pmd' => 'pgen_master_devices'), array(
+            ->from(array('pmd' => 'master_devices'), array(
                                                                'pmd.*',
                                                           ))
             ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(

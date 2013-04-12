@@ -276,10 +276,10 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         $dealerId                = $db->quote($dealerId, 'INT');
 
         $select = $db->select()
-            ->from('pgen_toners', array('*'))
-            ->joinLeft('pgen_device_toners', 'toner_id = id', array(null))
+            ->from('toners', array('*'))
+            ->joinLeft('device_toners', 'toner_id = id', array(null))
             ->joinLeft('dealer_toner_attributes', "tonerId = id AND dealerId = {$dealerId}", array(
-                                                                  "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, pgen_toners.cost)",
+                                                                  "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
                                                                   "dealerSku",
                                                                  ))
             ->where('master_device_id = ?', $masterDeviceId);
@@ -313,17 +313,17 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         $db = $this->getDbTable()->getAdapter();
 
         $sql = 'SELECT
-    `pgen_toners`.*,
-    `pgen_part_types`.`name`                AS `type_name`,
-    `pgen_toner_colors`.`name`              AS `toner_color_name`,
+    `toners`.*,
+    `part_types`.`name`                AS `type_name`,
+    `toner_colors`.`name`              AS `toner_color_name`,
     `manufacturers`.`fullname`              AS `manufacturer_name`,
-    `pgen_device_toners`.`master_device_id` AS `master_device_id`
-FROM `pgen_toners`
-    LEFT JOIN `pgen_device_toners` ON `pgen_device_toners`.`toner_id` = `pgen_toners`.`id`
-    LEFT JOIN `pgen_part_types` ON `pgen_part_types`.`id` = `pgen_toners`.`partTypeId`
-    LEFT JOIN `pgen_toner_colors` ON `pgen_toner_colors`.`id` = `pgen_toners`.`tonerColorId`
-    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `pgen_toners`.`manufacturerId`
-WHERE `pgen_device_toners`.`master_device_id` = ?';
+    `device_toners`.`master_device_id` AS `master_device_id`
+FROM `toners`
+    LEFT JOIN `device_toners` ON `device_toners`.`toner_id` = `toners`.`id`
+    LEFT JOIN `part_types` ON `part_types`.`id` = `toners`.`partTypeId`
+    LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
+    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
+WHERE `device_toners`.`master_device_id` = ?';
         $sql = $db->quoteInto($sql, $masterDeviceId);
 
         $query = $db->query($sql);
@@ -343,16 +343,16 @@ WHERE `pgen_device_toners`.`master_device_id` = ?';
         $db = $this->getDbTable()->getAdapter();
 
         $sql = "SELECT
-    `pgen_toners`.*,
-    `pgen_part_types`.`name`   AS `type_name`,
-    `pgen_toner_colors`.`name` AS `toner_color_name`,
+    `toners`.*,
+    `part_types`.`name`   AS `type_name`,
+    `toner_colors`.`name` AS `toner_color_name`,
     `manufacturers`.`fullname` AS `manufacturer_name`,
     NULL                       AS `master_device_id`
-FROM `pgen_toners`
-    LEFT JOIN `pgen_part_types` ON `pgen_part_types`.`id` = `pgen_toners`.`partTypeId`
-    LEFT JOIN `pgen_toner_colors` ON `pgen_toner_colors`.`id` = `pgen_toners`.`tonerColorId`
-    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `pgen_toners`.`manufacturerId`
-WHERE `pgen_toners`.`id` IN ({$tonerIdList});";
+FROM `toners`
+    LEFT JOIN `part_types` ON `part_types`.`id` = `toners`.`partTypeId`
+    LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
+    LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
+WHERE `toners`.`id` IN ({$tonerIdList});";
 
         $query = $db->query($sql);
 

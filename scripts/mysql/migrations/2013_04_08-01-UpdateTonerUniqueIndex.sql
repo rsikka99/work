@@ -1,2 +1,2 @@
-ALTER TABLE pgen_toners DROP INDEX sku, DROP INDEX sku_2;
-ALTER TABLE pgen_toners ADD INDEX sku (`sku` ASC, `manufacturerId` ASC);
+ALTER TABLE toners DROP INDEX sku, DROP INDEX sku_2;
+ALTER TABLE toners ADD INDEX sku (`sku` ASC, `manufacturerId` ASC);

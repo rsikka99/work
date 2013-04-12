@@ -88,10 +88,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // get toners for device
                 $select = $db->select()
                     ->from(array(
-                                't' => 'pgen_toners'
+                                't' => 'toners'
                            ))
                     ->join(array(
-                                'td' => 'pgen_device_toners'
+                                'td' => 'device_toners'
                            ), 't.id = td.toner_id')
                     ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
@@ -109,13 +109,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                 $select      = $db->select()
                     ->from(array(
-                                'md' => 'pgen_master_devices'
+                                'md' => 'master_devices'
                            ))
                     ->joinLeft(array(
                                     'm' => 'manufacturers'
                                ), 'm.id = md.manufacturerId')
                     ->joinLeft(array(
-                                    'rd' => 'pgen_replacement_devices'
+                                    'rd' => 'replacement_devices'
                                ), 'rd.masterDeviceId = md.id')
                     ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
@@ -238,7 +238,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 case "color" :
                     $select = $db->select();
                     $select->from(array(
-                                       'tc' => 'pgen_toner_colors'
+                                       'tc' => 'toner_colors'
                                   ));
                     $select->order('name');
                     $stmt   = $db->query($select);
@@ -268,7 +268,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 case "type" :
                     $select = $db->select();
                     $select->from(array(
-                                       'pt' => 'pgen_part_types'
+                                       'pt' => 'part_types'
                                   ));
                     $select->order('name');
                     $stmt   = $db->query($select);
@@ -441,10 +441,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array(
-                                       'dt' => 'pgen_device_toners'
+                                       'dt' => 'device_toners'
                                   ));
                     $select->joinLeft(array(
-                                           't' => 'pgen_toners'
+                                           't' => 'toners'
                                       ), 'dt.toner_id = t.id');
                     $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                     $stmt        = $db->query($select);
@@ -460,13 +460,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'pgen_toners'
+                                   't' => 'toners'
                               ));
                 $select->joinLeft(array(
-                                       'pt' => 'pgen_part_types'
+                                       'pt' => 'part_types'
                                   ), 'pt.id = t.partTypeId');
                 $select->joinLeft(array(
-                                       'tc' => 'pgen_toner_colors'
+                                       'tc' => 'toner_colors'
                                   ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
                                        'm' => 'manufacturers'
@@ -494,15 +494,15 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'pgen_toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
+                                   't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
-                                       'pt' => 'pgen_part_types'
+                                       'pt' => 'part_types'
                                   ), 'pt.id = t.partTypeId', array(
                                                                   'name AS type_name'
                                                              ));
                 $select->joinLeft(array(
-                                       'tc' => 'pgen_toner_colors'
+                                       'tc' => 'toner_colors'
                                   ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
                                        'm' => 'manufacturers'
@@ -588,10 +588,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
-                                   'dt' => 'pgen_device_toners'
+                                   'dt' => 'device_toners'
                               ));
                 $select->joinLeft(array(
-                                       't' => 'pgen_toners'
+                                       't' => 'toners'
                                   ), 'dt.toner_id = t.id');
                 $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                 $stmt        = $db->query($select);
@@ -897,10 +897,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $select = new Zend_Db_Select($db);
                             $select = $db->select();
                             $select->from(array(
-                                               'dt' => 'pgen_device_toners'
+                                               'dt' => 'device_toners'
                                           ));
                             $select->joinLeft(array(
-                                                   't' => 'pgen_toners'
+                                                   't' => 'toners'
                                               ), 'dt.toner_id = t.id');
                             $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                             $stmt        = $db->query($select);
@@ -931,12 +931,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             // *****************************************************************
             // ALL MODES END UP DELETING TONER
             // *****************************************************************
-
-
-            // REMOVE USER TONER OVERRIDES
-            $user_toner_OverrideTable = new Proposalgen_Model_DbTable_UserTonerOverride();
-            $where                    = $user_toner_OverrideTable->getAdapter()->quoteInto('toner_id = ?', $replace_id, 'INTEGER');
-            $user_toner_OverrideTable->delete($where);
 
             // REMOVE DEVICE TONER MAPPINGS
             $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
@@ -2675,7 +2669,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                 $select = $db->select()
                     ->from(array(
-                                'md' => 'pgen_master_devices'
+                                'md' => 'master_devices'
                            ), array(
                                    'id AS master_id',
                                    'modelName',
@@ -2728,12 +2722,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // Get Count
                 $select = $db->select()
                     ->from(array(
-                                't' => 'pgen_toners'), array(
+                                't' => 'toners'), array(
                                                             'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
                                                        )
                     )
                     ->joinLeft(array(
-                                    'dt' => 'pgen_device_toners'
+                                    'dt' => 'device_toners'
                                ), 'dt.toner_id = t.id', array(
                                                              'master_device_id'
                                                         ))
@@ -2743,10 +2737,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                    'fullname'
                                                               ))
                     ->joinLeft(array(
-                                    'tc' => 'pgen_toner_colors'
+                                    'tc' => 'toner_colors'
                                ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
                     ->joinLeft(array(
-                                    'pt' => 'pgen_part_types'
+                                    'pt' => 'part_types'
                                ), 'pt.id = t.partTypeId', 'name AS part_type')
                     ->joinLeft(array(
                                     'dta' => 'dealer_toner_attributes'
@@ -2945,7 +2939,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 'sku AS toner_SKU',
                 'yield AS toner_yield',
                 'cost AS toner_price',
-                '(SELECT master_device_id FROM pgen_device_toners AS sdt WHERE sdt.toner_id = t.id AND sdt.master_device_id = ' . $master_device_id . ') AS is_added',
+                '(SELECT master_device_id FROM device_toners AS sdt WHERE sdt.toner_id = t.id AND sdt.master_device_id = ' . $master_device_id . ') AS is_added',
                 'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.modelName) SEPARATOR "; ") AS device_list'
             );
         }
@@ -2968,10 +2962,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             // get count
             $select = $db->select()
                 ->from(array(
-                            't' => 'pgen_toners'
+                            't' => 'toners'
                        ), $toner_fields_list)
                 ->joinLeft(array(
-                                'dt' => 'pgen_device_toners'
+                                'dt' => 'device_toners'
                            ), 'dt.toner_id = t.id', array(
                                                          'master_device_id'
                                                     ))
@@ -2981,7 +2975,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                'tm.fullname AS toner_manufacturer'
                                                           ))
                 ->joinLeft(array(
-                                'md' => 'pgen_master_devices'
+                                'md' => 'master_devices'
                            ), 'md.id = dt.master_device_id')
                 ->joinLeft(array(
                                 'mdm' => 'manufacturers'
@@ -2989,12 +2983,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                                                  'mdm.fullname AS manufacturer_name'
                                                             ))
                 ->joinLeft(array(
-                                'tc' => 'pgen_toner_colors'
+                                'tc' => 'toner_colors'
                            ), 'tc.id = t.tonerColorId', array(
                                                              'name AS toner_color_name'
                                                         ))
                 ->joinLeft(array(
-                                'pt' => 'pgen_part_types'
+                                'pt' => 'part_types'
                            ), 'pt.id = t.partTypeId', array(
                                                            'pt.name AS type_name'
                                                       ))
@@ -3093,8 +3087,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         // Fetch Devices like term
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $sql = "SELECT concat(displayname, ' ', modelName) AS device_name, pgen_master_devices.id, displayname, modelName FROM manufacturers
-        JOIN pgen_master_devices ON pgen_master_devices.manufacturerId = manufacturers.id
+        $sql = "SELECT concat(displayname, ' ', modelName) AS device_name, master_devices.id, displayname, modelName FROM manufacturers
+        JOIN master_devices ON master_devices.manufacturerId = manufacturers.id
         WHERE concat(displayname, ' ', modelName) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
 
         $results = $db->fetchAll($sql);
@@ -3671,7 +3665,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array(
-                                'rd' => 'pgen_replacement_devices'
+                                'rd' => 'replacement_devices'
                            ))
                     ->where('masterDeviceId = ?', $device_id, 'INTEGER')
                     ->where('dealerId =  ?', $this->dealerId);

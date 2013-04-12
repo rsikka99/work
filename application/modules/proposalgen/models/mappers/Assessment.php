@@ -287,8 +287,8 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     UPDATE assessments
 	SET assessments.devicesModified=1
 	WHERE assessments.id IN (
-		SELECT di.rmsUploadId FROM pgen_device_instances AS di
-        LEFT JOIN pgen_device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
+		SELECT di.rmsUploadId FROM device_instances AS di
+        LEFT JOIN device_instance_master_devices AS dimd ON di.id = dimd.deviceInstanceId
         WHERE dimd.masterDeviceId = ?
 		GROUP BY di.rmsUploadId
 	);";

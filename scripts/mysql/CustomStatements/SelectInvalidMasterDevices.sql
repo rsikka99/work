@@ -1,11 +1,11 @@
 SELECT
-    pgen_master_devices.id    AS masterDeviceId,
+    master_devices.id    AS masterDeviceId,
     manufacturers.displayname AS manufacturer,
-    pgen_master_devices.modelName,
-    pgen_toner_configs.name   AS TonerConfiguration,
-    (SELECT COUNT(*) FROM pgen_device_toners WHERE pgen_device_toners.master_device_id = masterDeviceId) AS TonerCount
-FROM `pgen_master_devices`
-    JOIN pgen_toner_configs ON pgen_master_devices.tonerConfigId = pgen_toner_configs.id
-    JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-    LEFT JOIN pgen_device_toners ON pgen_device_toners.master_device_id = pgen_master_devices.id
-WHERE pgen_device_toners.master_device_id IS NULL AND pgen_master_devices.isLeased = 0
+    master_devices.modelName,
+    toner_configs.name   AS TonerConfiguration,
+    (SELECT COUNT(*) FROM device_toners WHERE device_toners.master_device_id = masterDeviceId) AS TonerCount
+FROM `master_devices`
+    JOIN toner_configs ON master_devices.tonerConfigId = toner_configs.id
+    JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
+    LEFT JOIN device_toners ON device_toners.master_device_id = master_devices.id
+WHERE device_toners.master_device_id IS NULL AND master_devices.isLeased = 0

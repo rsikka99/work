@@ -106,9 +106,9 @@ CREATE  TABLE IF NOT EXISTS `manufacturers` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_providers`
+-- Table `rms_providers`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
+CREATE  TABLE IF NOT EXISTS `rms_providers` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
@@ -116,9 +116,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_providers` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_uploads`
+-- Table `rms_uploads`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
+CREATE  TABLE IF NOT EXISTS `rms_uploads` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `clientId` INT NOT NULL ,
     `rmsProviderId` INT NOT NULL ,
@@ -136,7 +136,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_uploads` (
         ON UPDATE CASCADE,
     CONSTRAINT `rms_uploads_ibfk_2`
     FOREIGN KEY (`rmsProviderId` )
-    REFERENCES `pgen_rms_providers` (`id` )
+    REFERENCES `rms_providers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -172,9 +172,9 @@ CREATE  TABLE IF NOT EXISTS `users` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_devices`
+-- Table `rms_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_devices` (
+CREATE  TABLE IF NOT EXISTS `rms_devices` (
     `rmsProviderId` INT(11) NOT NULL ,
     `rmsModelId` INT(11) NOT NULL ,
     `manufacturer` VARCHAR(255) NULL ,
@@ -191,7 +191,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_devices` (
         ON UPDATE CASCADE,
     CONSTRAINT `rms_devices_ibfk_2`
     FOREIGN KEY (`rmsProviderId` )
-    REFERENCES `pgen_rms_providers` (`id` )
+    REFERENCES `rms_providers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -200,9 +200,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_devices` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_upload_rows`
+-- Table `rms_upload_rows`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
+CREATE  TABLE IF NOT EXISTS `rms_upload_rows` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `rmsProviderId` INT(11) NOT NULL ,
     `rmsModelId` INT(11) NULL ,
@@ -269,20 +269,20 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
     `tonerLevelMagenta` VARCHAR(255) NULL ,
     `tonerLevelYellow` VARCHAR(255) NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `pgen_rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
-    INDEX `pgen_rms_upload_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
-    INDEX `pgen_rms_upload_rows_ibfk_3_idx` (`manufacturerId` ASC) ,
-    CONSTRAINT `pgen_rms_upload_rows_ibfk_1`
+    INDEX `rms_upload_rows_ibfk_1_idx` (`rmsProviderId` ASC) ,
+    INDEX `rms_upload_rows_ibfk_2_idx` (`rmsProviderId` ASC, `rmsModelId` ASC) ,
+    INDEX `rms_upload_rows_ibfk_3_idx` (`manufacturerId` ASC) ,
+    CONSTRAINT `rms_upload_rows_ibfk_1`
     FOREIGN KEY (`rmsProviderId` )
-    REFERENCES `pgen_rms_providers` (`id` )
+    REFERENCES `rms_providers` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT `pgen_rms_upload_rows_ibfk_2`
+    CONSTRAINT `rms_upload_rows_ibfk_2`
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
-    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `rms_devices` (`rmsProviderId` , `rmsModelId` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT `pgen_rms_upload_rows_ibfk_3`
+    CONSTRAINT `rms_upload_rows_ibfk_3`
     FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
         ON DELETE SET NULL
@@ -293,9 +293,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_upload_rows` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_device_instances`
+-- Table `device_instances`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
+CREATE  TABLE IF NOT EXISTS `device_instances` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `rmsUploadId` INT(11) NOT NULL ,
     `rmsUploadRowId` INT(11) NOT NULL ,
@@ -310,12 +310,12 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
     INDEX `device_instances_ibfk_1_idx` (`rmsUploadId` ASC) ,
     CONSTRAINT `device_instances_ibfk_1`
     FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
+    REFERENCES `rms_uploads` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `device_instances_ibfk_2`
     FOREIGN KEY (`rmsUploadRowId` )
-    REFERENCES `pgen_rms_upload_rows` (`id` )
+    REFERENCES `rms_upload_rows` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -323,9 +323,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instances` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_device_instance_meters`
+-- Table `device_instance_meters`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_device_instance_meters` (
+CREATE  TABLE IF NOT EXISTS `device_instance_meters` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `deviceInstanceId` INT(11) NOT NULL ,
     `meterType` ENUM('LIFE','COLOR','COPY BLACK','BLACK','PRINT BLACK','PRINT COLOR','COPY COLOR','SCAN','FAX') NULL ,
@@ -335,9 +335,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instance_meters` (
     `monitorEndDate` DATETIME NOT NULL ,
     PRIMARY KEY (`id`) ,
     UNIQUE INDEX `device_instance_id` (`deviceInstanceId` ASC, `meterType` ASC) ,
-    CONSTRAINT `proposalgenerator_device_instance_meters_ibfk_1`
+    CONSTRAINT `device_instance_meters_ibfk_1`
     FOREIGN KEY (`deviceInstanceId` )
-    REFERENCES `pgen_device_instances` (`id` )
+    REFERENCES `device_instances` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -345,9 +345,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instance_meters` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_part_types`
+-- Table `part_types`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_part_types` (
+CREATE  TABLE IF NOT EXISTS `part_types` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
@@ -357,9 +357,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_part_types` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_toner_colors`
+-- Table `toner_colors`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_toner_colors` (
+CREATE  TABLE IF NOT EXISTS `toner_colors` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
@@ -369,9 +369,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_toner_colors` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_toners`
+-- Table `toners`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_toners` (
+CREATE  TABLE IF NOT EXISTS `toners` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `sku` VARCHAR(255) NOT NULL ,
     `cost` DOUBLE NOT NULL ,
@@ -384,15 +384,17 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
     INDEX `part_type_id` (`partTypeId` ASC) ,
     INDEX `toner_color_id` (`tonerColorId` ASC) ,
     INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturerId` ASC) ,
-    CONSTRAINT `proposalgenerator_toners_ibfk_1`
+    CONSTRAINT `toners_ibfk_1`
     FOREIGN KEY (`partTypeId` )
-    REFERENCES `pgen_part_types` (`id` ),
-    CONSTRAINT `proposalgenerator_toners_ibfk_3`
-    FOREIGN KEY (`tonerColorId` )
-    REFERENCES `pgen_toner_colors` (`id` )
+    REFERENCES `part_types` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `proposalgenerator_toners_ibfk_2`
+    CONSTRAINT `toners_ibfk_3`
+    FOREIGN KEY (`tonerColorId` )
+    REFERENCES `toner_colors` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `toners_ibfk_2`
     FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
         ON DELETE CASCADE
@@ -403,9 +405,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_toners` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_toner_configs`
+-- Table `toner_configs`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_toner_configs` (
+CREATE  TABLE IF NOT EXISTS `toner_configs` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
@@ -416,9 +418,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_toner_configs` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_master_devices`
+-- Table `master_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
+CREATE  TABLE IF NOT EXISTS `master_devices` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `dateCreated` DATETIME NOT NULL ,
     `dutyCycle` INT(11) NULL ,
@@ -443,12 +445,12 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
     PRIMARY KEY (`id`) ,
     INDEX `toner_config_id` (`tonerConfigId` ASC) ,
     INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
-    CONSTRAINT `proposalgenerator_master_devices_ibfk_2`
+    CONSTRAINT `master_devices_ibfk_2`
     FOREIGN KEY (`tonerConfigId` )
-    REFERENCES `pgen_toner_configs` (`id` )
+    REFERENCES `toner_configs` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `proposalgenerator_master_devices_ibfk_1`
+    CONSTRAINT `master_devices_ibfk_1`
     FOREIGN KEY (`manufacturerId` )
     REFERENCES `manufacturers` (`id` )
         ON DELETE CASCADE
@@ -459,21 +461,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_master_devices` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_device_toners`
+-- Table `device_toners`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_device_toners` (
+CREATE  TABLE IF NOT EXISTS `device_toners` (
     `toner_id` INT(11) NOT NULL ,
     `master_device_id` INT(11) NOT NULL ,
     PRIMARY KEY (`toner_id`, `master_device_id`) ,
     INDEX `master_device_id` (`master_device_id` ASC) ,
-    CONSTRAINT `proposalgenerator_device_toners_ibfk_1`
+    CONSTRAINT `device_toners_ibfk_1`
     FOREIGN KEY (`toner_id` )
-    REFERENCES `pgen_toners` (`id` )
+    REFERENCES `toners` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_device_toners_ibfk_2`
+    CONSTRAINT `device_toners_ibfk_2`
     FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -481,21 +483,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_toners` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_master_matchups`
+-- Table `rms_master_matchups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_master_matchups` (
+CREATE  TABLE IF NOT EXISTS `rms_master_matchups` (
     `rmsProviderId` INT(11) NOT NULL ,
     `rmsModelId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
-    CONSTRAINT `pgen_rms_master_matchups_ibfk_1`
+    CONSTRAINT `rms_master_matchups_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `pgen_rms_master_matchups_ibfk_2`
+    CONSTRAINT `rms_master_matchups_ibfk_2`
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
-    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `rms_devices` (`rmsProviderId` , `rmsModelId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -503,9 +505,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_master_matchups` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_pricing_configs`
+-- Table `pricing_configs`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_pricing_configs` (
+CREATE  TABLE IF NOT EXISTS `pricing_configs` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     `color_toner_part_type_id` INT(11) NULL DEFAULT NULL ,
@@ -514,35 +516,39 @@ CREATE  TABLE IF NOT EXISTS `pgen_pricing_configs` (
     UNIQUE INDEX `name` (`name` ASC) ,
     INDEX `color_toner_part_type_id` (`color_toner_part_type_id` ASC) ,
     INDEX `mono_toner_part_type_id` (`mono_toner_part_type_id` ASC) ,
-    CONSTRAINT `proposalgenerator_pricing_configs_ibfk_1`
+    CONSTRAINT `pricing_configs_ibfk_1`
     FOREIGN KEY (`color_toner_part_type_id` )
-    REFERENCES `pgen_part_types` (`id` ),
-    CONSTRAINT `proposalgenerator_pricing_configs_ibfk_2`
+    REFERENCES `part_types` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `pricing_configs_ibfk_2`
     FOREIGN KEY (`mono_toner_part_type_id` )
-    REFERENCES `pgen_part_types` (`id` ))
+    REFERENCES `part_types` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT)
     ENGINE = InnoDB
     AUTO_INCREMENT = 6
     DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `pgen_replacement_devices`
+-- Table `replacement_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_replacement_devices` (
+CREATE  TABLE IF NOT EXISTS `replacement_devices` (
     `dealerId` INT NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     `replacementCategory` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
     `printSpeed` INT(11) NULL ,
     `resolution` INT(11) NULL DEFAULT NULL ,
     `monthlyRate` DOUBLE NULL ,
-    INDEX `pgen_replacement_devices_ibfk_2_idx` (`dealerId` ASC) ,
+    INDEX `replacement_devices_ibfk_2_idx` (`dealerId` ASC) ,
     PRIMARY KEY (`dealerId`, `masterDeviceId`) ,
-    CONSTRAINT `pgen_replacement_devices_ibfk_1`
+    CONSTRAINT `replacement_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `pgen_replacement_devices_ibfk_2`
+    CONSTRAINT `replacement_devices_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -575,7 +581,7 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
         ON UPDATE CASCADE,
     CONSTRAINT `assessments_ibfk_3`
     FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
+    REFERENCES `rms_uploads` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -584,9 +590,9 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_report_settings`
+-- Table `report_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
+CREATE  TABLE IF NOT EXISTS `report_settings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `actualPageCoverageMono` DOUBLE NULL DEFAULT NULL ,
     `actualPageCoverageColor` DOUBLE NULL DEFAULT NULL ,
@@ -613,17 +619,19 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
     INDEX `assessmentPricingConfigId` (`assessmentPricingConfigId` ASC) ,
     INDEX `grossMarginPricingConfigId` (`grossMarginPricingConfigId` ASC) ,
     INDEX `proposalgenerator_report_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
-    CONSTRAINT `proposalgenerator_report_settings_ibfk_1`
+    CONSTRAINT `report_settings_ibfk_1`
     FOREIGN KEY (`assessmentPricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` ),
-    CONSTRAINT `proposalgenerator_report_settings_ibfk_2`
-    FOREIGN KEY (`grossMarginPricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` )
+    REFERENCES `pricing_configs` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `proposalgenerator_report_settings_ibfk_3`
+    CONSTRAINT `report_settings_ibfk_2`
+    FOREIGN KEY (`grossMarginPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `report_settings_ibfk_3`
     FOREIGN KEY (`replacementPricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` )
+    REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB
@@ -632,21 +640,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_report_report_settings`
+-- Table `report_report_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
+CREATE  TABLE IF NOT EXISTS `report_report_settings` (
     `reportId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`reportId`) ,
     INDEX `report_setting_id` (`reportSettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_report_report_settings_ibfk_1`
+    CONSTRAINT `report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_report_report_settings_ibfk_2`
+    CONSTRAINT `report_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `pgen_report_settings` (`id` )
+    REFERENCES `report_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -654,9 +662,9 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_survey_settings`
+-- Table `survey_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_survey_settings` (
+CREATE  TABLE IF NOT EXISTS `survey_settings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `pageCoverageMono` DOUBLE NULL DEFAULT NULL ,
     `pageCoverageColor` DOUBLE NULL DEFAULT NULL ,
@@ -667,21 +675,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_survey_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_report_survey_settings`
+-- Table `report_survey_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
+CREATE  TABLE IF NOT EXISTS `report_survey_settings` (
     `reportId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`reportId`) ,
     INDEX `survey_setting_id` (`surveySettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_1`
+    CONSTRAINT `report_survey_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_report_survey_settings_ibfk_2`
+    CONSTRAINT `report_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
-    REFERENCES `pgen_survey_settings` (`id` )
+    REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -689,54 +697,29 @@ CREATE  TABLE IF NOT EXISTS `pgen_report_survey_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_user_device_overrides`
+-- Table `rms_user_matchups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_user_device_overrides` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT ,
-    `user_id` INT(11) NOT NULL ,
-    `master_device_id` INT(11) NOT NULL ,
-    `cost` DOUBLE NOT NULL ,
-    `is_leased` TINYINT(4) NULL DEFAULT '0' ,
-    PRIMARY KEY (`id`) ,
-    INDEX `master_device_id` (`master_device_id` ASC) ,
-    CONSTRAINT `proposalgenerator_user_device_overrides_ibfk_1`
-    FOREIGN KEY (`master_device_id` )
-    REFERENCES `pgen_master_devices` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_user_device_overrides_ibfk_2`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `pgen_rms_user_matchups`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_user_matchups` (
+CREATE  TABLE IF NOT EXISTS `rms_user_matchups` (
     `rmsProviderId` INT(11) NOT NULL ,
     `rmsModelId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     `userId` INT(11) NOT NULL ,
     PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
     INDEX `user_id` (`userId` ASC) ,
-    INDEX `pgen_rms_user_matchups_ibfk_1_idx` (`masterDeviceId` ASC) ,
-    CONSTRAINT `pgen_rms_user_matchups_ibfk_2`
+    INDEX `rms_user_matchups_ibfk_1_idx` (`masterDeviceId` ASC) ,
+    CONSTRAINT `rms_user_matchups_ibfk_2`
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
-    REFERENCES `pgen_rms_devices` (`rmsProviderId` , `rmsModelId` )
+    REFERENCES `rms_devices` (`rmsProviderId` , `rmsModelId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `pgen_rms_user_matchups_ibfk_3`
+    CONSTRAINT `rms_user_matchups_ibfk_3`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `pgen_rms_user_matchups_ibfk_1`
+    CONSTRAINT `rms_user_matchups_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -744,21 +727,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_user_matchups` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_user_report_settings`
+-- Table `user_report_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_user_report_settings` (
+CREATE  TABLE IF NOT EXISTS `user_report_settings` (
     `userId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
     INDEX `report_setting_id` (`reportSettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_user_report_settings_ibfk_1`
+    CONSTRAINT `user_report_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_user_report_settings_ibfk_2`
+    CONSTRAINT `user_report_settings_ibfk_2`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `pgen_report_settings` (`id` )
+    REFERENCES `report_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -766,21 +749,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_user_survey_settings`
+-- Table `user_survey_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_user_survey_settings` (
+CREATE  TABLE IF NOT EXISTS `user_survey_settings` (
     `userId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
     INDEX `survey_setting_id` (`surveySettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_1`
+    CONSTRAINT `user_survey_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_user_survey_settings_ibfk_2`
+    CONSTRAINT `user_survey_settings_ibfk_2`
     FOREIGN KEY (`surveySettingId` )
-    REFERENCES `pgen_survey_settings` (`id` )
+    REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -788,40 +771,16 @@ CREATE  TABLE IF NOT EXISTS `pgen_user_survey_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_user_toner_overrides`
+-- Table `categories`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_user_toner_overrides` (
-    `user_id` INT(11) NOT NULL ,
-    `toner_id` INT(11) NOT NULL ,
-    `cost` DOUBLE NOT NULL ,
-    PRIMARY KEY (`toner_id`, `user_id`) ,
-    INDEX `toner_id` (`toner_id` ASC) ,
-    INDEX `proposalgenerator_user_toner_overrides_ibfk_2_idx` (`user_id` ASC) ,
-    CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_1`
-    FOREIGN KEY (`toner_id` )
-    REFERENCES `pgen_toners` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_user_toner_overrides_ibfk_2`
-    FOREIGN KEY (`user_id` )
-    REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `qgen_categories`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_categories` (
+CREATE  TABLE IF NOT EXISTS `categories` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     `description` TEXT NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `qgen_categories_ibfk_1_idx` (`dealerId` ASC) ,
-    CONSTRAINT `qgen_categories_ibfk_1`
+    INDEX `categories_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `categories_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -832,9 +791,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_categories` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_devices`
+-- Table `devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_devices` (
+CREATE  TABLE IF NOT EXISTS `devices` (
     `masterDeviceId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
     `cost` DOUBLE NOT NULL ,
@@ -844,12 +803,12 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
     PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
     INDEX `quotegen_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
     INDEX `quotegen_devices_ibfk_2_idx` (`dealerId` ASC) ,
-    CONSTRAINT `quotegen_devices_ibfk_1`
+    CONSTRAINT `devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_devices_ibfk_2`
+    CONSTRAINT `devices_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -859,9 +818,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_devices` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_device_configurations`
+-- Table `device_configurations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
+CREATE  TABLE IF NOT EXISTS `device_configurations` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `masterDeviceId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
@@ -869,13 +828,13 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
     `description` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `masterDeviceId` (`masterDeviceId` ASC) ,
-    INDEX `qgen_device_configurations_ibfk_2_idx` (`dealerId` ASC) ,
-    CONSTRAINT `quotegen_device_configurations_ibfk_1`
+    INDEX `device_configurations_ibfk_2_idx` (`dealerId` ASC) ,
+    CONSTRAINT `device_configurations_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `qgen_devices` (`masterDeviceId` )
+    REFERENCES `devices` (`masterDeviceId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `qgen_device_configurations_ibfk_2`
+    CONSTRAINT `device_configurations_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -885,9 +844,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configurations` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_options`
+-- Table `options`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_options` (
+CREATE  TABLE IF NOT EXISTS `options` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
@@ -896,8 +855,8 @@ CREATE  TABLE IF NOT EXISTS `qgen_options` (
     `dealerSku` VARCHAR(255) NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `qgen_options_ibfk_1_idx` (`dealerId` ASC) ,
-    CONSTRAINT `qgen_options_ibfk_1`
+    INDEX `options_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `options_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -908,22 +867,22 @@ CREATE  TABLE IF NOT EXISTS `qgen_options` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_device_configuration_options`
+-- Table `device_configuration_options`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
+CREATE  TABLE IF NOT EXISTS `device_configuration_options` (
     `deviceConfigurationId` INT(11) NOT NULL ,
     `optionId` INT(11) NOT NULL ,
     `quantity` INT(11) NOT NULL DEFAULT 1 ,
     PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
     INDEX `optionId` (`optionId` ASC) ,
-    CONSTRAINT `quotegen_device_configuration_options_ibfk_1`
+    CONSTRAINT `device_configuration_options_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
-    REFERENCES `qgen_device_configurations` (`id` )
+    REFERENCES `device_configurations` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_device_configuration_options_ibfk_2`
+    CONSTRAINT `device_configuration_options_ibfk_2`
     FOREIGN KEY (`optionId` )
-    REFERENCES `qgen_options` (`id` )
+    REFERENCES `options` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -931,9 +890,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_configuration_options` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_device_options`
+-- Table `device_options`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
+CREATE  TABLE IF NOT EXISTS `device_options` (
     `masterDeviceId` INT(11) NOT NULL ,
     `optionId` INT(11) NOT NULL ,
     `dealerId` INT(11) NOT NULL ,
@@ -941,17 +900,17 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
     PRIMARY KEY (`masterDeviceId`, `optionId`) ,
     INDEX `optionId` (`optionId` ASC) ,
     INDEX `quotegen_device_options_ibfk_3_idx` (`dealerId` ASC) ,
-    CONSTRAINT `quotegen_device_options_ibfk_1`
+    CONSTRAINT `device_options_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `qgen_devices` (`masterDeviceId` )
+    REFERENCES `devices` (`masterDeviceId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_device_options_ibfk_2`
+    CONSTRAINT `device_options_ibfk_2`
     FOREIGN KEY (`optionId` )
-    REFERENCES `qgen_options` (`id` )
+    REFERENCES `options` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_device_options_ibfk_3`
+    CONSTRAINT `device_options_ibfk_3`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -961,28 +920,30 @@ CREATE  TABLE IF NOT EXISTS `qgen_device_options` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_global_device_configurations`
+-- Table `global_device_configurations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_global_device_configurations` (
+CREATE  TABLE IF NOT EXISTS `global_device_configurations` (
     `deviceConfigurationId` INT(11) NOT NULL ,
     PRIMARY KEY (`deviceConfigurationId`) ,
-    CONSTRAINT `quotegen_user_device_configurations_ibfk_10`
+    CONSTRAINT `global_device_configurations_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
-    REFERENCES `qgen_device_configurations` (`id` ))
+    REFERENCES `device_configurations` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `qgen_leasing_schemas`
+-- Table `leasing_schemas`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
+CREATE  TABLE IF NOT EXISTS `leasing_schemas` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `qgen_leasing_schemas_ibfk_1_idx` (`dealerId` ASC) ,
-    CONSTRAINT `qgen_leasing_schemas_ibfk_1`
+    INDEX `leasing_schemas_ibfk_1_idx` (`dealerId` ASC) ,
+    CONSTRAINT `leasing_schemas_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -994,15 +955,15 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schemas` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_global_leasing_schemas`
+-- Table `global_leasing_schemas`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
+CREATE  TABLE IF NOT EXISTS `global_leasing_schemas` (
     `leasingSchemaId` INT(11) NOT NULL AUTO_INCREMENT ,
     PRIMARY KEY (`leasingSchemaId`) ,
     INDEX `quotegen_global_leasing_schemas_ibfk_1_idx` (`leasingSchemaId` ASC) ,
-    CONSTRAINT `quotegen_global_leasing_schemas_ibfk_1`
+    CONSTRAINT `global_leasing_schemas_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
-    REFERENCES `qgen_leasing_schemas` (`id` )
+    REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1011,17 +972,17 @@ CREATE  TABLE IF NOT EXISTS `qgen_global_leasing_schemas` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_leasing_schema_ranges`
+-- Table `leasing_schema_ranges`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
+CREATE  TABLE IF NOT EXISTS `leasing_schema_ranges` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `leasingSchemaId` INT(11) NOT NULL ,
     `startRange` DOUBLE NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
-    CONSTRAINT `quotegen_leasing_schema_ranges_ibfk_1`
+    CONSTRAINT `leasing_schema_ranges_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
-    REFERENCES `qgen_leasing_schemas` (`id` )
+    REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1031,17 +992,17 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_ranges` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_leasing_schema_terms`
+-- Table `leasing_schema_terms`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
+CREATE  TABLE IF NOT EXISTS `leasing_schema_terms` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `leasingSchemaId` INT(11) NOT NULL ,
     `months` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
-    CONSTRAINT `quotegen_leasing_schema_terms_ibfk_1`
+    CONSTRAINT `leasing_schema_terms_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
-    REFERENCES `qgen_leasing_schemas` (`id` )
+    REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1051,23 +1012,23 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_terms` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_leasing_schema_rates`
+-- Table `leasing_schema_rates`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
+CREATE  TABLE IF NOT EXISTS `leasing_schema_rates` (
     `leasingSchemaTermId` INT(11) NOT NULL ,
     `leasingSchemaRangeId` INT(11) NOT NULL ,
     `rate` DOUBLE NOT NULL ,
     PRIMARY KEY (`leasingSchemaTermId`, `leasingSchemaRangeId`) ,
     INDEX `leasingSchemaTermId` (`leasingSchemaTermId` ASC) ,
     INDEX `leasingSchemaRangeId` (`leasingSchemaRangeId` ASC) ,
-    CONSTRAINT `quotegen_leasing_schema_rates_ibfk_2`
+    CONSTRAINT `leasing_schema_rates_ibfk_1`
     FOREIGN KEY (`leasingSchemaTermId` )
-    REFERENCES `qgen_leasing_schema_terms` (`id` )
+    REFERENCES `leasing_schema_terms` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_leasing_schema_rates_ibfk_3`
+    CONSTRAINT `leasing_schema_rates_ibfk_2`
     FOREIGN KEY (`leasingSchemaRangeId` )
-    REFERENCES `qgen_leasing_schema_ranges` (`id` )
+    REFERENCES `leasing_schema_ranges` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1076,21 +1037,21 @@ CREATE  TABLE IF NOT EXISTS `qgen_leasing_schema_rates` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_option_categories`
+-- Table `option_categories`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_option_categories` (
+CREATE  TABLE IF NOT EXISTS `option_categories` (
     `categoryId` INT(11) NOT NULL ,
     `optionId` INT(11) NOT NULL ,
     PRIMARY KEY (`categoryId`, `optionId`) ,
     INDEX `optionId` (`optionId` ASC) ,
-    CONSTRAINT `quotegen_option_categories_ibfk_1`
+    CONSTRAINT `option_categories_ibfk_1`
     FOREIGN KEY (`categoryId` )
-    REFERENCES `qgen_categories` (`id` )
+    REFERENCES `categories` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `quotegen_option_categories_ibfk_2`
+    CONSTRAINT `option_categories_ibfk_2`
     FOREIGN KEY (`optionId` )
-    REFERENCES `qgen_options` (`id` )
+    REFERENCES `options` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1098,9 +1059,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_option_categories` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quotes`
+-- Table `quotes`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
+CREATE  TABLE IF NOT EXISTS `quotes` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `clientId` INT(11) NOT NULL ,
     `dateCreated` DATETIME NOT NULL ,
@@ -1121,14 +1082,14 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
     PRIMARY KEY (`id`) ,
     INDEX `clientId` (`clientId` ASC) ,
     INDEX `quotegen_quotes_ibfk_3_idx` (`pricingConfigId` ASC) ,
-    CONSTRAINT `quotegen_quotes_ibfk_1`
+    CONSTRAINT `quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_quotes_ibfk_3`
+    CONSTRAINT `quotes_ibfk_2`
     FOREIGN KEY (`pricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` )
+    REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB
@@ -1138,9 +1099,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quotes` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_devices`
+-- Table `quote_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
+CREATE  TABLE IF NOT EXISTS `quote_devices` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `quoteId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
@@ -1158,9 +1119,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
     `tonerConfigId` INT NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `quoteId` (`quoteId` ASC) ,
-    CONSTRAINT `quotegen_quote_devices_ibfk_1`
+    CONSTRAINT `quote_devices_ibfk_1`
     FOREIGN KEY (`quoteId` )
-    REFERENCES `qgen_quotes` (`id` )
+    REFERENCES `quotes` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1169,9 +1130,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_devices` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_options`
+-- Table `quote_device_options`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_options` (
+CREATE  TABLE IF NOT EXISTS `quote_device_options` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `quoteDeviceId` INT(11) NOT NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
@@ -1183,9 +1144,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_options` (
     `includedQuantity` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-    CONSTRAINT `quotegen_quote_device_options_ibfk_1`
+    CONSTRAINT `quote_device_options_ibfk_1`
     FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_devices` (`id` )
+    REFERENCES `quote_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1194,23 +1155,23 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_options` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_configuration_options`
+-- Table `quote_device_configuration_options`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configuration_options` (
+CREATE  TABLE IF NOT EXISTS `quote_device_configuration_options` (
     `quoteDeviceOptionId` INT(11) NOT NULL ,
     `optionId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
     PRIMARY KEY (`quoteDeviceOptionId`) ,
     INDEX `quotegen_quote_device_option_options_ibfk_1_idx` (`optionId` ASC, `masterDeviceId` ASC) ,
     INDEX `quotegen_quote_device_option_options_ibfk_2_idx` (`quoteDeviceOptionId` ASC) ,
-    CONSTRAINT `quotegen_quote_device_option_options_ibfk_1`
+    CONSTRAINT `quote_device_option_options_ibfk_1`
     FOREIGN KEY (`optionId` , `masterDeviceId` )
-    REFERENCES `qgen_device_options` (`optionId` , `masterDeviceId` )
+    REFERENCES `device_options` (`optionId` , `masterDeviceId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_quote_device_option_options_ibfk_2`
+    CONSTRAINT `quote_device_option_options_ibfk_2`
     FOREIGN KEY (`quoteDeviceOptionId` )
-    REFERENCES `qgen_quote_device_options` (`id` )
+    REFERENCES `quote_device_options` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1218,22 +1179,22 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configuration_options` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_configurations`
+-- Table `quote_device_configurations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configurations` (
+CREATE  TABLE IF NOT EXISTS `quote_device_configurations` (
     `quoteDeviceId` INT(11) NOT NULL AUTO_INCREMENT ,
     `masterDeviceId` INT(11) NOT NULL ,
     PRIMARY KEY (`quoteDeviceId`, `masterDeviceId`) ,
     INDEX `deviceConfigurationId` (`masterDeviceId` ASC) ,
     INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
-    CONSTRAINT `quotegen_quote_device_configurations_ibfk_1`
+    CONSTRAINT `quote_device_configurations_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `qgen_devices` (`masterDeviceId` )
+    REFERENCES `devices` (`masterDeviceId` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `quotegen_quote_device_configurations_ibfk_2`
+    CONSTRAINT `quote_device_configurations_ibfk_2`
     FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_devices` (`id` )
+    REFERENCES `quote_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1242,9 +1203,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_configurations` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_settings`
+-- Table `quote_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
+CREATE  TABLE IF NOT EXISTS `quote_settings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `pageCoverageMonochrome` DOUBLE NULL DEFAULT NULL ,
     `pageCoverageColor` DOUBLE NULL DEFAULT NULL ,
@@ -1254,9 +1215,9 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
     `adminCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `quotegen_quote_settings_ibfk1_idx` (`pricingConfigId` ASC) ,
-    CONSTRAINT `quotegen_quote_settings_ibfk1`
+    CONSTRAINT `quote_settings_ibfk1`
     FOREIGN KEY (`pricingConfigId` )
-    REFERENCES `pgen_pricing_configs` (`id` )
+    REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
     ENGINE = InnoDB
@@ -1265,37 +1226,43 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_settings` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_user_device_configurations`
+-- Table `user_device_configurations`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_user_device_configurations` (
+CREATE  TABLE IF NOT EXISTS `user_device_configurations` (
     `deviceConfigurationId` INT(11) NOT NULL ,
     `userId` INT(11) NOT NULL ,
     PRIMARY KEY (`deviceConfigurationId`, `userId`) ,
     INDEX `userId` (`userId` ASC) ,
-    CONSTRAINT `quotegen_user_device_configurations_ibfk_1`
+    CONSTRAINT `user_device_configurations_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
-    REFERENCES `qgen_device_configurations` (`id` ),
-    CONSTRAINT `quotegen_user_device_configurations_ibfk_2`
+    REFERENCES `device_configurations` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `user_device_configurations_ibfk_2`
     FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` ))
+    REFERENCES `users` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
 
 -- -----------------------------------------------------
--- Table `qgen_user_quote_settings`
+-- Table `user_quote_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_user_quote_settings` (
+CREATE  TABLE IF NOT EXISTS `user_quote_settings` (
     `userId` INT(11) NOT NULL ,
     `quoteSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
     INDEX `quoteSettingId` (`quoteSettingId` ASC) ,
-    CONSTRAINT `quotegen_user_quote_settings_ibfk_1`
+    CONSTRAINT `user_quote_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
-    CONSTRAINT `quotegen_user_quote_settings_ibfk_2`
+    CONSTRAINT `user_quote_settings_ibfk_2`
     FOREIGN KEY (`quoteSettingId` )
-    REFERENCES `qgen_quote_settings` (`id` ))
+    REFERENCES `quote_settings` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT)
     ENGINE = InnoDB
     DEFAULT CHARACTER SET = utf8;
 
@@ -1349,32 +1316,32 @@ CREATE  TABLE IF NOT EXISTS `user_roles` (
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_lease_terms`
+-- Table `quote_lease_terms`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_lease_terms` (
+CREATE  TABLE IF NOT EXISTS `quote_lease_terms` (
     `quoteId` INT NOT NULL ,
     `leasingSchemaTermId` INT NOT NULL ,
     PRIMARY KEY (`quoteId`) ,
-    INDEX `fk_qgen_quote_lease_terms_qgen_quotes1_idx` (`quoteId` ASC) ,
-    INDEX `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1_idx` (`leasingSchemaTermId` ASC) ,
+    INDEX `fk_quote_lease_terms_quotes1_idx` (`quoteId` ASC) ,
+    INDEX `fk_quote_lease_terms_leasing_schema_terms1_idx` (`leasingSchemaTermId` ASC) ,
     UNIQUE INDEX `quoteId_UNIQUE` (`quoteId` ASC, `leasingSchemaTermId` ASC) ,
-    CONSTRAINT `fk_qgen_quote_lease_terms_qgen_quotes1`
+    CONSTRAINT `quote_lease_terms_ibfk_1`
     FOREIGN KEY (`quoteId` )
-    REFERENCES `qgen_quotes` (`id` )
+    REFERENCES `quotes` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `fk_qgen_quote_lease_terms_qgen_leasing_schema_terms1`
+    CONSTRAINT `quote_lease_terms_ibfk_2`
     FOREIGN KEY (`leasingSchemaTermId` )
-    REFERENCES `qgen_leasing_schema_terms` (`id` )
+    REFERENCES `leasing_schema_terms` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_groups`
+-- Table `quote_device_groups`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
+CREATE  TABLE IF NOT EXISTS `quote_device_groups` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `quoteId` INT NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
@@ -1382,34 +1349,34 @@ CREATE  TABLE IF NOT EXISTS `qgen_quote_device_groups` (
     `groupPages` TINYINT NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) ,
     INDEX `quotegen_quote_device_groups_ibfk_1_idx` (`quoteId` ASC) ,
-    CONSTRAINT `quotegen_quote_device_groups_ibfk_1`
+    CONSTRAINT `quote_device_groups_ibfk_1`
     FOREIGN KEY (`quoteId` )
-    REFERENCES `qgen_quotes` (`id` )
+    REFERENCES `quotes` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `qgen_quote_device_group_devices`
+-- Table `quote_device_group_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_quote_device_group_devices` (
+CREATE  TABLE IF NOT EXISTS `quote_device_group_devices` (
     `quoteDeviceId` INT NOT NULL ,
     `quoteDeviceGroupId` INT NOT NULL ,
     `quantity` INT NOT NULL DEFAULT 1 ,
     `monochromePagesQuantity` INT NOT NULL ,
     `colorPagesQuantity` INT NOT NULL ,
     PRIMARY KEY (`quoteDeviceGroupId`, `quoteDeviceId`) ,
-    INDEX `qgen_quote_device_group_devices_ibfk1_idx` (`quoteDeviceId` ASC) ,
-    INDEX `qgen_quote_device_group_devices_ibfk2_idx` (`quoteDeviceGroupId` ASC) ,
-    CONSTRAINT `qgen_quote_device_group_devices_ibfk1`
+    INDEX `quote_device_group_devices_ibfk1_idx` (`quoteDeviceId` ASC) ,
+    INDEX `quote_device_group_devices_ibfk2_idx` (`quoteDeviceGroupId` ASC) ,
+    CONSTRAINT `quote_device_group_devices_ibfk1`
     FOREIGN KEY (`quoteDeviceId` )
-    REFERENCES `qgen_quote_devices` (`id` )
+    REFERENCES `quote_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `qgen_quote_device_group_devices_ibfk2`
+    CONSTRAINT `quote_device_group_devices_ibfk2`
     FOREIGN KEY (`quoteDeviceGroupId` )
-    REFERENCES `qgen_quote_device_groups` (`id` )
+    REFERENCES `quote_device_groups` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1495,9 +1462,9 @@ CREATE  TABLE IF NOT EXISTS `regions` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_device_instance_master_devices`
+-- Table `device_instance_master_devices`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_device_instance_master_devices` (
+CREATE  TABLE IF NOT EXISTS `device_instance_master_devices` (
     `deviceInstanceId` INT NOT NULL ,
     `masterDeviceId` INT NOT NULL ,
     PRIMARY KEY (`deviceInstanceId`) ,
@@ -1505,21 +1472,21 @@ CREATE  TABLE IF NOT EXISTS `pgen_device_instance_master_devices` (
     INDEX `device_instance_master_devices_ibfk_2_idx` (`masterDeviceId` ASC) ,
     CONSTRAINT `device_instance_master_devices_ibfk_1`
     FOREIGN KEY (`deviceInstanceId` )
-    REFERENCES `pgen_device_instances` (`id` )
+    REFERENCES `device_instances` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `device_instance_master_devices_ibfk_2`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `pgen_rms_excluded_rows`
+-- Table `rms_excluded_rows`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
+CREATE  TABLE IF NOT EXISTS `rms_excluded_rows` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `rmsUploadId` INT NOT NULL ,
     `rmsProviderId` INT NULL ,
@@ -1534,7 +1501,7 @@ CREATE  TABLE IF NOT EXISTS `pgen_rms_excluded_rows` (
     INDEX `rms_excluded_rows_ibfk_1_idx` (`rmsUploadId` ASC) ,
     CONSTRAINT `rms_excluded_rows_ibfk_1`
     FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
+    REFERENCES `rms_uploads` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1554,12 +1521,12 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
     CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
     CONSTRAINT `device_instance_replacement_master_devices_ibfk2`
     FOREIGN KEY (`deviceInstanceId` )
-    REFERENCES `pgen_device_instances` (`id` )
+    REFERENCES `device_instances` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
     CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
@@ -1636,7 +1603,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
         ON UPDATE CASCADE,
     CONSTRAINT `hardware_optimization_ibfk_2`
     FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
+    REFERENCES `rms_uploads` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1660,7 +1627,7 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
         ON UPDATE CASCADE,
     CONSTRAINT `health_check_ibfk_2`
     FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `pgen_rms_uploads` (`id` )
+    REFERENCES `rms_uploads` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1688,19 +1655,19 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_dealer_report_settings`
+-- Table `dealer_report_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_dealer_report_settings` (
+CREATE  TABLE IF NOT EXISTS `dealer_report_settings` (
     `dealerId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
     INDEX `proposalgenerator_dealer_report_settings_ibfk_1_idx` (`reportSettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_dealer_report_settings_ibfk_1`
+    CONSTRAINT `dealer_report_settings_ibfk_1`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `pgen_report_settings` (`id` )
+    REFERENCES `report_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_dealer_report_settings_ibfk_2`
+    CONSTRAINT `dealer_report_settings_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
@@ -1709,42 +1676,42 @@ CREATE  TABLE IF NOT EXISTS `pgen_dealer_report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `pgen_dealer_survey_settings`
+-- Table `dealer_survey_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `pgen_dealer_survey_settings` (
+CREATE  TABLE IF NOT EXISTS `dealer_survey_settings` (
     `dealerId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
     INDEX `proposalgenerator_dealer_survey_settings_ibfk2_idx` (`surveySettingId` ASC) ,
-    CONSTRAINT `proposalgenerator_dealer_survey_settings_ibfk1`
+    CONSTRAINT `dealer_survey_settings_ibfk1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `proposalgenerator_dealer_survey_settings_ibfk2`
+    CONSTRAINT `dealer_survey_settings_ibfk2`
     FOREIGN KEY (`surveySettingId` )
-    REFERENCES `pgen_survey_settings` (`id` )
+    REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `qgen_dealer_quote_settings`
+-- Table `dealer_quote_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `qgen_dealer_quote_settings` (
+CREATE  TABLE IF NOT EXISTS `dealer_quote_settings` (
     `dealerId` INT(11) NOT NULL ,
     `quoteSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
-    INDEX `qgen_dealer_quote_settings_ibkf2_idx` (`quoteSettingId` ASC) ,
-    CONSTRAINT `qgen_dealer_quote_settings_ibkf1`
+    INDEX `dealer_quote_settings_ibkf2_idx` (`quoteSettingId` ASC) ,
+    CONSTRAINT `dealer_quote_settings_ibkf1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `qgen_dealer_quote_settings_ibkf2`
+    CONSTRAINT `dealer_quote_settings_ibkf2`
     FOREIGN KEY (`quoteSettingId` )
-    REFERENCES `qgen_quote_settings` (`id` )
+    REFERENCES `quote_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1768,7 +1735,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
         ON UPDATE CASCADE,
     CONSTRAINT `dealer_master_device_attributes_ibk2`
     FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `pgen_master_devices` (`id` )
+    REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1787,7 +1754,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     INDEX `dealer_toner_attributes_ibfk2_idx` (`dealerId` ASC) ,
     CONSTRAINT `dealer_toner_attributes_ibfk1`
     FOREIGN KEY (`tonerId` )
-    REFERENCES `pgen_toners` (`id` )
+    REFERENCES `toners` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `dealer_toner_attributes_ibfk2`

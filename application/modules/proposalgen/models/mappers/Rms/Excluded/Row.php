@@ -259,7 +259,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
 
         if ($justCount)
         {
-            $select = $db->select()->from('pgen_rms_excluded_rows', "COUNT(*)")->where('rmsUploadId = ?', $rmsUploadId);
+            $select = $db->select()->from('rms_excluded_rows', "COUNT(*)")->where('rmsUploadId = ?', $rmsUploadId);
 
             return $db->query($select)->fetchColumn();
         }
@@ -296,7 +296,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
                 $offset = ($offset > 0) ? $offset : 0;
             }
 
-            $select = $db->select()->from('pgen_rms_excluded_rows', array('*', 'model' => "CONCAT(manufacturerName, ' ' , modelName)"))->where('rmsUploadId = ?', $rmsUploadId)->order($order)->limit($limit, $offset);
+            $select = $db->select()->from('rms_excluded_rows', array('*', 'model' => "CONCAT(manufacturerName, ' ' , modelName)"))->where('rmsUploadId = ?', $rmsUploadId)->order($order)->limit($limit, $offset);
 
             $query = $db->query($select);
 
