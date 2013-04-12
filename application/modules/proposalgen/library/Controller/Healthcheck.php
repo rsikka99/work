@@ -1,6 +1,10 @@
 <?php
 class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Controller_Proposal
 {
+    /**
+     * @var Proposalgen_Model_HealthCheck
+     */
+    protected $_report;
 
     public function initReportList ()
     {
@@ -81,7 +85,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->stepName) ? : Proposalgen_Model_HealthCheck_Step::STEP_SURVEY;
+        $stage = ($this->getReport()->stepName) ? : Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD;
         Proposalgen_Model_HealthCheck_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
