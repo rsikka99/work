@@ -157,11 +157,21 @@ class Default_IndexController extends Tangent_Controller_Action
             }
             else if (isset($postData['createHardwareOptimization']))
             {
-                $this->redirector('index', 'index', 'hardwareoptimization');
+                $hardwareOptimizationId = $this->_createNewHardwareOptimization();
+                $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
             }
         }
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/default/clientSearch.js'));
+    }
+
+    protected function _createNewHardwareOptimization ()
+    {
+        $hardwareOptimization           = new Proposalgen_Model_Hardware_Optimization;
+        $hardwareOptimization->clientId = $this->_selectedClientId;
+        $hardwareOptimizationId         = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
+
+        return $hardwareOptimizationId;
     }
 
     /**
@@ -176,7 +186,7 @@ class Default_IndexController extends Tangent_Controller_Action
         /**
          * If we are not allowed here
          */
-        if(!$this->view->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_QUOTE_INDEX,Application_Model_Acl::PRIVILEGE_VIEW))
+        if (!$this->view->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_QUOTE_INDEX, Application_Model_Acl::PRIVILEGE_VIEW))
         {
             $this->_flashMessenger->addMessage(array(
                                                     'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
@@ -247,7 +257,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
             // Create Client
             $values['dealerId'] = Zend_Auth::getInstance()->getIdentity()->dealerId;
-            $clientId = $clientService->create($values);
+            $clientId           = $clientService->create($values);
 
             if ($clientId)
             {
