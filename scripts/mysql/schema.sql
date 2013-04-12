@@ -306,7 +306,7 @@ CREATE  TABLE IF NOT EXISTS `device_instances` (
     `serialNumber` VARCHAR(255) NOT NULL DEFAULT '' ,
     `useUserData` TINYINT(4) NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) ,
-    INDEX `rmsUploadRowId` (`rmsUploadRowId` ASC) ,
+    INDEX `device_instances_ibfk_2_idx` (`rmsUploadRowId` ASC) ,
     INDEX `device_instances_ibfk_1_idx` (`rmsUploadId` ASC) ,
     CONSTRAINT `device_instances_ibfk_1`
     FOREIGN KEY (`rmsUploadId` )
@@ -381,9 +381,9 @@ CREATE  TABLE IF NOT EXISTS `toners` (
     `tonerColorId` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
     UNIQUE INDEX `sku` (`sku` ASC, `manufacturerId` ASC) ,
-    INDEX `part_type_id` (`partTypeId` ASC) ,
-    INDEX `toner_color_id` (`tonerColorId` ASC) ,
-    INDEX `proposalgenerator_toners_ibfk_2_idx` (`manufacturerId` ASC) ,
+    INDEX `toners_ibfk_1_idx` (`partTypeId` ASC) ,
+    INDEX `toners_ibfk_3_idx` (`tonerColorId` ASC) ,
+    INDEX `toners_ibfk_2_idx` (`manufacturerId` ASC) ,
     CONSTRAINT `toners_ibfk_1`
     FOREIGN KEY (`partTypeId` )
     REFERENCES `part_types` (`id` )
@@ -443,8 +443,8 @@ CREATE  TABLE IF NOT EXISTS `master_devices` (
     `wattsPowerIdle` DOUBLE NULL ,
     `reportsTonerLevels` TINYINT NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) ,
-    INDEX `toner_config_id` (`tonerConfigId` ASC) ,
-    INDEX `proposalgenerator_master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
+    INDEX `master_devices_ibfk_2_idx` (`tonerConfigId` ASC) ,
+    INDEX `master_devices_ibfk_1_idx` (`manufacturerId` ASC) ,
     CONSTRAINT `master_devices_ibfk_2`
     FOREIGN KEY (`tonerConfigId` )
     REFERENCES `toner_configs` (`id` )
@@ -467,7 +467,7 @@ CREATE  TABLE IF NOT EXISTS `device_toners` (
     `toner_id` INT(11) NOT NULL ,
     `master_device_id` INT(11) NOT NULL ,
     PRIMARY KEY (`toner_id`, `master_device_id`) ,
-    INDEX `master_device_id` (`master_device_id` ASC) ,
+    INDEX `device_toners_ibfk_2_idx` (`master_device_id` ASC) ,
     CONSTRAINT `device_toners_ibfk_1`
     FOREIGN KEY (`toner_id` )
     REFERENCES `toners` (`id` )
@@ -514,8 +514,8 @@ CREATE  TABLE IF NOT EXISTS `pricing_configs` (
     `mono_toner_part_type_id` INT(11) NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
     UNIQUE INDEX `name` (`name` ASC) ,
-    INDEX `color_toner_part_type_id` (`color_toner_part_type_id` ASC) ,
-    INDEX `mono_toner_part_type_id` (`mono_toner_part_type_id` ASC) ,
+    INDEX `pricing_configs_ibfk_1_idx` (`color_toner_part_type_id` ASC) ,
+    INDEX `pricing_configs_ibfk_2_idx` (`mono_toner_part_type_id` ASC) ,
     CONSTRAINT `pricing_configs_ibfk_1`
     FOREIGN KEY (`color_toner_part_type_id` )
     REFERENCES `part_types` (`id` )
@@ -572,17 +572,23 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
     `reportDate` DATETIME NULL DEFAULT NULL ,
     `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
     PRIMARY KEY (`id`) ,
-    INDEX `proposalgenerator_reports_ibfk_3_idx` (`clientId` ASC) ,
-    INDEX `assessments_ibfk_3_idx` (`rmsUploadId` ASC) ,
-    CONSTRAINT `assessments_ibfk_2`
+    INDEX `assessments_ibfk_1_idx` (`clientId` ASC) ,
+    INDEX `assessments_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    INDEX `assessments_ibfk_3_idx` (`dealerId` ASC) ,
+    CONSTRAINT `assessments_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `assessments_ibfk_3`
+    CONSTRAINT `assessments_ibfk_2`
     FOREIGN KEY (`rmsUploadId` )
     REFERENCES `rms_uploads` (`id` )
         ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `assessments_ibfk_3`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
     AUTO_INCREMENT = 2
@@ -616,9 +622,9 @@ CREATE  TABLE IF NOT EXISTS `report_settings` (
     `costThreshold` DOUBLE NULL DEFAULT NULL ,
     `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `assessmentPricingConfigId` (`assessmentPricingConfigId` ASC) ,
-    INDEX `grossMarginPricingConfigId` (`grossMarginPricingConfigId` ASC) ,
-    INDEX `proposalgenerator_report_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
+    INDEX `report_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
+    INDEX `report_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,
+    INDEX `report_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
     CONSTRAINT `report_settings_ibfk_1`
     FOREIGN KEY (`assessmentPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
@@ -646,7 +652,7 @@ CREATE  TABLE IF NOT EXISTS `report_report_settings` (
     `reportId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`reportId`) ,
-    INDEX `report_setting_id` (`reportSettingId` ASC) ,
+    INDEX `report_report_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
     CONSTRAINT `report_report_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
@@ -681,7 +687,7 @@ CREATE  TABLE IF NOT EXISTS `report_survey_settings` (
     `reportId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`reportId`) ,
-    INDEX `survey_setting_id` (`surveySettingId` ASC) ,
+    INDEX `report_survey_settings_ibfk_2_idx` (`surveySettingId` ASC) ,
     CONSTRAINT `report_survey_settings_ibfk_1`
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
@@ -705,7 +711,7 @@ CREATE  TABLE IF NOT EXISTS `rms_user_matchups` (
     `masterDeviceId` INT(11) NOT NULL ,
     `userId` INT(11) NOT NULL ,
     PRIMARY KEY (`rmsProviderId`, `rmsModelId`) ,
-    INDEX `user_id` (`userId` ASC) ,
+    INDEX `rms_user_matchups_ibfk_3_idx` (`userId` ASC) ,
     INDEX `rms_user_matchups_ibfk_1_idx` (`masterDeviceId` ASC) ,
     CONSTRAINT `rms_user_matchups_ibfk_2`
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
@@ -733,7 +739,7 @@ CREATE  TABLE IF NOT EXISTS `user_report_settings` (
     `userId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
-    INDEX `report_setting_id` (`reportSettingId` ASC) ,
+    INDEX `user_report_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
     CONSTRAINT `user_report_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -755,7 +761,7 @@ CREATE  TABLE IF NOT EXISTS `user_survey_settings` (
     `userId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
-    INDEX `survey_setting_id` (`surveySettingId` ASC) ,
+    INDEX `user_survey_settings_ibfk_2_idx` (`surveySettingId` ASC) ,
     CONSTRAINT `user_survey_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -801,8 +807,8 @@ CREATE  TABLE IF NOT EXISTS `devices` (
     `oemSku` VARCHAR(255) NOT NULL ,
     `description` TEXT NULL ,
     PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
-    INDEX `quotegen_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
-    INDEX `quotegen_devices_ibfk_2_idx` (`dealerId` ASC) ,
+    INDEX `devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
+    INDEX `devices_ibfk_2_idx` (`dealerId` ASC) ,
     CONSTRAINT `devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
@@ -827,7 +833,7 @@ CREATE  TABLE IF NOT EXISTS `device_configurations` (
     `name` VARCHAR(255) NOT NULL ,
     `description` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `masterDeviceId` (`masterDeviceId` ASC) ,
+    INDEX `device_configurations_ibfk_1_idx` (`masterDeviceId` ASC) ,
     INDEX `device_configurations_ibfk_2_idx` (`dealerId` ASC) ,
     CONSTRAINT `device_configurations_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
@@ -855,7 +861,7 @@ CREATE  TABLE IF NOT EXISTS `options` (
     `dealerSku` VARCHAR(255) NULL ,
     `oemSku` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `options_ibfk_1_idx` (`dealerId` ASC) ,
+    INDEX `qgen_options_ibfk_1_idx` (`dealerId` ASC) ,
     CONSTRAINT `options_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
@@ -874,7 +880,7 @@ CREATE  TABLE IF NOT EXISTS `device_configuration_options` (
     `optionId` INT(11) NOT NULL ,
     `quantity` INT(11) NOT NULL DEFAULT 1 ,
     PRIMARY KEY (`deviceConfigurationId`, `optionId`) ,
-    INDEX `optionId` (`optionId` ASC) ,
+    INDEX `device_configuration_options_ibfk_2_idx` (`optionId` ASC) ,
     CONSTRAINT `device_configuration_options_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
     REFERENCES `device_configurations` (`id` )
@@ -898,8 +904,8 @@ CREATE  TABLE IF NOT EXISTS `device_options` (
     `dealerId` INT(11) NOT NULL ,
     `includedQuantity` INT(11) NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`masterDeviceId`, `optionId`) ,
-    INDEX `optionId` (`optionId` ASC) ,
-    INDEX `quotegen_device_options_ibfk_3_idx` (`dealerId` ASC) ,
+    INDEX `device_options_ibfk_2_idx` (`optionId` ASC) ,
+    INDEX `device_options_ibfk_3_idx` (`dealerId` ASC) ,
     CONSTRAINT `device_options_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `devices` (`masterDeviceId` )
@@ -942,7 +948,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schemas` (
     `dealerId` INT(11) NOT NULL ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `leasing_schemas_ibfk_1_idx` (`dealerId` ASC) ,
+    INDEX `qgen_leasing_schemas_ibfk_1_idx` (`dealerId` ASC) ,
     CONSTRAINT `leasing_schemas_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
@@ -960,7 +966,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schemas` (
 CREATE  TABLE IF NOT EXISTS `global_leasing_schemas` (
     `leasingSchemaId` INT(11) NOT NULL AUTO_INCREMENT ,
     PRIMARY KEY (`leasingSchemaId`) ,
-    INDEX `quotegen_global_leasing_schemas_ibfk_1_idx` (`leasingSchemaId` ASC) ,
+    INDEX `global_leasing_schemas_ibfk_1_idx` (`leasingSchemaId` ASC) ,
     CONSTRAINT `global_leasing_schemas_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
     REFERENCES `leasing_schemas` (`id` )
@@ -979,7 +985,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_ranges` (
     `leasingSchemaId` INT(11) NOT NULL ,
     `startRange` DOUBLE NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
+    INDEX `leasing_schema_ranges_ibfk_1_idx` (`leasingSchemaId` ASC) ,
     CONSTRAINT `leasing_schema_ranges_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
     REFERENCES `leasing_schemas` (`id` )
@@ -999,7 +1005,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_terms` (
     `leasingSchemaId` INT(11) NOT NULL ,
     `months` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `leasingSchemaId` (`leasingSchemaId` ASC) ,
+    INDEX `leasing_schema_terms_ibfk_1_idx` (`leasingSchemaId` ASC) ,
     CONSTRAINT `leasing_schema_terms_ibfk_1`
     FOREIGN KEY (`leasingSchemaId` )
     REFERENCES `leasing_schemas` (`id` )
@@ -1019,8 +1025,8 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_rates` (
     `leasingSchemaRangeId` INT(11) NOT NULL ,
     `rate` DOUBLE NOT NULL ,
     PRIMARY KEY (`leasingSchemaTermId`, `leasingSchemaRangeId`) ,
-    INDEX `leasingSchemaTermId` (`leasingSchemaTermId` ASC) ,
-    INDEX `leasingSchemaRangeId` (`leasingSchemaRangeId` ASC) ,
+    INDEX `leasing_schema_rates_ibfk_1_idx` (`leasingSchemaTermId` ASC) ,
+    INDEX `leasing_schema_rates_ibfk_2_idx` (`leasingSchemaRangeId` ASC) ,
     CONSTRAINT `leasing_schema_rates_ibfk_1`
     FOREIGN KEY (`leasingSchemaTermId` )
     REFERENCES `leasing_schema_terms` (`id` )
@@ -1080,8 +1086,8 @@ CREATE  TABLE IF NOT EXISTS `quotes` (
     `monochromeOverageMargin` DOUBLE NOT NULL ,
     `colorOverageMargin` DOUBLE NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `clientId` (`clientId` ASC) ,
-    INDEX `quotegen_quotes_ibfk_3_idx` (`pricingConfigId` ASC) ,
+    INDEX `quotes_ibfk_1_idx` (`clientId` ASC) ,
+    INDEX `quotes_ibfk_2_idx` (`pricingConfigId` ASC) ,
     CONSTRAINT `quotes_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1118,7 +1124,7 @@ CREATE  TABLE IF NOT EXISTS `quote_devices` (
     `margin` DOUBLE NOT NULL ,
     `tonerConfigId` INT NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `quoteId` (`quoteId` ASC) ,
+    INDEX `quote_devices_ibfk_1_idx` (`quoteId` ASC) ,
     CONSTRAINT `quote_devices_ibfk_1`
     FOREIGN KEY (`quoteId` )
     REFERENCES `quotes` (`id` )
@@ -1143,7 +1149,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_options` (
     `quantity` INT(11) NOT NULL ,
     `includedQuantity` INT(11) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `quoteDeviceId` (`quoteDeviceId` ASC) ,
+    INDEX `quote_device_options_ibfk_1_idx` (`quoteDeviceId` ASC) ,
     CONSTRAINT `quote_device_options_ibfk_1`
     FOREIGN KEY (`quoteDeviceId` )
     REFERENCES `quote_devices` (`id` )
@@ -1214,8 +1220,8 @@ CREATE  TABLE IF NOT EXISTS `quote_settings` (
     `pricingConfigId` INT(11) NULL DEFAULT NULL ,
     `adminCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `quotegen_quote_settings_ibfk1_idx` (`pricingConfigId` ASC) ,
-    CONSTRAINT `quote_settings_ibfk1`
+    INDEX `quote_settings_ibfk_1_idx` (`pricingConfigId` ASC) ,
+    CONSTRAINT `quote_settings_ibfk_1`
     FOREIGN KEY (`pricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
@@ -1232,7 +1238,7 @@ CREATE  TABLE IF NOT EXISTS `user_device_configurations` (
     `deviceConfigurationId` INT(11) NOT NULL ,
     `userId` INT(11) NOT NULL ,
     PRIMARY KEY (`deviceConfigurationId`, `userId`) ,
-    INDEX `userId` (`userId` ASC) ,
+    INDEX `user_device_configurations_ibfk_2_idx` (`userId` ASC) ,
     CONSTRAINT `user_device_configurations_ibfk_1`
     FOREIGN KEY (`deviceConfigurationId` )
     REFERENCES `device_configurations` (`id` )
@@ -1254,7 +1260,7 @@ CREATE  TABLE IF NOT EXISTS `user_quote_settings` (
     `userId` INT(11) NOT NULL ,
     `quoteSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`) ,
-    INDEX `quoteSettingId` (`quoteSettingId` ASC) ,
+    INDEX `user_quote_settings_ibfk_2_idx` (`quoteSettingId` ASC) ,
     CONSTRAINT `user_quote_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` ),
@@ -1300,13 +1306,13 @@ CREATE  TABLE IF NOT EXISTS `user_roles` (
     `userId` INT(11) NOT NULL ,
     `roleId` INT(11) NOT NULL ,
     PRIMARY KEY (`userId`, `roleId`) ,
-    INDEX `FK_userRoles_roles_idx` (`roleId` ASC) ,
-    CONSTRAINT `FK_userRoles_users`
+    INDEX `roles_ibfk_2_idx` (`roleId` ASC) ,
+    CONSTRAINT `roles_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `FK_userRoles_roles`
+    CONSTRAINT `roles_ibfk_2`
     FOREIGN KEY (`roleId` )
     REFERENCES `roles` (`id` )
         ON DELETE CASCADE
@@ -1322,8 +1328,8 @@ CREATE  TABLE IF NOT EXISTS `quote_lease_terms` (
     `quoteId` INT NOT NULL ,
     `leasingSchemaTermId` INT NOT NULL ,
     PRIMARY KEY (`quoteId`) ,
-    INDEX `fk_quote_lease_terms_quotes1_idx` (`quoteId` ASC) ,
-    INDEX `fk_quote_lease_terms_leasing_schema_terms1_idx` (`leasingSchemaTermId` ASC) ,
+    INDEX `quote_lease_terms_ibfk_1_idx` (`quoteId` ASC) ,
+    INDEX `quote_lease_terms_ibfk_2_idx` (`leasingSchemaTermId` ASC) ,
     UNIQUE INDEX `quoteId_UNIQUE` (`quoteId` ASC, `leasingSchemaTermId` ASC) ,
     CONSTRAINT `quote_lease_terms_ibfk_1`
     FOREIGN KEY (`quoteId` )
@@ -1348,7 +1354,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_groups` (
     `isDefault` TINYINT NOT NULL DEFAULT 0 ,
     `groupPages` TINYINT NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) ,
-    INDEX `quotegen_quote_device_groups_ibfk_1_idx` (`quoteId` ASC) ,
+    INDEX `quote_device_groups_ibfk_1_idx` (`quoteId` ASC) ,
     CONSTRAINT `quote_device_groups_ibfk_1`
     FOREIGN KEY (`quoteId` )
     REFERENCES `quotes` (`id` )
@@ -1367,8 +1373,8 @@ CREATE  TABLE IF NOT EXISTS `quote_device_group_devices` (
     `monochromePagesQuantity` INT NOT NULL ,
     `colorPagesQuantity` INT NOT NULL ,
     PRIMARY KEY (`quoteDeviceGroupId`, `quoteDeviceId`) ,
-    INDEX `quote_device_group_devices_ibfk1_idx` (`quoteDeviceId` ASC) ,
-    INDEX `quote_device_group_devices_ibfk2_idx` (`quoteDeviceGroupId` ASC) ,
+    INDEX `qgen_quote_device_group_devices_ibfk1_idx` (`quoteDeviceId` ASC) ,
+    INDEX `qgen_quote_device_group_devices_ibfk2_idx` (`quoteDeviceGroupId` ASC) ,
     CONSTRAINT `quote_device_group_devices_ibfk1`
     FOREIGN KEY (`quoteDeviceId` )
     REFERENCES `quote_devices` (`id` )
@@ -1514,17 +1520,17 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     `deviceInstanceId` INT(11) NOT NULL ,
     `hardwareOptimizationId` INT(11) NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
-    INDEX `device_instance_replacement_master_devices_ibfk1_idx` (`masterDeviceId` ASC) ,
-    INDEX `device_instance_replacement_master_devices_ibfk2_idx` (`deviceInstanceId` ASC) ,
+    INDEX `device_instance_replacement_master_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
+    INDEX `device_instance_replacement_master_devices_ibfk_2_idx` (`deviceInstanceId` ASC) ,
     PRIMARY KEY (`deviceInstanceId`) ,
     UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
     INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk1`
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk2`
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_2`
     FOREIGN KEY (`deviceInstanceId` )
     REFERENCES `device_instances` (`id` )
         ON DELETE NO ACTION
@@ -1568,7 +1574,7 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
 CREATE  TABLE IF NOT EXISTS `user_sessions` (
     `sessionId` CHAR(32) NOT NULL ,
     `userId` INT NOT NULL ,
-    INDEX `user_sessions_ibfk_1` (`userId` ASC) ,
+    INDEX `user_sessions_ibfk_1_idx` (`userId` ASC) ,
     UNIQUE INDEX `sessionId_UNIQUE` (`sessionId` ASC) ,
     UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) ,
     PRIMARY KEY (`sessionId`) ,
@@ -1613,13 +1619,21 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
 -- Table `health_checks`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `health_checks` (
-    `id` INT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT ,
     `clientId` INT(11) NOT NULL ,
+    `dealerId` INT NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
-    `name` VARCHAR(255) NULL ,
+    `name` VARCHAR(255) NOT NULL ,
+    `stepName` INT NULL ,
+    `dateCreated` DATETIME NOT NULL ,
+    `lastModified` DATETIME NOT NULL ,
+    `reportDate` DATETIME NULL ,
+    `reportSettingId` INT NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `health_check_ibfk_1_idx` (`clientId` ASC) ,
     INDEX `health_check_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    INDEX `health_check_ibfk_3_idx` (`dealerId` ASC) ,
+    INDEX `health_check_ibfk_4_idx` (`reportSettingId` ASC) ,
     CONSTRAINT `health_check_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1629,6 +1643,16 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
     FOREIGN KEY (`rmsUploadId` )
     REFERENCES `rms_uploads` (`id` )
         ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `health_check_ibfk_3`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `health_check_ibfk_4`
+    FOREIGN KEY (`reportSettingId` )
+    REFERENCES `report_settings` (`id` )
+        ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
@@ -1645,8 +1669,8 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     `userId` INT NOT NULL ,
     `resetUsed` TINYINT(1) NOT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `user_password_reset_requests_ibfk1_idx` (`userId` ASC) ,
-    CONSTRAINT `user_password_reset_requests_ibfk1`
+    INDEX `user_password_reset_requests_ibfk_1_idx` (`userId` ASC) ,
+    CONSTRAINT `user_password_reset_requests_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
@@ -1661,7 +1685,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_report_settings` (
     `dealerId` INT(11) NOT NULL ,
     `reportSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
-    INDEX `proposalgenerator_dealer_report_settings_ibfk_1_idx` (`reportSettingId` ASC) ,
+    INDEX `dealer_report_settings_ibfk_1_idx` (`reportSettingId` ASC) ,
     CONSTRAINT `dealer_report_settings_ibfk_1`
     FOREIGN KEY (`reportSettingId` )
     REFERENCES `report_settings` (`id` )
@@ -1682,7 +1706,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_survey_settings` (
     `dealerId` INT(11) NOT NULL ,
     `surveySettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
-    INDEX `proposalgenerator_dealer_survey_settings_ibfk2_idx` (`surveySettingId` ASC) ,
+    INDEX `dealer_survey_settings_ibfk2_idx` (`surveySettingId` ASC) ,
     CONSTRAINT `dealer_survey_settings_ibfk1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
@@ -1703,13 +1727,13 @@ CREATE  TABLE IF NOT EXISTS `dealer_quote_settings` (
     `dealerId` INT(11) NOT NULL ,
     `quoteSettingId` INT(11) NOT NULL ,
     PRIMARY KEY (`dealerId`) ,
-    INDEX `dealer_quote_settings_ibkf2_idx` (`quoteSettingId` ASC) ,
-    CONSTRAINT `dealer_quote_settings_ibkf1`
+    INDEX `dealer_quote_settings_ibkf_2_idx` (`quoteSettingId` ASC) ,
+    CONSTRAINT `dealer_quote_settings_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `dealer_quote_settings_ibkf2`
+    CONSTRAINT `dealer_quote_settings_ibfk_2`
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `quote_settings` (`id` )
         ON DELETE CASCADE
@@ -1726,14 +1750,14 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
     `laborCostPerPage` DOUBLE NULL ,
     `partsCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
-    INDEX `dealer_master_device_attributes_ibk1_idx` (`dealerId` ASC) ,
-    INDEX `dealer_master_device_attributes_ibk2_idx` (`masterDeviceId` ASC) ,
-    CONSTRAINT `dealer_master_device_attributes_ibk1`
+    INDEX `dealer_master_device_attributes_ibfk_1_idx` (`dealerId` ASC) ,
+    INDEX `dealer_master_device_attributes_ibfk_2_idx` (`masterDeviceId` ASC) ,
+    CONSTRAINT `dealer_master_device_attributes_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `dealer_master_device_attributes_ibk2`
+    CONSTRAINT `dealer_master_device_attributes_ibfk_2`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
@@ -1750,14 +1774,14 @@ CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     `cost` DOUBLE NULL ,
     `dealerSku` VARCHAR(255) NULL ,
     PRIMARY KEY (`tonerId`, `dealerId`) ,
-    INDEX `dealer_toner_attributes_ibfk1_idx` (`tonerId` ASC) ,
-    INDEX `dealer_toner_attributes_ibfk2_idx` (`dealerId` ASC) ,
-    CONSTRAINT `dealer_toner_attributes_ibfk1`
+    INDEX `dealer_toner_attributes_ibfk_1_idx` (`tonerId` ASC) ,
+    INDEX `dealer_toner_attributes_ibfk_2_idx` (`dealerId` ASC) ,
+    CONSTRAINT `dealer_toner_attributes_ibfk_1`
     FOREIGN KEY (`tonerId` )
     REFERENCES `toners` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `dealer_toner_attributes_ibfk2`
+    CONSTRAINT `dealer_toner_attributes_ibfk_2`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
