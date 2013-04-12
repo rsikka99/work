@@ -10,13 +10,13 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = (object)array(
-            "Reports"                      => (object)array(
+            "Reports"     => (object)array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
             ),
 
-            "HealthCheck"                  => (object)array(
+            "HealthCheck" => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')

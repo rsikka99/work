@@ -5,7 +5,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
     public $proposal;
     protected $_graphs = array();
     const GALLONS_WATER_PER_PAGE = 0.121675; // Number of pages * this gives amount of gallons
-    const TREE_PER_PAGE = 7800;//Number of pages divided by this, gives amount of trees
+    const TREE_PER_PAGE = 7800; //Number of pages divided by this, gives amount of trees
     public $reportSettings;
 
     /**
@@ -23,16 +23,16 @@ class Proposalgen_Model_HealthCheck_HealthCheck
 
         if ($this->_graphs == null)
         {
-            $this->_graphs       = $this->proposal->getGraphs();
-            $healthgraphs        = array();
-            $numberValueMarker   = "N *sz0";
-            $currencyValueMarker = "N $*sz0";
-            $pageCounts          = $this->proposal->getPageCounts();
-            $companyName   = $this->proposal->report->getClient()->companyName;
+            $this->_graphs                     = $this->proposal->getGraphs();
+            $healthgraphs                      = array();
+            $numberValueMarker                 = "N *sz0";
+            $currencyValueMarker               = "N $*sz0";
+            $pageCounts                        = $this->proposal->getPageCounts();
+            $companyName                       = $this->proposal->report->getClient()->companyName;
             $OD_AverageMonthlyPagesPerEmployee = 200;
             $OD_AverageMonthlyPages            = 4200;
             $OD_AverageEmployeesPerDevice      = 4.4;
-            $employeeCount = $this->proposal->report->getClient()->employeeCount;
+            $employeeCount                     = $this->proposal->report->getClient()->employeeCount;
             /**
              * -- PagesPrinterATRPieGraph
              */
@@ -602,8 +602,9 @@ class Proposalgen_Model_HealthCheck_HealthCheck
             // Graphs CopyCapableDevicesGraph
             $healthgraphs['CopyCapableDevicesGraph'] = $copyCapableGraph->getUrl();
 
-            $this->_graphs = array_merge($healthgraphs,$this->_graphs);
+            $this->_graphs = array_merge($healthgraphs, $this->_graphs);
         }
+
         return $this->_graphs;
     }
 
@@ -612,7 +613,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
      *
      * @return float
      */
-    public function calculateNumberOfTreesUsed()
+    public function calculateNumberOfTreesUsed ()
     {
         return $this->proposal->getPageCounts()->Total->Combined->Yearly / self::TREE_PER_PAGE;
     }
@@ -622,7 +623,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
      *
      * @return float
      */
-    public function calculateQuarterOfNumberOfTreesUsed()
+    public function calculateQuarterOfNumberOfTreesUsed ()
     {
         return $this->calculateNumberOfTreesUsed() * .25;
     }
@@ -632,7 +633,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
      *
      * @return float
      */
-    public function calculateNumberOfGallonsWaterUsed()
+    public function calculateNumberOfGallonsWaterUsed ()
     {
         return $this->proposal->getPageCounts()->Total->Combined->Yearly * self::GALLONS_WATER_PER_PAGE;
     }
@@ -642,7 +643,7 @@ class Proposalgen_Model_HealthCheck_HealthCheck
      *
      * @return float
      */
-    public function calculateQuarterOfNumberOfGallonsWaterUsed()
+    public function calculateQuarterOfNumberOfGallonsWaterUsed ()
     {
         return $this->calculateNumberOfGallonsWaterUsed() * .25;
     }

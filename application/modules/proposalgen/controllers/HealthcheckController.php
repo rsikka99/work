@@ -15,7 +15,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         $rmsExcludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
         $this->saveReport(true);
 
-        $rmsUpload = $report->getRmsUpload();
+        $rmsUpload        = $report->getRmsUpload();
         $this->view->form = $form;
 
         $this->view->rmsUpload = $rmsUpload;
@@ -48,7 +48,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             {
                 $this->gotoPreviousStep();
             }
-        else
+            else
             {
                 $reportSettings = new Proposalgen_Model_Report_Setting();
                 $reportSettings->populate($values);

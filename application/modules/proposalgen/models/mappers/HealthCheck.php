@@ -219,7 +219,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     public function fetchAllUnfinishedHealthChecksForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"       => $clientId,
+                                    "{$this->col_clientId} = ?"  => $clientId,
                                     "{$this->col_stepName} <> ?" => Proposalgen_Model_HealthCheck_Step::STEP_FINISHED
                                ));
     }
@@ -234,7 +234,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     public function fetchAllFinishedHealthChecksForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"      => $clientId,
+                                    "{$this->col_clientId} = ?" => $clientId,
                                     "{$this->col_stepName} = ?" => Proposalgen_Model_HealthCheck_Step::STEP_FINISHED
                                ));
     }
