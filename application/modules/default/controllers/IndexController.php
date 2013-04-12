@@ -60,6 +60,9 @@ class Default_IndexController extends Tangent_Controller_Action
 
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableQuotes = $availableQuotes;
+
+            $availableHealthChecks             = Proposalgen_Model_Mapper_HealthCheck::getInstance()->fetchAllHealthChecksForClient($this->_selectedClientId);
+            $this->view->availableHealthCHecks = $availableHealthChecks;
         }
         if ($this->getRequest()->isPost())
         {
@@ -154,6 +157,24 @@ class Default_IndexController extends Tangent_Controller_Action
             {
                 $selectedQuoteId = $this->_createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED);
                 $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
+            }
+            else if (isset($postData['selectHealthCheck']))
+            {
+                $selectedReportId = $postData['selectHealthCheck'];
+
+                $validReportIds = array(0);
+                foreach ($availableReports as $report)
+                {
+                    $validReportIds[] = $report->id;
+                }
+
+                $inArray = new Zend_Validate_InArray($validReportIds);
+
+                if ($inArray->isValid($selectedReportId))
+                {
+                    $this->_proposalSession->reportId = $selectedReportId;
+                    $this->redirector('index', 'survey', 'proposalgen');
+                }
             }
         }
 

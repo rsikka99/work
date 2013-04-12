@@ -146,12 +146,40 @@
                         </form>
                     </div>
                     <div class="tab-pane" id="healthCheckTabPane">
-                        <div class="hero-unit">
-                            <h1>In Progress</h1>
+                        <form method="POST">
+                            <table class="table table-striped table-condensed table-bordered">
+                                <tr>
+                                    <th>Date Created</th>
+                                    <th>Last Modified</th>
+                                    <th>Finished</th>
+                                    <th style="width: 70px;">Action</th>
+                                </tr>
+                                <tr class="info">
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align: center;">
+                                        <button name="selectHealthCheck" value="0" class="btn btn-success btn-mini">Start New</button>
+                                    </td>
+                                </tr>
+                                <?php foreach ($this->availableHealthCHecks as $report) : /* @var $report Proposalgen_Model_HealthCheck */ ?>
+                                    <tr class="<?php echo ($report->stepName == Proposalgen_Model_HealthCheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
+                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
 
-                            <p>A health check is currently a report available at the end of an assessment. We are working towards moving health checks to be
-                                located here. The will be independent of an assessment once they are moved.</p>
-                        </div>
+                                        <?php if ($report->stepName == Proposalgen_Model_HealthCheck_Step::STEP_FINISHED) : ?>
+                                            <td>Finished</td>
+
+                                        <?php else : ?>
+                                            <td>In Progress</td>
+                                        <?php endif; ?>
+                                        <td style="text-align: center;">
+                                            <button name="selectHealthCheck" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </table>
+                        </form>
                     </div>
                     <div class="tab-pane" id="hardwareOptimizationTabPane">
                         <div class="hero-unit">
