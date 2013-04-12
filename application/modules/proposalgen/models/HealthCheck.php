@@ -41,6 +41,11 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
      */
     public $reportDate;
 
+    /**
+     * @var int
+     */
+    public $reportSettingId;
+
 
     // Non database fields
     /**
@@ -97,6 +102,11 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
             $this->rmsUploadId = $params->rmsUploadId;
         }
 
+        if (isset($params->reportSettingId) && !is_null($params->reportSettingId))
+        {
+            $this->reportSettingId = $params->reportSettingId;
+        }
+
         if (isset($params->stepName) && !is_null($params->stepName))
         {
             $this->stepName = $params->stepName;
@@ -125,14 +135,15 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                  => $this->id,
-            "clientId"            => $this->clientId,
-            "dealerId"            => $this->dealerId,
-            "rmsUploadId"         => $this->rmsUploadId,
-            "stepName"            => $this->stepName,
-            "dateCreated"         => $this->dateCreated,
-            "lastModified"        => $this->lastModified,
-            "reportDate"          => $this->reportDate,
+            "id"              => $this->id,
+            "clientId"        => $this->clientId,
+            "dealerId"        => $this->dealerId,
+            "reportSettingId" => $this->reportSettingId,
+            "rmsUploadId"     => $this->rmsUploadId,
+            "stepName"        => $this->stepName,
+            "dateCreated"     => $this->dateCreated,
+            "lastModified"    => $this->lastModified,
+            "reportDate"      => $this->reportDate,
         );
     }
 
@@ -145,7 +156,7 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchReportReportSetting($this->id);
+            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find($this->reportSettingId);
         }
 
         return $this->_reportSettings;
@@ -227,34 +238,6 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
         return $this;
     }
 
-    /**
-     * Gets the survey
-     *
-     * @return Proposalgen_Model_HealthCheck_Survey
-     */
-    public function getSurvey ()
-    {
-        if (!isset($this->_survey))
-        {
-            $this->_survey = Proposalgen_Model_Mapper_HealthCheck_Survey::getInstance()->find($this->id);
-        }
-
-        return $this->_survey;
-    }
-
-    /**
-     * Sets the survey
-     *
-     * @param Proposalgen_Model_HealthCheck_Survey $survey
-     *
-     * @return Proposalgen_Model_HealthCheck
-     */
-    public function setSurvey ($survey)
-    {
-        $this->_survey = $survey;
-
-        return $this;
-    }
 
     /**
      * Gets the rms upload
