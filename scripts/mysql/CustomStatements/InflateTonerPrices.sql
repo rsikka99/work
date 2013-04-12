@@ -1,4 +1,4 @@
--- UPDATE pgen_toners SET cost=ROUND(cost / (1 - ((5.5 - RAND() * 2) / 100)));
+-- UPDATE toners SET cost=ROUND(cost / (1 - ((5.5 - RAND() * 2) / 100)));
 
 /*
  * This calculation will inflate prices by a random factor.
@@ -8,4 +8,4 @@
 SELECT
     cost                                             AS originalCost,
     (ROUND(cost / (1 - ((5.5 - RAND() * 2) / 100)))) AS newCost
-FROM pgen_toners;
+FROM toners;

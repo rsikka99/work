@@ -1,7 +1,7 @@
 SELECT
-    pgen_master_devices.*,
-    pgen_toner_configs.name   AS TonerConfiguration,
+    master_devices.*,
+    toner_configs.name   AS TonerConfiguration,
     manufacturers.displayname AS manufacturer
-FROM `pgen_master_devices`
-    JOIN pgen_toner_configs ON pgen_master_devices.tonerConfigId = pgen_toner_configs.id
-    JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
+FROM `master_devices`
+    JOIN toner_configs ON master_devices.tonerConfigId = toner_configs.id
+    JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id

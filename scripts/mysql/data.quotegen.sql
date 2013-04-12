@@ -29,7 +29,7 @@ INSERT INTO `addresses` (`id`, `clientId`, `addressLine1`, `addressline2`, `city
 (8, 8, 'Lee Street', '', 'Kingston', '9', 'k1b2s7', 1);
 
 
-INSERT INTO `qgen_options` (`id`, `dealerId`, `name`, `description`, `cost`, `dealerSku`, `oemSku`) VALUES
+INSERT INTO `options` (`id`, `dealerId`, `name`, `description`, `cost`, `dealerSku`, `oemSku`) VALUES
 (7, 2, 'HP 3-bin Stapler/Stacker with Output', 'Staples up to 50 pages and stacks up to 1600 sheets', 2099.99, '', 'CC517A'),
 (8, 2, 'HP LaserJet MFP 3000-sheet Stapler/Stacker', 'Stacks up to 3000 sheets', 1999.99, '', 'C8085A'),
 (9, 2, 'Xerox Cart, W/Storage Capacity', 'Printer Cart with Storage Capacity', 299.99, '', '097S03636'),
@@ -91,7 +91,7 @@ INSERT INTO `qgen_options` (`id`, `dealerId`, `name`, `description`, `cost`, `de
 (65, 2, 'Kyocera Copy Tray(D)', 'Copy Tray', 27, '', '1902LF0UN1');
 
 
-INSERT INTO `qgen_devices` (`masterDeviceId`, `dealerId`, `cost`, `dealerSku`, `oemSku`, `description`) VALUES
+INSERT INTO `devices` (`masterDeviceId`, `dealerId`, `cost`, `dealerSku`, `oemSku`, `description`) VALUES
 (79, 2, 1000, '', '8870/DN', ''),
 (95, 2, 1500, '', 'CC395A', ''),
 (401, 2, 3000, '', 'Q3939A', '- Fax accessory'),
@@ -119,7 +119,7 @@ INSERT INTO `dealer_master_device_attributes` (`masterDeviceId`,`dealerId`,`labo
 (482, 2, 0, 0),
 (483, 2, 0, 0);
 
-INSERT INTO `qgen_device_options` (`masterDeviceId`, `optionId`, `dealerId`, `includedQuantity`) VALUES
+INSERT INTO `device_options` (`masterDeviceId`, `optionId`, `dealerId`, `includedQuantity`) VALUES
 (79, 9, 2, 0),
 (79, 12, 2, 0),
 (79, 14, 2, 0),

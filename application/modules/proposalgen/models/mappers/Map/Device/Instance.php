@@ -176,25 +176,25 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
             $justCountSql   = "
 SELECT COUNT(*) FROM (
 SELECT
-    pgen_rms_upload_rows.rmsProviderId,
-    pgen_rms_upload_rows.rmsModelId,
-    pgen_rms_upload_rows.manufacturer,
-    pgen_rms_upload_rows.modelName,
-    pgen_device_instances.useUserData,
-    pgen_device_instances.rmsUploadId,
-    pgen_device_instance_master_devices.masterDeviceId,
-    pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+    rms_upload_rows.rmsProviderId,
+    rms_upload_rows.rmsModelId,
+    rms_upload_rows.manufacturer,
+    rms_upload_rows.modelName,
+    device_instances.useUserData,
+    device_instances.rmsUploadId,
+    device_instance_master_devices.masterDeviceId,
+    device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname mappedManufacturer,
-    pgen_master_devices.modelName AS mappedModelName,
+    master_devices.modelName AS mappedModelName,
     COUNT(*) AS deviceCount,
-    GROUP_CONCAT(pgen_device_instances.id) AS deviceInstanceIds
-FROM pgen_device_instances
-JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
-LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
-LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
-LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.rmsUploadId = {$rmsUploadId}
-GROUP BY pgen_device_instances.rmsUploadRowId
+    GROUP_CONCAT(device_instances.id) AS deviceInstanceIds
+FROM device_instances
+JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
+LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
+LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
+LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
+WHERE device_instances.rmsUploadId = {$rmsUploadId}
+GROUP BY device_instances.rmsUploadRowId
 ORDER BY deviceCount DESC
 ) AS countTable";
             $justCountQuery = $db->query($justCountSql);
@@ -245,25 +245,25 @@ ORDER BY deviceCount DESC
             }
 
             $sql = "SELECT
-    pgen_rms_upload_rows.rmsProviderId,
-    pgen_rms_upload_rows.rmsModelId,
-    pgen_rms_upload_rows.manufacturer,
-    pgen_rms_upload_rows.modelName,
-    pgen_device_instances.useUserData,
-    pgen_device_instances.rmsUploadId,
-    pgen_device_instance_master_devices.masterDeviceId,
-    pgen_device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
+    rms_upload_rows.rmsProviderId,
+    rms_upload_rows.rmsModelId,
+    rms_upload_rows.manufacturer,
+    rms_upload_rows.modelName,
+    device_instances.useUserData,
+    device_instances.rmsUploadId,
+    device_instance_master_devices.masterDeviceId,
+    device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname                                      AS mappedManufacturer,
-    pgen_master_devices.modelName                                  AS mappedModelName,
+    master_devices.modelName                                  AS mappedModelName,
     COUNT(*)                                                       AS deviceCount,
-    GROUP_CONCAT(pgen_device_instances.id)                         AS deviceInstanceIds
-FROM pgen_device_instances
-    JOIN pgen_rms_upload_rows ON pgen_device_instances.rmsUploadRowId = pgen_rms_upload_rows.id
-    LEFT JOIN pgen_device_instance_master_devices ON pgen_device_instance_master_devices.deviceInstanceId = pgen_device_instances.id
-    LEFT JOIN pgen_master_devices ON pgen_device_instance_master_devices.masterDeviceId = pgen_master_devices.id
-    LEFT JOIN manufacturers ON pgen_master_devices.manufacturerId = manufacturers.id
-WHERE pgen_device_instances.rmsUploadId = ?
-GROUP BY CONCAT(pgen_rms_upload_rows.manufacturer, ' ', pgen_rms_upload_rows.modelName)";
+    GROUP_CONCAT(device_instances.id)                         AS deviceInstanceIds
+FROM device_instances
+    JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
+    LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
+    LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
+    LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
+WHERE device_instances.rmsUploadId = ?
+GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)";
 
             $sql = $db->quoteInto($sql, $rmsUploadId);
             $sql .= " ORDER BY {$orderBy} {$limitStatement}";

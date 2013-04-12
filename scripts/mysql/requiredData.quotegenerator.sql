@@ -1,26 +1,26 @@
 -- System Quote settings
-INSERT INTO `qgen_quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`) VALUES
+INSERT INTO `quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor`, `deviceMargin`, `pageMargin`, `pricingConfigId`, `adminCostPerPage`) VALUES
 (1, 4.5, 20, 15, 20, 2, 0.0035),
 (2, 4.5, 20, 15, 20, 2, 0.0035);
 
-INSERT INTO `qgen_dealer_quote_settings` (`dealerId`, `quoteSettingId`) VALUES
+INSERT INTO `dealer_quote_settings` (`dealerId`, `quoteSettingId`) VALUES
 (1,1),
 (2,2);
 
 -- ---------------------------------
 -- Create a default leasing schema
 -- ---------------------------------
-INSERT INTO `qgen_leasing_schemas` (`id`, `dealerId`, `name`) VALUES
+INSERT INTO `leasing_schemas` (`id`, `dealerId`, `name`) VALUES
 (1,2,'default');
 
-INSERT INTO `qgen_leasing_schema_ranges` (`id`, `leasingSchemaId`, `startRange`) VALUES
+INSERT INTO `leasing_schema_ranges` (`id`, `leasingSchemaId`, `startRange`) VALUES
 (1, 1, 0),
 (2, 1, 3000),
 (3, 1, 10000),
 (4, 1, 25000);
 
 
-INSERT INTO `qgen_leasing_schema_terms` (`id`, `leasingSchemaId`, `months`) VALUES
+INSERT INTO `leasing_schema_terms` (`id`, `leasingSchemaId`, `months`) VALUES
 (1, 1, 12),
 (2, 1, 24),
 (3, 1, 36),
@@ -30,7 +30,7 @@ INSERT INTO `qgen_leasing_schema_terms` (`id`, `leasingSchemaId`, `months`) VALU
 (7, 1, 60),
 (8, 1, 63);
 
-INSERT INTO `qgen_leasing_schema_rates` (`leasingSchemaTermId`, `leasingSchemaRangeId`, `rate`) VALUES
+INSERT INTO `leasing_schema_rates` (`leasingSchemaTermId`, `leasingSchemaRangeId`, `rate`) VALUES
 (1, 1, 0.0990),
 (1, 2, 0.0965),
 (1, 3, 0.0954),

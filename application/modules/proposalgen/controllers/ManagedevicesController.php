@@ -199,15 +199,15 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                 // get color and type from $key
                                 $select   = $db->select()
                                     ->from(array(
-                                                't' => 'pgen_toners'
+                                                't' => 'toners'
                                            ))
                                     ->join(array(
-                                                'tc' => 'pgen_toner_colors'
+                                                'tc' => 'toner_colors'
                                            ), 'tc.id = t.tonerColorId', array(
                                                                              'name AS toner_color_name'
                                                                         ))
                                     ->join(array(
-                                                'pt' => 'pgen_part_types'
+                                                'pt' => 'part_types'
                                            ), 'pt.id = t.partTypeId', array(
                                                                            'name AS type_name'
                                                                       ))->where('t.id = ?', $toner_id);
@@ -873,15 +873,15 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     // get color and type from $key
                                     $select   = $db->select()
                                         ->from(array(
-                                                    't' => 'pgen_toners'
+                                                    't' => 'toners'
                                                ))
                                         ->join(array(
-                                                    'tc' => 'pgen_toner_colors'
+                                                    'tc' => 'toner_colors'
                                                ), 'tc.id = t.tonerColorId', array(
                                                                                  'name AS toner_color_name'
                                                                             ))
                                         ->join(array(
-                                                    'pt' => 'pgen_part_types'
+                                                    'pt' => 'part_types'
                                                ), 'pt.id = t.partTypeId', array(
                                                                                'name AS type_name'
                                                                           ))->where('t.id = ?', $toner_id);

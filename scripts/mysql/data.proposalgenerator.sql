@@ -1,4 +1,4 @@
-INSERT INTO `pgen_rms_devices` (`rmsProviderId`, `rmsModelId`, `modelName`, `manufacturer`, `dateCreated`, `userId`) VALUES
+INSERT INTO `rms_devices` (`rmsProviderId`, `rmsModelId`, `modelName`, `manufacturer`, `dateCreated`, `userId`) VALUES
 (1, 25452, 'HL-3040CN', 'Brother', '2012-02-03 15:40:27', 1),
 (1, 24764, 'HL-5370DW', 'Brother', '2012-02-03 15:40:27', 1),
 (1, 16460, 'HL-6050D', 'Brother', '2012-02-03 15:40:27', 1),
@@ -712,7 +712,7 @@ INSERT INTO `pgen_rms_devices` (`rmsProviderId`, `rmsModelId`, `modelName`, `man
 (1, 23813, 'Phaser 6180mfp', 'Xerox', '0000-00-00 00:00:00', 1);
 
 
-INSERT INTO `pgen_toners` (id, sku, cost, yield, partTypeId, manufacturerId, tonerColorId) VALUES
+INSERT INTO `toners` (id, sku, cost, yield, partTypeId, manufacturerId, tonerColorId) VALUES
 (1, 'TN210BK', 57, 2200, 1, 1, 1),
 (2, 'TN210C', 52, 1400, 1, 1, 2),
 (3, 'TN210M', 52, 1400, 1, 1, 3),
@@ -1232,7 +1232,7 @@ INSERT INTO `pgen_toners` (id, sku, cost, yield, partTypeId, manufacturerId, ton
 
 -- --------------------------------------------------------
 
-INSERT INTO `pgen_master_devices` (`id`, `dateCreated`, `dutyCycle`, `isCopier`, `isDuplex`, `isFax`, `isLeased`, `isReplacementDevice`, `isScanner`, `launchDate`, `manufacturerId`, `modelName`, `leasedTonerYield`, `ppmBlack`, `ppmColor`, `partsCostPerPage`, `laborCostPerPage`, `tonerConfigId`, `wattsPowerNormal`, `wattsPowerIdle`, `reportsTonerLevels`) VALUES
+INSERT INTO `master_devices` (`id`, `dateCreated`, `dutyCycle`, `isCopier`, `isDuplex`, `isFax`, `isLeased`, `isReplacementDevice`, `isScanner`, `launchDate`, `manufacturerId`, `modelName`, `leasedTonerYield`, `ppmBlack`, `ppmColor`, `partsCostPerPage`, `laborCostPerPage`, `tonerConfigId`, `wattsPowerNormal`, `wattsPowerIdle`, `reportsTonerLevels`) VALUES
 (1, '2012-02-03 15:40:27', NULL, 0, 0, 0, 0, 0, 0, '2009-09-03 00:00:00', 1, 'HL-3040CN', NULL, NULL, NULL, NULL, NULL, 2, 70, 8, 0),
 (2, '2012-02-03 15:40:27', NULL, 0, 1, 0, 0, 0, 0, '2009-03-10 00:00:00', 1, 'HL-5370DW', NULL, NULL, NULL, NULL, NULL, 1, 75, 6, 0),
 (3, '2012-02-03 15:40:27', NULL, 0, 1, 0, 0, 0, 0, '2003-12-15 00:00:00', 1, 'HL-6050D', NULL, NULL, NULL, NULL, NULL, 1, 600, 110, 0),
@@ -1719,7 +1719,7 @@ INSERT INTO `pgen_master_devices` (`id`, `dateCreated`, `dutyCycle`, `isCopier`,
 (484, '2013-04-09 14:17:11', 60000, 0, 1, 0, 0, 0, 0, '2013-01-01 00:00:00', 31, 'C6010', NULL, 60, 60, NULL, NULL, 2, 35, 5, 1);
 
 
-INSERT INTO `pgen_device_toners` (toner_id, master_device_id) VALUES
+INSERT INTO `device_toners` (toner_id, master_device_id) VALUES
 (1, 1),
 (2, 1),
 (3, 1),
@@ -2493,7 +2493,7 @@ INSERT INTO `pgen_device_toners` (toner_id, master_device_id) VALUES
 (530, 484),
 (531, 484);
 
-INSERT INTO `pgen_rms_master_matchups` (`rmsProviderId`, `rmsModelId`, `masterDeviceId`) VALUES
+INSERT INTO `rms_master_matchups` (`rmsProviderId`, `rmsModelId`, `masterDeviceId`) VALUES
 (1, 25452, 1),
 (1, 24764, 2),
 (1, 16460, 3),
@@ -2969,7 +2969,7 @@ INSERT INTO `pgen_rms_master_matchups` (`rmsProviderId`, `rmsModelId`, `masterDe
 (1, 11092, 476);
 
 
-INSERT INTO `pgen_replacement_devices` (`dealerId`, `masterDeviceId`, `replacementCategory`, `printSpeed`, `resolution`, `monthlyRate`) VALUES
+INSERT INTO `replacement_devices` (`dealerId`, `masterDeviceId`, `replacementCategory`, `printSpeed`, `resolution`, `monthlyRate`) VALUES
 (1, 78, 'COLOR MFP', 1, 1, 249),
 (1, 43, 'BLACK & WHITE', 1, 1, 99),
 (1, 460, 'BLACK & WHITE MFP', 1, 1, 199),

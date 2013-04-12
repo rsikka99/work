@@ -3,7 +3,7 @@
 class Proposalgen_Model_DbTable_UserDeviceOverride extends Zend_Db_Table_Abstract
 {
     //put your code here
-    protected $_name = 'pgen_user_device_overrides';
+    protected $_name = 'user_device_overrides';
     protected $_primary = array (
             'user_id', 
             'master_device_id' 

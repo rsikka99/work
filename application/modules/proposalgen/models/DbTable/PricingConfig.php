@@ -3,7 +3,7 @@
 class Proposalgen_Model_DbTable_PricingConfig extends Zend_Db_Table_Abstract
 {
     //put your code here
-    protected $_name = 'pgen_pricing_configs';
+    protected $_name = 'pricing_configs';
     protected $_primary = 'id';
     protected $_dependentTables = array (
             'Users' 

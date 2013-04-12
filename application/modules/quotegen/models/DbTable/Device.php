@@ -2,7 +2,7 @@
 
 class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
 {
-    protected $_name = 'qgen_devices';
+    protected $_name = 'devices';
     protected $_primary = array(
         'masterDeviceId',
         'dealerId'
@@ -21,16 +21,16 @@ class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
         $searchString = $db->quoteInto("LIKE ?", "%$searchString%");
         $sql          = "
                 SELECT  
-                    `qgen_devices`.`masterDeviceId`,
-                    `printer_model`, 
+                    `devices`.`masterDeviceId`,
+                    `modelName`,
                     `manufacturers`.`displayname`,
-                    `qgen_device_configurations`.`name`,
-                    `qgen_device_configurations`.`id`
-                FROM `qgen_devices` 
+                    `device_configurations`.`name`,
+                    `device_configurations`.`id`
+                FROM `devices`
                 
-                JOIN `pgen_master_devices` ON `qgen_devices`.`masterDeviceId` = `pgen_master_devices`.`id`
-                JOIN `manufacturers` ON `pgen_master_devices`.`manufacturer_id` = `manufacturers`.`id`
-                LEFT JOIN `qgen_device_configurations` ON `qgen_devices`.`masterDeviceId` = `qgen_device_configurations`.`masterDeviceId`
+                JOIN `master_devices` ON `devices`.`masterDeviceId` = `master_devices`.`id`
+                JOIN `manufacturers` ON `master_devices`.`manufacturerId` = `manufacturers`.`id`
+                LEFT JOIN `device_configurations` ON `devices`.`masterDeviceId` = `device_configurations`.`masterDeviceId`
                 WHERE `fullname` {$searchString}
                 OR `displayname` {$searchString}
                 OR `printer_model` {$searchString}
