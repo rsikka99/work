@@ -31,6 +31,17 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
             'Float'
         );
 
+        $marginValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min' => -100,
+                    'max' => 100
+                )
+            ),
+            'Float'
+        );
+
 
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
@@ -38,6 +49,12 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                         'append'     => '$',
                                                         'validators' => $costValidator
                                                    ));
+
+        $this->addElement('text', 'dealerMargin', array(
+                                                       'label'      => 'Cost Threshold',
+                                                       'append'     => '$',
+                                                       'validators' => $marginValidator
+                                                  ));
         $this->addElement('text', 'targetMonochromeCostPerPage', array(
                                                                       'label'      => 'Target Monochrome Cost Per Page',
                                                                       'append'     => '$ / page',
@@ -52,6 +69,14 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                                                       'label' => 'Toner Preference',
                                                                                                       'class' => 'span3 '
                                                                                                  ));
+        $dealerPricingConfigId    = $this->createElement('select', 'dealerPricingConfigId', array(
+                                                                                                 'label' => 'Toner Preference',
+                                                                                                 'class' => 'span3 '
+                                                                                            ));
+        $customerPricingConfigId  = $this->createElement('select', 'customerPricingConfigId', array(
+                                                                                                   'label' => 'Toner Preference',
+                                                                                                   'class' => 'span3 '
+                                                                                              ));
 
 
         // Set a span 2 to all elements that do not have a class
@@ -67,7 +92,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         }
 
 
-        $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
+        $this->addDisplayGroup(array('costThreshold', 'dealerMargin', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfigId, $customerPricingConfigId), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
                                          'FieldSize',
