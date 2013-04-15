@@ -6,9 +6,9 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
         $hardwareOptimizationId = $this->_getParam('hardwareOptimizationId');
 
         // Initialize the service.
-        $clientId      = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
+        $clientId      = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
         $userId        = Zend_Auth::getInstance()->getIdentity()->id;
-        $rmsUpload     = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
+        $rmsUpload     = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
         $uploadService = new Proposalgen_Service_Rms_Upload($userId, $clientId, $rmsUpload);
 
         $form = $uploadService->getForm();
@@ -29,9 +29,9 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
                     $rmsUpload = $uploadService->rmsUpload;
 
                     // Save the hardware optimization object with the new id.
-                    $hardwareOptimization              = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+                    $hardwareOptimization              = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
                     $hardwareOptimization->rmsUploadId = $rmsUpload->id;
-                    Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->save($hardwareOptimization);
+                    Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($hardwareOptimization);
 
                     $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                 }
@@ -51,8 +51,7 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-//                     Call the base controller to send us to the next logical step in the proposal.
-//                    $this->gotoNextStep();
+                    $this->redirector('settings', null, null, array('hardwareOptimizationId' => $hardwareOptimizationId));
                 }
             }
         }
@@ -63,5 +62,21 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
     }
 
-}
+    public function settingsAction ()
+    {
+        $hardwareOptimizationId = $this->_getParam('hardwareOptimizationId');
 
+        // Get user settings
+        $userSettings = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->findSettingsByHardwareOptimizationId($hardwareOptimizationId);
+        // Get resolved override settings dealer + user settings
+        $userDefaultSettings = "";
+        $dealerDefaultSettings = "";
+        $defaultSettings = "";
+
+
+
+        $hardwareOptimizationService = new Preferences_Service_HardwareoptimizationSetting($defaultSettings);
+
+        $this->view->form = $hardwareOptimizationService->getFormWithDefaults($userSettings->toArray());
+    }
+}
