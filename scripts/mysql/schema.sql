@@ -1595,13 +1595,13 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
 -- Table `hardware_optimizations`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
-    `id` INT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT ,
     `clientId` INT(11) NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `name` VARCHAR(255) NULL ,
-    PRIMARY KEY (`id`) ,
     INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
     INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    PRIMARY KEY (`id`) ,
     CONSTRAINT `hardware_optimization_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1673,48 +1673,6 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     CONSTRAINT `user_password_reset_requests_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `dealer_report_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `dealer_report_settings` (
-    `dealerId` INT(11) NOT NULL ,
-    `reportSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`dealerId`) ,
-    INDEX `dealer_report_settings_ibfk_1_idx` (`reportSettingId` ASC) ,
-    CONSTRAINT `dealer_report_settings_ibfk_1`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `dealer_report_settings_ibfk_2`
-    FOREIGN KEY (`dealerId` )
-    REFERENCES `dealers` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `dealer_survey_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `dealer_survey_settings` (
-    `dealerId` INT(11) NOT NULL ,
-    `surveySettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`dealerId`) ,
-    INDEX `dealer_survey_settings_ibfk2_idx` (`surveySettingId` ASC) ,
-    CONSTRAINT `dealer_survey_settings_ibfk1`
-    FOREIGN KEY (`dealerId` )
-    REFERENCES `dealers` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `dealer_survey_settings_ibfk2`
-    FOREIGN KEY (`surveySettingId` )
-    REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1809,6 +1767,35 @@ CREATE  TABLE IF NOT EXISTS `user_viewed_clients` (
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+
+-- -----------------------------------------------------
+-- Table `dealer_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `dealer_settings` (
+    `dealerId` INT NOT NULL ,
+    `surveySettingId` INT NULL ,
+    `reportSettingId` INT NULL ,
+    PRIMARY KEY (`dealerId`) ,
+    INDEX `dealer_settings_ibkf2_idx` (`reportSettingId` ASC) ,
+    INDEX `dealer_settings_ibkf3_idx` (`surveySettingId` ASC) ,
+    CONSTRAINT `dealer_settings_ibkf1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_settings_ibkf2`
+    FOREIGN KEY (`reportSettingId` )
+    REFERENCES `report_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_settings_ibkf3`
+    FOREIGN KEY (`surveySettingId` )
+    REFERENCES `survey_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
 

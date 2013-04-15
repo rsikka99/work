@@ -143,7 +143,7 @@ class Admin_Model_Dealer extends My_Model_Abstract
         {
             $dealerReportSetting                      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($this->id);
             $dealerSurveySetting                      = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchDealerSurveySetting($this->id);
-            $this->_reportSettings                    = array_merge($dealerReportSetting->toArray(), $dealerSurveySetting->toArray());
+            $this->_reportSettings                    = array_merge($dealerReportSetting->toArray(), $dealerSurveySetting->toArray());;
             $this->_reportSettings['reportSettingId'] = $dealerReportSetting->id;
             $this->_reportSettings['surveySettingId'] = $dealerSurveySetting->id;
             unset($this->_reportSettings['id']);

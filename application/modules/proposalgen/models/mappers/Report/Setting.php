@@ -329,30 +329,30 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     public function fetchDealerReportSetting ($dealerId)
     {
         $reportSetting       = false;
-        $reportDealerSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealerId);
+        $dealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
 
-        if ($reportDealerSetting)
+        if ($dealerSetting)
         {
-            $reportSetting = $this->find($reportDealerSetting->reportSettingId);
+            $reportSetting = $this->find($dealerSetting->reportSettingId);
         }
 
         if (!$reportSetting)
         {
             // Take a copy
             $reportSetting   = $this->fetchSystemReportSetting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $reportSetting->id = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
 
-            if ($reportDealerSetting)
+            if ($dealerSetting)
             {
-                $reportDealerSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->save($reportDealerSetting);
+                $dealerSetting->reportSettingId = $reportSetting->id;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($dealerSetting);
             }
             else
             {
-                $reportDealerSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
-                $reportDealerSetting->reportSettingId = $reportSettingId;
-                $reportDealerSetting->dealerId        = $dealerId;
-                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($reportDealerSetting);
+                $dealerSetting                  = new Preferences_Model_Dealer_Setting();
+                $dealerSetting->reportSettingId = $reportSetting->id;
+                $dealerSetting->dealerId        = $dealerId;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);
             }
         }
 

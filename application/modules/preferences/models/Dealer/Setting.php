@@ -1,14 +1,21 @@
 <?php
-class Proposalgen_Model_Dealer_Survey_Setting extends My_Model_Abstract
+class Preferences_Model_Dealer_Setting extends My_Model_Abstract
 {
     /**
      * @var int
      */
     public $dealerId;
+
+    /**
+     * @var int
+     */
+    public $reportSettingId;
+
     /**
      * @var int
      */
     public $surveySettingId;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -19,10 +26,13 @@ class Proposalgen_Model_Dealer_Survey_Setting extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-
         if (isset($params->dealerId) && !is_null($params->dealerId))
         {
             $this->dealerId = $params->dealerId;
+        }
+        if (isset($params->reportSettingId) && !is_null($params->reportSettingId))
+        {
+            $this->reportSettingId = $params->reportSettingId;
         }
         if (isset($params->surveySettingId) && !is_null($params->surveySettingId))
         {
@@ -36,7 +46,8 @@ class Proposalgen_Model_Dealer_Survey_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "dealerId" => $this->dealerId,
+            "dealerId"        => $this->dealerId,
+            "reportSettingId" => $this->reportSettingId,
             "surveySettingId" => $this->surveySettingId,
         );
     }

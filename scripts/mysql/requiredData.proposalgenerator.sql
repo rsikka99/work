@@ -35,9 +35,3 @@ INSERT INTO `report_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverage
 /* Default System Survey Settings */
 INSERT INTO `survey_settings` (`id`, `pageCoverageMono`, `pageCoverageColor`) VALUES
 (1,6,24);
-
-INSERT INTO `dealer_survey_settings` (`dealerId`, `surveySettingId`) VALUES
-(1,1);
-
-INSERT INTO `dealer_report_settings` (`dealerId`, `reportSettingId`) VALUES
-(1,1);
