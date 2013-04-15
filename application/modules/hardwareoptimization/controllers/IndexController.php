@@ -3,16 +3,15 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
 {
     public function indexAction ()
     {
-
         $hardwareOptimizationId = $this->_getParam('hardwareOptimizationId');
-        $clientId               = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
-        $userId                 = Zend_Auth::getInstance()->getIdentity()->id;
 
+        // Initialize the service.
+        $clientId      = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
+        $userId        = Zend_Auth::getInstance()->getIdentity()->id;
         $uploadService = new Proposalgen_Service_Rms_Upload($userId, $clientId);
 
-        $form      = $uploadService->getForm();
-        $rmsUpload = null;
-
+        $form                     = $uploadService->getForm();
+        $uploadService->rmsUpload = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
 
         if ($this->getRequest()->isPost())
         {
@@ -24,10 +23,16 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
             }
             else if (isset($values ["performUpload"]))
             {
-                $success  = $uploadService->processUpload($values);
+                $success = $uploadService->processUpload($values);
                 if ($success)
                 {
-                    $rmsUpload = $uploadService->getRmsUpload();
+                    $rmsUpload = $uploadService->rmsUpload;
+
+                    // Save the hardware optimization object with the new id.
+                    $hardwareOptimization              = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+                    $hardwareOptimization->rmsUploadId = $rmsUpload->id;
+                    Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->save($hardwareOptimization);
+
                     $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                 }
                 else
@@ -37,7 +42,7 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->getRmsUpload()->id);
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->rmsUpload->id);
                 if ($count < 2)
                 {
                     $this->_flashMessenger->addMessage(array(
@@ -53,9 +58,10 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
         }
 
         $this->view->form           = $form;
-        $this->view->rmsUpload      = $rmsUpload;
-        $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $this->view->rmsUpload      = $uploadService->rmsUpload;
+        $navigationButtons          = ($uploadService->rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
     }
 
 }
+
