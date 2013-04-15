@@ -156,7 +156,7 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find($this->reportSettingId);
+            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchHealthCheckReportSetting($this->id);
         }
 
         return $this->_reportSettings;

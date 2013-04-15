@@ -6,6 +6,13 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      */
     protected $_report;
 
+    /**
+     * The current step that the user is viewing.
+     *
+     * @var Proposalgen_Model_HealthCheck_Step
+     */
+    protected $_activeStep;
+
     public function initReportList ()
     {
         // This is a list of reports that we can view.
@@ -132,6 +139,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      */
     protected function saveReport ($updateReportStage = true)
     {
+
         $reportMapper                = Proposalgen_Model_Mapper_HealthCheck::getInstance();
         $this->_report->lastModified = date('Y-m-d H:i:s');
 
@@ -150,6 +158,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
 
         if ($this->_report->id === null || $this->_report->id < 1)
         {
+            $this->_report->reportSettingId = $this->_report->getReportSettings()->id;
             $id                = $reportMapper->insert($this->_report);
             $this->_report->id = $id;
         }

@@ -37,9 +37,9 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
     {
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_HealthCheck_Step::STEP_REPORTSETTINGS);
-
+//        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $reportSettingsService = new Preferences_Service_ReportSetting();
         //$reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
-        Proposalgen_Model_Mapper_Report_Setting::getInstance()->find($this->_report->getReportSettings());
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -50,9 +50,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             }
             else
             {
-                $reportSettings = new Proposalgen_Model_Report_Setting();
-                $reportSettings->populate($values);
-                if (Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSettings))
+                if ($reportSettingsService->update($values))
                 {
                     $this->saveReport();
                     $this->_flashMessenger->addMessage(array(
@@ -74,6 +72,6 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             }
         }
 
-        //$this->view->form = $reportSettingsService->getForm();
+        $this->view->form = $reportSettingsService->getForm();
     }
 }

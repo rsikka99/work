@@ -242,6 +242,21 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     /**
      * Gets a users assesssment setting object
      *
+     * @return Proposalgen_Model_Report_Setting
+     */
+    public function fetchHealthCheckReportSetting ($reportId)
+    {
+        $reportSetting = $this->find($reportId);
+        // If we don't have a setting yet, make a blank one
+        if (!$reportSetting)
+        {
+            $reportSetting   = new Proposalgen_Model_Report_Setting();
+            $reportSetting->id = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+        }
+        return $reportSetting;
+    }
+    /**
+     *
      * @param int $userId
      *            The user's id
      *
