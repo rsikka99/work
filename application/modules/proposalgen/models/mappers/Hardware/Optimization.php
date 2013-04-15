@@ -256,4 +256,19 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
 
         return $clientId;
     }
+
+
+    public function findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId)
+    {
+        $rmsUploadRow = false;
+
+        $hardwareOptimization = $this->fetch(array("{$this->col_id} = ?" => $hardwareOptimizationId));
+
+        if ($hardwareOptimization instanceof Proposalgen_Model_Hardware_Optimization)
+        {
+            $rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->find($hardwareOptimization->rmsUploadId);
+        }
+
+        return $rmsUploadRow;
+    }
 }
