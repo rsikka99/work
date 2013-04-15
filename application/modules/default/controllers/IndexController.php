@@ -167,9 +167,10 @@ class Default_IndexController extends Tangent_Controller_Action
 
     protected function _createNewHardwareOptimization ()
     {
-        $hardwareOptimization           = new Proposalgen_Model_Hardware_Optimization;
+        $hardwareOptimization           = new Hardwareoptimization_Model_Hardware_Optimization;
         $hardwareOptimization->clientId = $this->_selectedClientId;
-        $hardwareOptimizationId         = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
+        $hardwareOptimization->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $hardwareOptimizationId         = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
 
         return $hardwareOptimizationId;
     }
