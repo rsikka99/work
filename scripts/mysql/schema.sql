@@ -1595,13 +1595,13 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
 -- Table `hardware_optimizations`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
-    `id` INT NOT NULL ,
+    `id` INT NOT NULL AUTO_INCREMENT ,
     `clientId` INT(11) NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `name` VARCHAR(255) NULL ,
-    PRIMARY KEY (`id`) ,
     INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
     INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    PRIMARY KEY (`id`) ,
     CONSTRAINT `hardware_optimization_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
