@@ -194,10 +194,10 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings());
                         $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
 
-                        $dealerSetting                  = new Preferences_Model_Dealer_Setting();
+                        $dealerSetting                      = new Preferences_Model_Dealer_Setting();
                         $dealerSetting->assessmentSettingId = $dealer->reportSettingId;
-                        $dealerSetting->surveySettingId = $dealer->surveySettingId;
-                        $dealerSetting->dealerId        = $dealer->id;
+                        $dealerSetting->surveySettingId     = $dealer->surveySettingId;
+                        $dealerSetting->dealerId            = $dealer->id;
                         Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);
 
                         // Create a new quote setting based on the system default quote setting

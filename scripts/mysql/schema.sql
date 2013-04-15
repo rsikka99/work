@@ -1858,6 +1858,35 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
 
 
 
+-- -----------------------------------------------------
+-- Table `dealer_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `dealer_settings` (
+    `dealerId` INT NOT NULL ,
+    `surveySettingId` INT NULL ,
+    `reportSettingId` INT NULL ,
+    PRIMARY KEY (`dealerId`) ,
+    INDEX `dealer_settings_ibkf2_idx` (`reportSettingId` ASC) ,
+    INDEX `dealer_settings_ibkf3_idx` (`surveySettingId` ASC) ,
+    CONSTRAINT `dealer_settings_ibkf1`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_settings_ibkf2`
+    FOREIGN KEY (`reportSettingId` )
+    REFERENCES `report_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `dealer_settings_ibkf3`
+    FOREIGN KEY (`surveySettingId` )
+    REFERENCES `survey_settings` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
