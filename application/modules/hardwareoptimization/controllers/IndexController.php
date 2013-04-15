@@ -8,10 +8,10 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
         // Initialize the service.
         $clientId      = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
         $userId        = Zend_Auth::getInstance()->getIdentity()->id;
-        $uploadService = new Proposalgen_Service_Rms_Upload($userId, $clientId);
+        $rmsUpload     = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
+        $uploadService = new Proposalgen_Service_Rms_Upload($userId, $clientId, $rmsUpload);
 
-        $form                     = $uploadService->getForm();
-        $uploadService->rmsUpload = Proposalgen_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
+        $form = $uploadService->getForm();
 
         if ($this->getRequest()->isPost())
         {

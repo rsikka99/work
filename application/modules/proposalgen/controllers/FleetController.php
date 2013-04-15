@@ -11,10 +11,8 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $report = $this->getReport();
 
-        $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_clientId);
-        $form   = $uploadService->getForm();
-
-        $rmsUpload = $report->getRmsUpload();
+        $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_clientId, $report->getRmsUpload());
+        $form          = $uploadService->getForm();
 
         if ($this->getRequest()->isPost())
         {
@@ -30,12 +28,12 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                  */
                 if ($form->isValid($values))
                 {
-                    $success  = $uploadService->processUpload($values);
+                    $success = $uploadService->processUpload($values);
                     if ($success)
                     {
-                        $rmsUpload = $uploadService->getRmsUpload();
-                        $report->rmsUploadId = $rmsUpload->id;
-                        $report->setRmsUpload($rmsUpload);
+                        $report->rmsUploadId = $uploadService->rmsUpload->id;
+                        $report->setRmsUpload($uploadService->rmsUpload);
+
                         $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                         $this->saveReport();
                         $this->gotoNextStep();
@@ -66,13 +64,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->form = $form;
 
-        $this->view->rmsUpload = $rmsUpload;
+        $this->view->rmsUpload = $uploadService->rmsUpload;
 //        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
 //        {
 //            $this->view->populateGrid = true;
 //        }
 
-        $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $navigationButtons          = ($uploadService->rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }

@@ -37,12 +37,27 @@ class Proposalgen_Service_Rms_Upload
     public $errorMessages;
 
 
-    public function __construct ($userId, $clientId)
+    /**
+     * @param      $userId    int
+     * @param      $clientId  int
+     * @param null $rmsUpload Proposalgen_Model_Rms_Upload
+     */
+    public function __construct ($userId, $clientId, $rmsUpload = null)
     {
         $this->_userId   = $userId;
         $this->_clientId = $clientId;
+        $this->rmsUpload = $rmsUpload;
     }
 
+    /**
+     * Process upload will take Proposalgen_Form_ImportRmsCsv values and process the upload,
+     * the success is measured by the bool value returned. Error messages will be saved inside
+     * the local member $errorMessages.
+     *
+     * @param $data
+     *
+     * @return bool success
+     */
     public function processUpload ($data)
     {
         $importSuccessful = false;
