@@ -1572,6 +1572,58 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
 
 
 -- -----------------------------------------------------
+-- Table `healthcheck_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT ,
+    `actualPageCoverageMono` DOUBLE NULL DEFAULT NULL ,
+    `actualPageCoverageColor` DOUBLE NULL DEFAULT NULL ,
+    `laborCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `partsCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `adminCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `assessmentReportMargin` DOUBLE NULL DEFAULT NULL ,
+    `grossMarginReportMargin` DOUBLE NULL DEFAULT NULL ,
+    `monthlyLeasePayment` DOUBLE NULL DEFAULT NULL ,
+    `defaultPrinterCost` DOUBLE NULL DEFAULT NULL ,
+    `leasedBwCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `leasedColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `mpsBwCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `mpsColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `kilowattsPerHour` DOUBLE NULL DEFAULT NULL ,
+    `assessmentPricingConfigId` INT(11) NULL DEFAULT NULL ,
+    `grossMarginPricingConfigId` INT(11) NULL DEFAULT NULL ,
+    `reportDate` DATETIME NULL DEFAULT NULL ,
+    `targetMonochromeCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `targetColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
+    `costThreshold` DOUBLE NULL DEFAULT NULL ,
+    `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
+    `pageCoverageMono` DOUBLE NULL DEFAULT NULL ,
+    `pageCoverageColor` DOUBLE NULL DEFAULT NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `healthcheck_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
+    INDEX `healthcheckt_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,
+    INDEX `healthcheck_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
+    CONSTRAINT `healthcheck_settings_ibfk_1`
+    FOREIGN KEY (`assessmentPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `healthcheck_settings_ibfk_2`
+    FOREIGN KEY (`grossMarginPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE RESTRICT
+        ON UPDATE RESTRICT,
+    CONSTRAINT `healthcheck_settings_ibfk_3`
+    FOREIGN KEY (`replacementPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    ENGINE = InnoDB
+    AUTO_INCREMENT = 2
+    DEFAULT CHARACTER SET = utf8;
+
+
+-- -----------------------------------------------------
 -- Table `health_checks`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `health_checks` (
@@ -1584,12 +1636,12 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
     `dateCreated` DATETIME NOT NULL ,
     `lastModified` DATETIME NOT NULL ,
     `reportDate` DATETIME NULL ,
-    `reportSettingId` INT NOT NULL ,
+    `settingId` INT NOT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `health_check_ibfk_1_idx` (`clientId` ASC) ,
     INDEX `health_check_ibfk_2_idx` (`rmsUploadId` ASC) ,
     INDEX `health_check_ibfk_3_idx` (`dealerId` ASC) ,
-    INDEX `health_check_ibfk_4_idx` (`reportSettingId` ASC) ,
+    INDEX `health_check_ibfk_4_idx` (`settingId` ASC) ,
     CONSTRAINT `health_check_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1606,8 +1658,8 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `health_check_ibfk_4`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `assessment_settings` (`id` )
+    FOREIGN KEY (`settingId` )
+    REFERENCES `healthcheck_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;

@@ -44,7 +44,7 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     /**
      * @var int
      */
-    public $reportSettingId;
+    public $settingId;
 
 
     // Non database fields
@@ -102,9 +102,9 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
             $this->rmsUploadId = $params->rmsUploadId;
         }
 
-        if (isset($params->reportSettingId) && !is_null($params->reportSettingId))
+        if (isset($params->settingId) && !is_null($params->settingId))
         {
-            $this->reportSettingId = $params->reportSettingId;
+            $this->settingId = $params->settingId;
         }
 
         if (isset($params->stepName) && !is_null($params->stepName))
@@ -135,15 +135,15 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"              => $this->id,
-            "clientId"        => $this->clientId,
-            "dealerId"        => $this->dealerId,
-            "reportSettingId" => $this->reportSettingId,
-            "rmsUploadId"     => $this->rmsUploadId,
-            "stepName"        => $this->stepName,
-            "dateCreated"     => $this->dateCreated,
-            "lastModified"    => $this->lastModified,
-            "reportDate"      => $this->reportDate,
+            "id"           => $this->id,
+            "clientId"     => $this->clientId,
+            "dealerId"     => $this->dealerId,
+            "settingId"    => $this->settingId,
+            "rmsUploadId"  => $this->rmsUploadId,
+            "stepName"     => $this->stepName,
+            "dateCreated"  => $this->dateCreated,
+            "lastModified" => $this->lastModified,
+            "reportDate"   => $this->reportDate,
         );
     }
 
@@ -156,7 +156,7 @@ class Proposalgen_Model_HealthCheck extends My_Model_Abstract
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchHealthCheckReportSetting($this->id);
+            $this->_reportSettings = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchSetting($this->id);
         }
 
         return $this->_reportSettings;

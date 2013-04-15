@@ -10,20 +10,45 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         $this->setActiveReportStep(Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD);
 
         $report               = $this->getReport();
-        $form                 = new Proposalgen_Form_ImportRmsCsv(array('csv'), "1B", "8MB");
-        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-        $rmsExcludedRowMapper = Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance();
+        $rmsUploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId);
         $this->saveReport(true);
+        $rmsUpload = null;
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+            if($rmsUploadService->getForm()->isValid($values))
+            {
+                $success = $rmsUploadService->processUpload($values);
+                if($success)
+                {
+                    try{
+                        $db       = Zend_Db_Table::getDefaultAdapter();
+                        $db->beginTransaction();
+                        $report->rmsUploadId = $rmsUploadService->rmsUpload->id;
+                        Proposalgen_Model_Mapper_HealthCheck::getInstance()->save($report);
+                        $this->_flashMessenger->addMessage(array(
+                                                                'success' => 'Upload Complete.'
+                                                           ));
+                    }catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        throw new Exception("Passing exception up the chain.", 0, $e);
+                    }
+                    $db->commit();
+                }
+                else
+                {
 
-        $rmsUpload        = $report->getRmsUpload();
-        $this->view->form = $form;
+                }
+            }
 
-        $this->view->rmsUpload = $rmsUpload;
-//        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
-//        {
-//            $this->view->populateGrid = true;
-//        }
 
+        }
+        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
+        {
+            $this->view->populateGrid = true;
+        }
+        $this->view->form = $rmsUploadService->getForm();
         $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
@@ -38,7 +63,8 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         // Mark the step we're on as active
         $this->setActiveReportStep(Proposalgen_Model_HealthCheck_Step::STEP_REPORTSETTINGS);
 //        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $reportSettingsService = new Preferences_Service_ReportSetting();
+        $healthcheckSettingsService = new Proposalgen_Service_HealthCheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
+
         //$reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
         if ($this->getRequest()->isPost())
         {
@@ -50,7 +76,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             }
             else
             {
-                if ($reportSettingsService->update($values))
+                if ($healthcheckSettingsService->update($values))
                 {
                     $this->saveReport();
                     $this->_flashMessenger->addMessage(array(
@@ -72,6 +98,6 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             }
         }
 
-        $this->view->form = $reportSettingsService->getForm();
+        $this->view->form = $healthcheckSettingsService->getForm();
     }
 }

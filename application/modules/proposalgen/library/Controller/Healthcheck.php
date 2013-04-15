@@ -109,9 +109,9 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         if (!isset($this->_report))
         {
             // Fetch the existing report, or create a new one if the session id isn't set
-            if (isset($this->_reportSession->reportId) && $this->_reportSession->reportId > 0)
+            if (isset($this->_reportSession->healthcheckId) && $this->_reportSession->healthcheckId > 0)
             {
-                $this->_report = Proposalgen_Model_Mapper_HealthCheck::getInstance()->find((int)$this->_reportSession->reportId);
+                $this->_report = Proposalgen_Model_Mapper_HealthCheck::getInstance()->find((int)$this->_reportSession->healthcheckId);
                 if ($this->_report === null)
                 {
                     throw new Exception("Error selecting the report with an id of '{$this->_reportSession->reportId}'.");
@@ -158,7 +158,8 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
 
         if ($this->_report->id === null || $this->_report->id < 1)
         {
-            $this->_report->reportSettingId = $this->_report->getReportSettings()->id;
+//            $reportSettingService = new Proposalgen_Service_ReportSettings(,,Zend_Auth::getInstance()->getIdentity()->dealerId)
+            $this->_report->settingId = $this->_report->getReportSettings()->id;
             $id                = $reportMapper->insert($this->_report);
             $this->_report->id = $id;
         }
