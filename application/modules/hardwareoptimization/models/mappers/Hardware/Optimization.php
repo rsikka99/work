@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abstract
+class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
@@ -13,12 +13,12 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Hardware_Optimization';
+    protected $_defaultDbTable = 'Hardwareoptimization_Model_DbTable_Hardware_Optimization';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Mapper_Hardware_Optimization
      */
     public static function getInstance ()
     {
@@ -26,10 +26,10 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Hardware_Optimization to the database.
+     * Saves an instance of Hardwareoptimization_Model_Hardware_Optimization to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Hardware_Optimization
+     * @param $object Hardwareoptimization_Model_Hardware_Optimization
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -54,9 +54,9 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Hardware_Optimization to the database.
+     * Saves (updates) an instance of Hardwareoptimization_Model_Hardware_Optimization to the database.
      *
-     * @param $object     Proposalgen_Model_Hardware_Optimization
+     * @param $object     Hardwareoptimization_Model_Hardware_Optimization
      *                    The Template model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -87,14 +87,14 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Hardware_Optimization or the
+     *                This can either be an instance of Hardwareoptimization_Model_Hardware_Optimization or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Hardware_Optimization)
+        if ($object instanceof Hardwareoptimization_Model_Hardware_Optimization)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -118,13 +118,13 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
      * @param $id int
      *            The id of the Template to find
      *
-     * @return Proposalgen_Model_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Hardware_Optimization
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Hardware_Optimization)
+        if ($result instanceof Hardwareoptimization_Model_Hardware_Optimization)
         {
             return $result;
         }
@@ -136,7 +136,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Hardware_Optimization($row->toArray());
+        $object = new Hardwareoptimization_Model_Hardware_Optimization($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -154,7 +154,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Hardware_Optimization
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -164,7 +164,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
             return false;
         }
 
-        $object = new Proposalgen_Model_Hardware_Optimization($row->toArray());
+        $object = new Hardwareoptimization_Model_Hardware_Optimization($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -184,7 +184,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Hardware_Optimization[]
+     * @return Hardwareoptimization_Model_Hardware_Optimization[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -192,7 +192,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Hardware_Optimization($row->toArray());
+            $object = new Hardwareoptimization_Model_Hardware_Optimization($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
     /**
      * @param $clientId
      *
-     * @return Proposalgen_Model_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Hardware_Optimization
      */
     public function findHardwareOptimizationByClientId ($clientId)
     {
@@ -228,7 +228,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
     }
 
     /**
-     * @param Proposalgen_Model_Hardware_Optimization $object
+     * @param Hardwareoptimization_Model_Hardware_Optimization $object
      *
      * @return int
      */
@@ -249,7 +249,7 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
         $clientId             = false;
         $hardwareOptimization = $this->fetch(array("{$this->col_id} = ?" => $hardwareOptimizationId));
 
-        if ($hardwareOptimization instanceof Proposalgen_Model_Hardware_Optimization)
+        if ($hardwareOptimization instanceof Hardwareoptimization_Model_Hardware_Optimization)
         {
             $clientId = Quotegen_Model_Mapper_Client::getInstance()->find($hardwareOptimization->clientId)->id;
         }
@@ -257,18 +257,51 @@ class Proposalgen_Model_Mapper_Hardware_Optimization extends My_Model_Mapper_Abs
         return $clientId;
     }
 
-
+    /**
+     * @param $hardwareOptimizationId
+     *
+     * @return bool|Proposalgen_Model_Rms_Upload
+     */
     public function findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId)
     {
         $rmsUploadRow = false;
 
         $hardwareOptimization = $this->fetch(array("{$this->col_id} = ?" => $hardwareOptimizationId));
 
-        if ($hardwareOptimization instanceof Proposalgen_Model_Hardware_Optimization)
+        if ($hardwareOptimization instanceof Hardwareoptimization_Model_Hardware_Optimization)
         {
-            $rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->find($hardwareOptimization->rmsUploadId);
+            $rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($hardwareOptimization->rmsUploadId);
         }
 
         return $rmsUploadRow;
+    }
+
+    /**
+     * @param $hardwareOptimizationId
+     *
+     * @return bool|HardwareOptimization_Model_Setting
+     */
+    public function findSettingsByHardwareOptimizationId($hardwareOptimizationId)
+    {
+        $hardwareOptimizationSetting = false;
+
+        $hardwareOptimization = $this->fetch(array("{$this->col_id} = ?" => $hardwareOptimizationId));
+
+        if ($hardwareOptimization instanceof Hardwareoptimization_Model_Hardware_Optimization)
+        {
+            $hardwareOptimizationSetting = Hardwareoptimization_Model_Mapper_Setting::getInstance()->find($hardwareOptimization->hardwareOptimizationSettingId);
+            if(!$hardwareOptimizationSetting instanceof Hardwareoptimization_Model_Setting)
+            {
+                $hardwareOptimizationSetting = new Hardwareoptimization_Model_Setting();
+                $hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Setting::getInstance()->insert($hardwareOptimizationSetting);
+                if($hardwareOptimizationSettingId)
+                {
+                    $hardwareOptimization->hardwareOptimizationSettingId = $hardwareOptimizationSettingId;
+                    $this->save($hardwareOptimization);
+                }
+            }
+        }
+
+        return $hardwareOptimizationSetting;
     }
 }

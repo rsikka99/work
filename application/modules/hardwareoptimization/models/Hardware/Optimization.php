@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Hardware_Optimization extends My_Model_Abstract
+class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
 {
     /**
      * @var int
@@ -14,7 +14,17 @@ class Proposalgen_Model_Hardware_Optimization extends My_Model_Abstract
     /**
      * @var int
      */
+    public $dealerId;
+
+    /**
+     * @var int
+     */
     public $rmsUploadId;
+
+    /**
+     * @var int
+     */
+    public $hardwareOptimizationSettingId;
 
     /**
      * @var int
@@ -40,6 +50,10 @@ class Proposalgen_Model_Hardware_Optimization extends My_Model_Abstract
         {
             $this->clientId = $params->clientId;
         }
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
+        }
 
         if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
@@ -50,6 +64,10 @@ class Proposalgen_Model_Hardware_Optimization extends My_Model_Abstract
         {
             $this->name = $params->name;
         }
+        if (isset($params->hardwareOptimizationSettingId) && !is_null($params->hardwareOptimizationSettingId))
+        {
+            $this->hardwareOptimizationSettingId = $params->hardwareOptimizationSettingId;
+        }
     }
 
     /**
@@ -58,10 +76,12 @@ class Proposalgen_Model_Hardware_Optimization extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"          => $this->id,
-            "clientId"    => $this->clientId,
-            "rmsUploadId" => $this->rmsUploadId,
-            "name"        => $this->name,
+            "id"                            => $this->id,
+            "dealerId"                      => $this->clientId,
+            "deaerlId"                      => $this->dealerId,
+            "rmsUploadId"                   => $this->rmsUploadId,
+            "name"                          => $this->name,
+            "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,
         );
     }
 }
