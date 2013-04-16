@@ -202,6 +202,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+
+            if ($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
+
+
             $jqGrid->setRows($excludedRowMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data

@@ -1,5 +1,5 @@
 <?php
-class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
+class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
@@ -12,12 +12,12 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Hardwareoptimization_Model_DbTable_Setting';
+    protected $_defaultDbTable = 'Hardwareoptimization_Model_DbTable_Hardware_Optimization_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Hardwareoptimization_Model_Mapper_Setting
+     * @return Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting
      */
     public static function getInstance ()
     {
@@ -28,7 +28,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      * Saves an instance of Hardwareoptimization_Model_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Hardwareoptimization_Model_Setting
+     * @param $object Hardwareoptimization_Model_Hardware_Optimization_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -55,7 +55,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Hardwareoptimization_Model_Setting to the database.
      *
-     * @param $object     Hardwareoptimization_Model_Setting
+     * @param $object     Hardwareoptimization_Model_Hardware_Optimization_Setting
      *                    The Setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -93,7 +93,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
-        if ($object instanceof Hardwareoptimization_Model_Setting)
+        if ($object instanceof Hardwareoptimization_Model_Hardware_Optimization_Setting)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -117,13 +117,13 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the Setting to find
      *
-     * @return Hardwareoptimization_Model_Setting
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Hardwareoptimization_Model_Setting)
+        if ($result instanceof Hardwareoptimization_Model_Hardware_Optimization_Setting)
         {
             return $result;
         }
@@ -135,7 +135,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Hardwareoptimization_Model_Setting($row->toArray());
+        $object = new Hardwareoptimization_Model_Hardware_Optimization_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -153,7 +153,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Hardwareoptimization_Model_Setting
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -163,7 +163,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Hardwareoptimization_Model_Setting($row->toArray());
+        $object = new Hardwareoptimization_Model_Hardware_Optimization_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -183,7 +183,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Hardwareoptimization_Model_Setting[]
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -191,7 +191,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Hardwareoptimization_Model_Setting($row->toArray());
+            $object = new Hardwareoptimization_Model_Hardware_Optimization_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -217,7 +217,7 @@ class Hardwareoptimization_Model_Mapper_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Hardwareoptimization_Model_Setting $object
+     * @param Hardwareoptimization_Model_Hardware_Optimization_Setting $object
      *
      * @return int
      */

@@ -305,9 +305,9 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
             foreach ($query->fetchAll() as $row)
             {
 
-                $excludedRow          = new Proposalgen_Model_Rms_Excluded_Row($row);
+                $excludedRow        = new Proposalgen_Model_Rms_Excluded_Row($row);
                 $excludedRow->model = $row ['model'];
-                $excludedRows[]       = $excludedRow;
+                $excludedRows[]     = $excludedRow;
             }
 
             return $excludedRows;

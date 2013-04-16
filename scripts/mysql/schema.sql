@@ -1552,7 +1552,32 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `id` INT NOT NULL AUTO_INCREMENT ,
-    PRIMARY KEY (`id`) )
+    `costThreshold` DOUBLE NULL ,
+    `customerPricingConfigId` INT NULL ,
+    `dealerMargin` DOUBLE NULL ,
+    `dealerPricingConfigId` INT NULL ,
+    `targetColorCostPerPage` DOUBLE NULL ,
+    `targetMonochromeCostPerPage` DOUBLE NULL ,
+    `replacementPricingConfigId` INT NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `hardware_optimization_settings_ibfk_1_idx` (`customerPricingConfigId` ASC) ,
+    INDEX `hardware_optimization_settings_ibfk_2_idx` (`dealerPricingConfigId` ASC) ,
+    INDEX `hardware_optimization_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
+    CONSTRAINT `hardware_optimization_settings_ibfk_1`
+    FOREIGN KEY (`customerPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `hardware_optimization_settings_ibfk_2`
+    FOREIGN KEY (`dealerPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `hardware_optimization_settings_ibfk_3`
+    FOREIGN KEY (`replacementPricingConfigId` )
+    REFERENCES `pricing_configs` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
@@ -1562,12 +1587,15 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
 CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `clientId` INT(11) NOT NULL ,
-    `rmsUploadId` INT(11) NULL ,
-    `name` VARCHAR(255) NULL ,
+    `dealerId` INT NOT NULL ,
     `hardwareOptimizationSettingId` INT NOT NULL ,
+    `name` VARCHAR(255) NULL ,
+    `rmsUploadId` INT(11) NULL ,
     INDEX `hardware_optimization_ibfk_1_idx` (`clientId` ASC) ,
     INDEX `hardware_optimization_ibfk_2_idx` (`rmsUploadId` ASC) ,
     PRIMARY KEY (`id`) ,
+    INDEX `hardware_optimization_ibfk_4_idx` (`dealerId` ASC) ,
+    INDEX `hardware_optimization_ibfk_3_idx` (`hardwareOptimizationSettingId` ASC) ,
     CONSTRAINT `hardware_optimization_ibfk_1`
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
@@ -1579,8 +1607,13 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
         ON DELETE SET NULL
         ON UPDATE CASCADE,
     CONSTRAINT `hardware_optimization_ibfk_3`
-    FOREIGN KEY (`id` )
+    FOREIGN KEY (`hardwareOptimizationSettingId` )
     REFERENCES `hardware_optimization_settings` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `hardware_optimization_ibfk_4`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;

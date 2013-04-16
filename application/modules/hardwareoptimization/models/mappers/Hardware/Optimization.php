@@ -238,6 +238,20 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
     }
 
     /**
+     * Fetches all the hardware optimizations for a client
+     * @param      $clientId
+     * @param null $order
+     * @param int  $count
+     * @param null $offset
+     *
+     * @return Hardwareoptimization_Model_Hardware_Optimization[]
+     */
+    public function fetchAllForClient ($clientId, $order = null, $count = 50, $offset = null)
+    {
+        return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), $order, $count, $offset);
+    }
+
+    /**
      * Gets and returns a Quotegen_Model_Client if found.  Else returns false.
      *
      * @param $hardwareOptimizationId int
@@ -262,7 +276,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
      *
      * @return bool|Proposalgen_Model_Rms_Upload
      */
-    public function findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId)
+    public function findRmsUploadRowByHardwareOptimizationId ($hardwareOptimizationId)
     {
         $rmsUploadRow = false;
 
@@ -279,9 +293,9 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
     /**
      * @param $hardwareOptimizationId
      *
-     * @return bool|HardwareOptimization_Model_Setting
+     * @return bool|Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
-    public function findSettingsByHardwareOptimizationId($hardwareOptimizationId)
+    public function findSettingsByHardwareOptimizationId ($hardwareOptimizationId)
     {
         $hardwareOptimizationSetting = false;
 
@@ -289,12 +303,12 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
 
         if ($hardwareOptimization instanceof Hardwareoptimization_Model_Hardware_Optimization)
         {
-            $hardwareOptimizationSetting = Hardwareoptimization_Model_Mapper_Setting::getInstance()->find($hardwareOptimization->hardwareOptimizationSettingId);
-            if(!$hardwareOptimizationSetting instanceof Hardwareoptimization_Model_Setting)
+            $hardwareOptimizationSetting = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->find($hardwareOptimization->hardwareOptimizationSettingId);
+            if (!$hardwareOptimizationSetting instanceof Hardwareoptimization_Model_Hardware_Optimization_Setting)
             {
-                $hardwareOptimizationSetting = new Hardwareoptimization_Model_Setting();
-                $hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Setting::getInstance()->insert($hardwareOptimizationSetting);
-                if($hardwareOptimizationSettingId)
+                $hardwareOptimizationSetting   = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
+                $hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert($hardwareOptimizationSetting);
+                if ($hardwareOptimizationSettingId)
                 {
                     $hardwareOptimization->hardwareOptimizationSettingId = $hardwareOptimizationSettingId;
                     $this->save($hardwareOptimization);

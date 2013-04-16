@@ -40,12 +40,10 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-
         if (isset($params->id) && !is_null($params->id))
         {
             $this->id = $params->id;
         }
-
         if (isset($params->clientId) && !is_null($params->clientId))
         {
             $this->clientId = $params->clientId;
@@ -54,12 +52,10 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
         {
             $this->dealerId = $params->dealerId;
         }
-
         if (isset($params->rmsUploadId) && !is_null($params->rmsUploadId))
         {
             $this->rmsUploadId = $params->rmsUploadId;
         }
-
         if (isset($params->name) && !is_null($params->name))
         {
             $this->name = $params->name;
@@ -77,8 +73,8 @@ class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
     {
         return array(
             "id"                            => $this->id,
-            "dealerId"                      => $this->clientId,
-            "deaerlId"                      => $this->dealerId,
+            "clientId"                      => $this->clientId,
+            "dealerId"                      => $this->dealerId,
             "rmsUploadId"                   => $this->rmsUploadId,
             "name"                          => $this->name,
             "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,

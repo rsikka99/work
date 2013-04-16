@@ -3,200 +3,227 @@
 </div>
 
 <div class="row">
-    <div class="span3">
-        <div class="well well-small">
-            <?php if (isset($this->selectedClientId)) :
-                $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
-                ?>
-                <form method="POST">
-                    <button class="btn btn-primary btn-mini pull-right" name="editClient">Edit</button>
-                    <p>
-                        <strong><?php echo (strlen($selectedClient->companyName) > 20) ? substr($selectedClient->companyName, 0, 20) . "..." : $selectedClient->companyName; ?></strong>
-                    </p>
-
-                    <p><strong>Address:</strong><br>
-                        <?php
-                        $truncatedAddressLines = array();
-                        foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
-                            <?php $truncatedAddressLines[] = (strlen($addressLine) > 26) ? substr($addressLine, 0, 26) . "..." : $addressLine; ?>
-                        <?php
-                        endforeach;
-
-                        echo implode("<br>", $truncatedAddressLines);
-                        ?>
-                    </p>
-
-                    <p><strong>Organization Size:</strong><br><strong><?php echo number_format($selectedClient->employeeCount); ?></strong> employees</p>
-                </form>
-            <?php endif; ?>
-        </div>
-        <div class="well well-small">
-            <div class="btn-group pull-right">
-                <a class="btn btn-mini btn-primary" title="View Client List" href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-list-ul"></i>
-                    List</a>
-                <a class="btn btn-mini btn-success" href="<?php echo $this->url(array('action' => 'create-client', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-plus"></i>
-                    New</a>
-            </div>
-            <p><strong>Clients</strong></p>
-
-            <form id="searchForClientForm" class="form-search" method="POST">
-                <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?php echo $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="input-block-level">
-                <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
-            </form>
-
-            <hr>
-            <strong>Recently Viewed Clients</strong>
-
+<div class="span3">
+    <div class="well well-small">
+        <?php if (isset($this->selectedClientId)) :
+            $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
+            ?>
             <form method="POST">
-                <table class="table table-condensed">
-                    <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchRecentlyViewed($this->userId) as $client) : ?>
-                        <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
-                            <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
-                            <td style="width: 50px;">
-                                <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </table>
+                <button class="btn btn-primary btn-mini pull-right" name="editClient">Edit</button>
+                <p>
+                    <strong><?php echo (strlen($selectedClient->companyName) > 20) ? substr($selectedClient->companyName, 0, 20) . "..." : $selectedClient->companyName; ?></strong>
+                </p>
+
+                <p><strong>Address:</strong><br>
+                    <?php
+                    $truncatedAddressLines = array();
+                    foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
+                        <?php $truncatedAddressLines[] = (strlen($addressLine) > 26) ? substr($addressLine, 0, 26) . "..." : $addressLine; ?>
+                    <?php
+                    endforeach;
+
+                    echo implode("<br>", $truncatedAddressLines);
+                    ?>
+                </p>
+
+                <p><strong>Organization Size:</strong><br><strong><?php echo number_format($selectedClient->employeeCount); ?></strong> employees</p>
             </form>
-            <hr>
-
-
-        </div>
-    </div>
-    <div class="span9">
-
-        <?php if (isset($this->selectedClientId)) : ?>
-            <div class="tabbable">
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
-                    <li><a href="#quoteTabPane" data-toggle="tab">Quote</a></li>
-                    <li><a href="#healthcheckTabPane" data-toggle="tab">Health Check</a></li>
-                    <li><a href="#hardwareOptimizationTabPane" data-toggle="tab">Hardware Optimize</a></li>
-                </ul>
-
-                <div class="tab-content">
-                    <div class="tab-pane active" id="assessmentTabPane">
-                        <form method="POST">
-                            <table class="table table-striped table-condensed table-bordered">
-                                <tr>
-                                    <th>Date Created</th>
-                                    <th>Last Modified</th>
-                                    <th>Finished</th>
-                                    <th style="width: 70px;">Action</th>
-                                </tr>
-                                <tr class="info">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="text-align: center;">
-                                        <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
-                                    </td>
-                                </tr>
-                                <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Assessment */ ?>
-                                    <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
-
-                                        <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
-                                            <td>Finished</td>
-
-                                        <?php else : ?>
-                                            <td>In Progress</td>
-                                        <?php endif; ?>
-                                        <td style="text-align: center;">
-                                            <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
-                        </form>
-
-                    </div>
-                    <div class="tab-pane" id="quoteTabPane">
-                        <form method="POST">
-                            <p>
-                                <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
-                                <button name="createPurchasedQuote" value="0" class="btn btn-success btn-mini">Create New Purchased Quote</button>
-                            </p>
-                            <table class="table table-striped table-condensed table-bordered">
-                                <tr>
-                                    <th>Date Created</th>
-                                    <th>Last Modified</th>
-                                    <th>Type</th>
-                                    <th style="width: 100px;">Action</th>
-                                </tr>
-
-                                <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
-                                    <tr>
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)); ?></td>
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
-
-                                        <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
-                                            <td>Leased</td>
-                                        <?php else : ?>
-                                            <td>Purchased</td>
-                                        <?php endif; ?>
-                                        <td>
-                                            <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
-
-                    </div>
-                    <div class="tab-pane" id="healthcheckTabPane">
-                        <form method="POST">
-                            <table class="table table-striped table-condensed table-bordered">
-                                <tr>
-                                    <th>Date Created</th>
-                                    <th>Last Modified</th>
-                                    <th>Finished</th>
-                                    <th style="width: 70px;">Action</th>
-                                </tr>
-                                <tr class="info">
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td style="text-align: center;">
-                                        <button name="selectHealthcheck" value="0" class="btn btn-success btn-mini">Start New</button>
-                                    </td>
-                                </tr>
-                                <?php foreach ($this->availableHealthCHecks as $report) : /* @var $report Proposalgen_Model_Healthcheck */ ?>
-                                    <tr class="<?php echo ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
-                                        <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
-
-                                        <?php if ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
-                                            <td>Finished</td>
-
-                                        <?php else : ?>
-                                            <td>In Progress</td>
-                                        <?php endif; ?>
-                                        <td style="text-align: center;">
-                                            <button name="selectHealthcheck" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </table>
-                        </form>
-                    </div>
-                    <div class="tab-pane" id="hardwareOptimizationTabPane">
-                        <div class="hero-unit">
-                            <h1>In Progress</h1>
-
-                            <p>A hardware optimization is currently a report available at the end of an assessment. We are working towards moving hardware
-                                optimizations to be located here. The will be independent of an assessment once they are moved.</p>
-                        <button name="createHardwareOptimization" value="1>" class="btn btn-primary btn-mini">Create Hardware Optimization</button>
-                </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php else : ?>
-            <div class="well">
-                <div class="alert alert-info"><strong>Important:</strong> Please select a client from the left menu to proceed.</div>
-            </div>
         <?php endif; ?>
     </div>
+    <div class="well well-small">
+        <div class="btn-group pull-right">
+            <a class="btn btn-mini btn-primary" title="View Client List" href="<?php echo $this->url(array('action' => 'view-all-clients', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-list-ul"></i>
+                List</a>
+            <a class="btn btn-mini btn-success" href="<?php echo $this->url(array('action' => 'create-client', 'controller' => 'index', 'module' => 'default')); ?>"><i class="icon-plus"></i>
+                New</a>
+        </div>
+        <p><strong>Clients</strong></p>
+
+        <form id="searchForClientForm" class="form-search" method="POST">
+            <input type="text" id="searchClientByName" placeholder="Enter name to search..." data-link="<?php echo $this->url(array("action" => "search-for-client", "controller" => "index", "module" => "default")); ?>" autocomplete="off" class="input-block-level">
+            <input type="hidden" name="selectClient" id="hiddenSelectClientId" />
+        </form>
+
+        <hr>
+        <strong>Recently Viewed Clients</strong>
+
+        <form method="POST">
+            <table class="table table-condensed">
+                <?php foreach (Quotegen_Model_Mapper_Client::getInstance()->fetchRecentlyViewed($this->userId) as $client) : ?>
+                    <tr class="<?php echo (isset($this->selectedClientId) && $client->id == $this->selectedClientId) ? "info" : ""; ?>">
+                        <td><?php echo (strlen($client->companyName) > 20) ? substr($client->companyName, 0, 20) . "..." : $client->companyName; ?></td>
+                        <td style="width: 50px;">
+                            <button class="btn btn-primary btn-mini" name="selectClient" value="<?php echo $client->id; ?>">Select</button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
+        <hr>
+
+
+    </div>
+</div>
+<div class="span9">
+
+    <?php if (isset($this->selectedClientId)) : ?>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
+                <li><a href="#quoteTabPane" data-toggle="tab">Quote</a></li>
+                <li><a href="#healthcheckTabPane" data-toggle="tab">Health Check</a></li>
+                <li><a href="#hardwareOptimizationTabPane" data-toggle="tab">Hardware Optimize</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="assessmentTabPane">
+                    <form method="POST">
+                        <table class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Last Modified</th>
+                                <th>Finished</th>
+                                <th style="width: 70px;">Action</th>
+                            </tr>
+                            <tr class="info">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: center;">
+                                    <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
+                                </td>
+                            </tr>
+                            <?php foreach ($this->availableAssessments as $report) : /* @var $report Proposalgen_Model_Assessment */ ?>
+                                <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+
+                                    <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
+                                        <td>Finished</td>
+
+                                    <?php else : ?>
+                                        <td>In Progress</td>
+                                    <?php endif; ?>
+                                    <td style="text-align: center;">
+                                        <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </form>
+
+                </div>
+                <div class="tab-pane" id="quoteTabPane">
+                    <form method="POST">
+                        <p>
+                            <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
+                            <button name="createPurchasedQuote" value="0" class="btn btn-success btn-mini">Create New Purchased Quote</button>
+                        </p>
+                        <table class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Last Modified</th>
+                                <th>Type</th>
+                                <th style="width: 100px;">Action</th>
+                            </tr>
+
+                            <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
+                                <tr>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
+
+                                    <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
+                                        <td>Leased</td>
+                                    <?php else : ?>
+                                        <td>Purchased</td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+
+                </div>
+                <div class="tab-pane" id="healthcheckTabPane">
+                    <form method="POST">
+                        <table class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Last Modified</th>
+                                <th>Finished</th>
+                                <th style="width: 70px;">Action</th>
+                            </tr>
+                            <tr class="info">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: center;">
+                                    <button name="selectHealthcheck" value="0" class="btn btn-success btn-mini">Start New</button>
+                                </td>
+                            </tr>
+                            <?php foreach ($this->availableHealthchecks as $healthcheck) : /* @var $healthcheck Proposalgen_Model_Healthcheck */ ?>
+                                <tr class="<?php echo ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+
+                                    <?php if ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
+                                        <td>Finished</td>
+
+                                    <?php else : ?>
+                                        <td>In Progress</td>
+                                    <?php endif; ?>
+                                    <td style="text-align: center;">
+                                        <button name="selectHealthcheck" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </form>
+                </div>
+                <div class="tab-pane" id="hardwareOptimizationTabPane">
+                    <form method="POST">
+                        <table class="table table-striped table-condensed table-bordered">
+                            <tr>
+                                <th>Date Created</th>
+                                <th>Last Modified</th>
+                                <th>Finished</th>
+                                <th style="width: 70px;">Action</th>
+                            </tr>
+                            <tr class="info">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td style="text-align: center;">
+                                    <button name="selectHardwareOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
+                                </td>
+                            </tr>
+                            <?php foreach ($this->availableHardwareOptimizations as $hardwareOptimization) : /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */ ?>
+                                <tr class="<?php echo ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+
+                                    <?php if ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
+                                        <td>Finished</td>
+
+                                    <?php else : ?>
+                                        <td>In Progress</td>
+                                    <?php endif; ?>
+                                    <td style="text-align: center;">
+                                        <button name="selectHardwareOptimization" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <?php else : ?>
+        <div class="well">
+            <div class="alert alert-info"><strong>Important:</strong> Please select a client from the left menu to proceed.</div>
+        </div>
+    <?php endif; ?>
+</div>
 </div>

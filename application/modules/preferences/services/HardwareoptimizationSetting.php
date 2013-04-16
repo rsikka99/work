@@ -5,7 +5,7 @@ class Preferences_Service_HardwareoptimizationSetting
     /**
      * Default report settings and survey settings combined into an array
      *
-     * @var Hardwareoptimization_Model_Setting|array|null
+     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting|array|null
      */
     protected $_defaultSettings;
 
@@ -17,7 +17,7 @@ class Preferences_Service_HardwareoptimizationSetting
     protected $_form;
 
     /**
-     * @var Hardwareoptimization_Model_Setting
+     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
     protected $_systemSettings;
 
@@ -27,7 +27,7 @@ class Preferences_Service_HardwareoptimizationSetting
      */
     public function __construct ($defaultSettings = null)
     {
-        $this->_systemSettings  = Hardwareoptimization_Model_Mapper_Setting::getInstance()->find(1);
+        $this->_systemSettings  = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->find(1);
         $this->_defaultSettings = $defaultSettings;
     }
 
@@ -175,7 +175,7 @@ class Preferences_Service_HardwareoptimizationSetting
                 unset($validData ['customerPricingConfigId']);
             }
 
-            $hardwareOptimizationSetting = new Hardwareoptimization_Model_Setting();
+            $hardwareOptimizationSetting = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
             $hardwareOptimizationSetting->populate($validData);
 
             if ($this->_defaultSettings)
@@ -187,7 +187,7 @@ class Preferences_Service_HardwareoptimizationSetting
                 $hardwareOptimizationSetting = $this->_systemSettings->id;
             }
 
-            Hardwareoptimization_Model_Mapper_Setting::getInstance()->save($hardwareOptimizationSetting);
+            Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($hardwareOptimizationSetting);
 
             return true;
         }

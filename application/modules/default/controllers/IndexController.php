@@ -53,6 +53,11 @@ class Default_IndexController extends Tangent_Controller_Action
     {
         $this->view->userId = $this->_userId;
 
+        $availableReports               = array();
+        $availableQuotes                = array();
+        $availableHealthchecks          = array();
+        $availableHardwareOptimizations = array();
+
         if ($this->_selectedClientId > 0)
         {
             $availableReports                 = Proposalgen_Model_Mapper_Assessment::getInstance()->fetchAllAssessmentsForClient($this->_selectedClientId);
@@ -62,8 +67,12 @@ class Default_IndexController extends Tangent_Controller_Action
             $this->view->availableQuotes = $availableQuotes;
 
             $availableHealthchecks             = Proposalgen_Model_Mapper_Healthcheck::getInstance()->fetchAllHealthchecksForClient($this->_selectedClientId);
-            $this->view->availableHealthCHecks = $availableHealthchecks;
+            $this->view->availableHealthchecks = $availableHealthchecks;
+
+            $availableHardwareOptimizations             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->fetchAllForClient($this->_selectedClientId);
+            $this->view->availableHardwareOptimizations = $availableHardwareOptimizations;
         }
+
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
@@ -160,7 +169,7 @@ class Default_IndexController extends Tangent_Controller_Action
             }
             else if (isset($postData['selectHealthcheck']))
             {
-                $selectedReportId = $postData['selectHealthcheck'];
+                $healthcheckId = $postData['selectHealthcheck'];
 
                 $validReportIds = array(0);
                 foreach ($availableHealthchecks as $report)
@@ -170,17 +179,46 @@ class Default_IndexController extends Tangent_Controller_Action
 
                 $inArray = new Zend_Validate_InArray($validReportIds);
 
-                if ($inArray->isValid($selectedReportId))
+                if ($inArray->isValid($healthcheckId))
                 {
 
-                    $this->_proposalSession->healthcheckId = $selectedReportId;
+                    $this->_proposalSession->healthcheckId = $healthcheckId;
                     $this->redirector('index', 'healthcheck', 'proposalgen');
                 }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array("warning" => "Please select a health check"));
+                }
             }
-            else if (isset($postData['createHardwareOptimization']))
+            else if (isset($postData['selectHardwareOptimization']))
             {
-                $hardwareOptimizationId = $this->_createNewHardwareOptimization();
-                $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
+                $hardwareOptimizationId = $postData['selectHardwareOptimization'];
+
+                if ($hardwareOptimizationId > 0)
+                {
+                    $validReportIds = array(0);
+                    foreach ($availableHardwareOptimizations as $report)
+                    {
+                        $validReportIds[] = $report->id;
+                    }
+
+                    $inArray = new Zend_Validate_InArray($validReportIds);
+
+                    if ($inArray->isValid($hardwareOptimizationId))
+                    {
+                        $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array("warning" => "Please select a hardware optimization"));
+                    }
+                }
+                else
+                {
+                    $hardwareOptimizationId = $this->_createNewHardwareOptimization();
+                    $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
+                }
+
             }
         }
 
@@ -189,10 +227,12 @@ class Default_IndexController extends Tangent_Controller_Action
 
     protected function _createNewHardwareOptimization ()
     {
-        $hardwareOptimization           = new Hardwareoptimization_Model_Hardware_Optimization;
-        $hardwareOptimization->clientId = $this->_selectedClientId;
-        $hardwareOptimization->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-        $hardwareOptimizationId         = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
+        $hardwareOptimization                                = new Hardwareoptimization_Model_Hardware_Optimization;
+        $hardwareOptimization->clientId                      = $this->_selectedClientId;
+        $hardwareOptimization->dealerId                      = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $hardwareOptimization->hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert(new Hardwareoptimization_Model_Hardware_Optimization_Setting());
+
+        $hardwareOptimizationId = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
 
         return $hardwareOptimizationId;
     }
