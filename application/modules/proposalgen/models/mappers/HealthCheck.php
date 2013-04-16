@@ -297,4 +297,23 @@ class Proposalgen_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
 
         return $result;
     }
+
+    /**
+     * @param $healthcheckId
+     *
+     * @return bool|Proposalgen_Model_Rms_Upload
+     */
+    public function findRmsUploadRowByHardwareOptimizationId($healthcheckId)
+    {
+        $rmsUploadRow = false;
+
+        $healthcheck = $this->fetch(array("{$this->col_id} = ?" => $healthcheckId));
+
+        if ($healthcheck instanceof Proposalgen_Model_Healthcheck)
+        {
+            $rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($healthcheck->rmsUploadId);
+        }
+
+        return $rmsUploadRow;
+    }
 }

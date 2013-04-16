@@ -134,6 +134,49 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     }
 
     /**
+     * Gets the proposal object for reports to use
+     *
+     * @throws Zend_Exception
+     * @return Proposalgen_Model_Proposal_OfficeDepot
+     */
+    public function getProposal ()
+    {
+        if (!$this->_proposal)
+        {
+            $this->_proposal = false;
+            $hasError        = false;
+            try
+            {
+                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_report);
+
+                if ($this->_report->devicesModified)
+                {
+                    $this->_redirect('/data/modificationwarning');
+                }
+
+                if (count($this->_proposal->getDeviceCount()) < 1)
+                {
+                    $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
+                    $hasError                     = true;
+                }
+            }
+            catch (Exception $e)
+            {
+                $this->view->ErrorMessages [] = "There was an error getting the reports.";
+                throw new Zend_Exception("Error Getting Proposal Object.", 0, $e);
+                $hasError = true;
+            }
+
+            if ($hasError)
+            {
+                $this->_proposal = false;
+            }
+        }
+
+        return $this->_proposal;
+    }
+
+    /**
      * Saves the current report.
      * This keeps the updated modification date in the same location at all times.
      */
@@ -214,6 +257,59 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         }
 
         return false;
+    }
+
+    /**
+     * Takes the user to the next step in the survey in order.
+     * So company always goes to general
+     */
+    protected function gotoNextStep ()
+    {
+        if (isset($this->_activeStep))
+        {
+            $nextStep = $this->_activeStep->nextStep;
+            if ($nextStep)
+            {
+                $this->redirector($nextStep->action, $nextStep->controller);
+            }
+        }
+    }
+
+    /**
+     * Takes the user to the previous step in the survey in order.
+     * So company always goes to general
+     */
+    protected function gotoPreviousStep ()
+    {
+        if (isset($this->_activeStep))
+        {
+            $prevStep = $this->_activeStep->previousStep;
+            if ($prevStep)
+            {
+                $this->redirector($prevStep->action, $prevStep->controller);
+            }
+        }
+    }
+
+    /**
+     * Sets a healthcheck step as active
+     *
+     * @param string $activeStepName
+     *            The name of the step that is active
+     */
+    protected function setActiveReportStep ($activeStepName)
+    {
+        $this->_activeStep = null;
+        foreach ($this->getReportSteps() as $step)
+        {
+            $step->active = false;
+            if (strcasecmp($step->enumValue, $activeStepName) === 0)
+            {
+                $this->_activeStep = $step;
+                $step->active      = true;
+                break;
+            }
+        }
     }
 
     /**

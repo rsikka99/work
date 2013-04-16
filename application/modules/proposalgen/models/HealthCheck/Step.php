@@ -1,11 +1,12 @@
 <?php
 class Proposalgen_Model_Healthcheck_Step extends My_Model_Abstract
 {
-    const STEP_FLEETDATA_UPLOAD     = 'upload';
-    const STEP_REPORTSETTINGS       = 'reportsettings';
-    const STEP_FINISHED             = 'finished';
-    const GROUP_SURVEY              = 'Survey';
-    const GROUP_FLEETDATA           = 'Fleet Data';
+    const STEP_FLEETDATA_UPLOAD = 'Upload';
+    const STEP_REPORTSETTINGS   = 'Settings';
+    const STEP_MAPPING          = 'mapping';
+    const STEP_FINISHED         = 'finished';
+    const GROUP_SURVEY          = 'Survey';
+    const GROUP_FLEETDATA       = 'Fleet Data';
 
     /**
      * The order in which steps go.
@@ -13,19 +14,25 @@ class Proposalgen_Model_Healthcheck_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_FLEETDATA_UPLOAD     => array(
+        self::STEP_FLEETDATA_UPLOAD => array(
             'name'       => 'Upload',
             'group'      => self::GROUP_FLEETDATA,
             'controller' => 'healthcheck',
             'action'     => 'index'
         ),
-        self::STEP_REPORTSETTINGS       => array(
+        self::STEP_MAPPING          => array(
+            'name'       => 'Mapping',
+            'group'      => null,
+            'controller' => 'healthcheck',
+            'action'     => 'mapping'
+        ),
+        self::STEP_REPORTSETTINGS   => array(
             'name'       => 'Settings',
             'group'      => null,
             'controller' => 'healthcheck',
             'action'     => 'settings'
         ),
-        self::STEP_FINISHED             => array(
+        self::STEP_FINISHED         => array(
             'name'       => 'Report',
             'group'      => null,
             'controller' => 'healthcheck',

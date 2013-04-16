@@ -10,10 +10,14 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD);
 
         $report               = $this->getReport();
-        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId);
-        $this->saveReport(true);
         $rmsUpload = null;
-        $form = $uploadService->getForm();
+        if(isset($report->id))
+        {
+            $rmsUpload = Proposalgen_Model_Mapper_Healthcheck::getInstance()->findRmsUploadRowByHardwareOptimizationId($report->id);
+        }
+
+        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId,$rmsUpload);
+
 
         if ($this->getRequest()->isPost())
         {
@@ -53,10 +57,11 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
                 }
                 else
                 {
-                    //$this->gotoNextStep();
+                    $this->gotoNextStep();
                 }
             }
         }
+        $this->saveReport(true);
         if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
         {
             $this->view->populateGrid = true;
@@ -115,6 +120,92 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
     }
 
     /**
+     * This handles the mapping of devices to our master devices
+     */
+    public function mappingAction ()
+    {
+        // Mark the step we're on as active
+        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_MAPPING);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['saveAndContinue']))
+            {
+                // Every time we save anything related to a report, we should save it (updates the modification date)
+                $this->saveReport();
+
+                // Call the base controller to send us to the next logical step in the proposal.
+                $this->gotoNextStep();
+            }
+            else if (isset($postData['goBack']))
+            {
+                // Call the base controller to send us to the next logical step in the proposal.
+                $this->gotoPreviousStep();
+            }
+        }
+
+        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+    }
+
+    /**
+     * Generates a list of devices that were not mapped automatically
+     */
+    public function deviceMappingListAction ()
+    {
+        $jqGrid                  = new Tangent_Service_JQGrid();
+        $mapDeviceInstanceMapper = Proposalgen_Model_Mapper_Map_Device_Instance::getInstance();
+
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'deviceCount'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
+
+        // Set up validation arrays
+        $blankModel  = new Proposalgen_Model_Map_Device_Instance();
+        $sortColumns = array_keys($blankModel->toArray());
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
+        {
+            $jqGrid->setRecordCount($mapDeviceInstanceMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+    }
+
+
+    /**
      * The healthcheckAction displays the healthcheck report.
      * Data is retrieved
      * from the database and displayed using HTML, CSS, and javascript.
@@ -132,7 +223,6 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         $this->view->formats = array(
             "/proposalgen/healthcheck/generate/format/docx" => $this->_wordFormat
         );
-
         $this->view->reportTitle = "Health Check";
 
         $format = $this->_getParam("format", "html");
@@ -140,6 +230,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         {
             // Clear the cache for the report before proceeding
             $healthcheck = new Proposalgen_Model_Healthcheck_Healthcheck($this->getProposal());
+            die();
             $this->clearCacheForReport();
             if (false !== ($proposal = $this->getProposal()))
             {
