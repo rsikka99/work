@@ -54,7 +54,7 @@ class Proposalgen_Service_HealthcheckSettings
     public function __construct ($HealthcheckId, $userId, $dealerId)
     {
         $this->_Healthcheck         = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
-        $this->_systemSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemSetting();
+        $this->_systemSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
         $this->_dealerSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
 //
 //        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId); //TODO FIX THIS ONCE USER IS DONE

@@ -19,6 +19,16 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     /**
      * @var int
      */
+    public $healthcheckSettingId;
+
+    /**
+     * @var Proposalgen_Model_Healthcheck_Setting
+     */
+    protected $_healthcheckSetting;
+
+    /**
+     * @var int
+     */
     public $surveySettingId;
 
     /**
@@ -44,6 +54,10 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
         {
             $this->assessmentSettingId = $params->assessmentSettingId;
         }
+        if (isset($params->healthcheckSettingId) && !is_null($params->healthcheckSettingId))
+        {
+            $this->healthcheckSettingId = $params->healthcheckSettingId;
+        }
         if (isset($params->surveySettingId) && !is_null($params->surveySettingId))
         {
             $this->surveySettingId = $params->surveySettingId;
@@ -56,9 +70,10 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "userId"              => $this->userId,
-            "assessmentSettingId" => $this->assessmentSettingId,
-            "surveySettingId"     => $this->surveySettingId,
+            "userId"               => $this->userId,
+            "assessmentSettingId"  => $this->assessmentSettingId,
+            "healthcheckSettingId" => $this->healthcheckSettingId,
+            "surveySettingId"      => $this->surveySettingId,
         );
     }
 
@@ -86,6 +101,32 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
         }
 
         return $this->_assessmentSetting;
+    }
+
+    /**
+     * Gets the healthcheck settings
+     *
+     * @return Proposalgen_Model_Healthcheck_Setting
+     */
+    public function getHealthcheckSettings ()
+    {
+        if (!isset($this->_healthcheckSetting))
+        {
+            $this->_healthcheckSetting = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->find($this->healthcheckSettingId);
+
+            if (!$this->_healthcheckSetting instanceof Proposalgen_Model_Healthcheck_Setting)
+            {
+                // Insert a new copy of the system setting
+                $this->_healthcheckSetting = new Proposalgen_Model_Healthcheck_Setting();
+                Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($this->_healthcheckSetting);
+                $this->healthcheckSettingId = $this->_healthcheckSetting->id;
+
+                // Save ourselves
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_healthcheckSetting;
     }
 
     /**

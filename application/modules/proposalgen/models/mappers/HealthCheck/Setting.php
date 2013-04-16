@@ -234,7 +234,7 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
      *
      * @return Proposalgen_Model_Healthcheck_Setting
      */
-    public function fetchSystemSetting ()
+    public function fetchSystemHealthcheckSetting ()
     {
         return $this->find(1);
     }
@@ -317,7 +317,7 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
         if (!$HealthcheckSetting)
         {
             // Take a copy
-            $HealthcheckSetting   = $this->fetchSystemSetting();
+            $HealthcheckSetting   = $this->fetchSystemHealthcheckSetting();
             $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
             if ($HealthcheckDealerSetting)
