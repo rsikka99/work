@@ -58,7 +58,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * The report steps for this proposal
      *
-     * @var Proposalgen_Model_Healthcheck_Step
+     * @var Healthcheck_Model_Healthcheck_Step
      */
     protected $_reportSteps;
 
@@ -150,13 +150,13 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Gets the report settings for the report
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Healthcheck_Model_Healthcheck_Setting
      */
     public function getReportSettings ()
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
+            $this->_reportSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
         }
 
         return $this->_reportSettings;
@@ -165,9 +165,9 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Sets the report settings for the report
      *
-     * @param Proposalgen_Model_Report_Setting $_reportSettings
+     * @param Healthcheck_Model_Healthcheck_Setting $_reportSettings
      *
-     * @return Proposalgen_Model_Healthcheck
+     * @return Healthcheck_Model_Healthcheck
      */
     public function setReportSettings ($_reportSettings)
     {
@@ -179,16 +179,16 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Gets the report steps for this report
      *
-     * @return Proposalgen_Model_Healthcheck_Step
+     * @return Healthcheck_Model_Healthcheck_Step
      */
     public function getReportSteps ()
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->stepName) ? : Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
+            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
 
-            $this->_reportSteps = Proposalgen_Model_Healthcheck_Step::getSteps();
-            Proposalgen_Model_Healthcheck_Step::updateAccessibleSteps($this->_reportSteps, $stage);
+            $this->_reportSteps = Healthcheck_Model_Healthcheck_Step::getSteps();
+            Healthcheck_Model_Healthcheck_Step::updateAccessibleSteps($this->_reportSteps, $stage);
         }
 
         return $this->_reportSteps;
@@ -197,9 +197,9 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Sets the report steps for this report
      *
-     * @param Proposalgen_Model_Healthcheck_Step $ReportSteps
+     * @param Healthcheck_Model_Healthcheck_Step $ReportSteps
      *
-     * @return Proposalgen_Model_Healthcheck
+     * @return Healthcheck_Model_Healthcheck
      */
     public function setReportSteps ($ReportSteps)
     {
@@ -229,7 +229,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      *
      * @param Quotegen_Model_Client $client
      *
-     * @return Proposalgen_Model_Healthcheck
+     * @return Healthcheck_Model_Healthcheck
      */
     public function setClient ($client)
     {
@@ -259,7 +259,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Rms_Upload $rmsUpload
      *
-     * @return Proposalgen_Model_Healthcheck
+     * @return Healthcheck_Model_Healthcheck
      */
     public function setRmsUpload ($rmsUpload)
     {

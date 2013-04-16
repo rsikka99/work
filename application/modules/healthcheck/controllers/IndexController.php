@@ -13,7 +13,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
         $rmsUpload = null;
         if(isset($report->id))
         {
-            $rmsUpload = Proposalgen_Model_Mapper_Healthcheck::getInstance()->findRmsUploadRowByHardwareOptimizationId($report->id);
+            $rmsUpload = Healthcheck_Model_Mapper_Healthcheck::getInstance()->findRmsUploadRowByHardwareOptimizationId($report->id);
         }
 
         $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId,$rmsUpload);
@@ -35,9 +35,9 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
                     $rmsUpload = $uploadService->rmsUpload;
 
                     // Save the health check object with the new id.
-                    $healthcheck              = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($report->id);
+                    $healthcheck              = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($report->id);
                     $healthcheck->rmsUploadId = $rmsUpload->id;
-                    Proposalgen_Model_Mapper_Healthcheck::getInstance()->save($healthcheck);
+                    Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($healthcheck);
 
                     $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                 }
@@ -79,7 +79,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
     public function settingsAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
+        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
 //        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $healthcheckSettingsService = new Proposalgen_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
 
@@ -125,7 +125,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
     public function mappingAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_MAPPING);
+        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_MAPPING);
 
         if ($this->getRequest()->isPost())
         {
@@ -213,7 +213,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
     public function reportAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_FINISHED);
+        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -229,7 +229,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
         try
         {
             // Clear the cache for the report before proceeding
-            $healthcheck = new Proposalgen_Model_Healthcheck_Healthcheck($this->getProposal());
+            $healthcheck = new Healthcheck_Model_Healthcheck_Healthcheck($this->getProposal());
             die();
             $this->clearCacheForReport();
             if (false !== ($proposal = $this->getProposal()))
@@ -277,7 +277,7 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
             case "docx" :
                 require_once ('PHPWord.php');
                 $this->view->phpword     = new PHPWord();
-                $healthcheck             = new Proposalgen_Model_Healthcheck_Healthcheck($this->getProposal());
+                $healthcheck             = new Healthcheck_Model_Healthcheck_Healthcheck($this->getProposal());
                 $this->view->healthcheck = $healthcheck;
                 $graphs                  = $this->cachePNGImages($healthcheck->getGraphs(), true);
                 $this->view->graphs      = $graphs;

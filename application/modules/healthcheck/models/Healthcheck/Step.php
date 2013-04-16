@@ -41,14 +41,14 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
     );
 
     /**
-     * @var Proposalgen_Model_Healthcheck_Step[]
+     * @var Healthcheck_Model_Healthcheck_Step[]
      */
     private static $steps;
 
     /**
      * Gets the report steps
      *
-     * @return Proposalgen_Model_Healthcheck_Step[]
+     * @return Healthcheck_Model_Healthcheck_Step[]
      */
     public static function getSteps ()
     {
@@ -64,11 +64,11 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
                 $previousStep = $currentStep;
 
                 // Create our new step
-                $currentStep            = new Proposalgen_Model_Healthcheck_Step($step);
+                $currentStep            = new Healthcheck_Model_Healthcheck_Step($step);
                 $currentStep->enumValue = $stepName;
 
                 // Set the previous step of our current step
-                if ($previousStep instanceof Proposalgen_Model_Healthcheck_Step)
+                if ($previousStep instanceof Healthcheck_Model_Healthcheck_Step)
                 {
                     $currentStep->previousStep = $previousStep;
 
@@ -86,14 +86,14 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
     /**
      * The previous step in a proposal
      *
-     * @var Proposalgen_Model_Healthcheck_Step
+     * @var Healthcheck_Model_Healthcheck_Step
      */
     public $previousStep = null;
 
     /**
      * The next step in a proposal
      *
-     * @var Proposalgen_Model_Healthcheck_Step
+     * @var Healthcheck_Model_Healthcheck_Step
      */
     public $nextStep = null;
 
@@ -230,7 +230,7 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
     public static function updateAccessibleSteps ($steps, $stepName)
     {
         $canAccess = true;
-        /* @var $step Proposalgen_Model_Healthcheck_Step */
+        /* @var $step Healthcheck_Model_Healthcheck_Step */
         foreach ($steps as $step)
         {
             $step->canAccess = $canAccess;
