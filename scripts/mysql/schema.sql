@@ -1797,6 +1797,33 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
         ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `user_settings`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `user_settings` (
+    `userId` INT NOT NULL ,
+    `reportSettingId` INT NULL ,
+    `surveySettingId` INT NULL ,
+    PRIMARY KEY (`userId`) ,
+    INDEX `user_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
+    INDEX `user_settings_ibfk_3_idx` (`surveySettingId` ASC) ,
+    CONSTRAINT `user_settings_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `user_settings_ibfk_2`
+    FOREIGN KEY (`reportSettingId` )
+    REFERENCES `report_settings` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `user_settings_ibfk_3`
+    FOREIGN KEY (`surveySettingId` )
+    REFERENCES `survey_settings` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
 
