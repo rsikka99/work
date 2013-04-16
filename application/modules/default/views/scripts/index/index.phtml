@@ -163,18 +163,18 @@
                                 </td>
                             </tr>
                             <?php foreach ($this->availableHealthchecks as $healthcheck) : /* @var $healthcheck Proposalgen_Model_Healthcheck */ ?>
-                                <tr class="<?php echo ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
-                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+                                <tr class="<?php echo ($healthcheck->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->lastModified)); ?></td>
 
-                                    <?php if ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
+                                    <?php if ($healthcheck->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
                                         <td>Finished</td>
 
                                     <?php else : ?>
                                         <td>In Progress</td>
                                     <?php endif; ?>
                                     <td style="text-align: center;">
-                                        <button name="selectHealthcheck" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                        <button name="selectHealthcheck" value="<?php echo $healthcheck->id; ?>" class="btn btn-primary btn-mini">Select</button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
