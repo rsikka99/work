@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -19,12 +19,12 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_HealthCheck';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Healthcheck';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_HealthCheck
+     * @return Proposalgen_Model_Mapper_Healthcheck
      */
     public static function getInstance ()
     {
@@ -35,7 +35,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      * Saves an instance of Proposalgen_Model_Report to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_HealthCheck
+     * @param $object Proposalgen_Model_Healthcheck
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -62,7 +62,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Report to the database.
      *
-     * @param $object     Proposalgen_Model_HealthCheck
+     * @param $object     Proposalgen_Model_Healthcheck
      *                    The report model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -100,7 +100,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_HealthCheck)
+        if ($object instanceof Proposalgen_Model_Healthcheck)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -124,13 +124,13 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the report to find
      *
-     * @return Proposalgen_Model_HealthCheck
+     * @return Proposalgen_Model_Healthcheck
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_HealthCheck)
+        if ($result instanceof Proposalgen_Model_Healthcheck)
         {
             return $result;
         }
@@ -142,7 +142,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_HealthCheck($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -160,7 +160,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_HealthCheck
+     * @return Proposalgen_Model_Healthcheck
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -170,7 +170,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_HealthCheck($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -179,7 +179,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all HealthChecks
+     * Fetches all Healthchecks
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -190,7 +190,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_HealthCheck[]
+     * @return Proposalgen_Model_Healthcheck[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -198,7 +198,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_HealthCheck($row->toArray());
+            $object = new Proposalgen_Model_Healthcheck($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -210,43 +210,43 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all unfinished HealthChecks for a given client
+     * Fetches all unfinished Healthchecks for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_HealthCheck[]
+     * @return Proposalgen_Model_Healthcheck[]
      */
-    public function fetchAllUnfinishedHealthChecksForClient ($clientId)
+    public function fetchAllUnfinishedHealthchecksForClient ($clientId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?"  => $clientId,
-                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_HealthCheck_Step::STEP_FINISHED
+                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_Healthcheck_Step::STEP_FINISHED
                                ));
     }
 
     /**
-     * Fetches all HealthChecks for a given client
+     * Fetches all Healthchecks for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_HealthCheck[]
+     * @return Proposalgen_Model_Healthcheck[]
      */
-    public function fetchAllFinishedHealthChecksForClient ($clientId)
+    public function fetchAllFinishedHealthchecksForClient ($clientId)
     {
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?" => $clientId,
-                                    "{$this->col_stepName} = ?" => Proposalgen_Model_HealthCheck_Step::STEP_FINISHED
+                                    "{$this->col_stepName} = ?" => Proposalgen_Model_Healthcheck_Step::STEP_FINISHED
                                ));
     }
 
     /**
-     * Fetches all HealthChecks for a given client
+     * Fetches all Healthchecks for a given client
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_HealthCheck[]
+     * @return Proposalgen_Model_Healthcheck[]
      */
-    public function fetchAllHealthChecksForClient ($clientId)
+    public function fetchAllHealthchecksForClient ($clientId)
     {
         return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), "{$this->col_dateCreated} DESC", 100);
     }
@@ -264,7 +264,7 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_HealthCheck $object
+     * @param Proposalgen_Model_Healthcheck $object
      *
      * @return int
      */
@@ -274,14 +274,14 @@ class Proposalgen_Model_Mapper_HealthCheck extends My_Model_Mapper_Abstract
     }
 
     /**
-     * This finds all HealthChecks that have a master device using the $masterDeviceId and
+     * This finds all Healthchecks that have a master device using the $masterDeviceId and
      * sets the deviceModified field to 1
      *
      * @param int $masterDeviceId
      *
      * @return bool
      */
-    public function setDevicesModifiedFlagOnHealthChecks ($masterDeviceId)
+    public function setDevicesModifiedFlagOnHealthchecks ($masterDeviceId)
     {
         $sql    = "
     UPDATE assessments

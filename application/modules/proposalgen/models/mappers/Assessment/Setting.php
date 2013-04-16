@@ -244,7 +244,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      *
      * @return Proposalgen_Model_Report_Setting
      */
-    public function fetchHealthCheckReportSetting ($reportId)
+    public function fetchHealthcheckReportSetting ($reportId)
     {
         $reportSetting = $this->find($reportId);
         // If we don't have a setting yet, make a blank one

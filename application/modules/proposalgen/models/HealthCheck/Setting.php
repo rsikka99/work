@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_HealthCheck_Setting extends My_Model_Abstract
+class Proposalgen_Model_Healthcheck_Setting extends My_Model_Abstract
 {
 
     /**
@@ -150,12 +150,12 @@ class Proposalgen_Model_HealthCheck_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_HealthCheck_Setting $settings
-     *            These can be either a Proposalgen_Model_HealthCheck_Setting or an array of settings
+     * @param Proposalgen_Model_Healthcheck_Setting $settings
+     *            These can be either a Proposalgen_Model_Healthcheck_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
-        if ($settings instanceof Proposalgen_Model_HealthCheck_Setting)
+        if ($settings instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             $settings = $settings->toArray();
         }
@@ -319,7 +319,7 @@ class Proposalgen_Model_HealthCheck_Setting extends My_Model_Abstract
      * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
      *                                 The pricing configuration to set
      *
-     * @return \Proposalgen_Model_HealthCheck_Setting
+     * @return \Proposalgen_Model_Healthcheck_Setting
      */
     public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
@@ -349,7 +349,7 @@ class Proposalgen_Model_HealthCheck_Setting extends My_Model_Abstract
      * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
      *                                  The pricing configuration to set
      *
-     * @return \Proposalgen_Model_HealthCheck_Setting
+     * @return \Proposalgen_Model_Healthcheck_Setting
      */
     public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {

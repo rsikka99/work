@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_HealthCheck_HealthCheck
+class Proposalgen_Model_Healthcheck_Healthcheck
 {
     /**@var Proposalgen_Model_Proposal_OfficeDepot */
     public $proposal;

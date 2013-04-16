@@ -1,84 +1,84 @@
 <?php
 
-class Proposalgen_Service_HealthCheckSettings
+class Proposalgen_Service_HealthcheckSettings
 {
     /**
      * The form for a client
      *
-     * @var Proposalgen_Form_Settings_HealthCheck
+     * @var Proposalgen_Form_Settings_Healthcheck
      */
     protected $_form;
 
     /**
-     * The system HealthCheck settings
+     * The system Healthcheck settings
      *
-     * @var Proposalgen_Model_HealthCheck_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
     protected $_systemSettings;
 
     /**
-     * The system HealthCheck settings
+     * The system Healthcheck settings
      *
-     * @var Proposalgen_Model_HealthCheck_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
     protected $_dealerSettings;
 
     /**
-     * The user HealthCheck settings
+     * The user Healthcheck settings
      *
-     * @var Proposalgen_Model_HealthCheck_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
     protected $_userSettings;
 
     /**
-     * The HealthCheck's HealthCheck settings
+     * The Healthcheck's Healthcheck settings
      *
-     * @var Proposalgen_Model_HealthCheck_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
-    protected $_HealthCheckSettings;
+    protected $_HealthcheckSettings;
 
     /**
      * The default settings (uses overrides)
      *
-     * @var Proposalgen_Model_HealthCheck_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
     protected $_defaultSettings;
 
     /**
-     * The HealthCheck
+     * The Healthcheck
      *
-     * @var Proposalgen_Model_HealthCheck
+     * @var Proposalgen_Model_Healthcheck
      */
-    protected $_HealthCheck;
+    protected $_Healthcheck;
 
-    public function __construct ($HealthCheckId, $userId, $dealerId)
+    public function __construct ($HealthcheckId, $userId, $dealerId)
     {
-        $this->_HealthCheck         = Proposalgen_Model_Mapper_HealthCheck::getInstance()->find($HealthCheckId);
-        $this->_systemSettings = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchSystemSetting();
-        $this->_dealerSettings = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchDealerSetting($dealerId);
+        $this->_Healthcheck         = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
+        $this->_systemSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemSetting();
+        $this->_dealerSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
 
-        $this->_userSettings   = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchUserSetting($userId); TODO FIX THIS ONCE USER IS DONE
-        $this->_HealthCheckSettings = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchSetting($HealthCheckId);
+        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId); //TODO FIX THIS ONCE USER IS DONE
+        $this->_HealthcheckSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($HealthcheckId);
 
         // Calculate the default settings
-        $this->_defaultSettings = new Proposalgen_Model_HealthCheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
+        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
         $this->_defaultSettings->populate($this->_userSettings->toArray());
     }
 
     /**
      * Gets the client form
      *
-     * @return Proposalgen_Form_Settings_HealthCheck
+     * @return Proposalgen_Form_Settings_Healthcheck
      */
     public function getForm ()
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Proposalgen_Form_Settings_HealthCheck($this->_defaultSettings);
+            $this->_form = new Proposalgen_Form_Settings_Healthcheck($this->_defaultSettings);
 
             // Populate with initial data?
-            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthCheckSettings->toArray()));
-            $reportDate = date('m/d/Y', strtotime($this->_HealthCheck->reportDate));
+            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthcheckSettings->toArray()));
+            $reportDate = date('m/d/Y', strtotime($this->_Healthcheck->reportDate));
             $this->_form->populate(array(
                                         'reportDate' => $reportDate
                                    ));
@@ -125,7 +125,7 @@ class Proposalgen_Service_HealthCheckSettings
     }
 
     /**
-     * Updates the HealthCheck's settings
+     * Updates the Healthcheck's settings
      *
      * @param array $data
      *
@@ -137,8 +137,8 @@ class Proposalgen_Service_HealthCheckSettings
         if ($validData)
         {
             $reportDate                = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
-            $this->_HealthCheck->reportDate = $reportDate;
-            Proposalgen_Model_Mapper_HealthCheck::getInstance()->save($this->_HealthCheck);
+            $this->_Healthcheck->reportDate = $reportDate;
+            Proposalgen_Model_Mapper_Healthcheck::getInstance()->save($this->_Healthcheck);
 
             foreach ($validData as $key => $value)
             {
@@ -158,17 +158,17 @@ class Proposalgen_Service_HealthCheckSettings
             }
 
             // Save the id as it will get erased
-            $HealthCheckSettingsId = $this->_HealthCheckSettings->id;
+            $HealthcheckSettingsId = $this->_HealthcheckSettings->id;
 
-            $this->_HealthCheckSettings->populate($this->_defaultSettings->toArray());
-            $this->_HealthCheckSettings->populate($validData);
+            $this->_HealthcheckSettings->populate($this->_defaultSettings->toArray());
+            $this->_HealthcheckSettings->populate($validData);
 
             // Restore the ID
-            $this->_HealthCheckSettings->id = $HealthCheckSettingsId;
+            $this->_HealthcheckSettings->id = $HealthcheckSettingsId;
 
-            Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->save($this->_HealthCheckSettings);
+            Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->save($this->_HealthcheckSettings);
 
-            $this->getForm()->populate($this->_HealthCheckSettings->toArray());
+            $this->getForm()->populate($this->_HealthcheckSettings->toArray());
 
             return true;
         }

@@ -16,7 +16,7 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->HealthCheck->active = true;
+        $this->view->availableReports->Healthcheck->active = true;
 
         $this->view->formats = array(
             "/proposalgen/report_healthcheck/generate/format/docx" => $this->_wordFormat
@@ -28,7 +28,7 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
         try
         {
             // Clear the cache for the report before proceeding
-            $healthCheck = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
+            $healthcheck = new Proposalgen_Model_Healthcheck_Healthcheck($this->getProposal());
             $this->clearCacheForReport();
             if (false !== ($proposal = $this->getProposal()))
             {
@@ -52,7 +52,7 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
             {
                 throw new Exception("The proposal cannot be found.");
             }
-            $this->view->healthcheck = $healthCheck;
+            $this->view->healthcheck = $healthcheck;
         }
         catch (Exception $e)
         {
@@ -75,9 +75,9 @@ class Proposalgen_Report_HealthcheckController extends Proposalgen_Library_Contr
             case "docx" :
                 require_once ('PHPWord.php');
                 $this->view->phpword     = new PHPWord();
-                $healthCheck             = new Proposalgen_Model_HealthCheck_HealthCheck($this->getProposal());
-                $this->view->healthcheck = $healthCheck;
-                $graphs                  = $this->cachePNGImages($healthCheck->getGraphs(), true);
+                $healthcheck             = new Proposalgen_Model_Healthcheck_Healthcheck($this->getProposal());
+                $this->view->healthcheck = $healthcheck;
+                $graphs                  = $this->cachePNGImages($healthcheck->getGraphs(), true);
                 $this->view->graphs      = $graphs;
                 $this->_helper->layout->disableLayout();
                 break;

@@ -61,8 +61,8 @@ class Default_IndexController extends Tangent_Controller_Action
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableQuotes = $availableQuotes;
 
-            $availableHealthChecks             = Proposalgen_Model_Mapper_HealthCheck::getInstance()->fetchAllHealthChecksForClient($this->_selectedClientId);
-            $this->view->availableHealthCHecks = $availableHealthChecks;
+            $availableHealthchecks             = Proposalgen_Model_Mapper_Healthcheck::getInstance()->fetchAllHealthchecksForClient($this->_selectedClientId);
+            $this->view->availableHealthCHecks = $availableHealthchecks;
         }
         if ($this->getRequest()->isPost())
         {
@@ -158,9 +158,9 @@ class Default_IndexController extends Tangent_Controller_Action
                 $selectedQuoteId = $this->_createNewQuote(Quotegen_Model_Quote::QUOTE_TYPE_PURCHASED);
                 $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $selectedQuoteId));
             }
-            else if (isset($postData['selectHealthCheck']))
+            else if (isset($postData['selectHealthcheck']))
             {
-                $selectedReportId = $postData['selectHealthCheck'];
+                $selectedReportId = $postData['selectHealthcheck'];
 
                 $validReportIds = array(0);
                 foreach ($availableReports as $report)

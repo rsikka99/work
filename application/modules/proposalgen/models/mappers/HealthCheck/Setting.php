@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -15,12 +15,12 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_HealthCheck_Setting';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Healthcheck_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_HealthCheck_Setting
+     * @return Proposalgen_Model_Mapper_Healthcheck_Setting
      */
     public static function getInstance ()
     {
@@ -28,10 +28,10 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_HealthCheck_Setting to the database.
+     * Saves an instance of Proposalgen_Model_Healthcheck_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_HealthCheck_Setting
+     * @param $object Proposalgen_Model_Healthcheck_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -56,10 +56,10 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_HealthCheck_Setting to the database.
+     * Saves (updates) an instance of Proposalgen_Model_Healthcheck_Setting to the database.
      *
-     * @param $object     Proposalgen_Model_HealthCheck_Setting
-     *                    The HealthCheck_setting model to save to the database
+     * @param $object     Proposalgen_Model_Healthcheck_Setting
+     *                    The Healthcheck_setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -89,14 +89,14 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_HealthCheck_Setting or the
+     *                This can either be an instance of Proposalgen_Model_Healthcheck_Setting or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_HealthCheck_Setting)
+        if ($object instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -115,18 +115,18 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Finds a HealthCheck_setting based on it's primaryKey
+     * Finds a Healthcheck_setting based on it's primaryKey
      *
      * @param $id int
-     *            The id of the HealthCheck_setting to find
+     *            The id of the Healthcheck_setting to find
      *
-     * @return Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_HealthCheck_Setting)
+        if ($result instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             return $result;
         }
@@ -138,7 +138,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_HealthCheck_Setting($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -147,7 +147,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Fetches a HealthCheck_setting
+     * Fetches a Healthcheck_setting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -156,7 +156,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -166,7 +166,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
             return false;
         }
 
-        $object = new Proposalgen_Model_HealthCheck_Setting($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -175,7 +175,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Fetches all HealthCheck_settings
+     * Fetches all Healthcheck_settings
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_HealthCheck_Setting[]
+     * @return Proposalgen_Model_Healthcheck_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -194,7 +194,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_HealthCheck_Setting($row->toArray());
+            $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * @param Proposalgen_Model_HealthCheck_Setting $object
+     * @param Proposalgen_Model_Healthcheck_Setting $object
      *
      * @return int
      */
@@ -230,9 +230,9 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Gets the systems HealthCheck setting object
+     * Gets the systems Healthcheck setting object
      *
-     * @return Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function fetchSystemSetting ()
     {
@@ -240,100 +240,100 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Gets the systems HealthCheck setting object
+     * Gets the systems Healthcheck setting object
      *
-     * @param $HealthCheckId
+     * @param $HealthcheckId
      *
-     * @return Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
-    public function fetchSetting ($HealthCheckId)
+    public function fetchSetting ($HealthcheckId)
     {
-        $HealthCheckSetting = $this->find($HealthCheckId);
+        $HealthcheckSetting = $this->find($HealthcheckId);
         // If we don't have a setting yet, make a blank one
-        if (!$HealthCheckSetting)
+        if (!$HealthcheckSetting)
         {
-            $HealthCheckSetting   = new Proposalgen_Model_HealthCheck_Setting();
-            $HealthCheckSetting->id = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
+            $HealthcheckSetting   = new Proposalgen_Model_Healthcheck_Setting();
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
         }
-        return $HealthCheckSetting;
+        return $HealthcheckSetting;
     }
     /**
-     * Gets a users HealthCheck setting object
+     * Gets a users Healthcheck setting object
      *
      * @param int $userId
      *            The user's id
      *
-     * @return Proposalgen_Model_HealthCheck_Setting Returns false if it could not find one.
+     * @return Proposalgen_Model_Healthcheck_Setting Returns false if it could not find one.
      */
     public function fetchUserSetting ($userId)
     {
-        $HealthCheckSetting     = false;
+        $HealthcheckSetting     = false;
         $userSetting = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
         if ($userSetting)
         {
-            $HealthCheckSetting = $this->find($userSetting->healthcheckSettingId);
+            $HealthcheckSetting = $this->find($userSetting->healthcheckSettingId);
         }
 
         // If we don't have a setting yet, make a blank one
-        if (!$HealthCheckSetting)
+        if (!$HealthcheckSetting)
         {
-            $HealthCheckSetting   = new Proposalgen_Model_HealthCheck_Setting();
-            $HealthCheckSettingId = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
+            $HealthcheckSetting   = new Proposalgen_Model_Healthcheck_Setting();
+            $HealthcheckSettingId = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
             if ($userSetting)
             {
-                $userSetting->HealthCheckSettingId = $HealthCheckSettingId;
-                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->save($userSetting);
+                $userSetting->HealthcheckSettingId = $HealthcheckSettingId;
+                Proposalgen_Model_Mapper_User_Healthcheck_Setting::getInstance()->save($userSetting);
             }
             else
             {
-                $userSetting                  = new Proposalgen_Model_User_HealthCheck_Setting();
+                $userSetting                  = new Proposalgen_Model_User_Healthcheck_Setting();
                 $userSetting->userId          = $userId;
-                $userSetting->HealthCheckSettingId = $HealthCheckSettingId;
-                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->insert($userSetting);
+                $userSetting->HealthcheckSettingId = $HealthcheckSettingId;
+                Proposalgen_Model_Mapper_User_Healthcheck_Setting::getInstance()->insert($userSetting);
             }
         }
 
-        return $HealthCheckSetting;
+        return $HealthcheckSetting;
     }
 
     /**
-     * Gets a dealer HealthCheck setting, if none exist it creates one.
+     * Gets a dealer Healthcheck setting, if none exist it creates one.
      *
      * @param $dealerId
      *
-     * @return Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function fetchDealerSetting ($dealerId)
     {
-        $HealthCheckSetting       = false;
-        $HealthCheckDealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
+        $HealthcheckSetting       = false;
+        $HealthcheckDealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
 
-        if ($HealthCheckDealerSetting)
+        if ($HealthcheckDealerSetting)
         {
-            $HealthCheckSetting = $this->find($HealthCheckDealerSetting->HealthCheckSettingId);
+            $HealthcheckSetting = $this->find($HealthcheckDealerSetting->HealthcheckSettingId);
         }
 
-        if (!$HealthCheckSetting)
+        if (!$HealthcheckSetting)
         {
             // Take a copy
-            $HealthCheckSetting   = $this->fetchSystemSetting();
-            $HealthCheckSetting->id = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
+            $HealthcheckSetting   = $this->fetchSystemSetting();
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
-            if ($HealthCheckDealerSetting)
+            if ($HealthcheckDealerSetting)
             {
-                $HealthCheckDealerSetting->HealthCheckSettingId = $HealthCheckSetting->id;
-                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($HealthCheckDealerSetting);
+                $HealthcheckDealerSetting->HealthcheckSettingId = $HealthcheckSetting->id;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($HealthcheckDealerSetting);
             }
             else
             {
-                $HealthCheckDealerSetting                  = new Preferences_Model_Dealer_Setting();
-                $HealthCheckDealerSetting->healthcheckSettingId = $HealthCheckSetting->id;
-                $HealthCheckDealerSetting->dealerId        = $dealerId;
-                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($HealthCheckDealerSetting);
+                $HealthcheckDealerSetting                  = new Preferences_Model_Dealer_Setting();
+                $HealthcheckDealerSetting->healthcheckSettingId = $HealthcheckSetting->id;
+                $HealthcheckDealerSetting->dealerId        = $dealerId;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($HealthcheckDealerSetting);
             }
         }
 
-        return $HealthCheckSetting;
+        return $HealthcheckSetting;
     }
 }

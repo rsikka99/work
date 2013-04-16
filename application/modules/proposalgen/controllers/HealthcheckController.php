@@ -7,7 +7,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
     public function indexAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD);
+        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD);
 
         $report               = $this->getReport();
         $rmsUploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId);
@@ -25,7 +25,7 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
                         $db       = Zend_Db_Table::getDefaultAdapter();
                         $db->beginTransaction();
                         $report->rmsUploadId = $rmsUploadService->rmsUpload->id;
-                        Proposalgen_Model_Mapper_HealthCheck::getInstance()->save($report);
+                        Proposalgen_Model_Mapper_Healthcheck::getInstance()->save($report);
                         $this->_flashMessenger->addMessage(array(
                                                                 'success' => 'Upload Complete.'
                                                            ));
@@ -61,9 +61,9 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
     public function reportsettingsAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_HealthCheck_Step::STEP_REPORTSETTINGS);
+        $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
 //        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $healthcheckSettingsService = new Proposalgen_Service_HealthCheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $healthcheckSettingsService = new Proposalgen_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         //$reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
         if ($this->getRequest()->isPost())

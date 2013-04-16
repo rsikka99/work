@@ -2,14 +2,14 @@
 class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Controller_Proposal
 {
     /**
-     * @var Proposalgen_Model_HealthCheck
+     * @var Proposalgen_Model_Healthcheck
      */
     protected $_report;
 
     /**
      * The current step that the user is viewing.
      *
-     * @var Proposalgen_Model_HealthCheck_Step
+     * @var Proposalgen_Model_Healthcheck_Step
      */
     protected $_activeStep;
 
@@ -23,7 +23,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 "url"       => $this->view->baseUrl('/proposalgen/report_index/index')
             ),
 
-            "HealthCheck" => (object)array(
+            "Healthcheck" => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')
@@ -51,7 +51,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->_report = Proposalgen_Model_Mapper_HealthCheck::getInstance()->find($this->_reportId);
+        $this->_report = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($this->_reportId);
         if ($this->_report === null)
         {
             $this->_flashMessenger->addMessage(array(
@@ -92,8 +92,8 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->stepName) ? : Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD;
-        Proposalgen_Model_HealthCheck_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
+        $stage = ($this->getReport()->stepName) ? : Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
+        Proposalgen_Model_Healthcheck_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
 
         $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
@@ -102,7 +102,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      * Gets the report object that we are working with
      *
      * @throws Exception
-     * @return Proposalgen_Model_HealthCheck
+     * @return Proposalgen_Model_Healthcheck
      */
     protected function getReport ()
     {
@@ -111,7 +111,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             // Fetch the existing report, or create a new one if the session id isn't set
             if (isset($this->_reportSession->healthcheckId) && $this->_reportSession->healthcheckId > 0)
             {
-                $this->_report = Proposalgen_Model_Mapper_HealthCheck::getInstance()->find((int)$this->_reportSession->healthcheckId);
+                $this->_report = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find((int)$this->_reportSession->healthcheckId);
                 if ($this->_report === null)
                 {
                     throw new Exception("Error selecting the report with an id of '{$this->_reportSession->reportId}'.");
@@ -120,11 +120,11 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             else
             {
                 $identity                   = Zend_Auth::getInstance()->getIdentity();
-                $this->_report              = new Proposalgen_Model_HealthCheck();
+                $this->_report              = new Proposalgen_Model_Healthcheck();
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
                 $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_report->stepName    = Proposalgen_Model_HealthCheck_Step::STEP_FLEETDATA_UPLOAD;
+                $this->_report->stepName    = Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
@@ -140,7 +140,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     protected function saveReport ($updateReportStage = true)
     {
 
-        $reportMapper                = Proposalgen_Model_Mapper_HealthCheck::getInstance();
+        $reportMapper                = Proposalgen_Model_Mapper_Healthcheck::getInstance();
         $this->_report->lastModified = date('Y-m-d H:i:s');
 
         if ($updateReportStage)
@@ -152,7 +152,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 $this->_report->stepName = $newStep->enumValue;
 
                 // We need to adjust the menu just in case we're not redirecting
-                Proposalgen_Model_HealthCheck_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
+                Proposalgen_Model_Healthcheck_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
 
@@ -174,19 +174,19 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Gets an array of report steps.
      *
-     * @return Proposalgen_Model_HealthCheck_Step[]
+     * @return Proposalgen_Model_Healthcheck_Step[]
      */
     protected function getReportSteps ()
     {
         $report      = $this->getReport();
         $reportSteps = null;
-        if ($report instanceof Proposalgen_Model_HealthCheck)
+        if ($report instanceof Proposalgen_Model_Healthcheck)
         {
             $reportSteps = $report->getReportSteps();
         }
         else
         {
-            $reportSteps = Proposalgen_Model_HealthCheck_Step::getSteps();
+            $reportSteps = Proposalgen_Model_Healthcheck_Step::getSteps();
         }
 
         return $reportSteps;
@@ -195,9 +195,9 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Checks to see if the next step is a new step.
      *
-     * @param Proposalgen_Model_HealthCheck_Step $step
+     * @param Proposalgen_Model_Healthcheck_Step $step
      *
-     * @return Proposalgen_Model_HealthCheck_Step Step Name. Returns FALSE if the step is not new.
+     * @return Proposalgen_Model_Healthcheck_Step Step Name. Returns FALSE if the step is not new.
      */
     protected function checkIfNextStepIsNew ($step)
     {
@@ -219,13 +219,13 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Gets the last available step for a report
      *
-     * @return Proposalgen_Model_HealthCheck_Step
+     * @return Proposalgen_Model_Healthcheck_Step
      */
     protected function getLatestAvailableReportStep ()
     {
         $latestStep = null;
 
-        /* @var $step Proposalgen_Model_HealthCheck_Step */
+        /* @var $step Proposalgen_Model_Healthcheck_Step */
         foreach ($this->getReportSteps() as $step)
         {
             /*
