@@ -183,7 +183,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 {
 
                     $this->_proposalSession->healthcheckId = $healthcheckId;
-                    $this->redirector('index', 'healthcheck', 'proposalgen');
+                    $this->redirector('index', 'index', 'healthcheck');
                 }
                 else
                 {
