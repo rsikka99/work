@@ -186,23 +186,19 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // Create a new report setting based on the system default report setting
                         // Then assigned the dealer object the new id.
-                        $reportSetting = new Proposalgen_Model_Report_Setting();
-                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting());
-                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+                        $reportSetting = new Proposalgen_Model_Assessment_Setting();
+                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting());
+                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($reportSetting);
 
                         $surveySetting = new Proposalgen_Model_Survey_Setting();
-                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings());
+                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings());
                         $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
 
-                        $dealerReportSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
-                        $dealerReportSetting->reportSettingId = $dealer->reportSettingId;
-                        $dealerReportSetting->dealerId        = $dealer->id;
-                        Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($dealerReportSetting);
-
-                        $dealerSurveySetting                  = new Proposalgen_Model_Dealer_Survey_Setting();
-                        $dealerSurveySetting->surveySettingId = $dealer->surveySettingId;
-                        $dealerSurveySetting->dealerId        = $dealer->id;
-                        Proposalgen_Model_Mapper_Dealer_Survey_Setting::getInstance()->insert($dealerSurveySetting);
+                        $dealerSetting                      = new Preferences_Model_Dealer_Setting();
+                        $dealerSetting->assessmentSettingId = $dealer->reportSettingId;
+                        $dealerSetting->surveySettingId     = $dealer->surveySettingId;
+                        $dealerSetting->dealerId            = $dealer->id;
+                        Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);
 
                         // Create a new quote setting based on the system default quote setting
                         // Then assigned the dealer quote setting id object it's new id
@@ -290,16 +286,10 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $db->beginTransaction();
 
                         // Delete the dealer and the related report setting
-                        $dealerReportSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealer->id);
-                        if ($dealerReportSetting instanceof Proposalgen_Model_Dealer_Report_Setting)
+                        $reportSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealer->id);
+                        if ($reportSetting instanceof Preferences_Model_Dealer_Setting)
                         {
-                            Proposalgen_Model_Mapper_Report_Setting::getInstance()->delete($dealerReportSetting->reportSettingId);
-                        }
-
-                        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->find($dealer->id);
-                        if ($dealerQuoteSetting instanceof Quotegen_Model_DealerQuoteSetting)
-                        {
-                            Quotegen_Model_Mapper_QuoteSetting::getInstance()->delete($dealerQuoteSetting->quoteSettingId);
+                            Preferences_Model_Mapper_Dealer_Setting::getInstance()->delete($dealer);
                         }
 
                         Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);

@@ -1499,12 +1499,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $db                      = Zend_Db_Table::getDefaultAdapter();
 
         $dealer         = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
-        $reportSettings = $dealer->getReportSettings();
+        $dealerSettings = $dealer->getDealerSettings();
 
-        $this->view->default_labor = $reportSettings['laborCostPerPage'];
-        $this->view->default_parts = $reportSettings['partsCostPerPage'];
 
-        // fill manufacturers dropdown
+        $this->view->default_labor = $dealerSettings->getAssessmentSettings()->laborCostPerPage;
+        $this->view->default_parts = $dealerSettings->getAssessmentSettings()->partsCostPerPage;
+
+        // fill manufacturers drop down
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullName');
         $this->view->manufacturer_list = $manufacturers;
@@ -1519,7 +1520,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             try
             {
 
-                // return current dropdown states
+                // return current drop down states
                 // $this->view->company_filter = $formData ['company_filter'];
                 $this->view->pricing_filter  = $formData ['pricing_filter'];
                 $this->view->search_filter   = $formData ['criteria_filter'];

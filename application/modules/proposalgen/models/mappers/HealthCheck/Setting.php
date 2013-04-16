@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -15,12 +15,12 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Report_Setting';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Healthcheck_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Report_Setting
+     * @return Proposalgen_Model_Mapper_Healthcheck_Setting
      */
     public static function getInstance ()
     {
@@ -28,10 +28,10 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Report_Setting to the database.
+     * Saves an instance of Proposalgen_Model_Healthcheck_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Report_Setting
+     * @param $object Proposalgen_Model_Healthcheck_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -56,10 +56,10 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Report_Setting to the database.
+     * Saves (updates) an instance of Proposalgen_Model_Healthcheck_Setting to the database.
      *
-     * @param $object     Proposalgen_Model_Report_Setting
-     *                    The report_setting model to save to the database
+     * @param $object     Proposalgen_Model_Healthcheck_Setting
+     *                    The Healthcheck_setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -89,14 +89,14 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Report_Setting or the
+     *                This can either be an instance of Proposalgen_Model_Healthcheck_Setting or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Report_Setting)
+        if ($object instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -115,18 +115,18 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a report_setting based on it's primaryKey
+     * Finds a Healthcheck_setting based on it's primaryKey
      *
      * @param $id int
-     *            The id of the report_setting to find
+     *            The id of the Healthcheck_setting to find
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Report_Setting)
+        if ($result instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             return $result;
         }
@@ -138,7 +138,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -147,7 +147,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a report_setting
+     * Fetches a Healthcheck setting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -156,7 +156,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -166,7 +166,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -175,7 +175,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all report_settings
+     * Fetches all Healthcheck_settings
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Report_Setting[]
+     * @return Proposalgen_Model_Healthcheck_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -194,7 +194,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Report_Setting($row->toArray());
+            $object = new Proposalgen_Model_Healthcheck_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Report_Setting $object
+     * @param Proposalgen_Model_Healthcheck_Setting $object
      *
      * @return int
      */
@@ -230,132 +230,110 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets the systems report setting object
+     * Gets the systems Healthcheck setting object
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
-    public function fetchSystemReportSetting ()
+    public function fetchSystemHealthcheckSetting ()
     {
         return $this->find(1);
     }
 
     /**
-     * Gets a users report setting object
+     * Gets the systems Healthcheck setting object
+     *
+     * @param $HealthcheckId
+     *
+     * @return Proposalgen_Model_Healthcheck_Setting
+     */
+    public function fetchSetting ($HealthcheckId)
+    {
+        $HealthcheckSetting = $this->find($HealthcheckId);
+        // If we don't have a setting yet, make a blank one
+        if (!$HealthcheckSetting)
+        {
+            $HealthcheckSetting   = new Proposalgen_Model_Healthcheck_Setting();
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
+        }
+        return $HealthcheckSetting;
+    }
+    /**
+     * Gets a users Healthcheck setting object
      *
      * @param int $userId
      *            The user's id
      *
-     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
+     * @return Proposalgen_Model_Healthcheck_Setting Returns false if it could not find one.
      */
-    public function fetchUserReportSetting ($userId)
+    public function fetchUserSetting ($userId)
     {
-        $reportSetting     = false;
-        $userReportSetting = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
-        if ($userReportSetting)
+        $HealthcheckSetting     = false;
+        $userSetting = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
+        if ($userSetting)
         {
-            $reportSetting = $this->find($userReportSetting->reportSettingId);
+            $HealthcheckSetting = $this->find($userSetting->healthcheckSettingId);
         }
 
         // If we don't have a setting yet, make a blank one
-        if (!$reportSetting)
+        if (!$HealthcheckSetting)
         {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $HealthcheckSetting   = new Proposalgen_Model_Healthcheck_Setting();
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
-            if ($userReportSetting)
+            if ($userSetting)
             {
-                $userReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
+                $userSetting->healthcheckSettingId = $HealthcheckSetting->Id;
+                Preferences_Model_Mapper_User_Setting::getInstance()->save($userSetting);
             }
             else
             {
-                $userReportSetting                  = new Proposalgen_Model_User_Report_Setting();
-                $userReportSetting->userId          = $userId;
-                $userReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
+                $userSetting                  = new Preferences_Model_User_Setting();
+                $userSetting->userId          = $userId;
+                $userSetting->HealthcheckSettingId = $HealthcheckSetting->Id;
+                Preferences_Model_Mapper_User_Setting::getInstance()->insert($userSetting);
             }
         }
 
-        return $reportSetting;
+        return $HealthcheckSetting;
     }
 
     /**
-     * Gets a reports report setting object
-     *
-     * @param int $reportId
-     *            The report's id
-     *
-     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
-     */
-    public function fetchReportReportSetting ($reportId)
-    {
-        $reportSetting       = false;
-        $reportReportSetting = Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->find($reportId);
-        if ($reportReportSetting)
-        {
-            $reportSetting = $this->find($reportReportSetting->reportSettingId);
-        }
-
-        // If we don't have a setting yet, make a blank one
-        if (!$reportSetting)
-        {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
-
-            if ($reportReportSetting)
-            {
-                $reportReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->save($reportReportSetting);
-            }
-            else
-            {
-                $reportReportSetting                  = new Proposalgen_Model_Report_Report_Setting();
-                $reportReportSetting->reportId        = $reportId;
-                $reportReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->insert($reportReportSetting);
-            }
-        }
-
-        return $reportSetting;
-    }
-
-    /**
-     * Gets a dealer report setting, if none exist it creates one.
+     * Gets a dealer Healthcheck setting, if none exist it creates one.
      *
      * @param $dealerId
      *
-     * @return bool|\Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Healthcheck_Setting
      */
-    public function fetchDealerReportSetting ($dealerId)
+    public function fetchDealerSetting ($dealerId)
     {
-        $reportSetting       = false;
-        $reportDealerSetting = Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->find($dealerId);
+        $HealthcheckSetting       = false;
+        $HealthcheckDealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
 
-        if ($reportDealerSetting)
+        if ($HealthcheckDealerSetting)
         {
-            $reportSetting = $this->find($reportDealerSetting->reportSettingId);
+            $HealthcheckSetting = $this->find($HealthcheckDealerSetting->healthcheckSettingId);
         }
 
-        if (!$reportSetting)
+        if (!$HealthcheckSetting)
         {
             // Take a copy
-            $reportSetting   = $this->fetchSystemReportSetting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $HealthcheckSetting   = $this->fetchSystemHealthcheckSetting();
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
-            if ($reportDealerSetting)
+            if ($HealthcheckDealerSetting)
             {
-                $reportDealerSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->save($reportDealerSetting);
+                $HealthcheckDealerSetting->HealthcheckSettingId = $HealthcheckSetting->id;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($HealthcheckDealerSetting);
             }
             else
             {
-                $reportDealerSetting                  = new Proposalgen_Model_Dealer_Report_Setting();
-                $reportDealerSetting->reportSettingId = $reportSettingId;
-                $reportDealerSetting->dealerId        = $dealerId;
-                Proposalgen_Model_Mapper_Dealer_Report_Setting::getInstance()->insert($reportDealerSetting);
+                $HealthcheckDealerSetting                  = new Preferences_Model_Dealer_Setting();
+                $HealthcheckDealerSetting->healthcheckSettingId = $HealthcheckSetting->id;
+                $HealthcheckDealerSetting->dealerId        = $dealerId;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($HealthcheckDealerSetting);
             }
         }
 
-        return $reportSetting;
+        return $HealthcheckSetting;
     }
 }

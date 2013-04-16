@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Assessment extends My_Model_Abstract
+class Proposalgen_Model_Healthcheck extends My_Model_Abstract
 {
     /**
      * @var int
@@ -22,11 +22,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     public $rmsUploadId;
 
     /**
-     * @var int
-     */
-    public $userPricingOverride;
-
-    /**
      * @var string
      */
     public $stepName;
@@ -47,22 +42,23 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     public $reportDate;
 
     /**
-     * @var bool
+     * @var int
      */
-    public $devicesModified;
+    public $settingId;
+
 
     // Non database fields
     /**
      * The report settings for this proposal
      *
-     * @var Proposalgen_Model_Assessment_Setting
+     * @var Proposalgen_Model_Report_Setting
      */
     protected $_reportSettings;
 
     /**
      * The report steps for this proposal
      *
-     * @var Proposalgen_Model_Assessment_Step
+     * @var Proposalgen_Model_Healthcheck_Step
      */
     protected $_reportSteps;
 
@@ -70,11 +66,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      * @var Quotegen_Model_Client
      */
     protected $_client;
-
-    /**
-     * @var Proposalgen_Model_Assessment_Survey
-     */
-    protected $_survey;
 
     /**
      * @var Proposalgen_Model_Rms_Upload
@@ -111,9 +102,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
             $this->rmsUploadId = $params->rmsUploadId;
         }
 
-        if (isset($params->userPricingOverride) && !is_null($params->userPricingOverride))
+        if (isset($params->settingId) && !is_null($params->settingId))
         {
-            $this->userPricingOverride = $params->userPricingOverride;
+            $this->settingId = $params->settingId;
         }
 
         if (isset($params->stepName) && !is_null($params->stepName))
@@ -136,11 +127,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
             $this->reportDate = $params->reportDate;
         }
 
-        if (isset($params->devicesModified) && !is_null($params->devicesModified))
-        {
-            $this->devicesModified = $params->devicesModified;
-        }
-
     }
 
     /**
@@ -149,29 +135,28 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                  => $this->id,
-            "clientId"            => $this->clientId,
-            "dealerId"            => $this->dealerId,
-            "rmsUploadId"         => $this->rmsUploadId,
-            "userPricingOverride" => $this->userPricingOverride,
-            "stepName"            => $this->stepName,
-            "dateCreated"         => $this->dateCreated,
-            "lastModified"        => $this->lastModified,
-            "reportDate"          => $this->reportDate,
-            "devicesModified"     => $this->devicesModified,
+            "id"           => $this->id,
+            "clientId"     => $this->clientId,
+            "dealerId"     => $this->dealerId,
+            "settingId"    => $this->settingId,
+            "rmsUploadId"  => $this->rmsUploadId,
+            "stepName"     => $this->stepName,
+            "dateCreated"  => $this->dateCreated,
+            "lastModified" => $this->lastModified,
+            "reportDate"   => $this->reportDate,
         );
     }
 
     /**
      * Gets the report settings for the report
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Proposalgen_Model_Report_Setting
      */
     public function getReportSettings ()
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($this->id);
+            $this->_reportSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
         }
 
         return $this->_reportSettings;
@@ -180,9 +165,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Sets the report settings for the report
      *
-     * @param Proposalgen_Model_Assessment_Setting $_reportSettings
+     * @param Proposalgen_Model_Report_Setting $_reportSettings
      *
-     * @return \Proposalgen_Model_Assessment
+     * @return Proposalgen_Model_Healthcheck
      */
     public function setReportSettings ($_reportSettings)
     {
@@ -194,16 +179,16 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Gets the report steps for this report
      *
-     * @return Proposalgen_Model_Assessment_Step
+     * @return Proposalgen_Model_Healthcheck_Step
      */
     public function getReportSteps ()
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->stepName) ? : Proposalgen_Model_Assessment_Step::STEP_SURVEY;
+            $stage = ($this->stepName) ? : Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
 
-            $this->_reportSteps = Proposalgen_Model_Assessment_Step::getSteps();
-            Proposalgen_Model_Assessment_Step::updateAccessibleSteps($this->_reportSteps, $stage);
+            $this->_reportSteps = Proposalgen_Model_Healthcheck_Step::getSteps();
+            Proposalgen_Model_Healthcheck_Step::updateAccessibleSteps($this->_reportSteps, $stage);
         }
 
         return $this->_reportSteps;
@@ -212,9 +197,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Sets the report steps for this report
      *
-     * @param Proposalgen_Model_Assessment_Step $ReportSteps
+     * @param Proposalgen_Model_Healthcheck_Step $ReportSteps
      *
-     * @return \Proposalgen_Model_Assessment
+     * @return Proposalgen_Model_Healthcheck
      */
     public function setReportSteps ($ReportSteps)
     {
@@ -244,7 +229,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      *
      * @param Quotegen_Model_Client $client
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Proposalgen_Model_Healthcheck
      */
     public function setClient ($client)
     {
@@ -253,34 +238,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
         return $this;
     }
 
-    /**
-     * Gets the survey
-     *
-     * @return Proposalgen_Model_Assessment_Survey
-     */
-    public function getSurvey ()
-    {
-        if (!isset($this->_survey))
-        {
-            $this->_survey = Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->find($this->id);
-        }
-
-        return $this->_survey;
-    }
-
-    /**
-     * Sets the survey
-     *
-     * @param Proposalgen_Model_Assessment_Survey $survey
-     *
-     * @return Proposalgen_Model_Assessment
-     */
-    public function setSurvey ($survey)
-    {
-        $this->_survey = $survey;
-
-        return $this;
-    }
 
     /**
      * Gets the rms upload
@@ -302,7 +259,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Rms_Upload $rmsUpload
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Proposalgen_Model_Healthcheck
      */
     public function setRmsUpload ($rmsUpload)
     {

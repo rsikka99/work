@@ -4,68 +4,92 @@
 
 <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_ADMIN)) : ?>
     <h3>System Management</h3>
-    <div class="btn-group">
+    <div class="row">
         <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_CLIENT_INDEX)) : ?>
-            <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "admin")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                System Client Management</a>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "admin")); ?>"><i class="icon-star icon-4x"></i><br /><br />
+                    System Client Management</a>
+            </div>
         <?php endif; ?>
 
         <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_DEALER_INDEX)) : ?>
-            <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "dealer", "module" => "admin")); ?>"><i class="icon-briefcase icon-4x"></i><br /><br />
-                System Dealer Management</a>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "dealer", "module" => "admin")); ?>"><i class="icon-briefcase icon-4x"></i><br /><br />
+                    System Dealer Management</a>
+            </div>
         <?php endif; ?>
 
         <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_LEASINGSCHEMA_INDEX)) : ?>
-            <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "admin")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                System Lease Rate Management</a>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "admin")); ?>"><i class="icon-money icon-4x"></i><br /><br />
+                    System Lease Rate Management</a>
+            </div>
         <?php endif; ?>
 
         <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_INDEX)) : ?>
-            <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "admin")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-                System User Management</a>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "admin")); ?>"><i class="icon-group icon-4x"></i><br /><br />
+                    System User Management</a>
+            </div>
         <?php endif; ?>
     </div>
 <?php endif; ?>
 <h3>Device Management</h3>
-<div class="btn-group">
+<div class="row">
 
     <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "devicesetup", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-            All Devices<br /><br /> </a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "devicesetup", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                All Devices<br /><br /> </a>
+        </div>
     <?php endif; ?>
 
     <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_CONFIGURATION_INDEX)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "configuration", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-            Hardware Quote <br /> Device Configurations</a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "configuration", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                Hardware Quote <br /> Configurations</a>
+        </div>
     <?php endif; ?>
 
     <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_OPTION_WILDCARD)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "option", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-            Hardware Quote <br /> Device Options</a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "option", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                Hardware Quote <br /> Device Options</a>
+        </div>
     <?php endif; ?>
 
     <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-            Bulk Pricing Updates<br /> <br /> </a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-money icon-4x"></i><br /><br />
+                Bulk Pricing Updates<br /> <br /> </a>
+        </div>
     <?php endif; ?>
 
     <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-            Replacement Devices<br /> <br /> </a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                Replacement Devices<br /> <br /> </a>
+        </div>
     <?php endif; ?>
 </div>
 <h3>Account Management</h3>
-<div class="btn-group">
+<div class="row">
     <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-            Clients<br /><br /></a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
+                Clients<br /><br /></a>
+        </div>
     <?php endif; ?>
     <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-            Lease Rates<br /><br /></a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
+                Lease Rates<br /><br /></a>
+        </div>
     <?php endif; ?>
     <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
-        <a class="btn" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-            Users<br /><br /></a>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
+                Users<br /><br /></a>
+        </div>
     <?php endif; ?>
 </div>

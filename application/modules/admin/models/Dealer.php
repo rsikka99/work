@@ -9,13 +9,6 @@ class Admin_Model_Dealer extends My_Model_Abstract
     public $id;
 
     /**
-     * The row in the database where the report settings are store for the dealer.
-     *
-     * @var int
-     */
-    public $reportSettingId;
-
-    /**
      * The amount of licences that a user is allowed to have at one time
      *
      * @var int
@@ -37,39 +30,16 @@ class Admin_Model_Dealer extends My_Model_Abstract
     public $dateCreated;
 
     /**
-     * The id that relates to the quote setting object table.
-     *
-     * @var int
-     */
-    public $quoteSettingId;
-
-    /**
-     * DONT WORRY, SAID SHAWN!
-     *
-     * @var int
-     */
-    public $surveySettingId;
-
-    /**
-     * Gets a report setting object for the dealer.
-     *
-     * @var Proposalgen_Model_Report_Setting
-     */
-    protected $_reportSettings;
-
-    /**
-     * Gets a quote setting object for the dealer object.
-     *
-     * @var Quotegen_Model_QuoteSetting
-     */
-    protected $_quoteSetting;
-
-    /**
      * The image id
      *
      * @var int
      */
     public $dealerLogoImageId;
+
+    /**
+     * @var Preferences_Model_Dealer_Setting
+     */
+    protected $_dealerSettings;
 
 
     /**
@@ -85,10 +55,6 @@ class Admin_Model_Dealer extends My_Model_Abstract
         {
             $this->id = $params->id;
         }
-        if (isset($params->reportSettingId) && !is_null($params->reportSettingId))
-        {
-            $this->reportSettingId = $params->reportSettingId;
-        }
         if (isset($params->userLicenses) && !is_null($params->userLicenses))
         {
             $this->userLicenses = $params->userLicenses;
@@ -100,14 +66,6 @@ class Admin_Model_Dealer extends My_Model_Abstract
         if (isset($params->dateCreated) && !is_null($params->dateCreated))
         {
             $this->dateCreated = $params->dateCreated;
-        }
-        if (isset($params->quoteSettingId) && !is_null($params->quoteSettingId))
-        {
-            $this->quoteSettingId = $params->quoteSettingId;
-        }
-        if (isset($params->surveySettingId) && !is_null($params->surveySettingId))
-        {
-            $this->surveySettingId = $params->surveySettingId;
         }
         if (isset($params->dealerLogoImageId) && !is_null($params->dealerLogoImageId))
         {
@@ -122,49 +80,34 @@ class Admin_Model_Dealer extends My_Model_Abstract
     {
         return array(
             "id"                => $this->id,
-            "reportSettingId"   => $this->reportSettingId,
             "userLicenses"      => $this->userLicenses,
             "dealerName"        => $this->dealerName,
             "dateCreated"       => $this->dateCreated,
-            "quoteSettingId"    => $this->quoteSettingId,
-            "surveySettingId"   => $this->surveySettingId,
             "dealerLogoImageId" => $this->dealerLogoImageId,
         );
     }
 
-    /**
-     * Gets the report and survey settings for the user
-     *
-     * @return array
-     */
-    public function getReportSettings ()
-    {
-        if (!isset($this->_reportSettings))
-        {
-            $dealerReportSetting                      = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($this->id);
-            $dealerSurveySetting                      = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchDealerSurveySetting($this->id);
-            $this->_reportSettings                    = array_merge($dealerReportSetting->toArray(), $dealerSurveySetting->toArray());
-            $this->_reportSettings['reportSettingId'] = $dealerReportSetting->id;
-            $this->_reportSettings['surveySettingId'] = $dealerSurveySetting->id;
-            unset($this->_reportSettings['id']);
-        }
-
-        return $this->_reportSettings;
-    }
 
     /**
-     * Getter for _quoteSetting
+     * Gets a dealers settings object
      *
-     * @return \Quotegen_Model_QuoteSetting
+     * @return Preferences_Model_Dealer_Setting
      */
-    public function getQuoteSetting ()
+    public function getDealerSettings ()
     {
-        if (!isset($this->_quoteSetting))
+        if (!isset($this->_dealerSettings))
         {
-            // FIXME: Actually code this function
+            $this->_dealerSettings = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($this->id);
+            if (!$this->_dealerSettings instanceof Preferences_Model_Dealer_Setting)
+            {
+                $this->_dealerSettings           = new Preferences_Model_Dealer_Setting();
+                $this->_dealerSettings->dealerId = $this->id;
+
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($this->_dealerSettings);
+            }
         }
 
-        return $this->_quoteSetting;
+        return $this->_dealerSettings;
     }
 
     /**

@@ -6,8 +6,11 @@ class Preferences_ProposalController extends Tangent_Controller_Action
     public function dealerAction ()
     {
         // Initialize and get the form
-        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $reportSettingFormService = new Preferences_Service_ReportSetting($dealer->getReportSettings());
+        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+
+        $combinedSettings = array_merge($dealer->getDealerSettings()->getAssessmentSettings()->toArray(), $dealer->getDealerSettings()->getSurveySettings()->toArray());
+
+        $reportSettingFormService = new Preferences_Service_ReportSetting($combinedSettings);
         $form                     = $reportSettingFormService->getForm();
 
         $request = $this->getRequest();
@@ -23,7 +26,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
             }
         }
 
@@ -52,7 +55,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
             }
         }
 
@@ -62,13 +65,18 @@ class Preferences_ProposalController extends Tangent_Controller_Action
     public function userAction ()
     {
         // Initialize and get the form
-        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $dealerReportSettings     = $dealer->getReportSettings();
-        $user                     = new Application_Model_User();
-        $userReportSettings       = $user->getReportSettings(Zend_Auth::getInstance()->getIdentity()->id);
-        $reportSettingFormService = new Preferences_Service_ReportSetting($userReportSettings);
 
-        $form = $reportSettingFormService->getFormWithDefaults($dealerReportSettings);
+        // Dealer
+        $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $combinedDealerSettings = array_merge($dealer->getDealerSettings()->getAssessmentSettings()->toArray(), $dealer->getDealerSettings()->getSurveySettings()->toArray());
+
+        // User
+        $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $combinedUserSettings = array_merge($user->getUserSettings()->getAssessmentSettings()->toArray(), $user->getUserSettings()->getAssessmentSettings()->toArray());
+
+        $reportSettingFormService = new Preferences_Service_ReportSetting($combinedUserSettings);
+
+        $form = $reportSettingFormService->getFormWithDefaults($combinedDealerSettings);
 
         $request = $this->getRequest();
 
@@ -83,7 +91,7 @@ class Preferences_ProposalController extends Tangent_Controller_Action
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
             }
         }
 

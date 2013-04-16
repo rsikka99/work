@@ -1,23 +1,23 @@
 <?php
-class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abstract
+class Preferences_Model_Mapper_Dealer_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
      */
     public $col_dealerId = 'dealerId';
-    public $col_surveySettingId = 'surveySettingId';
 
     /**
      * The default db table class to use
      *
      * @var String
+     *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Dealer_Survey_Setting';
+    protected $_defaultDbTable = 'Preferences_Model_DbTable_Dealer_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Dealer_Survey_Setting
+     * @return Preferences_Model_Mapper_Dealer_Setting
      */
     public static function getInstance ()
     {
@@ -25,10 +25,10 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Dealer_Survey_Setting to the database.
+     * Saves an instance of Preferences_Model_Dealer_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Dealer_Survey_Setting
+     * @param $object Preferences_Model_Dealer_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -40,7 +40,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
-        
+
         $object->dealerId = $id;
 
         // Save the object into the cache
@@ -50,10 +50,10 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Dealer_Survey_Setting to the database.
+     * Saves (updates) an instance of Preferences_Model_Dealer_Setting to the database.
      *
-     * @param $object     Proposalgen_Model_Dealer_Survey_Setting
-     *                    The Template model to save to the database
+     * @param $object     Preferences_Model_Dealer_Setting
+     *                    The Dealer Setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -83,14 +83,14 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Dealer_Survey_Setting or the
+     *                This can either be an instance of Preferences_Model_Dealer_Setting or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Dealer_Survey_Setting)
+        if ($object instanceof Preferences_Model_Dealer_Setting)
         {
             $whereClause = array(
                 "{$this->col_dealerId} = ?" => $object->dealerId
@@ -109,18 +109,18 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * Finds a Template based on it's primaryKey
+     * Finds a Dealer Setting based on it's primaryKey
      *
      * @param $id int
-     *            The id of the Template to find
+     *            The id of the Dealer Setting to find
      *
-     * @return Proposalgen_Model_Dealer_Survey_Setting
+     * @return Preferences_Model_Dealer_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Dealer_Survey_Setting)
+        if ($result instanceof Preferences_Model_Dealer_Setting)
         {
             return $result;
         }
@@ -132,7 +132,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Dealer_Survey_Setting($row->toArray());
+        $object = new Preferences_Model_Dealer_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -141,7 +141,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * Fetches a Template
+     * Fetches a Dealer Setting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -150,7 +150,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Dealer_Survey_Setting
+     * @return Preferences_Model_Dealer_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -160,7 +160,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
             return false;
         }
 
-        $object = new Proposalgen_Model_Dealer_Survey_Setting($row->toArray());
+        $object = new Preferences_Model_Dealer_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -169,7 +169,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * Fetches all Templates
+     * Fetches all Dealer Settings
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -180,7 +180,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Dealer_Survey_Setting[]
+     * @return Preferences_Model_Dealer_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -188,7 +188,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Dealer_Survey_Setting($row->toArray());
+            $object = new Preferences_Model_Dealer_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -214,7 +214,7 @@ class Proposalgen_Model_Mapper_Dealer_Survey_Setting extends My_Model_Mapper_Abs
     }
 
     /**
-     * @param Proposalgen_Model_Dealer_Survey_Setting $object
+     * @param Preferences_Model_Dealer_Setting $object
      *
      * @return int
      */

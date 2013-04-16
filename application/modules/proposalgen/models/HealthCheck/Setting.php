@@ -1,17 +1,6 @@
 <?php
-class Proposalgen_Model_Report_Setting extends My_Model_Abstract
+class Proposalgen_Model_Healthcheck_Setting extends My_Model_Abstract
 {
-    const SERVICE_BILLING_PREFERENCE_NOT_SET  = null;
-    const SERVICE_BILLING_PREFERENCE_PER_PAGE = 1;
-    const SERVICE_BILLING_PREFERENCE_MONTHLY  = 2;
-    const MIN_VALID_SERVICE_BILLING_VALUE     = 1;
-    const MAX_VALID_SERVICE_BILLING_VALUE     = 2;
-
-    static $ServiceBillingPreferenceOptions = array(
-        self::SERVICE_BILLING_PREFERENCE_NOT_SET  => "",
-        self::SERVICE_BILLING_PREFERENCE_PER_PAGE => "Per Page",
-        self::SERVICE_BILLING_PREFERENCE_MONTHLY  => "Monthly"
-    );
 
     /**
      * The database id
@@ -161,12 +150,12 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_Report_Setting $settings
-     *            These can be either a Proposalgen_Model_Report_Setting or an array of settings
+     * @param Proposalgen_Model_Healthcheck_Setting $settings
+     *            These can be either a Proposalgen_Model_Healthcheck_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
-        if ($settings instanceof Proposalgen_Model_Report_Setting)
+        if ($settings instanceof Proposalgen_Model_Healthcheck_Setting)
         {
             $settings = $settings->toArray();
         }
@@ -330,7 +319,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
      *                                 The pricing configuration to set
      *
-     * @return \Proposalgen_Model_Report_Setting
+     * @return \Proposalgen_Model_Healthcheck_Setting
      */
     public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
@@ -360,7 +349,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
      *                                  The pricing configuration to set
      *
-     * @return \Proposalgen_Model_Report_Setting
+     * @return \Proposalgen_Model_Healthcheck_Setting
      */
     public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {

@@ -12,35 +12,35 @@ class Proposalgen_Service_ReportSettings
     /**
      * The system report settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_systemSettings;
 
     /**
      * The system report settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_dealerSettings;
 
     /**
      * The user report settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_userSettings;
 
     /**
      * The report's report settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_reportSettings;
 
     /**
      * The default settings (uses overrides)
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_defaultSettings;
 
@@ -51,17 +51,18 @@ class Proposalgen_Service_ReportSettings
      */
     protected $_report;
 
-    public function __construct ($reportId, $userId,$dealerId)
+    public function __construct ($reportId, $userId, $dealerId)
     {
+        $user                  = Application_Model_Mapper_User::getInstance()->find($userId);
+        $dealer                = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
         $this->_report         = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
-        $this->_systemSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting();
-        $this->_dealerSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchDealerReportSetting($dealerId);
-
-        $this->_userSettings   = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
-        $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchReportReportSetting($reportId);
+        $this->_systemSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
+        $this->_dealerSettings = $dealer->getDealerSettings()->getAssessmentSettings();
+        $this->_userSettings   = $user->getUserSettings()->getAssessmentSettings();
+        $this->_reportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($reportId);
 
         // Calculate the default settings
-        $this->_defaultSettings = new Proposalgen_Model_Report_Setting(array_merge($this->_userSettings->toArray(),$this->_dealerSettings->toArray()));
+        $this->_defaultSettings = new Proposalgen_Model_Assessment_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
         $this->_defaultSettings->populate($this->_userSettings->toArray());
     }
 
@@ -77,7 +78,7 @@ class Proposalgen_Service_ReportSettings
             $this->_form = new Proposalgen_Form_Settings_Report($this->_defaultSettings);
 
             // Populate with initial data?
-            $this->_form->populate(array_merge($this->_userSettings->toArray(),$this->_reportSettings->toArray()));
+            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_reportSettings->toArray()));
             $reportDate = date('m/d/Y', strtotime($this->_report->reportDate));
             $this->_form->populate(array(
                                         'reportDate' => $reportDate
@@ -166,7 +167,7 @@ class Proposalgen_Service_ReportSettings
             // Restore the ID
             $this->_reportSettings->id = $reportSettingsId;
 
-            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($this->_reportSettings);
+            Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->save($this->_reportSettings);
 
             $this->getForm()->populate($this->_reportSettings->toArray());
 

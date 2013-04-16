@@ -160,7 +160,7 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_optimization_customer/index')
             ),
-            "HealthCheck"                  => (object)array(
+            "Healthcheck"                  => (object)array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_healthcheck/index')

@@ -1,16 +1,16 @@
 <?php
 
 /**
- * User Form: Used to manage Report settings
+ * User Form: Used to manage Healthcheck settings
  *
  * @version v1.0
  */
-class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
+class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Vertical
 {
     /**
      * The default settings
      *
-     * @var Proposalgen_Model_Assessment_Setting
+     * @var Proposalgen_Model_Healthcheck_Setting
      */
     protected $_defaultSettings;
     
@@ -21,7 +21,7 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
      */
     protected $_formElementGroups;
 
-    public function __construct (Proposalgen_Model_Assessment_Setting $defaultSettings, $options = null)
+    public function __construct (Proposalgen_Model_Healthcheck_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
         parent::__construct($options);
