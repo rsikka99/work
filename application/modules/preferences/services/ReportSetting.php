@@ -5,7 +5,7 @@ class Preferences_Service_ReportSetting
     /**
      * Default report settings and survey settings combined into an array
      *
-     * @var Proposalgen_Model_Report_Setting|array|null
+     * @var Proposalgen_Model_Assessment_Setting|array|null
      */
     protected $_defaultSettings;
 
@@ -19,7 +19,7 @@ class Preferences_Service_ReportSetting
     /**
      * Gets the report settings from the system
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_systemReportSettings;
 
@@ -34,7 +34,7 @@ class Preferences_Service_ReportSetting
      */
     public function __construct ($defaultSettings = null)
     {
-        $this->_systemReportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->find(1);
+        $this->_systemReportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->find(1);
         $this->_systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
         $this->_defaultSettings      = $defaultSettings;
     }
@@ -199,7 +199,7 @@ class Preferences_Service_ReportSetting
                 unset($validData ['replacementPricingConfigId']);
             }
 
-            $reportSetting = new Proposalgen_Model_Report_Setting();
+            $reportSetting = new Proposalgen_Model_Assessment_Setting();
             $surveySetting = new Proposalgen_Model_Survey_Setting();
 
             $reportSetting->populate($validData);
@@ -216,7 +216,7 @@ class Preferences_Service_ReportSetting
                 $surveySetting->id = $this->_systemReportSettings->id;
             }
 
-            Proposalgen_Model_Mapper_Report_Setting::getInstance()->save($reportSetting);
+            Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->save($reportSetting);
             Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
 
             return true;

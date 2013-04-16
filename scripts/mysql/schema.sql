@@ -596,9 +596,9 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
 
 
 -- -----------------------------------------------------
--- Table `report_settings`
+-- Table `assessment_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `report_settings` (
+CREATE  TABLE IF NOT EXISTS `assessment_settings` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `actualPageCoverageMono` DOUBLE NULL DEFAULT NULL ,
     `actualPageCoverageColor` DOUBLE NULL DEFAULT NULL ,
@@ -622,20 +622,20 @@ CREATE  TABLE IF NOT EXISTS `report_settings` (
     `costThreshold` DOUBLE NULL DEFAULT NULL ,
     `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `report_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
-    INDEX `report_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,
-    INDEX `report_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
-    CONSTRAINT `report_settings_ibfk_1`
+    INDEX `assessment_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
+    INDEX `assessment_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,
+    INDEX `assessment_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
+    CONSTRAINT `assessment_settings_ibfk_1`
     FOREIGN KEY (`assessmentPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `report_settings_ibfk_2`
+    CONSTRAINT `assessment_settings_ibfk_2`
     FOREIGN KEY (`grossMarginPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
-    CONSTRAINT `report_settings_ibfk_3`
+    CONSTRAINT `assessment_settings_ibfk_3`
     FOREIGN KEY (`replacementPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
@@ -646,21 +646,21 @@ CREATE  TABLE IF NOT EXISTS `report_settings` (
 
 
 -- -----------------------------------------------------
--- Table `report_report_settings`
+-- Table `assessment_assessment_settings`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `report_report_settings` (
-    `reportId` INT(11) NOT NULL ,
-    `reportSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`reportId`) ,
-    INDEX `report_report_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
-    CONSTRAINT `report_report_settings_ibfk_1`
-    FOREIGN KEY (`reportId` )
+CREATE  TABLE IF NOT EXISTS `assessment_assessment_settings` (
+    `assessmentId` INT(11) NOT NULL ,
+    `assessmentSettingId` INT(11) NOT NULL ,
+    PRIMARY KEY (`assessmentId`) ,
+    INDEX `assessment_assessment_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
+    CONSTRAINT `assessment_assessment_settings_ibfk_1`
+    FOREIGN KEY (`assessmentId` )
     REFERENCES `assessments` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `report_report_settings_ibfk_2`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
+    CONSTRAINT `assessment_assessment_settings_ibfk_2`
+    FOREIGN KEY (`assessmentSettingId` )
+    REFERENCES `assessment_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -726,50 +726,6 @@ CREATE  TABLE IF NOT EXISTS `rms_user_matchups` (
     CONSTRAINT `rms_user_matchups_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `user_report_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `user_report_settings` (
-    `userId` INT(11) NOT NULL ,
-    `reportSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`userId`) ,
-    INDEX `user_report_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
-    CONSTRAINT `user_report_settings_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `user_report_settings_ibfk_2`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
-
-
--- -----------------------------------------------------
--- Table `user_survey_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `user_survey_settings` (
-    `userId` INT(11) NOT NULL ,
-    `surveySettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`userId`) ,
-    INDEX `user_survey_settings_ibfk_2_idx` (`surveySettingId` ASC) ,
-    CONSTRAINT `user_survey_settings_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `user_survey_settings_ibfk_2`
-    FOREIGN KEY (`surveySettingId` )
-    REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB
@@ -1651,7 +1607,7 @@ CREATE  TABLE IF NOT EXISTS `health_checks` (
         ON UPDATE CASCADE,
     CONSTRAINT `health_check_ibfk_4`
     FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
+    REFERENCES `assessment_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
@@ -1770,16 +1726,38 @@ CREATE  TABLE IF NOT EXISTS `user_viewed_clients` (
     ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `rms_device_matchups`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `rms_device_matchups` (
+    `manufacturerId` INT NOT NULL ,
+    `modelName` VARCHAR(255) NOT NULL ,
+    `masterDeviceId` INT NULL ,
+    INDEX `rms_device_matchups_ibfk1_idx` (`manufacturerId` ASC) ,
+    INDEX `rms_device_matchups_ibfk2_idx` (`masterDeviceId` ASC) ,
+    PRIMARY KEY (`manufacturerId`, `modelName`) ,
+    CONSTRAINT `rms_device_matchups_ibfk1`
+    FOREIGN KEY (`manufacturerId` )
+    REFERENCES `manufacturers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `rms_device_matchups_ibfk2`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `master_devices` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
 
 -- -----------------------------------------------------
 -- Table `dealer_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `dealer_settings` (
     `dealerId` INT NOT NULL ,
-    `reportSettingId` INT NULL ,
+    `assessmentSettingId` INT NULL ,
     `surveySettingId` INT NULL ,
     PRIMARY KEY (`dealerId`) ,
-    INDEX `dealer_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
+    INDEX `dealer_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
     INDEX `dealer_settings_ibfk_3_idx` (`surveySettingId` ASC) ,
     CONSTRAINT `dealer_settings_ibfk_1`
     FOREIGN KEY (`dealerId` )
@@ -1787,8 +1765,8 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `dealer_settings_ibfk_2`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
+    FOREIGN KEY (`assessmentSettingId` )
+    REFERENCES `assessment_settings` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE,
     CONSTRAINT `dealer_settings_ibfk_3`
@@ -1804,10 +1782,10 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `user_settings` (
     `userId` INT NOT NULL ,
-    `reportSettingId` INT NULL ,
+    `assessmentSettingId` INT NULL ,
     `surveySettingId` INT NULL ,
     PRIMARY KEY (`userId`) ,
-    INDEX `user_settings_ibfk_2_idx` (`reportSettingId` ASC) ,
+    INDEX `user_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
     INDEX `user_settings_ibfk_3_idx` (`surveySettingId` ASC) ,
     CONSTRAINT `user_settings_ibfk_1`
     FOREIGN KEY (`userId` )
@@ -1815,8 +1793,8 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
     CONSTRAINT `user_settings_ibfk_2`
-    FOREIGN KEY (`reportSettingId` )
-    REFERENCES `report_settings` (`id` )
+    FOREIGN KEY (`assessmentSettingId` )
+    REFERENCES `assessment_settings` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE,
     CONSTRAINT `user_settings_ibfk_3`

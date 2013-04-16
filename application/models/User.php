@@ -1,14 +1,6 @@
 <?php
-
-/**
- * Application_Model_User is a model that represents a user row in the database.
- *
- * @author Lee Robert
- *
- */
 class Application_Model_User extends My_Model_Abstract
 {
-
     /**
      * The id assigned by the database
      *
@@ -87,12 +79,16 @@ class Application_Model_User extends My_Model_Abstract
     public $dealerId;
 
     /**
-     * This is a combined array of report and survey settings
+     * The user settings row
      *
-     * @var array
+     * @var Preferences_Model_User_Setting
      */
-    protected $_reportSettings;
+    protected $_userSettings;
 
+    /**
+     * @var Admin_Model_Dealer
+     */
+    protected $_dealer;
 
     /**
      * @var Admin_Model_UserRole[]
@@ -242,26 +238,39 @@ class Application_Model_User extends My_Model_Abstract
     }
 
     /**
-     * Gets the report and survey settings for the user
+     * Gets the users settings
      *
-     * @param $userId int
-     *
-     * @return array
+     * @return Preferences_Model_User_Setting
      */
-    public function getReportSettings ($userId)
+    public function getUserSettings ()
     {
-        if (!isset($this->_reportSettings))
+        if (!isset($this->_userSettings))
         {
-            $userReportSetting                        = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchUserReportSetting($userId);
-            $userSurveySetting                        = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($userId);
-            $this->_reportSettings                    = array_merge($userReportSetting->toArray(), $userSurveySetting->toArray());
-            $this->_reportSettings['reportSettingId'] = $userReportSetting->id;
-            $this->_reportSettings['surveySettingId'] = $userSurveySetting->id;
-            unset($this->_reportSettings['id']);
+            $this->_userSettings = Preferences_Model_Mapper_User_Setting::getInstance()->find($this->id);
+            if (!$this->_userSettings instanceof Preferences_Model_User_Setting)
+            {
+                $this->_userSettings         = new Preferences_Model_User_Setting();
+                $this->_userSettings->userId = $this->id;
+
+                Preferences_Model_Mapper_User_Setting::getInstance()->insert($this->_userSettings);
+            }
         }
 
-        return $this->_reportSettings;
+        return $this->_userSettings;
     }
 
+    /**
+     * Gets the dealer object that the user belongs to.
+     *
+     * @return Admin_Model_Dealer
+     */
+    public function getDealer ()
+    {
+        if (!isset($this->_dealer))
+        {
+            $this->_dealer = Admin_Model_Mapper_Dealer::getInstance()->find($this->dealerId);
+        }
 
+        return $this->_dealer;
+    }
 }

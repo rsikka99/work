@@ -10,7 +10,7 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
     /**
      * The default settings
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_defaultSettings;
     
@@ -21,7 +21,7 @@ class Proposalgen_Form_Settings_Report extends Twitter_Bootstrap_Form_Vertical
      */
     protected $_formElementGroups;
 
-    public function __construct (Proposalgen_Model_Report_Setting $defaultSettings, $options = null)
+    public function __construct (Proposalgen_Model_Assessment_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
         parent::__construct($options);

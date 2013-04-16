@@ -55,7 +55,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * The report settings for this proposal
      *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Proposalgen_Model_Assessment_Setting
      */
     protected $_reportSettings;
 
@@ -165,13 +165,13 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Gets the report settings for the report
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Assessment_Setting
      */
     public function getReportSettings ()
     {
         if (!isset($this->_reportSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchReportReportSetting($this->id);
+            $this->_reportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($this->id);
         }
 
         return $this->_reportSettings;
@@ -180,7 +180,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Sets the report settings for the report
      *
-     * @param Proposalgen_Model_Report_Setting $_reportSettings
+     * @param Proposalgen_Model_Assessment_Setting $_reportSettings
      *
      * @return \Proposalgen_Model_Assessment
      */

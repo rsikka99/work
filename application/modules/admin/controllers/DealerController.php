@@ -186,16 +186,16 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // Create a new report setting based on the system default report setting
                         // Then assigned the dealer object the new id.
-                        $reportSetting = new Proposalgen_Model_Report_Setting();
-                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Report_Setting::getInstance()->fetchSystemReportSetting());
-                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+                        $reportSetting = new Proposalgen_Model_Assessment_Setting();
+                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting());
+                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($reportSetting);
 
                         $surveySetting = new Proposalgen_Model_Survey_Setting();
-                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings());
+                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings());
                         $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
 
                         $dealerSetting                  = new Preferences_Model_Dealer_Setting();
-                        $dealerSetting->reportSettingId = $dealer->reportSettingId;
+                        $dealerSetting->assessmentSettingId = $dealer->reportSettingId;
                         $dealerSetting->surveySettingId = $dealer->surveySettingId;
                         $dealerSetting->dealerId        = $dealer->id;
                         Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);

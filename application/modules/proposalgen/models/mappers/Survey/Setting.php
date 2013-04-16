@@ -237,7 +237,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
      *
      * @return Proposalgen_Model_Survey_Setting
      */
-    public function fetchSystemDefaultSurveySettings ()
+    public function fetchSystemSurveySettings ()
     {
         return $this->find(1);
     }

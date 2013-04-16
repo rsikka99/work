@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
+class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -15,12 +15,12 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Report_Setting';
+    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Assessment_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Report_Setting
+     * @return Proposalgen_Model_Mapper_Assessment_Setting
      */
     public static function getInstance ()
     {
@@ -31,7 +31,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * Saves an instance of Proposalgen_Model_Report_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Report_Setting
+     * @param $object Proposalgen_Model_Assessment_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -58,8 +58,8 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Proposalgen_Model_Report_Setting to the database.
      *
-     * @param $object     Proposalgen_Model_Report_Setting
-     *                    The report_setting model to save to the database
+     * @param $object     Proposalgen_Model_Assessment_Setting
+     *                    The assessment_setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -96,7 +96,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Report_Setting)
+        if ($object instanceof Proposalgen_Model_Assessment_Setting)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -115,18 +115,18 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a report_setting based on it's primaryKey
+     * Finds a assessment_setting based on it's primaryKey
      *
      * @param $id int
-     *            The id of the report_setting to find
+     *            The id of the assessment_setting to find
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Assessment_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Report_Setting)
+        if ($result instanceof Proposalgen_Model_Assessment_Setting)
         {
             return $result;
         }
@@ -138,7 +138,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -147,7 +147,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a report_setting
+     * Fetches a assessment_setting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -156,7 +156,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Assessment_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -166,7 +166,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_Report_Setting($row->toArray());
+        $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -175,7 +175,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all report_settings
+     * Fetches all assessment_settings
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Report_Setting[]
+     * @return Proposalgen_Model_Assessment_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -194,7 +194,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Report_Setting($row->toArray());
+            $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Report_Setting $object
+     * @param Proposalgen_Model_Assessment_Setting $object
      *
      * @return int
      */
@@ -230,132 +230,132 @@ class Proposalgen_Model_Mapper_Report_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets the systems report setting object
+     * Gets the systems assesssment setting object
      *
-     * @return Proposalgen_Model_Report_Setting
+     * @return Proposalgen_Model_Assessment_Setting
      */
-    public function fetchSystemReportSetting ()
+    public function fetchSystemAssessmentSetting ()
     {
         return $this->find(1);
     }
 
     /**
-     * Gets a users report setting object
+     * Gets a users assesssment setting object
      *
      * @param int $userId
      *            The user's id
      *
-     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
+     * @return Proposalgen_Model_Assessment_Setting Returns false if it could not find one.
      */
     public function fetchUserReportSetting ($userId)
     {
-        $reportSetting     = false;
-        $userReportSetting = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
+        $assesssmentSetting = false;
+        $userReportSetting  = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
         if ($userReportSetting)
         {
-            $reportSetting = $this->find($userReportSetting->reportSettingId);
+            $assesssmentSetting = $this->find($userReportSetting->reportSettingId);
         }
 
         // If we don't have a setting yet, make a blank one
-        if (!$reportSetting)
+        if (!$assesssmentSetting)
         {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $assesssmentSetting   = new Proposalgen_Model_Assessment_Setting();
+            $assesssmentSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assesssmentSetting);
 
             if ($userReportSetting)
             {
-                $userReportSetting->reportSettingId = $reportSettingId;
+                $userReportSetting->reportSettingId = $assesssmentSettingId;
                 Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
             }
             else
             {
                 $userReportSetting                  = new Proposalgen_Model_User_Report_Setting();
                 $userReportSetting->userId          = $userId;
-                $userReportSetting->reportSettingId = $reportSettingId;
+                $userReportSetting->reportSettingId = $assesssmentSettingId;
                 Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
             }
         }
 
-        return $reportSetting;
+        return $assesssmentSetting;
     }
 
     /**
-     * Gets a reports report setting object
+     * Gets a assesssments assesssment setting object
      *
-     * @param int $reportId
-     *            The report's id
+     * @param int $assessmentId
+     *            The assesssment's id
      *
-     * @return Proposalgen_Model_Report_Setting Returns false if it could not find one.
+     * @return Proposalgen_Model_Assessment_Setting Returns false if it could not find one.
      */
-    public function fetchReportReportSetting ($reportId)
+    public function fetchAssessmentAssessmentSetting ($assessmentId)
     {
-        $reportSetting       = false;
-        $reportReportSetting = Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->find($reportId);
-        if ($reportReportSetting)
+        $assessmentSetting           = false;
+        $assessmentAssessmentSetting = Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->find($assessmentId);
+        if ($assessmentAssessmentSetting)
         {
-            $reportSetting = $this->find($reportReportSetting->reportSettingId);
+            $assessmentSetting = $this->find($assessmentAssessmentSetting->assessmentSettingId);
         }
 
         // If we don't have a setting yet, make a blank one
-        if (!$reportSetting)
+        if (!$assessmentSetting)
         {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
-            $reportSettingId = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $assessmentSetting   = new Proposalgen_Model_Assessment_Setting();
+            $assessmentSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
 
-            if ($reportReportSetting)
+            if ($assessmentAssessmentSetting)
             {
-                $reportReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->save($reportReportSetting);
+                $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
+                Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->save($assessmentAssessmentSetting);
             }
             else
             {
-                $reportReportSetting                  = new Proposalgen_Model_Report_Report_Setting();
-                $reportReportSetting->reportId        = $reportId;
-                $reportReportSetting->reportSettingId = $reportSettingId;
-                Proposalgen_Model_Mapper_Report_Report_Setting::getInstance()->insert($reportReportSetting);
+                $assessmentAssessmentSetting                      = new Proposalgen_Model_Assessment_Assessment_Setting();
+                $assessmentAssessmentSetting->assessmentId        = $assessmentId;
+                $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
+                Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->insert($assessmentAssessmentSetting);
             }
         }
 
-        return $reportSetting;
+        return $assessmentSetting;
     }
 
     /**
-     * Gets a dealer report setting, if none exist it creates one.
+     * Gets a dealer assessment setting, if none exist it creates one.
      *
      * @param $dealerId
      *
-     * @return bool|\Proposalgen_Model_Report_Setting
+     * @return bool|\Proposalgen_Model_Assessment_Setting
      */
-    public function fetchDealerReportSetting ($dealerId)
+    public function fetchDealerAssessmentSetting ($dealerId)
     {
-        $reportSetting       = false;
-        $dealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
+        $assessmentSetting = false;
+        $dealerSetting     = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
 
         if ($dealerSetting)
         {
-            $reportSetting = $this->find($dealerSetting->reportSettingId);
+            $assessmentSetting = $this->find($dealerSetting->assessmentSettingId);
         }
 
-        if (!$reportSetting)
+        if (!$assessmentSetting)
         {
             // Take a copy
-            $reportSetting   = $this->fetchSystemReportSetting();
-            $reportSetting->id = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
+            $assessmentSetting     = $this->fetchSystemAssessmentSetting();
+            $assessmentSetting->id = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
 
             if ($dealerSetting)
             {
-                $dealerSetting->reportSettingId = $reportSetting->id;
+                $dealerSetting->assessmentSettingId = $assessmentSetting->id;
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($dealerSetting);
             }
             else
             {
-                $dealerSetting                  = new Preferences_Model_Dealer_Setting();
-                $dealerSetting->reportSettingId = $reportSetting->id;
-                $dealerSetting->dealerId        = $dealerId;
+                $dealerSetting                      = new Preferences_Model_Dealer_Setting();
+                $dealerSetting->assessmentSettingId = $assessmentSetting->id;
+                $dealerSetting->dealerId            = $dealerId;
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);
             }
         }
 
-        return $reportSetting;
+        return $assessmentSetting;
     }
 }

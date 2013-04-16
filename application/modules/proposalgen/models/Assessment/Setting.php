@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Report_Setting extends My_Model_Abstract
+class Proposalgen_Model_Assessment_Setting extends My_Model_Abstract
 {
     const SERVICE_BILLING_PREFERENCE_NOT_SET  = null;
     const SERVICE_BILLING_PREFERENCE_PER_PAGE = 1;
@@ -161,12 +161,12 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_Report_Setting $settings
+     * @param Proposalgen_Model_Assessment_Setting $settings
      *            These can be either a Proposalgen_Model_Report_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
-        if ($settings instanceof Proposalgen_Model_Report_Setting)
+        if ($settings instanceof Proposalgen_Model_Assessment_Setting)
         {
             $settings = $settings->toArray();
         }
@@ -295,7 +295,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "replacementPricingConfigId"               => $this->replacementPricingConfigId,
+            "replacementPricingConfigId"  => $this->replacementPricingConfigId,
         );
     }
 
@@ -314,9 +314,9 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
         return $this->_assessmentPricingConfig;
     }
 
-    public function getReplacementPricingConfig()
+    public function getReplacementPricingConfig ()
     {
-        if(!isset($this->_replacementPricingConfig))
+        if (!isset($this->_replacementPricingConfig))
         {
             $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
         }
@@ -330,7 +330,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
      *                                 The pricing configuration to set
      *
-     * @return \Proposalgen_Model_Report_Setting
+     * @return \Proposalgen_Model_Assessment_Setting
      */
     public function setAssessmentPricingConfig ($AssessmentPricingConfig)
     {
@@ -360,7 +360,7 @@ class Proposalgen_Model_Report_Setting extends My_Model_Abstract
      * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
      *                                  The pricing configuration to set
      *
-     * @return \Proposalgen_Model_Report_Setting
+     * @return \Proposalgen_Model_Assessment_Setting
      */
     public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
     {

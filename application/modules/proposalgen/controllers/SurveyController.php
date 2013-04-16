@@ -56,8 +56,11 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
         /**
          * Fetch Survey Settings
          */
-        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemDefaultSurveySettings();
-        $surveySetting->populate(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchUserSurveySetting($this->_userId)->toArray());
+        $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings();
+
+        $user = Application_Model_Mapper_User::getInstance()->find($this->_userId);
+
+        $surveySetting->populate($user->getUserSettings()->getSurveySettings()->toArray());
 
         $form = new Proposalgen_Form_Assessment_Survey();
 
@@ -133,7 +136,7 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                 {
                     $laborCost                             = $form->getValue('labor_cost');
                     $survey->costOfInkAndToner             = ($form->getValue('toner_cost')) ? : new Zend_Db_Expr('NULL');
-                    $survey->costOfLabor                   = ($laborCost != NULL) ? $laborCost : new Zend_Db_Expr('NULL');
+                    $survey->costOfLabor                   = ($laborCost != null) ? $laborCost : new Zend_Db_Expr('NULL');
                     $survey->costToExecuteSuppliesOrder    = $form->getValue('avg_purchase');
                     $survey->averageItHourlyRate           = $form->getValue('it_hourlyRate');
                     $survey->hoursSpentOnIt                = ($form->getValue('itHours')) ? : new Zend_Db_Expr('NULL');
@@ -183,8 +186,8 @@ class Proposalgen_SurveyController extends Proposalgen_Library_Controller_Propos
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Your changes were saved successfully."
-                                                       ));
+                                                                'success' => "Your changes were saved successfully."
+                                                           ));
                     }
                 }
                 else
