@@ -1678,7 +1678,7 @@ CREATE  TABLE IF NOT EXISTS `healthchecks` (
     `dealerId` INT NOT NULL ,
     `rmsUploadId` INT(11) NULL ,
     `name` VARCHAR(255) NOT NULL ,
-    `stepName` INT NULL ,
+    `stepName` VARCHAR(255) NOT NULL ,
     `dateCreated` DATETIME NOT NULL ,
     `lastModified` DATETIME NOT NULL ,
     `reportDate` DATETIME NULL ,
