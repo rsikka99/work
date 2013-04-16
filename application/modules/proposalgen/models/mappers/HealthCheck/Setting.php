@@ -234,7 +234,7 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      *
      * @return Proposalgen_Model_HealthCheck_Setting
      */
-    public function fetchSystemHealthCheckSetting ()
+    public function fetchSystemSetting ()
     {
         return $this->find(1);
     }
@@ -265,13 +265,13 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      *
      * @return Proposalgen_Model_HealthCheck_Setting Returns false if it could not find one.
      */
-    public function fetchUserHealthCheckSetting ($userId)
+    public function fetchUserSetting ($userId)
     {
         $HealthCheckSetting     = false;
-        $userHealthCheckSetting = Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->find($userId);
-        if ($userHealthCheckSetting)
+        $userSetting = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
+        if ($userSetting)
         {
-            $HealthCheckSetting = $this->find($userHealthCheckSetting->HealthCheckSettingId);
+            $HealthCheckSetting = $this->find($userSetting->healthcheckSettingId);
         }
 
         // If we don't have a setting yet, make a blank one
@@ -280,17 +280,17 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
             $HealthCheckSetting   = new Proposalgen_Model_HealthCheck_Setting();
             $HealthCheckSettingId = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
 
-            if ($userHealthCheckSetting)
+            if ($userSetting)
             {
-                $userHealthCheckSetting->HealthCheckSettingId = $HealthCheckSettingId;
-                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->save($userHealthCheckSetting);
+                $userSetting->HealthCheckSettingId = $HealthCheckSettingId;
+                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->save($userSetting);
             }
             else
             {
-                $userHealthCheckSetting                  = new Proposalgen_Model_User_HealthCheck_Setting();
-                $userHealthCheckSetting->userId          = $userId;
-                $userHealthCheckSetting->HealthCheckSettingId = $HealthCheckSettingId;
-                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->insert($userHealthCheckSetting);
+                $userSetting                  = new Proposalgen_Model_User_HealthCheck_Setting();
+                $userSetting->userId          = $userId;
+                $userSetting->HealthCheckSettingId = $HealthCheckSettingId;
+                Proposalgen_Model_Mapper_User_HealthCheck_Setting::getInstance()->insert($userSetting);
             }
         }
 
@@ -302,12 +302,12 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
      *
      * @param $dealerId
      *
-     * @return bool|\Proposalgen_Model_HealthCheck_Setting
+     * @return Proposalgen_Model_HealthCheck_Setting
      */
     public function fetchDealerSetting ($dealerId)
     {
         $HealthCheckSetting       = false;
-        $HealthCheckDealerSetting = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->fetchDealerSetting($dealerId);
+        $HealthCheckDealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
 
         if ($HealthCheckDealerSetting)
         {
@@ -317,20 +317,20 @@ class Proposalgen_Model_Mapper_HealthCheck_Setting extends My_Model_Mapper_Abstr
         if (!$HealthCheckSetting)
         {
             // Take a copy
-            $HealthCheckSetting   = $this->fetchSystemHealthCheckSetting();
-            $HealthCheckSettingId = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
+            $HealthCheckSetting   = $this->fetchSystemSetting();
+            $HealthCheckSetting->id = Proposalgen_Model_Mapper_HealthCheck_Setting::getInstance()->insert($HealthCheckSetting);
 
             if ($HealthCheckDealerSetting)
             {
-                $HealthCheckDealerSetting->HealthCheckSettingId = $HealthCheckSettingId;
-                Proposalgen_Model_Mapper_Dealer_HealthCheck_Setting::getInstance()->save($HealthCheckDealerSetting);
+                $HealthCheckDealerSetting->HealthCheckSettingId = $HealthCheckSetting->id;
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($HealthCheckDealerSetting);
             }
             else
             {
-                $HealthCheckDealerSetting                  = new Proposalgen_Model_Dealer_HealthCheck_Setting();
-                $HealthCheckDealerSetting->HealthCheckSettingId = $HealthCheckSettingId;
+                $HealthCheckDealerSetting                  = new Preferences_Model_Dealer_Setting();
+                $HealthCheckDealerSetting->healthcheckSettingId = $HealthCheckSetting->id;
                 $HealthCheckDealerSetting->dealerId        = $dealerId;
-                Proposalgen_Model_Mapper_Dealer_HealthCheck_Setting::getInstance()->insert($HealthCheckDealerSetting);
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($HealthCheckDealerSetting);
             }
         }
 

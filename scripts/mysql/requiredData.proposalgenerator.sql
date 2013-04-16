@@ -35,3 +35,7 @@ INSERT INTO `assessment_settings` (`id`,`actualPageCoverageMono`,`actualPageCove
 /* Default System Survey Settings */
 INSERT INTO `survey_settings` (`id`, `pageCoverageMono`, `pageCoverageColor`) VALUES
 (1,6,24);
+
+/* Default System Report Settings */
+INSERT INTO `healthcheck_settings` (`id`,`actualPageCoverageMono`,`actualPageCoverageColor`,`laborCostPerPage`,`partsCostPerPage`,`adminCostPerPage`,`assessmentReportMargin`,`grossMarginReportMargin`,`monthlyLeasePayment`,`defaultPrinterCost`,`leasedBwCostPerPage`,`leasedColorCostPerPage`,`mpsBwCostPerPage`,`mpsColorCostPerPage`,`kilowattsPerHour`,`assessmentPricingConfigId`,`grossMarginPricingConfigId`,`costThreshold`, `targetMonochromeCostPerPage`,`targetColorCostPerPage`, `replacementPricingConfigId`) VALUES
+(1,6,24,0.002,0.0015,0.0006,20,20,250,1000,0.015,0.08,0.02,0.09,0.1,2,3,10,0.018,0.02, 3);

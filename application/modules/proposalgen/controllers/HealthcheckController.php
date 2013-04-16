@@ -98,6 +98,6 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
             }
         }
 
-        $this->view->form = $healthcheckSettingsService->getForm();
+       //$this->view->form = $healthcheckSettingsService->getForm();
     }
 }

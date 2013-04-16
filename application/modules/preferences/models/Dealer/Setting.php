@@ -25,6 +25,11 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
      * @var Proposalgen_Model_Survey_Setting
      */
     protected $_surveySetting;
+    
+    /**
+     * @var int
+     */
+    public $healthcheckSettingId;
 
 
     /**
@@ -48,6 +53,10 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         {
             $this->surveySettingId = $params->surveySettingId;
         }
+        if (isset($params->healthcheckSettingId) && !is_null($params->healthcheckSettingId))
+        {
+            $this->healthcheckSettingId = $params->healthcheckSettingId;
+        }
     }
 
     /**
@@ -59,6 +68,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
             "dealerId"            => $this->dealerId,
             "assessmentSettingId" => $this->assessmentSettingId,
             "surveySettingId"     => $this->surveySettingId,
+            "healthcheckSettingId" => $this->healthcheckSettingId,
         );
     }
 

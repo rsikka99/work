@@ -168,7 +168,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $id = $reportMapper->save($this->_report);
         }
 
-        $this->_reportSession->reportId = $this->_report->id;
+        $this->_reportSession->healthcheckId = $this->_report->id;
     }
 
     /**
