@@ -42,7 +42,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
 
         $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 
-        if ($this->_reportId < 1)
+        if ($this->_reportSession->healthcheckId < 1)
         {
             $this->_flashMessenger->addMessage(array(
                                                     "error" => "Please select a report first."
@@ -51,7 +51,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->_report = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($this->_reportId);
+        $this->_report = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($this->_reportSession->healthcheckId);
         if ($this->_report === null)
         {
             $this->_flashMessenger->addMessage(array(

@@ -56,13 +56,15 @@ class Proposalgen_Service_HealthcheckSettings
         $this->_Healthcheck         = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
         $this->_systemSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemSetting();
         $this->_dealerSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
-
-        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId); //TODO FIX THIS ONCE USER IS DONE
+//
+//        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId); //TODO FIX THIS ONCE USER IS DONE
         $this->_HealthcheckSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($HealthcheckId);
-
-        // Calculate the default settings
-        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
-        $this->_defaultSettings->populate($this->_userSettings->toArray());
+//
+//        // Calculate the default settings
+//        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray())); TODO USE THIS
+        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_dealerSettings->toArray(), $this->_dealerSettings->toArray()));
+//        $this->_defaultSettings->populate($this->_userSettings->toArray());
+        $this->_defaultSettings->populate($this->_dealerSettings->toArray());
     }
 
     /**
@@ -77,7 +79,8 @@ class Proposalgen_Service_HealthcheckSettings
             $this->_form = new Proposalgen_Form_Settings_Healthcheck($this->_defaultSettings);
 
             // Populate with initial data?
-            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthcheckSettings->toArray()));
+//            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthcheckSettings->toArray()));
+            $this->_form->populate(array_merge($this->_dealerSettings->toArray(), $this->_HealthcheckSettings->toArray()));
             $reportDate = date('m/d/Y', strtotime($this->_Healthcheck->reportDate));
             $this->_form->populate(array(
                                         'reportDate' => $reportDate

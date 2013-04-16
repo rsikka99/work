@@ -20,16 +20,16 @@ class Proposalgen_Model_Healthcheck_Step extends My_Model_Abstract
             'action'     => 'index'
         ),
         self::STEP_REPORTSETTINGS       => array(
-            'name'       => 'Report Settings',
+            'name'       => 'Settings',
             'group'      => null,
             'controller' => 'healthcheck',
-            'action'     => 'reportsettings'
+            'action'     => 'settings'
         ),
         self::STEP_FINISHED             => array(
-            'name'       => 'Reports',
+            'name'       => 'Report',
             'group'      => null,
-            'controller' => 'report_index',
-            'action'     => 'index'
+            'controller' => 'healthcheck',
+            'action'     => 'report'
         )
     );
 

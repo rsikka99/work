@@ -172,7 +172,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
                 if ($inArray->isValid($selectedReportId))
                 {
-                    $this->_proposalSession->reportId = $selectedReportId;
+                    $this->_proposalSession->healthcheckId = $selectedReportId;
                     $this->redirector('index', 'healthcheck', 'proposalgen');
                 }
             }

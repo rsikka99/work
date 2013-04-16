@@ -147,7 +147,7 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Fetches a Healthcheck_setting
+     * Fetches a Healthcheck setting
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
@@ -278,19 +278,19 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
         if (!$HealthcheckSetting)
         {
             $HealthcheckSetting   = new Proposalgen_Model_Healthcheck_Setting();
-            $HealthcheckSettingId = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
+            $HealthcheckSetting->id = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
             if ($userSetting)
             {
-                $userSetting->HealthcheckSettingId = $HealthcheckSettingId;
-                Proposalgen_Model_Mapper_User_Healthcheck_Setting::getInstance()->save($userSetting);
+                $userSetting->healthcheckSettingId = $HealthcheckSetting->Id;
+                Preferences_Model_Mapper_User_Setting::getInstance()->save($userSetting);
             }
             else
             {
-                $userSetting                  = new Proposalgen_Model_User_Healthcheck_Setting();
+                $userSetting                  = new Preferences_Model_User_Setting();
                 $userSetting->userId          = $userId;
-                $userSetting->HealthcheckSettingId = $HealthcheckSettingId;
-                Proposalgen_Model_Mapper_User_Healthcheck_Setting::getInstance()->insert($userSetting);
+                $userSetting->HealthcheckSettingId = $HealthcheckSetting->Id;
+                Preferences_Model_Mapper_User_Setting::getInstance()->insert($userSetting);
             }
         }
 
@@ -311,7 +311,7 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
 
         if ($HealthcheckDealerSetting)
         {
-            $HealthcheckSetting = $this->find($HealthcheckDealerSetting->HealthcheckSettingId);
+            $HealthcheckSetting = $this->find($HealthcheckDealerSetting->healthcheckSettingId);
         }
 
         if (!$HealthcheckSetting)
