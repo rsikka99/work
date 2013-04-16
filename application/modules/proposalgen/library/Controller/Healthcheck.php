@@ -159,7 +159,7 @@ class Proposalgen_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         if ($this->_report->id === null || $this->_report->id < 1)
         {
 //            $reportSettingService = new Proposalgen_Service_ReportSettings(,,Zend_Auth::getInstance()->getIdentity()->dealerId)
-            $this->_report->settingId = $this->_report->getReportSettings()->id;
+            $this->_report->healthcheckSettingId = $this->_report->getReportSettings()->id;
             $id                = $reportMapper->insert($this->_report);
             $this->_report->id = $id;
         }

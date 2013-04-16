@@ -44,7 +44,7 @@ class Proposalgen_Model_Healthcheck extends My_Model_Abstract
     /**
      * @var int
      */
-    public $settingId;
+    public $healthcheckSettingId;
 
 
     // Non database fields
@@ -102,9 +102,9 @@ class Proposalgen_Model_Healthcheck extends My_Model_Abstract
             $this->rmsUploadId = $params->rmsUploadId;
         }
 
-        if (isset($params->settingId) && !is_null($params->settingId))
+        if (isset($params->healthcheckSettingId) && !is_null($params->healthcheckSettingId))
         {
-            $this->settingId = $params->settingId;
+            $this->healthcheckSettingId = $params->healthcheckSettingId;
         }
 
         if (isset($params->stepName) && !is_null($params->stepName))
@@ -138,7 +138,7 @@ class Proposalgen_Model_Healthcheck extends My_Model_Abstract
             "id"           => $this->id,
             "clientId"     => $this->clientId,
             "dealerId"     => $this->dealerId,
-            "settingId"    => $this->settingId,
+            "healthcheckSettingId"    => $this->healthcheckSettingId,
             "rmsUploadId"  => $this->rmsUploadId,
             "stepName"     => $this->stepName,
             "dateCreated"  => $this->dateCreated,
