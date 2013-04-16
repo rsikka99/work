@@ -282,14 +282,14 @@ class Proposalgen_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
 
             if ($userSetting)
             {
-                $userSetting->healthcheckSettingId = $HealthcheckSetting->Id;
+                $userSetting->healthcheckSettingId = $HealthcheckSetting->id;
                 Preferences_Model_Mapper_User_Setting::getInstance()->save($userSetting);
             }
             else
             {
                 $userSetting                  = new Preferences_Model_User_Setting();
                 $userSetting->userId          = $userId;
-                $userSetting->HealthcheckSettingId = $HealthcheckSetting->Id;
+                $userSetting->healthcheckSettingId = $HealthcheckSetting->id;
                 Preferences_Model_Mapper_User_Setting::getInstance()->insert($userSetting);
             }
         }

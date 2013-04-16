@@ -57,13 +57,11 @@ class Proposalgen_Service_HealthcheckSettings
         $this->_systemSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
         $this->_dealerSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
 //
-//        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId); //TODO FIX THIS ONCE USER IS DONE
+        $this->_userSettings   = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId);
         $this->_HealthcheckSettings = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($HealthcheckId);
 //
 //        // Calculate the default settings
-//        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray())); TODO USE THIS
-        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_dealerSettings->toArray(), $this->_dealerSettings->toArray()));
-//        $this->_defaultSettings->populate($this->_userSettings->toArray());
+        $this->_defaultSettings = new Proposalgen_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
         $this->_defaultSettings->populate($this->_dealerSettings->toArray());
     }
 

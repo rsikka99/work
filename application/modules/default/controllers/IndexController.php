@@ -163,7 +163,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 $selectedReportId = $postData['selectHealthcheck'];
 
                 $validReportIds = array(0);
-                foreach ($availableReports as $report)
+                foreach ($availableHealthchecks as $report)
                 {
                     $validReportIds[] = $report->id;
                 }
@@ -172,6 +172,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
                 if ($inArray->isValid($selectedReportId))
                 {
+
                     $this->_proposalSession->healthcheckId = $selectedReportId;
                     $this->redirector('index', 'healthcheck', 'proposalgen');
                 }

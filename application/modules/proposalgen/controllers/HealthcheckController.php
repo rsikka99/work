@@ -10,45 +10,58 @@ class Proposalgen_HealthcheckController extends Proposalgen_Library_Controller_H
         $this->setActiveReportStep(Proposalgen_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD);
 
         $report               = $this->getReport();
-        $rmsUploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId);
+        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId);
         $this->saveReport(true);
         $rmsUpload = null;
+        $form = $uploadService->getForm();
+
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
-            if($rmsUploadService->getForm()->isValid($values))
+
+            if (isset($values ["goBack"]))
             {
-                $success = $rmsUploadService->processUpload($values);
-                if($success)
+                $this->gotoPreviousStep();
+            }
+            else if (isset($values ["performUpload"]))
+            {
+                $success = $uploadService->processUpload($values);
+                if ($success)
                 {
-                    try{
-                        $db       = Zend_Db_Table::getDefaultAdapter();
-                        $db->beginTransaction();
-                        $report->rmsUploadId = $rmsUploadService->rmsUpload->id;
-                        Proposalgen_Model_Mapper_Healthcheck::getInstance()->save($report);
-                        $this->_flashMessenger->addMessage(array(
-                                                                'success' => 'Upload Complete.'
-                                                           ));
-                    }catch (Exception $e)
-                    {
-                        $db->rollBack();
-                        throw new Exception("Passing exception up the chain.", 0, $e);
-                    }
-                    $db->commit();
+                    $rmsUpload = $uploadService->rmsUpload;
+
+                    // Save the health check object with the new id.
+                    $healthcheck              = Proposalgen_Model_Mapper_Healthcheck::getInstance()->find($report->id);
+                    $healthcheck->rmsUploadId = $rmsUpload->id;
+                    Proposalgen_Model_Mapper_Healthcheck::getInstance()->save($healthcheck);
+
+                    $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                 }
                 else
                 {
-
+                    $this->_flashMessenger->addMessage(array("danger" => $uploadService->errorMessages));
                 }
             }
-
-
+            else if (isset($values ["saveAndContinue"]))
+            {
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->rmsUpload->id);
+                if ($count < 2)
+                {
+                    $this->_flashMessenger->addMessage(array(
+                                                            'danger' => "You must have at least 2 valid devices to continue."
+                                                       ));
+                }
+                else
+                {
+                    //$this->gotoNextStep();
+                }
+            }
         }
         if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
         {
             $this->view->populateGrid = true;
         }
-        $this->view->form = $rmsUploadService->getForm();
+        $this->view->form = $uploadService->getForm();
         $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
