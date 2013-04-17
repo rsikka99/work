@@ -65,7 +65,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                             'append'     => '%',
                                                             'validators' => $coverageValidator
                                                        ));
-        // Assessment Elements
+        // Health Check Elements
         $this->addElement('text', 'assessmentReportMargin', array(
                                                                  'label'      => 'Pricing Margin',
                                                                  'append'     => '%',
@@ -107,6 +107,21 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                            'append'     => '/ KWh',
                                                            'validators' => $costValidator
                                                       ));
+        $this->addElement('text', 'adminCostPerPage', array(
+                                                           'label'      => 'Admin Cost',
+                                                           'append'     => '$ / page',
+                                                           'validators' => $cppValidator
+                                                      ));
+        $this->addElement('text', 'laborCostPerPage', array(
+                                                           'label'      => 'Labor Cost',
+                                                           'append'     => '$ / page',
+                                                           'validators' => $cppValidator
+                                                      ));
+        $this->addElement('text', 'partsCostPerPage', array(
+                                                           'label'      => 'Parts Cost',
+                                                           'append'     => '$ / page',
+                                                           'validators' => $cppValidator
+                                                      ));
         $assessmentPricingConfig = $this->createElement('select', 'assessmentPricingConfigId', array(
                                                                                                     'label' => 'Toner Preference',
                                                                                                     'class' => 'span3 '
@@ -136,6 +151,9 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
                                      $assessmentPricingConfig,
+                                     'adminCostPerPage',
+                                     'laborCostPerPage',
+                                     'partsCostPerPage',
                                ), 'assessment', array('legend' => 'Health Check Settings',));
 
         $this->setElementDecorators(array(

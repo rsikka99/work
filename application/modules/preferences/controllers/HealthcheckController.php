@@ -39,15 +39,15 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
     public function systemAction ()
     {
         // Initialize and get the form
-        $reportSettingFormService = new Preferences_Service_ReportSetting();
-        $form                     = $reportSettingFormService->getForm();
+        $HealthcheckSettingFormService = new Preferences_Service_HealthcheckSetting();
+        $form                     = $HealthcheckSettingFormService->getForm();
 
         $request = $this->getRequest();
 
         if ($request->isPost())
         {
             $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
+            $success = $HealthcheckSettingFormService->update($values);
 
             if ($success)
             {
@@ -68,11 +68,11 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
 
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $combinedDealerSettings = array_merge($dealer->getDealerSettings()->getAssessmentSettings()->toArray(), $dealer->getDealerSettings()->getSurveySettings()->toArray());
+        $combinedDealerSettings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();
 
         // User
         $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $combinedUserSettings = array_merge($user->getUserSettings()->getAssessmentSettings()->toArray(), $user->getUserSettings()->getAssessmentSettings()->toArray());
+        $combinedUserSettings = $user->getUserSettings()->getHealthcheckSettings()->toArray();
 
         $reportSettingFormService = new Preferences_Service_ReportSetting($combinedUserSettings);
 
