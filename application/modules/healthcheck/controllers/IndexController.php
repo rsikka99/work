@@ -1,5 +1,5 @@
 <?php
-class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthcheck
+class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthcheck
 {
     /**
      * Users can upload/see uploaded data on this step
@@ -81,9 +81,9 @@ class Healthcheck_IndexController extends Proposalgen_Library_Controller_Healthc
         // Mark the step we're on as active
         $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
 //        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $healthcheckSettingsService = new Proposalgen_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
 
-        //$reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
+        //$reportSettingsService = new Healthcheck_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();

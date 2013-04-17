@@ -66,7 +66,7 @@ class Default_IndexController extends Tangent_Controller_Action
             $availableQuotes             = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableQuotes = $availableQuotes;
 
-            $availableHealthchecks             = Proposalgen_Model_Mapper_Healthcheck::getInstance()->fetchAllHealthchecksForClient($this->_selectedClientId);
+            $availableHealthchecks             = Healthcheck_Model_Mapper_Healthcheck::getInstance()->fetchAllHealthchecksForClient($this->_selectedClientId);
             $this->view->availableHealthchecks = $availableHealthchecks;
 
             $availableHardwareOptimizations             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->fetchAllForClient($this->_selectedClientId);
@@ -172,9 +172,9 @@ class Default_IndexController extends Tangent_Controller_Action
                 $healthcheckId = $postData['selectHealthcheck'];
 
                 $validReportIds = array(0);
-                foreach ($availableHealthchecks as $report)
+                foreach ($availableHealthchecks as $healthcheck)
                 {
-                    $validReportIds[] = $report->id;
+                    $validReportIds[] = $healthcheck->id;
                 }
 
                 $inArray = new Zend_Validate_InArray($validReportIds);
