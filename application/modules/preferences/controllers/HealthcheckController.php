@@ -73,17 +73,16 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
         // User
         $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
         $combinedUserSettings = $user->getUserSettings()->getHealthcheckSettings()->toArray();
+        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($combinedUserSettings);
 
-        $reportSettingFormService = new Preferences_Service_ReportSetting($combinedUserSettings);
-
-        $form = $reportSettingFormService->getFormWithDefaults($combinedDealerSettings);
+        $form = $healthcheckSettingFormService->getFormWithDefaults($combinedDealerSettings);
 
         $request = $this->getRequest();
 
         if ($request->isPost())
         {
             $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
+            $success = $healthcheckSettingFormService->update($values);
 
             if ($success)
             {

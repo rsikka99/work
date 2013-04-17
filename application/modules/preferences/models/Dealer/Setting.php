@@ -126,13 +126,13 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     {
         if (!isset($this->_healthcheckSetting))
         {
-            $this->_healthcheckSetting = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->find($this->healthcheckSettingId);
+            $this->_healthcheckSetting = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->find($this->healthcheckSettingId);
 
-            if (!$this->_healthcheckSetting instanceof Proposalgen_Model_Healthcheck_Setting)
+            if (!$this->_healthcheckSetting instanceof Healthcheck_Model_Healthcheck_Setting)
             {
                 // Insert a new copy of the system setting
-                $this->_healthcheckSetting = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
-                Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($this->_healthcheckSetting);
+                $this->_healthcheckSetting = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
+                Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->insert($this->_healthcheckSetting);
                 $this->healthcheckSettingId = $this->_healthcheckSetting->id;
 
                 // Save ourselves

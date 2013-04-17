@@ -121,26 +121,25 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     /**
      * Gets the healthcheck settings
      *
-     * @return Proposalgen_Model_Healthcheck_Setting
+     * @return Healthcheck_Model_Healthcheck_Setting
      */
     public function getHealthcheckSettings ()
     {
         if (!isset($this->_healthcheckSetting))
         {
-            $this->_healthcheckSetting = Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->find($this->healthcheckSettingId);
+            $this->_healthcheckSetting = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->find($this->healthcheckSettingId);
 
-            if (!$this->_healthcheckSetting instanceof Proposalgen_Model_Healthcheck_Setting)
+            if (!$this->_healthcheckSetting instanceof Healthcheck_Model_Healthcheck_Setting)
             {
                 // Insert a new copy of the system setting
-                $this->_healthcheckSetting = new Proposalgen_Model_Healthcheck_Setting();
-                Proposalgen_Model_Mapper_Healthcheck_Setting::getInstance()->insert($this->_healthcheckSetting);
+                $this->_healthcheckSetting = new Healthcheck_Model_Healthcheck_Setting();
+                Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->insert($this->_healthcheckSetting);
                 $this->healthcheckSettingId = $this->_healthcheckSetting->id;
 
                 // Save ourselves
-                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
+                Preferences_Model_Mapper_User_Setting::getInstance()->save($this);
             }
         }
-
         return $this->_healthcheckSetting;
     }
 

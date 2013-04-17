@@ -50,7 +50,7 @@ class Preferences_Service_HealthcheckSetting
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
             {
-                $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMono"]);
+                $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
                 $this->_form->getElement("assessmentReportMargin")->setDescription($populateSettings["assessmentReportMargin"]);
                 $this->_form->getElement("monthlyLeasePayment")->setDescription($populateSettings["monthlyLeasePayment"]);
@@ -63,9 +63,6 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
-                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
                 // Re-load the settings into Healthcheck settings
                 $populateSettings = $this->_defaultSettings;
