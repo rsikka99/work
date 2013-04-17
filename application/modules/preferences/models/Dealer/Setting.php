@@ -19,6 +19,16 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     /**
      * @var int
      */
+    public $hardwareOptimizationSettingId;
+
+    /**
+     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting
+     */
+    protected $_hardwareOptimizationSetting;
+
+    /**
+     * @var int
+     */
     public $healthcheckSettingId;
 
     /**
@@ -53,6 +63,10 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         {
             $this->assessmentSettingId = $params->assessmentSettingId;
         }
+        if (isset($params->hardwareOptimizationSettingId) && !is_null($params->hardwareOptimizationSettingId))
+        {
+            $this->hardwareOptimizationSettingId = $params->hardwareOptimizationSettingId;
+        }
         if (isset($params->healthcheckSettingId) && !is_null($params->healthcheckSettingId))
         {
             $this->healthcheckSettingId = $params->healthcheckSettingId;
@@ -69,10 +83,11 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "dealerId"             => $this->dealerId,
-            "assessmentSettingId"  => $this->assessmentSettingId,
-            "healthcheckSettingId" => $this->healthcheckSettingId,
-            "surveySettingId"      => $this->surveySettingId,
+            "dealerId"                      => $this->dealerId,
+            "assessmentSettingId"           => $this->assessmentSettingId,
+            "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,
+            "healthcheckSettingId"          => $this->healthcheckSettingId,
+            "surveySettingId"               => $this->surveySettingId,
         );
     }
 
@@ -152,5 +167,31 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         }
 
         return $this->_surveySetting;
+    }
+
+    /**
+     * Gets the hardware optimization settings
+     *
+     * @return Hardwareoptimization_Model_Hardware_Optimization
+     */
+    public function getHardwareOptimizationSettings ()
+    {
+        if (!isset($this->_hardwareOptimizationSetting))
+        {
+            $this->_hardwareOptimizationSetting = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->find($this->hardwareOptimizationSettingId);
+
+            if (!$this->_hardwareOptimizationSetting instanceof Hardwareoptimization_Model_Hardware_Optimization_Setting)
+            {
+                // Insert a new copy of the system setting
+                $this->_hardwareOptimizationSetting = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->fetchSystemSetting();
+                Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert($this->_hardwareOptimizationSetting);
+                $this->hardwareOptimizationSettingId = $this->_hardwareOptimizationSetting->id;
+
+                // Save ourselves
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_hardwareOptimizationSetting;
     }
 }

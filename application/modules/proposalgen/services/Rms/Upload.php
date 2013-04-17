@@ -38,15 +38,19 @@ class Proposalgen_Service_Rms_Upload
 
 
     /**
-     * @param      $userId    int
-     * @param      $clientId  int
-     * @param null $rmsUpload Proposalgen_Model_Rms_Upload
+     * @param int      $userId
+     * @param int      $clientId
+     * @param int|null $rmsUploadId
      */
-    public function __construct ($userId, $clientId, $rmsUpload = null)
+    public function __construct ($userId, $clientId, $rmsUploadId = null)
     {
         $this->_userId   = $userId;
         $this->_clientId = $clientId;
-        $this->rmsUpload = $rmsUpload;
+
+        if ($rmsUploadId > 0)
+        {
+            $this->_rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
     }
 
     /**

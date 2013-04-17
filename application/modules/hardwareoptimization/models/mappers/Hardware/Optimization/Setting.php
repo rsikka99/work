@@ -225,4 +225,14 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting extends My
     {
         return $object->id;
     }
+
+    /**
+     * Gets the system row
+     *
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting
+     */
+    public function fetchSystemSetting ()
+    {
+        return $this->find(1);
+    }
 }

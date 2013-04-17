@@ -1,17 +1,57 @@
 <?php
 class Hardwareoptimization_IndexController extends Tangent_Controller_Action
 {
+
+    /**
+     * @var int
+     */
+    protected $_selectedClientId;
+
+    /**
+     * The namespace for our mps application
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected $_mpsSession;
+
+    /**
+     * The identity of the currently logged in user
+     *
+     * @var stdClass
+     */
+    protected $_identity;
+
+    /**
+     * @var Hardwareoptimization_Model_Hardware_Optimization
+     */
+    protected $_hardwareOptimization;
+
+    /**
+     * Initialize the controller
+     */
+    public function init ()
+    {
+        $this->_mpsSession           = new Zend_Session_Namespace('mps-tools');
+        $this->_identity             = Zend_Auth::getInstance()->getIdentity();
+        $this->_hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($this->_mpsSession->hardwareOptimizationId);
+
+        if (isset($this->_mpsSession->selectedClientId))
+        {
+            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+            // Make sure the selected client is ours!
+            if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
+            {
+                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
+                $this->view->selectedClientId = $this->_selectedClientId;
+            }
+        }
+    }
+
     public function indexAction ()
     {
-        $hardwareOptimizationId = $this->_getParam('hardwareOptimizationId');
-
         // Initialize the service.
-        $clientId      = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->getClientIdByHardwareOptimizationId($hardwareOptimizationId);
-        $userId        = Zend_Auth::getInstance()->getIdentity()->id;
-        $rmsUpload     = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->findRmsUploadRowByHardwareOptimizationId($hardwareOptimizationId);
-        $uploadService = new Proposalgen_Service_Rms_Upload($userId, $clientId, $rmsUpload);
-
-        $form = $uploadService->getForm();
+        $uploadService = new Proposalgen_Service_Rms_Upload($this->_identity->id, $this->_selectedClientId, $this->_hardwareOptimization->rmsUploadId);
+        $form          = $uploadService->getForm();
 
         if ($this->getRequest()->isPost())
         {
@@ -29,9 +69,8 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
                     $rmsUpload = $uploadService->rmsUpload;
 
                     // Save the hardware optimization object with the new id.
-                    $hardwareOptimization              = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
-                    $hardwareOptimization->rmsUploadId = $rmsUpload->id;
-                    Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($hardwareOptimization);
+                    $this->_hardwareOptimization->rmsUploadId = $rmsUpload->id;
+                    Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($this->_hardwareOptimization);
 
                     $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
                 }
@@ -42,7 +81,7 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->rmsUpload->id);
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->_rmsUpload->id);
                 if ($count < 2)
                 {
                     $this->_flashMessenger->addMessage(array(
@@ -51,7 +90,7 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $this->redirector('settings', null, null, array('hardwareOptimizationId' => $hardwareOptimizationId));
+                    $this->redirector('settings');
                 }
             }
         }
@@ -64,19 +103,12 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
 
     public function settingsAction ()
     {
-        $hardwareOptimizationId = $this->_getParam('hardwareOptimizationId');
+        $user   = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
 
-        // Get user settings
-        $userSettings = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->findSettingsByHardwareOptimizationId($hardwareOptimizationId);
-        // Get resolved override settings dealer + user settings
-        $userDefaultSettings = "";
-        $dealerDefaultSettings = "";
-        $defaultSettings = "";
+        $hardwareOptimizationService = new Preferences_Service_HardwareoptimizationSetting($this->_hardwareOptimization->getHardwareOptimizationSetting()->toArray());
 
-
-
-        $hardwareOptimizationService = new Preferences_Service_HardwareoptimizationSetting($defaultSettings);
-
-        $this->view->form = $hardwareOptimizationService->getFormWithDefaults($userSettings->toArray());
+        $defaultHardwareOptimizationSettings = $user->getDealer()->getDealerSettings()->getHardwareOptimizationSettings();
+        $defaultHardwareOptimizationSettings->populate($user->getUserSettings()->getHardwareOptimizationSettings()->toArray());
+        $this->view->form = $hardwareOptimizationService->getFormWithDefaults($defaultHardwareOptimizationSettings->toArray());
     }
 }

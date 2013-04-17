@@ -199,18 +199,18 @@
                                 </td>
                             </tr>
                             <?php foreach ($this->availableHardwareOptimizations as $hardwareOptimization) : /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */ ?>
-                                <tr class="<?php echo ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)); ?></td>
-                                    <td><?php echo strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+                                <tr class="<?php echo ($hardwareOptimization->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($hardwareOptimization->dateCreated)); ?></td>
+                                    <td><?php echo strftime("%B %d, %Y", strtotime($hardwareOptimization->lastModified)); ?></td>
 
-                                    <?php if ($report->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
+                                    <?php if ($hardwareOptimization->stepName == Proposalgen_Model_Healthcheck_Step::STEP_FINISHED) : ?>
                                         <td>Finished</td>
 
                                     <?php else : ?>
                                         <td>In Progress</td>
                                     <?php endif; ?>
                                     <td style="text-align: center;">
-                                        <button name="selectHardwareOptimization" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select
+                                        <button name="selectHardwareOptimization" value="<?php echo $hardwareOptimization->id; ?>" class="btn btn-primary btn-mini">Select
                                         </button>
                                     </td>
                                 </tr>

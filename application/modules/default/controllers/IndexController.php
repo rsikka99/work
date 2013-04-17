@@ -206,7 +206,8 @@ class Default_IndexController extends Tangent_Controller_Action
 
                     if ($inArray->isValid($hardwareOptimizationId))
                     {
-                        $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
+                        $this->_mpsSession->hardwareOptimizationId = $hardwareOptimizationId;
+                        $this->redirector('index', 'index', 'hardwareoptimization');
                     }
                     else
                     {
@@ -216,7 +217,8 @@ class Default_IndexController extends Tangent_Controller_Action
                 else
                 {
                     $hardwareOptimizationId = $this->_createNewHardwareOptimization();
-                    $this->redirector('index', 'index', 'hardwareoptimization', array('hardwareOptimizationId' => $hardwareOptimizationId));
+                    $this->_mpsSession->hardwareOptimizationId = $hardwareOptimizationId;
+                    $this->redirector('index', 'index', 'hardwareoptimization');
                 }
 
             }
