@@ -14,6 +14,9 @@ class Preferences_Model_Acl
     const RESOURCE_PREFERENCES_QUOTE_DEALER    = "preferences__quote__dealer";
     const RESOURCE_PREFERENCES_QUOTE_USER      = "preferences__quote__user";
     const RESOURCE_PREFERENCES_QUOTE_SYSTEM    = "preferences__quote__system";
+    const RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM    = "preferences__healthcheck__system";
+    const RESOURCE_PREFERENCES_HEALTHCHECK_USER    = "preferences__healthcheck__user";
+    const RESOURCE_PREFERENCES_HEALTHCHECK_DEALER    = "preferences__healthcheck__dealer";
 
     /**
      * Sets up acl resources and access for a module
@@ -46,6 +49,9 @@ class Preferences_Model_Acl
         $acl->addResource(self::RESOURCE_PREFERENCES_QUOTE_DEALER);
         $acl->addResource(self::RESOURCE_PREFERENCES_QUOTE_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_QUOTE_SYSTEM);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_USER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER);
     }
 
     /**
@@ -72,6 +78,12 @@ class Preferences_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        // Healthcheck User
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_HEALTHCHECK_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 
 }

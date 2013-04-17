@@ -15,7 +15,7 @@
                     <module>preferences</module>
                     <controller>index</controller>
                     <action>user</action>
-                    <resource>preferences__index__user</resource>
+                    <resource>preferences__index__index</resource>
                     <class>dropdown></class>
                     <pages>
                         <userreportsettings>

@@ -27,4 +27,13 @@ class Healthcheck_Bootstrap extends Zend_Application_Module_Bootstrap
         $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
     }
 
+    protected function _initAddToAcl ()
+    {
+        $acl = Zend_Registry::get('Zend_Acl');
+        if ($acl instanceof Application_Model_Acl)
+        {
+            Healthcheck_Model_Acl::setupAcl($acl);
+        }
+    }
+
 }
