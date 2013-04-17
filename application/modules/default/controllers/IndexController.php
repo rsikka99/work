@@ -262,8 +262,8 @@ class Default_IndexController extends Tangent_Controller_Action
 
         // Get the system and user defaults and apply overrides for user settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-        $userSetting  = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($this->_userId);
-        $quoteSetting->applyOverride($userSetting);
+        $user = Application_Model_Mapper_User::getInstance()->find($this->_userId);
+        $quoteSetting->applyOverride($user->getUserSettings()->getQuoteSettings());
 
         // Update current quote object and save new quote items to database
         $quote->populate($quoteSetting->toArray());

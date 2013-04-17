@@ -64,13 +64,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
 
         $this->view->form = $form;
 
-        $this->view->rmsUpload = $uploadService->rmsUpload;
+        $this->view->rmsUpload = $uploadService->_rmsUpload;
 //        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
 //        {
 //            $this->view->populateGrid = true;
 //        }
 
-        $navigationButtons          = ($uploadService->rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $navigationButtons          = ($uploadService->_rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }

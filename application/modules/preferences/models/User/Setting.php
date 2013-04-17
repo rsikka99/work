@@ -46,6 +46,16 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
      */
     protected $_surveySetting;
 
+    /**
+     * @var int
+     */
+    public $quoteSettingId;
+
+    /**
+     * @var Quotegen_Model_QuoteSetting
+     */
+    protected $_quoteSetting;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -76,6 +86,10 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
         {
             $this->surveySettingId = $params->surveySettingId;
         }
+        if (isset($params->quoteSettingId) && !is_null($params->quoteSettingId))
+        {
+            $this->quoteSettingId = $params->quoteSettingId;
+        }
     }
 
     /**
@@ -89,6 +103,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
             "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,
             "healthcheckSettingId"          => $this->healthcheckSettingId,
             "surveySettingId"               => $this->surveySettingId,
+            "quoteSettingId"                => $this->quoteSettingId,
         );
     }
 
@@ -140,6 +155,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
                 Preferences_Model_Mapper_User_Setting::getInstance()->save($this);
             }
         }
+
         return $this->_healthcheckSetting;
     }
 
@@ -193,5 +209,31 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
         }
 
         return $this->_hardwareOptimizationSetting;
+    }
+
+    /**
+     * Gets the quote settings
+     *
+     * @return Quotegen_Model_QuoteSetting
+     */
+    public function getQuoteSettings ()
+    {
+        if (!isset($this->_quoteSetting))
+        {
+            $this->_quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->find($this->quoteSettingId);
+
+            if (!$this->_quoteSetting instanceof Quotegen_Model_QuoteSetting)
+            {
+                // Insert a new copy of the system setting
+                $this->_quoteSetting = new Quotegen_Model_QuoteSetting();
+                Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($this->_quoteSetting);
+                $this->quoteSettingId = $this->_quoteSetting->id;
+
+                // Save ourselves
+                Preferences_Model_Mapper_User_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_quoteSetting;
     }
 }

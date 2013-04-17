@@ -63,8 +63,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         {
 
                             $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-                            $userQuoteSetting = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting($this->_userId);
-                            $quoteSetting->applyOverride($userQuoteSetting);
+                            $userSetting = Preferences_Model_Mapper_User_Setting::getInstance()->find($this->_userId);
+                            $quoteSetting->applyOverride($userSetting->getQuoteSettings());
 
                             $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
                             // Create Quote Device

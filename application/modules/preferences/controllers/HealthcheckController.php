@@ -10,15 +10,15 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
 
         $settings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();
 
-        $reportSettingFormService = new Preferences_Service_HealthcheckSetting($settings);
-        $form                     = $reportSettingFormService->getForm();
+        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($settings);
+        $form                     = $healthcheckSettingFormService->getForm();
 
         $request = $this->getRequest();
 
         if ($request->isPost())
         {
             $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
+            $success = $healthcheckSettingFormService->update($values);
 
             if ($success)
             {
@@ -64,8 +64,6 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
 
     public function userAction ()
     {
-        // Initialize and get the form
-
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();

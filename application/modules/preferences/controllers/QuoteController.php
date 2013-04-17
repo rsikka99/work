@@ -28,23 +28,31 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function userAction ()
     {
-        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->fetchDealerQuoteSetting(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $userQuoteSettings = Quotegen_Model_Mapper_UserQuoteSetting::getInstance()->fetchUserQuoteSetting(Zend_Auth::getInstance()->getIdentity()->id);
-        $quoteService = new Preferences_Service_QuoteSetting($userQuoteSettings->toArray());
-        $form         = $quoteService->getFormWithDefaults($dealerQuoteSetting);
+        // Dealer
+        $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $combinedDealerSettings = $dealer->getDealerSettings()->getQuoteSettings();
+
+        // User
+        $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $combinedUserSettings = $user->getUserSettings()->getQuoteSettings()->toArray();
+        $quoteSettingFormService = new Preferences_Service_QuoteSetting($combinedUserSettings);
+
+        $form = $quoteSettingFormService->getFormWithDefaults($combinedDealerSettings);
+
         $request = $this->getRequest();
+
         if ($request->isPost())
         {
             $values  = $request->getPost();
-            $success = $quoteService->update($values);
+            $success = $quoteSettingFormService->update($values);
 
             if ($success)
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
             }
         }
 
@@ -53,23 +61,28 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
-        $dealerQuoteSetting = Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->fetchDealerQuoteSetting(Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $quoteService = new Preferences_Service_QuoteSetting($dealerQuoteSetting->toArray());
-        $form         = $quoteService->getForm();
+        // Initialize and get the form
+        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+
+        $settings = $dealer->getDealerSettings()->getQuoteSettings()->toArray();
+
+        $quoteSettingFormService = new Preferences_Service_QuoteSetting($settings);
+        $form                     = $quoteSettingFormService->getForm();
 
         $request = $this->getRequest();
+
         if ($request->isPost())
         {
             $values  = $request->getPost();
-            $success = $quoteService->update($values);
+            $success = $quoteSettingFormService->update($values);
 
             if ($success)
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
             }
         }
 
