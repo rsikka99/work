@@ -1861,11 +1861,13 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
     `hardwareOptimizationSettingId` INT NULL ,
     `healthcheckSettingId` INT NULL ,
     `surveySettingId` INT NULL ,
+    `quoteSettingId` INT NULL ,
     PRIMARY KEY (`dealerId`) ,
     INDEX `dealer_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
     INDEX `dealer_settings_ibfk_3_idx` (`surveySettingId` ASC) ,
     INDEX `dealer_settings_ibfk_4_idx` (`healthcheckSettingId` ASC) ,
     INDEX `dealer_settings_ibfk_5_idx` (`hardwareOptimizationSettingId` ASC) ,
+    INDEX `dealer_settings_ibfk_6_idx` (`quoteSettingId` ASC) ,
     CONSTRAINT `dealer_settings_ibfk_1`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
@@ -1890,6 +1892,11 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
     FOREIGN KEY (`hardwareOptimizationSettingId` )
     REFERENCES `hardware_optimization_settings` (`id` )
         ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `dealer_settings_ibfk_6`
+    FOREIGN KEY (`quoteSettingId` )
+    REFERENCES `quote_settings` (`id` )
+        ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
@@ -1903,11 +1910,13 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
     `hardwareOptimizationSettingId` INT NULL ,
     `healthcheckSettingId` INT NULL ,
     `surveySettingId` INT NULL ,
+    `quoteSettingId` INT NULL ,
     PRIMARY KEY (`userId`) ,
     INDEX `user_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
     INDEX `user_settings_ibfk_3_idx` (`surveySettingId` ASC) ,
     INDEX `user_settings_ibfk_4_idx` (`healthcheckSettingId` ASC) ,
     INDEX `user_settings_ibfk_5_idx` (`hardwareOptimizationSettingId` ASC) ,
+    INDEX `user_settings_ibfk_6_idx` (`quoteSettingId` ASC) ,
     CONSTRAINT `user_settings_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
@@ -1931,6 +1940,11 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
     CONSTRAINT `user_settings_ibfk_5`
     FOREIGN KEY (`hardwareOptimizationSettingId` )
     REFERENCES `hardware_optimization_settings` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `user_settings_ibfk_6`
+    FOREIGN KEY (`quoteSettingId` )
+    REFERENCES `quote_settings` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
