@@ -24,7 +24,7 @@ class Proposalgen_Service_Rms_Upload
     /**
      * @var Proposalgen_Model_Rms_Upload
      */
-    public $rmsUpload;
+    public $_rmsUpload;
 
     /**
      * @var Proposalgen_Form_ImportRmsCsv
@@ -106,23 +106,23 @@ class Proposalgen_Service_Rms_Upload
                     $rmsDeviceMapper           = Proposalgen_Model_Mapper_Rms_Device::getInstance();
 
 
-                    if ($this->rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                    if ($this->_rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                     {
                         /**
                          * Delete all previously uploaded lines
                          */
-                        $rmsUploadRowMapper->deleteAllForRmsUpload($this->rmsUpload->id);
-                        $rmsExcludedRowMapper->deleteAllForRmsUpload($this->rmsUpload->id);
-                        Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($this->rmsUpload);
+                        $rmsUploadRowMapper->deleteAllForRmsUpload($this->_rmsUpload->id);
+                        $rmsExcludedRowMapper->deleteAllForRmsUpload($this->_rmsUpload->id);
+                        Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($this->_rmsUpload);
                     }
 
-                    $this->rmsUpload                  = new Proposalgen_Model_Rms_Upload();
-                    $this->rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
-                    $this->rmsUpload->fileName        = basename($this->_fileName);
-                    $this->rmsUpload->clientId        = $this->_clientId;
-                    $this->rmsUpload->rmsProviderId   = $uploadProviderId;
-                    $this->rmsUpload->invalidRowCount = 0;
-                    $this->rmsUpload->validRowCount   = 0;
+                    $this->_rmsUpload                  = new Proposalgen_Model_Rms_Upload();
+                    $this->_rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
+                    $this->_rmsUpload->fileName        = basename($this->_fileName);
+                    $this->_rmsUpload->clientId        = $this->_clientId;
+                    $this->_rmsUpload->rmsProviderId   = $uploadProviderId;
+                    $this->_rmsUpload->invalidRowCount = 0;
+                    $this->_rmsUpload->validRowCount   = 0;
 
 
                     /*
@@ -135,16 +135,16 @@ class Proposalgen_Service_Rms_Upload
                         /**
                          * Save our upload object
                          */
-                        $this->rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
-                        $this->rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
+                        $this->_rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
+                        $this->_rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
 
-                        if ($this->rmsUpload->id > 0)
+                        if ($this->_rmsUpload->id > 0)
                         {
-                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($this->rmsUpload);
+                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($this->_rmsUpload);
                         }
                         else
                         {
-                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($this->rmsUpload);
+                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($this->_rmsUpload);
                         }
 
 
@@ -200,7 +200,7 @@ class Proposalgen_Service_Rms_Upload
                              * Save Device Instance
                              */
                             $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
-                            $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
+                            $deviceInstance->rmsUploadId    = $this->_rmsUpload->id;
                             $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
                             Proposalgen_Model_Mapper_DeviceInstance::getInstance()->insert($deviceInstance);
 
@@ -304,7 +304,7 @@ class Proposalgen_Service_Rms_Upload
 
                             // Set values that have different names than in $line
                             $rmsExcludedRow->manufacturerName = $line->manufacturer;
-                            $rmsExcludedRow->rmsUploadId      = $this->rmsUpload->id;
+                            $rmsExcludedRow->rmsUploadId      = $this->_rmsUpload->id;
                             $rmsExcludedRow->reason           = $line->validationErrorMessage;
 
                             // Set values that are none existent in $line

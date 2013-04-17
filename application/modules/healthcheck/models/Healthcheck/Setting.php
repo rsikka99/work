@@ -14,6 +14,20 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      *
      * @var int
      */
+    public $pageCoverageMonochrome;
+
+    /**
+     * The actual color page coverage as a whole number
+     *
+     * @var int
+     */
+    public $pageCoverageColor;
+
+    /**
+     * The actual monochrome page coverage as a whole number
+     *
+     * @var int
+     */
     public $actualPageCoverageMono;
 
     /**
@@ -176,6 +190,14 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->id = $params->id;
         }
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
         if (isset($params->actualPageCoverageMono) && !is_null($params->actualPageCoverageMono))
         {
             $this->actualPageCoverageMono = $params->actualPageCoverageMono;
@@ -265,6 +287,8 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     {
         return array(
             "id"                          => $this->id,
+            "pageCoverageMonochrome"      => $this->pageCoverageMonochrome,
+            "pageCoverageColor"           => $this->pageCoverageColor,
             "actualPageCoverageMono"      => $this->actualPageCoverageMono,
             "actualPageCoverageColor"     => $this->actualPageCoverageColor,
             "laborCostPerPage"            => $this->laborCostPerPage,
@@ -284,7 +308,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "replacementPricingConfigId"               => $this->replacementPricingConfigId,
+            "replacementPricingConfigId"  => $this->replacementPricingConfigId,
         );
     }
 
@@ -303,9 +327,9 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         return $this->_assessmentPricingConfig;
     }
 
-    public function getReplacementPricingConfig()
+    public function getReplacementPricingConfig ()
     {
-        if(!isset($this->_replacementPricingConfig))
+        if (!isset($this->_replacementPricingConfig))
         {
             $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
         }

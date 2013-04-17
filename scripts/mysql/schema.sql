@@ -1648,6 +1648,8 @@ CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
     `targetColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `costThreshold` DOUBLE NULL DEFAULT NULL ,
     `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
+    `pageCoverageMonochrome` INT(11) NULL DEFAULT NULL ,
+    `pageCoverageColor` INT(11) NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `healthcheck_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
     INDEX `healthcheck_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,

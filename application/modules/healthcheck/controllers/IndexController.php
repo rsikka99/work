@@ -16,7 +16,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
             $rmsUpload = Healthcheck_Model_Mapper_Healthcheck::getInstance()->findRmsUploadRowByHardwareOptimizationId($report->id);
         }
 
-        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId,$rmsUpload);
+        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId,($rmsUpload ? $rmsUpload->id : null));
 
 
         if ($this->getRequest()->isPost())
@@ -32,7 +32,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 $success = $uploadService->processUpload($values);
                 if ($success)
                 {
-                    $rmsUpload = $uploadService->rmsUpload;
+                    $rmsUpload = $uploadService->_rmsUpload;
 
                     // Save the health check object with the new id.
                     $healthcheck              = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($report->id);
@@ -48,7 +48,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->rmsUpload->id);
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->_rmsUpload->id);
                 if ($count < 2)
                 {
                     $this->_flashMessenger->addMessage(array(

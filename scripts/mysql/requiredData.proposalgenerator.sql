@@ -37,8 +37,8 @@ INSERT INTO `survey_settings` (`id`, `pageCoverageMono`, `pageCoverageColor`) VA
 (1, 6, 24);
 
 /* Default System Report Settings */
-INSERT INTO `healthcheck_settings` (`id`, `actualPageCoverageMono`, `actualPageCoverageColor`, `laborCostPerPage`, `partsCostPerPage`, `adminCostPerPage`, `assessmentReportMargin`, `grossMarginReportMargin`, `monthlyLeasePayment`, `defaultPrinterCost`, `leasedBwCostPerPage`, `leasedColorCostPerPage`, `mpsBwCostPerPage`, `mpsColorCostPerPage`, `kilowattsPerHour`, `assessmentPricingConfigId`, `grossMarginPricingConfigId`, `costThreshold`, `targetMonochromeCostPerPage`, `targetColorCostPerPage`, `replacementPricingConfigId`) VALUES
-(1, 6, 24, 0.002, 0.0015, 0.0006, 20, 20, 250, 1000, 0.015, 0.08, 0.02, 0.09, 0.1, 2, 3, 10, 0.018, 0.02, 3);
+INSERT INTO `healthcheck_settings` (`id`, `pageCoverageMonochrome`,`pageCoverageColor`,`actualPageCoverageMono`, `actualPageCoverageColor`, `laborCostPerPage`, `partsCostPerPage`, `adminCostPerPage`, `assessmentReportMargin`, `grossMarginReportMargin`, `monthlyLeasePayment`, `defaultPrinterCost`, `leasedBwCostPerPage`, `leasedColorCostPerPage`, `mpsBwCostPerPage`, `mpsColorCostPerPage`, `kilowattsPerHour`, `assessmentPricingConfigId`, `grossMarginPricingConfigId`, `costThreshold`, `targetMonochromeCostPerPage`, `targetColorCostPerPage`, `replacementPricingConfigId`) VALUES
+(1, 6, 24, 6, 24, 0.002, 0.0015, 0.0006, 20, 20, 250, 1000, 0.015, 0.08, 0.02, 0.09, 0.1, 2, 3, 10, 0.018, 0.02, 3);
 
 INSERT INTO `hardware_optimization_settings` (`id`, `costThreshold`, `customerPricingConfigId`, `dealerMargin`, `dealerPricingConfigId`, `targetColorCostPerPage`, `targetMonochromeCostPerPage`, `replacementPricingConfigId`) VALUES
 (1, 25.50, 1, 20, 3, 0.10, 0.02, 3);

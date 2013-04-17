@@ -32,6 +32,13 @@
                             <action>user</action>
                             <resource>preferences__quote__user</resource>
                         </userquotesettings>
+                        <userhealthchecksettings>
+                            <label>Health Check</label>
+                            <module>preferences</module>
+                            <controller>healthcheck</controller>
+                            <action>user</action>
+                            <resource>preferences__healthcheck__user</resource>
+                        </userhealthchecksettings>
                     </pages>
                 </usersettings>
                 <dealersettings>
@@ -56,6 +63,13 @@
                             <action>dealer</action>
                             <resource>preferences__quote__dealer</resource>
                         </dealerquotesettings>
+                        <dealerhealthchecksettings>
+                            <label>Health Check</label>
+                            <module>preferences</module>
+                            <controller>healthcheck</controller>
+                            <action>dealer</action>
+                            <resource>preferences__healthcheck__dealer</resource>
+                        </dealerhealthchecksettings>
                     </pages>
                 </dealersettings>
                 <systemsettings>
@@ -80,6 +94,13 @@
                             <action>system</action>
                             <resource>preferences__quote__system</resource>
                         </systemquotesettings>
+                        <systemhealthchecksettings>
+                            <label>Health Check</label>
+                            <module>preferences</module>
+                            <controller>healthcheck</controller>
+                            <action>system</action>
+                            <resource>preferences__healthcheck__system</resource>
+                        </systemhealthchecksettings>
                     </pages>
                 </systemsettings>
             </pages>
