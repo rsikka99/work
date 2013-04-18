@@ -34,8 +34,6 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 $this->gotoNextStep();
             }
         }
-        $form = new EasyBib_Form();
-
     }
 
     public function selectuploadAction ()
