@@ -1249,10 +1249,8 @@ CREATE  TABLE IF NOT EXISTS `sessions` (
     `id` CHAR(32) NOT NULL ,
     `modified` INT(11) NOT NULL ,
     `lifetime` INT(11) NOT NULL ,
-    `data` TEXT NULL DEFAULT NULL ,
-    PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = latin1;
+    `data` TEXT NULL ,
+    PRIMARY KEY (`id`) );
 
 
 -- -----------------------------------------------------
@@ -1531,14 +1529,14 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
     `sessionId` CHAR(32) NOT NULL ,
     `userId` INT NOT NULL ,
     INDEX `user_sessions_ibfk_1_idx` (`userId` ASC) ,
-    UNIQUE INDEX `sessionId_UNIQUE` (`sessionId` ASC) ,
-    UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) ,
+    UNIQUE INDEX `user_sessions_sessionId_UNIQUE` (`sessionId` ASC) ,
+    UNIQUE INDEX `user_sessions_userId_UNIQUE` (`userId` ASC) ,
     PRIMARY KEY (`sessionId`) ,
     CONSTRAINT `user_sessions_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
     CONSTRAINT `user_sessions_ibfk_2`
     FOREIGN KEY (`sessionId` )
     REFERENCES `sessions` (`id` )
