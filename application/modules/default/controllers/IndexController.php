@@ -57,6 +57,7 @@ class Default_IndexController extends Tangent_Controller_Action
         $availableQuotes                = array();
         $availableHealthchecks          = array();
         $availableHardwareOptimizations = array();
+        $rmsUploads                     = array();
 
         if ($this->_selectedClientId > 0)
         {
@@ -71,6 +72,9 @@ class Default_IndexController extends Tangent_Controller_Action
 
             $availableHardwareOptimizations             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableHardwareOptimizations = $availableHardwareOptimizations;
+
+            $rmsUploads                      = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->_selectedClientId);
+            $this->view->availableRmsUploads = $rmsUploads;
         }
 
         if ($this->getRequest()->isPost())
@@ -216,17 +220,63 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $hardwareOptimizationId = $this->_createNewHardwareOptimization();
+                    $hardwareOptimizationId                    = $this->_createNewHardwareOptimization();
                     $this->_mpsSession->hardwareOptimizationId = $hardwareOptimizationId;
                     $this->redirector('index', 'index', 'hardwareoptimization');
                 }
 
+            }
+            else if (isset($postData['selectRmsUpload']))
+            {
+                $rmsUploadId = $postData['selectRmsUpload'];
+
+                if ($rmsUploadId > 0)
+                {
+                    /**
+                     * Make sure it's a valid upload for our current client
+                     */
+                    $isValid = false;
+                    foreach ($rmsUploads as $rmsUpload)
+                    {
+                        if ((int)$rmsUploadId === (int)$rmsUpload->id)
+                        {
+                            $isValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!$isValid)
+                    {
+                        $rmsUploadId = 0;
+                    }
+                }
+                else
+                {
+                    $rmsUploadId = 0;
+                }
+
+
+
+                if ($rmsUploadId === 0)
+                {
+                    $this->redirector('index', 'fleet', 'proposalgen');
+                }
+                else
+                {
+                    $this->redirector('index', 'fleet', 'proposalgen', array('rmsUploadId' => $rmsUploadId));
+                }
             }
         }
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/default/clientSearch.js'));
     }
 
+    /**
+     * Creates a new hardware optimization for the customer.
+     * FIXME: Lee - This should probably happen somewhere within the HWO module instead.
+     *
+     * @return int
+     */
     protected function _createNewHardwareOptimization ()
     {
         $hardwareOptimization                                = new Hardwareoptimization_Model_Hardware_Optimization;

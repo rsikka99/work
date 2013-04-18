@@ -174,7 +174,8 @@
                                         <td>In Progress</td>
                                     <?php endif; ?>
                                     <td style="text-align: center;">
-                                        <button name="selectHealthcheck" value="<?php echo $healthcheck->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                                        <button name="selectHealthcheck" value="<?php echo $healthcheck->id; ?>" class="btn btn-primary btn-mini">Select
+                                        </button>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -210,7 +211,8 @@
                                         <td>In Progress</td>
                                     <?php endif; ?>
                                     <td style="text-align: center;">
-                                        <button name="selectHardwareOptimization" value="<?php echo $hardwareOptimization->id; ?>" class="btn btn-primary btn-mini">Select
+                                        <button name="selectHardwareOptimization" value="<?php echo $hardwareOptimization->id; ?>" class="btn btn-primary btn-mini">
+                                            Select
                                         </button>
                                     </td>
                                 </tr>
@@ -220,6 +222,44 @@
                 </div>
             </div>
         </div>
+        <hr>
+        <h3>RMS Uploads</h3>
+
+        <form method="POST">
+            <table class="table table-striped table-condensed table-bordered">
+                <tr>
+                    <th>Date Uploaded</th>
+                    <th>Type</th>
+                    <th>File</th>
+                    <th>Valid</th>
+                    <th>Invalid</th>
+                    <th style="width: 70px;">Action</th>
+                </tr>
+                <tr class="info">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align: center;">
+                        <button name="selectRmsUpload" value="0" class="btn btn-success btn-mini">Upload</button>
+                    </td>
+                </tr>
+                <?php foreach ($this->availableRmsUploads as $rmsUpload) : /* @var $rmsUpload Proposalgen_Model_Rms_Upload */ ?>
+                    <tr>
+                        <td><?php echo strftime("%B %d, %Y %I:%M:%S %p", strtotime($rmsUpload->uploadDate)); ?></td>
+                        <td><?php echo $rmsUpload->getRmsProvider()->name; ?></td>
+                        <td><?php echo $rmsUpload->fileName; ?></td>
+                        <td><?php echo number_format($rmsUpload->validRowCount); ?></td>
+                        <td><?php echo number_format($rmsUpload->invalidRowCount); ?></td>
+
+                        <td style="text-align: center;">
+                            <button name="selectRmsUpload" value="<?php echo $rmsUpload->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+        </form>
     <?php else : ?>
         <div class="well">
             <div class="alert alert-info"><strong>Important:</strong> Please select a client from the left menu to proceed.</div>

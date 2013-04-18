@@ -81,7 +81,7 @@ class Hardwareoptimization_IndexController extends Tangent_Controller_Action
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->_rmsUpload->id);
+                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->rmsUpload->id);
                 if ($count < 2)
                 {
                     $this->_flashMessenger->addMessage(array(

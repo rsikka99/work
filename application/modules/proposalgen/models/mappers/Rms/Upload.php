@@ -7,6 +7,7 @@ class Proposalgen_Model_Mapper_Rms_Upload extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_clientId = 'clientId';
     public $col_rmsProviderId = 'rmsProviderId';
+    public $col_uploadDate = 'uploadDate';
 
     /**
      * The default db table class to use
@@ -226,5 +227,25 @@ class Proposalgen_Model_Mapper_Rms_Upload extends My_Model_Mapper_Abstract
     public function getPrimaryKeyValueForObject ($object)
     {
         return $object->id;
+    }
+
+    /**
+     * Fetches all available uploads for a client
+     *
+     * @param      $clientId
+     * @param null $order
+     * @param int  $count
+     * @param null $offset
+     *
+     * @return Proposalgen_Model_Rms_Upload[]
+     */
+    public function fetchAllForClient ($clientId, $order = null, $count = 25, $offset = null)
+    {
+        if ($order === null)
+        {
+            $order = "{$this->col_uploadDate} DESC";
+        }
+
+        return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), $order, $count, $offset);
     }
 }

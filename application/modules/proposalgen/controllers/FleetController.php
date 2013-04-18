@@ -1,25 +1,75 @@
 <?php
-class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposal
+class Proposalgen_FleetController extends Tangent_Controller_Action
 {
+    /**
+     * @var int
+     */
+    protected $_selectedClientId;
+
+    /**
+     * The namespace for our mps application
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected $_mpsSession;
+
+    /**
+     * @var int
+     */
+    protected $_userId;
+
+    /**
+     * Our identity that is stored in the session
+     *
+     * @var stdClass
+     */
+    protected $_identity;
+
+    public function init ()
+    {
+        /* Initialize action controller here */
+        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
+        $this->_userId     = $this->_identity->id;
+
+
+        if (isset($this->_mpsSession->selectedClientId))
+        {
+            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+
+            // Make sure the selected client is ours!
+            if ($client && $client->dealerId == $this->_identity->dealerId)
+            {
+                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
+                $this->view->selectedClientId = $this->_selectedClientId;
+            }
+        }
+    }
+
     /**
      * Users can upload/see uploaded data on this step
      */
     public function indexAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_UPLOAD);
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
-        $report = $this->getReport();
+        $rmsUpload = null;
+        if ($rmsUploadId > 0)
+        {
+            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
 
-        $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_clientId, $report->getRmsUpload());
-        $form          = $uploadService->getForm();
+        $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_selectedClientId, $rmsUpload);
+
+        $form = $uploadService->getForm();
 
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
             if (isset($values ["goBack"]))
             {
-                $this->gotoPreviousStep();
+                // Bring the user back to the home page
+                $this->redirector("index", "index", "index");
             }
             else if (isset($values ["performUpload"]))
             {
@@ -31,12 +81,7 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
                     $success = $uploadService->processUpload($values);
                     if ($success)
                     {
-                        $report->rmsUploadId = $uploadService->rmsUpload->id;
-                        $report->setRmsUpload($uploadService->rmsUpload);
-
                         $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
-                        $this->saveReport();
-                        $this->gotoNextStep();
                     }
                     else
                     {
@@ -47,28 +92,13 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
             }
             else if (isset($values ["saveAndContinue"]))
             {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($report->getRmsUpload()->id);
-                if ($count < 2)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "You must have at least 2 valid devices to continue."
-                                                       ));
-                }
-                else
-                {
-                    // Call the base controller to send us to the next logical step in the proposal.
-                    $this->gotoNextStep();
-                }
+                $this->redirector('mapping', null, null, array("rmsUploadId" => $uploadService->rmsUpload->id));
             }
         }
 
         $this->view->form = $form;
 
         $this->view->rmsUpload = $uploadService->_rmsUpload;
-//        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
-//        {
-//            $this->view->populateGrid = true;
-//        }
 
         $navigationButtons          = ($uploadService->_rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
@@ -80,24 +110,30 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      */
     public function mappingAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_MAPDEVICES);
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+
+        $rmsUpload = null;
+        if ($rmsUploadId > 0)
+        {
+            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
+
+        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        {
+            $this->redirector("index");
+        }
 
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
             if (isset($postData['saveAndContinue']))
             {
-                // Every time we save anything related to a report, we should save it (updates the modification date)
-                $this->saveReport();
-
-                // Call the base controller to send us to the next logical step in the proposal.
-                $this->gotoNextStep();
+                $this->redirector('summary', null, null, array("rmsUploadId" => $rmsUploadId));
             }
             else if (isset($postData['goBack']))
             {
                 // Call the base controller to send us to the next logical step in the proposal.
-                $this->gotoPreviousStep();
+                $this->redirector('index', null, null, array("rmsUploadId" => $rmsUploadId));
             }
         }
 
@@ -308,24 +344,30 @@ class Proposalgen_FleetController extends Proposalgen_Library_Controller_Proposa
      */
     public function summaryAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FLEETDATA_SUMMARY);
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+
+        $rmsUpload = null;
+        if ($rmsUploadId > 0)
+        {
+            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
+
+        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        {
+            $this->redirector("index");
+        }
 
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
             if (isset($postData['saveAndContinue']))
             {
-                // Every time we save anything related to a report, we should save it (updates the modification date)
-                $this->saveReport();
-
-                // Call the base controller to send us to the next logical step in the proposal.
-                $this->gotoNextStep();
+                // FIXME: Should this have a magic way of going to a report?
+                $this->redirector('index', 'index', 'index');
             }
             else if (isset($postData['goBack']))
             {
-                // Call the base controller to send us to the next logical step in the proposal.
-                $this->gotoPreviousStep();
+                $this->redirector('mapping', null, null, array("rmsUploadId" => $rmsUploadId));
             }
         }
 

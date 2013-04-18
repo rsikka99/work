@@ -38,18 +38,18 @@ class Proposalgen_Service_Rms_Upload
 
 
     /**
-     * @param int      $userId
-     * @param int      $clientId
-     * @param int|null $rmsUploadId
+     * @param int                               $userId
+     * @param int                               $clientId
+     * @param Proposalgen_Model_Rms_Upload|null $rmsUpload
      */
-    public function __construct ($userId, $clientId, $rmsUploadId = null)
+    public function __construct ($userId, $clientId, $rmsUpload = null)
     {
         $this->_userId   = $userId;
         $this->_clientId = $clientId;
 
-        if ($rmsUploadId > 0)
+        if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
         {
-            $this->_rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+            $this->rmsUpload = $rmsUpload;
         }
     }
 
@@ -105,15 +105,13 @@ class Proposalgen_Service_Rms_Upload
                     $deviceInstanceMeterMapper = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
                     $rmsDeviceMapper           = Proposalgen_Model_Mapper_Rms_Device::getInstance();
 
-
-                    if ($this->_rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                    /**
+                     * Store our old upload in case we need it.
+                     */
+                    $oldRmsUpload = null;
+                    if ($this->rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                     {
-                        /**
-                         * Delete all previously uploaded lines
-                         */
-                        $rmsUploadRowMapper->deleteAllForRmsUpload($this->_rmsUpload->id);
-                        $rmsExcludedRowMapper->deleteAllForRmsUpload($this->_rmsUpload->id);
-                        Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($this->_rmsUpload);
+                        $oldRmsUpload = $this->rmsUpload;
                     }
 
                     $this->_rmsUpload                  = new Proposalgen_Model_Rms_Upload();
@@ -138,190 +136,209 @@ class Proposalgen_Service_Rms_Upload
                         $this->_rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
                         $this->_rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
 
-                        if ($this->_rmsUpload->id > 0)
+                        if ($this->rmsUpload->validRowCount < 2)
                         {
-                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($this->_rmsUpload);
+                            $this->errorMessages = "Your file had less than 2 valid rows in it. We require that you have 2 or more valid rows to upload a file";
                         }
                         else
                         {
-                            Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($this->_rmsUpload);
-                        }
 
-
-                        /**
-                         * Valid Lines
-                         */
-                        /**
-                         * @var Proposalgen_Model_DeviceInstance[]
-                         */
-                        $deviceInstances = array();
-
-                        foreach ($uploadCsvService->validCsvLines as $line)
-                        {
-                            /*
-                             * Convert line into device instance, upload row, and meters
-                             */
-                            $lineArray = $line->toArray();
-
-                            /*
-                             * Check and insert rms device
-                             */
-                            if ($line->rmsModelId > 0)
+                            if ($oldRmsUpload instanceof Proposalgen_Model_Rms_Upload)
                             {
-                                $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
-                                if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                /**
+                                 * Delete all previously uploaded lines
+                                 */
+                                $rmsUploadRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
+                                $rmsExcludedRowMapper->deleteAllForRmsUpload($oldRmsUpload->id);
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->delete($oldRmsUpload);
+                            }
+
+
+                            if ($this->rmsUpload->id > 0)
+                            {
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->save($this->rmsUpload);
+                            }
+                            else
+                            {
+                                Proposalgen_Model_Mapper_Rms_Upload::getInstance()->insert($this->rmsUpload);
+                            }
+
+
+                            /**
+                             * Valid Lines
+                             */
+                            /**
+                             * @var Proposalgen_Model_DeviceInstance[]
+                             */
+                            $deviceInstances = array();
+
+                            foreach ($uploadCsvService->validCsvLines as $line)
+                            {
+                                /*
+                                 * Convert line into device instance, upload row, and meters
+                                 */
+                                $lineArray = $line->toArray();
+
+                                /*
+                                 * Check and insert rms device
+                                 */
+                                if ($line->rmsModelId > 0)
                                 {
-                                    $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
-                                    $rmsDevice->rmsProviderId = $uploadProviderId;
-                                    $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
-                                    $rmsDevice->userId        = $this->_userId;
-                                    $rmsDeviceMapper->insert($rmsDevice);
+                                    $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
+                                    if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                    {
+                                        $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
+                                        $rmsDevice->rmsProviderId = $uploadProviderId;
+                                        $rmsDevice->dateCreated   = new Zend_Db_Expr("NOW()");
+                                        $rmsDevice->userId        = $this->_userId;
+                                        $rmsDeviceMapper->insert($rmsDevice);
+                                    }
+                                }
+
+                                /*
+                                 * Save Rms Upload Row
+                                 */
+                                $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row($lineArray);
+                                $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
+                                $rmsUploadRow->rmsProviderId  = $uploadProviderId;
+
+                                // Lets make an attempt at finding the manufacturer
+                                $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($rmsUploadRow->manufacturer);
+                                if ($manufacturers && count($manufacturers) > 0)
+                                {
+                                    $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
+                                }
+
+                                $rmsUploadRowMapper->insert($rmsUploadRow);
+
+
+                                /*
+                                 * Save Device Instance
+                                 */
+                                $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
+                                $deviceInstance->rmsUploadId    = $this->rmsUpload->id;
+                                $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
+                                Proposalgen_Model_Mapper_DeviceInstance::getInstance()->insert($deviceInstance);
+
+                                $deviceInstances[] = $deviceInstance;
+
+                                /*
+                                 * Save Meters
+                                 */
+
+                                $meter                   = new Proposalgen_Model_DeviceInstanceMeter();
+                                $meter->deviceInstanceId = $deviceInstance->id;
+                                $meter->monitorStartDate = $line->monitorStartDate;
+                                $meter->monitorEndDate   = $line->monitorEndDate;
+
+                                // Black Meter
+                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
+                                $meter->startMeter = $line->startMeterBlack;
+                                $meter->endMeter   = $line->endMeterBlack;
+                                $deviceInstanceMeterMapper->insert($meter);
+
+                                // Color Meter
+                                if ($line->endMeterColor > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR;
+                                    $meter->startMeter = $line->startMeterColor;
+                                    $meter->endMeter   = $line->endMeterColor;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Life Meter
+                                if ($line->endMeterLife > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE;
+                                    $meter->startMeter = $line->startMeterLife;
+                                    $meter->endMeter   = $line->endMeterLife;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Print Black
+                                if ($line->endMeterPrintBlack > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_BLACK;
+                                    $meter->startMeter = $line->startMeterPrintBlack;
+                                    $meter->endMeter   = $line->endMeterPrintBlack;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Print Color
+                                if ($line->endMeterPrintColor > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_COLOR;
+                                    $meter->startMeter = $line->startMeterPrintColor;
+                                    $meter->endMeter   = $line->endMeterPrintColor;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+
+                                // Copy Black
+                                if ($line->endMeterCopyBlack > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_BLACK;
+                                    $meter->startMeter = $line->startMeterCopyBlack;
+                                    $meter->endMeter   = $line->endMeterCopyBlack;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Copy Color
+                                if ($line->endMeterCopyColor > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_COLOR;
+                                    $meter->startMeter = $line->startMeterCopyColor;
+                                    $meter->endMeter   = $line->endMeterCopyColor;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Scan Meter
+                                if ($line->endMeterScan > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_SCAN;
+                                    $meter->startMeter = $line->startMeterScan;
+                                    $meter->endMeter   = $line->endMeterScan;
+                                    $deviceInstanceMeterMapper->insert($meter);
+                                }
+
+                                // Fax Meter
+                                if ($line->endMeterFax > 0)
+                                {
+                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_FAX;
+                                    $meter->startMeter = $line->startMeterFax;
+                                    $meter->endMeter   = $line->endMeterFax;
+                                    $deviceInstanceMeterMapper->insert($meter);
                                 }
                             }
 
-                            /*
-                             * Save Rms Upload Row
+                            /**
+                             * Invalid Lines
                              */
-                            $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row($lineArray);
-                            $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";
-                            $rmsUploadRow->rmsProviderId  = $uploadProviderId;
-
-                            // Lets make an attempt at finding the manufacturer
-                            $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($rmsUploadRow->manufacturer);
-                            if ($manufacturers && count($manufacturers) > 0)
+                            foreach ($uploadCsvService->invalidCsvLines as $line)
                             {
-                                $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
+                                $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
+
+                                // Set values that have different names than in $line
+                                $rmsExcludedRow->manufacturerName = $line->manufacturer;
+                                $rmsExcludedRow->rmsUploadId      = $this->rmsUpload->id;
+                                $rmsExcludedRow->reason           = $line->validationErrorMessage;
+
+                                // Set values that are none existent in $line
+                                $rmsExcludedRow->rmsProviderId = $uploadProviderId;
+
+                                Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance()->insert($rmsExcludedRow);
                             }
 
-                            $rmsUploadRowMapper->insert($rmsUploadRow);
-
-
-                            /*
-                             * Save Device Instance
-                             */
-                            $deviceInstance                 = new Proposalgen_Model_DeviceInstance($lineArray);
-                            $deviceInstance->rmsUploadId    = $this->_rmsUpload->id;
-                            $deviceInstance->rmsUploadRowId = $rmsUploadRow->id;
-                            Proposalgen_Model_Mapper_DeviceInstance::getInstance()->insert($deviceInstance);
-
-                            $deviceInstances[] = $deviceInstance;
 
                             /*
-                             * Save Meters
+                             * Perform Mapping
                              */
+                            $deviceMappingService = new Proposalgen_Service_DeviceMapping();
+                            $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
 
-                            $meter                   = new Proposalgen_Model_DeviceInstanceMeter();
-                            $meter->deviceInstanceId = $deviceInstance->id;
-                            $meter->monitorStartDate = $line->monitorStartDate;
-                            $meter->monitorEndDate   = $line->monitorEndDate;
-
-                            // Black Meter
-                            $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
-                            $meter->startMeter = $line->startMeterBlack;
-                            $meter->endMeter   = $line->endMeterBlack;
-                            $deviceInstanceMeterMapper->insert($meter);
-
-                            // Color Meter
-                            if ($line->endMeterColor > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR;
-                                $meter->startMeter = $line->startMeterColor;
-                                $meter->endMeter   = $line->endMeterColor;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Life Meter
-                            if ($line->endMeterLife > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE;
-                                $meter->startMeter = $line->startMeterLife;
-                                $meter->endMeter   = $line->endMeterLife;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Print Black
-                            if ($line->endMeterPrintBlack > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_BLACK;
-                                $meter->startMeter = $line->startMeterPrintBlack;
-                                $meter->endMeter   = $line->endMeterPrintBlack;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Print Color
-                            if ($line->endMeterPrintColor > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_COLOR;
-                                $meter->startMeter = $line->startMeterPrintColor;
-                                $meter->endMeter   = $line->endMeterPrintColor;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-
-                            // Copy Black
-                            if ($line->endMeterCopyBlack > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_BLACK;
-                                $meter->startMeter = $line->startMeterCopyBlack;
-                                $meter->endMeter   = $line->endMeterCopyBlack;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Copy Color
-                            if ($line->endMeterCopyColor > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_COLOR;
-                                $meter->startMeter = $line->startMeterCopyColor;
-                                $meter->endMeter   = $line->endMeterCopyColor;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Scan Meter
-                            if ($line->endMeterScan > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_SCAN;
-                                $meter->startMeter = $line->startMeterScan;
-                                $meter->endMeter   = $line->endMeterScan;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
-
-                            // Fax Meter
-                            if ($line->endMeterFax > 0)
-                            {
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_FAX;
-                                $meter->startMeter = $line->startMeterFax;
-                                $meter->endMeter   = $line->endMeterFax;
-                                $deviceInstanceMeterMapper->insert($meter);
-                            }
+                            $db->commit();
+                            $importSuccessful = true;
                         }
-
-                        /**
-                         * Invalid Lines
-                         */
-                        foreach ($uploadCsvService->invalidCsvLines as $line)
-                        {
-                            $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
-
-                            // Set values that have different names than in $line
-                            $rmsExcludedRow->manufacturerName = $line->manufacturer;
-                            $rmsExcludedRow->rmsUploadId      = $this->_rmsUpload->id;
-                            $rmsExcludedRow->reason           = $line->validationErrorMessage;
-
-                            // Set values that are none existent in $line
-                            $rmsExcludedRow->rmsProviderId = $uploadProviderId;
-
-                            Proposalgen_Model_Mapper_Rms_Excluded_Row::getInstance()->insert($rmsExcludedRow);
-                        }
-
-
-                        /*
-                         * Perform Mapping
-                         */
-                        $deviceMappingService = new Proposalgen_Service_DeviceMapping();
-                        $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
-
-                        $db->commit();
-                        $importSuccessful = true;
                     }
                     else
                     {
