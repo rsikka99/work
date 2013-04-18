@@ -280,6 +280,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $device       = new Quotegen_Model_Device();
                                     $devicevalues = array(
                                         'masterDeviceId' => $masterDeviceId,
+                                        'dealerId'      => Zend_Auth::getInstance()->getIdentity()->dealerId,
                                         'oemSku'         => $oemSku,
                                         'dealerSku'      => $dealerSku,
                                         'description'    => $values ['description'],
