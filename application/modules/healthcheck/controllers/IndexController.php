@@ -74,6 +74,10 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            if($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
             $uploads     = $uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
             $jqGrid->setRows($uploads);
