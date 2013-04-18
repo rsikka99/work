@@ -1,0 +1,3 @@
+SELECT rms_devices.manufacturer,rms_devices.modelName,rms_master_matchups.masterDeviceId,manufacturers.id AS manufacturerId,manufacturers.fullname,manufacturers.displayname,manufacturers.isDeleted FROM rms_devices
+LEFT JOIN rms_master_matchups ON rms_devices.rmsProviderId = rms_master_matchups.rmsProviderId AND rms_devices.rmsModelId = rms_master_matchups.rmsModelId
+LEFT JOIN manufacturers ON rms_devices.manufacturer = manufacturers.fullname;
