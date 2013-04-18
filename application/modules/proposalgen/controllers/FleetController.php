@@ -82,6 +82,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     if ($success)
                     {
                         $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
+                        $this->redirector(null, null, null, array("rmsUploadId" => $uploadService->rmsUpload->id));
                     }
                     else
                     {
@@ -379,6 +380,13 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             $this->redirector("index");
         }
 
+        $this->view->rmsUpload = $rmsUpload;
+
+        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        {
+            $this->redirector("index");
+        }
+
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
@@ -401,81 +409,88 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function deviceSummaryListAction ()
     {
-        $jqGrid               = new Tangent_Service_JQGrid();
-        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
-        /*
-         * Grab the incoming parameters
-         */
-        $jqGridParameters = array(
-            'sidx' => $this->_getParam('sidx', 'id'),
-            'sord' => $this->_getParam('sord', 'ASC'),
-            'page' => $this->_getParam('page', 1),
-            'rows' => $this->_getParam('rows', 10)
-        );
-
-        // Set up validation arrays
-        $validSortColumns = array('id');
-        $sortColumns      = array_keys($validSortColumns);
-
-        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-        $jqGrid->setValidSortColumns($sortColumns);
-
-
-        if ($jqGrid->sortingIsValid())
+        if ($rmsUploadId > 0)
         {
-            $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
+            $jqGrid               = new Tangent_Service_JQGrid();
+            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
 
-            // Validate current page number since we don't want to be out of bounds
-            if ($jqGrid->getCurrentPage() < 1)
+            /*
+             * Grab the incoming parameters
+             */
+            $jqGridParameters = array(
+                'sidx' => $this->_getParam('sidx', 'id'),
+                'sord' => $this->_getParam('sord', 'ASC'),
+                'page' => $this->_getParam('page', 1),
+                'rows' => $this->_getParam('rows', 10)
+            );
+
+            // Set up validation arrays
+            $validSortColumns = array('id');
+            $sortColumns      = array_keys($validSortColumns);
+
+            $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+            $jqGrid->setValidSortColumns($sortColumns);
+
+
+            if ($jqGrid->sortingIsValid())
             {
-                $jqGrid->setCurrentPage(1);
-            }
-            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-            {
-                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-            }
+                $jqGrid->setRecordCount($deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), null, null, true));
 
-            // Return a small subset of the results based on the jqGrid parameters
-            $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($this->getReport()->getRmsUpload()->id, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
-
-            $rows = array();
-            foreach ($deviceInstances as $deviceInstance)
-            {
-
-                $row = array(
-                    "id"         => $deviceInstance->id,
-                    "isExcluded" => $deviceInstance->isExcluded,
-                    "ampv"       => number_format($deviceInstance->getAverageMonthlyPageCount()),
-                    "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
-                );
-
-                $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
-
-                if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+                // Validate current page number since we don't want to be out of bounds
+                if ($jqGrid->getCurrentPage() < 1)
                 {
-                    $row["mappedToDeviceName"] = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
+                    $jqGrid->setCurrentPage(1);
                 }
-                else
+                else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
                 {
-                    $row["mappedToDeviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
+                    $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
                 }
-                $rows[] = $row;
 
+                // Return a small subset of the results based on the jqGrid parameters
+                $startRecord     = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+                $deviceInstances = $deviceInstanceMapper->getMappedDeviceInstances($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+
+                $rows = array();
+                foreach ($deviceInstances as $deviceInstance)
+                {
+
+                    $row = array(
+                        "id"         => $deviceInstance->id,
+                        "isExcluded" => $deviceInstance->isExcluded,
+                        "ampv"       => number_format($deviceInstance->getAverageMonthlyPageCount()),
+                        "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
+                    );
+
+                    $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
+
+                    if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+                    {
+                        $row["mappedToDeviceName"] = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
+                    }
+                    else
+                    {
+                        $row["mappedToDeviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
+                    }
+                    $rows[] = $row;
+
+                }
+
+                $jqGrid->setRows($rows);
+
+                // Send back jqGrid json data
+                $this->sendJson($jqGrid->createPagerResponseArray());
             }
-
-            $jqGrid->setRows($rows);
-
-            // Send back jqGrid json data
-            $this->sendJson($jqGrid->createPagerResponseArray());
+            else
+            {
+                $this->_response->setHttpResponseCode(500);
+                $this->sendJson(array('error' => 'Sorting parameters are invalid'));
+            }
         }
         else
         {
-            $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+            $this->sendJson(array('error' => 'Invalid RMS Upload Id'));
         }
     }
 
@@ -529,10 +544,12 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function editUnknownDeviceAction ()
     {
-        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $rmsUploadId               = $this->_getParam('rmsUploadId', false);
         $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
+        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
 
-        if ($deviceInstanceIdsAsString !== false)
+
+        if ($deviceInstanceIdsAsString !== false && $rmsUploadId > 0)
         {
             $deviceInstanceIds             = explode(",", $deviceInstanceIdsAsString);
             $this->view->deviceInstanceIds = $deviceInstanceIds;
@@ -548,7 +565,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the device you wanted to add.'));
 
                 // Send back to the mapping page
-                $this->_helper->redirector('mapping');
+                $this->redirector('mapping', null, null, array('rmsUploadId' => $rmsUploadId));
             }
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
@@ -612,7 +629,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             $db->commit();
 
                             $this->_flashMessenger->addMessage(array("success" => "Device successfully mapped!"));
-                            $this->redirector("mapping");
+                            $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
                         }
                         catch (Exception $e)
                         {
@@ -638,7 +655,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         else
         {
             $this->_flashMessenger->addMessage(array("warning" => "Invalid Device Specified."));
-            $this->redirector("mapping");
+            $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
         }
     }
 
@@ -648,43 +665,48 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function removeUnknownDeviceAction ()
     {
-        $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
-
-        $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
-        $reportId             = $this->getReport()->id;
-        $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-
-        $jsonResponse = array("success" => true, "message" => "Unknown Device successfully removed.");
-
-        $db->beginTransaction();
-        try
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        if ($rmsUploadId > 0)
         {
-            /*
-             * Loop through all the device instance ids and set the useUserDate to false
-             */
-            foreach ($deviceInstanceIds as $deviceInstanceId)
+            $db                        = Zend_Db_Table_Abstract::getDefaultAdapter();
+            $deviceInstanceIdsAsString = $this->_getParam("deviceInstanceIds", false);
+
+            $deviceInstanceIds    = explode(",", $deviceInstanceIdsAsString);
+            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+
+            $jsonResponse = array("success" => true, "message" => "Unknown Device successfully removed.");
+
+            $db->beginTransaction();
+            try
             {
-                $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-                $assessment     = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
-                if ($deviceInstance && $assessment && $assessment->rmsUploadId == $deviceInstance->rmsUploadId)
+                /*
+                 * Loop through all the device instance ids and set the useUserDate to false
+                 */
+                foreach ($deviceInstanceIds as $deviceInstanceId)
                 {
+                    $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
+                    if ($deviceInstance && $rmsUploadId == $deviceInstance->rmsUploadId)
+                    {
 
-                    $deviceInstance->useUserData = false;
-                    $deviceInstanceMapper->save($deviceInstance);
+                        $deviceInstance->useUserData = false;
+                        $deviceInstanceMapper->save($deviceInstance);
+                    }
+
                 }
-
+                $db->commit();
             }
-            $db->commit();
+            catch (Exception $e)
+            {
+                $db->rollBack();
+                My_Log::logException($e);
+                $this->getResponse()->setHttpResponseCode(500);
+                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . My_Log::getUniqueId());
+            }
         }
-        catch (Exception $e)
+        else
         {
-            $db->rollBack();
-            My_Log::logException($e);
-            $this->getResponse()->setHttpResponseCode(500);
-            $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . My_Log::getUniqueId());
+            $jsonResponse = array("error" => true, "message" => "No RMS Upload ID provided. Cannot remove the device.");
         }
-
         $this->sendJson($jsonResponse);
     }
 
@@ -693,76 +715,84 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function toggleExcludedFlagAction ()
     {
-        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
-        $isExcluded       = $this->_getParam("isExcluded", false);
-        if ($isExcluded == 'true')
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        if ($rmsUploadId > 0)
         {
-            $isExcluded = true;
-        }
-        else
-        {
-            $isExcluded = false;
-        }
-        $errorMessage = false;
-
-        if ($deviceInstanceId !== false)
-        {
-            $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
-            $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
-            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+            $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+            $isExcluded       = $this->_getParam("isExcluded", false);
+            if ($isExcluded == 'true')
             {
-                $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
-                if ($rmsUpload)
+                $isExcluded = true;
+            }
+            else
+            {
+                $isExcluded = false;
+            }
+            $errorMessage = false;
+
+            if ($deviceInstanceId !== false)
+            {
+                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
+                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
                 {
-                    if ($rmsUpload->id == $this->getReport()->rmsUploadId)
+                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    if ($rmsUpload)
                     {
-                        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-                        $db->beginTransaction();
-                        try
+                        if ($rmsUpload->id == $rmsUploadId)
                         {
-                            $deviceInstance->isExcluded = $isExcluded;
-                            $deviceInstanceMapper->save($deviceInstance);
-                            $db->commit();
+                            $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                            $db->beginTransaction();
+                            try
+                            {
+                                $deviceInstance->isExcluded = $isExcluded;
+                                $deviceInstanceMapper->save($deviceInstance);
+                                $db->commit();
+                            }
+                            catch (Exception $e)
+                            {
+                                $db->rollBack();
+                                My_Log::logException($e);
+                                $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                            }
                         }
-                        catch (Exception $e)
+                        else
                         {
-                            $db->rollBack();
-                            My_Log::logException($e);
-                            $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                            $errorMessage = "You can only exclude device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
                         }
                     }
                     else
                     {
-                        $errorMessage = "You can only exclude device instances that belong to the same assessment." . $rmsUpload->id . " - " . $this->getReport()->rmsUploadId;
+                        $errorMessage = "Invalid Rms Upload.";
                     }
                 }
                 else
                 {
-                    $errorMessage = "Invalid Rms Upload.";
+                    $errorMessage = "Invalid device instance.";
                 }
             }
             else
             {
-                $errorMessage = "Invalid device instance.";
+                $errorMessage = "Invalid device instance id.";
+            }
+
+            if ($errorMessage !== false)
+            {
+                $this->sendJson(array("error" => true, "message" => $errorMessage));
+            }
+
+            if ($isExcluded)
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is now excluded."));
+            }
+            else
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is now included. "));
             }
         }
         else
         {
-            $errorMessage = "Invalid device instance id.";
-        }
-
-        if ($errorMessage !== false)
-        {
-            $this->sendJson(array("error" => true, "message" => $errorMessage));
-        }
-
-        if ($isExcluded)
-        {
-            $this->sendJson(array("success" => true, "message" => "Device is now excluded."));
-        }
-        else
-        {
-            $this->sendJson(array("success" => true, "message" => "Device is now included. "));
+            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
         }
 
     }
@@ -772,77 +802,87 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function deviceInstanceDetailsAction ()
     {
+        $rmsUploadId  = $this->_getParam('rmsUploadId', false);
         $jsonResponse = array();
         $errorMessage = false;
 
-        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
-
-        /*
-         * We must get a deviceInstanceId
-         */
-        if ($deviceInstanceId !== false)
+        if ($rmsUploadId > 0)
         {
+
+
+            $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+
             /*
-             * Devices must exist
+             * We must get a deviceInstanceId
              */
-            $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
-            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+            if ($deviceInstanceId !== false)
             {
                 /*
-                 * Devices must be part of our report
+                 * Devices must exist
                  */
-                if ($deviceInstance->rmsUploadId == $this->getReport()->getRmsUpload()->id)
+                $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
                 {
                     /*
-                     * Once we get here we can start populating our response
+                     * Devices must be part of our report
                      */
-                    $jsonResponse                                       = $deviceInstance->toArray();
-                    $jsonResponse['masterDevice']                       = $deviceInstance->getMasterDevice()->toArray();
-                    $launchDate                                         = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
-                    $jsonResponse['masterDevice']['launchDate']         = $launchDate->toString(Zend_Date::DATE_MEDIUM);
-                    $jsonResponse['masterDevice']['cost']               = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
-                    $jsonResponse['masterDevice']['ppmBlack']           = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
-                    $jsonResponse['masterDevice']['ppmColor']           = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
-                    $jsonResponse['masterDevice']['wattsPowerNormal']   = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
-                    $jsonResponse['masterDevice']['wattsPowerIdle']     = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
-                    $jsonResponse['masterDevice']['dutyCycle']          = number_format($jsonResponse['masterDevice']['dutyCycle']);
-                    $jsonResponse['masterDevice']['leasedTonerYield']   = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
-                    $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
-                    $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
-                    $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
-
-                    foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
+                    if ($deviceInstance->rmsUploadId == $rmsUploadId)
                     {
-                        foreach ($tonersByPartType as $tonersByColor)
-                        {
-                            /* @var $toner Proposalgen_Model_Toner */
-                            foreach ($tonersByColor as $toner)
-                            {
-                                $tonerArray                               = $toner->toArray();
-                                $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
-                                $tonerArray['yield']                      = number_format($tonerArray['yield']);
-                                $tonerArray['manufacturer']               = ($toner->getManufacturer()) ? $toner->getManufacturer()->toArray() : "Unknown";
-                                $tonerArray['partTypeName']               = Proposalgen_Model_PartType::$PartTypeNames[$toner->partTypeId];
-                                $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
-                                $jsonResponse["masterDevice"]["toners"][] = $tonerArray;
+                        /*
+                         * Once we get here we can start populating our response
+                         */
+                        $jsonResponse                                       = $deviceInstance->toArray();
+                        $jsonResponse['masterDevice']                       = $deviceInstance->getMasterDevice()->toArray();
+                        $launchDate                                         = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
+                        $jsonResponse['masterDevice']['launchDate']         = $launchDate->toString(Zend_Date::DATE_MEDIUM);
+                        $jsonResponse['masterDevice']['cost']               = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
+                        $jsonResponse['masterDevice']['ppmBlack']           = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
+                        $jsonResponse['masterDevice']['ppmColor']           = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
+                        $jsonResponse['masterDevice']['wattsPowerNormal']   = number_format($jsonResponse['masterDevice']['wattsPowerNormal']);
+                        $jsonResponse['masterDevice']['wattsPowerIdle']     = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
+                        $jsonResponse['masterDevice']['dutyCycle']          = number_format($jsonResponse['masterDevice']['dutyCycle']);
+                        $jsonResponse['masterDevice']['leasedTonerYield']   = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
+                        $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
+                        $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
+                        $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
 
+                        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
+                        {
+                            foreach ($tonersByPartType as $tonersByColor)
+                            {
+                                /* @var $toner Proposalgen_Model_Toner */
+                                foreach ($tonersByColor as $toner)
+                                {
+                                    $tonerArray                               = $toner->toArray();
+                                    $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
+                                    $tonerArray['yield']                      = number_format($tonerArray['yield']);
+                                    $tonerArray['manufacturer']               = ($toner->getManufacturer()) ? $toner->getManufacturer()->toArray() : "Unknown";
+                                    $tonerArray['partTypeName']               = Proposalgen_Model_PartType::$PartTypeNames[$toner->partTypeId];
+                                    $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
+                                    $jsonResponse["masterDevice"]["toners"][] = $tonerArray;
+
+                                }
                             }
                         }
+                    }
+                    else
+                    {
+                        $errorMessage = "Device does not belong to your report.";
                     }
                 }
                 else
                 {
-                    $errorMessage = "Device does not belong to your report.";
+                    $errorMessage = "Invalid device specified.";
                 }
             }
             else
             {
-                $errorMessage = "Invalid device specified.";
+                $errorMessage = "Missing/Invalid Parameter 'deviceInstanceId'.";
             }
         }
         else
         {
-            $errorMessage = "Missing/Invalid Parameter 'deviceInstanceId'.";
+            $errorMessage = "Missing/Invalid Parameter 'rmsUploadId'.";
         }
 
         if ($errorMessage !== false)

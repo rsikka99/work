@@ -165,9 +165,6 @@ $(function ()
                     var row = grid.getRowData(ids[i]);
                     if (row.mappedManufacturer != undefined)
                     {
-                        ;
-                    }
-                    {
                         row.mappedManufacturer = row.mappedManufacturer.replace('"', '&quot;');
                     }
                     row.manufacturer = row.manufacturer.replace('"', '&quot;');
@@ -355,7 +352,10 @@ $(function ()
         $.ajax({
             url     : TMTW_BASEURL + "/proposalgen/fleet/remove-unknown-device",
             dataType: 'json',
-            data    : {'deviceInstanceIds': deviceInstanceIds},
+            data    : {
+                rmsUploadId        : rmsUploadId,
+                'deviceInstanceIds': deviceInstanceIds
+            },
             success : function (data)
             {
                 $("#mappingGrid").trigger("reloadGrid");

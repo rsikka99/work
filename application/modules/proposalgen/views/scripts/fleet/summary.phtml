@@ -1,3 +1,6 @@
+<?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
+<?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/deviceSummary.js')); ?>
 <div class="well">
     <table id="summaryGrid"></table>

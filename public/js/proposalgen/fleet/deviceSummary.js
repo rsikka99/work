@@ -11,6 +11,9 @@ $(function ()
     var summaryGrid = $("#summaryGrid").jqGrid(
         {
             url         : TMTW_BASEURL + 'proposalgen/fleet/device-summary-list',
+            postData    : {
+                rmsUploadId: rmsUploadId
+            },
             datatype    : 'json',
             colModel    : [
                 {
@@ -88,6 +91,7 @@ $(function ()
             url     : '/proposalgen/fleet/device-instance-details',
             dataType: 'json',
             data    : {
+                rmsUploadId     : rmsUploadId,
                 deviceInstanceId: $(this).data("device-instance-id")
             },
             success : function (data)
@@ -188,6 +192,7 @@ $(function ()
                 url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-excluded-flag',
                 dataType: 'json',
                 data    : {
+                    rmsUploadId     : rmsUploadId,
                     deviceInstanceId: $(this).data("device-instance-id"),
                     isExcluded      : true
                 }
@@ -199,6 +204,7 @@ $(function ()
                 url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-excluded-flag',
                 dataType: 'json',
                 data    : {
+                    rmsUploadId     : rmsUploadId,
                     deviceInstanceId: $(this).data("device-instance-id"),
                     isExcluded      : false
                 }
