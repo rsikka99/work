@@ -24,7 +24,7 @@ class Proposalgen_Service_Rms_Upload
     /**
      * @var Proposalgen_Model_Rms_Upload
      */
-    public $_rmsUpload;
+    public $rmsUpload;
 
     /**
      * @var Proposalgen_Form_ImportRmsCsv
@@ -114,13 +114,13 @@ class Proposalgen_Service_Rms_Upload
                         $oldRmsUpload = $this->rmsUpload;
                     }
 
-                    $this->_rmsUpload                  = new Proposalgen_Model_Rms_Upload();
-                    $this->_rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
-                    $this->_rmsUpload->fileName        = basename($this->_fileName);
-                    $this->_rmsUpload->clientId        = $this->_clientId;
-                    $this->_rmsUpload->rmsProviderId   = $uploadProviderId;
-                    $this->_rmsUpload->invalidRowCount = 0;
-                    $this->_rmsUpload->validRowCount   = 0;
+                    $this->rmsUpload                  = new Proposalgen_Model_Rms_Upload();
+                    $this->rmsUpload->uploadDate      = new Zend_Db_Expr('NOW()');
+                    $this->rmsUpload->fileName        = basename($this->_fileName);
+                    $this->rmsUpload->clientId        = $this->_clientId;
+                    $this->rmsUpload->rmsProviderId   = $uploadProviderId;
+                    $this->rmsUpload->invalidRowCount = 0;
+                    $this->rmsUpload->validRowCount   = 0;
 
 
                     /*
@@ -133,8 +133,8 @@ class Proposalgen_Service_Rms_Upload
                         /**
                          * Save our upload object
                          */
-                        $this->_rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
-                        $this->_rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
+                        $this->rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
+                        $this->rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
 
                         if ($this->rmsUpload->validRowCount < 2)
                         {

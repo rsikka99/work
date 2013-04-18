@@ -98,9 +98,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         $this->view->form = $form;
 
-        $this->view->rmsUpload = $uploadService->_rmsUpload;
+        $this->view->rmsUpload = $uploadService->rmsUpload;
 
-        $navigationButtons          = ($uploadService->_rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
+        $navigationButtons          = ($uploadService->rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
 
     }
