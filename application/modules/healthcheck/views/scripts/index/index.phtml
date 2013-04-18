@@ -1,7 +1,16 @@
 <?php $this->headScript()->appendFile($this->baseUrl('js/healthcheck/index/selectUpload.js')); ?>
+<?php
+$rmsUpload = $this->selectedUpload;
+?>
 <div class="well">
+    <?php if($rmsUpload){?>
+    <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> csv file. The name of the file is
+        "<?php echo $this->escape($rmsUpload->fileName); ?>". There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid
+        devices
+        imported.</p>
+<?php } ?>
     <form id="selectUpload" method="POST">
-        <input type="hidden" name="selectIds" id="selectIds" value="<?php echo $this->selectedUploadId;?>" />
+        <input type="hidden" name="selectIds" id="selectIds" value="<?php echo ($this->selectedUpload ? $this->selectedUpload->id : -1);?>" />
     </form>
         <table id="selectUploadGrid"></table>
         <div id="selectUploadGridPager"></div>

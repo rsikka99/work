@@ -10,9 +10,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
         //      Mark the step we're on as active
         $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_SELECTUPLOAD);
         $report = $this->getReport();
-        if (isset($report->rmsUploadId))
+        if (isset($report->getRmsUpload()->id))
         {
-            $this->view->selectedUploadId = $report->rmsUploadId;
+            $this->view->selectedUpload = $report->getRmsUpload();
         }
         if ($this->getRequest()->isPost())
         {
@@ -20,9 +20,12 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
             if (isset($values["selectIds"]))
             {
-                $this->getReport()->rmsUploadId = $values["selectIds"];
-                $this->saveReport();
-                $this->view->selectedUploadId = $this->getReport()->rmsUploadId;
+                if (is_numeric($values["selectIds"]))
+                {
+                    $this->getReport()->rmsUploadId = $values["selectIds"];
+                    $this->saveReport();
+                    $this->view->selectedUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($values["selectIds"]);
+                }
             }
         }
     }
@@ -51,7 +54,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
         if ($jqGrid->sortingIsValid())
         {
-            $jqGrid->setRecordCount(count($uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection())));
+            $jqGrid->setRecordCount($uploadMapper->count(array("$uploadMapper->col_clientId = ?" => $this->getReport()->clientId)));
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGrid->getCurrentPage() < 1)
@@ -64,31 +67,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
             }
 
             // Return a small subset of the results based on the jqGrid parameters
-            $startRecord    = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            $selectedUpload = $uploadMapper->find($this->getReport()->rmsUploadId);
-            $uploads        = $uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage() - 1, $startRecord);
-            if ($selectedUpload)
-            {
-                $replacingPosition = count($uploads);
-                $newList = array();
-                for ($counter = 0; $counter < count($uploads); $counter++)
-                {
-                    $upload = $uploads[$counter];
-                    if ($upload->id == $selectedUpload->id)
-                    {
-                        $replacingPosition = $counter;
-                    }
-                    $newList[$counter + 1] = $upload;
-                }
-                //$newList[0]               = $selectedUpload;
-                if($replacingPosition== 0)
-                    $uploads[count($uploads)] = $uploads[0];
-                else
-                $uploads[$replacingPosition]               = $uploads[0];
-                $uploads[0]               = $selectedUpload;
-                //$uploads = $newList;
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $uploads     = $uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
-            }
             $jqGrid->setRows($uploads);
 
             // Send back jqGrid json data
