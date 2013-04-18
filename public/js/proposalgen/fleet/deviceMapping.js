@@ -84,7 +84,7 @@ $(function ()
                     hidden  : true
                 },
                 {
-                    width   : 350,
+                    width   : 340,
                     name    : 'deviceName',
                     index   : 'manufacturer',
                     label   : 'Device Name',
@@ -116,7 +116,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 350,
+                    width   : 340,
                     name    : 'mapToMasterDevice',
                     index   : 'mapToMasterDevice',
                     label   : 'Select Master Device',
@@ -133,7 +133,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 65,
+                    width   : 85,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',

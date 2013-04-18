@@ -9,6 +9,7 @@
     var selectedPrinterModel        = '<?php echo $this->printer_model; ?>';
     var manufacturerList            = "<?php echo $this->escape($this->manufacturers); ?>";
     var partTypeList                = '<?php echo $this->partTypeList; ?>';
+    var rmsUploadId                = '<?php echo $this->rmsUpload->id; ?>';
 
 <?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/managedevices/managemappingdevices.js')); ?>

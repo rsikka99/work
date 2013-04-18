@@ -37,7 +37,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $form->removeElement('delete_device');
         $form->removeElement('back_button');
 
-        // fill manufacturer dropdown
+        // Fill manufacturer drop down
         $list = "";
         // $isPrintModelSet is used to see if data has been saved successfully.
         $isPrintModelSet = false;
@@ -691,9 +691,35 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
     public function managemappingdevicesAction ()
     {
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
-        $db                = Zend_Db_Table::getDefaultAdapter();
+        $rmsUploadId       = $this->_getParam('rmsUploadId', false);
         $deviceInstanceIds = $this->_getParam('deviceInstanceIds', false);
+        $rmsUpload         = null;
+        if ($rmsUploadId > 0)
+        {
+            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
+
+        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    'error' => 'Error: You must select an upload.'
+                                               ));
+            $this->redirector('index', 'index', 'index');
+        }
+
+        if ($deviceInstanceIds === false)
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    'error' => 'Error: You must select a device to edit or create in order to access this page.'
+                                               ));
+            $this->redirector('mapping', 'fleet', null, array('rmsUploadId' => $rmsUpload->id));
+        }
+
+        $this->view->rmsUpload = $rmsUpload;
+
+        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
+        $db = Zend_Db_Table::getDefaultAdapter();
+
 
         // add device form
         $form = new Proposalgen_Form_Device(null, "edit");
@@ -1242,7 +1268,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     }
                                 }
                                 $db->commit();
-                                $this->_helper->_redirector('mapping', 'fleet');
+                                $this->redirector('mapping', 'fleet', null, array('rmsUploadId' => $rmsUpload->id));
                             }
                             else
                             {

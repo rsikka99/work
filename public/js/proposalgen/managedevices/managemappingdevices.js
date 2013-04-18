@@ -1023,7 +1023,7 @@ function do_action(inAction)
     }
     else if (inAction == 'done')
     {
-        document.location.href = '../fleet/mapping';
+        document.location.href = TMTW_BASEURL + '/proposalgen/fleet/mapping/rmsUploadId/' + rmsUploadId;
 
     }
     else if (inAction == 'manufacturer')
