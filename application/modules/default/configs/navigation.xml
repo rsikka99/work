@@ -389,7 +389,7 @@
                             <resource>default__info__about</resource>
                         </about>
                         <eula>
-                            <label>Eula</label>
+                            <label>EULA</label>
                             <module>default</module>
                             <controller>info</controller>
                             <action>eula</action>
