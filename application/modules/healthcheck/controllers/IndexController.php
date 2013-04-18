@@ -8,16 +8,17 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     public function indexAction ()
     {
         //      Mark the step we're on as active
+        $navigationButtons          = Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT;
         $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_SELECTUPLOAD);
         $report = $this->getReport();
         if (isset($report->getRmsUpload()->id))
         {
+            $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
             $this->view->selectedUpload = $report->getRmsUpload();
         }
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
-
             if (isset($values["selectIds"]))
             {
                 if (is_numeric($values["selectIds"]))
@@ -25,9 +26,16 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                     $this->getReport()->rmsUploadId = $values["selectIds"];
                     $this->saveReport();
                     $this->view->selectedUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($values["selectIds"]);
+                    $this->gotoNextStep();
                 }
             }
+            else if(isset($values["saveAndContinue"]))
+            {
+                $this->gotoNextStep();
+            }
         }
+        $form = new EasyBib_Form();
+
     }
 
     public function selectuploadAction ()
