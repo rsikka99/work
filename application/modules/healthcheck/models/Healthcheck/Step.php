@@ -2,6 +2,7 @@
 class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
 {
     const STEP_REPORTSETTINGS   = 'Settings';
+    const STEP_SELECTUPLOAD   = 'selectupload';
     const STEP_FINISHED         = 'finished';
 
     /**
@@ -10,11 +11,17 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
+        self::STEP_SELECTUPLOAD   => array(
+            'name'       => 'Select Upload',
+            'group'      => null,
+            'controller' => 'index',
+            'action'     => 'index'
+        ),
         self::STEP_REPORTSETTINGS   => array(
             'name'       => 'Settings',
             'group'      => null,
             'controller' => 'index',
-            'action'     => 'index'
+            'action'     => 'settings'
         ),
         self::STEP_FINISHED         => array(
             'name'       => 'Report',

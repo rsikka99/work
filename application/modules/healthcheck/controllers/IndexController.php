@@ -1,15 +1,117 @@
 <?php
 class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthcheck
 {
+
+    /**
+     * Generates a list of devices that were not mapped automatically
+     */
+    public function indexAction ()
+    {
+        //      Mark the step we're on as active
+        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_SELECTUPLOAD);
+        $report = $this->getReport();
+        if (isset($report->rmsUploadId))
+        {
+            $this->view->selectedUploadId = $report->rmsUploadId;
+        }
+        if ($this->getRequest()->isPost())
+        {
+            $values = $this->getRequest()->getPost();
+
+            if (isset($values["selectIds"]))
+            {
+                $this->getReport()->rmsUploadId = $values["selectIds"];
+                $this->saveReport();
+                $this->view->selectedUploadId = $this->getReport()->rmsUploadId;
+            }
+        }
+    }
+
+    public function selectuploadAction ()
+    {
+        $jqGrid       = new Tangent_Service_JQGrid();
+        $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'deviceCount'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
+
+        // Set up validation arrays
+        $blankModel  = new Proposalgen_Model_Rms_Upload();
+        $sortColumns = array_keys($blankModel->toArray());
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
+        {
+            $jqGrid->setRecordCount(count($uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection())));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord    = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            $selectedUpload = $uploadMapper->find($this->getReport()->rmsUploadId);
+            $uploads        = $uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage() - 1, $startRecord);
+            if ($selectedUpload)
+            {
+                $replacingPosition = count($uploads);
+                $newList = array();
+                for ($counter = 0; $counter < count($uploads); $counter++)
+                {
+                    $upload = $uploads[$counter];
+                    if ($upload->id == $selectedUpload->id)
+                    {
+                        $replacingPosition = $counter;
+                    }
+                    $newList[$counter + 1] = $upload;
+                }
+                //$newList[0]               = $selectedUpload;
+                if($replacingPosition== 0)
+                    $uploads[count($uploads)] = $uploads[0];
+                else
+                $uploads[$replacingPosition]               = $uploads[0];
+                $uploads[0]               = $selectedUpload;
+                //$uploads = $newList;
+
+            }
+            $jqGrid->setRows($uploads);
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+    }
+
     /**
      * Users can upload/see uploaded data on this step
      */
-    public function indexAction ()
+    public function settingsAction ()
     {
 //      Mark the step we're on as active
         $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
         $this->saveReport(true);
-        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -62,7 +164,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
         $this->view->availableReports->Healthcheck->active = true;
 
-        $this->view->formats = array(
+        $this->view->formats     = array(
             "/proposalgen/healthcheck/generate/format/docx" => $this->_wordFormat
         );
         $this->view->reportTitle = "Health Check";
@@ -117,7 +219,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                require_once ('PHPWord.php');
+                require_once('PHPWord.php');
                 $this->view->phpword     = new PHPWord();
                 $healthcheck             = new Healthcheck_Model_Healthcheck_Healthcheck($this->getProposal());
                 $this->view->healthcheck = $healthcheck;
@@ -139,7 +241,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
+            $this->render($this->view->App()->theme . '/' . $format . "/00_render");
         }
         catch (Exception $e)
         {
