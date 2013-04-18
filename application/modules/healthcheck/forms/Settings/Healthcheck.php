@@ -62,19 +62,9 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $this->_formElementGroups [] = $generalGroup;
         
         $proposalGroup = new stdClass();
-        $proposalGroup->title = "Assessment / Solution";
+        $proposalGroup->title = "Health Check";
         $proposalGroup->elements = array ();
         $this->_formElementGroups [] = $proposalGroup;
-        
-        $grossMarginGroup = new stdClass();
-        $grossMarginGroup->title = "Gross Margin";
-        $grossMarginGroup->elements = array ();
-        $this->_formElementGroups [] = $grossMarginGroup;
-
-        $optimization = new stdClass();
-        $optimization->title = "Optimization";
-        $optimization->elements = array ();
-        $this->_formElementGroups [] = $optimization;
         
         //*****************************************************************
         // GENERAL SETTING FIELDS
@@ -280,7 +270,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         //*****************************************************************
         
         // Actual Page Coverage (Monochrome)
-        $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
+        $actual_page_coverage = new Zend_Form_Element_Text('pageCoverageMonochrome');
         $actual_page_coverage->setLabel('Page Coverage Monochrome')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -295,10 +285,10 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('inputappend', '%');
         
         $this->addElement($actual_page_coverage);
-        $grossMarginGroup->elements [] = $actual_page_coverage;
+        $proposalGroup->elements [] = $actual_page_coverage;
         
         // Actual Page Coverage (Color)
-        $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
+        $actual_page_coverage_color = new Zend_Form_Element_Text('pageCoverageColor');
         $actual_page_coverage_color->setLabel('Page Coverage Color')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
@@ -314,7 +304,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('inputappend', '%');
         
         $this->addElement($actual_page_coverage_color);
-        $grossMarginGroup->elements [] = $actual_page_coverage_color;
+        $proposalGroup->elements [] = $actual_page_coverage_color;
         
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
@@ -333,7 +323,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
         
         $this->addElement($admin_charge);
-        $grossMarginGroup->elements [] = $admin_charge;
+        $proposalGroup->elements [] = $admin_charge;
         
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
@@ -352,7 +342,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
         
         $this->addElement($labor_cost);
-        $grossMarginGroup->elements [] = $labor_cost;
+        $proposalGroup->elements [] = $labor_cost;
 
         // Service Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
@@ -371,65 +361,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($parts_cost);
-        $grossMarginGroup->elements [] = $parts_cost;
-        
-        // Toner preference for the gross marginm
-        $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
-        $gross_margin_pricing_config->setLabel('Toner Preference')
-            ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getGrossMarginPricingConfig()
-            ->configName)
-            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        
-        $this->addElement($gross_margin_pricing_config);
-        $grossMarginGroup->elements [] = $gross_margin_pricing_config;
-
-        $cost_threshold = new Zend_Form_Element_Text('costThreshold');
-        $cost_threshold->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setDescription('$')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / month')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costThreshold));
-        $this->addElement($cost_threshold);
-        $optimization->elements [] = $cost_threshold;
-
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
-        $target_monochrome->setLabel('Target Monochrome Cost Per Page')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setDescription('$')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetMonochromeCostPerPage, 4));
-        $this->addElement($target_monochrome);
-        $optimization->elements [] = $target_monochrome;
-
-        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
-        $target_color->setLabel('Target Color Cost Per Page')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
-            ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetColorCostPerPage, 4));
-        $this->addElement($target_color);
-        $optimization->elements [] = $target_color;
-
-        // Toner preference for the assessment
-        $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
-        $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
-            ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getReplacementPricingConfig() ? $this->_defaultSettings->getReplacementPricingConfig()->configName : null))
-            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        $this->addElement($replacementDeviceTonerPreference);
-        $optimization->elements [] = $replacementDeviceTonerPreference;
-
-        $target_monochrome->setLabel('Target Monochrome')
-            ->setAttrib('class', 'input-mini');
-        $target_color->setLabel('Target Color')
-            ->setAttrib('class', 'input-mini');
+        $proposalGroup->elements [] = $parts_cost;
         
         //*****************************************************************
         // BUTTONS

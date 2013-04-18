@@ -1,12 +1,8 @@
 <?php
 class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
 {
-    const STEP_FLEETDATA_UPLOAD = 'Upload';
     const STEP_REPORTSETTINGS   = 'Settings';
-    const STEP_MAPPING          = 'mapping';
     const STEP_FINISHED         = 'finished';
-    const GROUP_SURVEY          = 'Survey';
-    const GROUP_FLEETDATA       = 'Fleet Data';
 
     /**
      * The order in which steps go.
@@ -14,17 +10,11 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_FLEETDATA_UPLOAD => array(
-            'name'       => 'Upload',
-            'group'      => self::GROUP_FLEETDATA,
-            'controller' => 'index',
-            'action'     => 'index'
-        ),
         self::STEP_REPORTSETTINGS   => array(
             'name'       => 'Settings',
             'group'      => null,
             'controller' => 'index',
-            'action'     => 'settings'
+            'action'     => 'index'
         ),
         self::STEP_FINISHED         => array(
             'name'       => 'Report',

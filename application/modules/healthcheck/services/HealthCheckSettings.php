@@ -153,10 +153,6 @@ class Healthcheck_Service_HealthcheckSettings
             {
                 unset($validData ['assessmentPricingConfigId']);
             }
-            if ((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['grossMarginPricingConfigId']);
-            }
 
             // Save the id as it will get erased
             $HealthcheckSettingsId = $this->_HealthcheckSettings->id;

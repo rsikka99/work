@@ -124,7 +124,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
                 $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_report->stepName    = Healthcheck_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
+                $this->_report->stepName    = Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }

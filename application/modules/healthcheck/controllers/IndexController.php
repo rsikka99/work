@@ -6,84 +6,10 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
      */
     public function indexAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD);
-
-        $report               = $this->getReport();
-        $rmsUpload = null;
-        if(isset($report->id))
-        {
-            $rmsUpload = Healthcheck_Model_Mapper_Healthcheck::getInstance()->findRmsUploadRowByHardwareOptimizationId($report->id);
-        }
-
-        $uploadService = new Proposalgen_Service_Rms_Upload(Zend_Auth::getInstance()->getIdentity()->id,$this->getReport()->clientId,($rmsUpload ? $rmsUpload->id : null));
-
-
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-
-            if (isset($values ["goBack"]))
-            {
-                $this->gotoPreviousStep();
-            }
-            else if (isset($values ["performUpload"]))
-            {
-                $success = $uploadService->processUpload($values);
-                if ($success)
-                {
-                    $rmsUpload = $uploadService->_rmsUpload;
-
-                    // Save the health check object with the new id.
-                    $healthcheck              = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($report->id);
-                    $healthcheck->rmsUploadId = $rmsUpload->id;
-                    Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($healthcheck);
-
-                    $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
-                }
-                else
-                {
-                    $this->_flashMessenger->addMessage(array("danger" => $uploadService->errorMessages));
-                }
-            }
-            else if (isset($values ["saveAndContinue"]))
-            {
-                $count = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->countRowsForRmsUpload($uploadService->_rmsUpload->id);
-                if ($count < 2)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "You must have at least 2 valid devices to continue."
-                                                       ));
-                }
-                else
-                {
-                    $this->gotoNextStep();
-                }
-            }
-        }
-        $this->saveReport(true);
-        if($rmsUpload instanceof Proposalgen_Model_Rms_Upload_Row)
-        {
-            $this->view->populateGrid = true;
-        }
-        $this->view->form = $uploadService->getForm();
-        $navigationButtons          = ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT : Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK;
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
-
-    }
-
-
-    /**
-     * Allows the user to set the report settings for a report
-     */
-    public function settingsAction ()
-    {
-        // Mark the step we're on as active
+//      Mark the step we're on as active
         $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
-//        $dealer                   = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $this->saveReport(true);
         $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id,Zend_Auth::getInstance()->getIdentity()->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
-
-        //$reportSettingsService = new Healthcheck_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -116,8 +42,10 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
             }
         }
 
-       $this->view->form = $healthcheckSettingsService->getForm();
+        $this->view->form = $healthcheckSettingsService->getForm();
+
     }
+
 
     /**
      * The healthcheckAction displays the healthcheck report.
