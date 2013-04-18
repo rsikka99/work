@@ -12,6 +12,9 @@ $(function ()
     $("#mappingGrid").jqGrid(
         {
             url       : TMTW_BASEURL + 'proposalgen/fleet/device-mapping-list',
+            postData  : {
+                rmsUploadId: rmsUploadId
+            },
             datatype  : 'json',
             colModel  : [
                 {
@@ -69,7 +72,7 @@ $(function ()
                     label   : 'Device Manu.',
                     title   : false,
                     sortable: false,
-                    hidden: true
+                    hidden  : true
                 },
                 {
                     width   : 200,
@@ -78,7 +81,7 @@ $(function ()
                     label   : 'Model Name',
                     title   : false,
                     sortable: false,
-                    hidden: true
+                    hidden  : true
                 },
                 {
                     width   : 350,
@@ -160,7 +163,10 @@ $(function ()
                 {
                     // Get the data so we can use and manipualte it.
                     var row = grid.getRowData(ids[i]);
-                    if(row.mappedManufacturer != undefined);
+                    if (row.mappedManufacturer != undefined)
+                    {
+                        ;
+                    }
                     {
                         row.mappedManufacturer = row.mappedManufacturer.replace('"', '&quot;');
                     }
@@ -235,7 +241,7 @@ $(function ()
                                 },
                                 success : function (data)
                                 {
-                                    data.unshift({device_name: "Remove mapping", fullname:"Remove mapping", id: 0, modelName: "Remove Mapping"});
+                                    data.unshift({device_name: "Remove mapping", fullname: "Remove mapping", id: 0, modelName: "Remove Mapping"});
                                     response($.map(data, function (item)
                                     {
                                         return {

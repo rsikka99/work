@@ -1,5 +1,8 @@
 <?php $rmsUpload = $this->rmsUpload; ?>
 <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
+    <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+        var rmsUploadId = <?php echo $rmsUpload->id; ?>
+    <?php $this->headScript()->captureEnd(); ?>
     <div class="well">
         <h1>Upload Complete</h1>
 

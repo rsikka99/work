@@ -6,6 +6,9 @@ $(function ()
     $("#excludedTable").jqGrid(
         {
             url         : TMTW_BASEURL + 'proposalgen/fleet/excluded-list',
+            postData: {
+                rmsUploadId: rmsUploadId
+            },
             datatype    : 'json',
             jsonReader  : { repeatitems: false },
             colModel    : [
@@ -46,13 +49,13 @@ $(function ()
                     align   : 'center'
                 },
                 {
-                    width: 50,
-                    name: 'csvLineNumber',
-                    index: 'csvLineNumber',
-                    label: 'CSV Line Number',
-                    title: true,
+                    width   : 50,
+                    name    : 'csvLineNumber',
+                    index   : 'csvLineNumber',
+                    label   : 'CSV Line Number',
+                    title   : true,
                     sortable: true,
-                    align: 'center'
+                    align   : 'center'
                 }
             ],
             scrollOffset: 0,
