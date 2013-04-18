@@ -20,12 +20,6 @@ class Healthcheck_Model_Healthcheck_Step extends My_Model_Abstract
             'controller' => 'index',
             'action'     => 'index'
         ),
-        self::STEP_MAPPING          => array(
-            'name'       => 'Mapping',
-            'group'      => null,
-            'controller' => 'index',
-            'action'     => 'mapping'
-        ),
         self::STEP_REPORTSETTINGS   => array(
             'name'       => 'Settings',
             'group'      => null,
