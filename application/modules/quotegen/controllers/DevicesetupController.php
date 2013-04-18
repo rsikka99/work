@@ -631,7 +631,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $requiredTonerColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($masterDevice->tonerConfigId);
 
         // Get quotegen device
-        $device                     = Quotegen_Model_Mapper_Device::getInstance()->find($masterDeviceId);
+        $device                     = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $device;
 
         // Populate manufacturers dropdown
