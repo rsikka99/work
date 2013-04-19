@@ -145,6 +145,11 @@ class Proposalgen_Library_Controller_Proposal extends Tangent_Controller_Action
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/proposalgen/report_printingdevicelist/index')
             ),
+            "OldDeviceList" => (object)array(
+                "pagetitle" => "Old Device List",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/proposalgen/report_olddevicelist/index')
+            ),
             "Toners"                       => (object)array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,

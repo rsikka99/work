@@ -303,6 +303,13 @@
                                     <action>index</action>
                                     <resource>proposalgen__report_printingdevicelist__index</resource>
                                 </printingdevicelist>
+                                <olddevicelist>
+                                    <label>Old Device List</label>
+                                    <module>proposalgen</module>
+                                    <controller>report_olddevicelist</controller>
+                                    <action>index</action>
+                                    <resource>proposalgen__report_olddevicelist__index</resource>
+                                </olddevicelist>
                                 <toners>
                                     <label>Essentials</label>
                                     <module>proposalgen</module>
