@@ -12,18 +12,21 @@ class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
      */
     private static $stepNames = array(
         self::STEP_SELECTUPLOAD   => array(
+            'module'     => 'healthcheck',
             'name'       => 'Select Upload',
             'group'      => null,
             'controller' => 'index',
             'action'     => 'index'
         ),
         self::STEP_REPORTSETTINGS   => array(
+            'module'     => 'healthcheck',
             'name'       => 'Settings',
             'group'      => null,
             'controller' => 'index',
             'action'     => 'settings'
         ),
         self::STEP_FINISHED         => array(
+            'module'     => 'healthcheck',
             'name'       => 'Report',
             'group'      => null,
             'controller' => 'index',

@@ -117,7 +117,7 @@ class Tangent_Controller_Action extends Zend_Controller_Action
             // Only redirect when there is a step to redirect to.
             if ($activeStep->nextStep instanceof My_Navigation_Step)
             {
-                $this->redirector($activeStep->nextStep->module, $activeStep->nextStep->controller, $activeStep->nextStep->action, $params);
+                $this->redirector($activeStep->nextStep->action, $activeStep->nextStep->controller, $activeStep->nextStep->module, $params);
             }
         }
     }
@@ -131,15 +131,6 @@ class Tangent_Controller_Action extends Zend_Controller_Action
     public function gotoPreviousNavigationStep (My_Navigation_Abstract $navigation, $params = null)
     {
         $activeStep = $navigation->activeStep;
-        if ($activeStep instanceof My_Navigation_Step)
-        {
-            // Only redirect when there is a step to redirect to.
-            if ($activeStep->previousStep instanceof My_Navigation_Step)
-            {
-                $this->redirector($activeStep->previousStep->action, $activeStep->previousStep->controller, $activeStep->previousStep->module, $params);
-            }
-        }
-
         if ($activeStep instanceof My_Navigation_Step)
         {
             // Only redirect when there is a step to redirect to.
