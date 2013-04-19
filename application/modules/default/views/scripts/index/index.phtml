@@ -163,11 +163,11 @@
                                 </td>
                             </tr>
                             <?php foreach ($this->availableHealthchecks as $healthcheck) : /* @var $healthcheck Proposalgen_Model_Healthcheck */ ?>
-                                <tr class="<?php echo ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                <tr class="<?php echo ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
                                     <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->dateCreated)); ?></td>
                                     <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->lastModified)); ?></td>
 
-                                    <?php if ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Step::STEP_FINISHED) : ?>
+                                    <?php if ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) : ?>
                                         <td>Finished</td>
 
                                     <?php else : ?>

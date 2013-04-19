@@ -16,7 +16,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     }
 
     /**
-     * Generates a list of devices that were not mapped automatically
+     * Selects a upload to use for the healthcheck
      */
     public function indexAction ()
     {
