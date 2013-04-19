@@ -283,7 +283,7 @@ class Assessment_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizonta
          * Add our form actions
          */
 
-        Assessment_Form_Assessment_Navigation::addFormActionsToForm(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT, $this);
+        Assessment_Form_Assessment_Navigation::addFormActionsToForm(Assessment_Form_Assessment_Navigation::BUTTONS_BACK_NEXT, $this);
     }
 
     public function loadDefaultDecorators ()
@@ -292,7 +292,7 @@ class Assessment_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizonta
                                   array(
                                       'ViewScript',
                                       array(
-                                          'viewScript' => 'survey/form/survey.phtml'
+                                          'viewScript' => 'forms/survey.phtml'
                                       )
                                   )
                              ));

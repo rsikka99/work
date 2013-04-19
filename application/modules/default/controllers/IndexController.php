@@ -125,26 +125,28 @@ class Default_IndexController extends Tangent_Controller_Action
             }
             else if (isset($postData['selectAssessment']))
             {
-                $selectedReportId = $postData['selectAssessment'];
+                $assessmentId = $postData['selectAssessment'];
 
-                $validReportIds = array(0);
+                $validAssessmentIds = array(0);
                 foreach ($availableReports as $report)
                 {
-                    $validReportIds[] = $report->id;
+                    $validAssessmentIds[] = $report->id;
                 }
 
-                $inArray = new Zend_Validate_InArray($validReportIds);
+                $inArray = new Zend_Validate_InArray($validAssessmentIds);
 
-                if ($inArray->isValid($selectedReportId))
+                if ($inArray->isValid($assessmentId))
                 {
-                    $this->_proposalSession->reportId = $selectedReportId;
-                    $this->redirector('index', 'survey', 'proposalgen');
+                    $this->_proposalSession->reportId = $assessmentId;
+                    $this->_mpsSession->assessmentId = $assessmentId;
+                    $this->redirector('index', 'index', 'assessment');
                 }
             }
             else if (isset($postData['selectQuote']))
             {
                 $selectedQuoteId = $postData['selectQuote'];
 
+                $validQuoteIds = array();
                 foreach ($availableQuotes as $quote)
                 {
                     $validQuoteIds[] = $quote->id;

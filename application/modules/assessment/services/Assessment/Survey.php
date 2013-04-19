@@ -10,7 +10,7 @@ class Assessment_Service_Assessment_Survey
     /**
      * @var Proposalgen_Model_Survey_Setting
      */
-    protected $_surveySetting;
+    protected $_assessmentSurveySetting;
 
     /**
      * @var Assessment_Form_Assessment_Survey
@@ -19,8 +19,8 @@ class Assessment_Service_Assessment_Survey
 
     public function __construct ($assessmentSurvey, $surveySetting)
     {
-        $this->_assessmentSurvey = $assessmentSurvey;
-        $this->_surveySetting    = $surveySetting;
+        $this->_assessmentSurvey        = $assessmentSurvey;
+        $this->_assessmentSurveySetting = $surveySetting;
     }
 
     /**
@@ -77,7 +77,7 @@ class Assessment_Service_Assessment_Survey
             else
             {
                 $this->_assessmentSurvey->reportId = $assessmentId;
-                Assessment_Model_Mapper_Assessment_Survey::getInstance()->insert($survey);
+                Assessment_Model_Mapper_Assessment_Survey::getInstance()->insert($this->_assessmentSurvey);
             }
             $assessmentSurveyId = $this->_assessmentSurvey->reportId;
         }
@@ -97,6 +97,7 @@ class Assessment_Service_Assessment_Survey
         if (!isset($this->_form))
         {
             $this->_form = new Assessment_Form_Assessment_Survey();
+            $this->_form->populate($this->createPopulateArray($this->_assessmentSurvey, $this->_assessmentSurveySetting));
         }
 
         return $this->_form;
@@ -121,35 +122,36 @@ class Assessment_Service_Assessment_Survey
     }
 
     /**
-     * @param $survey
-     * @param $surveySetting
+     * @param $assessmentSurvey
+     *
+     * @param $assessmentSurveySetting
      *
      * @return array
      */
-    protected function createPopulateArray ($survey, $surveySetting)
+    protected function createPopulateArray ($assessmentSurvey, $assessmentSurveySetting)
     {
         $formDataFromAnswers                           = array();
-        $formDataFromAnswers ["toner_cost_radio"]      = ($survey->costOfInkAndToner > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["toner_cost"]            = ($survey->costOfInkAndToner > 0) ? $survey->costOfInkAndToner : null;
-        $formDataFromAnswers ["labor_cost_radio"]      = ($survey->costOfLabor !== null) ? 'exact' : 'guess';
-        $formDataFromAnswers ["labor_cost"]            = ($survey->costOfLabor !== null) ? $survey->costOfLabor : null;
-        $formDataFromAnswers ["avg_purchase"]          = ($survey->costToExecuteSuppliesOrder > 0) ? $survey->costToExecuteSuppliesOrder : Assessment_Model_Assessment_Survey::DEFAULT_SUPPLIES_ORDER_COST;
-        $formDataFromAnswers ["it_hourlyRate"]         = ($survey->averageItHourlyRate > 0) ? $survey->averageItHourlyRate : Assessment_Model_Assessment_Survey::DEFAULT_IT_HOURLY_RATE;
-        $formDataFromAnswers ["itHoursRadio"]          = ($survey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["itHours"]               = ($survey->hoursSpentOnIt > 0) ? $survey->hoursSpentOnIt : null;
-        $formDataFromAnswers ["monthlyBreakdownRadio"] = ($survey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["monthlyBreakdown"]      = ($survey->averageMonthlyBreakdowns > 0) ? $survey->averageMonthlyBreakdowns : null;
-        $formDataFromAnswers ["pageCoverage_BW"]       = ($survey->pageCoverageMonochrome > 0) ? $survey->pageCoverageMonochrome : $surveySetting->pageCoverageMono;
-        $formDataFromAnswers ["pageCoverage_Color"]    = ($survey->pageCoverageColor > 0) ? $survey->pageCoverageColor : $surveySetting->pageCoverageColor;
-        $formDataFromAnswers ["printVolume"]           = ($survey->percentageOfInkjetPrintVolume > 0) ? $survey->percentageOfInkjetPrintVolume : 5;
-        $formDataFromAnswers ["repairTime"]            = ($survey->averageRepairTime > 0.0) ? $survey->averageRepairTime : 0.5;
+        $formDataFromAnswers ["toner_cost_radio"]      = ($assessmentSurvey->costOfInkAndToner > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ["toner_cost"]            = ($assessmentSurvey->costOfInkAndToner > 0) ? $assessmentSurvey->costOfInkAndToner : null;
+        $formDataFromAnswers ["labor_cost_radio"]      = ($assessmentSurvey->costOfLabor !== null) ? 'exact' : 'guess';
+        $formDataFromAnswers ["labor_cost"]            = ($assessmentSurvey->costOfLabor !== null) ? $assessmentSurvey->costOfLabor : null;
+        $formDataFromAnswers ["avg_purchase"]          = ($assessmentSurvey->costToExecuteSuppliesOrder > 0) ? $assessmentSurvey->costToExecuteSuppliesOrder : Assessment_Model_Assessment_Survey::DEFAULT_SUPPLIES_ORDER_COST;
+        $formDataFromAnswers ["it_hourlyRate"]         = ($assessmentSurvey->averageItHourlyRate > 0) ? $assessmentSurvey->averageItHourlyRate : Assessment_Model_Assessment_Survey::DEFAULT_IT_HOURLY_RATE;
+        $formDataFromAnswers ["itHoursRadio"]          = ($assessmentSurvey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ["itHours"]               = ($assessmentSurvey->hoursSpentOnIt > 0) ? $assessmentSurvey->hoursSpentOnIt : null;
+        $formDataFromAnswers ["monthlyBreakdownRadio"] = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
+        $formDataFromAnswers ["monthlyBreakdown"]      = ($assessmentSurvey->averageMonthlyBreakdowns > 0) ? $assessmentSurvey->averageMonthlyBreakdowns : null;
+        $formDataFromAnswers ["pageCoverage_BW"]       = ($assessmentSurvey->pageCoverageMonochrome > 0) ? $assessmentSurvey->pageCoverageMonochrome : $assessmentSurveySetting->pageCoverageMono;
+        $formDataFromAnswers ["pageCoverage_Color"]    = ($assessmentSurvey->pageCoverageColor > 0) ? $assessmentSurvey->pageCoverageColor : $assessmentSurveySetting->pageCoverageColor;
+        $formDataFromAnswers ["printVolume"]           = ($assessmentSurvey->percentageOfInkjetPrintVolume > 0) ? $assessmentSurvey->percentageOfInkjetPrintVolume : 5;
+        $formDataFromAnswers ["repairTime"]            = ($assessmentSurvey->averageRepairTime > 0.0) ? $assessmentSurvey->averageRepairTime : 0.5;
 
         /**
          * Number of monthly supply orders
          */
-        if ($survey->numberOfSupplyOrdersPerMonth > 0)
+        if ($assessmentSurvey->numberOfSupplyOrdersPerMonth > 0)
         {
-            switch ($survey->numberOfSupplyOrdersPerMonth)
+            switch ($assessmentSurvey->numberOfSupplyOrdersPerMonth)
             {
                 case Assessment_Model_Assessment_Survey::SUPPLY_ORDERS_DAILY :
                     $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
@@ -159,7 +161,7 @@ class Assessment_Service_Assessment_Survey
                     break;
                 default :
                     $formDataFromAnswers ["inkTonerOrderRadio"] = "Times per month";
-                    $formDataFromAnswers ["numb_monthlyOrders"] = $survey->numberOfSupplyOrdersPerMonth;
+                    $formDataFromAnswers ["numb_monthlyOrders"] = $assessmentSurvey->numberOfSupplyOrdersPerMonth;
                     break;
             }
         }

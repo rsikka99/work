@@ -27,7 +27,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
 
     public function init ()
     {
-        $this->_identity   = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
         $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
     }
@@ -41,13 +41,17 @@ class Assessment_IndexController extends Tangent_Controller_Action
     {
         if (!isset($this->_assessment))
         {
-            if (isset($this->_mpsSession->assessmentId))
+            if (isset($this->_mpsSession->assessmentId) && $this->_mpsSession->assessmentId > 0)
             {
                 $this->_assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($this->_mpsSession->assessmentId);
             }
             else
             {
-                $this->_assessment = new Assessment_Model_Assessment();
+                $this->_assessment               = new Assessment_Model_Assessment();
+                $this->_assessment->dateCreated  = date('Y-m-d H:i:s');
+                $this->_assessment->lastModified = date('Y-m-d H:i:s');
+                $this->_assessment->dealerId     = $this->_identity->dealerId;
+                $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
             }
 
 
@@ -61,7 +65,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
      */
     public function saveAssessment ()
     {
-        if (isset($this->_mpsSession->assessmentId))
+        if (isset($this->_mpsSession->assessmentId) && $this->_mpsSession->assessmentId > 0)
         {
             Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
         }
@@ -77,7 +81,23 @@ class Assessment_IndexController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->redirector("select-upload");
+    }
+
+    public function selectUploadAction ()
+    {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['saveAndContinue']))
+            {
+                $this->gotoNextNavigationStep($this->_navigation);
+            }
+        }
+        $rmsUpload                  = false;
+        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT);
     }
 
     /**
@@ -91,7 +111,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
          * Fetch Survey Settings
          */
         $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings();
-        $user          = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
+        $user          = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);;
         $surveySetting->populate($user->getUserSettings()->getSurveySettings()->toArray());
 
 
@@ -172,13 +192,38 @@ class Assessment_IndexController extends Tangent_Controller_Action
     public function settingsAction ()
     {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SETTINGS);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['saveAndContinue']))
+            {
+                $this->gotoNextNavigationStep($this->_navigation);
+            }
+            else if (isset($postData['goBack']))
+            {
+                $this->gotoPreviousNavigationStep($this->_navigation);
+            }
+        }
+
+        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
     }
 
     /**
      * The user can see various reports from here
      */
-    public function reportsAction ()
+    public function reportAction ()
     {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+
+        if ($this->getRequest()->isPost())
+        {
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['goBack']))
+            {
+                $this->gotoPreviousNavigationStep($this->_navigation);
+            }
+        }
+        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK);
     }
 }
