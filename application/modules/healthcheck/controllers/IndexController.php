@@ -23,7 +23,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
         //      Mark the step we're on as active
         $navigationButtons          = Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT;
 
-//        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
+        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
         $report = $this->getReport();
         if (isset($report->getRmsUpload()->id))
         {
@@ -40,71 +40,13 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                     $this->getReport()->rmsUploadId = $values["selectIds"];
                     $this->saveReport();
                     $this->view->selectedUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($values["selectIds"]);
-                    $this->gotoNextStep();
+                    $this->gotoNextNavigationStep($this->_navigation);
                 }
             }
             else if(isset($values["saveAndContinue"]))
             {
-                $this->gotoNextStep();
+                $this->gotoNextNavigationStep($this->_navigation);
             }
-        }
-    }
-
-    public function selectuploadAction ()
-    {
-        $jqGrid       = new Tangent_Service_JQGrid();
-        $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
-        /*
-         * Grab the incoming parameters
-         */
-        $jqGridParameters = array(
-            'sidx' => $this->_getParam('sidx', 'deviceCount'),
-            'sord' => $this->_getParam('sord', 'desc'),
-            'page' => $this->_getParam('page', 1),
-            'rows' => $this->_getParam('rows', 10)
-        );
-
-        // Set up validation arrays
-        $blankModel  = new Proposalgen_Model_Rms_Upload();
-        $sortColumns = array_keys($blankModel->toArray());
-
-        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
-        $jqGrid->setValidSortColumns($sortColumns);
-
-
-        if ($jqGrid->sortingIsValid())
-        {
-            $jqGrid->setRecordCount($uploadMapper->count(array("$uploadMapper->col_clientId = ?" => $this->getReport()->clientId)));
-
-            // Validate current page number since we don't want to be out of bounds
-            if ($jqGrid->getCurrentPage() < 1)
-            {
-                $jqGrid->setCurrentPage(1);
-            }
-            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
-            {
-                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
-            }
-
-            // Return a small subset of the results based on the jqGrid parameters
-            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            if($startRecord < 0)
-            {
-                $startRecord = 0;
-            }
-            $uploads     = $uploadMapper->fetchAllForClient($this->getReport()->clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
-
-            $jqGrid->setRows($uploads);
-
-            // Send back jqGrid json data
-            $this->sendJson($jqGrid->createPagerResponseArray());
-        }
-        else
-        {
-            $this->_response->setHttpResponseCode(500);
-            $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
         }
     }
 
@@ -123,7 +65,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
             if (isset($values ['cancel']))
             {
-                $this->gotoPreviousStep();
+                $this->gotoPreviousNavigationStep($this->_navigation);
             }
             else
             {
@@ -137,7 +79,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
 
                     if (isset($values ['saveAndContinue']))
                     {
-                        $this->gotoNextStep();
+                        $this->gotoNextNavigationStep($this->_navigation);
                     }
                 }
                 else
@@ -162,7 +104,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     public function reportAction ()
     {
         // Mark the step we're on as active
-        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_FINISHED);
+        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();

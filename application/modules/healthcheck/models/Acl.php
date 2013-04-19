@@ -36,7 +36,7 @@ class Healthcheck_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         /**
-         * Any logged in user
+         * Healthcheck user
          */
         $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }

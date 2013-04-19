@@ -26,6 +26,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES    = "proposalgen__fleet__edit-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST     = "proposalgen__fleet__device-mapping-list";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
+    const RESOURCE_PROPOSALGEN_FLEET_SELECTUPLOAD          = "proposalgen__fleet__select-upload";
     const RESOURCE_PROPOSALGEN_FLEET_INDEX                 = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING               = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG    = "proposalgen__fleet__toggle-excluded-flag";
@@ -85,6 +86,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SELECTUPLOAD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES);
@@ -147,6 +149,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_SELECTUPLOAD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);

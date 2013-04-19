@@ -106,6 +106,64 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
     }
 
+    public function selectUploadAction ()
+    {
+        $clientId = $this->_mpsSession->selectedClientId;
+        $jqGrid       = new Tangent_Service_JQGrid();
+        $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'deviceCount'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
+
+        // Set up validation arrays
+        $blankModel  = new Proposalgen_Model_Rms_Upload();
+        $sortColumns = array_keys($blankModel->toArray());
+
+        $jqGrid->parseJQGridPagingRequest($jqGridParameters);
+        $jqGrid->setValidSortColumns($sortColumns);
+
+
+        if ($jqGrid->sortingIsValid())
+        {
+            $jqGrid->setRecordCount($uploadMapper->count(array("$uploadMapper->col_clientId = ?" => $clientId)));
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGrid->getCurrentPage() < 1)
+            {
+                $jqGrid->setCurrentPage(1);
+            }
+            else if ($jqGrid->getCurrentPage() > $jqGrid->calculateTotalPages())
+            {
+                $jqGrid->setCurrentPage($jqGrid->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
+            if($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
+            $uploads     = $uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
+
+            $jqGrid->setRows($uploads);
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGrid->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+    }
+
     /**
      * This handles the mapping of devices to our master devices
      */

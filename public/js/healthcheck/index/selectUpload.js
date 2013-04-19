@@ -11,7 +11,7 @@ $(function ()
      **********************************************************************************************************************************************************/
     $("#selectUploadGrid").jqGrid(
         {
-            url       : TMTW_BASEURL + 'healthcheck/index/selectupload',
+            url       : TMTW_BASEURL + 'proposalgen/fleet/select-upload',
             datatype  : 'json',
             colModel  : [
                 {

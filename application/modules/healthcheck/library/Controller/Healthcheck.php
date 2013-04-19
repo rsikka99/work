@@ -93,7 +93,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     {
         // Render our survey menu
         $stage = ($this->getReport()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
-        Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $stage);
+        //Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $stage);
 //
 //        $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
@@ -122,7 +122,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 $identity                   = Zend_Auth::getInstance()->getIdentity();
                 $this->_report              = new Healthcheck_Model_Healthcheck();
                 $this->_report->userId      = $identity->id;
-                $this->_report->clientId    = $this->_clientId;
+                $this->_report->clientId    = $this->_mpsSession->selectedClientId;
                 $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
                 $this->_report->stepName    = Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
