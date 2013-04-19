@@ -42,7 +42,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
 
         $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 
-        if ($this->_reportSession->healthcheckId < 1)
+        if ($this->_mpsSession->healthcheckId < 1)
         {
             $this->_flashMessenger->addMessage(array(
                                                     "error" => "Please select a report first."
@@ -51,7 +51,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($this->_reportSession->healthcheckId);
+        $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($this->_mpsSession->healthcheckId);
         if ($this->_report === null)
         {
             $this->_flashMessenger->addMessage(array(
@@ -109,9 +109,9 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         if (!isset($this->_report))
         {
             // Fetch the existing report, or create a new one if the session id isn't set
-            if (isset($this->_reportSession->healthcheckId) && $this->_reportSession->healthcheckId > 0)
+            if (isset($this->_mpsSession->healthcheckId) && $this->_mpsSession->healthcheckId > 0)
             {
-                $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find((int)$this->_reportSession->healthcheckId);
+                $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find((int)$this->_mpsSession->healthcheckId);
                 if ($this->_report === null)
                 {
                     throw new Exception("Error selecting the report with an id of '{$this->_reportSession->reportId}'.");
@@ -211,7 +211,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $id = $reportMapper->save($this->_report);
         }
 
-        $this->_reportSession->healthcheckId = $this->_report->id;
+        $this->_mpsSession->healthcheckId = $this->_report->id;
     }
 
     /**
