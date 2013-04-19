@@ -7,26 +7,32 @@ echo $this->pageStart;
 <div class="h1">Old Device List</div>
 <?php echo $this->noBreakEnd; ?>
 <table class="genericTable" id="AppendixDeviceTable">
-		<thead>
-			<tr class="center">
-				<th class="left">Manufacturer</th>
-				<th class="left">Model</th>
-				<th>IP Address</th>
-				<th>Serial No.</th>
-				<th>Age <br />(In Years)</th>
-			</tr>
-		</thead>
-		<tbody>
-		<?php foreach($proposal->getIncludedDevicesSortedAscendingByAge() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
+    <thead>
+    <tr class="center">
+        <th class="left">Device</th>
+        <th>IP Address</th>
+        <th>Serial No.</th>
+        <th>Age <br />(In Years)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($proposal->getIncludedDevicesSortedAscendingByAge() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
         <tr>
-				<td class="column1"><div><?php echo $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
-				<td class="column2"><div><?php echo $deviceInstance->getMasterDevice()->modelName; ?></div></td>
-				<td class="column3"><div class="center"><?php echo ($deviceInstance->ipAddress) ?: "Unknown"; ?></div></td>
-				<td class="column3"><div class="center"><?php echo ($deviceInstance->serialNumber) ?: "Unknown"; ?></div></td>
-				<td class="column6"><div class="center"><?php echo $deviceInstance->getAge(); ?></div></td>
-			</tr>
-            <?php endforeach; ?>
-		</tbody>
-	</table>
-<br/>
-<br/>
+            <td class="column1">
+                <div><?php echo $deviceInstance->getMasterDevice()->getFullDeviceName(); ?></div>
+            </td>
+            <td class="column3">
+                <div class="center"><?php echo ($deviceInstance->ipAddress) ? : "Unknown"; ?></div>
+            </td>
+            <td class="column3">
+                <div class="center"><?php echo ($deviceInstance->serialNumber) ? : "Unknown"; ?></div>
+            </td>
+            <td class="column6">
+                <div class="center"><?php echo $deviceInstance->getAge(); ?></div>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<br />
+<br />

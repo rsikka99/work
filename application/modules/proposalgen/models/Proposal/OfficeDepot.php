@@ -2043,7 +2043,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * Gets the devices sorted by ascending age
      */
-    public function getIncludedDevicesSortedAscendingByAge()
+    public function getIncludedDevicesSortedAscendingByAge ()
     {
         if (!isset($this->_includedDevicesSortedAscendingByAge))
         {
@@ -2061,13 +2061,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             ));
             $this->_includedDevicesSortedAscendingByAge = $devices;
         }
+
         return $this->_includedDevicesSortedAscendingByAge;
     }
 
     /**
      * Gets the devices sorted by descending age
      */
-    public function getIncludedDevicesSortedDescendingByAge()
+    public function getIncludedDevicesSortedDescendingByAge ()
     {
         if (!isset($this->_includedDevicesSortedDescendingByAge))
         {
@@ -2085,8 +2086,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             ));
             $this->_includedDevicesSortedDescendingByAge = $devices;
         }
+
         return $this->_includedDevicesSortedDescendingByAge;
     }
+
     /**
      * @return float
      */
@@ -3410,8 +3413,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->GrossMarginColorMargin))
         {
-            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP()->Color) / $this->getMPSColorCPP() * 100;
-            ;
+            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP()->Color) / $this->getMPSColorCPP() * 100;;
         }
 
         return $this->GrossMarginColorMargin;
@@ -3957,7 +3959,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAveragePagesPerDeviceMonthly()
+    public function calculateAveragePagesPerDeviceMonthly ()
     {
         return $this->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount();
     }
@@ -3967,9 +3969,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculatePercentOfTotalVolumePurchasedColorMonthly()
+    public function calculatePercentOfTotalVolumePurchasedColorMonthly ()
     {
-        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
+        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly) * 100;
     }
 
     /**
