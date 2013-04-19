@@ -179,16 +179,16 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Gets the report steps for this report
      *
-     * @return Healthcheck_Model_Healthcheck_Step
+     * @return Healthcheck_Model_Healthcheck_Steps
      */
     public function getReportSteps ()
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
+            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
 
-            $this->_reportSteps = Healthcheck_Model_Healthcheck_Step::getSteps();
-            Healthcheck_Model_Healthcheck_Step::updateAccessibleSteps($this->_reportSteps, $stage);
+            $this->_reportSteps = Healthcheck_Model_Healthcheck_Steps::getInstance()->steps;
+            Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->_reportSteps, $stage);
         }
 
         return $this->_reportSteps;
@@ -197,7 +197,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     /**
      * Sets the report steps for this report
      *
-     * @param Healthcheck_Model_Healthcheck_Step $ReportSteps
+     * @param Healthcheck_Model_Healthcheck_Steps $ReportSteps
      *
      * @return Healthcheck_Model_Healthcheck
      */

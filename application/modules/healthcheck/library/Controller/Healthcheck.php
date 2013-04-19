@@ -9,7 +9,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * The current step that the user is viewing.
      *
-     * @var Healthcheck_Model_Healthcheck_Step
+     * @var Healthcheck_Model_Healthcheck_Steps
      */
     protected $_activeStep;
 
@@ -92,10 +92,10 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->stepName) ? : Healthcheck_Model_Healthcheck_Step::STEP_FLEETDATA_UPLOAD;
-        Healthcheck_Model_Healthcheck_Step::updateAccessibleSteps($this->getReportSteps(), $stage);
-
-        $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
+        $stage = ($this->getReport()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+        Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $stage);
+//
+//        $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
     }
 
     /**
@@ -124,7 +124,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 $this->_report->userId      = $identity->id;
                 $this->_report->clientId    = $this->_clientId;
                 $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_report->stepName    = Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS;
+                $this->_report->stepName    = Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS;
                 $this->_report->dateCreated = date('Y-m-d H:i:s');
                 $this->_report->reportDate  = date('Y-m-d H:i:s');
             }
@@ -195,7 +195,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
                 $this->_report->stepName = $newStep->enumValue;
 
                 // We need to adjust the menu just in case we're not redirecting
-                Healthcheck_Model_Healthcheck_Step::updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
+                Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
             }
         }
 
@@ -217,7 +217,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Gets an array of report steps.
      *
-     * @return Healthcheck_Model_Healthcheck_Step[]
+     * @return Healthcheck_Model_Healthcheck_Steps[]
      */
     protected function getReportSteps ()
     {
@@ -229,7 +229,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         }
         else
         {
-            $reportSteps = Healthcheck_Model_Healthcheck_Step::getSteps();
+            $reportSteps = Healthcheck_Model_Healthcheck_Steps::getInstance()->steps;
         }
 
         return $reportSteps;
@@ -238,9 +238,9 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Checks to see if the next step is a new step.
      *
-     * @param Healthcheck_Model_Healthcheck_Step $step
+     * @param Healthcheck_Model_Healthcheck_Steps $step
      *
-     * @return Healthcheck_Model_Healthcheck_Step Step Name. Returns FALSE if the step is not new.
+     * @return Healthcheck_Model_Healthcheck_Steps Step Name. Returns FALSE if the step is not new.
      */
     protected function checkIfNextStepIsNew ($step)
     {
@@ -315,13 +315,13 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * Gets the last available step for a report
      *
-     * @return Healthcheck_Model_Healthcheck_Step
+     * @return Healthcheck_Model_Healthcheck_Steps
      */
     protected function getLatestAvailableReportStep ()
     {
         $latestStep = null;
 
-        /* @var $step Healthcheck_Model_Healthcheck_Step */
+        /* @var $step Healthcheck_Model_Healthcheck_Steps */
         foreach ($this->getReportSteps() as $step)
         {
             /*

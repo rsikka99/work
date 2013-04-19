@@ -1,6 +1,19 @@
 <?php
 class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthcheck
 {
+    /**
+     * The navigation steps
+     *
+     * @var Healthcheck_Model_Healthcheck_Steps
+     */
+    protected $_navigation;
+
+    public function init ()
+    {
+        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
+        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
+    }
 
     /**
      * Generates a list of devices that were not mapped automatically
@@ -9,7 +22,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     {
         //      Mark the step we're on as active
         $navigationButtons          = Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT;
-        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_SELECTUPLOAD);
+
+//        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
         $report = $this->getReport();
         if (isset($report->getRmsUpload()->id))
         {
@@ -100,7 +114,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     public function settingsAction ()
     {
 //      Mark the step we're on as active
-        $this->setActiveReportStep(Healthcheck_Model_Healthcheck_Step::STEP_REPORTSETTINGS);
+        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS);
         $this->saveReport(true);
         $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
