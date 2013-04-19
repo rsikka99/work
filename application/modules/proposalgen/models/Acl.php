@@ -6,9 +6,9 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
     const RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING       = "proposalgen__admin__bulkdevicepricing";
-    const RESOURCE_PROPOSALGEN_ADMIN_BULKFILEPRICING       = "proposalgen__admin__bulkfilepricing";
+    const RESOURCE_PROPOSALGEN_ADMIN_BULKFILEPRICING         = "proposalgen__admin__bulkfilepricing";
     const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS            = "proposalgen__admin__devicetoners";
-    const RESOURCE_PROPOSALGEN_ADMIN_EXPORTPRICING            = "proposalgen__admin__exportpricing";
+    const RESOURCE_PROPOSALGEN_ADMIN_EXPORTPRICING           = "proposalgen__admin__exportpricing";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS         = "proposalgen__admin__filterlistitems";
     const RESOURCE_PROPOSALGEN_ADMIN_INDEX                   = "proposalgen__admin__index";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS      = "proposalgen__admin__managereplacements";
@@ -44,7 +44,8 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD = "proposalgen__report_optimization_customer__%";
     const RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD   = "proposalgen__report_optimization_dealer__%";
     const RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD    = "proposalgen__report_printingdevicelist__%";
-    const RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD    = "proposalgen__report_costanalysis__%";
+    const RESOURCE_PROPOSALGEN_REPORT_OLDDEVICELIST_WILDCARD         = "proposalgen__report_olddevicelist__%";
+    const RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD          = "proposalgen__report_costanalysis__%";
     const RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD              = "proposalgen__report_solution__%";
     const RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD                = "proposalgen__report_toners__%";
 
@@ -110,6 +111,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_OLDDEVICELIST_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD);
 
@@ -154,6 +156,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_SOLUTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_PRINTINGDEVICELIST_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_OLDDEVICELIST_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_TONERS_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
