@@ -1954,7 +1954,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     /**
      * Gets the devices sorted by ascending age
      */
-    public function getIncludedDevicesSortedAscendingByAge()
+    public function getIncludedDevicesSortedAscendingByAge ()
     {
         if (!isset($this->_includedDevicesSortedAscendingByAge))
         {
@@ -1972,13 +1972,14 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             ));
             $this->_includedDevicesSortedAscendingByAge = $devices;
         }
+
         return $this->_includedDevicesSortedAscendingByAge;
     }
 
     /**
      * Gets the devices sorted by descending age
      */
-    public function getIncludedDevicesSortedDescendingByAge()
+    public function getIncludedDevicesSortedDescendingByAge ()
     {
         if (!isset($this->_includedDevicesSortedDescendingByAge))
         {
@@ -1996,8 +1997,10 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             ));
             $this->_includedDevicesSortedDescendingByAge = $devices;
         }
+
         return $this->_includedDevicesSortedDescendingByAge;
     }
+
     /**
      * @return float
      */
@@ -3321,8 +3324,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     {
         if (!isset($this->GrossMarginColorMargin))
         {
-            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP()->Color) / $this->getMPSColorCPP() * 100;
-            ;
+            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP()->Color) / $this->getMPSColorCPP() * 100;;
         }
 
         return $this->GrossMarginColorMargin;
@@ -3618,7 +3620,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostOemMonochromeMonthly()
+    public function calculateAverageTotalCostOemMonochromeMonthly ()
     {
         return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
     }
@@ -3628,7 +3630,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostCompatibleMonochromeMonthly()
+    public function calculateAverageTotalCostCompatibleMonochromeMonthly ()
     {
         return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
     }
@@ -3638,7 +3640,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostOemColorMonthly()
+    public function calculateAverageTotalCostOemColorMonthly ()
     {
         return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
     }
@@ -3648,7 +3650,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostCompatibleColorMonthly()
+    public function calculateAverageTotalCostCompatibleColorMonthly ()
     {
         return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly;
     }
@@ -3658,7 +3660,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostOemCombinedMonthly()
+    public function calculateAverageTotalCostOemCombinedMonthly ()
     {
         return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
     }
@@ -3668,7 +3670,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAverageTotalCostCompatibleCombinedMonthly()
+    public function calculateAverageTotalCostCompatibleCombinedMonthly ()
     {
         return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
     }
@@ -3678,7 +3680,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
     {
         return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
     }
@@ -3688,7 +3690,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()
+    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
     {
         return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
     }
@@ -3698,7 +3700,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateAveragePagesPerDeviceMonthly()
+    public function calculateAveragePagesPerDeviceMonthly ()
     {
         return $this->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount();
     }
@@ -3708,9 +3710,9 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculatePercentOfTotalVolumePurchasedColorMonthly()
+    public function calculatePercentOfTotalVolumePurchasedColorMonthly ()
     {
-        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly )* 100;
+        return ($this->getPageCounts()->Purchased->Color->Monthly / $this->getPageCounts()->Purchased->Combined->Monthly) * 100;
     }
 
     /**
@@ -3718,7 +3720,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateEstimatedAnnualCostOfPrinting()
+    public function calculateEstimatedAnnualCostOfPrinting ()
     {
         return $this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost();
     }
@@ -3728,7 +3730,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateTotalCostOfMonochromePagesAnnually()
+    public function calculateTotalCostOfMonochromePagesAnnually ()
     {
         return $this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP();
     }
@@ -3738,7 +3740,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function calculateTotalCostOfColorPagesAnnually()
+    public function calculateTotalCostOfColorPagesAnnually ()
     {
         return $this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP();
     }
@@ -3748,7 +3750,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      *
      * @return float
      */
-    public function getHalfOfAnnualITCost()
+    public function getHalfOfAnnualITCost ()
     {
         return $this->getAnnualITCost() * .5;
     }

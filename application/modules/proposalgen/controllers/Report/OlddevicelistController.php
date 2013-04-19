@@ -18,8 +18,8 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
 
         $this->view->availableReports->OldDeviceList->active = true;
 
-        $this->view->formats                                      = array(
-            "/proposalgen/report_olddevicelist/generate/format/csv"  => $this->_csvFormat
+        $this->view->formats = array(
+            "/proposalgen/report_olddevicelist/generate/format/csv" => $this->_csvFormat
         );
         try
         {
@@ -62,7 +62,7 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
+            $this->render($this->view->App()->theme . '/' . $format . "/00_render");
         }
         catch (Exception $e)
         {
@@ -81,10 +81,10 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
         {
             $proposal = $this->getProposal();
 
-            $url = $this->view->serverUrl();
+            $url             = $this->view->serverUrl();
             $this->view->url = $url;
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Could not generate printing device list report.");
         }
@@ -92,17 +92,16 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
         // assign to a view variable
         $this->view->proposal = $proposal;
         // Define our field titles
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Age";
+        $this->view->appendix_titles = "Device,IP Address,Serial,Age";
 
         $appendix_values = "";
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ( $proposal->getIncludedDevicesSortedAscendingByAge() as $device )
+            foreach ($proposal->getIncludedDevicesSortedAscendingByAge() as $device)
             {
-                $row = array ();
+                $row    = array();
                 $row [] = $device->getMasterDevice()->getFullDeviceName();
-                $row [] = $device->getMasterDevice()->modelName;
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
                 $row [] = $device->getAge();
@@ -110,7 +109,7 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
 
             } // end Purchased Devices foreach
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error while generating CSV Report.", 0, $e);
         }
@@ -118,31 +117,31 @@ class Proposalgen_Report_OldDeviceListController extends Proposalgen_Library_Con
 
         // Removes spaces from company name, otherwise CSV filename contains +
         // symbol
-        $companyName = str_replace(array (
-                                         " ",
-                                         "/",
-                                         "\\",
-                                         ";",
-                                         "?",
-                                         "\"",
-                                         "'",
-                                         ",",
-                                         "%",
-                                         "&",
-                                         "#",
-                                         "@",
-                                         "!",
-                                         ">",
-                                         "<",
-                                         "+",
-                                         "=",
-                                         "{",
-                                         "}",
-                                         "[",
-                                         "]",
-                                         "|",
-                                         "~",
-                                         "`"
+        $companyName = str_replace(array(
+                                        " ",
+                                        "/",
+                                        "\\",
+                                        ";",
+                                        "?",
+                                        "\"",
+                                        "'",
+                                        ",",
+                                        "%",
+                                        "&",
+                                        "#",
+                                        "@",
+                                        "!",
+                                        ">",
+                                        "<",
+                                        "+",
+                                        "=",
+                                        "{",
+                                        "}",
+                                        "[",
+                                        "]",
+                                        "|",
+                                        "~",
+                                        "`"
                                    ), "_", $this->view->proposal->Report->CustomerCompanyName);
     }
 } // end index controller
