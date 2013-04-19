@@ -2,6 +2,10 @@
 class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_Abstract
 {
     /**
+     * All devices that have ages older or equal to this are in the old device list report
+     */
+    const OLD_DEVICE_LIST = 5;
+    /**
      * All devices printing less than this are considered underutilized.
      */
     const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.05;
@@ -153,6 +157,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
     protected $_optimizedDevices;
     protected $_numberOfDevicesNotReportingTonerLevels;
     protected $_numberOfCopyCapableDevices;
+    protected $_includedDevicesSortedAscendingByAge;
+    protected $_includedDevicesSortedDescendingByAge;
 
     /**
      * @param Proposalgen_Model_Assessment $report
@@ -1945,6 +1951,53 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
         return $this->_oldDevices;
     }
 
+    /**
+     * Gets the devices sorted by ascending age
+     */
+    public function getIncludedDevicesSortedAscendingByAge()
+    {
+        if (!isset($this->_includedDevicesSortedAscendingByAge))
+        {
+            $devices = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            {
+                if ($device->getAge() >= self::OLD_DEVICE_LIST)
+                {
+                    $devices[] = $device;
+                }
+            }
+            usort($devices, array(
+                                 $this,
+                                 "sortDevicesByAge"
+                            ));
+            $this->_includedDevicesSortedAscendingByAge = $devices;
+        }
+        return $this->_includedDevicesSortedAscendingByAge;
+    }
+
+    /**
+     * Gets the devices sorted by descending age
+     */
+    public function getIncludedDevicesSortedDescendingByAge()
+    {
+        if (!isset($this->_includedDevicesSortedDescendingByAge))
+        {
+            $devices = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            {
+                if ($device->getAge() >= self::OLD_DEVICE_LIST)
+                {
+                    $devices[] = $device;
+                }
+            }
+            usort($devices, array(
+                                 $this,
+                                 "sortDevicesByAge"
+                            ));
+            $this->_includedDevicesSortedDescendingByAge = $devices;
+        }
+        return $this->_includedDevicesSortedDescendingByAge;
+    }
     /**
      * @return float
      */
