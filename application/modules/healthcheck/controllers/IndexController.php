@@ -57,6 +57,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     {
 //      Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS);
+        $this->getReport();
         $this->saveReport(true);
         $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
