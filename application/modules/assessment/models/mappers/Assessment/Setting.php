@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
+class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -15,12 +15,12 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Assessment_Setting';
+    protected $_defaultDbTable = 'Assessment_Model_DbTable_Assessment_Setting';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Assessment_Setting
+     * @return Assessment_Model_Mapper_Assessment_Setting
      */
     public static function getInstance ()
     {
@@ -28,10 +28,10 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Report_Setting to the database.
+     * Saves an instance of Assessment_Model_Report_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Assessment_Setting
+     * @param $object Assessment_Model_Assessment_Setting
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -56,9 +56,9 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Report_Setting to the database.
+     * Saves (updates) an instance of Assessment_Model_Report_Setting to the database.
      *
-     * @param $object     Proposalgen_Model_Assessment_Setting
+     * @param $object     Assessment_Model_Assessment_Setting
      *                    The assessment_setting model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -89,14 +89,14 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Report_Setting or the
+     *                This can either be an instance of Assessment_Model_Report_Setting or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Assessment_Setting)
+        if ($object instanceof Assessment_Model_Assessment_Setting)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -120,13 +120,13 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * @param $id int
      *            The id of the assessment_setting to find
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Assessment_Model_Assessment_Setting
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Assessment_Setting)
+        if ($result instanceof Assessment_Model_Assessment_Setting)
         {
             return $result;
         }
@@ -138,7 +138,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
+        $object = new Assessment_Model_Assessment_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -156,7 +156,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Assessment_Model_Assessment_Setting
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -166,7 +166,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
             return false;
         }
 
-        $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
+        $object = new Assessment_Model_Assessment_Setting($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Assessment_Setting[]
+     * @return Assessment_Model_Assessment_Setting[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -194,7 +194,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Assessment_Setting($row->toArray());
+            $object = new Assessment_Model_Assessment_Setting($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -220,7 +220,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     }
 
     /**
-     * @param Proposalgen_Model_Assessment_Setting $object
+     * @param Assessment_Model_Assessment_Setting $object
      *
      * @return int
      */
@@ -232,7 +232,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     /**
      * Gets the systems assesssment setting object
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Assessment_Model_Assessment_Setting
      */
     public function fetchSystemAssessmentSetting ()
     {
@@ -240,32 +240,16 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
     }
 
     /**
-     * Gets a users assesssment setting object
-     *
-     * @return Proposalgen_Model_Report_Setting
-     */
-    public function fetchHealthcheckReportSetting ($reportId)
-    {
-        $reportSetting = $this->find($reportId);
-        // If we don't have a setting yet, make a blank one
-        if (!$reportSetting)
-        {
-            $reportSetting   = new Proposalgen_Model_Report_Setting();
-            $reportSetting->id = Proposalgen_Model_Mapper_Report_Setting::getInstance()->insert($reportSetting);
-        }
-        return $reportSetting;
-    }
-    /**
      *
      * @param int $userId
      *            The user's id
      *
-     * @return Proposalgen_Model_Assessment_Setting Returns false if it could not find one.
+     * @return Assessment_Model_Assessment_Setting Returns false if it could not find one.
      */
-    public function fetchUserReportSetting ($userId)
+    public function fetchUserAssessmentSetting ($userId)
     {
         $assesssmentSetting = false;
-        $userReportSetting  = Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
+        $userReportSetting  = Assessment_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
         if ($userReportSetting)
         {
             $assesssmentSetting = $this->find($userReportSetting->reportSettingId);
@@ -274,20 +258,20 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
         // If we don't have a setting yet, make a blank one
         if (!$assesssmentSetting)
         {
-            $assesssmentSetting   = new Proposalgen_Model_Assessment_Setting();
-            $assesssmentSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assesssmentSetting);
+            $assesssmentSetting   = new Assessment_Model_Assessment_Setting();
+            $assesssmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assesssmentSetting);
 
             if ($userReportSetting)
             {
                 $userReportSetting->reportSettingId = $assesssmentSettingId;
-                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
+                Assessment_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
             }
             else
             {
-                $userReportSetting                  = new Proposalgen_Model_User_Report_Setting();
+                $userReportSetting                  = new Assessment_Model_User_Report_Setting();
                 $userReportSetting->userId          = $userId;
                 $userReportSetting->reportSettingId = $assesssmentSettingId;
-                Proposalgen_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
+                Assessment_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
             }
         }
 
@@ -300,12 +284,12 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      * @param int $assessmentId
      *            The assesssment's id
      *
-     * @return Proposalgen_Model_Assessment_Setting Returns false if it could not find one.
+     * @return Assessment_Model_Assessment_Setting Returns false if it could not find one.
      */
     public function fetchAssessmentAssessmentSetting ($assessmentId)
     {
         $assessmentSetting           = false;
-        $assessmentAssessmentSetting = Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->find($assessmentId);
+        $assessmentAssessmentSetting = Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->find($assessmentId);
         if ($assessmentAssessmentSetting)
         {
             $assessmentSetting = $this->find($assessmentAssessmentSetting->assessmentSettingId);
@@ -314,20 +298,20 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
         // If we don't have a setting yet, make a blank one
         if (!$assessmentSetting)
         {
-            $assessmentSetting   = new Proposalgen_Model_Assessment_Setting();
-            $assessmentSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
+            $assessmentSetting   = new Assessment_Model_Assessment_Setting();
+            $assessmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
 
             if ($assessmentAssessmentSetting)
             {
                 $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
-                Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->save($assessmentAssessmentSetting);
+                Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->save($assessmentAssessmentSetting);
             }
             else
             {
-                $assessmentAssessmentSetting                      = new Proposalgen_Model_Assessment_Assessment_Setting();
+                $assessmentAssessmentSetting                      = new Assessment_Model_Assessment_Assessment_Setting();
                 $assessmentAssessmentSetting->assessmentId        = $assessmentId;
                 $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
-                Proposalgen_Model_Mapper_Assessment_Assessment_Setting::getInstance()->insert($assessmentAssessmentSetting);
+                Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->insert($assessmentAssessmentSetting);
             }
         }
 
@@ -339,7 +323,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
      *
      * @param $dealerId
      *
-     * @return bool|\Proposalgen_Model_Assessment_Setting
+     * @return bool|\Assessment_Model_Assessment_Setting
      */
     public function fetchDealerAssessmentSetting ($dealerId)
     {
@@ -355,7 +339,7 @@ class Proposalgen_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstra
         {
             // Take a copy
             $assessmentSetting     = $this->fetchSystemAssessmentSetting();
-            $assessmentSetting->id = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
+            $assessmentSetting->id = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
 
             if ($dealerSetting)
             {

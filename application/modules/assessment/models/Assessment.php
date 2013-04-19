@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Assessment extends My_Model_Abstract
+class Assessment_Model_Assessment extends My_Model_Abstract
 {
     /**
      * @var int
@@ -55,16 +55,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * The report settings for this proposal
      *
-     * @var Proposalgen_Model_Assessment_Setting
+     * @var Assessment_Model_Assessment_Setting
      */
     protected $_reportSettings;
-
-    /**
-     * The report steps for this proposal
-     *
-     * @var Proposalgen_Model_Assessment_Step
-     */
-    protected $_reportSteps;
 
     /**
      * @var Quotegen_Model_Client
@@ -72,7 +65,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     protected $_client;
 
     /**
-     * @var Proposalgen_Model_Assessment_Survey
+     * @var Assessment_Model_Assessment_Survey
      */
     protected $_survey;
 
@@ -165,7 +158,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Gets the report settings for the report
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Assessment_Model_Assessment_Setting
      */
     public function getReportSettings ()
     {
@@ -180,9 +173,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Sets the report settings for the report
      *
-     * @param Proposalgen_Model_Assessment_Setting $_reportSettings
+     * @param Assessment_Model_Assessment_Setting $_reportSettings
      *
-     * @return \Proposalgen_Model_Assessment
+     * @return \Assessment_Model_Assessment
      */
     public function setReportSettings ($_reportSettings)
     {
@@ -190,39 +183,6 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
 
         return $this;
     }
-
-    /**
-     * Gets the report steps for this report
-     *
-     * @return Proposalgen_Model_Assessment_Step
-     */
-    public function getReportSteps ()
-    {
-        if (!isset($this->_reportSteps))
-        {
-            $stage = ($this->stepName) ? : Proposalgen_Model_Assessment_Step::STEP_SURVEY;
-
-            $this->_reportSteps = Proposalgen_Model_Assessment_Step::getSteps();
-            Proposalgen_Model_Assessment_Step::updateAccessibleSteps($this->_reportSteps, $stage);
-        }
-
-        return $this->_reportSteps;
-    }
-
-    /**
-     * Sets the report steps for this report
-     *
-     * @param Proposalgen_Model_Assessment_Step $ReportSteps
-     *
-     * @return \Proposalgen_Model_Assessment
-     */
-    public function setReportSteps ($ReportSteps)
-    {
-        $this->_reportSteps = $ReportSteps;
-
-        return $this;
-    }
-
 
     /**
      * Gets the client
@@ -244,7 +204,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      *
      * @param Quotegen_Model_Client $client
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Assessment_Model_Assessment
      */
     public function setClient ($client)
     {
@@ -256,13 +216,13 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Gets the survey
      *
-     * @return Proposalgen_Model_Assessment_Survey
+     * @return Assessment_Model_Assessment_Survey
      */
     public function getSurvey ()
     {
         if (!isset($this->_survey))
         {
-            $this->_survey = Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->find($this->id);
+            $this->_survey = Assessment_Model_Mapper_Assessment_Survey::getInstance()->find($this->id);
         }
 
         return $this->_survey;
@@ -271,9 +231,9 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
     /**
      * Sets the survey
      *
-     * @param Proposalgen_Model_Assessment_Survey $survey
+     * @param Assessment_Model_Assessment_Survey $survey
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Assessment_Model_Assessment
      */
     public function setSurvey ($survey)
     {
@@ -302,7 +262,7 @@ class Proposalgen_Model_Assessment extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Rms_Upload $rmsUpload
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Assessment_Model_Assessment
      */
     public function setRmsUpload ($rmsUpload)
     {

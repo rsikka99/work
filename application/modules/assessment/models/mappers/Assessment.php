@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
+class Assessment_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
 {
     /*
      * Column name definitions. Define all columns up here and use them down below.
@@ -19,12 +19,12 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Assessment';
+    protected $_defaultDbTable = 'Assessment_Model_DbTable_Assessment';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Assessment
+     * @return Assessment_Model_Mapper_Assessment
      */
     public static function getInstance ()
     {
@@ -32,10 +32,10 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Report to the database.
+     * Saves an instance of Assessment_Model_Report to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Assessment
+     * @param $object Assessment_Model_Assessment
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -60,9 +60,9 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Report to the database.
+     * Saves (updates) an instance of Assessment_Model_Report to the database.
      *
-     * @param $object     Proposalgen_Model_Assessment
+     * @param $object     Assessment_Model_Assessment
      *                    The report model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -93,14 +93,14 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Report or the
+     *                This can either be an instance of Assessment_Model_Report or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Assessment)
+        if ($object instanceof Assessment_Model_Assessment)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -124,13 +124,13 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * @param $id int
      *            The id of the report to find
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Assessment_Model_Assessment
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Assessment)
+        if ($result instanceof Assessment_Model_Assessment)
         {
             return $result;
         }
@@ -142,7 +142,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Assessment($row->toArray());
+        $object = new Assessment_Model_Assessment($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -160,7 +160,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Assessment_Model_Assessment
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -170,7 +170,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Proposalgen_Model_Assessment($row->toArray());
+        $object = new Assessment_Model_Assessment($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -190,7 +190,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL: A SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Assessment[]
+     * @return Assessment_Model_Assessment[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -198,7 +198,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Assessment($row->toArray());
+            $object = new Assessment_Model_Assessment($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -214,13 +214,13 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Assessment[]
+     * @return Assessment_Model_Assessment[]
      */
     public function fetchAllUnfinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"       => $clientId,
-                                    "{$this->col_stepName} <> ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
+                                    "{$this->col_clientId} = ?"  => $clientId,
+                                    "{$this->col_stepName} <> ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
                                ));
     }
 
@@ -229,13 +229,13 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Assessment[]
+     * @return Assessment_Model_Assessment[]
      */
     public function fetchAllFinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"      => $clientId,
-                                    "{$this->col_stepName} = ?" => Proposalgen_Model_Assessment_Step::STEP_FINISHED
+                                    "{$this->col_clientId} = ?" => $clientId,
+                                    "{$this->col_stepName} = ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
                                ));
     }
 
@@ -244,7 +244,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
      *
      * @param int $clientId
      *
-     * @return Proposalgen_Model_Assessment[]
+     * @return Assessment_Model_Assessment[]
      */
     public function fetchAllAssessmentsForClient ($clientId)
     {
@@ -264,7 +264,7 @@ class Proposalgen_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Assessment $object
+     * @param Assessment_Model_Assessment $object
      *
      * @return int
      */

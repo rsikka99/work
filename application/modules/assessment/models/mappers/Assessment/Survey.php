@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstract
+class Assessment_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
@@ -12,12 +12,12 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Proposalgen_Model_DbTable_Assessment_Survey';
+    protected $_defaultDbTable = 'Assessment_Model_DbTable_Assessment_Survey';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Proposalgen_Model_Mapper_Assessment_Survey
+     * @return Assessment_Model_Mapper_Assessment_Survey
      */
     public static function getInstance ()
     {
@@ -25,10 +25,10 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
     }
 
     /**
-     * Saves an instance of Proposalgen_Model_Assessment_Survey to the database.
+     * Saves an instance of Assessment_Model_Assessment_Survey to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Proposalgen_Model_Assessment_Survey
+     * @param $object Assessment_Model_Assessment_Survey
      *                The object to insert
      *
      * @return int The primary key of the new row
@@ -48,9 +48,9 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
     }
 
     /**
-     * Saves (updates) an instance of Proposalgen_Model_Assessment_Survey to the database.
+     * Saves (updates) an instance of Assessment_Model_Assessment_Survey to the database.
      *
-     * @param $object     Proposalgen_Model_Assessment_Survey
+     * @param $object     Assessment_Model_Assessment_Survey
      *                    The Assessment_Survey model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -81,14 +81,14 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Proposalgen_Model_Assessment_Survey or the
+     *                This can either be an instance of Assessment_Model_Assessment_Survey or the
      *                primary key to delete
      *
      * @return int The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Proposalgen_Model_Assessment_Survey)
+        if ($object instanceof Assessment_Model_Assessment_Survey)
         {
             $whereClause = array(
                 "{$this->col_reportId} = ?" => $object->reportId
@@ -112,13 +112,13 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
      * @param $id int
      *            The id of the Assessment_Survey to find
      *
-     * @return Proposalgen_Model_Assessment_Survey
+     * @return Assessment_Model_Assessment_Survey
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Proposalgen_Model_Assessment_Survey)
+        if ($result instanceof Assessment_Model_Assessment_Survey)
         {
             return $result;
         }
@@ -130,7 +130,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
             return false;
         }
         $row    = $result->current();
-        $object = new Proposalgen_Model_Assessment_Survey($row->toArray());
+        $object = new Assessment_Model_Assessment_Survey($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -148,7 +148,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return Proposalgen_Model_Assessment_Survey
+     * @return Assessment_Model_Assessment_Survey
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -158,7 +158,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
             return false;
         }
 
-        $object = new Proposalgen_Model_Assessment_Survey($row->toArray());
+        $object = new Assessment_Model_Assessment_Survey($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -178,7 +178,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Proposalgen_Model_Assessment_Survey[]
+     * @return Assessment_Model_Assessment_Survey[]
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
@@ -186,7 +186,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Proposalgen_Model_Assessment_Survey($row->toArray());
+            $object = new Assessment_Model_Assessment_Survey($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -212,7 +212,7 @@ class Proposalgen_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstrac
     }
 
     /**
-     * @param Proposalgen_Model_Assessment_Survey $object
+     * @param Assessment_Model_Assessment_Survey $object
      *
      * @return int
      */

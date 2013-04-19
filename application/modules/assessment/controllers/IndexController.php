@@ -14,7 +14,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
     protected $_mpsSession;
 
     /**
-     * @var
+     * @var Assessment_Model_Assessment
      */
     protected $_assessment;
 
@@ -32,10 +32,52 @@ class Assessment_IndexController extends Tangent_Controller_Action
         $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
     }
 
+    /**
+     * Gets the assessment we're working on
+     *
+     * @return Assessment_Model_Assessment
+     */
+    public function getAssessment ()
+    {
+        if (!isset($this->_assessment))
+        {
+            if (isset($this->_mpsSession->assessmentId))
+            {
+                $this->_assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($this->_mpsSession->assessmentId);
+            }
+            else
+            {
+                $this->_assessment = new Assessment_Model_Assessment();
+            }
 
+
+        }
+
+        return $this->_assessment;
+    }
+
+    /**
+     * Saves an assessment
+     */
+    public function saveAssessment ()
+    {
+        if (isset($this->_mpsSession->assessmentId))
+        {
+            Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
+        }
+        else
+        {
+            Assessment_Model_Mapper_Assessment::getInstance()->insert($this->_assessment);
+            $this->_mpsSession->assessmentId = $this->_assessment->id;
+        }
+    }
+
+    /**
+     * This action takes care of selecting an upload
+     */
     public function indexAction ()
     {
-
+        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD);
     }
 
     /**
@@ -49,67 +91,24 @@ class Assessment_IndexController extends Tangent_Controller_Action
          * Fetch Survey Settings
          */
         $surveySetting = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings();
-
-        $user = Application_Model_Mapper_User::getInstance()->find($this->_userId);
-
+        $user          = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
         $surveySetting->populate($user->getUserSettings()->getSurveySettings()->toArray());
 
-        $form = new Proposalgen_Form_Assessment_Survey();
 
         /**
          * Get data to populate
          */
+        $survey = $this->getAssessment()->getSurvey();
 
-        $survey = $this->getReport()->getSurvey();
-
-        if (!$survey instanceof Proposalgen_Model_Assessment_Survey)
+        if (!$survey instanceof Assessment_Model_Assessment_Survey)
         {
-            $survey = new Proposalgen_Model_Assessment_Survey();
+            $survey = new Assessment_Model_Assessment_Survey();
         }
 
 
-        $formDataFromAnswers = array();
+        $assessmentSurveyService = new Assessment_Service_Assessment_Survey($survey, $surveySetting);
+        $form                    = $assessmentSurveyService->getForm();
 
-        $formDataFromAnswers ["toner_cost_radio"]      = ($survey->costOfInkAndToner > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["toner_cost"]            = ($survey->costOfInkAndToner > 0) ? $survey->costOfInkAndToner : null;
-        $formDataFromAnswers ["labor_cost_radio"]      = ($survey->costOfLabor !== null) ? 'exact' : 'guess';
-        $formDataFromAnswers ["labor_cost"]            = ($survey->costOfLabor !== null) ? $survey->costOfLabor : null;
-        $formDataFromAnswers ["avg_purchase"]          = ($survey->costToExecuteSuppliesOrder > 0) ? $survey->costToExecuteSuppliesOrder : Proposalgen_Model_Assessment_Survey::DEFAULT_SUPPLIES_ORDER_COST;
-        $formDataFromAnswers ["it_hourlyRate"]         = ($survey->averageItHourlyRate > 0) ? $survey->averageItHourlyRate : Proposalgen_Model_Assessment_Survey::DEFAULT_IT_HOURLY_RATE;
-        $formDataFromAnswers ["itHoursRadio"]          = ($survey->hoursSpentOnIt > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["itHours"]               = ($survey->hoursSpentOnIt > 0) ? $survey->hoursSpentOnIt : null;
-        $formDataFromAnswers ["monthlyBreakdownRadio"] = ($survey->averageMonthlyBreakdowns > 0) ? 'exact' : 'guess';
-        $formDataFromAnswers ["monthlyBreakdown"]      = ($survey->averageMonthlyBreakdowns > 0) ? $survey->averageMonthlyBreakdowns : null;
-        $formDataFromAnswers ["pageCoverage_BW"]       = ($survey->pageCoverageMonochrome > 0) ? $survey->pageCoverageMonochrome : $surveySetting->pageCoverageMono;
-        $formDataFromAnswers ["pageCoverage_Color"]    = ($survey->pageCoverageColor > 0) ? $survey->pageCoverageColor : $surveySetting->pageCoverageColor;
-        $formDataFromAnswers ["printVolume"]           = ($survey->percentageOfInkjetPrintVolume > 0) ? $survey->percentageOfInkjetPrintVolume : 5;
-        $formDataFromAnswers ["repairTime"]            = ($survey->averageRepairTime > 0.0) ? $survey->averageRepairTime : 0.5;
-
-        /**
-         * Number of monthly supply orders
-         */
-        if ($survey->numberOfSupplyOrdersPerMonth > 0)
-        {
-            switch ($survey->numberOfSupplyOrdersPerMonth)
-            {
-                case Proposalgen_Model_Assessment_Survey::SUPPLY_ORDERS_DAILY :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
-                    break;
-                case Proposalgen_Model_Assessment_Survey::SUPPLY_ORDERS_WEEKLY :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Weekly";
-                    break;
-                default :
-                    $formDataFromAnswers ["inkTonerOrderRadio"] = "Times per month";
-                    $formDataFromAnswers ["numb_monthlyOrders"] = $survey->numberOfSupplyOrdersPerMonth;
-                    break;
-            }
-        }
-        else
-        {
-            $formDataFromAnswers ["inkTonerOrderRadio"] = "Daily";
-        }
-
-        $form->populate($formDataFromAnswers);
 
         /**
          * Handle our post
@@ -123,69 +122,43 @@ class Assessment_IndexController extends Tangent_Controller_Action
             }
             else
             {
-                if ($form->isValid($postData))
-                {
-                    $laborCost                             = $form->getValue('labor_cost');
-                    $survey->costOfInkAndToner             = ($form->getValue('toner_cost')) ? : new Zend_Db_Expr('NULL');
-                    $survey->costOfLabor                   = ($laborCost != null) ? $laborCost : new Zend_Db_Expr('NULL');
-                    $survey->costToExecuteSuppliesOrder    = $form->getValue('avg_purchase');
-                    $survey->averageItHourlyRate           = $form->getValue('it_hourlyRate');
-                    $survey->hoursSpentOnIt                = ($form->getValue('itHours')) ? : new Zend_Db_Expr('NULL');
-                    $survey->averageMonthlyBreakdowns      = ($form->getValue('monthlyBreakdown')) ? : new Zend_Db_Expr('NULL');
-                    $survey->pageCoverageMonochrome        = $form->getValue('pageCoverage_BW');
-                    $survey->pageCoverageColor             = $form->getValue('pageCoverage_Color');
-                    $survey->percentageOfInkjetPrintVolume = $form->getValue('printVolume');
-                    $survey->averageRepairTime             = $form->getValue('repairTime');
 
-                    /**
-                     * Number of monthly supply orders
-                     */
-                    switch ($form->getValue('inkTonerOrderRadio'))
-                    {
-                        case "Daily" :
-                            $survey->numberOfSupplyOrdersPerMonth = Proposalgen_Model_Assessment_Survey::SUPPLY_ORDERS_DAILY;
-                            break;
-                        case "Weekly" :
-                            $survey->numberOfSupplyOrdersPerMonth = Proposalgen_Model_Assessment_Survey::SUPPLY_ORDERS_WEEKLY;
-                            break;
-                        default :
-                            $survey->numberOfSupplyOrdersPerMonth = $form->getValue('numb_monthlyOrders');
-                            break;
-                    }
+                $db = Zend_Db_Table::getDefaultAdapter();
+                try
+                {
+                    $db->beginTransaction();
+                    $postData = $this->getRequest()->getPost();
 
                     // Every time we save anything related to a report, we should save it (updates the modification date)
-                    $this->saveReport();
+                    $this->saveAssessment();
 
-                    /**
-                     * Save the survey
-                     */
-                    if ($survey->reportId > 0)
+                    if ($assessmentSurveyService->save($postData, $this->getAssessment()->id))
                     {
-                        Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->save($survey);
+                        $db->commit();
+
+                        if (isset($postData ["saveAndContinue"]))
+                        {
+                            // Call the base controller to send us to the next logical step in the proposal.
+                            $this->gotoNextNavigationStep($this->_navigation);
+                        }
+                        else
+                        {
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'success' => "Your changes were saved successfully."
+                                                               ));
+                        }
                     }
                     else
                     {
-                        $survey->reportId = $this->getReport()->id;
-                        Proposalgen_Model_Mapper_Assessment_Survey::getInstance()->insert($survey);
-                    }
-
-                    if (isset($postData ["saveAndContinue"]))
-                    {
-                        // Call the base controller to send us to the next logical step in the proposal.
-                        $this->gotoNextNavigationStep($this->_navigation);
-                    }
-                    else
-                    {
-                        $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Your changes were saved successfully."
-                                                           ));
+                        $db->rollBack();
+                        $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below before continuing.'));
                     }
                 }
-                else
+                catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'Please correct the errors below before continuing.'));
+                    $db->rollBack();
+                    My_Log::logException($e);
                 }
-
             }
         }
 
@@ -193,13 +166,19 @@ class Assessment_IndexController extends Tangent_Controller_Action
         $this->view->form = $form;
     }
 
+    /**
+     * The user can set various settings here
+     */
     public function settingsAction ()
     {
-
+        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SETTINGS);
     }
 
+    /**
+     * The user can see various reports from here
+     */
     public function reportsAction ()
     {
-
+        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
     }
 }

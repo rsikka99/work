@@ -1,5 +1,5 @@
 <?php
-class Proposalgen_Model_Assessment_Survey extends My_Model_Abstract
+class Assessment_Model_Assessment_Survey extends My_Model_Abstract
 {
     const SUPPLY_ORDERS_DAILY         = 22;
     const SUPPLY_ORDERS_WEEKLY        = 4;
