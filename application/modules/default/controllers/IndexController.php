@@ -186,7 +186,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 if ($inArray->isValid($healthcheckId))
                 {
 
-                    $this->_proposalSession->healthcheckId = $healthcheckId;
+                    $this->_mpsSession->healthcheckId = $healthcheckId;
                     $this->redirector('index', 'index', 'healthcheck');
                 }
                 else
