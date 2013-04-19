@@ -50,9 +50,7 @@ CREATE  TABLE IF NOT EXISTS `clients` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 5
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 5;
 
 
 -- -----------------------------------------------------
@@ -62,9 +60,7 @@ CREATE  TABLE IF NOT EXISTS `log_types` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 6
-    DEFAULT CHARACTER SET = latin1;
+    AUTO_INCREMENT = 6;
 
 
 -- -----------------------------------------------------
@@ -84,9 +80,7 @@ CREATE  TABLE IF NOT EXISTS `logs` (
     REFERENCES `log_types` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 410
-    DEFAULT CHARACTER SET = latin1;
+    AUTO_INCREMENT = 410;
 
 
 -- -----------------------------------------------------
@@ -100,9 +94,7 @@ CREATE  TABLE IF NOT EXISTS `manufacturers` (
     PRIMARY KEY (`id`) ,
     UNIQUE INDEX `fullname` (`fullname` ASC) ,
     INDEX `displayname` (`displayname` ASC) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 27
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 27;
 
 
 -- -----------------------------------------------------
@@ -165,9 +157,7 @@ CREATE  TABLE IF NOT EXISTS `users` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
     AUTO_INCREMENT = 13
-    DEFAULT CHARACTER SET = latin1
     COMMENT = 'The users table stores basic information on a user';
 
 
@@ -194,9 +184,7 @@ CREATE  TABLE IF NOT EXISTS `rms_devices` (
     REFERENCES `rms_providers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 103
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 103;
 
 
 -- -----------------------------------------------------
@@ -287,9 +275,7 @@ CREATE  TABLE IF NOT EXISTS `rms_upload_rows` (
     REFERENCES `manufacturers` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 477
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 477;
 
 
 -- -----------------------------------------------------
@@ -317,9 +303,7 @@ CREATE  TABLE IF NOT EXISTS `device_instances` (
     FOREIGN KEY (`rmsUploadRowId` )
     REFERENCES `rms_upload_rows` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -339,9 +323,7 @@ CREATE  TABLE IF NOT EXISTS `device_instance_meters` (
     FOREIGN KEY (`deviceInstanceId` )
     REFERENCES `device_instances` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -351,9 +333,7 @@ CREATE  TABLE IF NOT EXISTS `part_types` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 3
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 3;
 
 
 -- -----------------------------------------------------
@@ -363,9 +343,7 @@ CREATE  TABLE IF NOT EXISTS `toner_colors` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 7
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 7;
 
 
 -- -----------------------------------------------------
@@ -399,9 +377,7 @@ CREATE  TABLE IF NOT EXISTS `toners` (
     REFERENCES `manufacturers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 15
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 15;
 
 
 -- -----------------------------------------------------
@@ -412,9 +388,7 @@ CREATE  TABLE IF NOT EXISTS `toner_configs` (
     `name` VARCHAR(255) NOT NULL ,
     PRIMARY KEY (`id`) ,
     UNIQUE INDEX `name` (`name` ASC) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 5
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 5;
 
 
 -- -----------------------------------------------------
@@ -455,9 +429,7 @@ CREATE  TABLE IF NOT EXISTS `master_devices` (
     REFERENCES `manufacturers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 4
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 4;
 
 
 -- -----------------------------------------------------
@@ -477,9 +449,7 @@ CREATE  TABLE IF NOT EXISTS `device_toners` (
     FOREIGN KEY (`master_device_id` )
     REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -499,9 +469,7 @@ CREATE  TABLE IF NOT EXISTS `rms_master_matchups` (
     FOREIGN KEY (`rmsProviderId` , `rmsModelId` )
     REFERENCES `rms_devices` (`rmsProviderId` , `rmsModelId` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -526,9 +494,7 @@ CREATE  TABLE IF NOT EXISTS `pricing_configs` (
     REFERENCES `part_types` (`id` )
         ON DELETE RESTRICT
         ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 6
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 6;
 
 
 -- -----------------------------------------------------
@@ -552,9 +518,7 @@ CREATE  TABLE IF NOT EXISTS `replacement_devices` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -590,9 +554,7 @@ CREATE  TABLE IF NOT EXISTS `assessments` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 2;
 
 
 -- -----------------------------------------------------
@@ -640,9 +602,7 @@ CREATE  TABLE IF NOT EXISTS `assessment_settings` (
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 2;
 
 
 -- -----------------------------------------------------
@@ -662,9 +622,7 @@ CREATE  TABLE IF NOT EXISTS `assessment_assessment_settings` (
     FOREIGN KEY (`assessmentSettingId` )
     REFERENCES `assessment_settings` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -675,9 +633,7 @@ CREATE  TABLE IF NOT EXISTS `survey_settings` (
     `pageCoverageMono` DOUBLE NULL DEFAULT NULL ,
     `pageCoverageColor` DOUBLE NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 2;
 
 
 -- -----------------------------------------------------
@@ -697,9 +653,7 @@ CREATE  TABLE IF NOT EXISTS `report_survey_settings` (
     FOREIGN KEY (`surveySettingId` )
     REFERENCES `survey_settings` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -727,9 +681,7 @@ CREATE  TABLE IF NOT EXISTS `rms_user_matchups` (
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -747,9 +699,7 @@ CREATE  TABLE IF NOT EXISTS `categories` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 5
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 5;
 
 
 -- -----------------------------------------------------
@@ -774,9 +724,7 @@ CREATE  TABLE IF NOT EXISTS `devices` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -800,9 +748,7 @@ CREATE  TABLE IF NOT EXISTS `device_configurations` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -823,9 +769,7 @@ CREATE  TABLE IF NOT EXISTS `options` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 7
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 7;
 
 
 -- -----------------------------------------------------
@@ -846,9 +790,7 @@ CREATE  TABLE IF NOT EXISTS `device_configuration_options` (
     FOREIGN KEY (`optionId` )
     REFERENCES `options` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -876,9 +818,7 @@ CREATE  TABLE IF NOT EXISTS `device_options` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -891,9 +831,7 @@ CREATE  TABLE IF NOT EXISTS `global_device_configurations` (
     FOREIGN KEY (`deviceConfigurationId` )
     REFERENCES `device_configurations` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE RESTRICT);
 
 
 -- -----------------------------------------------------
@@ -910,9 +848,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schemas` (
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
     AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'Stores information on different leasing schemas';
 
 
@@ -928,8 +864,6 @@ CREATE  TABLE IF NOT EXISTS `global_leasing_schemas` (
     REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'This table marks leasing schemas as global';
 
 
@@ -947,9 +881,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_ranges` (
     REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
     AUTO_INCREMENT = 5
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'Stores the available value ranges (start range) for a leasin';
 
 
@@ -967,9 +899,7 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_terms` (
     REFERENCES `leasing_schemas` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
     AUTO_INCREMENT = 10
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'Holds the terms available for a leasing schema';
 
 
@@ -993,8 +923,6 @@ CREATE  TABLE IF NOT EXISTS `leasing_schema_rates` (
     REFERENCES `leasing_schema_ranges` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'Stores the rates that coincide with the terms and ranges for';
 
 
@@ -1015,9 +943,7 @@ CREATE  TABLE IF NOT EXISTS `option_categories` (
     FOREIGN KEY (`optionId` )
     REFERENCES `options` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1054,9 +980,7 @@ CREATE  TABLE IF NOT EXISTS `quotes` (
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
-    ENGINE = InnoDB
     AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8
     COMMENT = 'Primary table for a quote. Stores basic information';
 
 
@@ -1086,9 +1010,7 @@ CREATE  TABLE IF NOT EXISTS `quote_devices` (
     REFERENCES `quotes` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 7
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 7;
 
 
 -- -----------------------------------------------------
@@ -1111,9 +1033,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_options` (
     REFERENCES `quote_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 14
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 14;
 
 
 -- -----------------------------------------------------
@@ -1135,9 +1055,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_configuration_options` (
     FOREIGN KEY (`quoteDeviceOptionId` )
     REFERENCES `quote_device_options` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = latin1;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1159,9 +1077,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_configurations` (
     REFERENCES `quote_devices` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 7
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 7;
 
 
 -- -----------------------------------------------------
@@ -1182,9 +1098,7 @@ CREATE  TABLE IF NOT EXISTS `quote_settings` (
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 4
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 4;
 
 
 -- -----------------------------------------------------
@@ -1204,9 +1118,7 @@ CREATE  TABLE IF NOT EXISTS `user_device_configurations` (
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE RESTRICT);
 
 
 -- -----------------------------------------------------
@@ -1224,9 +1136,7 @@ CREATE  TABLE IF NOT EXISTS `user_quote_settings` (
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `quote_settings` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = utf8;
+        ON UPDATE RESTRICT);
 
 
 -- -----------------------------------------------------
@@ -1237,9 +1147,7 @@ CREATE  TABLE IF NOT EXISTS `roles` (
     `name` VARCHAR(255) NOT NULL ,
     `systemRole` TINYINT NOT NULL DEFAULT 0 ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 5
-    DEFAULT CHARACTER SET = latin1;
+    AUTO_INCREMENT = 5;
 
 
 -- -----------------------------------------------------
@@ -1270,9 +1178,7 @@ CREATE  TABLE IF NOT EXISTS `user_roles` (
     FOREIGN KEY (`roleId` )
     REFERENCES `roles` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = latin1;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1667,9 +1573,7 @@ CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
     REFERENCES `pricing_configs` (`id` )
         ON DELETE NO ACTION
         ON UPDATE NO ACTION)
-    ENGINE = InnoDB
-    AUTO_INCREMENT = 2
-    DEFAULT CHARACTER SET = utf8;
+    AUTO_INCREMENT = 2;
 
 
 -- -----------------------------------------------------
