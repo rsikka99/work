@@ -1216,8 +1216,7 @@ CREATE  TABLE IF NOT EXISTS `sessions` (
     `lifetime` INT(11) NOT NULL ,
     `data` TEXT NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) )
-    ENGINE = InnoDB
-    DEFAULT CHARACTER SET = latin1;
+    ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
