@@ -1,5 +1,5 @@
 <?php
-class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizontal
+class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertical
 {
     /**
      * The default settings
@@ -25,7 +25,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        $this->_addClassNames('class', 'form-center-actions');
+        $this->_addClassNames('form-center-actions');
 
         $this->setMethod("POST");
 
@@ -36,26 +36,15 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
         $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
-        // Setup some form element groups
-        $generalGroup                = new stdClass();
-        $generalGroup->title         = "General";
-        $generalGroup->elements      = array();
-        $this->_formElementGroups [] = $generalGroup;
+        $customerGroup               = new stdClass();
+        $customerGroup->title        = "Customer Facing Settings";
+        $customerGroup->elements     = array();
+        $this->_formElementGroups [] = $customerGroup;
 
-        $proposalGroup               = new stdClass();
-        $proposalGroup->title        = "Assessment / Solution";
-        $proposalGroup->elements     = array();
-        $this->_formElementGroups [] = $proposalGroup;
-
-        $grossMarginGroup            = new stdClass();
-        $grossMarginGroup->title     = "Gross Margin";
-        $grossMarginGroup->elements  = array();
-        $this->_formElementGroups [] = $grossMarginGroup;
-
-        $optimization                = new stdClass();
-        $optimization->title         = "Optimization";
-        $optimization->elements      = array();
-        $this->_formElementGroups [] = $optimization;
+        $dealerGroup                 = new stdClass();
+        $dealerGroup->title          = "Dealer Settings (Not for customer eyes)";
+        $dealerGroup->elements       = array();
+        $this->_formElementGroups [] = $dealerGroup;
 
         //*****************************************************************
         // GENERAL SETTING FIELDS
@@ -83,7 +72,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
 
         $this->addElement($report_date);
 
-        $generalGroup->elements [] = $report_date;
+        $customerGroup->elements [] = $report_date;
 
         //*****************************************************************
         // PROPOSAL SETTING FIELDS
@@ -109,7 +98,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
 
         $this->addElement($pricing_margin);
-        $proposalGroup->elements [] = $pricing_margin;
+        $customerGroup->elements [] = $pricing_margin;
 
         // Average Monthly Lease Payment
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
@@ -128,7 +117,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // Default Printer Cost
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
@@ -147,7 +136,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // Leased Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
@@ -166,7 +155,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // Leased Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
@@ -185,7 +174,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // MPS Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
@@ -204,7 +193,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // MPS Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
@@ -225,7 +214,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
 
         // Energy Cost ($/KW/H)
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
@@ -244,7 +233,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
-        $proposalGroup->elements [] = $element;
+        $customerGroup->elements [] = $element;
         // Toner preference for the assessment
         $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
@@ -254,7 +243,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
 
         $this->addElement($pricing_config);
-        $proposalGroup->elements [] = $pricing_config;
+        $customerGroup->elements [] = $pricing_config;
 
         //*****************************************************************
         // GROSS MARGIN SETTING FIELDS
@@ -276,7 +265,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage);
-        $grossMarginGroup->elements [] = $actual_page_coverage;
+        $dealerGroup->elements [] = $actual_page_coverage;
 
         // Actual Page Coverage (Color)
         $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
@@ -295,7 +284,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage_color);
-        $grossMarginGroup->elements [] = $actual_page_coverage_color;
+        $dealerGroup->elements [] = $actual_page_coverage_color;
 
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
@@ -314,7 +303,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($admin_charge);
-        $grossMarginGroup->elements [] = $admin_charge;
+        $dealerGroup->elements [] = $admin_charge;
 
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
@@ -333,7 +322,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($labor_cost);
-        $grossMarginGroup->elements [] = $labor_cost;
+        $dealerGroup->elements [] = $labor_cost;
 
         // Service Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
@@ -352,7 +341,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($parts_cost);
-        $grossMarginGroup->elements [] = $parts_cost;
+        $dealerGroup->elements [] = $parts_cost;
 
         // Toner preference for the gross marginm
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
@@ -363,54 +352,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Horizon
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
 
         $this->addElement($gross_margin_pricing_config);
-        $grossMarginGroup->elements [] = $gross_margin_pricing_config;
-
-        $cost_threshold = new Zend_Form_Element_Text('costThreshold');
-        $cost_threshold->setLabel('Cost Threshold')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setDescription('$')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / month')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costThreshold));
-        $this->addElement($cost_threshold);
-        $optimization->elements [] = $cost_threshold;
-
-        $target_monochrome = new Zend_Form_Element_Text('targetMonochromeCostPerPage');
-        $target_monochrome->setLabel('Target Monochrome Cost Per Page')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setDescription('$')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetMonochromeCostPerPage, 4));
-        $this->addElement($target_monochrome);
-        $optimization->elements [] = $target_monochrome;
-
-        $target_color = new Zend_Form_Element_Text('targetColorCostPerPage');
-        $target_color->setLabel('Target Color Cost Per Page')
-            ->addValidator(new Zend_Validate_Float())
-            ->setAttrib('class', 'input-mini')
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
-            ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->targetColorCostPerPage, 4));
-        $this->addElement($target_color);
-        $optimization->elements [] = $target_color;
-
-        // Toner preference for the assessment
-        $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
-        $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
-            ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getReplacementPricingConfig() ? $this->_defaultSettings->getReplacementPricingConfig()->configName : null))
-            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        $this->addElement($replacementDeviceTonerPreference);
-        $optimization->elements [] = $replacementDeviceTonerPreference;
-
-        $target_monochrome->setLabel('Target Monochrome')
-            ->setAttrib('class', 'input-mini');
-        $target_color->setLabel('Target Color')
-            ->setAttrib('class', 'input-mini');
+        $dealerGroup->elements [] = $gross_margin_pricing_config;
 
         //*****************************************************************
         // BUTTONS

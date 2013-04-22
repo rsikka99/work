@@ -50,6 +50,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
                 $this->_assessment               = new Assessment_Model_Assessment();
                 $this->_assessment->dateCreated  = date('Y-m-d H:i:s');
                 $this->_assessment->lastModified = date('Y-m-d H:i:s');
+                $this->_assessment->reportDate   = date('Y-m-d H:i:s');
                 $this->_assessment->dealerId     = $this->_identity->dealerId;
                 $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
             }

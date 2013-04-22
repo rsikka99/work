@@ -79,16 +79,17 @@ class Assessment_Service_Assessment_Settings
 
             // Populate with initial data?
             $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_assessmentSettings->toArray()));
-            $assessmentDate = date('m/d/Y', strtotime($this->_assessment->assessmentDate));
+            $reportDate = date('m/d/Y', strtotime($this->_assessment->reportDate));
+
             $this->_form->populate(array(
-                                        'assessmentDate' => $assessmentDate
+                                        'reportDate' => $reportDate
                                    ));
 
             $this->_form->setDecorators(array(
                                              array(
                                                  'ViewScript',
                                                  array(
-                                                     'viewScript' => 'forms/settings/assessment.phtml'
+                                                     'viewScript' => 'forms/assessment/settings.phtml'
                                                  )
                                              )
                                         ));
@@ -130,8 +131,8 @@ class Assessment_Service_Assessment_Settings
         $validData = $this->validateAndFilterData($data);
         if ($validData)
         {
-            $assessmentDate                    = date('Y-m-d h:i:s', strtotime($validData ['assessmentDate']));
-            $this->_assessment->assessmentDate = $assessmentDate;
+            $reportDate                    = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
+            $this->_assessment->reportDate = $reportDate;
             Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
 
             foreach ($validData as $key => $value)
