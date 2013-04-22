@@ -16,7 +16,7 @@ class Assessment_Model_Assessment_Steps extends My_Navigation_Abstract
             'name'       => 'Upload',
             'module'     => 'assessment',
             'controller' => 'index',
-            'action'     => 'index'
+            'action'     => 'select-upload'
         ),
         self::STEP_SURVEY       => array(
             'name'       => 'Survey',
