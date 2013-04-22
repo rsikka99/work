@@ -1,0 +1,51 @@
+<?php
+/**
+ * Cost Analysis - Main Table
+ *
+ * This script contains everything for the main table of the cost analysis.
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+$costPerPageSetting = $proposal->getCostPerPageSettingForCustomer();
+$deviceInstances    = $proposal->getMonthlyHighCostPurchasedDevice($costPerPageSetting);
+
+$tcStyle = $this->styles->tables->costanalysis;
+$table   = $section->addTable($tcStyle->tablestyle);
+
+$table->addRow($tcStyle->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Device Name"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate("% Of Monthly Cost"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Monochrome AMPV"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Color AMPV"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Black CPP"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Color CPP"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText($this->translate("Estimated Monthly Cost"), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+
+foreach ($deviceInstances as $deviceInstance)
+{
+    $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+    $percentOfMonthlyCost = ($proposal->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($costPerPageSetting) / $proposal->calculateTotalMonthlyCost() * 100, 2) : 0;
+    $cycle                = ($this->cycle(array(true, false))->next()->current());
+    if ($cycle)
+    {
+        $style = $tcStyle->body->cell1->even;
+    }
+    else
+    {
+        $style = $tcStyle->body->cell1->odd;
+    }
+
+    $table->addRow($tcStyle->rowheight);
+    $cell1 = $table->addCell($tcStyle->col1Width, $style);
+    $cell1->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $cell1->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText(number_format($percentOfMonthlyCost) . "%", $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText(number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+}

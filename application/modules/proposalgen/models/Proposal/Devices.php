@@ -33,7 +33,7 @@ class Proposalgen_Model_Proposal_Devices
     public $unmappedDeviceInstances = array();
 
     /**
-     * @var Proposalgen_Model_Assessment
+     * @var Assessment_Model_Assessment
      */
     protected $_report;
 
@@ -45,14 +45,14 @@ class Proposalgen_Model_Proposal_Devices
     /**
      * Constructor
      *
-     * @param Proposalgen_Model_Assessment $report
+     * @param Assessment_Model_Assessment $assessment
      */
-    public function __construct (Proposalgen_Model_Assessment $report)
+    public function __construct (Assessment_Model_Assessment $assessment)
     {
-        $this->_report = $report;
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $report->getReportSettings()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $report->getReportSettings()->partsCostPerPage;
-        $this->_fetchAndSortAllDevices($report->getRmsUpload()->id);
+        $this->_report = $assessment;
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $assessment->getAssessmentSettings()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $assessment->getAssessmentSettings()->partsCostPerPage;
+        $this->_fetchAndSortAllDevices($assessment->getRmsUpload()->id);
     }
 
     /**
@@ -103,7 +103,7 @@ class Proposalgen_Model_Proposal_Devices
                         }
 
                         // Might as well process the overrides now too
-                        $deviceInstance->processOverrides($this->_report);
+                        $deviceInstance->processOverrides($this->_report->getAssessmentSettings()->adminCostPerPage);
                     }
                     else
                     {

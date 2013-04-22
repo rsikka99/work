@@ -334,11 +334,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
 
     /**
-     * Applies overrides to settings, device prices, toner prices
+     * Applies overrides to for cost per page
      *
-     * @param Proposalgen_Model_Assessment $report
+     * @param $adminCostPerPage
      */
-    public function processOverrides ($report)
+    public function processOverrides ($adminCostPerPage)
     {
         /**
          * Process any overrides we have on a master device
@@ -346,7 +346,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $masterDevice = $this->getMasterDevice();
         if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
         {
-            $this->getMasterDevice()->processOverrides($report);
+            $this->getMasterDevice()->processOverrides($adminCostPerPage);
         }
 
         /*
@@ -357,7 +357,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $replacementMasterDevice = $this->getReplacementMasterDevice();
             if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
             {
-                $replacementMasterDevice->processOverrides($report);
+                $replacementMasterDevice->processOverrides($adminCostPerPage);
             }
         }
     }
@@ -1159,7 +1159,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             if ($this->getIsMappedToMasterDevice())
             {
                 $deviceInstanceMasterDevice = $this->getDeviceInstanceMasterDevice();
-                $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $dealerId                   = Zend_Auth::getInstance()->getIdentity()->dealerId;
                 $this->_masterDevice        = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceInstanceMasterDevice->masterDeviceId, $dealerId, Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage, Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage);
             }
             else
@@ -1417,7 +1417,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                 }
             }
         }
-
 
 
         return $this->_customerReason;

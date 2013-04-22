@@ -1,0 +1,65 @@
+<?php
+/**
+ * Cost Analysis - Header information
+ *
+ * This script contains everything that comes before the big table of
+ * information in the cost analysis.
+ */
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+/**
+ * Variables
+ */
+// Add any variables that are needed throughout the page here.
+
+
+/**
+ * Section starts here
+ */
+
+$section->addTitle($this->translate('Gross Margin Report'));
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate('AMPV = Average Monthly Page Volume'), 'italic_text');
+
+// Table with values
+$tcStyle = $this->styles->tables->settings;
+$table = $section->addTable($tcStyle->tablestyle);
+
+$table->addRow($tcStyle->row->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('PrintIQ Black And White CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getMPSBlackAndWhiteCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle );
+$table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Total Cost:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+
+$table->addRow($tcStyle->row->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('PrintIQ Color CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getMPSColorCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Total Revenue:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginTotalMonthlyRevenue()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+
+$table->addRow($tcStyle->row->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Black And White CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginWeightedCPP()->BlackAndWhite, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Monthly Profit:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginMonthlyProfit(), 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+
+$table->addRow($tcStyle->row->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Color CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($proposal->getGrossMarginWeightedCPP()->Color, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Overall Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginOverallMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+
+$table->addRow($tcStyle->row->rowheight);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Black And White Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginBlackAndWhiteMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Color Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($proposal->getGrossMarginColorMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+
+$textRun = $section->createTextRun();
+$textRun = $section->createTextRun();
+$textRun->addText($this->translate('Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of ' . $proposal->Report->GrossMarginPricingConfig->NiceConfigName . '. For these devices the system has selected the best available alternative.'), 'italic_text', 'nospacing_centeralign');
+

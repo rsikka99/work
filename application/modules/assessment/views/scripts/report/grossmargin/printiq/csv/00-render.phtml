@@ -1,0 +1,26 @@
+<?php
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+$fh = fopen($this->savePath, "w+");
+
+
+// Please note that is is a hacked way around things. This should be done more properly with PHPExcel or fputcsv.
+
+fputs($fh,"GROSS MARGIN REPORT\n");
+fputs($fh, "AMPV = Average Monthly Page Volume\n");
+fputs($fh, "\n");
+fputs($fh, "PrintIQ Black And White CPP:,$" . $this->PrintIQ_Black_And_White_CPP . ",,,,,Total Cost:,$" . $this->Total_Cost . "\n");
+fputs($fh, "PrintIQ Color CPP:,$" . $this->PrintIQ_Color_CPP . ",,,,,Total Revenue:,$" . $this->Total_Revenue . "\n");
+fputs($fh, "Weighted Black And White CPP:,$" . $this->Weighted_Black_And_White_CPP . ",,,,,Monthly Profit:,$" . $this->Monthly_Profit . "\n");
+fputs($fh, "Weighted Color CPP:,$" . $this->Weighted_Color_CPP . ",,,,,Overall Margin:," . $this->Overall_Margin . "%\n");
+fputs($fh, "Black And White Margin:," . $this->Black_And_White_Margin . "%,,,,,Color Margin:," . $this->Color_Margin . "%\n");
+fputs($fh, "\n");
+fputs($fh, $this->fieldTitlesLvl1);
+fputs($fh, $this->fieldTitlesLvl2);
+fputs($fh, $this->fieldList);
+fputs($fh, "\n");
+fputs($fh, $this->fieldTotals);
+
+fclose($fh);
+echo $this->baseUrl($this->publicFileName);

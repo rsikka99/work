@@ -1,0 +1,1091 @@
+<?php
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+/**
+ * Styles
+ */
+$h1Color       = $this->wordStyles->default->sectionHeaderFontColor;
+$h1BorderColor = $this->wordStyles->default->sectionHeaderBorderColor;
+$h2Background  = $this->wordStyles->default->subSectionBackgroundColor;
+$h2Color       = $this->wordStyles->default->subSectionFontColor;
+
+$textHighlightColor = "0096D6";
+
+/**
+ * Document Properties
+ */
+$properties = $phpword->getProperties();
+$properties->setCreator('Demo Report');
+$properties->setCompany('Demo Report');
+$properties->setTitle('Demo Report');
+$properties->setDescription('Demo Report');
+$properties->setCategory('Demo Report');
+$properties->setLastModifiedBy('Demo Report');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Demo Report');
+$properties->setKeywords('demo, assessment, report');
+
+$titlepageSection = $phpword->createSection(array(
+                                                 'orientation'  => null,
+                                                 'marginLeft'   => 1420,
+                                                 'marginRight'  => 720,
+                                                 'marginTop'    => 720,
+                                                 'marginBottom' => 720
+                                            ));
+$section          = $phpword->createSection();
+/**
+ * Footer
+ */
+// Footer in PHPWord is not working correctly
+//$footer = $section->createFooter();
+//$footer->addText("TEXT");
+//$footer->addImage(PUBLIC_PATH . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
+
+
+/**
+ * Paragraph styles
+ */
+// Title page
+$this->phpword->addParagraphStyle('titleStyle1', array(
+                                                      'align'      => 'center',
+                                                      'spaceAfter' => 100,
+                                                      'bgColor'    => '004990'
+                                                 ));
+$this->phpword->addParagraphStyle('titleStyle2', array(
+                                                      'spaceAfter'  => 50,
+                                                      'spaceBefore' => 50,
+                                                      'bgColor'     => '4C4C4C'
+                                                 ));
+$this->phpword->addParagraphStyle('titleStyle3', array(
+                                                      'spaceAfter' => 100,
+                                                      'bgColor'    => '7F7F7F'
+                                                 ));
+$this->phpword->addFontStyle('titlepage_title', array (
+                                                      'size' => 24,
+                                                      'bold' => true,
+                                                      'color' => 'FFFFFF'
+                                                ));
+
+$this->phpword->addFontStyle('titlepage_subtitle', array (
+                                                         'size' => 16,
+                                                         'bold' => true,
+                                                         'color' => 'FFFFFF'
+                                                   ));
+
+$this->phpword->addFontStyle('titlepage_address', array (
+                                                        'size' => 12,
+                                                        'color' => 'FFFFFF'
+                                                  ));
+$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+
+$phpword->addParagraphStyle('nospacing', array(
+                                              'spaceBefore' => 0,
+                                              'spaceAfter'  => 0
+                                         ));
+
+$phpword->addParagraphStyle('nospacing_rightalign', array(
+                                                         'align'       => 'right',
+                                                         'spaceBefore' => 0,
+                                                         'spaceAfter'  => 0
+                                                    ));
+
+$phpword->addParagraphStyle('nospacing_centeralign', array(
+                                                          'align'       => 'center',
+                                                          'spaceBefore' => 0,
+                                                          'spaceAfter'  => 0
+                                                     ));
+
+$phpword->addParagraphStyle('rightalign', array(
+                                               'align' => 'right'
+                                          ));
+
+$phpword->addParagraphStyle('gradeParagraph', array(
+                                                   'align'       => 'center',
+                                                   'spaceBefore' => 0,
+                                                   'spaceAfter'  => 0
+                                              ));
+
+$phpword->addParagraphStyle('savingsParagraph', array(
+                                                     'align'       => 'center',
+                                                     'spaceBefore' => 0,
+                                                     'spaceAfter'  => 0
+                                                ));
+
+/**
+ * Font Styles
+ */
+$phpword->addFontStyle('titlepageHeaderFont', array(
+                                                   'bold' => true,
+                                                   'size' => 16
+                                              ));
+
+$phpword->addFontStyle('bold_text', array(
+                                         'bold' => true
+                                    ));
+
+$phpword->addFontStyle('bold_highlight_text', array(
+                                                   'bold'  => true,
+                                                   'color' => $h3Color
+                                              ));
+
+$phpword->addFontStyle('gradeFont', array(
+                                         'bold' => true,
+                                         'size' => 18
+                                    ));
+
+$phpword->addFontStyle('gradeTitleFont', array(
+                                              'bold' => true,
+                                              'size' => 12
+                                         ));
+
+$phpword->addFontStyle('savingsFont', array(
+                                           'bold' => true,
+                                           'size' => 11
+                                      ));
+
+$phpword->addFontStyle('savingsAmountFont', array(
+                                                 'color' => 'F0003C',
+                                                 'bold'  => true,
+                                                 'size'  => 11
+                                            ));
+
+$phpword->addFontStyle('small_italic_text', array(
+                                                 'color'  => '333333',
+                                                 'italic' => true,
+                                                 'size'   => 9
+                                            ));
+
+/**
+ * Header/Title Styles
+ */
+/**
+ * Header/Title Styles
+ */
+// H1 Style
+$phpword->addTitleStyle(1, array(
+                                'size'  => 15,
+                                'color' => $h1Color,
+                                'bold'  => true
+                           ), array(
+                                   'borderBottomSize' => 1
+                              ));
+// H2 Style #5881BC
+$phpword->addTitleStyle(2, array(
+                                'size'   => 12,
+                                'color'  => $h2Color,
+                                'bold'   => true,
+                                'italic' => true
+                           ), array(
+                                   'bgColor' => $h2Background
+                              ));
+// H3 Style #5881BC
+$phpword->addTitleStyle(3, array(
+                                'size'  => 10,
+                                'color' => $h3Color,
+                                'bold'  => true
+                           ), array(
+                                   'spaceBefore' => 100,
+                                   'spaceAfter'  => 100
+                              ));
+
+// H3 Style #5881BC
+$phpword->addFontStyle('heading3', array(
+                                        'size'  => 10,
+                                        'color' => $h3Color,
+                                        'bold'  => true
+                                   ));
+
+/**
+ * Addtional replacements table
+ */
+$addtionalReplacementsTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 3325,
+    "col2Width"  => 2325,
+    "col3Width"  => 1825,
+    "col4Width"  => 1825,
+    "header"     => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    ),
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    )
+);
+
+/**
+ * True costs table styles
+ */
+$trueCostsTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 1805.6,
+    "col2Width"  => 3611.2,
+    "col3Width"  => 3811.2,
+    "header"     => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    ),
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => array(
+                'color' => '000000',
+                'bold'  => true
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        )
+    )
+);
+
+/**
+ * Print IQ Plus Costs Table
+ */
+$printiqpluscostsTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 7020,
+    "col2Width"  => 2008,
+    "row"        => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    ),
+    "boldRow"    => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => array(
+                'bold' => true
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => array(
+                'bold' => true
+            ),
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    ),
+    "footer"     => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => array(
+                "color" => '000000',
+                'bold'  => true
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "valign" => "center"
+            ),
+            "fontStyle"      => array(
+                "color" => '000000',
+                'bold'  => true
+            ),
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    )
+);
+
+/**
+ * Print IQ Plus Summary Table
+ */
+
+$printiqplussummaryTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 5320,
+    "col2Width"  => 1369,
+    "col3Width"  => 1369,
+    "col4Width"  => 1369,
+    "header"     => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    ),
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => array(
+                'color' => '000000'
+            ),
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    ),
+    "footer"     => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => array(
+                'color' => '000000',
+                'bold'  => true
+            ),
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    )
+);
+
+/**
+ * Total Annual Savings Table
+ */
+
+$totalAnnualSavingsTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 6020,
+    "col2Width"  => 3008,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "bgColor"          => "F0F0F0",
+                "borderColor"      => "999999",
+                "borderTopSize"    => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => array(
+                "color" => '000000',
+                'bold'  => true,
+                'size'  => 12
+            ),
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "bgColor"          => "F0F0F0",
+                "borderColor"      => "999999",
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => array(
+                "color" => '000000',
+                'bold'  => true,
+                'size'  => 12
+            ),
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    )
+);
+
+/**
+ * Estimated Annual Savings table styles
+ */
+$estimatedAnnualSavingsTable = (object)array(
+    "tablestyle"      => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "headerCol1Width" => 4414,
+    "headerCol2Width" => 4614,
+    "col1Width"       => 3008,
+    "col2Width"       => 1404,
+    "col3Width"       => 3308,
+    "col4Width"       => 1304,
+    "header"          => (object)array(
+        "rowheight" => 400,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    ),
+    "body"            => (object)array(
+        "rowheight" => 200,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    ),
+    "footer"          => (object)array(
+        "rowheight" => 200,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_rightalign'
+        )
+    )
+);
+
+/**
+ * Print IQ Plus device table
+ */
+
+$printiqplusdevicesTable = (object)array(
+    "tablestyle"      => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "col1Width"       => 3300,
+    "col2Width"       => 2000,
+    "col3Width"       => 1000,
+    "col4Width"       => 1000,
+    "col5Width"       => 1000,
+    "col6Width"       => 1000,
+    "footerCol1Width" => 6300,
+    "footerCol2Width" => 1000,
+    "footerCol3Width" => 1000,
+    "footerCol4Width" => 1000,
+    "header"          => (object)array(
+        "rowheight" => 400,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell5"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell6"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    ),
+    "body"            => (object)array(
+        "rowheight" => 200,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell5"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell6"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => array(
+                'color' => '000000'
+            ),
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    ),
+    "footer"          => (object)array(
+        "rowheight" => 200,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell3"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing_centeralign'
+        ),
+        "cell4"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "fontStyle"      => array(
+                'color' => '000000',
+                'bold'  => true
+            ),
+            "paragraphStyle" => 'nospacing_centeralign'
+        )
+    )
+);
+
+/**
+ * Next Steps Table
+ */
+
+$nextStepsTable = (object)array(
+    "tablestyle" => array(
+        'cellMarginTop'    => 100,
+        'cellMarginRight'  => 100,
+        'cellMarginBottom' => 100,
+        'cellMarginLeft'   => 100
+    ),
+    "col1Width"  => 2000,
+    "col2Width"  => 7300,
+    "body"       => (object)array(
+        "rowheight" => null,
+        "cell1"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => 'bold_text',
+            "paragraphStyle" => 'nospacing'
+        ),
+        "cell2"     => (object)array(
+            "cellStyle"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "fontStyle"      => null,
+            "paragraphStyle" => null,
+            "listStyle"      => null
+        )
+    )
+);
+
+/**
+ * Setup some styles to be used across the report
+ */
+$styles = (object)array(
+    "tables" => (object)array(
+        "truecosts"              => $trueCostsTable,
+        "estimatedAnnualSavings" => $estimatedAnnualSavingsTable,
+        "totalAnnualSavings"     => $totalAnnualSavingsTable,
+        "printiqplusdevices"     => $printiqplusdevicesTable,
+        "printiqpluscosts"       => $printiqpluscostsTable,
+        "printiqplussummary"     => $printiqplussummaryTable,
+        "addtionalReplacements"  => $addtionalReplacementsTable,
+        "nextsteps"              => $nextStepsTable
+    )
+);
+
+$titledata = array(
+    "phpword"  => $phpword,
+    "section"  => $titlepageSection,
+    "proposal" => $this->proposal,
+    "styles"   => $styles,
+    "dealerLogoFile"   => $this->dealerLogoFile,
+);
+
+$data = array(
+    "phpword"  => $phpword,
+    "section"  => $section,
+    "proposal" => $this->proposal,
+    "styles"   => $styles,
+    "brandName" => 'MPSToolbox.com',
+    "companyName" => 'MPSToolbox.com'
+);
+// Actual document pages
+$this->partial("report/solution/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
+
+$this->partial("report/solution/" . $this->App()->theme . "/docx/02_yourprintiq.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/03_evaluatingthetruecost.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/04_solution1.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/05_solution2.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/06_additionalreplacements.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/07_businessprint.phtml", $data);
+$this->partial("report/solution/" . $this->App()->theme . "/docx/08_nextsteps.phtml", $data);
+
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter->save($this->savePath);
+
+echo $this->baseUrl($this->publicFileName);

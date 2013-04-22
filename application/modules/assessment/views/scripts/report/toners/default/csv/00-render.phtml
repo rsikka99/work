@@ -1,0 +1,24 @@
+<?php
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+// TODO: Save file to $this->savePath
+$fh = fopen($this->savePath, "w+");
+
+// Please note that is is a hacked way around things. This should be done more properly with PHPExcel or fputcsv.
+// FIXME: This really defeats the purpose of a CSV
+fputs($fh,"JIT Supply and Toner SKU Report\n");
+fputs($fh, "\n");
+fputs($fh, $this->fieldTitlesLvl1);
+fputs($fh, $this->fieldTitlesLvl2);
+fputs($fh, $this->fieldList);
+fputs($fh, "\n");
+fputs($fh, "\n");
+fputs($fh, $this->excludedTableTitle);
+fputs($fh, "\n");
+fputs($fh, "\n");
+fputs($fh, $this->excludedTitles);
+fputs($fh, $this->excludedValues);
+
+fclose($fh);
+echo $this->baseUrl($this->publicFileName);

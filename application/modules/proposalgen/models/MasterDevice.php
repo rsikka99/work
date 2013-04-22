@@ -195,7 +195,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (!isset($this->_dealerAttributes))
         {
 
-            $where = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId));
+            $where                   = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getWhereId(array($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId));
             $this->_dealerAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->fetch($where);
         }
 
@@ -210,46 +210,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_overridesProcessed;
 
     /**
-     * @param Proposalgen_Model_Assessment $report
+     * @param $adminCostPerPage
      */
-    public function processOverrides ($report)
+    public function processOverrides ($adminCostPerPage)
     {
         if (!$this->_overridesProcessed)
         {
-//            /*
-//             * Only apply overrides if we have a master device id. If this is an unknown device it won't have one.
-//             */
-//            if ($this->id > 0)
-//            {
-//                $userDeviceOverrideMapper = Proposalgen_Model_Mapper_UserDeviceOverride::getInstance();
-//                /*
-//                 * Check for a user override
-//                 */
-//                $deviceOverride = $userDeviceOverrideMapper->findOverrideForMasterDevice(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
-//                // Handle Toners
-//                // Toner Overrides + Margin
-//                foreach ($this->getToners() as $tonersByPartType)
-//                {
-//                    foreach ($tonersByPartType as $tonersByColor)
-//                    {
-//                        /* @var $toner Proposalgen_Model_Toner */
-//                        foreach ($tonersByColor as $toner)
-//                        {
-//                            if (!in_array($toner->sku, Proposalgen_Model_DeviceInstance::$uniqueTonerArray))
-//                            {
-//                                Proposalgen_Model_DeviceInstance::$uniqueTonerArray [] = $toner->sku;
-//                            }
-//
-//                            // Process the overrides
-//                            $toner->processOverrides($report);
-//                        }
-//                    }
-//                } // End of toners loop
-//            }
-
-
             // Admin Charge
-            $this->adminCostPerPage = $report->getReportSettings()->adminCostPerPage;
+            $this->adminCostPerPage = $adminCostPerPage;
 
             $this->_overridesProcessed = true;
         }

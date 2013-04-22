@@ -1,0 +1,20 @@
+<?php
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+
+$fh = fopen($this->savePath, "w+");
+
+
+
+fputs($fh, $this->fieldTitleList);
+fputs($fh, "\n");
+fputs($fh, "MPSToolbox.com Black And White CPP:," . $this->monochromeCPP);
+fputs($fh, "\n");
+fputs($fh, "MPSToolbox.com Color CPP:," . $this->colorCPP);
+fputs($fh, "\n");
+fputs($fh, "\n");
+fputs($fh, $this->fieldList);
+
+
+fclose($fh);
+echo $this->baseUrl($this->publicFileName);

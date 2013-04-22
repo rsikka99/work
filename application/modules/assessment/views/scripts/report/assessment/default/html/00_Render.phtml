@@ -1,0 +1,19 @@
+<?php
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/assessment/assessment_html.css"));
+?>
+<div class="container" id="htmlReportContainer">
+    <?php
+    $this->brandName = "MPSToolbox.com";
+    $this->companyName = "MPSToolbox.com";
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/01_Title.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/02_Scorecard.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/03_ServiceAndSuppliesLogistics.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/04_PrintingHardwareUsage.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/05_TechnologyReliabilityAndUserProductivity.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/06_EnvironmentalImpact.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/07_Expense.phtml');
+    echo $this->render('report/assessment/' . $this->App()->theme . '/html/08_Summary.phtml');
+    ?>
+</div>

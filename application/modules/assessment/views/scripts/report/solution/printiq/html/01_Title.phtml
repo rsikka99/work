@@ -1,0 +1,25 @@
+<?php
+/* @var $proposal Assessment_ViewModel_Assessment */
+$proposal = $this->proposal;
+    echo $this->titlePageStart;
+?>
+    <?php echo $this->noBreakStart; ?>
+        <div class="titlepage">
+        	<div class="header">
+            	<h3>Prepared for:
+            	<?php
+            		if(strlen($proposal->report->getClient()->companyName) > 26)
+            			echo "<br/>";
+            		echo $proposal->report->getClient()->companyName;
+            	?>
+            	</h3>
+            	<h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
+            </div> <!-- End div header -->
+            <div class="customerdetails">
+                <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
+            </div>
+        </div> <!-- End div titlepage -->
+    <?php echo $this->noBreakEnd; ?>
+<?php
+    echo $this->pageEnd;
+?>

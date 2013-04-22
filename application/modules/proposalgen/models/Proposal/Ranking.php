@@ -15,9 +15,9 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
      * The constructor for proposal rankings.
      * Requires a reference to a proposal object
      *
-     * @param \Proposalgen_Model_Proposal_OfficeDepot $proposal
+     * @param \Assessment_ViewModel_Assessment $proposal
      */
-    public function __construct (Proposalgen_Model_Proposal_OfficeDepot $proposal)
+    public function __construct (Assessment_ViewModel_Assessment $proposal)
     {
         $this->proposal = $proposal;
     }
@@ -63,7 +63,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
                 $rankingText .= implode(', ', $areasToImprove) . ".";
             }
 
@@ -106,7 +106,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -132,17 +132,17 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
         {
             $criteria           = $this->getRankingCriteria();
             $criteria           = $criteria ["TechnologyReliabilityAndUserProductivity"];
-            $Averageage         = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageDeviceAge(), $criteria ["Averageage"]);
+            $AverageAge         = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageDeviceAge(), $criteria ["AverageAge"]);
             $PercentITTime      = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getweeklyITHours() * 60) / $this->proposal->getDeviceCount(), $criteria ["PercentITTime"]);
             $ScanCapable        = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDeviceCount()) * 100, $criteria ["ScanCapable"]);
             $FaxCapable         = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfFaxCapableDevices() / $this->proposal->getDeviceCount()) * 100, $criteria ["FaxCapable"]);
             $ColorCapable       = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfColorCapableDevices() / $this->proposal->getDeviceCount()) * 100, $criteria ["ColorCapable"]);
             $technologyFeatures = ($ScanCapable + $FaxCapable + $ColorCapable) / 3;
-            $totalRanking       = round(((($Averageage + $PercentITTime) / 2) + $technologyFeatures) / 2, 1);
+            $totalRanking       = round(((($AverageAge + $PercentITTime) / 2) + $technologyFeatures) / 2, 1);
 
             $rankingText    = $this->getOverallRankingText($totalRanking, "technology reliability and user productivity");
             $areasToImprove = array();
-            if ($Averageage <= $totalRanking)
+            if ($AverageAge <= $totalRanking)
             {
                 $areasToImprove [] = "update its printing devices to newer, more reliable machines";
             }
@@ -157,7 +157,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -214,7 +214,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
 
             if (count($areasToImprove) > 0)
             {
-                $rankingText .= " To improve your score in this area, " . $this->proposal->report->getClient()->companyName . " could ";
+                $rankingText .= " To improve your score in this area, " . $this->proposal->assessment->getClient()->companyName . " could ";
                 foreach ($areasToImprove as $improvementText)
                 {
                     $rankingText .= $improvementText . ", ";
@@ -252,7 +252,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
             $totalRanking = round((((($LeasedBWPerPage + $LeasedColorPerPage) / 2) + (($PurchasedBWPerPage + $PurchasedColorPerPage) / 2)) / 2), 1);
 
             $rankingText = $this->getOverallRankingText($totalRanking, "expense");
-            $rankingText .= " Under the reportName program, we estimate that we can save " . $this->proposal->report->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
+            $rankingText .= " Under the reportName program, we estimate that we can save " . $this->proposal->assessment->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
 
             $this->Expense = (object)array(
                 "Rank"        => $totalRanking,
@@ -274,7 +274,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
      */
     public function getOverallRankingText ($rank, $sectionName)
     {
-        $text    = "";
+        $ratingText    = "";
         $ratings = array(
             "poor"          => 2.0,
             "below average" => 4.0,
@@ -401,7 +401,7 @@ class Proposalgen_Model_Proposal_Ranking extends Tangent_Model_Abstract
                     )
                 ),
                 "TechnologyReliabilityAndUserProductivity" => array(
-                    "Averageage"    => array(
+                    "AverageAge"    => array(
                         10 => 3.28,
                         9  => 3.65,
                         8  => 4.05,

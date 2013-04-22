@@ -187,22 +187,4 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
         $this->view->form           = $assessmentSettingsService->getForm();
         $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
     }
-
-    /**
-     * The user can see various reports from here
-     */
-    public function reportAction ()
-    {
-        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
-
-        if ($this->getRequest()->isPost())
-        {
-            $postData = $this->getRequest()->getPost();
-            if (isset($postData['goBack']))
-            {
-                $this->gotoPreviousNavigationStep($this->_navigation);
-            }
-        }
-        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK);
-    }
 }

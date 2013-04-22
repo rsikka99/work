@@ -83,7 +83,7 @@ class Proposalgen_Report_IndexController extends Proposalgen_Library_Controller_
         $reportMargin  = 1 - ((((int)$report->getReportPricingMargin())) / 100);
         $companyMargin = 1 - (((int)$dealerCompany->getDcPricingMargin()) / 100);
 
-        Proposalgen_Model_DeviceInstance::processOverrides($device, $report, $reportMargin, $companyMargin);
+        Proposalgen_Model_DeviceInstance::processOverrides($report->getAssessmentSettings()->getAdminCostPerPage);
 
         $this->view->device = $device;
         $this->_helper->layout->setLayout('blueprint');

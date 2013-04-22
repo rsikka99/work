@@ -44,9 +44,9 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
     /**
      * The current proposal
      *
-     * @var Proposalgen_Model_Proposal_OfficeDepot
+     * @var Assessment_ViewModel_Assessment
      */
-    protected $_proposal;
+    protected $_assessmentViewModel;
     protected $_csvFormat;
     protected $_pdfFormat;
     protected $_wordFormat;
@@ -152,27 +152,14 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
     {
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/htmlReport.js'));
 
-        $this->_user = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
 
-        if ($this->_reportId < 1)
+        if ($this->getAssessment()->id < 1)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                    "error" => "Please select a report first."
-                                               ));
-            // Send user to the index
-            $this->_helper->redirector('index', 'index', 'index');
-        }
+            $this->_flashMessenger->addMessage(array("error" => "Please select a report first."));
 
-        $this->_report = Proposalgen_Model_Mapper_Assessment::getInstance()->find($this->_reportId);
-        if ($this->_report === null)
-        {
-            $this->_flashMessenger->addMessage(array(
-                                                    "error" => "Please select a report first."
-                                               ));
             // Send user to the index
-            $this->_helper->redirector('index', 'index', 'index');
+            $this->redirector('index', 'index', 'index');
         }
-
 
         // Setup the different file formats
         $this->_csvFormat           = (object)array(
@@ -203,7 +190,7 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
 
         $this->view->dealerLogoFile = $this->getDealerLogoFile();
 
-        $this->view->proposal = $this->getProposal();
+        $this->view->proposal = $this->getAssessmentViewModel();
     }
 
     /**
@@ -236,24 +223,24 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
      * Gets the proposal object for reports to use
      *
      * @throws Zend_Exception
-     * @return Proposalgen_Model_Proposal_OfficeDepot
+     * @return Assessment_ViewModel_Assessment
      */
-    public function getProposal ()
+    public function getAssessmentViewModel ()
     {
-        if (!$this->_proposal)
+        if (!$this->_assessmentViewModel)
         {
-            $this->_proposal = false;
-            $hasError        = false;
+            $this->_assessmentViewModel = false;
+            $hasError                   = false;
             try
             {
-                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_report);
+                $this->_assessmentViewModel = new Assessment_ViewModel_Assessment($this->getAssessment());
 
-                if ($this->_report->devicesModified)
+                if ($this->getAssessment()->devicesModified)
                 {
                     $this->_redirect('/data/modificationwarning');
                 }
 
-                if (count($this->_proposal->getDeviceCount()) < 1)
+                if ($this->_assessmentViewModel->getDeviceCount() < 1)
                 {
                     $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
                     $hasError                     = true;
@@ -262,17 +249,16 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $this->view->ErrorMessages [] = "There was an error getting the reports.";
-                throw new Zend_Exception("Error Getting Proposal Object.", 0, $e);
-                $hasError = true;
+                throw new Zend_Exception("Error Getting Assessment View Model.", 0, $e);
             }
 
             if ($hasError)
             {
-                $this->_proposal = false;
+                $this->_assessmentViewModel = false;
             }
         }
 
-        return $this->_proposal;
+        return $this->_assessmentViewModel;
     }
 
 
