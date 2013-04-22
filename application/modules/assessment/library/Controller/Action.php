@@ -542,6 +542,7 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
         }
         else
         {
+            $this->_assessment->assessmentSettingId = $this->_assessment->getAssessmentSettings()->id;
             Assessment_Model_Mapper_Assessment::getInstance()->insert($this->_assessment);
             $this->_mpsSession->assessmentId = $this->_assessment->id;
         }

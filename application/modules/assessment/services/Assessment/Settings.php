@@ -59,7 +59,7 @@ class Assessment_Service_Assessment_Settings
         $this->_systemSettings     = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
         $this->_dealerSettings     = $dealer->getDealerSettings()->getAssessmentSettings();
         $this->_userSettings       = $user->getUserSettings()->getAssessmentSettings();
-        $this->_assessmentSettings = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($assessmentId);
+        $this->_assessmentSettings = $this->_assessment->getAssessmentSettings();
 
         // Calculate the default settings
         $this->_defaultSettings = new Assessment_Model_Assessment_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));

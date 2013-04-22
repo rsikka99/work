@@ -51,13 +51,18 @@ class Assessment_Model_Assessment extends My_Model_Abstract
      */
     public $devicesModified;
 
+    /**
+     * @var int
+     */
+    public $assessmentSettingId;
+
     // Non database fields
     /**
      * The report settings for this proposal
      *
      * @var Assessment_Model_Assessment_Setting
      */
-    protected $_reportSettings;
+    protected $_assessmentSettings;
 
     /**
      * @var Quotegen_Model_Client
@@ -134,6 +139,11 @@ class Assessment_Model_Assessment extends My_Model_Abstract
             $this->devicesModified = $params->devicesModified;
         }
 
+        if (isset($params->assessmentSettingId) && !is_null($params->assessmentSettingId))
+        {
+            $this->assessmentSettingId = $params->assessmentSettingId;
+        }
+
     }
 
     /**
@@ -152,6 +162,7 @@ class Assessment_Model_Assessment extends My_Model_Abstract
             "lastModified"        => $this->lastModified,
             "reportDate"          => $this->reportDate,
             "devicesModified"     => $this->devicesModified,
+            "assessmentSettingId" => $this->assessmentSettingId,
         );
     }
 
@@ -160,14 +171,14 @@ class Assessment_Model_Assessment extends My_Model_Abstract
      *
      * @return Assessment_Model_Assessment_Setting
      */
-    public function getReportSettings ()
+    public function getAssessmentSettings ()
     {
-        if (!isset($this->_reportSettings))
+        if (!isset($this->_assessmentSettings))
         {
-            $this->_reportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($this->id);
+            $this->_assessmentSettings = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentSetting($this->id);
         }
 
-        return $this->_reportSettings;
+        return $this->_assessmentSettings;
     }
 
     /**
@@ -177,9 +188,9 @@ class Assessment_Model_Assessment extends My_Model_Abstract
      *
      * @return \Assessment_Model_Assessment
      */
-    public function setReportSettings ($_reportSettings)
+    public function setAssessmentSettings ($_reportSettings)
     {
-        $this->_reportSettings = $_reportSettings;
+        $this->_assessmentSettings = $_reportSettings;
 
         return $this;
     }

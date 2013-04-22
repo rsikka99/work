@@ -50,7 +50,7 @@ class Preferences_Service_ReportSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form      = new Preferences_Form_ReportSetting();
+            $this->_form = new Preferences_Form_ReportSetting();
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
@@ -137,11 +137,11 @@ class Preferences_Service_ReportSetting
 
         if ($form->isValid($data))
         {
-            if($this->_form->allowsNull)
+            if ($this->_form->allowsNull)
             {
-                foreach($data as $key => $value)
+                foreach ($data as $key => $value)
                 {
-                    if($value === "")
+                    if ($value === "")
                     {
                         $data [$key] = new Zend_Db_Expr("NULL");
                     }
@@ -216,7 +216,7 @@ class Preferences_Service_ReportSetting
                 $surveySetting->id = $this->_systemReportSettings->id;
             }
 
-            Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->save($reportSetting);
+            Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($reportSetting);
             Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
 
             return true;

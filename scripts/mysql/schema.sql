@@ -522,42 +522,6 @@ CREATE  TABLE IF NOT EXISTS `replacement_devices` (
 
 
 -- -----------------------------------------------------
--- Table `assessments`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `assessments` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT ,
-    `clientId` INT NOT NULL ,
-    `dealerId` INT NOT NULL ,
-    `rmsUploadId` INT(11) NULL ,
-    `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
-    `stepName` VARCHAR(255) NULL ,
-    `dateCreated` DATETIME NOT NULL ,
-    `lastModified` DATETIME NOT NULL ,
-    `reportDate` DATETIME NULL DEFAULT NULL ,
-    `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
-    PRIMARY KEY (`id`) ,
-    INDEX `assessments_ibfk_1_idx` (`clientId` ASC) ,
-    INDEX `assessments_ibfk_2_idx` (`rmsUploadId` ASC) ,
-    INDEX `assessments_ibfk_3_idx` (`dealerId` ASC) ,
-    CONSTRAINT `assessments_ibfk_1`
-    FOREIGN KEY (`clientId` )
-    REFERENCES `clients` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `assessments_ibfk_2`
-    FOREIGN KEY (`rmsUploadId` )
-    REFERENCES `rms_uploads` (`id` )
-        ON DELETE SET NULL
-        ON UPDATE CASCADE,
-    CONSTRAINT `assessments_ibfk_3`
-    FOREIGN KEY (`dealerId` )
-    REFERENCES `dealers` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    AUTO_INCREMENT = 2;
-
-
--- -----------------------------------------------------
 -- Table `assessment_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `assessment_settings` (
@@ -606,23 +570,46 @@ CREATE  TABLE IF NOT EXISTS `assessment_settings` (
 
 
 -- -----------------------------------------------------
--- Table `assessment_assessment_settings`
+-- Table `assessments`
 -- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `assessment_assessment_settings` (
-    `assessmentId` INT(11) NOT NULL ,
-    `assessmentSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`assessmentId`) ,
-    INDEX `assessment_assessment_settings_ibfk_2_idx` (`assessmentSettingId` ASC) ,
-    CONSTRAINT `assessment_assessment_settings_ibfk_1`
-    FOREIGN KEY (`assessmentId` )
-    REFERENCES `assessments` (`id` )
+CREATE  TABLE IF NOT EXISTS `assessments` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT ,
+    `clientId` INT NOT NULL ,
+    `dealerId` INT NOT NULL ,
+    `rmsUploadId` INT(11) NULL ,
+    `userPricingOverride` TINYINT(4) NULL DEFAULT '0' ,
+    `stepName` VARCHAR(255) NULL ,
+    `dateCreated` DATETIME NOT NULL ,
+    `lastModified` DATETIME NOT NULL ,
+    `reportDate` DATETIME NULL DEFAULT NULL ,
+    `devicesModified` TINYINT(4) NULL DEFAULT '0' ,
+    `assessmentSettingId` INT NOT NULL ,
+    PRIMARY KEY (`id`) ,
+    INDEX `assessments_ibfk_1_idx` (`clientId` ASC) ,
+    INDEX `assessments_ibfk_2_idx` (`rmsUploadId` ASC) ,
+    INDEX `assessments_ibfk_3_idx` (`dealerId` ASC) ,
+    INDEX `assessments_ibfk_4_idx` (`assessmentSettingId` ASC) ,
+    CONSTRAINT `assessments_ibfk_1`
+    FOREIGN KEY (`clientId` )
+    REFERENCES `clients` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE,
-    CONSTRAINT `assessment_assessment_settings_ibfk_2`
+    CONSTRAINT `assessments_ibfk_2`
+    FOREIGN KEY (`rmsUploadId` )
+    REFERENCES `rms_uploads` (`id` )
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+    CONSTRAINT `assessments_ibfk_3`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `assessments_ibfk_4`
     FOREIGN KEY (`assessmentSettingId` )
     REFERENCES `assessment_settings` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE);
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
+    AUTO_INCREMENT = 2;
 
 
 -- -----------------------------------------------------
@@ -1122,24 +1109,6 @@ CREATE  TABLE IF NOT EXISTS `user_device_configurations` (
 
 
 -- -----------------------------------------------------
--- Table `user_quote_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `user_quote_settings` (
-    `userId` INT(11) NOT NULL ,
-    `quoteSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`userId`) ,
-    INDEX `user_quote_settings_ibfk_2_idx` (`quoteSettingId` ASC) ,
-    CONSTRAINT `user_quote_settings_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` ),
-    CONSTRAINT `user_quote_settings_ibfk_2`
-    FOREIGN KEY (`quoteSettingId` )
-    REFERENCES `quote_settings` (`id` )
-        ON DELETE RESTRICT
-        ON UPDATE RESTRICT);
-
-
--- -----------------------------------------------------
 -- Table `roles`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `roles` (
@@ -1634,27 +1603,6 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     CONSTRAINT `user_password_reset_requests_ibfk_1`
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `dealer_quote_settings`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `dealer_quote_settings` (
-    `dealerId` INT(11) NOT NULL ,
-    `quoteSettingId` INT(11) NOT NULL ,
-    PRIMARY KEY (`dealerId`) ,
-    INDEX `dealer_quote_settings_ibkf_2_idx` (`quoteSettingId` ASC) ,
-    CONSTRAINT `dealer_quote_settings_ibfk_1`
-    FOREIGN KEY (`dealerId` )
-    REFERENCES `dealers` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `dealer_quote_settings_ibfk_2`
-    FOREIGN KEY (`quoteSettingId` )
-    REFERENCES `quote_settings` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;

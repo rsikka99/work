@@ -47,7 +47,7 @@ class Proposalgen_Service_ReportSettings
     /**
      * The report
      *
-     * @var Proposalgen_Model_Assessment
+     * @var Assessment_Model_Assessment
      */
     protected $_report;
 
@@ -55,11 +55,11 @@ class Proposalgen_Service_ReportSettings
     {
         $user                  = Application_Model_Mapper_User::getInstance()->find($userId);
         $dealer                = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
-        $this->_report         = Proposalgen_Model_Mapper_Assessment::getInstance()->find($reportId);
-        $this->_systemSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
+        $this->_report         = Assessment_Model_Mapper_Assessment::getInstance()->find($reportId);
+        $this->_systemSettings = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
         $this->_dealerSettings = $dealer->getDealerSettings()->getAssessmentSettings();
         $this->_userSettings   = $user->getUserSettings()->getAssessmentSettings();
-        $this->_reportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchAssessmentAssessmentSetting($reportId);
+        $this->_reportSettings = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetch($reportId);
 
         // Calculate the default settings
         $this->_defaultSettings = new Proposalgen_Model_Assessment_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));

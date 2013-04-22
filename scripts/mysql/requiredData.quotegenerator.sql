@@ -3,7 +3,7 @@ INSERT INTO `quote_settings` (`id`, `pageCoverageMonochrome`, `pageCoverageColor
 (1, 4.5, 20, 15, 20, 2, 0.0035),
 (2, 4.5, 20, 15, 20, 2, 0.0035);
 
-INSERT INTO `dealer_quote_settings` (`dealerId`, `quoteSettingId`) VALUES
+INSERT INTO `dealer_settings` (`dealerId`,`quoteSettingId`) VALUES
 (1,1),
 (2,2);
 

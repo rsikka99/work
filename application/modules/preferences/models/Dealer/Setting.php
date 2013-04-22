@@ -128,7 +128,6 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
             }
         }
-
         return $this->_assessmentSetting;
     }
 

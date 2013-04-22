@@ -2,6 +2,7 @@
 class Assessment_IndexController extends Assessment_Library_Controller_Action
 {
     /**
+
      * This action takes care of selecting an upload
      */
     public function indexAction ()
