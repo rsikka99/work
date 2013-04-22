@@ -32,6 +32,15 @@ class Assessment_IndexController extends Tangent_Controller_Action
         $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
     }
 
+    public function postDispatch ()
+    {
+        // Render our survey menu
+        $stage = ($this->getAssessment()->stepName) ? : Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
+        $this->_navigation->updateAccessibleSteps($stage);
+
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
+    }
+
     /**
      * Gets the assessment we're working on
      *
