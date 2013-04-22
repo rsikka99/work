@@ -9,6 +9,7 @@
             <action>index</action>
             <resource>preferences__index__index</resource>
             <class>dropdown></class>
+            <visible>false</visible>
             <pages>
                 <usersettings>
                     <label>My Report Settings</label>
@@ -119,7 +120,7 @@
                             <label>Hardware Optimization</label>
                             <module>preferences</module>
                             <controller>hardwareoptimization</controller>
-                            <action>syste,</action>
+                            <action>system</action>
                             <resource>preferences__hardwareoptimization__system</resource>
                         </hardwareoptimizationsettings>
                     </pages>
