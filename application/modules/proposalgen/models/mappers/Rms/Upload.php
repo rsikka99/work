@@ -236,11 +236,20 @@ class Proposalgen_Model_Mapper_Rms_Upload extends My_Model_Mapper_Abstract
      * @param null $order
      * @param int  $count
      * @param null $offset
+     * @param bool $justCount
      *
-     * @return Proposalgen_Model_Rms_Upload[]
+     * @return Proposalgen_Model_Rms_Upload[]|int
      */
-    public function fetchAllForClient ($clientId, $order = null, $count = 25, $offset = null)
+    public function fetchAllForClient ($clientId, $order = null, $count = 25, $offset = null, $justCount = false)
     {
+        /**
+         * Send back the count
+         */
+        if ($justCount)
+        {
+            return $this->count(array("{$this->col_clientId} = ?" => $clientId));
+        }
+
         if ($order === null)
         {
             $order = "{$this->col_uploadDate} DESC";

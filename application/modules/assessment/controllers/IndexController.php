@@ -53,8 +53,6 @@ class Assessment_IndexController extends Tangent_Controller_Action
                 $this->_assessment->dealerId     = $this->_identity->dealerId;
                 $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
             }
-
-
         }
 
         return $this->_assessment;
@@ -84,6 +82,9 @@ class Assessment_IndexController extends Tangent_Controller_Action
         $this->redirector("select-upload");
     }
 
+    /**
+     * Handles selecting an rms upload
+     */
     public function selectUploadAction ()
     {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD);
@@ -91,12 +92,33 @@ class Assessment_IndexController extends Tangent_Controller_Action
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
-            if (isset($postData['saveAndContinue']))
+
+            if (isset($postData['selectRmsUploadId']))
             {
-                $this->gotoNextNavigationStep($this->_navigation);
+                $selectRmsUploadService = new Proposalgen_Service_SelectRmsUpload($this->_mpsSession->selectedClientId);
+                $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
+                if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'The Upload you selected is valid.'));
+                    $this->getAssessment()->rmsUploadId = $rmsUpload->id;
+                    $this->saveAssessment();
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                }
+            }
+
+            if ($this->getAssessment()->rmsUploadId > 0)
+            {
+                if (isset($postData['saveAndContinue']))
+                {
+                    $this->gotoNextNavigationStep($this->_navigation);
+                }
             }
         }
-        $rmsUpload                  = false;
+
+        $this->view->rmsUpload      = $this->getAssessment()->getRmsUpload();
         $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT);
     }
 

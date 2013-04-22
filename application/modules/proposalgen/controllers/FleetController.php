@@ -106,9 +106,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
     }
 
-    public function selectUploadAction ()
+    public function rmsUploadListAction ()
     {
-        $clientId = $this->_mpsSession->selectedClientId;
+        $clientId     = $this->_mpsSession->selectedClientId;
         $jqGrid       = new Tangent_Service_JQGrid();
         $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
         /*
@@ -131,7 +131,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         if ($jqGrid->sortingIsValid())
         {
-            $jqGrid->setRecordCount($uploadMapper->count(array("$uploadMapper->col_clientId = ?" => $clientId)));
+            $jqGrid->setRecordCount($uploadMapper->fetchAllForClient($clientId, null, null, null, true));
+
+
             // Validate current page number since we don't want to be out of bounds
             if ($jqGrid->getCurrentPage() < 1)
             {
@@ -144,13 +146,13 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             // Return a small subset of the results based on the jqGrid parameters
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
-            if($startRecord < 0)
+
+            if ($startRecord < 0)
             {
                 $startRecord = 0;
             }
-            $uploads     = $uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
-            $jqGrid->setRows($uploads);
+            $jqGrid->setRows($uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
             // Send back jqGrid json data
             $this->sendJson($jqGrid->createPagerResponseArray());

@@ -20,32 +20,43 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
      */
     public function indexAction ()
     {
-        //      Mark the step we're on as active
-        $navigationButtons          = Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT;
-
+        // Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
-        $report = $this->getReport();
-        if (isset($report->getRmsUpload()->id))
+        $healthcheck = $this->getReport();
+
+        if (isset($healthcheck->getRmsUpload()->id))
         {
-            $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation($navigationButtons);
-            $this->view->selectedUpload = $report->getRmsUpload();
+            $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT);
+            $this->view->rmsUpload      = $healthcheck->getRmsUpload();
         }
+
         if ($this->getRequest()->isPost())
         {
-            $values = $this->getRequest()->getPost();
-            if (isset($values["selectIds"]))
+            $postData = $this->getRequest()->getPost();
+
+            if (isset($postData['selectRmsUploadId']))
             {
-                if (is_numeric($values["selectIds"]))
+                $selectRmsUploadService = new Proposalgen_Service_SelectRmsUpload($this->_mpsSession->selectedClientId);
+                $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
+                if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                 {
-                    $this->getReport()->rmsUploadId = $values["selectIds"];
+                    $this->_flashMessenger->addMessage(array('success' => 'The Upload you selected is valid.'));
+                    $this->getReport()->rmsUploadId = $postData["selectRmsUploadId"];
                     $this->saveReport();
-                    $this->view->selectedUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($values["selectIds"]);
                     $this->gotoNextNavigationStep($this->_navigation);
                 }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                }
             }
-            else if(isset($values["saveAndContinue"]))
+
+            if ($this->getReport()->rmsUploadId > 0)
             {
-                $this->gotoNextNavigationStep($this->_navigation);
+                if (isset($postData['saveAndContinue']))
+                {
+                    $this->gotoNextNavigationStep($this->_navigation);
+                }
             }
         }
     }

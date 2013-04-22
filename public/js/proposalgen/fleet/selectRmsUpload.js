@@ -1,19 +1,13 @@
-/**
- * show_mapped holds the visibility state of the bottom jqgrid
- */
-var show_mapped = false;
-
 $(function ()
 {
-
-    /***********************************************************************************************************************************************************
-     * UNMAPPED GRID
-     **********************************************************************************************************************************************************/
-    $("#selectUploadGrid").jqGrid(
+    /**
+     * Select Upload Grid
+     */
+    $("#selectRmsUploadGrid").jqGrid(
         {
-            url       : TMTW_BASEURL + 'proposalgen/fleet/select-upload',
-            datatype  : 'json',
-            colModel  : [
+            url         : TMTW_BASEURL + 'proposalgen/fleet/rms-upload-list',
+            datatype    : 'json',
+            colModel    : [
                 {
                     width   : 10,
                     name    : 'id',
@@ -73,35 +67,33 @@ $(function ()
                     align   : 'center'
                 }
             ],
-            jsonReader: {
+            jsonReader  : {
                 repeatitems: false
             },
-            sortorder : 'asc',
-            sortname  : 'validRowCount',
-
+            sortorder   : 'asc',
+            sortname    : 'validRowCount',
             height      : 'auto',
             rowNum      : 15,
             rowList     : [ 15, 30, 50, 100 ],
-            pager       : '#selectUploadGridPager',
+            pager       : '#selectRmsUploadGridPager',
             gridComplete: function ()
             {
-
                 // Get the grid object (cache in variable)
                 var grid = $(this);
                 var ids = grid.getDataIDs();
-                var selectedUploadId = $("#selectIds").val();
+                var selectedUploadId = $("#selectedRmsUploadId").val();
                 for (var i = 0; i < ids.length; i++)
                 {
-                    // Get the data so we can use and manipualte it.
+                    // Get the data so we can use and manipulate it.
                     var row = grid.getRowData(ids[i]);
 
-                    if(selectedUploadId != row.id)
+                    if (selectedUploadId != row.id)
                     {
-                        row.action = '<input title="Select Upload" type="button" style="width:100%" class="selectUpload btn btn-small btn-primary" onclick="javascript: selectValue(' + row.id + ');" upload-id="' + row.id + '" value="Select" />';
+                        row.action = '<button title="Select Upload" type="submit" name="selectRmsUploadId" class="btn btn-small btn-block btn-primary" value="' + row.id + '">Select</button>';
                     }
                     else
                     {
-                        row.action = '<input title="Select Upload" type="button" style="width:100%" class="selectUpload btn btn-small btn-success" onclick="javascript: selectValue(' + row.id + ');" upload-id="' + row.id + '" value="Selected" />';
+                        row.action = '<button title="Selected" type="button" disabled="disabled" class="btn btn-small btn-block btn-success" value="-1">Selected</button>';
                     }
                     grid.setRowData(ids[i], row);
                 }
@@ -111,8 +103,3 @@ $(function ()
 
 
 });
-function selectValue($value){
-//    $("#selectIds").val($(this).data("upload-id"));
-    $("#selectIds").val($value);
-    $("#selectUpload").submit();
-};
