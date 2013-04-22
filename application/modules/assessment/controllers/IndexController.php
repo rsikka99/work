@@ -1,95 +1,12 @@
 <?php
-class Assessment_IndexController extends Tangent_Controller_Action
+class Assessment_IndexController extends Assessment_Library_Controller_Action
 {
-    /**
-     * The Zend_Auth identity
-     *
-     * @var stdClass
-     */
-    protected $_identity;
-
-    /**
-     * @var Zend_Session_Namespace
-     */
-    protected $_mpsSession;
-
-    /**
-     * @var Assessment_Model_Assessment
-     */
-    protected $_assessment;
-
-    /**
-     * The navigation steps
-     *
-     * @var Assessment_Model_Assessment_Steps
-     */
-    protected $_navigation;
-
-    public function init ()
-    {
-        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
-        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
-        $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
-    }
-
-    public function postDispatch ()
-    {
-        // Render our survey menu
-        $stage = ($this->getAssessment()->stepName) ? : Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
-        $this->_navigation->updateAccessibleSteps($stage);
-
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
-    }
-
-    /**
-     * Gets the assessment we're working on
-     *
-     * @return Assessment_Model_Assessment
-     */
-    public function getAssessment ()
-    {
-        if (!isset($this->_assessment))
-        {
-            if (isset($this->_mpsSession->assessmentId) && $this->_mpsSession->assessmentId > 0)
-            {
-                $this->_assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($this->_mpsSession->assessmentId);
-            }
-            else
-            {
-                $this->_assessment               = new Assessment_Model_Assessment();
-                $this->_assessment->dateCreated  = date('Y-m-d H:i:s');
-                $this->_assessment->lastModified = date('Y-m-d H:i:s');
-                $this->_assessment->reportDate   = date('Y-m-d H:i:s');
-                $this->_assessment->dealerId     = $this->_identity->dealerId;
-                $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
-            }
-        }
-
-        return $this->_assessment;
-    }
-
-    /**
-     * Saves an assessment
-     */
-    public function saveAssessment ()
-    {
-        if (isset($this->_mpsSession->assessmentId) && $this->_mpsSession->assessmentId > 0)
-        {
-            Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
-        }
-        else
-        {
-            Assessment_Model_Mapper_Assessment::getInstance()->insert($this->_assessment);
-            $this->_mpsSession->assessmentId = $this->_assessment->id;
-        }
-    }
-
     /**
      * This action takes care of selecting an upload
      */
     public function indexAction ()
     {
-        $this->redirector("select-upload");
+        $this->redirectToLatestStep();
     }
 
     /**
@@ -109,9 +26,10 @@ class Assessment_IndexController extends Tangent_Controller_Action
                 $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
                 if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                 {
-                    $this->_flashMessenger->addMessage(array('success' => 'The Upload you selected is valid.'));
                     $this->getAssessment()->rmsUploadId = $rmsUpload->id;
+                    $this->updateAssessmentStepName();
                     $this->saveAssessment();
+                    $this->gotoNextNavigationStep($this->_navigation);
                 }
                 else
                 {
@@ -182,6 +100,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
                     $postData = $this->getRequest()->getPost();
 
                     // Every time we save anything related to a report, we should save it (updates the modification date)
+                    $this->updateAssessmentStepName();
                     $this->saveAssessment();
 
                     if ($assessmentSurveyService->save($postData, $this->getAssessment()->id))
@@ -195,9 +114,7 @@ class Assessment_IndexController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Your changes were saved successfully."
-                                                               ));
+                            $this->_flashMessenger->addMessage(array('success' => "Your changes were saved successfully."));
                         }
                     }
                     else
@@ -238,7 +155,11 @@ class Assessment_IndexController extends Tangent_Controller_Action
                 $postData = $this->getRequest()->getPost();
                 if ($assessmentSettingsService->update($postData))
                 {
+                    $this->updateAssessmentStepName();
+                    $this->saveAssessment();
+
                     $db->commit();
+
                     if (isset($postData['saveAndContinue']))
                     {
                         $this->gotoNextNavigationStep($this->_navigation);
