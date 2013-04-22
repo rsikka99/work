@@ -458,9 +458,6 @@ table.quoteDeviceTable tr.optionRow td {
 #surveyNavbar.affix {
   top: 40px;
 }
-#assessmentMenu {
-  margin-bottom: 0;
-}
 #selectReportMenu {
   margin-bottom: 15px;
 }
@@ -666,4 +663,7 @@ tr.lowProfitDevice td {
   font-weight: bold;
   color: white;
   background-color: red;
+}
+#navigationMenu {
+  margin-bottom: 0;
 }

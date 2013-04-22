@@ -12,7 +12,7 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
         $html = array();
         if ($steps !== null)
         {
-            $html [] = '<ul class="nav nav-tabs" id="assessmentMenu">';
+            $html [] = '<ul class="nav nav-tabs" id="navigationMenu">';
 
             foreach ($steps as $step)
             {
