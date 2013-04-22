@@ -6,17 +6,17 @@ $proposal = $this->proposal;
     <div class="header">
         <h3>Prepared for:
             <?php
-            if (strlen($proposal->report->getClient()->companyName) > 26)
+            if (strlen($proposal->assessment->getClient()->companyName) > 26)
             {
                 echo "<br/>";
             }
 
-            echo $proposal->report->getClient()->companyName;
+            echo $proposal->assessment->getClient()->companyName;
             ?>
         </h3>
         <h3><?php echo $proposal->getDateReportPrepared() ; ?></h3>
     </div>
     <div class="customerdetails">
-        <p><?php echo nl2br($proposal->report->getClient()->getAddress()); ?></p>
+        <p><?php echo nl2br($proposal->assessment->getClient()->getAddress()); ?></p>
     </div>
 </div>

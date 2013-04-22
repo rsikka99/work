@@ -90,7 +90,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 
 <div class="center">
     <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of
-        <strong><?php echo $proposal->report->getReportSettings()->getGrossMarginPricingConfig()->getNiceConfigName(); ?></strong>. <br /> For these devices the
+        <strong><?php echo $proposal->assessment->getAssessmentSettings()->getGrossMarginPricingConfig()->getNiceConfigName(); ?></strong>. <br /> For these devices the
         system has selected the best available alternative.</em>
     <br /><br />
 </div>

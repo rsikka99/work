@@ -61,5 +61,5 @@ $table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addTe
 
 $textRun = $section->createTextRun();
 $textRun = $section->createTextRun();
-$textRun->addText($this->translate('Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of ' . $proposal->report->getReportSettings()->getGrossMarginPricingConfig()->getNiceConfigName() . '. For these devices the system has selected the best available alternative.'), 'italic_text', 'nospacing_centeralign');
+$textRun->addText($this->translate('Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of ' . $proposal->assessment->getAssessmentSettings()->getGrossMarginPricingConfig()->getNiceConfigName() . '. For these devices the system has selected the best available alternative.'), 'italic_text', 'nospacing_centeralign');
 

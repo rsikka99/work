@@ -19,11 +19,11 @@ $cell = $table->addCell(5818);
 $cell->addTextBreak(3);
 $cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/smartassessment.jpg");
 $cell->addTextBreak(5);
-$cell->addText($this->translate('Prepared For:') . " " . $proposal->report->getClient()->companyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$cell->addText($this->translate('Prepared For:') . " " . $proposal->assessment->getClient()->companyName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addText($proposal->getDateReportPrepared(), 'titlepageHeaderFont', 'titlepageHeaderParagraph');
 $cell->addTextBreak(4);
 // Parse the address
-$addressLines = explode("\n", $proposal->report->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressLines = explode("\n", $proposal->assessment->getClient()->getAddress()->getFullAddressMultipleLines());
 foreach ( $addressLines as $line )
 {
     $cell->addText($line, null, 'nospacing');

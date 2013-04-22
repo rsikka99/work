@@ -1,5 +1,4 @@
 <?php
-
 class Assessment_Report_SolutionController extends Assessment_Library_Controller_Action
 {
 
@@ -10,8 +9,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
      */
     public function indexAction ()
     {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_FINISHED);
+        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
@@ -19,7 +17,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
         $this->view->availableReports->Solution->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/report_solution/generate/format/docx" => $this->_wordFormat
+            "/assessment/report_solution/generate/format/docx" => $this->_wordFormat
         );
 
         try

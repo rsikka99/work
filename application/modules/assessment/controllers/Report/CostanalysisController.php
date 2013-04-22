@@ -158,6 +158,6 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                                         "|",
                                         "~",
                                         "`"
-                                   ), "_", $proposal->report->CustomerCompanyName);
+                                   ), "_", $proposal->assessment->CustomerCompanyName);
     }
 }

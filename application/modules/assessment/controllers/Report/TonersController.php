@@ -8,10 +8,10 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->Toners->active = true;
+        $this->view->availableReports->JITSupplyAndTonerSku->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/report_toners/generate/format/csv" => $this->_csvFormat,
+            "/assessment/report_toners/generate/format/csv" => $this->_csvFormat,
         );
 
         try

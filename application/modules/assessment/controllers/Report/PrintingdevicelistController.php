@@ -12,8 +12,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->availableReports->PrintingDeviceList->active = true;
 
         $this->view->formats = array(
-            "/proposalgen/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
-            "/proposalgen/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
+            "/assessment/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
+            "/assessment/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
         );
         try
         {

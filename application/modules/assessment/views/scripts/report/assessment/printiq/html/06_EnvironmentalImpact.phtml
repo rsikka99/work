@@ -15,7 +15,7 @@ $graphs = $proposal->getGraphs();
 <br />
 <div class="pheader">Energy Consumption</div>
 <?php if ($proposal->getPercentageOfDevicesReportingPower() > $proposal->getDevicesReportingPowerThreshold()) {?>
-<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->report->getReportSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
+<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
 <p>The following lists the devices with the highest average power consumption per month.</p>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>

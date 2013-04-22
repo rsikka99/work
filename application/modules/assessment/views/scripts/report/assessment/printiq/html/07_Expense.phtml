@@ -54,7 +54,7 @@ $proposal = $this->proposal;
         <td class="right"><?php echo number_format($proposal->getPageCounts()->Leased->Color->Yearly); ?></td>
     </tr>
     <tr>
-        <td>Estimated annual total lease payments<br/><em>Based on $<?php echo number_format($proposal->report->getReportSettings()->monthlyLeasePayment); ?> per month per device</em></td>
+        <td>Estimated annual total lease payments<br/><em>Based on $<?php echo number_format($proposal->assessment->getAssessmentSettings()->monthlyLeasePayment); ?> per month per device</em></td>
        
         <td class="right">$<?php echo number_format($proposal->getCombinedAnnualLeasePayments()); ?></td>
     </tr>
@@ -129,7 +129,7 @@ $proposal = $this->proposal;
         <td class="right">&nbsp;</td>
     </tr>
      <tr>
-        <td style="width: 565px;"><strong>Total estimated annual cost of hardware purchases</strong><br/><em>Based on the age of your devices and an average purchase price of $<?php echo number_format($proposal->report->getReportSettings()->defaultPrinterCost)?>.</em></td>
+        <td style="width: 565px;"><strong>Total estimated annual cost of hardware purchases</strong><br/><em>Based on the age of your devices and an average purchase price of $<?php echo number_format($proposal->assessment->getAssessmentSettings()->defaultPrinterCost)?>.</em></td>
         <td style="width: 80px;" class="right bold">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases()); ?></td>
     </tr>
      <tr>

@@ -239,6 +239,6 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                                         "|",
                                         "~",
                                         "`"
-                                   ), "_", $proposal->report->CustomerCompanyName);
+                                   ), "_", $proposal->assessment->CustomerCompanyName);
     }
 }

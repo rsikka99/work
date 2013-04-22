@@ -58,7 +58,7 @@ $proposal = $this->proposal;
         <td class="right">$<?php echo number_format($proposal->calculateTotalCostOfColorPagesAnnually()); ?></td>
     </tr>
     <tr>
-        <td>Annual internal administration cost<br/><em>Processing 1 invoice/month @ <?php echo $this->currency($proposal->report->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em></td>
+        <td>Annual internal administration cost<br/><em>Processing 1 invoice/month @ <?php echo $this->currency($proposal->assessment->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em></td>
         <td class="right">$<?php echo number_format($proposal->getInternalAdminCost()) ?></td>
     </tr>
     <tr>

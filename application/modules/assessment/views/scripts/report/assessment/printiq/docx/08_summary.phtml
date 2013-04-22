@@ -85,7 +85,7 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $t
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText($this->translate('Annual internal administration cost'), null, 'nospacing');
-$cell->addText(sprintf($this->translate('Processing 1 invoice/month @ %1$s/invoice'), $this->currency($proposal->report->getSurvey()->costToExecuteSuppliesOrder)), 'small_italic_text', 'nospacing');
+$cell->addText(sprintf($this->translate('Processing 1 invoice/month @ %1$s/invoice'), $this->currency($proposal->assessment->getSurvey()->costToExecuteSuppliesOrder)), 'small_italic_text', 'nospacing');
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($proposal->getInternalAdminCost()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);

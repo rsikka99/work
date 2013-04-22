@@ -141,7 +141,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
 						<td class="right">$<?php echo number_format(($proposal->getLeftOverColorPageCount() * $proposal->getMPSColorCPP()),0)?></td>
 					</tr>
 					<tr>
-						<td>Processing 1 invoice/month @ <?php echo $this->currency($proposal->report->getSurvey()->costToExecuteSuppliesOrder); ?></td>
+						<td>Processing 1 invoice/month @ <?php echo $this->currency($proposal->assessment->getSurvey()->costToExecuteSuppliesOrder); ?></td>
 						<td class="right">$<?php echo number_format($proposal->getInternalAdminCost()); ?></td>
 					</tr>
 					<tr>

@@ -2,7 +2,7 @@
 /* @var $proposal Assessment_ViewModel_Assessment */
 $proposal = $this->proposal;
 $costPerPageSettings = $proposal->getCostPerPageSettingForCustomer();
-$reportMargin = $proposal->report->getReportSettings()->assessmentReportMargin;
+$reportMargin = $proposal->assessment->getAssessmentSettings()->assessmentReportMargin;
 $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDeviceInstances));
 ?>
 <style>
@@ -32,15 +32,15 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
     <tbody>
     <tr>
         <td>Report Margin</td>
-        <td><?php echo number_format($proposal->report->getReportSettings()->assessmentReportMargin); ?>%</td>
+        <td><?php echo number_format($proposal->assessment->getAssessmentSettings()->assessmentReportMargin); ?>%</td>
     </tr>
     <tr>
         <td>Monochrome Page Coverage</td>
-        <td><?php echo number_format($proposal->report->getSurvey()->pageCoverageMonochrome); ?>%</td>
+        <td><?php echo number_format($proposal->assessment->getSurvey()->pageCoverageMonochrome); ?>%</td>
     </tr>
     <tr>
         <td>Color Page Coverage</td>
-        <td><?php echo number_format($proposal->report->getSurvey()->pageCoverageColor); ?>%</td>
+        <td><?php echo number_format($proposal->assessment->getSurvey()->pageCoverageColor); ?>%</td>
     </tr>
 
     <tr>
