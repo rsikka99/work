@@ -215,19 +215,44 @@ class Assessment_IndexController extends Tangent_Controller_Action
     {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SETTINGS);
 
+        $assessment                = $this->getAssessment();
+        $assessmentSettingsService = new Assessment_Service_Assessment_Settings($assessment->id, $this->_identity->id, $this->_identity->dealerId);
+
+
         if ($this->getRequest()->isPost())
         {
-            $postData = $this->getRequest()->getPost();
-            if (isset($postData['saveAndContinue']))
+            $db = Zend_Db_Table::getDefaultAdapter();
+            try
             {
-                $this->gotoNextNavigationStep($this->_navigation);
+                $db->beginTransaction();
+                $postData = $this->getRequest()->getPost();
+                if ($assessmentSettingsService->update($postData))
+                {
+                    $db->commit();
+                    if (isset($postData['saveAndContinue']))
+                    {
+                        $this->gotoNextNavigationStep($this->_navigation);
+                    }
+                    else if (isset($postData['goBack']))
+                    {
+                        $this->gotoPreviousNavigationStep($this->_navigation);
+                    }
+                }
+                else
+                {
+                    $db->rollBack();
+                    $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
+                }
             }
-            else if (isset($postData['goBack']))
+            catch (Exception $e)
             {
-                $this->gotoPreviousNavigationStep($this->_navigation);
+                $db->rollBack();
+                $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
+                My_Log::logException($e);
             }
         }
 
+        $this->view->form           = $assessmentSettingsService->getForm();
         $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
     }
 

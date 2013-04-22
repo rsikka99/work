@@ -12,7 +12,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     public $assessmentSettingId;
 
     /**
-     * @var Proposalgen_Model_Assessment_Setting
+     * @var Assessment_Model_Assessment_Setting
      */
     protected $_assessmentSetting;
 
@@ -109,7 +109,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     /**
      * Gets the assessment settings
      *
-     * @return Proposalgen_Model_Assessment_Setting
+     * @return Assessment_Model_Assessment_Setting
      */
     public function getAssessmentSettings ()
     {
@@ -117,7 +117,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         {
             $this->_assessmentSetting = Assessment_Model_Mapper_Assessment_Setting::getInstance()->find($this->assessmentSettingId);
 
-            if (!$this->_assessmentSetting instanceof Proposalgen_Model_Assessment_Setting)
+            if (!$this->_assessmentSetting instanceof Assessment_Model_Assessment_Setting)
             {
                 // Insert a new copy of the system setting
                 $this->_assessmentSetting = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
