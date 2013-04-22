@@ -30,7 +30,10 @@ INSERT INTO `roles` VALUES
 (8, 'Client Administrator', 0),
 (9, 'Lease Rate Administrator', 0),
 (10, 'Hardware Optimization User', 0),
-(11, 'Healthcheck User', 0);
+(11, 'Healthcheck User', 0),
+(12, 'Healthcheck Administrator', 0),
+(13, 'Hardware Optimization Administrator', 0);
+
 
 /* Add roles to users */
 INSERT INTO `user_roles` (`userId`, `roleId`) VALUES

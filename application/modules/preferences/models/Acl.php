@@ -8,6 +8,7 @@ class Preferences_Model_Acl
     const RESOURCE_PREFERENCES_INDEX_INDEX     = "preferences__index__index";
     const RESOURCE_PREFERENCES_INDEX_USER     = "preferences__index__user";
     const RESOURCE_PREFERENCES_INDEX_DEALER     = "preferences__index__dealer";
+    const RESOURCE_PREFERENCES_INDEX_SYSTEM     = "preferences__index__system";
     const RESOURCE_PREFERENCES_PROPOSAL_DEALER = "preferences__proposal__dealer";
     const RESOURCE_PREFERENCES_PROPOSAL_USER   = "preferences__proposal__user";
     const RESOURCE_PREFERENCES_PROPOSAL_SYSTEM = "preferences__proposal__system";
@@ -17,6 +18,9 @@ class Preferences_Model_Acl
     const RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM    = "preferences__healthcheck__system";
     const RESOURCE_PREFERENCES_HEALTHCHECK_USER    = "preferences__healthcheck__user";
     const RESOURCE_PREFERENCES_HEALTHCHECK_DEALER    = "preferences__healthcheck__dealer";
+    const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM    = "preferences__hardwareoptimization__system";
+    const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER    = "preferences__hardwareoptimization__user";
+    const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER    = "preferences__hardwareoptimization__dealer";
 
     /**
      * Sets up acl resources and access for a module
@@ -43,6 +47,7 @@ class Preferences_Model_Acl
         $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_INDEX);
         $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_DEALER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_INDEX_SYSTEM);
         $acl->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_DEALER);
         $acl->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM);
@@ -52,6 +57,9 @@ class Preferences_Model_Acl
         $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM);
         $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER);
     }
 
     /**
@@ -80,10 +88,24 @@ class Preferences_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Healthcheck User
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_HEALTHCHECK_USER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        // Healthcheck Administrator
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_ADMIN, self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        // Hardware Optimization User
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_OPTIMIZATION_USER, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        // Hardware Optimization Administrator
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_OPTIMIZATION_ADMIN, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        // System Admin
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_INDEX_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+
     }
 
 }

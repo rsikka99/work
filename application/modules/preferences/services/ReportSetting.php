@@ -34,7 +34,7 @@ class Preferences_Service_ReportSetting
      */
     public function __construct ($defaultSettings = null)
     {
-        $this->_systemReportSettings = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->find(1);
+        $this->_systemReportSettings = Assessment_Model_Mapper_Assessment_Setting::getInstance()->find(1);
         $this->_systemSurveySettings = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->find(1);
         $this->_defaultSettings      = $defaultSettings;
     }

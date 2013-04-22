@@ -5,19 +5,21 @@ class Application_Model_Acl extends Zend_Acl
     /**
      * Roles
      */
-    const ROLE_GUEST                      = "-1";
-    const ROLE_AUTHENTICATED_USER         = "0";
-    const ROLE_SYSTEM_ADMIN               = "1";
-    const ROLE_ASSESSMENT_ADMIN           = "2";
-    const ROLE_ASSESSMENT_USER            = "3";
-    const ROLE_QUOTE_ADMIN                = "4";
-    const ROLE_QUOTE_USER                 = "5";
-    const ROLE_DEALER_ADMIN               = "6";
-    const ROLE_HARDWARE_ADMIN             = "7";
-    const ROLE_CLIENT_ADMIN               = "8";
-    const ROLE_LEASERATE_ADMIN            = "9";
-    const ROLE_HARDWARE_OPTIMIZATION_USER = "10";
-    const ROLE_HEALTHCHECK_USER           = "11";
+    const ROLE_GUEST                       = "-1";
+    const ROLE_AUTHENTICATED_USER          = "0";
+    const ROLE_SYSTEM_ADMIN                = "1";
+    const ROLE_ASSESSMENT_ADMIN            = "2";
+    const ROLE_ASSESSMENT_USER             = "3";
+    const ROLE_QUOTE_ADMIN                 = "4";
+    const ROLE_QUOTE_USER                  = "5";
+    const ROLE_DEALER_ADMIN                = "6";
+    const ROLE_HARDWARE_ADMIN              = "7";
+    const ROLE_CLIENT_ADMIN                = "8";
+    const ROLE_LEASERATE_ADMIN             = "9";
+    const ROLE_HARDWARE_OPTIMIZATION_USER  = "10";
+    const ROLE_HEALTHCHECK_USER            = "11";
+    const ROLE_HEALTHCHECK_ADMIN           = "12";
+    const ROLE_HARDWARE_OPTIMIZATION_ADMIN = "13";
 
     /**
      * Resource parameters
@@ -76,12 +78,14 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_QUOTE_USER, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_QUOTE_ADMIN, self::ROLE_QUOTE_USER);
         $this->addRole(self::ROLE_DEALER_ADMIN, self::ROLE_AUTHENTICATED_USER);
-        $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_ASSESSMENT_ADMIN, self::ROLE_QUOTE_ADMIN));
         $this->addRole(self::ROLE_CLIENT_ADMIN, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_HARDWARE_ADMIN, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_LEASERATE_ADMIN, self::ROLE_AUTHENTICATED_USER);
         $this->addRole(self::ROLE_HEALTHCHECK_USER, self::ROLE_ASSESSMENT_USER);
         $this->addRole(self::ROLE_HARDWARE_OPTIMIZATION_USER, self::ROLE_ASSESSMENT_USER);
+        $this->addRole(self::ROLE_HEALTHCHECK_ADMIN, self::ROLE_HEALTHCHECK_USER);
+        $this->addRole(self::ROLE_HARDWARE_OPTIMIZATION_ADMIN, self::ROLE_HARDWARE_OPTIMIZATION_USER);
+        $this->addRole(self::ROLE_SYSTEM_ADMIN, array(self::ROLE_ASSESSMENT_ADMIN, self::ROLE_QUOTE_ADMIN,self::ROLE_HARDWARE_OPTIMIZATION_ADMIN,self::ROLE_HEALTHCHECK_ADMIN));
 
 
         // Resources and access is defined in module ACL models
