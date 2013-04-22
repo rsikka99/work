@@ -33,8 +33,8 @@ class Assessment_Model_Assessment_Steps extends My_Navigation_Abstract
         self::STEP_FINISHED     => array(
             'name'       => 'Reports',
             'module'     => 'assessment',
-            'controller' => 'index',
-            'action'     => 'report'
+            'controller' => 'report_index',
+            'action'     => 'index'
         )
     );
 
