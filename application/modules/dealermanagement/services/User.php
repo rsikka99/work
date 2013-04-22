@@ -136,6 +136,7 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
         $success        = false;
         $userMapper     = Application_Model_Mapper_User::getInstance();
         $userRoleMapper = Admin_Model_Mapper_UserRole::getInstance();
+        $roleMapper     = Admin_Model_Mapper_Role::getInstance();
         $user           = $userMapper->find($id);
 
         if ($user)
@@ -162,7 +163,7 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                     $user->password = $user->cryptPassword($filteredData['password']);
                 }
 
-                $rowsAffected = $userMapper->save($user);
+                $userMapper->save($user);
 
                 $userRoles = $user->getUserRoles();
 
@@ -178,7 +179,11 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
 
                     if (!in_array($userRole->roleId, $filteredData['userRoles']))
                     {
-                        $userRoleMapper->delete($userRole);
+                        $role = $roleMapper->find($userRole->roleId);
+                        if (!$role->systemRole)
+                        {
+                            $userRoleMapper->delete($userRole);
+                        }
                     }
                 }
 

@@ -251,7 +251,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $currentUserRoles [] = $userRole->roleId;
         }
 
-        // If the user doesn't exist, send them back t the view all users page
+        // If the user doesn't exist, send them back to the view all users page
         if (!$user)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
