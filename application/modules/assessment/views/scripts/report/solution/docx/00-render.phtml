@@ -50,33 +50,33 @@ $section          = $phpword->createSection();
  * Paragraph styles
  */
 // Title page
-$this->phpword->addParagraphStyle('titleStyle1', array(
+$phpword->addParagraphStyle('titleStyle1', array(
                                                       'align'      => 'center',
                                                       'spaceAfter' => 100,
                                                       'bgColor'    => '004990'
                                                  ));
-$this->phpword->addParagraphStyle('titleStyle2', array(
+$phpword->addParagraphStyle('titleStyle2', array(
                                                       'spaceAfter'  => 50,
                                                       'spaceBefore' => 50,
                                                       'bgColor'     => '4C4C4C'
                                                  ));
-$this->phpword->addParagraphStyle('titleStyle3', array(
+$phpword->addParagraphStyle('titleStyle3', array(
                                                       'spaceAfter' => 100,
                                                       'bgColor'    => '7F7F7F'
                                                  ));
-$this->phpword->addFontStyle('titlepage_title', array (
+$phpword->addFontStyle('titlepage_title', array (
                                                       'size' => 24,
                                                       'bold' => true,
                                                       'color' => 'FFFFFF'
                                                 ));
 
-$this->phpword->addFontStyle('titlepage_subtitle', array (
+$phpword->addFontStyle('titlepage_subtitle', array (
                                                          'size' => 16,
                                                          'bold' => true,
                                                          'color' => 'FFFFFF'
                                                    ));
 
-$this->phpword->addFontStyle('titlepage_address', array (
+$phpword->addFontStyle('titlepage_address', array (
                                                         'size' => 12,
                                                         'color' => 'FFFFFF'
                                                   ));
@@ -1075,15 +1075,14 @@ $data = array(
     "companyName" => 'MPSToolbox.com'
 );
 // Actual document pages
-$this->partial("report/solution/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
-
-$this->partial("report/solution/" . $this->App()->theme . "/docx/02_yourprintiq.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/03_evaluatingthetruecost.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/04_solution1.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/05_solution2.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/06_additionalreplacements.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/07_businessprint.phtml", $data);
-$this->partial("report/solution/" . $this->App()->theme . "/docx/08_nextsteps.phtml", $data);
+$this->partial("report/solution/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/solution/docx/02_yourprintiq.phtml", $data);
+$this->partial("report/solution/docx/03_evaluatingthetruecost.phtml", $data);
+$this->partial("report/solution/docx/04_solution1.phtml", $data);
+$this->partial("report/solution/docx/05_solution2.phtml", $data);
+$this->partial("report/solution/docx/06_additionalreplacements.phtml", $data);
+$this->partial("report/solution/docx/07_businessprint.phtml", $data);
+$this->partial("report/solution/docx/08_nextsteps.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);

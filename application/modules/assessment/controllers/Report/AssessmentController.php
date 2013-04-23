@@ -89,7 +89,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format . "/00_render");
+            $this->render($format . "/00_render");
         }
         catch (Exception $e)
         {

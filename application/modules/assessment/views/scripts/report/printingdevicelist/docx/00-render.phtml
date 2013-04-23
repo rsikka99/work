@@ -6,7 +6,7 @@ $phpword = $this->phpword;
 $proposal = $this->proposal;
 
 // Initialize some properties
-$properties = $this->phpword->getProperties();
+$properties = $phpword->getProperties();
 $properties->setCreator('Gross Margin Report');
 $properties->setCompany('Gross Margin Report');
 $properties->setTitle('Gross Margin Report');
@@ -35,28 +35,28 @@ $mainSection = $phpword->createSection(array (
  * Define Global Paragraph Styles here
  */
 
-$this->phpword->addParagraphStyle('nospacing', array (
+$phpword->addParagraphStyle('nospacing', array (
     'spaceBefore' => 0, 
     'spaceAfter' => 0 
 ));
 
-$this->phpword->addParagraphStyle('nospacing_rightalign', array (
+$phpword->addParagraphStyle('nospacing_rightalign', array (
     'align' => 'right', 
     'spaceBefore' => 0, 
     'spaceAfter' => 0 
 ));
 
-$this->phpword->addParagraphStyle('nospacing_centeralign', array (
+$phpword->addParagraphStyle('nospacing_centeralign', array (
     'align' => 'center', 
     'spaceBefore' => 0, 
     'spaceAfter' => 0 
 ));
 
-$this->phpword->addParagraphStyle('centeralign', array (
+$phpword->addParagraphStyle('centeralign', array (
     'align' => 'right' 
 ));
 
-$this->phpword->addParagraphStyle('rightalign', array (
+$phpword->addParagraphStyle('rightalign', array (
     'align' => 'right' 
 ));
 
@@ -64,26 +64,26 @@ $this->phpword->addParagraphStyle('rightalign', array (
  * Define Global Font Styles here
  */
 
-$this->phpword->addFontStyle('table_header', array (
+$phpword->addFontStyle('table_header', array (
     'size' => 8,
     'bold' => true 
 ));
 
-$this->phpword->addFontStyle('table_body', array (
+$phpword->addFontStyle('table_body', array (
     'size' => 8
 ));
 
-$this->phpword->addFontStyle('table_footer', array (
+$phpword->addFontStyle('table_footer', array (
     'size' => 8,
     'bold' => true,
     'color' => 'red'
 ));
 
-$this->phpword->addFontStyle('bold_text', array (
+$phpword->addFontStyle('bold_text', array (
     'bold' => true 
 ));
 
-$this->phpword->addFontStyle('italic_text', array (
+$phpword->addFontStyle('italic_text', array (
     'italic' => true 
 ));
 
@@ -92,7 +92,7 @@ $this->phpword->addFontStyle('italic_text', array (
  */
 
 // H1 Style
-$this->phpword->addTitleStyle(1, array (
+$phpword->addTitleStyle(1, array (
     'size' => 16, 
     'color' => number_format(0), 
     'bold' => true 
@@ -100,13 +100,13 @@ $this->phpword->addTitleStyle(1, array (
     'borderBottomSize' => 1
 ));
 // H2 Style #5881BC
-$this->phpword->addTitleStyle(2, array (
+$phpword->addTitleStyle(2, array (
     'size' => 14, 
     'color' => number_format(0), 
     'bold' => true 
 ));
 // H3 Style #5881BC
-$this->phpword->addTitleStyle(3, array (
+$phpword->addTitleStyle(3, array (
     'size' => 12, 
     'color' => '4F81BD', 
     'bold' => true 
@@ -240,7 +240,7 @@ $styles = (object)array (
  * An array of view variables to pass to the partial scripts
  */
 $data = array (
-    "phpword" => $this->phpword, 
+    "phpword" => $phpword, 
     "proposal" => $this->proposal, 
     "section" => $mainSection, 
     "styles" => $styles,
@@ -251,11 +251,11 @@ $data = array (
 /**
  * Render each of the view scripts for different parts of the document
  */
-$this->partial("/report/printingdevicelist/" . $this->App()->theme . "/docx/01_header.phtml", $data);
-$this->partial("/report/printingdevicelist/" . $this->App()->theme . "/docx/02_included.phtml", $data);
-$this->partial("/report/printingdevicelist/" . $this->App()->theme . "/docx/03_excluded.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/01_header.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/02_included.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/03_excluded.phtml", $data);
 
-$objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);
 
 /**

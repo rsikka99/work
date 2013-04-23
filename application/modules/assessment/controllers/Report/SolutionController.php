@@ -68,7 +68,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format  . "/00_render");
+            $this->render($format  . "/00_render");
         }
         catch (Exception $e)
         {

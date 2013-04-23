@@ -180,8 +180,8 @@ $data = array(
 /**
  * Render each of the view scripts for different parts of the document
  */
-$this->partial("report/costanalysis/" . $this->App()->theme . "/docx/01_header.phtml", $data);
-$this->partial("report/costanalysis/" . $this->App()->theme . "/docx/02_maintable.phtml", $data);
+$this->partial("report/costanalysis/docx/01_header.phtml", $data);
+$this->partial("report/costanalysis/docx/02_maintable.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);

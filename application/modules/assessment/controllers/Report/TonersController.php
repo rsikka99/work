@@ -55,7 +55,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format . "/00_render");
+            $this->render($format . "/00_render");
         }
         catch (Exception $e)
         {
