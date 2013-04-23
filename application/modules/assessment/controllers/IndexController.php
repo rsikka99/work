@@ -127,7 +127,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    My_Log::logException($e);
+                    Tangent_Log::logException($e);
                 }
             }
         }
@@ -180,7 +180,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
             {
                 $db->rollBack();
                 $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
-                My_Log::logException($e);
+                Tangent_Log::logException($e);
             }
         }
 

@@ -153,7 +153,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                     catch ( Exception $e )
                     {
                         $db->rollBack();
-                        My_Log::logException($e);
+                        Tangent_Log::logException($e);
                     }
                 }
                 else

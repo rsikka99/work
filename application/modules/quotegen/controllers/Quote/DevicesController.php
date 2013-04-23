@@ -106,7 +106,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                             $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error processing this request.  Please try again.'
                             ));
-                            My_Log::logException($e);
+                            Tangent_Log::logException($e);
                         }
                     }
 

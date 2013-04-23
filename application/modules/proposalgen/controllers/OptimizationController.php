@@ -232,7 +232,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         catch (Exception $e)
         {
             $db->rollBack();
-            My_Log::logException($e);
+            Tangent_Log::logException($e);
 
             return false;
         }
@@ -353,7 +353,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         catch (Exception $e)
         {
             $db->rollBack();
-            My_Log::logException($e);
+            Tangent_Log::logException($e);
 
             return false;
         }
@@ -375,7 +375,7 @@ class Proposalgen_OptimizationController extends Proposalgen_Library_Controller_
         }
         catch (Exception $e)
         {
-            My_Log::logException($e);
+            Tangent_Log::logException($e);
 
             return false;
         }

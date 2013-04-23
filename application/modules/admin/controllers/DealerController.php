@@ -77,7 +77,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     {
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database.  If problem persists please contact your system administrator."));
-                        My_Log::logException($e);
+                        Tangent_Log::logException($e);
                     }
                 }
             }
@@ -228,7 +228,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     {
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array('danger' => "Error saving dealer to database. If problem persists please contact your system administrator."));
-                        My_Log::logException($e);
+                        Tangent_Log::logException($e);
                     }
                 }
                 else
@@ -303,7 +303,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollBack();
-                        My_Log::logException($e);
+                        Tangent_Log::logException($e);
                         $this->_flashMessenger->addMessage(array("danger" => "Error deleting {$dealer->dealerName}, please try again."));
                     }
                 }

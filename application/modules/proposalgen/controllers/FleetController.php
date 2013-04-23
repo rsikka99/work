@@ -399,7 +399,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    My_Log::logException($e);
+                    Tangent_Log::logException($e);
                     $errorMessage = "An error occurred while mapping";
                 }
             }
@@ -697,8 +697,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                              * Error Saving
                              */
                             $db->rollBack();
-                            My_Log::logException($e);
-                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . My_Log::getUniqueId()));
+                            Tangent_Log::logException($e);
+                            $this->_flashMessenger->addMessage(array("danger" => "There was a system error while saving your device. Please try again. Reference #" . Tangent_Log::getUniqueId()));
                         }
                     }
                     else
@@ -758,9 +758,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                My_Log::logException($e);
+                Tangent_Log::logException($e);
                 $this->getResponse()->setHttpResponseCode(500);
-                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . My_Log::getUniqueId());
+                $jsonResponse = array("error" => true, "message" => "There was an error removing the unknown device. Reference #" . Tangent_Log::getUniqueId());
             }
         }
         else
@@ -812,8 +812,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             catch (Exception $e)
                             {
                                 $db->rollBack();
-                                My_Log::logException($e);
-                                $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . My_Log::getUniqueId();
+                                Tangent_Log::logException($e);
+                                $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . Tangent_Log::getUniqueId();
                             }
                         }
                         else

@@ -81,7 +81,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                My_Log::logException($e);
+                Tangent_Log::logException($e);
             }
         }
 
@@ -179,7 +179,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollBack();
-                    My_Log::logException($e);
+                    Tangent_Log::logException($e);
                 }
             }
         }
@@ -262,7 +262,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
             catch (Exception $e)
             {
                 $db->rollBack();
-                My_Log::logException($e);
+                Tangent_Log::logException($e);
             }
         }
 

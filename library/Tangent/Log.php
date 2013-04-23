@@ -1,35 +1,153 @@
-<?php 
-class Tangent_Log extends Zend_Log {
-static $_logger;
-
-
+<?php
+class Tangent_Log
+{
+    const SOURCE_ZENDLOG      = 1;
+    const SOURCE_LOGINATTEMPT = 2;
+    const SOURCE_PROPOSAL     = 3;
+    const SOURCE_EMAIL        = 4;
+    const SOURCE_SECURITY     = 5;
 
     /**
-     * @return Tangent_Log
+     *
+     * @var Zend_Log
      */
-    public static function getInstance ()
+    private static $logger;
+
+    /**
+     * Gets the unique id for this session of logs
+     *
+     * @var string
+     */
+    private static $_uniqueId;
+
+    static function getUniqueId ()
     {
-        
-        if (! isset(self::$_logger))
+        if (!isset(self::$_uniqueId))
         {
-        	$logger = new Zend_Log();
-        	$infoWriter = new Zend_Log_Writer_Stream(DATA_PATH."/logs/info.log");
-            $alertWriter = new Zend_Log_Writer_Stream(DATA_PATH."/logs/alert.log");
-            $logger->addWriter($infoWriter);
-            $logger->addWriter($alertWriter);
-            $filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
-			$alertWriter->addFilter($filter);
-			self::$_logger = $logger;        	
+            self::$_uniqueId = uniqid();
         }
-        return self::$_logger;
+
+        return self::$_uniqueId;
     }
-    /**
-     * @param message text
-     * @param message priority
-     */
-	public static function message ($message, $priority)
+
+    static function logException (Exception $e)
     {
-       self::getInstance()->$priority($message);
+        $errorMessage = $e->getMessage();
+        $stackTrace   = $e->getTraceAsString();
+
+        self::error($e);
+        self::error($stackTrace);
     }
-    
+
+    static function log ($message, $level = null, $source = null)
+    {
+        $uid = self::getUniqueId();
+
+        if (false !== ($logger = self::getLogger()))
+        {
+            if ($level === null)
+            {
+                $level = Zend_Log::INFO;
+            }
+
+            if ($source === null)
+            {
+                $source = self::SOURCE_ZENDLOG;
+            }
+
+            $logger->setEventItem('logTypeId', $source);
+            $logger->log("{$uid}: {$message}", $level);
+        }
+    }
+
+    static function debug ($message, $source = null)
+    {
+        self::log($message, Zend_Log::DEBUG, $source);
+    }
+
+    static function info ($message, $source = null)
+    {
+        self::log($message, Zend_Log::INFO, $source);
+    }
+
+    static function notice ($message, $source = null)
+    {
+        self::log($message, Zend_Log::NOTICE, $source);
+    }
+
+    static function warn ($message, $source = null)
+    {
+        self::log($message, Zend_Log::WARN, $source);
+    }
+
+    static function error ($message, $source = null)
+    {
+        self::log($message, Zend_Log::ERR, $source);
+    }
+
+    static function crit ($message, $source = null)
+    {
+        self::log($message, Zend_Log::CRIT, $source);
+    }
+
+    static function alert ($message, $source = null)
+    {
+        self::log($message, Zend_Log::ALERT, $source);
+    }
+
+    static function emerg ($message, $source = null)
+    {
+        self::log($message, Zend_Log::EMERG, $source);
+    }
+
+    /**
+     *
+     * @return Zend_Log
+     */
+    private static function getLogger ()
+    {
+        if (!isset(self::$logger))
+        {
+            if (Zend_Registry::isRegistered('Zend_Log'))
+            {
+                self::$logger = Zend_Registry::get('Zend_Log');
+                $auth         = Zend_Auth::getInstance();
+                if ($auth->hasIdentity())
+                {
+                    self::$logger->setEventItem('userId', $auth->getIdentity()->id);
+                }
+                else
+                {
+                    self::$logger->setEventItem('userId', null);
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return self::$logger;
+    }
+
+    /**
+     *
+     * @return Zend_Log_Writer_Firebug
+     */
+    private static function getFirebugLogger ()
+    {
+        if (!isset(self::$firebugLogger))
+        {
+            if (Zend_Registry::isRegistered('Zend_Log_Writer_Firebug'))
+            {
+                self::$firebugLogger = Zend_Registry::get('Zend_Log_Writer_Firebug');
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return self::$firebugLogger;
+    }
 }

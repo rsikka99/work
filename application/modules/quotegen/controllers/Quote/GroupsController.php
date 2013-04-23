@@ -228,7 +228,7 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             $db->rollBack();
                             
                             // Log the error
-                            My_Log::logException($e);
+                            Tangent_Log::logException($e);
                             
                             $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.' 

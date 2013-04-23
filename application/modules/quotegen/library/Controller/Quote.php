@@ -512,7 +512,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         }
         catch ( Exception $e )
         {
-            My_Log::logException($e);
+            Tangent_Log::logException($e);
             return false;
         }
         return $quoteDeviceId;

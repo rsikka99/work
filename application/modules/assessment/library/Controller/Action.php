@@ -25,7 +25,6 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
      */
     protected $_navigation;
 
-
     /**
      * An object containing various word styles
      *
@@ -40,18 +39,18 @@ class Assessment_Library_Controller_Action extends Tangent_Controller_Action
      */
     public $reportName;
 
-
     /**
      * The current proposal
      *
      * @var Assessment_ViewModel_Assessment
      */
     protected $_assessmentViewModel;
+
+
     protected $_csvFormat;
     protected $_pdfFormat;
     protected $_wordFormat;
-    protected $_reportId;
-    protected $_reportCompanyName;
+
     protected $_reportAbsoluteCachePath;
     protected $_reportCachePath;
 

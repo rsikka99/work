@@ -214,7 +214,7 @@ class Default_AuthController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        My_Log::logException($e);
+                        Tangent_Log::logException($e);
 
                         // prepare error message stating user not found
                         $this->view->message = "An error occurred while resetting your password.";

@@ -347,9 +347,9 @@ class Proposalgen_Service_Rms_Upload
                 }
                 catch (Exception $e)
                 {
-                    My_Log::logException($e);
+                    Tangent_Log::logException($e);
                     $db->rollBack();
-                    $this->errorMessages = "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . My_Log::getUniqueId();
+                    $this->errorMessages = "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . Tangent_Log::getUniqueId();
                 }
             }
         }

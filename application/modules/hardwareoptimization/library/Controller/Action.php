@@ -34,14 +34,6 @@ class Hardwareoptimization_Library_Controller_Action extends Tangent_Controller_
     protected $_wordStyles;
 
     /**
-     * Report name is the title behind the reports that are being generated.
-     *
-     * @var string
-     */
-    public $reportName;
-
-
-    /**
      * The current proposal
      *
      * @var Hardwareoptimization_ViewModel_CustomerHardwareOptimization

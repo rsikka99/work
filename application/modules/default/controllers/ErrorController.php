@@ -76,20 +76,20 @@ class Default_ErrorController extends Tangent_Controller_Action
         $ex = $errors->exception;
 
         // Declare the start of the trace
-        My_Log::crit("[$uid] - --------Started Trace [ $code ]--------.");
+        Tangent_Log::crit("[$uid] - --------Started Trace [ $code ]--------.");
 
         // Loop through all the exceptions, and log them
         do
         {
             // Log exception, if logger available
-            My_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occured in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
-            My_Log::log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
+            Tangent_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occured in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
+            Tangent_Log::log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
             $exceptions [] = $ex;
         } while (!is_null($ex = $ex->getPrevious()));
 
         // Include request parameters afterwards
-        My_Log::log('Request Parameters', $priority, null, $errors->request->getParams());
-        My_Log::crit("[$uid] - --------Finished Trace--------.");
+        Tangent_Log::log('Request Parameters', $priority, null, $errors->request->getParams());
+        Tangent_Log::crit("[$uid] - --------Finished Trace--------.");
 
         // Conditionally display exceptions
         if ($this->getInvokeArg('displayExceptions') == true)

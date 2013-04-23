@@ -121,7 +121,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         catch (Exception $e)
                         {
                             $db->rollBack();
-                            My_Log::logException($e);
+                            Tangent_Log::logException($e);
                             $this->_flashMessenger->addMessage(array(
                                                                     'danger' => 'There was an error processing this request.  Please try again.'
                                                                ));

@@ -127,7 +127,7 @@ class Quotegen_QuotesettingController extends Tangent_Controller_Action
                 }
                 catch ( Exception $e )
                 {
-                    My_Log::logException($e);
+                    Tangent_Log::logException($e);
                     $this->_flashMessenger->addMessage(array (
                             'danger' => 'Error saving configuration.  Please try again.' 
                     ));
