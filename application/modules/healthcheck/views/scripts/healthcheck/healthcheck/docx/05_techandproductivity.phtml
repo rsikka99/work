@@ -1,0 +1,51 @@
+<?php
+/**
+ * Assessment - Analysis: Technology Reliability and User Productivity
+ */
+
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->healthcheck->proposal;
+$graphs   = $this->graphs;
+$section->addPageBreak();
+$section->addTitle($this->translate("Analysis: Technology Reliability and User Productivity"), 1);
+$gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
+$gradeTable->addRow();
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->TechnologyReliabilityAndUserProductivity->RankingText);
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->TechnologyReliabilityAndUserProductivity->Rank, 1), "gradeFont", "gradeParagraph");
+
+$section->addTextBreak();
+$section->addTitle($this->translate('Age of Printing Devices'), 2);
+$section->addText(sprintf($this->translate('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.'), number_format($proposal->getAverageAgeOfDevices(), 1)));
+
+$imageTable = $section->addTable(array (
+    'borderBottomSize' => 1 
+));
+$imageTable->addRow();
+$cell = $imageTable->addCell(9028.8, array (
+    'valign' => 'center' 
+));
+
+$cell->addImage($graphs ['AgeBarGraph'], array (
+    'align' => 'center' 
+));
+$section->addText($this->translate('The breakdown of the age of your printing devices is shown above.'));
+$section->addTextBreak();
+
+$section->addTitle($this->translate('Technology Features and Functionality'), 2);
+$section->addText($this->translate('The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the number of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.'));
+$section->addText($this->translate('The charts below show the percentage of your printing devices that are capable of copying, duplex printing, and color printing.'));
+
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['CopyCapableDevicesGraph']);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['DuplexCapableDevicesGraph']);
+$imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['colorCapablePieChart']);
+
+$section->addTextBreak();
+$section->addText(sprintf($this->translate('If you are in need of additional features and functionality to improve workflow and print quality, %1$s has a variety of printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.'),$this->companyName));

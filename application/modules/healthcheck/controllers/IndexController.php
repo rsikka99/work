@@ -116,15 +116,15 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
      * Data is retrieved
      * from the database and displayed using HTML, CSS, and javascript.
      */
-    public function reportAction ()
+    public function healthcheckAction ()
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         $this->initReportList();
         $this->initHtmlReport();
-
         $this->view->availableReports->Healthcheck->active = true;
+
 
         $this->view->formats     = array(
             "/proposalgen/healthcheck/generate/format/docx" => $this->_wordFormat
@@ -132,10 +132,11 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
         $this->view->reportTitle = "Health Check";
 
         $format = $this->_getParam("format", "html");
+
         try
         {
             // Clear the cache for the report before proceeding
-            $healthcheck = new Healthcheck_Model_Healthcheck_Healthcheck($this->getProposal());
+            $healthcheck = new Healthcheck_Model_Healthcheck_Healthcheck($this->getHealthcheck());
             die();
             $this->clearCacheForReport();
             if (false !== ($proposal = $this->getProposal()))
