@@ -41,6 +41,11 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
      */
     public $replacementPricingConfigId;
 
+    /**
+     * @var float
+     */
+    public $adminCostPerPage;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -91,6 +96,10 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
         {
             $this->replacementPricingConfigId = $params->replacementPricingConfigId;
         }
+        if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
+        {
+            $this->adminCostPerPage = $params->adminCostPerPage;
+        }
 
     }
 
@@ -108,6 +117,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "replacementPricingConfigId"  => $this->replacementPricingConfigId,
+            "adminCostPerPage"            => $this->adminCostPerPage,
         );
     }
 }
