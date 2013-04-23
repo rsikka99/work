@@ -285,11 +285,8 @@ class Healthcheck_Library_Controller_Action extends Tangent_Controller_Action
      * Downloads images ahead of time using curl.
      * Uses multi threading
      *
-     * @param         $imageArray array
-     *                            An array of URL's to images. Currently only saves .png files
-     * @param boolean $local
-     *                            Whether or not the change the image path to a local path or a
-     *                            web accessible path
+     * @param array   $imageArray An array of URLs to images. Currently only saves .png files
+     * @param boolean $local      Whether or not the change the image path to a local path or a web accessible path
      *
      * @throws Exception
      * @return array
@@ -297,17 +294,19 @@ class Healthcheck_Library_Controller_Action extends Tangent_Controller_Action
     public function cachePNGImages ($imageArray, $local = true)
     {
 
-        $cachePath = $this->_reportAbsoluteCachePath;
+        $cachePath       = $this->_reportAbsoluteCachePath;
+        $publicCachePath = $this->_reportCachePath;
 
-        $reportId = $this->_reportId;
         try
         {
             // Download files ahead of time
             $randomSalt         = strftime("%s") . mt_rand(10000, 30000);
             $imagePathAndPrefix = $cachePath . '/' . $randomSalt . "_";
 
-            $newImages   = array();
-            $multihandle = curl_multi_init();
+            $newImages       = array();
+            $curlHandle      = curl_multi_init();
+            $curlConnections = array();
+            $files           = array();
 
             foreach ($imageArray as $i => $fetchUrl)
             {
@@ -317,45 +316,52 @@ class Healthcheck_Library_Controller_Action extends Tangent_Controller_Action
                     unlink($imageFilename);
                 }
 
-                // To fix the way the graphs are generated, we change &amp; to &
-                $fetchUrl = str_replace("&amp;", "&", $fetchUrl);
-                $fetchUrl = str_replace(" ", "%20", $fetchUrl);
+                /**
+                 * Google charts get generated in a weird way. We need to change &amp; to & in order for things to work properly.
+                 */
+                $fetchUrl             = str_replace("&amp;", "&", $fetchUrl);
+                $fetchUrl             = str_replace(" ", "%20", $fetchUrl);
+                $curlConnections [$i] = curl_init($fetchUrl);
+                $files [$i]           = fopen($imageFilename, "w");
 
-                $conn [$i] = curl_init($fetchUrl);
-                $file [$i] = fopen($imageFilename, "w");
-
-                curl_setopt($conn [$i], CURLOPT_FILE, $file [$i]);
-                curl_setopt($conn [$i], CURLOPT_HEADER, 0);
-                curl_setopt($conn [$i], CURLOPT_CONNECTTIMEOUT, 60);
-                curl_multi_add_handle($multihandle, $conn [$i]);
+                curl_setopt($curlConnections [$i], CURLOPT_FILE, $files [$i]);
+                curl_setopt($curlConnections [$i], CURLOPT_HEADER, 0);
+                curl_setopt($curlConnections [$i], CURLOPT_CONNECTTIMEOUT, 60);
+                curl_multi_add_handle($curlHandle, $curlConnections [$i]);
                 $newImages [] = $imageFilename;
             }
 
-            // Wait until all the images are downloaded
+            /**
+             * Wait until all threads are finished downloading
+             */
             do
             {
-                $n = curl_multi_exec($multihandle, $active);
+                curl_multi_exec($curlHandle, $active);
             } while ($active);
 
-            // Change the path of the images to a new path
+            /**
+             * Update our image array to point to cached images
+             */
             foreach ($imageArray as $i => & $imageUrl)
             {
-                curl_multi_remove_handle($multihandle, $conn [$i]);
-                curl_close($conn [$i]);
-                fclose($file [$i]);
+                curl_multi_remove_handle($curlHandle, $curlConnections [$i]);
+                curl_close($curlConnections [$i]);
+                fclose($files [$i]);
                 if ($local)
                 {
-                    $imageUrl = PUBLIC_PATH . "/cache/reports/$reportId/" . $randomSalt . "_$i.png";
+                    $imageUrl = $cachePath . "/{$randomSalt}_{$i}.png";
                 }
                 else
                 {
-                    $imageUrl = $this->view->FullUrl("/cache/reports/$reportId/" . $randomSalt . "_$i.png");
+                    $imageUrl = $this->view->FullUrl($imageUrl = $publicCachePath . "/{$randomSalt}_{$i}.png");
                 }
 
             }
-            curl_multi_close($multihandle);
-            // Change Permissions on all the images
-            $newImages [] = $imageFilename;
+            curl_multi_close($curlHandle);
+
+            /**
+             * Attempt to change permissions on our files
+             */
             chmod($cachePath, 0777);
             foreach ($newImages as $filePath)
             {
@@ -368,61 +374,6 @@ class Healthcheck_Library_Controller_Action extends Tangent_Controller_Action
         }
 
         return $imageArray;
-
-    }
-
-    /**
-     * Gets the name of the company in the survey
-     *
-     * @throws Exception
-     */
-    public function getReportCompanyName ()
-    {
-        if (!isset($this->_reportCompanyName))
-        {
-            $questionTable = new Proposalgen_Model_DbTable_TextAnswer();
-            $where         = $questionTable->getAdapter()->quoteInto('report_id = ? AND question_id = 4', $this->_reportId, 'INTEGER');
-            $row           = $questionTable->fetchRow($where);
-
-            if ($row ['textual_answer'])
-            {
-                $this->_reportCompanyName = $row ['textual_answer'];
-            }
-            else
-            {
-                throw new Exception("No Company Name Found!");
-            }
-        }
-
-        return $this->_reportCompanyName;
-
-    } // end function getReportCompanyName
-
-
-    /**
-     * Verifies that a replacement device of each type is found.
-     */
-    public function verifyReplacementDevices ()
-    {
-        $replacementDeviceMapper = Proposalgen_Model_Mapper_ReplacementDevice::getInstance();
-        foreach (Proposalgen_Model_ReplacementDevice::$replacementTypes as $type)
-        {
-            try
-            {
-                $row = null;
-                $row = $replacementDeviceMapper->fetchRow(array(
-                                                               'replacement_category = ?' => $type
-                                                          ));
-                if (!$row)
-                {
-                    throw new Exception("Error: Missing replacement device for the $type category.");
-                }
-            }
-            catch (Exception $e)
-            {
-                $this->view->ErrorMessages [] = "Error: Missing replacement device for the $type category.";
-            }
-        }
 
     }
 
