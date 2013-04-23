@@ -1,8 +1,12 @@
 {
-    "hash": "506ca018dc1c9ecbafff8e3ac3f3e3cd",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "c0d4b863e341c3994d4aaf7ebc0d9626",
     "packages": [
         {
-            "name": "gChartPhp/gChartPhp",
+            "name": "gchartphp/gchartphp",
             "version": "dev-master",
             "source": {
                 "type": "git",
