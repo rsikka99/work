@@ -8,13 +8,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * All devices printing less than this are considered underutilized.
      */
-    const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.05;
+    const UNDERUTILIZED_THRESHOLD_PERCENTAGE = 0.05;
     /**
      * All devices that have ages older than this are considered old/
      */
-    const OLD_DEVICE_THRESHHOLD = 10;
+    const OLD_DEVICE_THRESHOLD = 10;
 
-    public static $Proposal;
+    public static $_instance;
 
     // New Separated Proposal
     protected $Ranking;
@@ -25,7 +25,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $LeasedDevices;
     protected $PurchasedDevices;
     protected $User;
-    protected $DealerCompany;
     protected $CompanyMargin;
     protected $ReportMargin;
     protected $MaximumMonthlyPrintVolume;
@@ -168,11 +167,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public function __construct (Assessment_Model_Assessment $report)
     {
         parent::__construct($report);
-        $this->DealerCompany = "Office Depot Inc.";
 
-        if (isset(self::$Proposal))
+        if (isset(self::$_instance))
         {
-            self::$Proposal = $this;
+            self::$_instance = $this;
         }
 
         // Get the report settings
@@ -489,21 +487,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this;
     }
 
-    /**
-     * @deprecated
-     *
-     * @return null
-     */
-    public function getDealerCompany ()
-    {
-        if (!isset($this->DealerCompany))
-        {
 
-            $this->DealerCompany = null;
-        }
-
-        return $this->DealerCompany;
-    }
 
     /**
      * @return float
@@ -1002,7 +986,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -1044,7 +1028,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -1145,14 +1129,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
                     if ($deviceInstance->getUsage() < 1)
                     {
 
                         //Check to see if it is under the age requirements
-                        if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHHOLD)
+                        if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHOLD)
                         {
                             //Check to see if it is reporting toner levels
                             if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->getIsLeased())
@@ -2026,7 +2010,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devices = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
             {
-                if ($device->getAge() > self::OLD_DEVICE_THRESHHOLD)
+                if ($device->getAge() > self::OLD_DEVICE_THRESHOLD)
                 {
                     $devices[] = $device;
                 }

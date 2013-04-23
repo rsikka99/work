@@ -135,7 +135,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
      *
      * @param Proposalgen_Model_Rms_Upload_Row[] $rmsUploadRows
      *
-     * @return Proposalgen_Model_Assessment
+     * @return Proposalgen_Model_Rms_Upload
      */
     public function setRmsUploadRows ($rmsUploadRows)
     {
