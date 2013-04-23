@@ -154,7 +154,6 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
             "lastModified"                 => $this->lastModified,
             "reportDate"                   => $this->reportDate,
             "devicesModified"              => $this->devicesModified,
-            "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
         );
     }
 

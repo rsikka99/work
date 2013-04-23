@@ -230,40 +230,6 @@ class Healthcheck_ViewModel_Ranking extends Tangent_Model_Abstract
 
         return $this->EnvironmentalFriendliness;
     }
-
-    /**
-     * @return stdClass
-     */
-    public function getExpense ()
-    {
-        if (!isset($this->Expense))
-        {
-            $criteria           = $this->getRankingCriteria();
-            $criteria           = $criteria ["Expense"];
-            $LeasedBWPerPage    = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedBlackAndWhiteCPP(), $criteria ["LeasedBWPerPage"]);
-            $LeasedColorPerPage = $LeasedBWPerPage;
-            if ($this->proposal->getLeasedEstimatedColorCPP() > 0)
-            {
-                $LeasedColorPerPage = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getLeasedEstimatedColorCPP(), $criteria ["LeasedColorPerPage"]);
-            }
-            $PurchasedBWPerPage    = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInBlackAndWhiteCPP(), $criteria ["PurchasedBWPerPage"]);
-            $PurchasedColorPerPage = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEstimatedAllInColorCPP(), $criteria ["PurchasedColorPerPage"]);
-
-            $totalRanking = round((((($LeasedBWPerPage + $LeasedColorPerPage) / 2) + (($PurchasedBWPerPage + $PurchasedColorPerPage) / 2)) / 2), 1);
-
-            $rankingText = $this->getOverallRankingText($totalRanking, "expense");
-            $rankingText .= " Under the reportName program, we estimate that we can save " . $this->proposal->healthcheck->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
-
-            $this->Expense = (object)array(
-                "Rank"        => $totalRanking,
-                "RankingText" => $rankingText
-            );
-        }
-
-        return $this->Expense;
-    }
-
-
     /**
      * Gets the overall paragraph
      *
