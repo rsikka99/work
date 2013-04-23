@@ -313,7 +313,6 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
         {
             $HealthcheckSetting = $this->find($HealthcheckDealerSetting->healthcheckSettingId);
         }
-
         if (!$HealthcheckSetting)
         {
             // Take a copy
@@ -322,7 +321,7 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
 
             if ($HealthcheckDealerSetting)
             {
-                $HealthcheckDealerSetting->HealthcheckSettingId = $HealthcheckSetting->id;
+                $HealthcheckDealerSetting->healthcheckSettingId = $HealthcheckSetting->id;
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($HealthcheckDealerSetting);
             }
             else

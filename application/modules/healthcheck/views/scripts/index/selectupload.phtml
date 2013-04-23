@@ -1,0 +1,27 @@
+<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/selectRmsUpload.js'));
+/* @var $rmsUpload Proposalgen_Model_Rms_Upload */
+$rmsUpload = $this->rmsUpload;
+?>
+<div class="page-header">
+    <h1>Healthcheck -
+        <small>Select Upload</small>
+    </h1>
+</div>
+<div class="well">
+    <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
+        <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> csv file. The name of the file is
+            "<?php echo $this->escape($rmsUpload->fileName); ?>".
+        <p>There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid devices imported.</p>
+        <?php if ($rmsUpload->invalidRowCount > 0) : ?>
+            <p>There were also <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <form id="selectRmsUpload" method="POST">
+        <input type="hidden" name="selectedRmsUploadId" id="selectedRmsUploadId" value="<?php echo ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) ? $rmsUpload->id : -1; ?>" />
+        <table id="selectRmsUploadGrid"></table>
+        <div id="selectRmsUploadGridPager"></div>
+    </form>
+
+    <?php echo $this->navigationForm; ?>
+</div>

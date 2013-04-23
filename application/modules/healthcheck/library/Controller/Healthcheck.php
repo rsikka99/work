@@ -4,7 +4,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     /**
      * @var Healthcheck_Model_Healthcheck
      */
-    protected $_report;
+    protected $_healthcheck;
 
     /**
      * The current step that the user is viewing.
@@ -51,8 +51,8 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $this->_helper->redirector('index', 'index', 'index');
         }
 
-        $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($this->_mpsSession->healthcheckId);
-        if ($this->_report === null)
+        $this->_healthcheck = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($this->_mpsSession->healthcheckId);
+        if ($this->_healthcheck === null)
         {
             $this->_flashMessenger->addMessage(array(
                                                     "error" => "Please select a report first."
@@ -92,7 +92,9 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     public function postDispatch ()
     {
         // Render our survey menu
-        $stage = ($this->getReport()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+        $stage = ($this->getHealthcheck()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+        $this->_navigation->updateAccessibleSteps($stage);
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
         //Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $stage);
 //
 //        $this->view->placeholder('ProgressionNav')->set($this->view->ProposalMenu($this->getReportSteps()));
@@ -104,15 +106,15 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      * @throws Exception
      * @return Healthcheck_Model_Healthcheck
      */
-    protected function getReport ()
+    protected function getHealthcheck ()
     {
-        if (!isset($this->_report))
+        if (!isset($this->_healthcheck))
         {
             // Fetch the existing report, or create a new one if the session id isn't set
             if (isset($this->_mpsSession->healthcheckId) && $this->_mpsSession->healthcheckId > 0)
             {
-                $this->_report = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find((int)$this->_mpsSession->healthcheckId);
-                if ($this->_report === null)
+                $this->_healthcheck = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find((int)$this->_mpsSession->healthcheckId);
+                if ($this->_healthcheck === null)
                 {
                     throw new Exception("Error selecting the report with an id of '{$this->_reportSession->reportId}'.");
                 }
@@ -120,17 +122,17 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             else
             {
                 $identity                   = Zend_Auth::getInstance()->getIdentity();
-                $this->_report              = new Healthcheck_Model_Healthcheck();
-                $this->_report->userId      = $identity->id;
-                $this->_report->clientId    = $this->_mpsSession->selectedClientId;
-                $this->_report->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                $this->_report->stepName    = Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS;
-                $this->_report->dateCreated = date('Y-m-d H:i:s');
-                $this->_report->reportDate  = date('Y-m-d H:i:s');
+                $this->_healthcheck              = new Healthcheck_Model_Healthcheck();
+                $this->_healthcheck->userId      = $identity->id;
+                $this->_healthcheck->clientId    = $this->_mpsSession->selectedClientId;
+                $this->_healthcheck->dealerId    = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                $this->_healthcheck->stepName    = Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+                $this->_healthcheck->dateCreated = date('Y-m-d H:i:s');
+                $this->_healthcheck->reportDate  = date('Y-m-d H:i:s');
             }
         }
 
-        return $this->_report;
+        return $this->_healthcheck;
     }
 
     /**
@@ -147,9 +149,9 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
             $hasError        = false;
             try
             {
-                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_report);
+                $this->_proposal = new Proposalgen_Model_Proposal_OfficeDepot($this->_healthcheck);
 
-                if ($this->_report->devicesModified)
+                if ($this->_healthcheck->devicesModified)
                 {
                     $this->_redirect('/data/modificationwarning');
                 }
@@ -180,38 +182,21 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      * Saves the current report.
      * This keeps the updated modification date in the same location at all times.
      */
-    protected function saveReport ($updateReportStage = true)
+    protected function saveHealthcheck ()
     {
-
-        $reportMapper                = Healthcheck_Model_Mapper_Healthcheck::getInstance();
-        $this->_report->lastModified = date('Y-m-d H:i:s');
-
-        if ($updateReportStage)
+        if (isset($this->_mpsSession->healthcheckId) && $this->_mpsSession->healthcheckId > 0)
         {
-            // This updates the reports progress
-            $newStep = $this->checkIfNextStepIsNew($this->_activeStep);
-            if ($newStep !== false)
-            {
-                $this->_report->stepName = $newStep->enumValue;
-
-                // We need to adjust the menu just in case we're not redirecting
-                Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->getReportSteps(), $newStep->enumValue);
-            }
-        }
-
-        if ($this->_report->id === null || $this->_report->id < 1)
-        {
-//            $reportSettingService = new Healthcheck_Service_ReportSettings(,,Zend_Auth::getInstance()->getIdentity()->dealerId)
-            $this->_report->healthcheckSettingId = $this->_report->getReportSettings()->id;
-            $id                = $reportMapper->insert($this->_report);
-            $this->_report->id = $id;
+            // Update the last modified date
+            $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
+            Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
         }
         else
         {
-            $id = $reportMapper->save($this->_report);
+            $this->_healthcheck->healthcheckSettingId = $this->_healthcheck->getHealthcheckSettings()->id;
+            $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
+            Healthcheck_Model_Mapper_Healthcheck::getInstance()->insert($this->_healthcheck);
+            $this->_mpsSession->healthcheckId = $this->_healthcheck->id;
         }
-
-        $this->_mpsSession->healthcheckId = $this->_report->id;
     }
 
     /**
@@ -219,9 +204,9 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
      *
      * @return Healthcheck_Model_Healthcheck_Steps[]
      */
-    protected function getReportSteps ()
+    protected function getHealthcheckSteps ()
     {
-        $report      = $this->getReport();
+        $report      = $this->getHealthcheck();
         $reportSteps = null;
         if ($report instanceof Healthcheck_Model_Healthcheck)
         {
@@ -292,6 +277,42 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     }
 
     /**
+     * Redirects the user to the very last available step
+     */
+    public function redirectToLatestStep ()
+    {
+        $stage = ($this->getHealthcheck()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+        $this->_navigation->updateAccessibleSteps($stage);
+
+
+        $firstStep  = false;
+        $latestStep = false;
+        foreach ($this->_navigation->steps as $step)
+        {
+            if ($firstStep === false)
+            {
+                $firstStep = $step;
+            }
+
+            if (!$step->canAccess)
+            {
+                break;
+            }
+
+            $latestStep = $step;
+        }
+
+        if ($latestStep)
+        {
+            $this->redirector($latestStep->action, $latestStep->controller, $latestStep->module);
+        }
+        else
+        {
+            $this->redirector($firstStep->action, $firstStep->controller, $firstStep->module);
+        }
+    }
+
+    /**
      * Sets a healthcheck step as active
      *
      * @param string $activeStepName
@@ -300,7 +321,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
     protected function setActiveReportStep ($activeStepName)
     {
         $this->_activeStep = null;
-        foreach ($this->getReportSteps() as $step)
+        foreach ($this->getHealthcheckSteps() as $step)
         {
             $step->active = false;
             if (strcasecmp($step->enumValue, $activeStepName) === 0)
@@ -322,7 +343,7 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         $latestStep = null;
 
         /* @var $step Healthcheck_Model_Healthcheck_Steps */
-        foreach ($this->getReportSteps() as $step)
+        foreach ($this->getHealthcheckSteps() as $step)
         {
             /*
              * Just in case we don't find anything, lets set the step to the very first step.
@@ -343,5 +364,47 @@ class Healthcheck_Library_Controller_Healthcheck extends Proposalgen_Library_Con
         }
 
         return $latestStep;
+    }
+
+    /**
+    * Updates a healthcheck to be at the next available step
+    *
+    * @param bool $force Whether or not to force the update
+    */
+    public function updateHealthcheckStepName ($force = false)
+    {
+        // We can only do this when we have an active step
+        if ($this->_navigation->activeStep instanceof My_Navigation_Step)
+        {
+            // That step also needs a next step for this to work
+            if ($this->_navigation->activeStep->nextStep instanceof My_Navigation_Step)
+            {
+                $update = true;
+                // We only want to update
+                if ($force)
+                {
+                    $update = true;
+                }
+                else
+                {
+                    $newStepName = $this->_navigation->activeStep->nextStep->enumValue;
+
+                    foreach ($this->_navigation->steps as $step)
+                    {
+                        // No need to update the step if we were going back in time.
+                        if ($step->enumValue == $newStepName && $step->canAccess)
+                        {
+                            $update = false;
+                            break;
+                        }
+                    }
+                }
+
+                if ($update)
+                {
+                    $this->getHealthcheck()->stepName = $this->_navigation->activeStep->nextStep->enumValue;
+                }
+            }
+        }
     }
 }
