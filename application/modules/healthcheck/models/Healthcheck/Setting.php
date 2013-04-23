@@ -122,6 +122,25 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $kilowattsPerHour;
 
     /**
+     * The Average It Hourly Rate
+     */
+    public $averageItHourlyRate;
+
+    /**
+     *  Hours Spent On IT
+     */
+    public $hoursSpentOnIt;
+
+    /**
+     * Cost Of labor
+     */
+    public $costOfLabor;
+
+    /**
+     * The Cost to Execute Supplies Order
+     */
+    public $costToExecuteSuppliesOrder;
+    /**
      * The id of the assessment pricing configuration
      *
      * @var int
@@ -274,6 +293,18 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->costThreshold = $params->costThreshold;
         }
+        if (isset($params->averageItHourlyRate) && !is_null($params->averageItHourlyRate))
+        {
+            $this->averageItHourlyRate = $params->averageItHourlyRate;
+        }
+        if (isset($params->hoursSpentOnIt) && !is_null($params->hoursSpentOnIt))
+        {
+            $this->hoursSpentOnIt = $params->hoursSpentOnIt;
+        }
+        if (isset($params->costOfLabor) && !is_null($params->costOfLabor))
+        {
+            $this->costOfLabor = $params->costOfLabor;
+        }
         if (isset($params->replacementPricingConfigId) && !is_null($params->replacementPricingConfigId))
         {
             $this->replacementPricingConfigId = $params->replacementPricingConfigId;
@@ -308,6 +339,9 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
+            "averageItHourlyRate"         => $this->averageItHourlyRate,
+            "hoursSpentOnIt"              => $this->hoursSpentOnIt,
+            "costOfLabor"                 => $this->costOfLabor,
             "replacementPricingConfigId"  => $this->replacementPricingConfigId,
         );
     }

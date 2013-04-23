@@ -1,6 +1,6 @@
 <?php
-/* @var $healthcheck Healthcheck_ViewModel_Healthcheck */
-$healthcheck = $this->healthcheck;
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
+$proposal = $this->proposal;
 ?>
 <div class="h1">Fleet Attributes</div>
 <p>The following provides a summary of your existing printing devices.</p>
@@ -33,7 +33,7 @@ $healthcheck = $this->healthcheck;
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($proposal->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
         </tr>
             <?php endforeach; ?>

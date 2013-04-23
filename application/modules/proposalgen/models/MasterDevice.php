@@ -182,6 +182,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_hasValidMonoGrossMarginToners;
     protected $_hasValidColorGrossMarginToners;
     protected $_tonersForAssessment;
+    protected $_tonersForHealthcheck;
     protected $_tonersForGrossMargin;
     protected $_requiredTonerColors;
 
@@ -1048,6 +1049,28 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         $this->_requiredTonerColors = $RequiredTonerColors;
 
         return $this;
+    }
+
+    /**
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getTonersForHealthcheck ()
+    {
+        if (!isset($this->_tonersForHealthcheck))
+        {
+            $toners = array();
+            foreach ($this->getRequiredTonerColors() as $tonerColor)
+            {
+                $toner = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                if ($toner instanceof Proposalgen_Model_Toner)
+                {
+                    $toners [$tonerColor] = $toner;
+                }
+            }
+            $this->_tonersForHealthcheck = $toners;
+        }
+
+        return $this->_tonersForHealthcheck;
     }
 
     /**

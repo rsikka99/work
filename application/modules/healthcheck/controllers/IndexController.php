@@ -1,5 +1,5 @@
 <?php
-class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthcheck
+class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
 {
     /**
      * The navigation steps
