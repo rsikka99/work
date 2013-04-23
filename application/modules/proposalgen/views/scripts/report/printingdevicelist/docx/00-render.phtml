@@ -1,0 +1,264 @@
+<?php
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+
+/* @var $proposal Proposalgen_Model_Proposal_Abstract */
+$proposal = $this->proposal;
+
+// Initialize some properties
+$properties = $phpword->getProperties();
+$properties->setCreator('Gross Margin Report');
+$properties->setCompany('Gross Margin Report');
+$properties->setTitle('Gross Margin Report');
+$properties->setDescription('Gross Margin Report');
+$properties->setCategory('Gross Margin Report');
+$properties->setLastModifiedBy('Gross Margin Report');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Gross Margin Report');
+$properties->setKeywords('Gross Margin, Report');
+
+/**
+ * Define the different Sections
+ */
+
+// This section is landscape with 0.5" margins insead of 1"
+$mainSection = $phpword->createSection(array(
+                                            'orientation'  => 'portrait',
+                                            'marginLeft'   => 720,
+                                            'marginRight'  => 720,
+                                            'marginTop'    => 720,
+                                            'marginBottom' => 720
+                                       ));
+
+/**
+ * Define Global Paragraph Styles here
+ */
+
+$phpword->addParagraphStyle('nospacing', array(
+                                              'spaceBefore' => 0,
+                                              'spaceAfter'  => 0
+                                         ));
+
+$phpword->addParagraphStyle('nospacing_rightalign', array(
+                                                         'align'       => 'right',
+                                                         'spaceBefore' => 0,
+                                                         'spaceAfter'  => 0
+                                                    ));
+
+$phpword->addParagraphStyle('nospacing_centeralign', array(
+                                                          'align'       => 'center',
+                                                          'spaceBefore' => 0,
+                                                          'spaceAfter'  => 0
+                                                     ));
+
+$phpword->addParagraphStyle('centeralign', array(
+                                                'align' => 'right'
+                                           ));
+
+$phpword->addParagraphStyle('rightalign', array(
+                                               'align' => 'right'
+                                          ));
+
+/**
+ * Define Global Font Styles here
+ */
+
+$phpword->addFontStyle('table_header', array(
+                                            'size' => 8,
+                                            'bold' => true
+                                       ));
+
+$phpword->addFontStyle('table_body', array(
+                                          'size' => 8
+                                     ));
+
+$phpword->addFontStyle('table_footer', array(
+                                            'size'  => 8,
+                                            'bold'  => true,
+                                            'color' => 'red'
+                                       ));
+
+$phpword->addFontStyle('bold_text', array(
+                                         'bold' => true
+                                    ));
+
+$phpword->addFontStyle('italic_text', array(
+                                           'italic' => true
+                                      ));
+
+/**
+ * Define Global Heading (Title) Styles here
+ */
+
+// H1 Style
+$phpword->addTitleStyle(1, array(
+                                'size'  => 16,
+                                'color' => number_format(0),
+                                'bold'  => true
+                           ), array(
+                                   'borderBottomSize' => 1
+                              ));
+// H2 Style #5881BC
+$phpword->addTitleStyle(2, array(
+                                'size'  => 14,
+                                'color' => number_format(0),
+                                'bold'  => true
+                           ));
+// H3 Style #5881BC
+$phpword->addTitleStyle(3, array(
+                                'size'  => 12,
+                                'color' => '4F81BD',
+                                'bold'  => true
+                           ));
+
+/**
+ * Define Table Styles here
+ */
+$header_color    = "dddddd";
+$footer_color    = "dddddd";
+$highlight_color = "f6ff8f";
+
+/* LANDSCAPE FULL WIDTH TABLE = 16000 twips */
+/* PORTRAIT FULL WIDTH TABLE = 10400 twips */
+
+$includeTable = (object)array(
+    "tablestyle"  => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginright'  => 50
+    ),
+    "col1Width"   => 2200,
+    "col2Width"   => 2200,
+    "col3Width"   => 2000,
+    "col4Width"   => 2000,
+    "col5Width"   => 2000,
+    "leftalign"   => "nospacing",
+    "centeralign" => "nospacing_centeralign",
+    "rightalign"  => "nospacing_rightalign",
+    "header"      => (object)array(
+        "rowheight" => null,
+        "fontStyle" => "table_header",
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $header_color,
+            "valign"           => "center"
+        )
+    ),
+    "row"         => (object)array(
+        "rowheight" => null,
+        "fontStyle" => 'table_body',
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center"
+        )
+    ),
+    "footer"      => (object)array(
+        "rowheight" => null,
+        "fontStyle" => 'table_footer',
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $footer_color,
+            "valign"           => "center"
+        )
+    )
+);
+
+$excludeTable = (object)array(
+    "tablestyle"  => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginright'  => 50
+    ),
+    "col1Width"   => 2600,
+    "col2Width"   => 2600,
+    "col3Width"   => 2600,
+    "col4Width"   => 2600,
+    "leftalign"   => "nospacing",
+    "centeralign" => "nospacing_centeralign",
+    "rightalign"  => "nospacing_rightalign",
+    "header"      => (object)array(
+        "rowheight" => null,
+        "fontStyle" => "table_header",
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $header_color,
+            "valign"           => "center"
+        )
+    ),
+    "row"         => (object)array(
+        "rowheight" => null,
+        "fontStyle" => 'table_body',
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "valign"           => "center"
+        )
+    ),
+    "footer"      => (object)array(
+        "rowheight" => null,
+        "fontStyle" => 'table_footer',
+        "cell"      => array(
+            "borderTopSize"    => 1,
+            "borderRightSize"  => 1,
+            "borderBottomSize" => 1,
+            "borderLeftSize"   => 1,
+            "bgColor"          => $footer_color,
+            "valign"           => "center"
+        )
+    )
+);
+
+/**
+ * Here we put all our table styles into an object that gets passed to each of
+ * the view scripts
+ */
+$styles = (object)array(
+    "tables" => (object)array(
+        "includeTable" => $includeTable,
+        "excludeTable" => $excludeTable
+    )
+);
+
+/**
+ * An array of view variables to pass to the partial scripts
+ */
+$data = array(
+    "phpword"     => $phpword,
+    "proposal"    => $this->proposal,
+    "section"     => $mainSection,
+    "styles"      => $styles,
+    "brandName"   => 'MPSToolbox.com',
+    "companyName" => 'MPSToolbox.com'
+);
+
+/**
+ * Render each of the view scripts for different parts of the document
+ */
+$this->partial("/report/printingdevicelist//docx/01_header.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/02_included.phtml", $data);
+$this->partial("/report/printingdevicelist/docx/03_excluded.phtml", $data);
+
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter->save($this->savePath);
+
+/**
+ * Finally we write out the url to the file we just generated.
+ */
+echo $this->baseUrl($this->publicFileName);
