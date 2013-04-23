@@ -1432,6 +1432,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `targetColorCostPerPage` DOUBLE NULL ,
     `targetMonochromeCostPerPage` DOUBLE NULL ,
     `replacementPricingConfigId` INT NULL ,
+    `adminCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `hardware_optimization_settings_ibfk_1_idx` (`customerPricingConfigId` ASC) ,
     INDEX `hardware_optimization_settings_ibfk_2_idx` (`dealerPricingConfigId` ASC) ,
