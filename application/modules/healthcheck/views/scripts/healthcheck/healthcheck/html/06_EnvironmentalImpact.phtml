@@ -1,0 +1,62 @@
+<?php
+/* @var $healthcheck Healthcheck_ViewModel_Healthcheck */
+$healthcheck = $this->healthcheck;
+$graphs = $this->healthcheck->getGraphs();
+?>
+<div class="h1">Analysis: Environmental Impact</div>
+<table cellspacing="0" class="gradesTable">
+    <tr>
+        <td class="gradeDescription">
+            <p><?php echo $proposal->getRanking()->getEnvironmentalFriendliness()->RankingText; ?></p>
+        </td>
+        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+    </tr>
+</table>
+<br />
+<div class="pheader">Forest and Water Consumption</div>
+<p>Did you know that it takes one average-sized tree to produce 7,800 pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for Sample Company:</p>
+<table>
+    <tr>
+        <td><img style="width:95px;" src="/themes/default/proposalgenerator/reports/images/tree.jpg"/></td>
+        <td><img style="width:95px;" src="/themes/default/proposalgenerator/reports/images/tree.jpg"/></td>
+        <td style="font-size:25px;text-align:center"><strong><?php echo number_format($this->healthcheck->calculateNumberOfTreesUsed())?></strong> <br/>trees</td>
+        <td><img style="width:87px;" src="/themes/default/proposalgenerator/reports/images/droplet.jpg"/></td>
+        <td><img style="width:87px;" src="/themes/default/proposalgenerator/reports/images/droplet.jpg"/></td>
+        <td style="font-size:25px;text-align:center"><strong><?php echo number_format($this->healthcheck->calculateNumberOfGallonsWaterUsed())?></strong> <br/>gallons water</td>
+    </tr>
+</table>
+<div class="pheader">Energy Consumption</div>
+<?php if ($proposal->getPercentageOfDevicesReportingPower() > $proposal->getDevicesReportingPowerThreshold()) {?>
+<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> </strong>kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->report->getReportSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
+<p>The following lists the devices with the highest average power consumption per month.</p>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 160px;">Model</th>
+            <th style="width: 110px;" class="center">Serial No.</th>
+            <th style="width: 170px;" class="center">Avg. kWh Consumption<br/>Per Month Count</th>
+            <th style="width: 145px;" class="center">Avg. Power<br/>Cost per Month</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+        <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr>
+            <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
+            <td class="center"><?php if($deviceInstance->serialNumber) echo $deviceInstance->serialNumber; else echo 'Unknown';?></td>
+            <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
+            <td class="center">$<?php echo number_format($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
+        </tr>
+        <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
+    </tbody>
+</table>
+<br />
+<?php } else echo "<p>".$proposal->getNumberOfDevicesReportingPower()." of your ".$proposal->getDeviceCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
+<div class="pheader">Green Features: Duplex Printing and Scanning</div>
+<p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner and e-mailing documents instead of printing copies for distribution.</p>
+<p>By printing 25% more documents on both sides of the page than you are now, you could save <strong><?php echo number_format($this->healthcheck->calculateQuarterOfNumberOfTreesUsed()) ?> trees</strong> and <strong><?php echo number_format($this->healthcheck->calculateQuarterOfNumberOfGallonsWaterUsed()) ?> gallons of water</strong> used in paper production per year.</p>
+<p>The following charts show how many of your printing devices have duplex printing and scanning capabilities:</p>
+<div class="center">
+    <img src="<?php echo $graphs[13]; ?>" style="width: 270px; height: 175px;" />
+    <img src="<?php echo $graphs[14]; ?>" style="width: 270px; height: 175px;" />
+</div>

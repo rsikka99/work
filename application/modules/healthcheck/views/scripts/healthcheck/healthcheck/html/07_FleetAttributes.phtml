@@ -1,0 +1,189 @@
+<?php
+/* @var $healthcheck Healthcheck_ViewModel_Healthcheck */
+$healthcheck = $this->healthcheck;
+?>
+<div class="h1">Fleet Attributes</div>
+<p>The following provides a summary of your existing printing devices.</p>
+<p>Leased devices are shown in gray.</p>
+<div class="pheader">Optimized Devices - No Changes Necessary</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong><?php echo $this->jitName ?> Compatible</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($proposal->getOptimizedDevices() as $deviceInstance): ?>
+            <?php
+            $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+            if ($deviceInstance->getIsLeased())
+            {
+                echo ' shaded';
+            }
+            ?>">
+            <td><?php echo $deviceName?>
+            <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+            <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($proposal->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
+        </tr>
+            <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Underutilized Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 30px;vertical-align: middle"><strong>Device Name</th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong><?php echo $this->jitName ?> Compatible</strong></th>
+            <th style="vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+
+        foreach ($proposal->getUnderutilizedDevices() as $deviceInstance):
+            ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+            if ($deviceInstance->getIsLeased())
+            {
+                echo ' shaded';
+            }?>">
+            <td><?php echo $deviceName?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume(),2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to JIT compatible device.</td>
+        </tr>
+            <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Overutilized Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong><?php echo $this->jitName ?> Compatible</strong></th>
+            <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($proposal->getOverutilizedDevices() as $deviceInstance):
+            ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+            if ($deviceInstance->getIsLeased())
+            {
+                echo ' shaded';
+            }?>">
+            <td><?php echo $deviceName?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume(),2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
+            <td>Migrate excess page volume to an JIT compatible device.</td>
+        </tr>
+            <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Old Devices</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong><?php echo $this->jitName ?> Compatible</strong></th>
+            <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($proposal->getOldDevices() as $deviceInstance): ?>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+            if ($deviceInstance->getIsLeased())
+            {
+                echo ' shaded';
+            }?>">
+            <td><?php echo $deviceName?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($proposal->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to a newer JIT compatible device.</td>
+        </tr>
+            <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Devices Not Reporting Toner Levels</div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+        <tr class="shaded">
+            <th style="width: 170px;vertical-align: middle"><strong>Device Name</th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
+            <th style="width: 51px;vertical-align: middle" class="center"><strong><?php echo $this->jitName ?> Compatible</strong></th>
+            <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($proposal->getDevicesNotReportingTonerLevels() as $deviceInstance):
+                ?>
+                <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+            <tr class="<?php
+                if ($deviceInstance->getIsLeased())
+                {
+                    echo ' shaded';
+                }?>">
+                <td><?php echo $deviceName?>
+                    <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                    <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($proposal->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
+            <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($proposal->report->getReportSettings()->monthlyLeasePayment, $proposal->getLeasedBlackAndWhiteCharge(), $proposal->getLeasedColorCharge(), $proposal->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($proposal->calculateTotalMonthlyCost())), 2) ?>%</td>
+            <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
+            <td>Migrate all page volume to JIT compatible device.</td>
+        </tr>
+                <?php endforeach; ?>
+    </tbody>
+</table>
