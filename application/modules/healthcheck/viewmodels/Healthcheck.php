@@ -510,42 +510,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return $this->MaximumMonthlyPrintVolume;
     }
 
-    public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
-    {
-        $maxVolume = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-        {
-            if ($deviceInstance->getReplacementMasterDevice())
-            {
-                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume();
-            }
-            else
-            {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
-            }
-        }
-
-        return $maxVolume;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMaximumMonthlyPurchasedPrintVolume ()
-    {
-        if (!isset($this->_maximumMonthlyPurchasedPrintVolume))
-        {
-            $maxVolume = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
-            {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
-            }
-            $this->_maximumMonthlyPurchasedPrintVolume = $maxVolume;
-        }
-
-        return $this->_maximumMonthlyPurchasedPrintVolume;
-    }
-
     /**
      * @return int
      */
@@ -586,83 +550,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->_numberOfColorCapablePurchasedDevices;
-    }
-
-    /**
-     * Gets the amount of color capable devices with replacement devices
-     *
-     * @return int
-     */
-    public function getNumberOfColorCapableDevicesWithReplacements ()
-    {
-        $numberOfDevices = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
-        {
-            $replacementDevice = $device->getReplacementMasterDevice();
-            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
-            {
-                if ($replacementDevice->isColor())
-                {
-                    $numberOfDevices++;
-                }
-            }
-            else if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
-            {
-                $numberOfDevices++;
-            }
-        }
-
-        return $numberOfDevices;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfBlackAndWhiteCapableDevices ()
-    {
-        if (!isset($this->NumberOfBlackAndWhiteCapableDevices))
-        {
-            $this->NumberOfBlackAndWhiteCapableDevices = $this->getDeviceCount() - $this->getNumberOfColorCapableDevices();
-        }
-
-        return $this->NumberOfBlackAndWhiteCapableDevices;
-    }
-
-    /**
-     * Gets fleet percentages
-     *
-     * @return stdClass
-     */
-    public function getPercentages ()
-    {
-        if (!isset($this->Percentages))
-        {
-            $Percentages                                            = new stdClass();
-            $Percentages->TotalColorPercentage                      = 0;
-            $Percentages->PurchasedVsLeasedBlackAndWhite            = new stdClass();
-            $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = 0;
-            $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = 0;
-            $Percentages->PurchasedVsLeasedColor                    = new stdClass();
-            $Percentages->PurchasedVsLeasedColor->Leased            = 0;
-            $Percentages->PurchasedVsLeasedColor->Purchased         = 0;
-            if ($this->getPageCounts()->Total->Combined->Monthly)
-            {
-                $Percentages->TotalColorPercentage = $this->getPageCounts()->Total->Color->Monthly / $this->getPageCounts()->Total->Combined->Monthly;
-            }
-            if ($this->getPageCounts()->Total->BlackAndWhite->Yearly)
-            {
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getPageCounts()->Leased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getPageCounts()->Purchased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
-            }
-            if ($this->getPageCounts()->Total->Color->Yearly)
-            {
-                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getPageCounts()->Leased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
-                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getPageCounts()->Purchased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
-            }
-            $this->Percentages = $Percentages;
-        }
-
-        return $this->Percentages;
     }
 
     /**
@@ -722,19 +609,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->PageCounts;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAverageCostOfDevices ()
-    {
-        if (!isset($this->AverageCostOfDevices))
-        {
-            $this->AverageCostOfDevices = $this->healthcheck->getHealthcheckSettings()->defaultPrinterCost;
-        }
-
-        return $this->AverageCostOfDevices;
     }
 
     /**
@@ -944,19 +818,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getPercentColorDevices ()
-    {
-        if (!isset($this->PercentColorDevices))
-        {
-            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / count($this->getDevices()->allIncludedDeviceInstances);
-        }
-
-        return $this->PercentColorDevices;
-    }
-
-    /**
-     * @return float
-     */
     public function getAverageAgeOfDevices ()
     {
         if (!isset($this->AverageAgeOfDevices))
@@ -995,77 +856,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      *
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function getMonthlyHighCostColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->HighCostDevices))
-        {
-            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
-            $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
-            foreach ($deviceArray as $key => $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isColor())
-                {
-                    $costArray[] = array($key, $deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
-                }
-            }
-
-            usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
-            $highCostDevices = array();
-            foreach ($costArray as $costs)
-            {
-                $highCostDevices[] = $deviceArray[$costs[0]];
-            }
-            $this->HighCostDevices = $highCostDevices;
-        }
-
-        return $this->HighCostDevices;
-    }
-
-
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return Proposalgen_Model_DeviceInstance []
-     */
-    public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->highCostPurchasedDevices))
-        {
-            $deviceArray = $this->getPurchasedDevices();
-            $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
-            foreach ($deviceArray as $key => $deviceInstance)
-            {
-                $costArray[] = array($key, ($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
-            }
-
-            usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
-            $highCostDevices = array();
-
-            foreach ($costArray as $costs)
-            {
-                $highCostDevices[] = $deviceArray[$costs[0]];
-            }
-
-            $this->highCostPurchasedDevices = $highCostDevices;
-        }
-
-        return $this->highCostPurchasedDevices;
-    }
-
-
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
     public function getMonthlyHighCostPurchasedColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
@@ -1094,38 +884,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->HighCostDevices;
-    }
-
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getMonthlyHighCostMonochromeDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->HighCostMonochromeDevices))
-        {
-            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
-            $costArray   = array();
-            /**@var $value Proposalgen_Model_DeviceInstance */
-            foreach ($deviceArray as $key => $deviceInstance)
-            {
-                $costArray[] = array($key, $deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage);
-            }
-
-            usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
-            $highCostDevices = array();
-            foreach ($costArray as $costs)
-            {
-                $highCostDevices[] = $deviceArray[$costs[0]];
-            }
-            $this->HighCostMonochromeDevices = $highCostDevices;
-        }
-
-        return $this->HighCostMonochromeDevices;
     }
 
     /**
@@ -1164,44 +922,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return ($deviceA[1] > $deviceB[1]) ? -1 : 1;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getMostExpensiveDevices ()
-    {
-        if (!isset($this->MostExpensiveDevices))
-        {
-
-            $deviceArray = $this->getPurchasedDevices();
-            usort($deviceArray, array(
-                                     $this,
-                                     "ascendingSortDevicesByMonthlyCost"
-                                ));
-            $this->MostExpensiveDevices = $deviceArray;
-        }
-
-        return $this->MostExpensiveDevices;
-    }
-
-    /**
-     * Callback function for uSort when we want to sort a device based on
-     * monthly cost
-     *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
-     *
-     * @return int
-     */
-    public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
-    {
-        if ($deviceA->getMonthlyRate() == $deviceB->getMonthlyRate())
-        {
-            return 0;
-        }
-
-        return ($deviceA->getMonthlyRate() > $deviceB->getMonthlyRate()) ? -1 : 1;
     }
 
     /**
@@ -1356,19 +1076,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return float
-     */
-    public function getLeastUsedDevicePercentage ()
-    {
-        if (!isset($this->LeastUsedDevicePercentage))
-        {
-            $this->LeastUsedDevicePercentage = $this->getLeastUsedDeviceCount() / $this->getDeviceCount() * 100;
-        }
-
-        return $this->LeastUsedDevicePercentage;
-    }
-
-    /**
      * @return int
      */
     public function getMostUsedDeviceCount ()
@@ -1379,19 +1086,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->MostUsedDeviceCount;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMostUsedDevicePercentage ()
-    {
-        if (!isset($this->MostUsedDevicePercentage))
-        {
-            $this->MostUsedDevicePercentage = $this->getMostUsedDeviceCount() / $this->getDeviceCount() * 100;
-        }
-
-        return $this->MostUsedDevicePercentage;
     }
 
     /**
@@ -1527,76 +1221,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return $this->NumberOfDevicesReportingPower;
     }
 
-
-    /**
-     * @return stdClass
-     */
-    public function getGrossMarginTotalMonthlyCost ()
-    {
-        if (!isset($this->GrossMarginTotalMonthlyCost))
-        {
-            $totalCost                = new stdClass();
-            $totalCost->BlackAndWhite = 0;
-            $totalCost->Color         = 0;
-            $totalCost->Combined      = 0;
-            foreach ($this->getPurchasedDevices() as $device)
-            {
-                $totalCost->BlackAndWhite += $device->getGrossMarginMonthlyBlackAndWhiteCost();
-                $totalCost->Color += $device->getGrossMarginMonthlyColorCost();
-            }
-            $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
-            $this->GrossMarginTotalMonthlyCost = $totalCost;
-        }
-
-        return $this->GrossMarginTotalMonthlyCost;
-    }
-
-    /**
-     * @return float
-     */
-    public function getNumberOfRepairs ()
-    {
-        if (!isset($this->NumberOfRepairs))
-        {
-            $this->NumberOfRepairs = $this->healthcheck->getSurvey()->averageMonthlyBreakdowns;
-            if (!$this->NumberOfRepairs)
-            {
-                $this->NumberOfRepairs = $this->getDeviceCount() * 0.05;
-            }
-        }
-
-        return $this->NumberOfRepairs;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAverageTimeBetweenBreakdownAndFix ()
-    {
-        if (!isset($this->AverageTimeBetweenBreakdownAndFix))
-        {
-            $this->AverageTimeBetweenBreakdownAndFix = $this->healthcheck->getSurvey()->averageRepairTime;
-        }
-
-        return $this->AverageTimeBetweenBreakdownAndFix;
-    }
-
-    /**
-     * @return float
-     */
-    public function getAnnualDowntimeFromBreakdowns ()
-    {
-        if (!isset($this->AnnualDowntimeFromBreakdowns))
-        {
-            // convert to hours (8hrs = 1day : 4hrs = 1/2day) breakdowns *
-            // (repair time * 8)
-            $downtime                           = $this->getNumberOfRepairs() * ($this->getAverageTimeBetweenBreakdownAndFix() * 8) * 12;
-            $this->AnnualDowntimeFromBreakdowns = $downtime;
-        }
-
-        return $this->AnnualDowntimeFromBreakdowns;
-    }
-
     /**
      * @return int
      */
@@ -1608,89 +1232,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->NumberOfUniquePurchasedToners;
-    }
-
-
-    /**
-     * @return float
-     */
-    public function getPercentPrintingDoneOnInkjet ()
-    {
-        if (!isset($this->PercentPrintingDoneOnInkjet))
-        {
-            $this->PercentPrintingDoneOnInkjet = $this->healthcheck->getSurvey()->percentageOfInkjetPrintVolume;
-        }
-
-        return $this->PercentPrintingDoneOnInkjet;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getHighRiskDevices ()
-    {
-        if (!isset($this->HighRiskDevices))
-        {
-            $deviceArraySortedByUsage       = $this->getDevices()->allIncludedDeviceInstances;
-            $deviceArraySortedByAge         = $this->getDevices()->allIncludedDeviceInstances;
-            $deviceArraySortedByRiskRanking = $this->getDevices()->allIncludedDeviceInstances;
-            usort($deviceArraySortedByUsage, array(
-                                                  $this,
-                                                  "sortDevicesByLifeUsage"
-                                             ));
-            usort($deviceArraySortedByAge, array(
-                                                $this,
-                                                "sortDevicesByAge"
-                                           ));
-            // setting the age rank for each device
-            $ctr = 1;
-            foreach ($deviceArraySortedByAge as $deviceInstance)
-            {
-                $deviceInstance->setAgeRank($ctr);
-                $ctr++;
-            }
-
-            // setting the life usage rank for each device
-            $ctr = 1;
-            foreach ($deviceArraySortedByAge as $deviceInstance)
-            {
-                $deviceInstance->setLifeUsageRank($ctr);
-                $ctr++;
-            }
-            // setting the risk ranking based on age and life usage rank
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                $deviceInstance->setRiskRank($deviceInstance->getLifeUsageRank() + $deviceInstance->getAgeRank());
-            }
-
-            // sorting devices based on risk ranking
-            usort($deviceArraySortedByRiskRanking, array(
-                                                        $this,
-                                                        "sortDevicesByRiskRanking"
-                                                   ));
-            $this->HighRiskDevices = $deviceArraySortedByRiskRanking;
-        }
-
-        return $this->HighRiskDevices;
-    }
-
-    /**
-     * Callback function for uSort when we want to sort devices based on life
-     * usage
-     *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
-     *
-     * @return int
-     */
-    public function sortDevicesByLifeUsage ($deviceA, $deviceB)
-    {
-        if ($deviceA->getLifeUsage() == $deviceB->getLifeUsage())
-        {
-            return 0;
-        }
-
-        return ($deviceA->getLifeUsage() < $deviceB->getLifeUsage()) ? -1 : 1;
     }
 
     /**
@@ -1709,25 +1250,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return ($deviceA->getAge() < $deviceB->getAge()) ? -1 : 1;
-    }
-
-    /**
-     * Callback function for uSort when we want to sort devices based their risk
-     * ranking
-     *
-     * @param Proposalgen_Model_DeviceInstance $deviceA
-     * @param Proposalgen_Model_DeviceInstance $deviceB
-     *
-     * @return int
-     */
-    public function sortDevicesByRiskRanking ($deviceA, $deviceB)
-    {
-        if ($deviceA->getRiskRank() == $deviceB->getRiskRank())
-        {
-            return 0;
-        }
-
-        return ($deviceA->getRiskRank() > $deviceB->getRiskRank()) ? -1 : 1;
     }
 
     /**
@@ -1753,56 +1275,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->_oldDevices;
-    }
-
-    /**
-     * Gets the devices sorted by ascending age
-     */
-    public function getIncludedDevicesSortedAscendingByAge ()
-    {
-        if (!isset($this->_includedDevicesSortedAscendingByAge))
-        {
-            $devices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
-            {
-                if ($device->getAge() >= self::OLD_DEVICE_LIST)
-                {
-                    $devices[] = $device;
-                }
-            }
-            usort($devices, array(
-                                 $this,
-                                 "sortDevicesByAge"
-                            ));
-            $this->_includedDevicesSortedAscendingByAge = $devices;
-        }
-
-        return $this->_includedDevicesSortedAscendingByAge;
-    }
-
-    /**
-     * Gets the devices sorted by descending age
-     */
-    public function getIncludedDevicesSortedDescendingByAge ()
-    {
-        if (!isset($this->_includedDevicesSortedDescendingByAge))
-        {
-            $devices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
-            {
-                if ($device->getAge() >= self::OLD_DEVICE_LIST)
-                {
-                    $devices[] = $device;
-                }
-            }
-            usort($devices, array(
-                                 $this,
-                                 "sortDevicesByAge"
-                            ));
-            $this->_includedDevicesSortedDescendingByAge = $devices;
-        }
-
-        return $this->_includedDevicesSortedDescendingByAge;
     }
 
     /**
@@ -1880,43 +1352,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             // Formatting variables
             $numberValueMarker                          = "N *sz0";
-            $PrintIQSavingsBarGraph_currencyValueMarker = "N $*sz0";
-
-            /**
-             * -- PrintIQSavingsBarGraph
-             */
-            $highest  = ($this->getPrintIQTotalCost() > $this->getTotalPurchasedAnnualCost()) ? $this->getPrintIQTotalCost() : $this->getTotalPurchasedAnnualCost();
-            $barGraph = new gchart\gGroupedBarChart(600, 160);
-            $barGraph->setHorizontal(true);
-            $barGraph->setTitle("Annual Printing Costs for Purchased Hardware");
-            $barGraph->setVisibleAxes(array(
-                                           'x'
-                                      ));
-            $barGraph->addDataSet(array(
-                                       $this->getTotalPurchasedAnnualCost()
-                                  ));
-            $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
-            $barGraph->addDataSet(array(
-                                       $this->getPrintIQTotalCost()
-                                  ));
-            $barGraph->setLegend(array(
-                                      "Current",
-                                      "MPSToolbox"
-                                 ));
-            $barGraph->addAxisRange(0, 0, $highest * 1.3);
-            $barGraph->setDataRange(0, $highest * 1.3);
-            $barGraph->setBarScale(40, 10);
-            $barGraph->setLegendPosition("b");
-            $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
-            $barGraph->setProperty('chxs', '0N*sz0*');
-            $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "0", "-1", "11");
-            $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "1", "-1", "11");
-            // Graphs[0]
-            $this->Graphs [] = $barGraph->getUrl();
+            //Graphs[2]
+            $this->Graphs [] = "FILLER";
 
             /**
              * -- LeasedVsPurchasedBarGraph
@@ -2134,195 +1571,23 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             // Graphs[6]
             $this->Graphs [] = $barGraph->getUrl();
 
-            /**
-             * -- Color Capable Devices Graph
-             */
-            $colorPercentage = 0;
-            if ($this->getDeviceCount())
-            {
-                $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDeviceCount()) * 100), 2);
-            }
-
-            $notColorPercentage = 100 - $colorPercentage;
-            $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
-            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
-            $colorCapableGraph->addDataSet(array(
-                                                $colorPercentage,
-                                                $notColorPercentage
-                                           ));
-            $colorCapableGraph->setLegend(array(
-                                               "Color-capable",
-                                               "Black-and-white only"
-                                          ));
-            $colorCapableGraph->setLabels(array(
-                                               "$colorPercentage%"
-                                          ));
-            $colorCapableGraph->addColors(array(
-                                               "E21736",
-                                               "0194D2"
-                                          ));
-            $colorCapableGraph->setLegendPosition("bv");
             // Graphs[7]
-            $this->Graphs [] = $colorCapableGraph->getUrl();
+            $this->Graphs [] = "FILLER";
 
-            /**
-             * -- ColorVSBWPagesGraph
-             */
-            $colorPercentage = 0;
-            if ($pageCounts->Total->Combined->Monthly > 0)
-            {
-                $colorPercentage = round((($pageCounts->Total->Color->Monthly / $pageCounts->Total->Combined->Monthly) * 100), 2);
-            }
-
-            $bwPercentage        = 100 - $colorPercentage;
-            $colorVSBWPagesGraph = new gchart\gPie3DChart(305, 210);
-            $colorVSBWPagesGraph->setTitle("Color vs Black/White Pages");
-            $colorVSBWPagesGraph->addDataSet(array(
-                                                  $colorPercentage,
-                                                  $bwPercentage
-                                             ));
-            $colorVSBWPagesGraph->setLegend(array(
-                                                 "Color pages printed",
-                                                 "Black-and-white pages printed"
-                                            ));
-            $colorVSBWPagesGraph->setLabels(array(
-                                                 "$colorPercentage%",
-                                                 "$bwPercentage%"
-                                            ));
-            $colorVSBWPagesGraph->addColors(array(
-                                                 "E21736",
-                                                 "0194D2"
-                                            ));
-            $colorVSBWPagesGraph->setLegendPosition("bv");
             // Graphs[8]
-            $this->Graphs [] = $colorVSBWPagesGraph->getUrl();
+            $this->Graphs [] = "FILLER";
 
-            /**
-             * -- Device Ages Graph
-             */
-            $deviceAges = array(
-                "Less than 5 years old" => 0,
-                "5-6 years old"         => 0,
-                "7-8 years old"         => 0,
-                "More than 8 years old" => 0
-            );
-            foreach ($this->getPurchasedDevices() as $device)
-            {
-                if ($device->getAge() < 5)
-                {
-                    $deviceAges ["Less than 5 years old"]++;
-                }
-                else if ($device->getAge() <= 6)
-                {
-                    $deviceAges ["5-6 years old"]++;
-                }
-                else if ($device->getAge() <= 8)
-                {
-                    $deviceAges ["7-8 years old"]++;
-                }
-                else
-                {
-                    $deviceAges ["More than 8 years old"]++;
-                }
-            }
-            $dataSet     = array();
-            $legendItems = array();
-            $labels      = array();
-
-            foreach ($deviceAges as $legendItem => $count)
-            {
-                if ($count > 0)
-                {
-                    $dataSet []     = $count;
-                    $legendItems [] = $legendItem;
-                    $percentage     = round(($count / $this->getPurchasedDeviceCount()) * 100, 2);
-                    $labels []      = "$percentage%";
-                }
-            }
-            $deviceAgeGraph = new gchart\gPie3DChart(350, 200);
-            $deviceAgeGraph->addDataSet($dataSet);
-            $deviceAgeGraph->setLegend($legendItems);
-            $deviceAgeGraph->setLabels($labels);
-            $deviceAgeGraph->addColors(array(
-                                            "E21736",
-                                            "0094cf",
-                                            "5c3f9b",
-                                            "adba1d"
-                                       ));
-            $deviceAgeGraph->setLegendPosition("bv");
             // Graphs[9]
-            $this->Graphs [] = $deviceAgeGraph->getUrl();
+            $this->Graphs [] = "FILLER";
 
-            /**
-             * -- ScanCapableDevicesGraph
-             */
-            if ($this->getDeviceCount())
-            {
-                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDeviceCount()) * 100), 2);
-            }
-            else
-            {
-                $scanPercentage = 0;
-            }
-            $notScanPercentage = 100 - $scanPercentage;
-            $scanCapableGraph  = new gchart\gPie3DChart(200, 160);
-            $scanCapableGraph->setTitle("Scan-Capable Printing Devices");
-            $scanCapableGraph->addDataSet(array(
-                                               $scanPercentage,
-                                               $notScanPercentage
-                                          ));
-            $scanCapableGraph->setLegend(array(
-                                              "Scan capable",
-                                              "Not scan capable"
-                                         ));
-            $scanCapableGraph->setLabels(array(
-                                              "$scanPercentage%"
-                                         ));
-            $scanCapableGraph->addColors(array(
-                                              "E21736",
-                                              "0194D2"
-                                         ));
-            $scanCapableGraph->setLegendPosition("bv");
             // Graphs[10]
-            $this->Graphs [] = $scanCapableGraph->getUrl();
+            $this->Graphs [] = "FILLER";
 
-            /**
-             * -- FaxCapableDevicesGraph
-             */
-            $faxPercentage = 0;
-            if ($this->getDeviceCount())
-            {
-                $faxPercentage = round((($this->getNumberOfFaxCapableDevices() / $this->getDeviceCount()) * 100), 2);
-            }
-
-            $notFaxPercentage = 100 - $faxPercentage;
-            $faxCapable       = new gchart\gPie3DChart(200, 160);
-            $faxCapable->setTitle("Fax-Capable Printing Devices");
-            $faxCapable->addDataSet(array(
-                                         $faxPercentage,
-                                         $notFaxPercentage
-                                    ));
-            $faxCapable->setLegend(array(
-                                        "Fax capable",
-                                        "Not fax capable"
-                                   ));
-            $faxCapable->setLabels(array(
-                                        "$faxPercentage%"
-                                   ));
-            $faxCapable->addColors(array(
-                                        "E21736",
-                                        "0194D2"
-                                   ));
-            $faxCapable->setLegendPosition("bv");
             // Graphs[11]
-            $this->Graphs [] = $faxCapable->getUrl();
+            $this->Graphs [] = "FILLER";
 
-            /**
-             * -- SmallColorCapableDevicesGraph
-             */
-            $colorCapableGraph->setDimensions(200, 160);
             // Graphs[12]
-            $this->Graphs [] = $colorCapableGraph->getUrl();
+            $this->Graphs [] = "FILLER";
 
             /**
              * -- DuplexCapableDevicesGraph
@@ -2356,8 +1621,35 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $this->Graphs [] = $duplexCapableGraph->getUrl();
 
             /**
-             * -- BigScanCapableDevicesGraph
+             * -- ScanCapableDevicesGraph
              */
+            if ($this->getDeviceCount())
+            {
+                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDeviceCount()) * 100), 2);
+            }
+            else
+            {
+                $scanPercentage = 0;
+            }
+            $notScanPercentage = 100 - $scanPercentage;
+            $scanCapableGraph  = new gchart\gPie3DChart(200, 160);
+            $scanCapableGraph->setTitle("Scan-Capable Printing Devices");
+            $scanCapableGraph->addDataSet(array(
+                                               $scanPercentage,
+                                               $notScanPercentage
+                                          ));
+            $scanCapableGraph->setLegend(array(
+                                              "Scan capable",
+                                              "Not scan capable"
+                                         ));
+            $scanCapableGraph->setLabels(array(
+                                              "$scanPercentage%"
+                                         ));
+            $scanCapableGraph->addColors(array(
+                                              "E21736",
+                                              "0194D2"
+                                         ));
+            $scanCapableGraph->setLegendPosition("bv");
             $scanCapableGraph->setDimensions(305, 210);
             // Graphs[14]
             $this->Graphs [] = $scanCapableGraph->getUrl();
@@ -2447,58 +1739,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->TotalPurchasedAnnualCost;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMPSBlackAndWhiteCPP ()
-    {
-        if (!isset($this->MPSBlackAndWhiteCPP))
-        {
-            $this->MPSBlackAndWhiteCPP = $this->healthcheck->getHealthcheckSettings()->mpsBwCostPerPage;
-        }
-
-        return $this->MPSBlackAndWhiteCPP;
-    }
-
-    /**
-     * @return float
-     */
-    public function getMPSColorCPP ()
-    {
-        if (!isset($this->MPSColorCPP))
-        {
-            $this->MPSColorCPP = $this->healthcheck->getHealthcheckSettings()->mpsColorCostPerPage;
-        }
-
-        return $this->MPSColorCPP;
-    }
-
-    /**
-     * @return float
-     */
-    public function getInternalAdminCost ()
-    {
-        if (!isset($this->InternalAdminCost))
-        {
-            $this->InternalAdminCost = $this->healthcheck->getHealthcheckSettings()->costToExecuteSuppliesOrder * 12;
-        }
-
-        return $this->InternalAdminCost;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPrintIQTotalCost ()
-    {
-        if (!isset($this->PrintIQTotalCost))
-        {
-            $this->PrintIQTotalCost = $this->getInternalAdminCost() + ($this->getAnnualITCost() * 0.5) + ($this->getPageCounts()->Purchased->Color->Yearly * $this->getMPSColorCPP()) + ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly * $this->getMPSBlackAndWhiteCPP()) + $this->getAnnualCostOfHardwarePurchases();
-        }
-
-        return $this->PrintIQTotalCost;
     }
 
     /**
@@ -2731,34 +1971,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * The weighted average monthly cost per page for customers
-     *
-     * @var Proposalgen_Model_CostPerPage
-     */
-    protected $_customerWeightedAverageMonthlyCostPerPage;
-
-    /**
-     * Calculates the dealers monthly revenue when using a target cost per page schema
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyRevenueUsingTargetCostPerPage ()
-    {
-        if (!isset($this->_dealerMonthlyRevenueUsingTargetCostPerPage))
-        {
-            $this->_dealerMonthlyRevenueUsingTargetCostPerPage = 0;
-
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
-            {
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $this->healthcheck->getHealthcheckSettings()->targetMonochromeCostPerPage;
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyColorPageCount() * $this->healthcheck->getHealthcheckSettings()->targetColorCostPerPage;
-            }
-        }
-
-        return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
-    }
-
-    /**
      * Calculates the average pages per device monthly
      *
      * @return float
@@ -2846,7 +2058,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $this->_graphs                     = $this->getOldGraphs();
             $healthgraphs                      = array();
             $numberValueMarker                 = "N *sz0";
-            $currencyValueMarker               = "N $*sz0";
             $pageCounts                        = $this->getPageCounts();
             $companyName                       = $this->healthcheck->getClient()->companyName;
             $OD_AverageMonthlyPagesPerEmployee = 200;
