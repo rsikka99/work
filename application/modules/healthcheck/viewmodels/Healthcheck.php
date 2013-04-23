@@ -1508,8 +1508,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckReportMargin);
-            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckReportMargin);
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
             $this->_averageOemOnlyCostPerPage   = $costPerPage;
         }
 
@@ -1546,8 +1546,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckReportMargin);
-            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckReportMargin);
+            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
+            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 

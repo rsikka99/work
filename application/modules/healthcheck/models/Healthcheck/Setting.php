@@ -140,6 +140,12 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      * The Cost to Execute Supplies Order
      */
     public $costToExecuteSuppliesOrder;
+
+    /**
+     * @var int
+     */
+    public $numberOfSupplyOrdersPerMonth;
+
     /**
      * The id of the assessment pricing configuration
      *
@@ -309,6 +315,10 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->replacementPricingConfigId = $params->replacementPricingConfigId;
         }
+        if (isset($params->numberOfSupplyOrdersPerMonth) && !is_null($params->numberOfSupplyOrdersPerMonth))
+        {
+            $this->numberOfSupplyOrdersPerMonth = $params->numberOfSupplyOrdersPerMonth;
+        }
     }
 
     /**
@@ -343,6 +353,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "hoursSpentOnIt"              => $this->hoursSpentOnIt,
             "costOfLabor"                 => $this->costOfLabor,
             "replacementPricingConfigId"  => $this->replacementPricingConfigId,
+            "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
         );
     }
 

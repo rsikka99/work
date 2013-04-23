@@ -437,6 +437,69 @@ class Healthcheck_Library_Controller_Action extends Tangent_Controller_Action
     }
 
     /**
+     * Saves the current report.
+     * This keeps the updated modification date in the same location at all times.
+     */
+    protected function saveHealthcheck ()
+    {
+        if (isset($this->_mpsSession->healthcheckId) && $this->_mpsSession->healthcheckId > 0)
+        {
+            // Update the last modified date
+            $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
+            Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
+        }
+        else
+        {
+            $this->_healthcheck->healthcheckSettingId = $this->_healthcheck->getHealthcheckSettings()->id;
+            $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
+            Healthcheck_Model_Mapper_Healthcheck::getInstance()->insert($this->_healthcheck);
+            $this->_mpsSession->healthcheckId = $this->_healthcheck->id;
+        }
+    }
+
+    /**
+     * Updates a healthcheck to be at the next available step
+     *
+     * @param bool $force Whether or not to force the update
+     */
+    public function updateHealthcheckStepName ($force = false)
+    {
+        // We can only do this when we have an active step
+        if ($this->_navigation->activeStep instanceof My_Navigation_Step)
+        {
+            // That step also needs a next step for this to work
+            if ($this->_navigation->activeStep->nextStep instanceof My_Navigation_Step)
+            {
+                $update = true;
+                // We only want to update
+                if ($force)
+                {
+                    $update = true;
+                }
+                else
+                {
+                    $newStepName = $this->_navigation->activeStep->nextStep->enumValue;
+
+                    foreach ($this->_navigation->steps as $step)
+                    {
+                        // No need to update the step if we were going back in time.
+                        if ($step->enumValue == $newStepName && $step->canAccess)
+                        {
+                            $update = false;
+                            break;
+                        }
+                    }
+                }
+
+                if ($update)
+                {
+                    $this->getHealthcheck()->stepName = $this->_navigation->activeStep->nextStep->enumValue;
+                }
+            }
+        }
+    }
+
+    /**
      * Redirects the user to the very last available step
      */
     public function redirectToLatestStep ()
