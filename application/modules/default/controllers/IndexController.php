@@ -138,7 +138,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 if ($inArray->isValid($assessmentId))
                 {
                     $this->_proposalSession->reportId = $assessmentId;
-                    $this->_mpsSession->assessmentId = $assessmentId;
+                    $this->_mpsSession->assessmentId  = $assessmentId;
                     $this->redirector('index', 'index', 'assessment');
                 }
             }
@@ -222,7 +222,6 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $hardwareOptimizationId                    = $this->_createNewHardwareOptimization();
                     $this->_mpsSession->hardwareOptimizationId = $hardwareOptimizationId;
                     $this->redirector('index', 'index', 'hardwareoptimization');
                 }
@@ -258,7 +257,6 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
 
 
-
                 if ($rmsUploadId === 0)
                 {
                     $this->redirector('index', 'fleet', 'proposalgen');
@@ -271,24 +269,6 @@ class Default_IndexController extends Tangent_Controller_Action
         }
 
         $this->view->headScript()->appendFile($this->view->baseUrl('/js/default/clientSearch.js'));
-    }
-
-    /**
-     * Creates a new hardware optimization for the customer.
-     * FIXME: Lee - This should probably happen somewhere within the HWO module instead.
-     *
-     * @return int
-     */
-    protected function _createNewHardwareOptimization ()
-    {
-        $hardwareOptimization                                = new Hardwareoptimization_Model_Hardware_Optimization;
-        $hardwareOptimization->clientId                      = $this->_selectedClientId;
-        $hardwareOptimization->dealerId                      = Zend_Auth::getInstance()->getIdentity()->dealerId;
-        $hardwareOptimization->hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert(new Hardwareoptimization_Model_Hardware_Optimization_Setting());
-
-        $hardwareOptimizationId = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($hardwareOptimization);
-
-        return $hardwareOptimizationId;
     }
 
     /**
@@ -314,7 +294,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
         // Get the system and user defaults and apply overrides for user settings
         $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-        $user = Application_Model_Mapper_User::getInstance()->find($this->_userId);
+        $user         = Application_Model_Mapper_User::getInstance()->find($this->_userId);
         $quoteSetting->applyOverride($user->getUserSettings()->getQuoteSettings());
 
         // Update current quote object and save new quote items to database

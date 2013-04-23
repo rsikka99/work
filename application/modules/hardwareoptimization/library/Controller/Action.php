@@ -503,7 +503,7 @@ class Hardwareoptimization_Library_Controller_Action extends Tangent_Controller_
         }
         else
         {
-            $this->_hardwareOptimization->hardwareOptimizationId = $this->_hardwareOptimization->getHardwareOptimizationSetting()->id;
+            $this->_hardwareOptimization->hardwareOptimizationSettingId = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->insert(new Hardwareoptimization_Model_Hardware_Optimization_Setting());
             Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert($this->_hardwareOptimization);
             $this->_mpsSession->hardwareOptimizationId = $this->_hardwareOptimization->id;
         }

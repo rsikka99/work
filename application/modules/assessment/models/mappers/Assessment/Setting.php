@@ -279,7 +279,7 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
     }
 
     /**
-     * Gets a assesssments assesssment setting object
+     * Gets a assessments assesssment setting object
      *
      * @param int $assessmentId
      *            The assesssment's id
