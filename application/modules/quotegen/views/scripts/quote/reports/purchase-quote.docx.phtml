@@ -17,7 +17,7 @@ $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/quote/{$this->
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath = 'quote/reports/purchase-quote/docx';
-$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
+$commonPartsBasePath = 'quote/reports/common';
 
 $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 
@@ -48,15 +48,6 @@ $titlepageSection = $phpword->createSection(array (
 ));
 $section = $phpword->createSection();
 
-/**
- * Footer
- */
-// FIXME: Footer in PHPWord is not working correctly
-//$footer = $section->createFooter();
-//$footer->addText("TEXT");
-//$footer->addImage(PUBLIC_PATH . $this->theme('/proposalgenerator/reports/images/officedepotLogo.jpg'), array (    'align' => 'right'));
-
-// Render our style defaults?
 $this->render("{$commonPartsBasePath}/styles.phtml");
 
 

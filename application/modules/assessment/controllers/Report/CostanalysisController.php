@@ -61,7 +61,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format . "/00-render");
+            $this->render($format . "/00-render");
         }
         catch (Exception $e)
         {

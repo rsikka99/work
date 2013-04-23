@@ -1,0 +1,501 @@
+<?php
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+$proposal = $this->proposal;
+
+/**
+ * Styles
+ */
+$h1Color       = $this->wordStyles->default->sectionHeaderFontColor;
+$h1BorderColor = $this->wordStyles->default->sectionHeaderBorderColor;
+$h2Background  = $this->wordStyles->default->subSectionBackgroundColor;
+$h2Color       = $this->wordStyles->default->subSectionFontColor;
+$h3Color       = "000000";
+
+
+/**
+ * Document Properties
+ */
+$properties = $phpword->getProperties();
+$properties->setCreator('Demo Report');
+$properties->setCompany('Demo Report');
+$properties->setTitle('Demo Report');
+$properties->setDescription('Demo Report');
+$properties->setCategory('Demo Report');
+$properties->setLastModifiedBy('Demo Report');
+$properties->setCreated(time());
+$properties->setModified(time());
+$properties->setSubject('Demo Report');
+$properties->setKeywords('demo, assessment, report');
+
+$titlepageSection = $phpword->createSection(array(
+                                                 'orientation'  => null,
+                                                 'marginLeft'   => 1420,
+                                                 'marginRight'  => 720,
+                                                 'marginTop'    => 720,
+                                                 'marginBottom' => 720
+                                            ));
+$section          = $phpword->createSection();
+
+
+// Title page
+$phpword->addParagraphStyle('titleStyle1', array(
+                                                'align'      => 'center',
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '004990'
+                                           ));
+$phpword->addParagraphStyle('titleStyle2', array(
+                                                'spaceAfter'  => 50,
+                                                'spaceBefore' => 50,
+                                                'bgColor'     => '4C4C4C'
+                                           ));
+$phpword->addParagraphStyle('titleStyle3', array(
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '7F7F7F'
+                                           ));
+$phpword->addFontStyle('titlepage_title', array(
+                                               'size'  => 24,
+                                               'bold'  => true,
+                                               'color' => 'FFFFFF'
+                                          ));
+
+$phpword->addFontStyle('titlepage_subtitle', array(
+                                                  'size'  => 16,
+                                                  'bold'  => true,
+                                                  'color' => 'FFFFFF'
+                                             ));
+
+$phpword->addFontStyle('titlepage_address', array(
+                                                 'size'  => 12,
+                                                 'color' => 'FFFFFF'
+                                            ));
+$phpword->addParagraphStyle('titlepageHeaderParagraph', array(
+                                                             'spaceAfter' => 200
+                                                        ));
+
+$phpword->addParagraphStyle('nospacing', array(
+                                              'spaceBefore' => 0,
+                                              'spaceAfter'  => 0
+                                         ));
+
+$phpword->addParagraphStyle('nospacing_rightalign', array(
+                                                         'align'       => 'right',
+                                                         'spaceBefore' => 0,
+                                                         'spaceAfter'  => 0
+                                                    ));
+
+$phpword->addParagraphStyle('nospacing_centeralign', array(
+                                                          'align'       => 'center',
+                                                          'spaceBefore' => 0,
+                                                          'spaceAfter'  => 0
+                                                     ));
+
+$phpword->addParagraphStyle('rightalign', array(
+                                               'align' => 'right'
+                                          ));
+
+$phpword->addParagraphStyle('gradeParagraph', array(
+                                                   'align'       => 'center',
+                                                   'spaceBefore' => 0,
+                                                   'spaceAfter'  => 0
+                                              ));
+
+$phpword->addParagraphStyle('savingsParagraph', array(
+                                                     'align'       => 'center',
+                                                     'spaceBefore' => 0,
+                                                     'spaceAfter'  => 0
+                                                ));
+
+/**
+ * Font Styles
+ */
+$phpword->addFontStyle('titlepageHeaderFont', array(
+                                                   'bold' => true,
+                                                   'size' => 16
+                                              ));
+
+$phpword->addFontStyle('bold_text', array(
+                                         'bold' => true
+                                    ));
+
+$phpword->addFontStyle('bold_highlight_text', array(
+                                                   'bold'  => true,
+                                                   'color' => $h3Color
+                                              ));
+
+$phpword->addFontStyle('gradeFont', array(
+                                         'bold' => true,
+                                         'size' => 18
+                                    ));
+
+$phpword->addFontStyle('gradeTitleFont', array(
+                                              'bold' => true,
+                                              'size' => 12
+                                         ));
+
+$phpword->addFontStyle('savingsFont', array(
+                                           'bold' => true,
+                                           'size' => 11
+                                      ));
+
+$phpword->addFontStyle('savingsAmountFont', array(
+                                                 'color' => $h3Color,
+                                                 'bold'  => true,
+                                                 'size'  => 11
+                                            ));
+
+$phpword->addFontStyle('small_italic_text', array(
+                                                 'italic' => true,
+                                                 'size'   => 9
+                                            ));
+
+/**
+ * Header/Title Styles
+ */
+// H1 Style
+$phpword->addTitleStyle(1, array(
+                                'size'  => 15,
+                                'color' => $h1Color,
+                                'bold'  => true
+                           ), array(
+                                   'borderBottomColor' => $h1BorderColor,
+                                   'borderBottomSize'  => 1
+                              ));
+// H2 Style #5881BC
+$phpword->addTitleStyle(2, array(
+                                'size'   => 12,
+                                'color'  => $h2Color,
+                                'bold'   => true,
+                                'italic' => true
+                           ), array(
+                                   'bgColor' => $h2Background
+                              ));
+// H3 Style #5881BC
+$phpword->addTitleStyle(3, array(
+                                'size'  => 10,
+                                'color' => $h3Color,
+                                'bold'  => true
+                           ), array(
+                                   'spaceBefore' => 100,
+                                   'spaceAfter'  => 100
+                              ));
+
+// H3 Style #5881BC
+$phpword->addFontStyle('heading3', array(
+                                        'size'  => 10,
+                                        'color' => $h3Color,
+                                        'bold'  => true
+                                   ));
+
+/**
+ * Setup some styles to be used across the report
+ */
+$styles = (object)array(
+    "tables" => (object)array(
+        "grades"              => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "cell1"      => array(
+                "bgColor"          => "F0F0F0",
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1
+            ),
+            "cell2"      => array(
+                "bgColor"          => "F0F0F0",
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        ),
+        "singleimage"         => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            )
+        ),
+        "doubleimage"         => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+        "tripleimage"         => (object)array(
+            "tablestyle" => array(),
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            ),
+            "cell3"      => array(
+                "valign" => "center"
+            )
+        ),
+        "savings"             => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "cell1"      => array(
+                "bgColor"          => "F0F0F0",
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        ),
+        "utilization"         => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => 400,
+            "cell1"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell2"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell3"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell4"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        ),
+        "highriskdevices"     => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => 400,
+            "cell1"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell2"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell3"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell4"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell5"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell6"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        ),
+        "highenergy"          => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => 400,
+            "cell1"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell2"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell3"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell4"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        ),
+        "twoColumnDataTable"  => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => null,
+            "cell1"      => array(
+                "valign" => "center"
+            ),
+            "cell2"      => array(
+                "valign" => "center"
+            )
+        ),
+        "expenseSummaryTable" => (object)array(
+            "tablestyle"  => array(
+                'cellMarginTop'    => 50,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 50,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"   => null,
+            "col1Width"   => 7500,
+            "col2Width"   => 1528,
+            "cell1"       => array(
+                "valign" => "center"
+            ),
+            "cell2"       => array(
+                "valign" => "center"
+            ),
+            "cell1Border" => array(
+                "valign"           => "center",
+                'borderBottomSize' => 1
+            ),
+            "cell2Border" => array(
+                "valign"           => "center",
+                'borderBottomSize' => 1
+            )
+        ),
+        "mostexpensive"       => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 100,
+                'cellMarginRight'  => 100,
+                'cellMarginBottom' => 100,
+                'cellMarginLeft'   => 100
+            ),
+            "rowheight"  => 400,
+            "col1Width"  => 3611.2,
+            "col2Width"  => 1805.6,
+            "col3Width"  => 1805.6,
+            "col4Width"  => 1805.6,
+            "cell1"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell2"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell3"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "cell4"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        )
+    )
+);
+
+$titledata = array(
+    "phpword"        => $phpword,
+    "section"        => $titlepageSection,
+    "proposal"       => $this->proposal,
+    "styles"         => $styles,
+    "dealerLogoFile" => $this->dealerLogoFile,
+);
+
+$data = array(
+    "phpword"      => $phpword,
+    "section"      => $section,
+    "proposal"     => $this->proposal,
+    "styles"       => $styles,
+    "brandName"    => "MPSToolbox.com",
+    "companayName" => "MPSToolbox.com",
+);
+
+// Actual document pages
+$this->partial("report/assessment/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/assessment/docx/02_reportcard.phtml", $data);
+$this->partial("report/assessment/docx/03_serviceandsupplieslogistics.phtml", $data);
+$this->partial("report/assessment/docx/04_printinghardwareusage.phtml", $data);
+$this->partial("report/assessment/docx/05_techandproductivity.phtml", $data);
+$this->partial("report/assessment/docx/06_environmental.phtml", $data);
+$this->partial("report/assessment/docx/07_expense.phtml", $data);
+$this->partial("report/assessment/docx/08_summary.phtml", $data);
+
+$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$objWriter->save($this->savePath);
+
+echo $this->baseUrl($this->publicFileName);

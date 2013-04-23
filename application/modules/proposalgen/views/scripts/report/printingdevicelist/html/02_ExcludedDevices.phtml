@@ -20,12 +20,12 @@ $proposal = $this->proposal;
                 /* @var $device Proposalgen_Model_DeviceInstance */ ?>
                 <?php $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber; ?>
             <tr>
-                        <?php if($device->getIsMappedToMasterDevice()) : ?>
-                <td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
-                <td><div class=" left"><?php echo $device->getMasterDevice()->modelName; ?></div></td>
+                <?php if($device->getIsMappedToMasterDevice()) : ?>
+                    <td><div class=" left"><?php echo $device->getMasterDevice()->getManufacturer()->displayname; ?></div></td>
+                    <td><div class=" left"><?php echo $device->getMasterDevice()->modelName; ?></div></td>
                 <?php else : ?>
-                <td><div class=" left"><?php echo $device->getRmsUploadRow()->manufacturer; ?></div></td>
-                <td><div class=" left"><?php echo $device->getRmsUploadRow()->modelName; ?></div></td>
+                    <td><div class=" left"><?php echo $device->getRmsUploadRow()->manufacturer; ?></div></td>
+                    <td><div class=" left"><?php echo $device->getRmsUploadRow()->modelName; ?></div></td>
                 <?php endif; ?>
                 <td><div class=" center"><?php echo $SerialNumber; ?></div></td>
     					<td><div class=" left"><?php if ($device->ipAddress) echo $device->ipAddress; else echo 'Unknown IP';?></div></td>
@@ -37,9 +37,3 @@ $proposal = $this->proposal;
 <?php else: ?>
 <br/><p><em>No devices were excluded from this report.</em></p>
 <?php endif?>
-
-
-<?php echo $this->noBreakEnd; ?>
-<?php
-echo $this->pageEnd;
-?>
