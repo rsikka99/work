@@ -2,11 +2,6 @@
 /* @var $rmsUpload Proposalgen_Model_Rms_Upload */
 $rmsUpload = $this->rmsUpload;
 ?>
-<div class="page-header">
-    <h1>Assessment -
-        <small>Select Upload</small>
-    </h1>
-</div>
 <div class="well">
     <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
         <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> csv file. The name of the file is
