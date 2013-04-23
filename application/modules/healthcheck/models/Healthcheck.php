@@ -152,7 +152,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      *
      * @return Healthcheck_Model_Healthcheck_Setting
      */
-    public function getReportSettings ()
+    public function getHealthcheckSettings ()
     {
         if (!isset($this->_reportSettings))
         {

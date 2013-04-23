@@ -15,20 +15,19 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
         $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
     }
 
+    public function indexAction()
+    {
+        $this->redirectToLatestStep();
+    }
     /**
      * Selects a upload to use for the healthcheck
      */
-    public function indexAction ()
+    public function selectuploadAction ()
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
-        $healthcheck = $this->getReport();
+        $healthcheck = $this->getHealthcheck();
 
-        if (isset($healthcheck->getRmsUpload()->id))
-        {
-            $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_NEXT);
-            $this->view->rmsUpload      = $healthcheck->getRmsUpload();
-        }
 
         if ($this->getRequest()->isPost())
         {
@@ -41,8 +40,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                 {
                     $this->_flashMessenger->addMessage(array('success' => 'The Upload you selected is valid.'));
-                    $this->getReport()->rmsUploadId = $postData["selectRmsUploadId"];
-                    $this->saveReport();
+                    $this->getHealthcheck()->rmsUploadId = $postData["selectRmsUploadId"];
+                    $this->updateHealthcheckStepName();
+                    $this->saveHealthcheck();
                     $this->gotoNextNavigationStep($this->_navigation);
                 }
                 else
@@ -51,7 +51,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 }
             }
 
-            if ($this->getReport()->rmsUploadId > 0)
+            if ($this->getHealthcheck()->rmsUploadId > 0)
             {
                 if (isset($postData['saveAndContinue']))
                 {
@@ -59,6 +59,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
                 }
             }
         }
+        $this->view->navigationForm = new Healthcheck_Form_Healthcheck_Navigation(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_NEXT);
+        $this->view->rmsUpload      = $healthcheck->getRmsUpload();
     }
 
     /**
@@ -68,9 +70,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
     {
 //      Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS);
-        $this->getReport();
-        $this->saveReport(true);
-        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getReport()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
+
+        $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getHealthcheck()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -81,9 +82,11 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Healthc
             }
             else
             {
+
                 if ($healthcheckSettingsService->update($values))
                 {
-                    $this->saveReport();
+                    $this->updateHealthcheckStepName();
+                    $this->saveHealthcheck();
                     $this->_flashMessenger->addMessage(array(
                                                             'success' => 'Settings saved.'
                                                        ));
