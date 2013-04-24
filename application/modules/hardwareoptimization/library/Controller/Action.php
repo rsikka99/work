@@ -19,6 +19,11 @@ class Hardwareoptimization_Library_Controller_Action extends Tangent_Controller_
     protected $_hardwareOptimization;
 
     /**
+     * @var Hardwareoptimization_ViewModel_Optimization
+     */
+    protected $_optimizationViewModel;
+
+    /**
      * The navigation steps
      *
      * @var Hardwareoptimization_Model_Hardware_Optimization_Steps
@@ -487,6 +492,22 @@ class Hardwareoptimization_Library_Controller_Action extends Tangent_Controller_
 
         return $this->_hardwareOptimization;
     }
+
+    /**
+     * Getter for _optmizationViewModel
+     *
+     * @return \Hardwareoptimization_ViewModel_Optimization
+     */
+    public function getOptimizationViewModel ()
+    {
+        if (!isset($this->_optimizationViewModel))
+        {
+            $this->_optimizationViewModel = new Hardwareoptimization_ViewModel_Optimization($this->_hardwareOptimization);
+        }
+
+        return $this->_optimizationViewModel;
+    }
+
 
     /**
      * Saves a hardware optimization
