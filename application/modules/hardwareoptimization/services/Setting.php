@@ -114,22 +114,7 @@ class Hardwareoptimization_Service_Setting
 
         if ($form->isValid($data))
         {
-            if ($this->_form->allowsNull)
-            {
-                foreach ($data as $key => $value)
-                {
-                    if ($value === "")
-                    {
-                        $data [$key] = new Zend_Db_Expr("NULL");
-                    }
-                }
-
-                $validData = $data;
-            }
-            else
-            {
-                $validData = $form->getValues();
-            }
+            $validData = $form->getValues();
         }
         else
         {
@@ -147,9 +132,11 @@ class Hardwareoptimization_Service_Setting
      *
      * @param array $data
      *
+     * @param null  $defaultValues
+     *
      * @return boolean
      */
-    public function update ($data)
+    public function update ($data, $defaultValues = null)
     {
         $validData = $this->validateAndFilterData($data);
         if ($validData)
@@ -165,16 +152,19 @@ class Hardwareoptimization_Service_Setting
             // Check the valid data to see if toner preferences drop downs have been set.
             if ((int)$validData ['replacementPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['replacementPricingConfigId']);
+                $validData ['replacementPricingConfigId'] = $defaultValues['replacementPricingConfigId'];
             }
             if ((int)$validData ['dealerPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['dealerPricingConfigId']);
+                $validData ['dealerPricingConfigId'] = $defaultValues['dealerPricingConfigId'];
             }
             if ((int)$validData ['customerPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['customerPricingConfigId']);
+                $validData ['customerPricingConfigId'] = $defaultValues['customerPricingConfigId'];
             }
+
+
+            $validData = array_merge($defaultValues, $validData);
 
             $hardwareOptimizationSetting = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
             $hardwareOptimizationSetting->populate($validData);
@@ -189,6 +179,8 @@ class Hardwareoptimization_Service_Setting
             }
 
             Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($hardwareOptimizationSetting);
+
+            $this->_form->populate($hardwareOptimizationSetting->toArray());
 
             return true;
         }
