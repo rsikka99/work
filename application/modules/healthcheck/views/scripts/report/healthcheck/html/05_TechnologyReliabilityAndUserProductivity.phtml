@@ -1,20 +1,20 @@
 <?php
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+$graphs = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Technology Reliability and User Productivity</div>
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <p><?php echo $proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
+            <p><?php echo $healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText; ?></p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
 <div class="pheader">Age of Printing Devices</div>
-<p>We estimate the average age of your printing devices is <?php echo number_format($proposal->getAverageAgeOfDevices(),1)?> years(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.</p>
+<p>We estimate the average age of your printing devices is <?php echo number_format($healthcheckViewModel->getAverageAgeOfDevices(),1)?> years(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.</p>
 <div class="center">
     <img src="<?php echo $graphs['AgeBarGraph']; ?>" />
 </div>

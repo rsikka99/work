@@ -1,21 +1,25 @@
 <?php
 /**
- * Assessment - Analysis: Service and Supplies Logistics
+ * Healthcheck - Analysis: Service and Supplies Logistics
  */
 
 /* @var $phpWord PHPWord */
 $phpWord = $this->phpword;
+
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
-$graphs   = $this->graphs;
+
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+$graphs               = $healthcheckViewModel->getGraphs();
+
+
 $section->addPageBreak();
 $section->addTitle($this->translate('Analysis: Service and Supplies Logistics'), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->SuppliesAndServiceLogistics->RankingText, null, 'nospacing');
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->SuppliesAndServiceLogistics->Rank, 1), 'gradeFont', 'gradeParagraph');
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($healthcheckViewModel->getRanking()->getSuppliesAndServiceLogistics()->RankingText, null, 'nospacing');
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($healthcheckViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1), 'gradeFont', 'gradeParagraph');
 $section->addTextBreak();
 $section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
 $section->addText($this->translate('Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.'));
@@ -29,13 +33,13 @@ $section->addTextBreak(2);
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.')
-    , number_format(count($proposal->getDevices()->allIncludedDeviceInstances)) //1
-    , number_format($proposal->getNumberOfUniqueModels()) //2
-    , count($proposal->getLeasedDevices()) //3
-    , number_format(count($proposal->getPurchasedDevices())) //4
-    , number_format($proposal->getNumberOfUniquePurchasedModels()) //5
-    , number_format($proposal->getNumberOfUniquePurchasedToners()) //6
-    , number_format($proposal->getCashHeldInInventory())//7
+    , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances)) //1
+    , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
+    , count($healthcheckViewModel->getLeasedDevices()) //3
+    , number_format(count($healthcheckViewModel->getPurchasedDevices())) //4
+    , number_format($healthcheckViewModel->getNumberOfUniquePurchasedModels()) //5
+    , number_format($healthcheckViewModel->getNumberOfUniquePurchasedToners()) //6
+    , number_format($healthcheckViewModel->getCashHeldInInventory())//7
 ));
 
 $imageTable = $section->addTable(array(
@@ -50,13 +54,13 @@ $cell->addImage($graphs[3], array(
                                  'align' => 'center'
                             ));
 
-$section->addText(sprintf($this->translate('By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'),$this->companyName));
+$section->addText(sprintf($this->translate('By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'), $this->companyName));
 $section->addTextBreak(2);
 $section->addTitle(sprintf($this->translate('Number of Printing Devices Compatible with %1$s'), $this->jitName), 2);
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices (excluding leased devices), you have %2$s that are compatible with %4$s and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.')
-    , $proposal->getPurchasedDeviceCount()
-    , $proposal->getNumberOfDevicesReportingTonerLevels()
-    , $proposal->getNumberOfDevicesNotReportingTonerLevels()
+    , $healthcheckViewModel->getPurchasedDeviceCount()
+    , $healthcheckViewModel->getNumberOfDevicesReportingTonerLevels()
+    , $healthcheckViewModel->getNumberOfDevicesNotReportingTonerLevels()
     , $this->jitFullName
 ));
 
@@ -84,47 +88,47 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 //Black Toner
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Black Toner'), 'bold_text', 'nospacing');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //Color Toner
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Color Toner'), 'bold_text', 'nospacing');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($proposal->getPageCounts()->Purchased->Color->Monthly), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($proposal->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($proposal->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getPageCounts()->Purchased->Color->Monthly), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //TOTAL (Monthly)
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('TOTAL (Monthly)'), 'bold_text', 'nospacing');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText($this->translate(''), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateAverageTotalCostOemCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostOemCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateAverageTotalCostCompatibleCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleCombinedMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 //TOTAL (Annual)
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('TOTAL (Annual)'), 'bold_text', 'nospacing');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText($this->translate(''), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($proposal->calculateEstimatedOemTonerCostAnnually(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateEstimatedOemTonerCostAnnually(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->translate(''), null, 'nospacing_rightalign');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($proposal->calculateEstimatedCompTonerCostAnnually(), array('precision' => 2)), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell6)->addText($this->currency($healthcheckViewModel->calculateEstimatedCompTonerCostAnnually(), array('precision' => 2)), null, 'nospacing_rightalign');
 
 $section->addTextBreak();
 $tcStyle         = $this->styles->tables->twoColumnHeader;
 $twoColumnHeader = $section->addTable($tcStyle->tablestyle);
 $twoColumnHeader->addRow(null);
 $twoColumnHeader->addCell($tcStyle->cell1Width, $tcStyle->cell1->cellStyle)->addText($this->translate('DIFFERENCE '), $tcStyle->cell1->fontStyle, $tcStyle->cell1->paragraphStyle);
-$twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($proposal->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
+$twoColumnHeader->addCell($tcStyle->cell2Width, $tcStyle->cell2->cellStyle)->addText($this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()), $tcStyle->cell2->fontStyle, $tcStyle->cell2->paragraphStyle);
 $textrun = $section->createTextRun();
-$textrun->addText(sprintf($this->translate('Where compatible substitutes are available, we estimate that by switching even 50%% of your OEM toner to compatible toner, you can save approximately %1$s per year in toner costs.'), $this->currency($proposal->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 0))));
+$textrun->addText(sprintf($this->translate('Where compatible substitutes are available, we estimate that by switching even 50%% of your OEM toner to compatible toner, you can save approximately %1$s per year in toner costs.'), $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 0))));
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
 $imageTable->addRow();

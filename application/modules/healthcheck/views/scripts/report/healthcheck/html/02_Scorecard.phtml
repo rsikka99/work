@@ -1,6 +1,6 @@
 <?php
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
 ?>
 <div class="h1">Your <?php echo $this->reportName?> Health Check</div>
 <p>Does your fleet of printing hardware deliver your users and business the greatest return on investment?
@@ -20,27 +20,27 @@ $proposal = $this->proposal;
             <p>Printing device management, number of various printer device models, and compatibility with <?php echo $this->jitFullName ?>.</p>
         </td>
 
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
             <h4>Printing Hardware Usage</h4>
             <p>Total number of printing devices, average print volumes, underused and overused equipment, and color print usage.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getPrintingHardwareUsage()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
             <h4>Technology Reliability and User Productivity</h4>
             <p>Age of printing devices, IT time spent managing printers, and availability of technology features that improve workflow and productivity.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1); ?></td>
     </tr>
     <tr>
         <td class="gradeDescription">
             <h4>Environmental Impact</h4>
             <p>Energy consumption from printing hardware, forest and water consumption from paper used in printing, availability of green print technology features.</p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
     </tr>
 </table>

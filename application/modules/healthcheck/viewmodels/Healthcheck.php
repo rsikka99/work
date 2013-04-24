@@ -161,7 +161,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_numberOfCopyCapableDevices;
     protected $_includedDevicesSortedAscendingByAge;
     protected $_includedDevicesSortedDescendingByAge;
-    protected $_graphs;
 
     public $highCostPurchasedDevices;
 
@@ -674,6 +673,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return $this->_underutilizedDevices;
     }
 
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
     public function getOverutilizedDevices ()
     {
         if (!isset($this->_overutilizedDevices))
@@ -1253,7 +1255,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     *
+     * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getOldDevices ()
     {
@@ -1336,7 +1338,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return array
      */
-    public function getOldGraphs ()
+    protected function _getOldGraphs ()
     {
         if (!isset($this->Graphs))
         {
@@ -2091,10 +2093,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function getGraphs ()
     {
 
-        if ($this->_graphs == null)
+        if ($this->Graphs == null)
         {
-            $this->_graphs                     = $this->getOldGraphs();
-            $healthgraphs                      = array();
+            // Fetch the old graphs
+            $this->_getOldGraphs();
+
+            $healthcheckGraphs                 = array();
             $numberValueMarker                 = "N *sz0";
             $pageCounts                        = $this->getPageCounts();
             $companyName                       = $this->healthcheck->getClient()->companyName;
@@ -2145,7 +2149,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $deviceAgeGraph->setLegendPosition("bv");
 
             // PagesPrinterATRPieGraph
-            $healthgraphs['PagesPrinterATRPieGraph'] = $deviceAgeGraph->getUrl();
+            $healthcheckGraphs['PagesPrinterATRPieGraph'] = $deviceAgeGraph->getUrl();
 
             /**
              * -- HardwareUtilizationCapacityBar
@@ -2180,7 +2184,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // HardwareUtilizationCapacityBar
-            $healthgraphs['HardwareUtilizationCapacityBar'] = $barGraph->getUrl();
+            $healthcheckGraphs['HardwareUtilizationCapacityBar'] = $barGraph->getUrl();
 
 
             /**
@@ -2216,7 +2220,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // ColorCapablePrintingDevices
-            $healthgraphs['ColorCapablePrintingDevices'] = $barGraph->getUrl();
+            $healthcheckGraphs['ColorCapablePrintingDevices'] = $barGraph->getUrl();
 
 
             /**
@@ -2254,7 +2258,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // ColorVSBWPagesGraph
-            $healthgraphs['ColorVSBWPagesGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['ColorVSBWPagesGraph'] = $barGraph->getUrl();
 
             /**
              * -- colorCapablePieChart
@@ -2285,7 +2289,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                           ));
             $colorCapableGraph->setLegendPosition("bv");
             // colorCapablePieChart
-            $healthgraphs['colorCapablePieChart'] = $colorCapableGraph->getUrl();
+            $healthcheckGraphs['colorCapablePieChart'] = $colorCapableGraph->getUrl();
 
             /**
              * -- CompatibleATRBarGraph
@@ -2318,7 +2322,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // CompatibleATRBarGraph
-            $healthgraphs['CompatibleATRBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['CompatibleATRBarGraph'] = $barGraph->getUrl();
 
             $oemCost  = ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
             $compCost = ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
@@ -2352,7 +2356,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                       "Compatible Toner"
                                  ));
             // DifferenceBarGraph
-            $healthgraphs['DifferenceBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['DifferenceBarGraph'] = $barGraph->getUrl();
 
             /**
              * -- HardwareUtilizationCapacityPercent
@@ -2410,7 +2414,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                  ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             // HardwareUtilizationCapacityPercent
-            $healthgraphs['HardwareUtilizationCapacityPercent'] = $barGraph->getUrl();
+            $healthcheckGraphs['HardwareUtilizationCapacityPercent'] = $barGraph->getUrl();
 
             /**
              * -- AgeBarGraph
@@ -2497,7 +2501,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
             // AgeBarGraph
-            $healthgraphs['AgeBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['AgeBarGraph'] = $barGraph->getUrl();
 
             /**
              * -- DuplexCapableDevicesGraph
@@ -2528,7 +2532,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                            ));
             $duplexCapableGraph->setLegendPosition("bv");
             // DuplexCapableDevicesGraph
-            $healthgraphs['DuplexCapableDevicesGraph'] = $duplexCapableGraph->getUrl();
+            $healthcheckGraphs['DuplexCapableDevicesGraph'] = $duplexCapableGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesBarGraph
@@ -2565,7 +2569,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[4]   //AverageMonthlyPagesBarGraph
-            $healthgraphs['AverageMonthlyPagesBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['AverageMonthlyPagesBarGraph'] = $barGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
@@ -2601,7 +2605,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[5] //AverageMonthlyPagesPerEmployeeBarGraph
-            $healthgraphs ['AverageMonthlyPagesPerEmployeeBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs ['AverageMonthlyPagesPerEmployeeBarGraph'] = $barGraph->getUrl();
 
             /**
              * -- EmployeesPerDeviceBarGraph
@@ -2636,7 +2640,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[6] //EmployeesPerDeviceBarGraph
-            $healthgraphs['EmployeesPerDeviceBarGraph'] = $barGraph->getUrl();
+            $healthcheckGraphs['EmployeesPerDeviceBarGraph'] = $barGraph->getUrl();
 
             /**
              * -- CopyCapableDevicesGraph
@@ -2669,12 +2673,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                          ));
             $copyCapableGraph->setLegendPosition("bv");
             // Graphs CopyCapableDevicesGraph
-            $healthgraphs['CopyCapableDevicesGraph'] = $copyCapableGraph->getUrl();
+            $healthcheckGraphs['CopyCapableDevicesGraph'] = $copyCapableGraph->getUrl();
 
-            $this->_graphs = array_merge($healthgraphs, $this->_graphs);
+            $this->Graphs = array_merge($healthcheckGraphs, $this->Graphs);
         }
 
-        return $this->_graphs;
+        return $this->Graphs;
     }
 
     /**
