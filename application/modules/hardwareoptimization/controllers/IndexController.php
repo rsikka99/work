@@ -68,7 +68,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             {
                 // Save
                 $this->saveHardwareOptimization();
-                $hardwareOptimizationService->update($postData);
+                $hardwareOptimizationService->update($postData, $defaultHardwareOptimizationSettings->toArray());
+
                 if (isset($postData['saveAndContinue']))
                 {
                     $this->gotoNextNavigationStep($this->_navigation);
@@ -85,7 +86,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     public function optimizeAction ()
     {
         // Mark the step we're on as active
-        $this->_navigation->setActiveStep(Proposalgen_Model_Assessment_Step::STEP_OPTIMIZATION);
+        $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_OPTIMIZE);
 
         $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
@@ -101,12 +102,15 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $postData = $this->_request->getPost();
             if ($form->isValid($postData))
             {
-
-                if ($form->getValue('Submit'))
+                if ($form->getValue('Submit') || isset($postData["saveAndContinue"]))
                 {
-
                     if ($this->_processSaveProfitability($form))
                     {
+                        if(isset($postData["saveAndContinue"]))
+                        {
+                            $this->saveHardwareOptimization();
+                            $this->gotoNextNavigationStep($this->_navigation);
+                        }
                         $this->_helper->flashMessenger(array(
                                                             'success' => "Your changes have been saved."
                                                        ));
@@ -126,7 +130,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         $this->_helper->flashMessenger(array(
                                                             'success' => "We've optimized your fleet. Please review the changes before proceeding."
                                                        ));
-                        $this->_helper->redirector('index', null, null, array());
+                        $this->_helper->redirector('optimize', null, null, array());
                     }
                     else
                     {
@@ -142,7 +146,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         $this->_helper->flashMessenger(array(
                                                             'success' => "Device replacements have been reset."
                                                        ));
-                        $this->_helper->redirector('index', null, null, array());
+                        $this->_helper->redirector('optimize', null, null, array());
                     }
                     else
                     {
@@ -153,10 +157,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 }
                 else if ($form->getValues('Cancel'))
                 {
-//                     Every time we save anything related to a report, we should save it (updates the modification date)
-//                    $this->saveReport();
-//                     Call the base controller to send us to the next logical step in the proposal.
-//                    $this->gotoNextStep();
+
+                    $this->gotoPreviousNavigationStep($this->_navigation);
                 }
             }
         }
@@ -165,11 +167,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $this->view->devices              = $devices;
         $this->view->hardwareOptimization = $this->_hardwareOptimization;
         $this->view->optmizationViewModel = $this->getOptimizationViewModel();
-
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
         $this->view->title          = 'Hardware Optimization';
     }
-
 
     /**
      * Returns Json based on id that has been pased via query string
@@ -368,7 +368,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $optimization                    = $this->getOptimizationViewModel();
         $savingsThreshold                = $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-
 
         try
         {
