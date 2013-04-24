@@ -7,8 +7,8 @@
 $phpWord = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->healthcheck->proposal;
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
+$proposal = $this->proposal;
 $graphs   = $this->graphs;
 $section->addPageBreak();
 $section->addTitle($this->translate('Analysis: Service and Supplies Logistics'), 1);
@@ -26,21 +26,6 @@ $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs[1]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs[2]);
 $section->addTextBreak(2);
-
-$inkJetString = $this->translate('less than 10%');
-if ($proposal->getPercentPrintingDoneOnInkjet() == 50)
-{
-    $inkJetString = $this->translate('more than 50%');
-}
-else if ($proposal->getPercentPrintingDoneOnInkjet() == 38)
-{
-    $inkJetString = $this->translate('26% to 50%');
-}
-else if ($proposal->getPercentPrintingDoneOnInkjet() == 18)
-{
-    $inkJetString = $this->translate('10% to 25%');
-}
-
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.')

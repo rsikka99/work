@@ -89,7 +89,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         // Render early
         try
         {
-            $this->render($this->view->App()->theme . '/' . $format . "/00_render");
+            $this->render('/' . $format . "/00_render");
         }
         catch (Exception $e)
         {

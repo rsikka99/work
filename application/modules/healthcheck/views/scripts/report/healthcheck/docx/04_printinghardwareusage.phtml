@@ -9,8 +9,8 @@ $phpword = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->healthcheck->proposal;
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
+$proposal = $this->proposal;
 $graphs   = $this->graphs;
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
@@ -141,7 +141,7 @@ $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->uti
 $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Estimated Monthly Cost'), 'bold_text', 'nospacing_centeralign');
 $ctr = 0;
 /* @var $device Proposalgen_Model_DeviceInstance */
-foreach ($proposal->getMonthlyHighCostColorDevices($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance)
+foreach ($proposal->getMonthlyHighCostPurchasedColorDevices($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance)
 {
 
     $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName());

@@ -9,8 +9,8 @@ $phpWord = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->healthcheck->proposal;
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
+$proposal = $this->proposal;
 $graphs   = $this->graphs;
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Environmental Impact"), 1);
@@ -33,14 +33,14 @@ $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($this->healthcheck->calculateNumberOfTreesUsed()))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
+$imageTable->addCell($cellWidths[1],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s trees',number_format($this->proposal->calculateNumberOfTreesUsed()))),"forestWaterFont",array('align' => 'center', 'valign' => 'center'));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg",array('width'=>$imageWidth,'height' => $imageHeight));
-$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($this->healthcheck->calculateNumberOfGallonsWaterUsed()))),"forestWaterFont");
+$imageTable->addCell($cellWidths[0],$this->styles->tables->tripleimage->cell1)->addText(sprintf($this->translate(' %1$s gallons water',number_format($this->proposal->calculateNumberOfGallonsWaterUsed()))),"forestWaterFont");
 
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
-$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->report->getReportSettings()->kilowattsPerHour, 2)));
+$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2)));
 $section->addText($this->translate('The following lists the devices with the highest average power consumption per month.'));
 
 $cellWidths = array (
@@ -77,7 +77,7 @@ $section->addTitle($this->translate('Green Features: Duplex Printing and Scannin
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner and e-mailing documents instead of printing copies for distribution.'));
 $textrun = $section->createTextRun();
 $textrun->addText($this->translate('By printing 25% more documents on both sides of the page than you are now, you could save '));
-$textrun->addText(sprintf($this->translate('%1$s trees and %2$s gallons of water used in paper production per year.'),number_format($this->healthcheck->calculateQuarterOfNumberOfTreesUsed()),number_format($this->healthcheck->calculateQuarterOfNumberOfGallonsWaterUsed())));
+$textrun->addText(sprintf($this->translate('%1$s trees and %2$s gallons of water used in paper production per year.'),number_format($this->proposal->calculateQuarterOfNumberOfTreesUsed()),number_format($this->proposal->calculateQuarterOfNumberOfGallonsWaterUsed())));
 $section->addText($this->translate('The following charts show how many of your printing devices have duplex printing and scanning capabilities:'));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

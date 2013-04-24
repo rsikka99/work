@@ -1,7 +1,7 @@
 <?php
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
 $proposal = $this->proposal;
 
 /**
@@ -667,7 +667,7 @@ $titledata = array(
 $data = array(
     "phpword"     => $phpword,
     "section"     => $section,
-    "healthcheck" => $this->healthcheck,
+    "proposal"    => $this->proposal,
     "graphs"      => $this->graphs,
     "styles"      => $styles,
     "brandName"   => "MPSToolbox.com",
@@ -676,14 +676,14 @@ $data = array(
     "jitFullName" => "MPSToolbox.com Just In Time (JIT)"
 );
 // Actual document pages
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/01_titlepage.phtml", $titledata);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/02_reportcard.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/03_serviceandsupplieslogistics.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/04_printinghardwareusage.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/05_techandproductivity.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/06_environmental.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/07_fleetattributes.phtml", $data);
-$this->partial("report/healthcheck/" . $this->App()->theme . "/docx/08_summary.phtml", $data);
+$this->partial("report/healthcheck/docx/01_titlepage.phtml", $titledata);
+$this->partial("report/healthcheck/docx/02_reportcard.phtml", $data);
+$this->partial("report/healthcheck/docx/03_serviceandsupplieslogistics.phtml", $data);
+$this->partial("report/healthcheck/docx/04_printinghardwareusage.phtml", $data);
+$this->partial("report/healthcheck/docx/05_techandproductivity.phtml", $data);
+$this->partial("report/healthcheck/docx/06_environmental.phtml", $data);
+$this->partial("report/healthcheck/docx/07_fleetattributes.phtml", $data);
+$this->partial("report/healthcheck/docx/08_summary.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
 $objWriter->save($this->savePath);

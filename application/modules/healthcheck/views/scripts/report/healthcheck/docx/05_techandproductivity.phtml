@@ -9,8 +9,8 @@ $phpWord = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->healthcheck->proposal;
+/* @var $proposal Healthcheck_ViewModel_Healthcheck */
+$proposal = $this->proposal;
 $graphs   = $this->graphs;
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Technology Reliability and User Productivity"), 1);

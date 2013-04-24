@@ -346,7 +346,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
 
         // Service Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
-        $parts_cost->setLabel('Parts Cost')
+        $parts_cost->setLabel('Parts Cost Per Page')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
@@ -362,6 +362,101 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
 
         $this->addElement($parts_cost);
         $proposalGroup->elements [] = $parts_cost;
+
+        // Average It Hourly Rate
+        $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
+        $averageItHourlyRate->setLabel('Estiamted Average It Hourly Rate')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $averageItHourlyRate->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($averageItHourlyRate);
+        $proposalGroup->elements [] = $averageItHourlyRate;
+
+        // Hours Spent On It
+        $hoursSpentOnIt = new Zend_Form_Element_Text('hoursSpentOnIt');
+        $hoursSpentOnIt->setLabel('Estimated Hours Spent On IT')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $hoursSpentOnIt->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($hoursSpentOnIt);
+        $proposalGroup->elements [] = $hoursSpentOnIt;
+
+        // Cost Of Labor
+        $costOfLabor = new Zend_Form_Element_Text('costOfLabor');
+        $costOfLabor->setLabel('Estimated Cost Of Labor')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $costOfLabor->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($costOfLabor);
+        $proposalGroup->elements [] = $costOfLabor;
+
+        // Cost To Execute Supplies Order
+        $costToExecuteSuppliesOrder = new Zend_Form_Element_Text('costToExecuteSuppliesOrder');
+        $costToExecuteSuppliesOrder->setLabel('Estimated Cost To Execute Supplies Order')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $costToExecuteSuppliesOrder->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($costToExecuteSuppliesOrder);
+        $proposalGroup->elements [] = $costToExecuteSuppliesOrder;
+
+        // Cost To Execute Supplies Order
+        $numberOfSupplyOrdersPerMonth = new Zend_Form_Element_Text('numberOfSupplyOrdersPerMonth');
+        $numberOfSupplyOrdersPerMonth->setLabel('Estimated Supply Orders Per Month')
+            ->addValidator(new Zend_Validate_Float())
+            ->setAttrib('class', 'input-mini')
+            ->setAttrib('maxlength', 10)
+            ->setAttrib('style', 'text-align: right')
+            ->setDescription('$')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('inputprepend', '$')
+            ->setAttrib('inputappend', ' / page')
+            ->addValidator('greaterThan', true, array (
+                                                      'min' => 0
+                                                ));
+        $numberOfSupplyOrdersPerMonth->getValidator('Float')->setMessage('Please enter a number.');
+
+        $this->addElement($numberOfSupplyOrdersPerMonth);
+        $proposalGroup->elements [] = $numberOfSupplyOrdersPerMonth;
         
         //*****************************************************************
         // BUTTONS
