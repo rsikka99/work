@@ -146,7 +146,7 @@ class Tangent_Http_Client_Curl_MultiRequest
      *
      * @return Tangent_Http_Client_Curl_MultiRequest
      */
-    public function _doRetry ()
+    public function doRetry ()
     {
         $this->_doRetry = true;
 

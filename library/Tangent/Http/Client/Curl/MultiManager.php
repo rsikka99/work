@@ -41,8 +41,9 @@ class Tangent_Http_Client_Curl_MultiManager
     {
         if (!is_null($maxRequests))
         {
-
+            $this->setMaxRequests($maxRequests);
         }
+        $this->initCurl();
     }
 
     /**
