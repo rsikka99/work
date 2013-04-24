@@ -9,9 +9,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->PrintingDeviceList->active = true;
-
-        $this->view->formats = array(
+        $this->view->availableReports['PrintingDeviceList']['active'] = true;
+        $this->view->formats                                          = array(
             "/assessment/report_printingdevicelist/generate/format/csv"  => $this->_csvFormat,
             "/assessment/report_printingdevicelist/generate/format/docx" => $this->_wordFormat
         );
@@ -89,7 +88,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->proposal = $proposal;
         // Define our field titles
 
-        $jitcompat                   = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
+        $jitcompat = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
 
         $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV," . $jitcompat;
 

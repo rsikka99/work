@@ -8,9 +8,8 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->JITSupplyAndTonerSku->active = true;
-
-        $this->view->formats = array(
+        $this->view->availableReports['JITSupplyAndTonerSku']['active'] = true;
+        $this->view->formats                                            = array(
             "/assessment/report_toners/generate/format/csv" => $this->_csvFormat,
         );
 

@@ -9,11 +9,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->CustomerCostAnalysis->active = true;
-
-
-        $this->view->availableReports->CustomerCostAnalysis->active = true;
-        $this->view->formats                                        = array(
+        $this->view->availableReports['CustomerCostAnalysis']['active'] = true;
+        $this->view->formats                                            = array(
             "/assessment/report_costanalysis/generate/format/csv"  => $this->_csvFormat,
             "/assessment/report_costanalysis/generate/format/docx" => $this->_wordFormat
         );
@@ -44,8 +41,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $this->initCSVCostAnalysis();
                 break;
             case "docx" :
-                require_once ('PHPWord.php');
-                $this->view->phpword = new PHPWord();
+                require_once('PHPWord.php');
+                $this->view->phpword    = new PHPWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;

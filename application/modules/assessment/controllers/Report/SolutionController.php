@@ -14,9 +14,8 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->Solution->active = true;
-
-        $this->view->formats = array(
+        $this->view->availableReports['Solution']['active'] = true;
+        $this->view->formats                                = array(
             "/assessment/report_solution/generate/format/docx" => $this->_wordFormat
         );
 
@@ -48,10 +47,10 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                require_once ('PHPWord.php');
-                $this->view->phpword = new PHPWord();
-                $proposal = $this->getAssessmentViewModel();
-                $graphs   = $this->cachePNGImages($proposal->getGraphs(), true);
+                require_once('PHPWord.php');
+                $this->view->phpword    = new PHPWord();
+                $proposal               = $this->getAssessmentViewModel();
+                $graphs                 = $this->cachePNGImages($proposal->getGraphs(), true);
                 $this->view->wordStyles = $this->getWordStyles();
                 $proposal->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
@@ -68,7 +67,7 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
         // Render early
         try
         {
-            $this->render($format  . "/00_render");
+            $this->render($format . "/00_render");
         }
         catch (Exception $e)
         {

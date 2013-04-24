@@ -12,8 +12,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->GrossMargin->active = true;
-        $this->view->formats                               = array(
+        $this->view->availableReports['GrossMargin']['active'] = true;
+        $this->view->formats                                   = array(
             "/assessment/report_grossmargin/generate/format/csv"  => $this->_csvFormat,
             "/assessment/report_grossmargin/generate/format/docx" => $this->_wordFormat
         );
@@ -45,7 +45,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $this->initCSVGrossMargin();
                 break;
             case "docx" :
-                require_once ('PHPWord.php');
+                require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
                 $proposal            = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
@@ -64,7 +64,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         // Render early
         try
         {
-            $this->render($format  . "/00_render");
+            $this->render($format . "/00_render");
         }
         catch (Exception $e)
         {

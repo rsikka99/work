@@ -15,7 +15,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->Assessment->active = true;
+        $this->view->availableReports['Assessment']['active'] = true;
 
         $this->view->formats = array(
             "/assessment/report_assessment/generate/format/docx" => $this->_wordFormat

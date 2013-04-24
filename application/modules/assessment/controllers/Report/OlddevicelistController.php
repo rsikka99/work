@@ -10,7 +10,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->OldDeviceList->active = true;
+        $this->view->availableReports['OldDeviceList']['active'] = true;
 
         $this->view->formats = array(
             "/assessment/report_olddevicelist/generate/format/csv" => $this->_csvFormat

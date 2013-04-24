@@ -7,23 +7,23 @@
                         <button name="goBack" id="goBack" type="submit" class="btn btn-inverse"><i class="icon-arrow-left icon-white"></i> Go Back</button>
                         <select id="reportNavigator" style='margin-top: 2px;'>
                             <?php foreach ($this->availableReports as $report) : ?>
-                            <option value='<?php echo $report->url; ?>' <?php echo ($report->active) ? "selected='selected'" : "";?>><?php echo $report->pagetitle; ?></option>
+                                <option value='<?php echo $report['url']; ?>' <?php echo ($report['active']) ? "selected='selected'" : ""; ?>><?php echo $report['pagetitle']; ?></option>
                             <?php endforeach; ?>
                         </select>
                     </form>
                 </div>
             </div>
             <?php if (count($this->formats) > 0) : ?>
-            <div class="navbar-form pull-right">
-                <div class="btn-group">
-                    <?php foreach ($this->formats as $url => $format) : ?>
-                    <a class="btn btn-<?php echo $format->btnstyle; ?> downloadButton" href="<?php echo $this->baseUrl($url); ?>" data-ext="<?php echo $format->extension; ?>" data-loadingmessage="<?php echo $format->loadingmessage; ?>"><?php echo $format->name; ?>
-                        <i class="icon-download icon-white"></i></a>
-                    <?php endforeach; ?>
-                </div>
+                <div class="navbar-form pull-right">
+                    <div class="btn-group">
+                        <?php foreach ($this->formats as $url => $format) : ?>
+                            <a class="btn btn-<?php echo $format['btnstyle']; ?> downloadButton" href="<?php echo $this->baseUrl($url); ?>" data-ext="<?php echo $format['extension']; ?>" data-loadingmessage="<?php echo $format['loadingmessage']; ?>"><?php echo $format['name']; ?>
+                                <i class="icon-download icon-white"></i></a>
+                        <?php endforeach; ?>
+                    </div>
 
-            </div>
-            <?php endif;?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </div>
