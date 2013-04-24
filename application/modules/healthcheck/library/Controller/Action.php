@@ -127,7 +127,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
         $this->view->publicFileName = $this->_relativeCachePath . "/" . $filename;
         $this->view->savePath       = $this->_fullCachePath . "/" . $filename;
         $this->view->dealerLogoFile = $this->getDealerLogoFile();
-        $this->view->proposal       = $this->getHealthcheckViewModel();
+        $this->view->healthcheckViewModel       = $this->getHealthcheckViewModel();
     }
 
     /**

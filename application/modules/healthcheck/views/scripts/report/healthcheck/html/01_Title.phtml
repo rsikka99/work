@@ -1,6 +1,6 @@
 <?php
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
 ?>
 <div class="titlepage">
     <div class="header">
@@ -16,17 +16,17 @@ $proposal = $this->proposal;
     <div class="title-page-customer-details">
         <h3>Prepared for:
             <?php
-            if (strlen($proposal->healthcheck->getClient()->companyName) > 26)
+            if (strlen($healthcheckViewModel->healthcheck->getClient()->companyName) > 26)
             {
                 echo "<br/>";
             }
 
-            echo $proposal->healthcheck->getClient()->companyName;
+            echo $healthcheckViewModel->healthcheck->getClient()->companyName;
             ?>
         </h3>
 
-        <h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
+        <h3><?php echo $healthcheckViewModel->getDateReportPrepared(); ?></h3>
 
-        <p><?php echo nl2br($proposal->healthcheck->getClient()->getAddress()); ?></p>
+        <p><?php echo nl2br($healthcheckViewModel->healthcheck->getClient()->getAddress()); ?></p>
     </div>
 </div>

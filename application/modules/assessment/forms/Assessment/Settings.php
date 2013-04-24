@@ -354,22 +354,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $this->addElement($gross_margin_pricing_config);
         $dealerGroup->elements [] = $gross_margin_pricing_config;
 
-        //*****************************************************************
-        // BUTTONS
-        //*****************************************************************
-        $element = new Zend_Form_Element_Submit('save_settings', array(
-                                                                      'disableLoadDefaultDecorators' => true
-                                                                 ));
-        $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
-        $this->addElement($element);
-
-        $element = new Zend_Form_Element_Button('back_button');
-        $element->setLabel('Back')
-            ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
-        $this->addElement($element);
-
-        Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL, $this);
+        Assessment_Form_Assessment_Navigation::addFormActionsToForm(Assessment_Form_Assessment_Navigation::BUTTONS_ALL, $this);
     }
 
     /**

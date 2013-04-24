@@ -1,11 +1,5 @@
 <?php
-
-/**
- * User Form: Used to manage Healthcheck settings
- *
- * @version v1.0
- */
-class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Vertical
+class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
      * The default settings
@@ -31,20 +25,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
-        $this->setAttrib('class', 'form-horizontal form-center-actions');
+        $this->_addClassNames('form-center-actions');
 
         $this->setMethod("POST");
 
@@ -457,21 +438,6 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
 
         $this->addElement($numberOfSupplyOrdersPerMonth);
         $proposalGroup->elements [] = $numberOfSupplyOrdersPerMonth;
-
-        //*****************************************************************
-        // BUTTONS
-        //*****************************************************************
-        $element = new Zend_Form_Element_Submit('save_settings', array(
-                                                                      'disableLoadDefaultDecorators' => true
-                                                                 ));
-        $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
-        $this->addElement($element);
-
-        $element = new Zend_Form_Element_Button('back_button');
-        $element->setLabel('Back')
-            ->setAttrib('class', 'btn')
-            ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
-        $this->addElement($element);
 
         Healthcheck_Form_Healthcheck_Navigation::addFormActionsToForm(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_ALL, $this);
     }

@@ -1,8 +1,6 @@
 <?php
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
 
 /**
  * Styles
@@ -659,7 +657,7 @@ $styles = (object)array(
 $titledata = array(
     "phpword"        => $phpword,
     "section"        => $titlepageSection,
-    "proposal"       => $this->proposal,
+    "healthcheckViewModel"       => $this->healthcheckViewModel,
     "styles"         => $styles,
     "dealerLogoFile" => $this->dealerLogoFile,
 );
@@ -667,8 +665,7 @@ $titledata = array(
 $data = array(
     "phpword"     => $phpword,
     "section"     => $section,
-    "proposal"    => $this->proposal,
-    "graphs"      => $this->graphs,
+    "healthcheckViewModel"    => $this->healthcheckViewModel,
     "styles"      => $styles,
     "brandName"   => "MPSToolbox.com",
     "companyName" => "MPSToolbox.com",

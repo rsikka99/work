@@ -1,6 +1,6 @@
 <?php
 /**
- * Assessment - Analysis: Technology Reliability and User Productivity
+ * Healthcheck - Analysis: Technology Reliability and User Productivity
  */
 
 /* @var $phpWord PHPWord */
@@ -9,19 +9,20 @@ $phpWord = $this->phpword;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
-$graphs   = $this->graphs;
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+$graphs   = $healthcheckViewModel->getGraphs();
+
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Technology Reliability and User Productivity"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->TechnologyReliabilityAndUserProductivity->RankingText);
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->TechnologyReliabilityAndUserProductivity->Rank, 1), "gradeFont", "gradeParagraph");
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText);
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Age of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.'), number_format($proposal->getAverageAgeOfDevices(), 1)));
+$section->addText(sprintf($this->translate('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.'), number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1)));
 
 $imageTable = $section->addTable(array (
     'borderBottomSize' => 1 

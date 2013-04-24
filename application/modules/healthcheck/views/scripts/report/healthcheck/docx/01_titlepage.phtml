@@ -1,20 +1,21 @@
 <?php
 /**
- * Assessment Title Page
+ * Healthcheck Title Page
  */
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
-/* @var $proposal Healthcheck_ViewModel_Healthcheck */
-$proposal = $this->proposal;
 
-/* @var $section PHPWord_Section */
-$titlepage       = $this->section;
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+
+/* @var $titlePage PHPWord_Section */
+$titlePage       = $this->section;
 $titleImageStyle = array(
     'align' => 'center'
 );
 
 // Table to fix the issue of images being different sizes
-$imageTable = $titlepage->addTable(array(
+$imageTable = $titlePage->addTable(array(
                                         'borderBottomSize' => 1
                                    ));
 $imageTable->addRow(5760);
@@ -25,33 +26,33 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
                                                                                                            'align' => 'center'
                                                                                                       ));
 
-$titlepage->addTextBreak();
+$titlePage->addTextBreak();
 // Assessment Title
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
-$titlepage->addText($this->translate('  Health Check'), 'titlepage_title', 'titleStyle2');
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate('  Health Check'), 'titlepage_title', 'titleStyle2');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
 
 
-$titlepage->addTextBreak();
+$titlePage->addTextBreak();
 
-$titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlepage->addText(sprintf($this->translate('Prepared For: %1$s'), $proposal->healthcheck->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
+$titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
+$titlePage->addText(sprintf($this->translate('Prepared For: %1$s'), $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
-$addressLines = explode("\n", $proposal->healthcheck->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressLines = explode("\n", $healthcheckViewModel->healthcheck->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
-    $titlepage->addText($line, 'titlepage_address', 'titleStyle3');
+    $titlePage->addText($line, 'titlepage_address', 'titleStyle3');
     $addressCount++;
 }
-$titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlepage->addText($this->translate('Date:') . " " . $proposal->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
+$titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
+$titlePage->addText($this->translate('Date:') . " " . $healthcheckViewModel->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)
 {
     for ($i = 0; $i < 11 - $addressCount; $i++)
     {
-        $titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
+        $titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
     }
 }
