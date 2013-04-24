@@ -1343,84 +1343,6 @@ CREATE  TABLE IF NOT EXISTS `rms_excluded_rows` (
 
 
 -- -----------------------------------------------------
--- Table `device_instance_replacement_master_devices`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
-    `deviceInstanceId` INT(11) NOT NULL ,
-    `hardwareOptimizationId` INT(11) NOT NULL ,
-    `masterDeviceId` INT(11) NOT NULL ,
-    INDEX `device_instance_replacement_master_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
-    INDEX `device_instance_replacement_master_devices_ibfk_2_idx` (`deviceInstanceId` ASC) ,
-    PRIMARY KEY (`deviceInstanceId`) ,
-    UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
-    INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk_1`
-    FOREIGN KEY (`masterDeviceId` )
-    REFERENCES `master_devices` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk_2`
-    FOREIGN KEY (`deviceInstanceId` )
-    REFERENCES `device_instances` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION,
-    CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
-    FOREIGN KEY (`hardwareOptimizationId` )
-    REFERENCES `assessments` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `assessment_surveys`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
-    `reportId` INT NOT NULL ,
-    `costOfInkAndToner` DOUBLE NULL ,
-    `costOfLabor` DOUBLE NULL ,
-    `costToExecuteSuppliesOrder` DOUBLE NOT NULL DEFAULT 50.00 ,
-    `averageItHourlyRate` DOUBLE NOT NULL DEFAULT 40.00 ,
-    `numberOfSupplyOrdersPerMonth` DOUBLE NOT NULL ,
-    `hoursSpentOnIt` INT NULL ,
-    `averageMonthlyBreakdowns` DOUBLE NULL ,
-    `pageCoverageMonochrome` DOUBLE NOT NULL ,
-    `pageCoverageColor` DOUBLE NOT NULL ,
-    `percentageOfInkjetPrintVolume` DOUBLE NOT NULL ,
-    `averageRepairTime` DOUBLE NOT NULL ,
-    PRIMARY KEY (`reportId`) ,
-    CONSTRAINT `assessment_surveys_ibfk_1`
-    FOREIGN KEY (`reportId` )
-    REFERENCES `assessments` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `user_sessions`
--- -----------------------------------------------------
-CREATE  TABLE IF NOT EXISTS `user_sessions` (
-    `sessionId` CHAR(32) NOT NULL ,
-    `userId` INT NOT NULL ,
-    INDEX `user_sessions_ibfk_1_idx` (`userId` ASC) ,
-    UNIQUE INDEX `user_sessions_sessionId_UNIQUE` (`sessionId` ASC) ,
-    UNIQUE INDEX `user_sessions_userId_UNIQUE` (`userId` ASC) ,
-    PRIMARY KEY (`sessionId`) ,
-    CONSTRAINT `user_sessions_ibfk_1`
-    FOREIGN KEY (`userId` )
-    REFERENCES `users` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-    CONSTRAINT `user_sessions_ibfk_2`
-    FOREIGN KEY (`sessionId` )
-    REFERENCES `sessions` (`id` )
-        ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `hardware_optimization_settings`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
@@ -1491,6 +1413,84 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
     CONSTRAINT `hardware_optimization_ibfk_4`
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `device_instance_replacement_master_devices`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
+    `deviceInstanceId` INT(11) NOT NULL ,
+    `hardwareOptimizationId` INT(11) NOT NULL ,
+    `masterDeviceId` INT(11) NOT NULL ,
+    INDEX `device_instance_replacement_master_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
+    INDEX `device_instance_replacement_master_devices_ibfk_2_idx` (`deviceInstanceId` ASC) ,
+    PRIMARY KEY (`deviceInstanceId`) ,
+    UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
+    INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_1`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `master_devices` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_2`
+    FOREIGN KEY (`deviceInstanceId` )
+    REFERENCES `device_instances` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `device_instance_replacement_master_devices_ibfk_3`
+    FOREIGN KEY (`hardwareOptimizationId` )
+    REFERENCES `hardware_optimizations` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `assessment_surveys`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
+    `reportId` INT NOT NULL ,
+    `costOfInkAndToner` DOUBLE NULL ,
+    `costOfLabor` DOUBLE NULL ,
+    `costToExecuteSuppliesOrder` DOUBLE NOT NULL DEFAULT 50.00 ,
+    `averageItHourlyRate` DOUBLE NOT NULL DEFAULT 40.00 ,
+    `numberOfSupplyOrdersPerMonth` DOUBLE NOT NULL ,
+    `hoursSpentOnIt` INT NULL ,
+    `averageMonthlyBreakdowns` DOUBLE NULL ,
+    `pageCoverageMonochrome` DOUBLE NOT NULL ,
+    `pageCoverageColor` DOUBLE NOT NULL ,
+    `percentageOfInkjetPrintVolume` DOUBLE NOT NULL ,
+    `averageRepairTime` DOUBLE NOT NULL ,
+    PRIMARY KEY (`reportId`) ,
+    CONSTRAINT `assessment_surveys_ibfk_1`
+    FOREIGN KEY (`reportId` )
+    REFERENCES `assessments` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `user_sessions`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `user_sessions` (
+    `sessionId` CHAR(32) NOT NULL ,
+    `userId` INT NOT NULL ,
+    INDEX `user_sessions_ibfk_1_idx` (`userId` ASC) ,
+    UNIQUE INDEX `user_sessions_sessionId_UNIQUE` (`sessionId` ASC) ,
+    UNIQUE INDEX `user_sessions_userId_UNIQUE` (`userId` ASC) ,
+    PRIMARY KEY (`sessionId`) ,
+    CONSTRAINT `user_sessions_ibfk_1`
+    FOREIGN KEY (`userId` )
+    REFERENCES `users` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `user_sessions_ibfk_2`
+    FOREIGN KEY (`sessionId` )
+    REFERENCES `sessions` (`id` )
         ON DELETE CASCADE
         ON UPDATE CASCADE)
     ENGINE = InnoDB;
