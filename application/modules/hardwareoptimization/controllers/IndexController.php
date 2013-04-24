@@ -55,7 +55,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_SETTINGS);
 
-        $user = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
+        $user                        = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
         $hardwareOptimizationService = new Hardwareoptimization_Service_Setting($this->_hardwareOptimization->getHardwareOptimizationSetting()->toArray());
 
         $defaultHardwareOptimizationSettings = $user->getDealer()->getDealerSettings()->getHardwareOptimizationSettings();
@@ -65,7 +65,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
-            if(!isset($postData['goBack']))
+            if (!isset($postData['goBack']))
             {
                 // Save
                 $this->saveHardwareOptimization();
@@ -83,12 +83,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $this->view->form = $form;
     }
 
-    public function optimizeAction()
+    public function optimizeAction ()
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Proposalgen_Model_Assessment_Step::STEP_OPTIMIZATION);
 
-        $devicesViewModel = new Assessment_ViewModel_Devices($this->_hardwareOptimization);
+        $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
         $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances, Zend_Auth::getInstance()->getIdentity()->dealerId);
@@ -162,9 +162,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             }
         }
 
-        $this->view->form           = $form;
-        $this->view->devices        = $devices;
-//        $this->view->proposal       = $this->getProposal();
+        $this->view->form                 = $form;
+        $this->view->devices              = $devices;
+        $this->view->hardwareOptimization = $this->_hardwareOptimization;
+        $this->view->optmizationViewModel = $this->getOptimizationViewModel();
+
         $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
         $this->view->title          = 'Hardware Optimization';
     }
@@ -214,6 +216,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             ),
             "hasReplacement" => (int)$hasReplacementDevice
         );
+
 
         if ($hasReplacementDevice)
         {
@@ -362,10 +365,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     protected function _analyzeFleet ()
     {
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $proposal = $this->getProposal();
-
-
+        $db                              = Zend_Db_Table::getDefaultAdapter();
+        $proposal                        = $this->getProposal();
         $savingsThreshold                = $proposal->report->getReportSettings()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
 

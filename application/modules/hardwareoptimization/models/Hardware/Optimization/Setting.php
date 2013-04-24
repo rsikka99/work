@@ -120,4 +120,17 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "adminCostPerPage"            => $this->adminCostPerPage,
         );
     }
+
+    /**
+     *
+     * @param $pricingConfigId
+     *
+     * @return \Proposalgen_Model_DeviceToner
+     */
+    public function getPricingConfig ($pricingConfigId)
+    {
+        $pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($pricingConfigId);
+
+        return $pricingConfig;
+    }
 }
