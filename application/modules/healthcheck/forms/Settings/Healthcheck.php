@@ -365,7 +365,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
 
         // Average It Hourly Rate
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
-        $averageItHourlyRate->setLabel('Estiamted Average It Hourly Rate')
+        $averageItHourlyRate->setLabel('Estimated Average It Hourly Rate')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
@@ -374,7 +374,6 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->setValue(40)
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
