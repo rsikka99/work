@@ -1,6 +1,6 @@
 <?php
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 ?>
 <div class="h1">3 Smart Steps to Success with Managed Print</div>
 <p style="margin-bottom: 15pt;"><?php echo $this->companyName;?> has been managing print for our customers since the beginning. Sourcing and delivering printers and supplies is our mainstay and we've been taking care of business for 25 years. Our full service MPS program was designed to manage and support your printing environment, based on your unique office printing needs.</p>
@@ -35,31 +35,31 @@ $proposal = $this->proposal;
     </tr>
     <tr>
         <td><?php echo $this->brandName; ?> monochrome cost per page</td>
-        <td class="right">$<?php echo number_format($proposal->getMPSBlackAndWhiteCPP(), 5); ?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 5); ?></td>
     </tr>
     <tr>
         <td><?php echo $this->brandName; ?> color cost per page</td>
-        <td class="right">$<?php echo number_format($proposal->getMPSColorCPP(), 5); ?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getMPSColorCPP(), 5); ?></td>
     </tr>
     <tr>
         <td>Predicted annual monochrome pages</td>
-        <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
     </tr>
     <tr>
         <td>Predicted annual color pages</td>
-        <td class="right"><?php echo number_format($proposal->getPageCounts()->Purchased->Color->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Yearly); ?></td>
     </tr>
     <tr>
         <td>Cost of monochrome pages</td>
-        <td class="right">$<?php echo number_format($proposal->calculateTotalCostOfMonochromePagesAnnually()); ?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()); ?></td>
     </tr>
     <tr>
         <td>Cost of color pages</td>
-        <td class="right">$<?php echo number_format($proposal->calculateTotalCostOfColorPagesAnnually()); ?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()); ?></td>
     </tr>
     <tr>
-        <td>Annual internal administration cost<br/><em>Processing 1 invoice/month @ <?php echo $this->currency($proposal->assessment->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em></td>
-        <td class="right">$<?php echo number_format($proposal->getInternalAdminCost()) ?></td>
+        <td>Annual internal administration cost<br/><em>Processing 1 invoice/month @ <?php echo $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getInternalAdminCost()) ?></td>
     </tr>
     <tr>
         <td>Annual cost of external service<br/><em>Maintenance kits and parts are included</em></td>
@@ -67,23 +67,23 @@ $proposal = $this->proposal;
     </tr>
     <tr>
         <td>Annual cost of internal IT supporting printing devices<br/><em>Assume reduction of 50%</em></td>
-        <td class="right">$<?php echo number_format($proposal->getHalfOfAnnualITCost());?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getHalfOfAnnualITCost());?></td>
     </tr>
     <tr>
         <td>Annual cost of new hardware purchases<br/><em>Assume no change</em></td>
-        <td class="right">$<?php echo number_format($proposal->getAnnualCostOfHardwarePurchases());?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases());?></td>
     </tr>
     <tr>
         <td class="bold topborder"><?php echo $this->brandName; ?> estimated annual cost of purchased devices</td>
-        <td class="right bold topborder">$<?php echo number_format($proposal->getPrintIQTotalCost());?></td>
+        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getPrintIQTotalCost());?></td>
     </tr>
     <tr>
         <td class="bold topborder">Current estimated annual cost of purchased devices</td>
-        <td class="right bold topborder">$<?php echo number_format($proposal->getTotalPurchasedAnnualCost());?></td>
+        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getTotalPurchasedAnnualCost());?></td>
     </tr>
     <tr>
         <td class="bold topborder">POTENTIAL ANNUAL SAVINGS USING <?php echo $this->brandName; ?></td>
-        <td class="right bold topborder">$<?php echo number_format($proposal->getPrintIQSavings());?></td>
+        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getPrintIQSavings());?></td>
     </tr>
 </table>
 <br />

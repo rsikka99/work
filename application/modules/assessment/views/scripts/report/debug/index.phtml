@@ -1,12 +1,12 @@
 <?php
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
-$costPerPageSettings = $proposal->getCostPerPageSettingForCustomer();
-$reportMargin = $proposal->assessment->getAssessmentSettings()->assessmentReportMargin;
-$totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDeviceInstances));
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+$costPerPageSettings = $assessmentViewModel->getCostPerPageSettingForCustomer();
+$reportMargin = $assessmentViewModel->assessment->getAssessmentSettings()->assessmentReportMargin;
+$totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allIncludedDeviceInstances));
 ?>
 <style>
-    
+
     .debugReportTable {
         font-size : 12px;
     }
@@ -32,29 +32,30 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
     <tbody>
     <tr>
         <td>Report Margin</td>
-        <td><?php echo number_format($proposal->assessment->getAssessmentSettings()->assessmentReportMargin); ?>%</td>
+        <td><?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->assessmentReportMargin); ?>%</td>
     </tr>
     <tr>
         <td>Monochrome Page Coverage</td>
-        <td><?php echo number_format($proposal->assessment->getSurvey()->pageCoverageMonochrome); ?>%</td>
+        <td><?php echo number_format($assessmentViewModel->assessment->getSurvey()->pageCoverageMonochrome); ?>%</td>
     </tr>
     <tr>
         <td>Color Page Coverage</td>
-        <td><?php echo number_format($proposal->assessment->getSurvey()->pageCoverageColor); ?>%</td>
+        <td><?php echo number_format($assessmentViewModel->assessment->getSurvey()->pageCoverageColor); ?>%</td>
     </tr>
 
     <tr>
         <td>Cost Of Ink And Toner (Monthly)</td>
-        <td><?php echo $this->currency($proposal->getCostOfInkAndTonerMonthly()); ?></td>
+        <td><?php echo $this->currency($assessmentViewModel->getCostOfInkAndTonerMonthly()); ?></td>
     </tr>
     <tr>
         <td>Cost Of Ink And Toner (Yearly)</td>
-        <td><?php echo $this->currency($proposal->getCostOfInkAndToner()); ?></td>
+        <td><?php echo $this->currency($assessmentViewModel->getCostOfInkAndToner()); ?></td>
     </tr>
     </tbody>
 </table>
 <h1>Purchased Devices
-    <small><?php echo number_format(count($proposal->getDevices()->purchasedDeviceInstances)) ?> out of <?php echo $totalDeviceCount; ?> devices</small>
+    <small><?php echo number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances)) ?> out of <?php echo $totalDeviceCount; ?>devices
+    </small>
 </h1>
 <table class="table table-striped table-bordered debugTable debugReportTable">
     <thead>
@@ -76,7 +77,7 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
     $totalColorPages = 0;
     $totalMonthlyInkAndToner = 0;
     ?>
-    <?php foreach ($proposal->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
+    <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
         <?php
         $totalBlackPages += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount();
         $totalColorPages += $deviceInstance->getAverageMonthlyColorPageCount();
@@ -85,7 +86,7 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
             <td class="debugNumber"><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "";  ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : ""; ?></td>
             <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, array("precision" => 4)); ?></td>
             <td class="debugNumber"><?php echo $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, $reportMargin), array("precision" => 4)); ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, array("precision" => 4)) : ""; ?></td>
@@ -135,7 +136,7 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
     </tbody>
 </table>
 <h1>Leased Devices
-    <small><?php echo number_format(count($proposal->getDevices()->leasedDeviceInstances)) ?> out of <?php echo $totalDeviceCount; ?> devices</small>
+    <small><?php echo number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances)) ?> out of <?php echo $totalDeviceCount; ?> devices</small>
 </h1>
 
 <table class="table table-striped table-bordered debugTable debugReportTable">
@@ -153,7 +154,7 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
     $totalColorPages = 0;
     $totalMonthlyInkAndToner = 0;
     ?>
-    <?php foreach ($proposal->getDevices()->leasedDeviceInstances as $deviceInstance) : ?>
+    <?php foreach ($assessmentViewModel->getDevices()->leasedDeviceInstances as $deviceInstance) : ?>
         <?php
         $totalBlackPages += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount();
         $totalColorPages += $deviceInstance->getAverageMonthlyColorPageCount();
@@ -161,7 +162,7 @@ $totalDeviceCount = number_format(count($proposal->getDevices()->allIncludedDevi
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
             <td class="debugNumber"><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "";  ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : ""; ?></td>
             <td></td>
         </tr>
     <?php endforeach; ?>

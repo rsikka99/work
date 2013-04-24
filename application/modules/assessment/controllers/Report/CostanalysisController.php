@@ -19,8 +19,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -76,10 +76,10 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
     {
         try
         {
-            $proposal = $this->getAssessmentViewModel();
+            $assessmentViewModel = $this->getAssessmentViewModel();
 
-            $this->view->monochromeCPP = $this->view->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4));
-            $this->view->colorCPP      = $this->view->currency($proposal->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4));
+            $this->view->monochromeCPP = $this->view->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4));
+            $this->view->colorCPP      = $this->view->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4));
         }
         catch (Exception $e)
         {
@@ -101,10 +101,10 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         {
             $fieldList_Values = "";
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
-            foreach ($proposal->getMonthlyHighCostPurchasedDevice($proposal->getCostPerPageSettingForCustomer()) as $deviceInstance)
+            foreach ($assessmentViewModel->getMonthlyHighCostPurchasedDevice($assessmentViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance)
             {
 
-                $percentOfMonthlyCost = ($proposal->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($proposal->getCostPerPageSettingForCustomer()) / $proposal->calculateTotalMonthlyCost() * 100, 2) : 0;
+                $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
                 $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
@@ -113,9 +113,9 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $fieldList [] = "%" . number_format($percentOfMonthlyCost, 2);
                 $fieldList [] = round($deviceInstance->getAverageMonthlyBlackAndWhitePageCount());
                 $fieldList [] = ($isColor) ? round($deviceInstance->getAverageMonthlyColorPageCount()) : '-';
-                $fieldList [] = $this->view->currency($deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForCustomer())->monochromeCostPerPage, array("precision" => 4));
-                $fieldList [] = ($isColor) ? $this->view->currency($deviceInstance->calculateCostPerPage($proposal->getCostPerPageSettingForCustomer())->colorCostPerPage, array("precision" => 4)) : '-';
-                $fieldList [] = $this->view->currency($deviceInstance->calculateMonthlyCost($proposal->getCostPerPageSettingForCustomer()));
+                $fieldList [] = $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->monochromeCostPerPage, array("precision" => 4));
+                $fieldList [] = ($isColor) ? $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->colorCostPerPage, array("precision" => 4)) : '-';
+                $fieldList [] = $this->view->currency($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()));
 
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
@@ -128,33 +128,5 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
 
         $this->view->fieldTitleList = implode(",", $fieldTitleList) . "\n";
         $this->view->fieldList      = $fieldList_Values;
-
-        // Removes spaces from company name, otherwise CSV filename contains + symbol
-        $companyName = str_replace(array(
-                                        " ",
-                                        "/",
-                                        "\\",
-                                        ";",
-                                        "?",
-                                        "\"",
-                                        "'",
-                                        ",",
-                                        "%",
-                                        "&",
-                                        "#",
-                                        "@",
-                                        "!",
-                                        ">",
-                                        "<",
-                                        "+",
-                                        "=",
-                                        "{",
-                                        "}",
-                                        "[",
-                                        "]",
-                                        "|",
-                                        "~",
-                                        "`"
-                                   ), "_", $proposal->assessment->CustomerCompanyName);
     }
 }

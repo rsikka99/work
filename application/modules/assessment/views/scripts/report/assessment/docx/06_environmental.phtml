@@ -10,27 +10,27 @@ $phpWord = $this->phpword;
 $section = $this->section;
 $section->addPageBreak();
 
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+$graphs              = $assessmentViewModel->getGraphs();
 
 $section->addTitle($this->translate("Analysis: Environmental Impact"), 1);
 $gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
 $gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($proposal->getRanking()->EnvironmentalFriendliness->RankingText);
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($proposal->getRanking()->EnvironmentalFriendliness->Rank, 1), "gradeFont", "gradeParagraph");
+$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->RankingText);
+$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1), "gradeFont", "gradeParagraph");
 
 $section->addTextBreak();
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
-$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($proposal->getAveragePowerUsagePerMonth()), number_format($proposal->getAveragePowerCostPerMonth()), number_format($proposal->Report->ReportKilowattsPerHour, 2)));
+$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), number_format($assessmentViewModel->getAveragePowerCostPerMonth()), number_format($assessmentViewModel->Report->ReportKilowattsPerHour, 2)));
 $section->addText($this->translate('The following lists the devices with the highest average power consumption per month.'));
 
-$cellWidths = array (
-    2657, 
-    1857, 
-    2457, 
-    2057 
+$cellWidths = array(
+    2657,
+    1857,
+    2457,
+    2057
 );
 
 $highEnergyTable = $section->addTable($this->styles->tables->highenergy->tablestyle);
@@ -41,16 +41,18 @@ $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevice
 $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->translate('Avg. Power Cost per Month'), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
 $rowCount = 0;
-foreach ( $proposal->getHighPowerConsumptionDevices() as $device )
+foreach ($assessmentViewModel->getHighPowerConsumptionDevices() as $device)
 {
     $highEnergyTable->addRow();
     $highEnergyTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
-    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ?  : "Unknown", null, 'nospacing_centeralign');
+    $highEnergyTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
     $highEnergyTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAverageMonthlyPowerConsumption()) . ' kWh', null, 'nospacing_centeralign');
     $highEnergyTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->currency($device->getAverageMonthlyPowerCost()), null, 'nospacing_centeralign');
-    $rowCount ++;
+    $rowCount++;
     if ($rowCount >= 3)
+    {
         break;
+    }
 }
 
 $section->addTextBreak();

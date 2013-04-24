@@ -18,8 +18,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -40,9 +40,9 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
             case "docx" :
                 require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $proposal            = $this->getAssessmentViewModel();
-                $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
-                $proposal->setGraphs($graphs);
+                $assessmentViewModel = $this->getAssessmentViewModel();
+                $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
+                $assessmentViewModel->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             default :
@@ -74,7 +74,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
     {
         try
         {
-            $proposal = $this->getAssessmentViewModel();
+            $assessmentViewModel = $this->getAssessmentViewModel();
 
             $url             = $this->view->serverUrl();
             $this->view->url = $url;
@@ -83,9 +83,9 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         {
             throw new Exception("Could not generate printing device list report.");
         }
-        // Instantiate the proposal and
+        // Instantiate the assessmentViewModel and
         // assign to a view variable
-        $this->view->proposal = $proposal;
+        $this->view->assessmentViewModel = $assessmentViewModel;
         // Define our field titles
 
         $jitcompat = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
@@ -96,7 +96,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ($proposal->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances as $device)
             {
                 $row    = array();
                 $row [] = $device->getMasterDevice()->getFullDeviceName();
@@ -122,7 +122,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ($proposal->getExcludedDevices() as $device)
+            foreach ($assessmentViewModel->getExcludedDevices() as $device)
             {
                 $row = array();
                 if ($device->getIsMappedToMasterDevice())
@@ -147,34 +147,6 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         }
 
         $this->view->excluded_values = $excluded_values;
-        // Removes spaces from company name, otherwise CSV filename contains +
-        // symbol
-        $companyName = str_replace(array(
-                                        " ",
-                                        "/",
-                                        "\\",
-                                        ";",
-                                        "?",
-                                        "\"",
-                                        "'",
-                                        ",",
-                                        "%",
-                                        "&",
-                                        "#",
-                                        "@",
-                                        "!",
-                                        ">",
-                                        "<",
-                                        "+",
-                                        "=",
-                                        "{",
-                                        "}",
-                                        "[",
-                                        "]",
-                                        "|",
-                                        "~",
-                                        "`"
-                                   ), "_", $this->view->proposal->Report->CustomerCompanyName);
     }
 } // end index controller
 

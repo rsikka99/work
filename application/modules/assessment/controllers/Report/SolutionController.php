@@ -24,8 +24,8 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
 
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -49,10 +49,10 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
             case "docx" :
                 require_once('PHPWord.php');
                 $this->view->phpword    = new PHPWord();
-                $proposal               = $this->getAssessmentViewModel();
-                $graphs                 = $this->cachePNGImages($proposal->getGraphs(), true);
+                $assessmentViewModel    = $this->getAssessmentViewModel();
+                $graphs                 = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
                 $this->view->wordStyles = $this->getWordStyles();
-                $proposal->setGraphs($graphs);
+                $assessmentViewModel->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             default :

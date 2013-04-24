@@ -19,8 +19,8 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -67,7 +67,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
     {
         try
         {
-            $proposal = $this->getAssessmentViewModel();
+            $assessmentViewModel = $this->getAssessmentViewModel();
 
             $url             = $this->view->serverUrl();
             $this->view->url = $url;
@@ -76,8 +76,8 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         {
             throw new Exception("Could not generate printing device list report.");
         }
-        // Instantiate the proposal and assign to a view variable
-        $this->view->proposal = $proposal;
+        // Instantiate the assessmentViewModel and assign to a view variable
+        $this->view->assessmentViewModel = $assessmentViewModel;
         // Define our field titles
         $this->view->appendix_titles = "Device,IP Address,Serial,Age";
 
@@ -85,7 +85,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ($proposal->getIncludedDevicesSortedAscendingByAge() as $device)
+            foreach ($assessmentViewModel->getIncludedDevicesSortedAscendingByAge() as $device)
             {
                 $row    = array();
                 $row [] = $device->getMasterDevice()->getFullDeviceName();
@@ -101,34 +101,6 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
             throw new Exception("Error while generating CSV Report.", 0, $e);
         }
         $this->view->appendix_values = $appendix_values;
-
-        // Removes spaces from company name, otherwise CSV filename contains + symbol
-        $companyName = str_replace(array(
-                                        " ",
-                                        "/",
-                                        "\\",
-                                        ";",
-                                        "?",
-                                        "\"",
-                                        "'",
-                                        ",",
-                                        "%",
-                                        "&",
-                                        "#",
-                                        "@",
-                                        "!",
-                                        ">",
-                                        "<",
-                                        "+",
-                                        "=",
-                                        "{",
-                                        "}",
-                                        "[",
-                                        "]",
-                                        "|",
-                                        "~",
-                                        "`"
-                                   ), "_", $this->view->proposal->Report->CustomerCompanyName);
     }
 } // end index controller
 

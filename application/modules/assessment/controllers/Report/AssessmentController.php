@@ -46,7 +46,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
             {
                 throw new Exception("Assessment View Model is false");
             }
-            $this->view->proposal = $assessmentViewModel;
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -71,9 +71,9 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
             case "docx" :
                 require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $proposal            = $this->getAssessmentViewModel();
-                $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
-                $proposal->setGraphs($graphs);
+                $assessmentViewModel = $this->getAssessmentViewModel();
+                $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
+                $assessmentViewModel->setGraphs($graphs);
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();
                 break;

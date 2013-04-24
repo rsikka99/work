@@ -2,8 +2,8 @@
 /* @var $phpWord PHPWord */
 $phpWord = $this->phpword;
 
-/* @var $proposal Proposalgen_Model_Proposal_Abstract */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Proposalgen_Model_Proposal_Abstract */
+$assessmentViewModel = $this->assessmentViewModel;
 
 // Initialize some properties
 $properties = $phpWord->getProperties();
@@ -172,7 +172,7 @@ $styles = (object)array(
  */
 $data = array(
     "phpword"  => $this->phpword,
-    "proposal" => $proposal,
+    "assessmentViewModel" => $assessmentViewModel,
     "section"  => $mainSection,
     "styles"   => $styles,
 );

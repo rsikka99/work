@@ -22,8 +22,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -47,9 +47,9 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             case "docx" :
                 require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $proposal            = $this->getAssessmentViewModel();
-                $graphs              = $this->cachePNGImages($proposal->getGraphs(), true);
-                $proposal->setGraphs($graphs);
+                $assessmentViewModel = $this->getAssessmentViewModel();
+                $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);
+                $assessmentViewModel->setGraphs($graphs);
                 $this->_helper->layout->disableLayout();
                 break;
             default :
@@ -81,19 +81,19 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
     {
         try
         {
-            $proposal = $this->getAssessmentViewModel();
+            $assessmentViewModel = $this->getAssessmentViewModel();
 
-            $this->view->PrintIQ_Black_And_White_CPP  = number_format($proposal->getMPSBlackAndWhiteCPP(), 4, '.', '');
-            $this->view->PrintIQ_Color_CPP            = number_format($proposal->getMPSColorCPP(), 4, '.', '');
-            $this->view->Weighted_Black_And_White_CPP = number_format($proposal->getGrossMarginWeightedCPP()->BlackAndWhite, 4, '.', '');
-            $this->view->Weighted_Color_CPP           = number_format($proposal->getGrossMarginWeightedCPP()->Color, 4, '.', '');
-            $this->view->Black_And_White_Margin       = number_format($proposal->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
+            $this->view->PrintIQ_Black_And_White_CPP  = number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4, '.', '');
+            $this->view->PrintIQ_Color_CPP            = number_format($assessmentViewModel->getMPSColorCPP(), 4, '.', '');
+            $this->view->Weighted_Black_And_White_CPP = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4, '.', '');
+            $this->view->Weighted_Color_CPP           = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4, '.', '');
+            $this->view->Black_And_White_Margin       = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
 
-            $this->view->Total_Cost     = number_format($proposal->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
-            $this->view->Total_Revenue  = number_format($proposal->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
-            $this->view->Monthly_Profit = number_format($proposal->getGrossMarginMonthlyProfit(), 2, '.', '');
-            $this->view->Overall_Margin = number_format($proposal->getGrossMarginOverallMargin(), 0, '.', '');
-            $this->view->Color_Margin   = number_format($proposal->getGrossMarginColorMargin(), 0, '.', '');
+            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
+            $this->view->Total_Revenue  = number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
+            $this->view->Monthly_Profit = number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2, '.', '');
+            $this->view->Overall_Margin = number_format($assessmentViewModel->getGrossMarginOverallMargin(), 0, '.', '');
+            $this->view->Color_Margin   = number_format($assessmentViewModel->getGrossMarginColorMargin(), 0, '.', '');
         }
         catch (Exception $e)
         {
@@ -133,7 +133,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($proposal->getPurchasedDevices() as $device)
+            foreach ($assessmentViewModel->getPurchasedDevices() as $device)
             {
                 $tonerConfig              = $device->getMasterDevice()->tonerConfigId;
                 $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
@@ -191,17 +191,17 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             }
 
             $fieldTotals    = array();
-            $fieldTotals [] = 'Totals for ' . $proposal->getDeviceCount() . ' devices:';
-            $fieldTotals [] = number_format($proposal->getPageCounts()->Purchased->BlackAndWhite->Monthly, 0, '.', '');
+            $fieldTotals [] = 'Totals for ' . $assessmentViewModel->getDeviceCount() . ' devices:';
+            $fieldTotals [] = number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly, 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
-            $fieldTotals [] = '$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
-            $fieldTotals [] = number_format($proposal->getPageCounts()->Purchased->Color->Monthly, 0, '.', '');
+            $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Monthly, 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
-            $fieldTotals [] = '$' . number_format($proposal->getGrossMarginTotalMonthlyCost()->Color, 2, '.', '');
+            $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2, '.', '');
         }
         catch (Exception $e)
         {
@@ -212,33 +212,5 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         $this->view->fieldTitlesLvl2 = implode(",", $fieldTitlesLvl2) . "\n";
         $this->view->fieldList       = $fieldList_Values;
         $this->view->fieldTotals     = implode(",", $fieldTotals) . "\n";
-
-        // Removes spaces from company name, otherwise CSV filename contains + symbol
-        $companyName = str_replace(array(
-                                        " ",
-                                        "/",
-                                        "\\",
-                                        ";",
-                                        "?",
-                                        "\"",
-                                        "'",
-                                        ",",
-                                        "%",
-                                        "&",
-                                        "#",
-                                        "@",
-                                        "!",
-                                        ">",
-                                        "<",
-                                        "+",
-                                        "=",
-                                        "{",
-                                        "}",
-                                        "[",
-                                        "]",
-                                        "|",
-                                        "~",
-                                        "`"
-                                   ), "_", $proposal->assessment->CustomerCompanyName);
     }
 }

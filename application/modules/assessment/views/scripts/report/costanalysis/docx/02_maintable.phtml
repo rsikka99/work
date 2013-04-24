@@ -6,11 +6,11 @@
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 
-$costPerPageSetting = $proposal->getCostPerPageSettingForCustomer();
-$deviceInstances    = $proposal->getMonthlyHighCostPurchasedDevice($costPerPageSetting);
+$costPerPageSetting = $assessmentViewModel->getCostPerPageSettingForCustomer();
+$deviceInstances    = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($costPerPageSetting);
 
 $tcStyle = $this->styles->tables->costanalysis;
 $table   = $section->addTable($tcStyle->tablestyle);
@@ -27,7 +27,7 @@ $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addTe
 foreach ($deviceInstances as $deviceInstance)
 {
     $isColor              = ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    $percentOfMonthlyCost = ($proposal->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($costPerPageSetting) / $proposal->calculateTotalMonthlyCost() * 100, 2) : 0;
+    $percentOfMonthlyCost = ($assessmentViewModel->calculateTotalMonthlyCost() > 0) ? number_format($deviceInstance->calculateMonthlyCost($costPerPageSetting) / $assessmentViewModel->calculateTotalMonthlyCost() * 100, 2) : 0;
     $cycle                = ($this->cycle(array(true, false))->next()->current());
     if ($cycle)
     {

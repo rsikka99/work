@@ -28,7 +28,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     public $reportName;
 
     /**
-     * The current proposal
+     * The current assessment view model
      *
      * @var Assessment_ViewModel_Assessment
      */
@@ -153,10 +153,10 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
      */
     public function initReportVariables ($filename)
     {
-        $this->view->publicFileName = $this->_relativeCachePath . "/" . $filename;
-        $this->view->savePath       = $this->_fullCachePath . "/" . $filename;
-        $this->view->dealerLogoFile = $this->getDealerLogoFile();
-        $this->view->proposal       = $this->getAssessmentViewModel();
+        $this->view->publicFileName      = $this->_relativeCachePath . "/" . $filename;
+        $this->view->savePath            = $this->_fullCachePath . "/" . $filename;
+        $this->view->dealerLogoFile      = $this->getDealerLogoFile();
+        $this->view->assessmentViewModel = $this->getAssessmentViewModel();
     }
 
     /**

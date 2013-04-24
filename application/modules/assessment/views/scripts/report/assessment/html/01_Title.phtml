@@ -1,6 +1,6 @@
 <?php
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 ?>
 <div class="titlepage">
     <div class="header">
@@ -16,17 +16,17 @@ $proposal = $this->proposal;
     <div class="title-page-customer-details">
         <h3>Prepared for:
             <?php
-            if (strlen($proposal->assessment->getClient()->companyName) > 26)
+            if (strlen($assessmentViewModel->assessment->getClient()->companyName) > 26)
             {
                 echo "<br/>";
             }
 
-            echo $proposal->assessment->getClient()->companyName;
+            echo $assessmentViewModel->assessment->getClient()->companyName;
             ?>
         </h3>
 
-        <h3><?php echo $proposal->getDateReportPrepared(); ?></h3>
+        <h3><?php echo $assessmentViewModel->getDateReportPrepared(); ?></h3>
 
-        <p><?php echo nl2br($proposal->assessment->getClient()->getAddress()); ?></p>
+        <p><?php echo nl2br($assessmentViewModel->assessment->getClient()->getAddress()); ?></p>
     </div>
 </div>

@@ -1,13 +1,10 @@
 <?php
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
-echo $this->pageStart;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 $this->brandName = "MPSToolbox.com";
 $this->companyName = "MPSToolbox.com";
 ?>
-<?php echo $this->noBreakStart; ?>
 <div class="h1">Old Device List</div>
-<?php echo $this->noBreakEnd; ?>
 <table class="genericTable" id="AppendixDeviceTable">
     <thead>
     <tr class="center">
@@ -18,7 +15,7 @@ $this->companyName = "MPSToolbox.com";
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($proposal->getIncludedDevicesSortedAscendingByAge() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
+    <?php foreach ($assessmentViewModel->getIncludedDevicesSortedAscendingByAge() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
         <tr>
             <td class="column1">
                 <div><?php echo $deviceInstance->getMasterDevice()->getFullDeviceName(); ?></div>

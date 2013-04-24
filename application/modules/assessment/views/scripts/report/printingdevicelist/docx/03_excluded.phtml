@@ -7,8 +7,8 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 
 /**
  * Variables
@@ -38,11 +38,12 @@ $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->tra
 $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Exclusion Reason'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 /* @var $device Proposalgen_Model_DeviceInstance */
-foreach($proposal->getExcludedDevices() as $device) {
+foreach ($assessmentViewModel->getExcludedDevices() as $device)
+{
     $SerialNumber = (strlen($device->serialNumber) == 0) ? 'Unknown Serial' : $device->serialNumber;
-    
+
     $table->addRow($tcStyle->cell->rowheight);
-    if($device->getIsMappedToMasterDevice())
+    if ($device->getIsMappedToMasterDevice())
     {
         $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->getManufacturer()->fullname), $tcStyle->row->fontStyle, $tcStyle->leftalign);
         $table->addCell($tcStyle->col1Width, $tcStyle->row->cell)->addText($this->translate($device->getMasterDevice()->modelName), $tcStyle->row->fontStyle, $tcStyle->leftalign);

@@ -5,17 +5,17 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 
 /**
  * Variables
  */
-$numberListStyle = array (
-    'listType' => PHPWord_Style_ListItem::TYPE_NUMBER 
+$numberListStyle    = array(
+    'listType' => PHPWord_Style_ListItem::TYPE_NUMBER
 );
-$listParagraphStyle = array (
-    'spaceAfter' => 100 
+$listParagraphStyle = array(
+    'spaceAfter' => 100
 );
 
 /**
@@ -23,7 +23,7 @@ $listParagraphStyle = array (
  */
 $section->addTitle($this->translate('Your Solution'), 1);
 
-$section->addText(sprintf($this->translate('Based on your %1$s Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.'),$this->brandName));
+$section->addText(sprintf($this->translate('Based on your %1$s Smart Assessment, we have developed a choice of managed print solutions to meet your specific business needs.'), $this->brandName));
 
 $section->addTitle($this->translate('Managed Print Solution Objectives'), 2);
 $section->addText($this->translate('Your managed print solution is designed to meet the following objectives:'), 0, null, null, $listParagraphStyle);

@@ -17,8 +17,8 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         {
             // Clear the cache for the report before proceeding
             $this->clearCacheForReport();
-            $proposal             = $this->getAssessmentViewModel();
-            $this->view->proposal = $proposal;
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {
@@ -71,8 +71,8 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
     {
         try
         {
-            /* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-            $proposal = $this->getAssessmentViewModel();
+            /* @var $assessmentViewModel Proposalgen_Model_Proposal_OfficeDepot */
+            $assessmentViewModel = $this->getAssessmentViewModel();
         }
         catch (Exception $e)
         {
@@ -93,7 +93,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($proposal->getPurchasedDevices() as $device)
+            foreach ($assessmentViewModel->getPurchasedDevices() as $device)
             {
                 $toners    = $device->getMasterDevice()->getToners();
                 $oemToners = $toners[Proposalgen_Model_PartType::OEM];
@@ -136,7 +136,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
             $excluded_values = "";
             try
             {
-                foreach ($proposal->getExcludedDevices() as $device)
+                foreach ($assessmentViewModel->getExcludedDevices() as $device)
                 {
                     $row    = array();
                     $row [] = $device->getDeviceName();
@@ -191,6 +191,6 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
                                         "|",
                                         "~",
                                         "`"
-                                   ), "_", $proposal->Report->CustomerCompanyName);
+                                   ), "_", $assessmentViewModel->Report->CustomerCompanyName);
     }
 }

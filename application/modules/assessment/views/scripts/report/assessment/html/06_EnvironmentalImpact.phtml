@@ -1,21 +1,21 @@
 <?php
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
-$graphs = $proposal->getGraphs();
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+$graphs = $assessmentViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Environmental Impact</div>
 <table cellspacing="0" class="gradesTable">
     <tr>
         <td class="gradeDescription">
-            <p><?php echo $proposal->getRanking()->getEnvironmentalFriendliness()->RankingText; ?></p>
+            <p><?php echo $assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->RankingText; ?></p>
         </td>
-        <td class="gradeNumber"><?php echo number_format($proposal->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
+        <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getEnvironmentalFriendliness()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
 <div class="pheader">Energy Consumption</div>
-<?php if ($proposal->getPercentageOfDevicesReportingPower() > $proposal->getDevicesReportingPowerThreshold()) {?>
-<p>You are currently using an estimated average of <strong><?php echo number_format($proposal->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($proposal->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($proposal->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
+<?php if ($assessmentViewModel->getPercentageOfDevicesReportingPower() > $assessmentViewModel->getDevicesReportingPowerThreshold()) {?>
+<p>You are currently using an estimated average of <strong><?php echo number_format($assessmentViewModel->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of <strong>$<?php echo number_format($assessmentViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.</p>
 <p>The following lists the devices with the highest average power consumption per month.</p>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>
@@ -27,7 +27,7 @@ $graphs = $proposal->getGraphs();
         </tr>
     </thead>
     <tbody>
-        <?php $ctr = 0; foreach ($proposal->getHighPowerConsumptionDevices() as $deviceInstance): ?>
+        <?php $ctr = 0; foreach ($assessmentViewModel->getHighPowerConsumptionDevices() as $deviceInstance): ?>
         <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
         <tr>
             <td><div style="width: 160px; padding: 0;"><?php echo $deviceName; ?></div></td>
@@ -39,7 +39,7 @@ $graphs = $proposal->getGraphs();
     </tbody>
 </table>
 <br />
-<?php } else echo "<p>".$proposal->getNumberOfDevicesReportingPower()." of your ".$proposal->getDeviceCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
+<?php } else echo "<p>".$assessmentViewModel->getNumberOfDevicesReportingPower()." of your ".$assessmentViewModel->getDeviceCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
 <div class="pheader">Green Features: Duplexing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplexing and scanning capabilities:</p>
 <div class="center">

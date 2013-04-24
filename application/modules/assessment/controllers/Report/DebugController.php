@@ -17,7 +17,7 @@ class Assessment_Report_DebugController extends Assessment_Library_Controller_Ac
         $this->view->reportTitle = "Debug";
         try
         {
-            if (false !== ($proposal = $this->getAssessmentViewModel()))
+            if (false !== ($assessmentViewModel = $this->getAssessmentViewModel()))
             {
 
             }
@@ -25,7 +25,7 @@ class Assessment_Report_DebugController extends Assessment_Library_Controller_Ac
             {
                 throw new Exception("Assessment View Model is false");
             }
-            $this->view->proposal = $proposal;
+            $this->view->assessmentViewModel = $assessmentViewModel;
         }
         catch (Exception $e)
         {

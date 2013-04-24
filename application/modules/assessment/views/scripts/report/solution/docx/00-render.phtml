@@ -1,8 +1,8 @@
 <?php
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 
 /**
  * Styles
@@ -29,7 +29,7 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$titlepageSection = $phpword->createSection(array(
+$titlePageSection = $phpword->createSection(array(
                                                  'orientation'  => null,
                                                  'marginLeft'   => 1420,
                                                  'marginRight'  => 720,
@@ -51,35 +51,35 @@ $section          = $phpword->createSection();
  */
 // Title page
 $phpword->addParagraphStyle('titleStyle1', array(
-                                                      'align'      => 'center',
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => '004990'
-                                                 ));
+                                                'align'      => 'center',
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '004990'
+                                           ));
 $phpword->addParagraphStyle('titleStyle2', array(
-                                                      'spaceAfter'  => 50,
-                                                      'spaceBefore' => 50,
-                                                      'bgColor'     => '4C4C4C'
-                                                 ));
+                                                'spaceAfter'  => 50,
+                                                'spaceBefore' => 50,
+                                                'bgColor'     => '4C4C4C'
+                                           ));
 $phpword->addParagraphStyle('titleStyle3', array(
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => '7F7F7F'
-                                                 ));
-$phpword->addFontStyle('titlepage_title', array (
-                                                      'size' => 24,
-                                                      'bold' => true,
-                                                      'color' => 'FFFFFF'
-                                                ));
+                                                'spaceAfter' => 100,
+                                                'bgColor'    => '7F7F7F'
+                                           ));
+$phpword->addFontStyle('titlepage_title', array(
+                                               'size'  => 24,
+                                               'bold'  => true,
+                                               'color' => 'FFFFFF'
+                                          ));
 
-$phpword->addFontStyle('titlepage_subtitle', array (
-                                                         'size' => 16,
-                                                         'bold' => true,
-                                                         'color' => 'FFFFFF'
-                                                   ));
+$phpword->addFontStyle('titlepage_subtitle', array(
+                                                  'size'  => 16,
+                                                  'bold'  => true,
+                                                  'color' => 'FFFFFF'
+                                             ));
 
-$phpword->addFontStyle('titlepage_address', array (
-                                                        'size' => 12,
-                                                        'color' => 'FFFFFF'
-                                                  ));
+$phpword->addFontStyle('titlepage_address', array(
+                                                 'size'  => 12,
+                                                 'color' => 'FFFFFF'
+                                            ));
 $phpword->addParagraphStyle('titlepageHeaderParagraph', array(
                                                              'spaceAfter' => 200
                                                         ));
@@ -1059,20 +1059,20 @@ $styles = (object)array(
 );
 
 $titledata = array(
-    "phpword"  => $phpword,
-    "section"  => $titlepageSection,
-    "proposal" => $this->proposal,
-    "styles"   => $styles,
-    "dealerLogoFile"   => $this->dealerLogoFile,
+    "phpword"             => $phpword,
+    "section"             => $titlePageSection,
+    "assessmentViewModel" => $this->assessmentViewModel,
+    "styles"              => $styles,
+    "dealerLogoFile"      => $this->dealerLogoFile,
 );
 
 $data = array(
-    "phpword"  => $phpword,
-    "section"  => $section,
-    "proposal" => $this->proposal,
-    "styles"   => $styles,
-    "brandName" => 'MPSToolbox.com',
-    "companyName" => 'MPSToolbox.com'
+    "phpword"             => $phpword,
+    "section"             => $section,
+    "assessmentViewModel" => $this->assessmentViewModel,
+    "styles"              => $styles,
+    "brandName"           => 'MPSToolbox.com',
+    "companyName"         => 'MPSToolbox.com'
 );
 // Actual document pages
 $this->partial("report/solution/docx/01_titlepage.phtml", $titledata);

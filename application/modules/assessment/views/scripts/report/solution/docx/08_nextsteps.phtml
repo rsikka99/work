@@ -5,15 +5,15 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-/* @var $proposal Assessment_ViewModel_Assessment */
-$proposal = $this->proposal;
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
 
 $section->addPageBreak();
 $section->addTitle($this->translate('Next Steps'), 1);
 
 $section->addText($this->translate('We recommend the following implementation plan for your managed print services program:'));
 $section->addTextBreak();
-$tc = $this->styles->tables->nextsteps;
+$tc    = $this->styles->tables->nextsteps;
 $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
