@@ -352,9 +352,8 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 2))
             ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
@@ -371,9 +370,8 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 0))
+            ->setAttrib('inputappend', ' hours')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
@@ -390,9 +388,8 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costOfLabor, 2))
             ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
@@ -409,9 +406,9 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costToExecuteSuppliesOrder, 2))
             ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
+            ->setAttrib('inputappend', ' / order')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
@@ -428,9 +425,8 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
-            ->setAttrib('inputprepend', '$')
-            ->setAttrib('inputappend', ' / page')
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->numberOfSupplyOrdersPerMonth, 0))
+            ->setAttrib('inputappend', ' / month')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));

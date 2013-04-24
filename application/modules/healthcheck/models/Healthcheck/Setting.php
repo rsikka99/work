@@ -129,7 +129,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     /**
      *  Hours Spent On IT
      *
-     *  @var float
+     * @var float
      */
     public $hoursSpentOnIt;
 
@@ -321,6 +321,10 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->replacementPricingConfigId = $params->replacementPricingConfigId;
         }
+        if (isset($params->costToExecuteSuppliesOrder) && !is_null($params->costToExecuteSuppliesOrder))
+        {
+            $this->costToExecuteSuppliesOrder = $params->costToExecuteSuppliesOrder;
+        }
         if (isset($params->numberOfSupplyOrdersPerMonth) && !is_null($params->numberOfSupplyOrdersPerMonth))
         {
             $this->numberOfSupplyOrdersPerMonth = $params->numberOfSupplyOrdersPerMonth;
@@ -333,32 +337,33 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                          => $this->id,
-            "pageCoverageMonochrome"      => $this->pageCoverageMonochrome,
-            "pageCoverageColor"           => $this->pageCoverageColor,
-            "actualPageCoverageMono"      => $this->actualPageCoverageMono,
-            "actualPageCoverageColor"     => $this->actualPageCoverageColor,
-            "laborCostPerPage"            => $this->laborCostPerPage,
-            "partsCostPerPage"            => $this->partsCostPerPage,
-            "adminCostPerPage"            => $this->adminCostPerPage,
-            "assessmentReportMargin"      => $this->assessmentReportMargin,
-            "grossMarginReportMargin"     => $this->grossMarginReportMargin,
-            "monthlyLeasePayment"         => $this->monthlyLeasePayment,
-            "defaultPrinterCost"          => $this->defaultPrinterCost,
-            "leasedBwCostPerPage"         => $this->leasedBwCostPerPage,
-            "leasedColorCostPerPage"      => $this->leasedColorCostPerPage,
-            "mpsBwCostPerPage"            => $this->mpsBwCostPerPage,
-            "mpsColorCostPerPage"         => $this->mpsColorCostPerPage,
-            "kilowattsPerHour"            => $this->kilowattsPerHour,
-            "assessmentPricingConfigId"   => $this->assessmentPricingConfigId,
-            "grossMarginPricingConfigId"  => $this->grossMarginPricingConfigId,
-            "costThreshold"               => $this->costThreshold,
-            "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
-            "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "averageItHourlyRate"         => $this->averageItHourlyRate,
-            "hoursSpentOnIt"              => $this->hoursSpentOnIt,
-            "costOfLabor"                 => $this->costOfLabor,
-            "replacementPricingConfigId"  => $this->replacementPricingConfigId,
+            "id"                           => $this->id,
+            "pageCoverageMonochrome"       => $this->pageCoverageMonochrome,
+            "pageCoverageColor"            => $this->pageCoverageColor,
+            "actualPageCoverageMono"       => $this->actualPageCoverageMono,
+            "actualPageCoverageColor"      => $this->actualPageCoverageColor,
+            "laborCostPerPage"             => $this->laborCostPerPage,
+            "partsCostPerPage"             => $this->partsCostPerPage,
+            "adminCostPerPage"             => $this->adminCostPerPage,
+            "assessmentReportMargin"       => $this->assessmentReportMargin,
+            "grossMarginReportMargin"      => $this->grossMarginReportMargin,
+            "monthlyLeasePayment"          => $this->monthlyLeasePayment,
+            "defaultPrinterCost"           => $this->defaultPrinterCost,
+            "leasedBwCostPerPage"          => $this->leasedBwCostPerPage,
+            "leasedColorCostPerPage"       => $this->leasedColorCostPerPage,
+            "mpsBwCostPerPage"             => $this->mpsBwCostPerPage,
+            "mpsColorCostPerPage"          => $this->mpsColorCostPerPage,
+            "kilowattsPerHour"             => $this->kilowattsPerHour,
+            "assessmentPricingConfigId"    => $this->assessmentPricingConfigId,
+            "grossMarginPricingConfigId"   => $this->grossMarginPricingConfigId,
+            "costThreshold"                => $this->costThreshold,
+            "targetMonochromeCostPerPage"  => $this->targetMonochromeCostPerPage,
+            "targetColorCostPerPage"       => $this->targetColorCostPerPage,
+            "averageItHourlyRate"          => $this->averageItHourlyRate,
+            "hoursSpentOnIt"               => $this->hoursSpentOnIt,
+            "costOfLabor"                  => $this->costOfLabor,
+            "replacementPricingConfigId"   => $this->replacementPricingConfigId,
+            "costToExecuteSuppliesOrder"   => $this->costToExecuteSuppliesOrder,
             "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
         );
     }
