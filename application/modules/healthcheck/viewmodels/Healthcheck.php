@@ -13,7 +13,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      * All devices that have ages older than this are considered old/
      */
     const OLD_DEVICE_THRESHHOLD = 10;
-    
+
     const GALLONS_WATER_PER_PAGE = 0.121675; // Number of pages * this gives amount of gallons
     const TREE_PER_PAGE = 7800; //Number of pages divided by this, gives amount of trees
     public static $Proposal;
@@ -1351,7 +1351,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $employeeCount = $this->healthcheck->getClient()->employeeCount;
 
             // Formatting variables
-            $numberValueMarker                          = "N *sz0";
+            $numberValueMarker = "N *sz0";
             //Graphs[2]
             $this->Graphs [] = "FILLER";
 
@@ -1830,6 +1830,44 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->UniquePurchasedTonerList;
+    }
+
+    /**
+     * Calculates half the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
+    {
+        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
+    }
+
+    /**
+     * Calculates the difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
+    {
+        return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
+    }
+
+    /**
+     * @return float
+     */
+    public function calculateEstimatedCompTonerCostAnnually ()
+    {
+        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
+    }
+
+    /**
+     * Calculates The Estimated Oem Toner Cost Annually.
+     *
+     * @return float
+     */
+    public function calculateEstimatedOemTonerCostAnnually ()
+    {
+        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getPageCounts()->Purchased->Color->Monthly + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->Purchased->BlackAndWhite->Monthly)) * 12;
     }
 
     /**

@@ -128,11 +128,15 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
 
     /**
      *  Hours Spent On IT
+     *
+     *  @var float
      */
     public $hoursSpentOnIt;
 
     /**
      * Cost Of labor
+     *
+     * @var float
      */
     public $costOfLabor;
 
@@ -143,6 +147,8 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
 
     /**
      * @var int
+     *
+     * @var float
      */
     public $numberOfSupplyOrdersPerMonth;
 
