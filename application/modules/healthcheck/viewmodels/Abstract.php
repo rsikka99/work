@@ -87,48 +87,6 @@ class Healthcheck_ViewModel_Abstract
         return $this->_costPerPageSettingForCustomer;
     }
 
-    /**
-     * Gets the cost per page settings for the dealers point of view
-     *
-     * @return Proposalgen_Model_CostPerPageSetting
-     */
-    public function getCostPerPageSettingForDealer ()
-    {
-        if (!isset($this->_costPerPageSettingForDealer))
-        {
-            $this->_costPerPageSettingForDealer = new Proposalgen_Model_CostPerPageSetting();
-
-            $healthcheckSettings                                         = $this->healthcheck->getHealthcheckSettings();
-            $this->_costPerPageSettingForDealer->adminCostPerPage       = $healthcheckSettings->adminCostPerPage;
-            $this->_costPerPageSettingForDealer->pageCoverageColor      = $healthcheckSettings->actualPageCoverageColor;
-            $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $healthcheckSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForDealer->pricingConfiguration   = $healthcheckSettings->getGrossMarginPricingConfig();
-        }
-
-        return $this->_costPerPageSettingForDealer;
-    }
-
-    /**
-     * Gets the cost per page settings for replacement devices
-     *
-     * @return Proposalgen_Model_CostPerPageSetting
-     */
-    public function getCostPerPageSettingForReplacements ()
-    {
-
-        if (!isset($this->_costPerPageSettingForReplacements))
-        {
-            $this->_costPerPageSettingForReplacements = new Proposalgen_Model_CostPerPageSetting();
-
-            $healthcheckSettings                                               = $this->healthcheck->getHealthcheckSettings();
-            $this->_costPerPageSettingForReplacements->adminCostPerPage       = $healthcheckSettings->adminCostPerPage;
-            $this->_costPerPageSettingForReplacements->pageCoverageColor      = $healthcheckSettings->actualPageCoverageColor;
-            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $healthcheckSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForReplacements->pricingConfiguration   = $healthcheckSettings->getReplacementPricingConfig();
-        }
-
-        return $this->_costPerPageSettingForReplacements;
-    }
 
 
     /**

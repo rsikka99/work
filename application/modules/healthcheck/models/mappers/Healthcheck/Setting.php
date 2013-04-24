@@ -240,7 +240,7 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
     }
 
     /**
-     * Gets the systems Healthcheck setting object
+     * Gets the Healthcheck's setting object
      *
      * @param $HealthcheckId
      *
@@ -248,7 +248,12 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
      */
     public function fetchSetting ($HealthcheckId)
     {
-        $HealthcheckSetting = $this->find($HealthcheckId);
+        $Healthcheck = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
+        $HealthcheckSetting = null;
+        if($Healthcheck)
+        {
+            $HealthcheckSetting = $this->find($Healthcheck->healthcheckSettingId);
+        }
         // If we don't have a setting yet, make a blank one
         if (!$HealthcheckSetting)
         {

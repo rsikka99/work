@@ -46,7 +46,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             {
                 throw new Exception("Healthcheck View Model is false");
             }
-            $this->view->proposal = $healthcheckViewModel;
+            $this->view->healthcheckViewModel = $healthcheckViewModel;
         }
         catch (Exception $e)
         {

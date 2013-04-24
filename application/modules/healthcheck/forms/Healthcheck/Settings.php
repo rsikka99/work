@@ -370,8 +370,8 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 0))
-            ->setAttrib('inputappend', ' hours')
+            ->setAttrib('data-defaultvalue', "15 minutes per week per printer")
+            ->setAttrib('append', ' hours')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
@@ -382,14 +382,15 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
         // Cost Of Labor
         $costOfLabor = new Zend_Form_Element_Text('costOfLabor');
-        $costOfLabor->setLabel('Estimated Cost Of Labor')
+        $costOfLabor->setLabel('Estimated Annual Cost Of Labor')
             ->addValidator(new Zend_Validate_Float())
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costOfLabor, 2))
+            ->setAttrib('data-defaultvalue', "200 per printer")
             ->setAttrib('inputprepend', '$')
+            ->setAttrib('append', ' / fleet')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
                                                 ));
