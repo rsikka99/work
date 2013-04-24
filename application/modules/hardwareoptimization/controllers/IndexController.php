@@ -1,13 +1,12 @@
 <?php
 class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_Controller_Action
 {
-
     /**
-     * This action takes care of selecting an upload
+     * This action will redirect us to the latest available step
      */
     public function indexAction ()
     {
-        $this->redirectToLatestStep();
+        $this->redirectToLatestStep($this->getHardwareOptimization()->stepName);
     }
 
     /**

@@ -15,7 +15,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports->Healthcheck->active = true;
+        $this->view->availableReports['Healthcheck']['active'] = true;
 
         $this->view->formats = array(
             "/healthcheck/report_healthcheck/generate/format/docx" => $this->_wordFormat
@@ -71,7 +71,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
             case "docx" :
                 require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
-                $healthcheck            = $this->getHealthcheckViewModel();
+                $healthcheck         = $this->getHealthcheckViewModel();
                 $graphs              = $this->cachePNGImages($healthcheck->getGraphs(), true);
                 $healthcheck->setGraphs($graphs);
                 $this->view->wordStyles = $this->getWordStyles();
