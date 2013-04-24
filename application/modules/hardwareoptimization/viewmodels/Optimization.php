@@ -30,6 +30,20 @@ class Hardwareoptimization_ViewModel_Optimization
      */
     protected $_dealerMonthlyCostWithReplacements;
 
+    /**
+     * Cost per page setting for a dealer
+     *
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSettingForDealer;
+
+    /**
+     * Cost per page setting for replacement devices
+     *
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSettingForReplacements;
+
 
     /**
      * Constructor
@@ -122,12 +136,31 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_costPerPageSettingForDealer = new Proposalgen_Model_CostPerPageSetting();
 
-            $reportSettings                                             = $this->_optimization->getHardwareOptimizationSetting();
-            $this->_costPerPageSettingForDealer->adminCostPerPage       = $reportSettings->adminCostPerPage;
-            $this->_costPerPageSettingForDealer->pricingConfiguration   = $reportSettings->getPricingConfig($reportSettings->dealerPricingConfigId);
+            $reportSettings                                           = $this->_optimization->getHardwareOptimizationSetting();
+            $this->_costPerPageSettingForDealer->adminCostPerPage     = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForDealer->pricingConfiguration = $reportSettings->getPricingConfig($reportSettings->dealerPricingConfigId);
         }
 
         return $this->_costPerPageSettingForDealer;
+    }
+
+    /**
+     * Gets the cost per page settings for the replacement devices
+     *
+     * @return Proposalgen_Model_CostPerPageSetting
+     */
+    public function getCostPerPageSettingForReplacements ()
+    {
+        if (!isset($this->_costPerPageSettingForReplacements))
+        {
+            $this->_costPerPageSettingForReplacements = new Proposalgen_Model_CostPerPageSetting();
+
+            $reportSettings                                                 = $this->_optimization->getHardwareOptimizationSetting();
+            $this->_costPerPageSettingForReplacements->adminCostPerPage     = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForReplacements->pricingConfiguration = $reportSettings->getPricingConfig($reportSettings->replacementPricingConfigId);
+        }
+
+        return $this->_costPerPageSettingForReplacements;
     }
 
 
