@@ -1,9 +1,9 @@
 <?php
 class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
 {
-    const STEP_REPORTSETTINGS = 'Settings';
-    const STEP_SELECTUPLOAD   = 'selectupload';
-    const STEP_FINISHED       = 'finished';
+    const STEP_SETTINGS      = 'settings';
+    const STEP_SELECT_UPLOAD = 'select-upload';
+    const STEP_FINISHED      = 'finished';
 
     /**
      * The order in which steps go.
@@ -11,19 +11,19 @@ class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
      * @var array
      */
     private static $stepNames = array(
-        self::STEP_SELECTUPLOAD   => array(
+        self::STEP_SELECT_UPLOAD => array(
             'module'     => 'healthcheck',
             'name'       => 'Select Upload',
             'controller' => 'index',
-            'action'     => 'selectupload'
+            'action'     => 'select-upload'
         ),
-        self::STEP_REPORTSETTINGS => array(
+        self::STEP_SETTINGS      => array(
             'module'     => 'healthcheck',
             'name'       => 'Settings',
             'controller' => 'index',
             'action'     => 'settings'
         ),
-        self::STEP_FINISHED       => array(
+        self::STEP_FINISHED      => array(
             'module'     => 'healthcheck',
             'name'       => 'Report',
             'controller' => 'report_healthcheck',

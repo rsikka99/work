@@ -195,7 +195,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     {
         if (!isset($this->_reportSteps))
         {
-            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD;
+            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD;
 
             $this->_reportSteps = Healthcheck_Model_Healthcheck_Steps::getInstance()->steps;
             Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->_reportSteps, $stage);

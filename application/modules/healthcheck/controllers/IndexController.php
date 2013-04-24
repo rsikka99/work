@@ -15,17 +15,18 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
         $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
     }
 
-    public function indexAction()
+    public function indexAction ()
     {
-        $this->redirectToLatestStep();
+        $this->redirectToLatestStep($this->getHealthcheck()->stepName);
     }
+
     /**
      * Selects a upload to use for the healthcheck
      */
-    public function selectuploadAction ()
+    public function selectUploadAction ()
     {
         // Mark the step we're on as active
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECTUPLOAD);
+        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD);
         $healthcheck = $this->getHealthcheck();
 
 
@@ -69,7 +70,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
     public function settingsAction ()
     {
 //      Mark the step we're on as active
-        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_REPORTSETTINGS);
+        $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SETTINGS);
 
         $healthcheckSettingsService = new Healthcheck_Service_HealthcheckSettings($this->getHealthcheck()->id, Zend_Auth::getInstance()->getIdentity()->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
         if ($this->getRequest()->isPost())
