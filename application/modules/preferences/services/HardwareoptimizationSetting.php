@@ -150,6 +150,7 @@ class Preferences_Service_HardwareoptimizationSetting
      */
     public function update ($data)
     {
+
         $validData = $this->validateAndFilterData($data);
         if ($validData)
         {
@@ -175,6 +176,7 @@ class Preferences_Service_HardwareoptimizationSetting
                 unset($validData ['customerPricingConfigId']);
             }
 
+
             $hardwareOptimizationSetting = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
             $hardwareOptimizationSetting->populate($validData);
 
@@ -184,8 +186,9 @@ class Preferences_Service_HardwareoptimizationSetting
             }
             else
             {
-                $hardwareOptimizationSetting = $this->_systemSettings->id;
+                $hardwareOptimizationSetting->id = $this->_systemSettings->id;
             }
+
 
             Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($hardwareOptimizationSetting);
 
