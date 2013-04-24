@@ -178,13 +178,13 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
-        $proposal           = $this->getProposal();
-        $costPerPageSetting = $proposal->getCostPerPageSettingForDealer();
+        $optimization       = $this->getOptimizationViewModel();
+        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
         $instanceId     = $this->_getParam('deviceInstanceId');
         $deviceInstance = null;
         $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
-        $deviceInstance->processOverrides($this->Report);
+        $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
 
         $replacementDevice    = $deviceInstance->getReplacementMasterDevice();
         $hasReplacementDevice = ($replacementDevice instanceof Proposalgen_Model_MasterDevice);
@@ -252,7 +252,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     protected function _processSaveProfitability ($form)
     {
 
-        $proposal                        = $this->getProposal();
+        $optimization                    = $this->getOptimizationViewModel();
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
         $db                              = Zend_Db_Table::getDefaultAdapter();
         $db->beginTransaction();
@@ -261,7 +261,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             /*
              * Loop through our devices
              */
-            foreach ($proposal->getPurchasedDevices() as $deviceInstance)
+            foreach ($optimization->getPurchasedDevices() as $deviceInstance)
             {
                 $masterDeviceId = $form->getValue("deviceInstance_{$deviceInstance->id}");
 
@@ -365,8 +365,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     protected function _analyzeFleet ()
     {
         $db                              = Zend_Db_Table::getDefaultAdapter();
-        $proposal                        = $this->getProposal();
-        $savingsThreshold                = $proposal->report->getReportSettings()->costThreshold;
+        $optimization                    = $this->getOptimizationViewModel();
+        $savingsThreshold                = $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
 
 
@@ -385,17 +385,17 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId, false);
             $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
 
+            /* @var $replacementMasterDevice Proposalgen_Model_MasterDevice */
             foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
             {
-                $replacementMasterDevice->processOverrides($proposal->report);
+                $replacementMasterDevice->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
             }
 
-            $costPerPageSetting            = $proposal->getCostPerPageSettingForDealer();
-            $replacementCostPerPageSetting = $proposal->getCostPerPageSettingForReplacements();
+            $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
+            $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
 
-            foreach ($proposal->getPurchasedDevices() as $deviceInstance)
+            foreach ($optimization->getPurchasedDevices() as $deviceInstance)
             {
-
                 $suggestedDevice = null;
 
                 if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
@@ -423,22 +423,19 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-                    $newDevice                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                    $newDevice->masterDeviceId   = $suggestedDevice->id;
-                    $newDevice->deviceInstanceId = $deviceInstance->id;
+                    $newDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                    $newDevice->masterDeviceId         = $suggestedDevice->id;
+                    $newDevice->deviceInstanceId       = $deviceInstance->id;
+                    $newDevice->hardwareOptimizationId = $this->_hardwareOptimization->id;
 
-                    // FIXME: This is set to the assessment id for now. It will need to change to the HWO id when we separate the two reports.
-                    $newDevice->hardwareOptimizationId = $this->_reportId;
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
-
             $db->commit();
         }
         catch (Exception $e)
         {
             $db->rollBack();
-            My_Log::logException($e);
 
             return false;
         }
@@ -456,12 +453,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         try
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-            $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_reportId);
+            $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_hardwareOptimization->id);
         }
         catch (Exception $e)
         {
-            My_Log::logException($e);
-
             return false;
         }
 

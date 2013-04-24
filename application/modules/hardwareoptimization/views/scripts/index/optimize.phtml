@@ -67,11 +67,11 @@ $formActions [] = $form->getElement('Analyze');
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <div class='replacementDevices'>
         <?php
-        $costPerPageSetting = $hardwareOptimization->getCostPerPageSettingForDealer();
+        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
         $jsonRows           = array();
         $deviceCount        = 0;
         /* @var $device Proposalgen_Model_DeviceInstance */
-        foreach ($hardwareOptimization->getPurchasedDevices() as $device) :
+        foreach ($optimization->getPurchasedDevices() as $device) :
             $deviceCount++;
             $replacementDeviceElement = $form->getElement("deviceInstance_{$device->id}");
 
@@ -106,7 +106,7 @@ $formActions [] = $form->getElement('Analyze');
             $jsonRows[] = $rowJson;
             ?>
         <?php endforeach; ?>
-        <em>The following <?php echo $deviceCount; ?> out of <?php echo count($hardwareOptimization->getDevices()->allIncludedDeviceInstances);?> devices are eligible for potential optimization.</em>
+        <em>The following <?php echo $deviceCount; ?> out of <?php echo count($optimization->getDevices()->allIncludedDeviceInstances);?> devices are eligible for potential optimization.</em>
         <!-- Form Actions -->
         <div class="clearfix">
             <?php foreach ($formActions as $element) : ?>

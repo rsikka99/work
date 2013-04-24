@@ -27,6 +27,13 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     protected $_wordStyles;
 
     /**
+     * Number representing the dealer id
+     *
+     * @var int
+     */
+    protected $_dealerId;
+
+    /**
      * The current proposal
      *
      * @var Hardwareoptimization_ViewModel_CustomerHardwareOptimization
@@ -49,6 +56,8 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         parent::init();
 
         $this->_navigation = Hardwareoptimization_Model_Hardware_Optimization_Steps::getInstance();
+        $this->_dealerId   = Zend_Auth::getInstance()->getIdentity()->dealerId;
+
 
         if (isset($this->_mpsSession->selectedClientId))
         {
