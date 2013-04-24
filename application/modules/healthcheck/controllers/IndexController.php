@@ -2,19 +2,8 @@
 class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
 {
     /**
-     * The navigation steps
-     *
-     * @var Healthcheck_Model_Healthcheck_Steps
+     * This action will redirect us to the latest available step
      */
-    protected $_navigation;
-
-    public function init ()
-    {
-        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
-        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
-        $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
-    }
-
     public function indexAction ()
     {
         $this->redirectToLatestStep($this->getHealthcheck()->stepName);

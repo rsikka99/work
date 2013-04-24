@@ -2,7 +2,7 @@
 class Assessment_IndexController extends Assessment_Library_Controller_Action
 {
     /**
-     * This action takes care of selecting an upload
+     * This action will redirect us to the latest available step
      */
     public function indexAction ()
     {
