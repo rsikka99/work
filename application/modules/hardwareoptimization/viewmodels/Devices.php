@@ -1,5 +1,5 @@
 <?php
-class Assessment_ViewModel_Devices
+class Hardwareoptimization_ViewModel_Devices
 {
     /**
      * @var Proposalgen_Model_DeviceInstance[]
@@ -33,9 +33,9 @@ class Assessment_ViewModel_Devices
     public $unmappedDeviceInstances = array();
 
     /**
-     * @var Assessment_Model_Assessment
+     * @var Hardwareoptimization_Model_Hardware_Optimization
      */
-    protected $_assessment;
+    protected $_hardwareOptimization;
 
     /**
      * @var bool
@@ -45,14 +45,12 @@ class Assessment_ViewModel_Devices
     /**
      * Constructor
      *
-     * @param Assessment_Model_Assessment $assessment
+     * @param Hardwareoptimization_Model_Hardware_Optimization $hardwareOptimization
      */
-    public function __construct (Assessment_Model_Assessment $assessment)
+    public function __construct (Hardwareoptimization_Model_Hardware_Optimization $hardwareOptimization)
     {
-        $this->_assessment                                      = $assessment;
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $assessment->getAssessmentSettings()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $assessment->getAssessmentSettings()->partsCostPerPage;
-        $this->_fetchAndSortAllDevices($assessment->getRmsUpload()->id);
+        $this->_hardwareOptimization                                      = $hardwareOptimization;
+        $this->_fetchAndSortAllDevices($hardwareOptimization->getRmsUpload()->id);
     }
 
     /**
@@ -103,7 +101,7 @@ class Assessment_ViewModel_Devices
                         }
 
                         // Might as well process the overrides now too
-                        $deviceInstance->processOverrides($this->_assessment->getAssessmentSettings()->adminCostPerPage);
+                        $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
                     }
                     else
                     {
