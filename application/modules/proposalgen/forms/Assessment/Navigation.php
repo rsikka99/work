@@ -148,7 +148,10 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
         $form->addDisplayGroup($addedButtons, 'actions', array(
                                                               'disableLoadDefaultDecorators' => true,
                                                               'decorators'                   => array(
-                                                                  'Actions'
+                                                                  'Actions','FieldSize',
+                                                                  'ViewHelper',
+                                                                  'Addon',
+                                                                  'ElementErrors',
                                                               )
                                                          ));
     }

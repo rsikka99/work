@@ -11,11 +11,15 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     const DEVICETYPE_COLOR     = 2;
     const DEVICETYPE_COLOR_MFP = 3;
 
+
     /**
-     *
-     * @var Proposalgen_Model_Proposal_OfficeDepot
+     * @var Proposalgen_Model_DeviceInstance[]
      */
-    protected $proposal;
+    protected $_devices;
+    /**
+     * @var int
+     */
+    protected $_dealerId;
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
@@ -37,13 +41,16 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      */
     protected $colorMfpReplacementDevicecs;
 
+
     /**
-     * @param Proposalgen_Model_Proposal_OfficeDepot $proposal
-     * @param null                                   $options
+     * @param null $devices
+     * @param      $dealerId
+     * @param null $options
      */
-    public function __construct ($proposal, $options = null)
+    public function __construct ($devices, $dealerId, $options = null)
     {
-        $this->proposal = $proposal;
+        $this->_devices  = $devices;
+        $this->_dealerId = $dealerId;
         parent::__construct($options);
     }
 
@@ -93,7 +100,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                            ));
 
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($this->proposal->getPurchasedDevices() as $deviceInstance)
+        foreach ($this->_devices as $deviceInstance)
         {
             // Get replacement devices for each type of device
             if ($deviceInstance->getAction() !== 'Retire')
@@ -177,7 +184,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->getProposal()->report->getClient()->dealerId);
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
                 $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
@@ -201,7 +208,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->getProposal()->report->getClient()->dealerId);
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
                 $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
@@ -225,7 +232,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->getProposal()->report->getClient()->dealerId);
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
@@ -251,7 +258,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->getProposal()->report->getClient()->dealerId);
+            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
