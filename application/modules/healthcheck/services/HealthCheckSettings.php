@@ -5,7 +5,7 @@ class Healthcheck_Service_HealthcheckSettings
     /**
      * The form for a client
      *
-     * @var Healthcheck_Form_Settings_Healthcheck
+     * @var Healthcheck_Form_Healthcheck_Settings
      */
     protected $_form;
 
@@ -53,11 +53,11 @@ class Healthcheck_Service_HealthcheckSettings
 
     public function __construct ($HealthcheckId, $userId, $dealerId)
     {
-        $this->_Healthcheck         = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
+        $this->_Healthcheck    = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
         $this->_systemSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
         $this->_dealerSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
 //
-        $this->_userSettings   = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId);
+        $this->_userSettings        = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId);
         $this->_HealthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($HealthcheckId);
 //
 //        // Calculate the default settings
@@ -68,13 +68,13 @@ class Healthcheck_Service_HealthcheckSettings
     /**
      * Gets the client form
      *
-     * @return Healthcheck_Form_Settings_Healthcheck
+     * @return Healthcheck_Form_Healthcheck_Settings
      */
     public function getForm ()
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Healthcheck_Form_Settings_Healthcheck($this->_defaultSettings);
+            $this->_form = new Healthcheck_Form_Healthcheck_Settings($this->_defaultSettings);
 
             // Populate with initial data?
 //            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthcheckSettings->toArray()));
@@ -114,13 +114,6 @@ class Healthcheck_Service_HealthcheckSettings
         {
             $validData = $form->getValues();
         }
-        else
-        {
-            if ($this->getForm() instanceof EasyBib_Form)
-            {
-                $this->getForm()->buildBootstrapErrorDecorators();
-            }
-        }
 
         return $validData;
     }
@@ -137,7 +130,7 @@ class Healthcheck_Service_HealthcheckSettings
         $validData = $this->validateAndFilterData($data);
         if ($validData)
         {
-            $reportDate                = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
+            $reportDate                     = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
             $this->_Healthcheck->reportDate = $reportDate;
             Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_Healthcheck);
 
