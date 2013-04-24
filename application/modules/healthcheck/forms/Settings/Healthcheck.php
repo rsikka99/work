@@ -13,7 +13,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
      * @var Healthcheck_Model_Healthcheck_Setting
      */
     protected $_defaultSettings;
-    
+
     /**
      * Groups of elements
      *
@@ -34,7 +34,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         /**
          * Add class to form for label alignment
          *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
          * over controls (default)
          * - Inline .form-inline Left-aligned label and inline-block controls
          * for compact style
@@ -45,34 +45,34 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        
+
         $this->setMethod("POST");
-        
+
         // What does this currency regex validate?
-        $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+        $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
         $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
-        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
-        
+        $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+
         // Setup some form element groups
-        $generalGroup = new stdClass();
-        $generalGroup->title = "General";
-        $generalGroup->elements = array ();
+        $generalGroup                = new stdClass();
+        $generalGroup->title         = "General";
+        $generalGroup->elements      = array();
         $this->_formElementGroups [] = $generalGroup;
-        
-        $proposalGroup = new stdClass();
-        $proposalGroup->title = "Health Check";
-        $proposalGroup->elements = array ();
+
+        $proposalGroup               = new stdClass();
+        $proposalGroup->title        = "Health Check";
+        $proposalGroup->elements     = array();
         $this->_formElementGroups [] = $proposalGroup;
-        
+
         //*****************************************************************
         // GENERAL SETTING FIELDS
         //*****************************************************************
-        
 
-        $minYear = (int)date('Y') - 2;
-        $maxYear = $minYear + 4;
+
+        $minYear     = (int)date('Y') - 2;
+        $maxYear     = $minYear + 4;
         $report_date = new ZendX_JQuery_Form_Element_DatePicker('reportDate');
         //$report_date = new My_Form_Element_DateTimePicker('reportDate');
         $report_date->setLabel('Report Date')
@@ -85,15 +85,15 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('class', 'span2')
             ->setAttrib('style', 'text-align: right')
             ->setRequired(true);
-        $report_date->addFilters(array (
-                'StringTrim', 
-                'StripTags' 
-        ));
-        
+        $report_date->addFilters(array(
+                                      'StringTrim',
+                                      'StripTags'
+                                 ));
+
         $this->addElement($report_date);
-        
+
         $generalGroup->elements [] = $report_date;
-        
+
         //*****************************************************************
         // PROPOSAL SETTING FIELDS
         //*****************************************************************
@@ -103,10 +103,10 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin')
             ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(array (
-                'min' => 0,
-                'max' => 99
-        )))
+            ->addValidator(new Zend_Validate_Between(array(
+                                                          'min' => 0,
+                                                          'max' => 99
+                                                     )))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -131,14 +131,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->monthlyLeasePayment, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Default Printer Cost
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost')
@@ -150,14 +150,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->defaultPrinterCost, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Leased Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost')
@@ -169,14 +169,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Leased Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost')
@@ -188,14 +188,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // MPS Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel('MPS Monochrome Cost')
@@ -207,14 +207,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // MPS Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel('MPS Color Cost')
@@ -228,14 +228,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Energy Cost ($/KW/H)
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost')
@@ -247,11 +247,11 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / KWh')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         // Toner preference for the assessment
@@ -259,42 +259,42 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
             ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
-            ->configName)
+                ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        
+
         $this->addElement($pricing_config);
         $proposalGroup->elements [] = $pricing_config;
-        
+
         //*****************************************************************
         // GROSS MARGIN SETTING FIELDS
         //*****************************************************************
-        
+
         // Actual Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('pageCoverageMonochrome');
         $actual_page_coverage->setLabel('Page Coverage Monochrome')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
             ->setAttrib('inputappend', '%');
-        
+
         $this->addElement($actual_page_coverage);
         $proposalGroup->elements [] = $actual_page_coverage;
-        
+
         // Actual Page Coverage (Color)
         $actual_page_coverage_color = new Zend_Form_Element_Text('pageCoverageColor');
         $actual_page_coverage_color->setLabel('Page Coverage Color')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -302,10 +302,10 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setDescription('%')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
             ->setAttrib('inputappend', '%');
-        
+
         $this->addElement($actual_page_coverage_color);
         $proposalGroup->elements [] = $actual_page_coverage_color;
-        
+
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge')
@@ -317,14 +317,14 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($admin_charge);
         $proposalGroup->elements [] = $admin_charge;
-        
+
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
         $labor_cost->setLabel('Labor Cost')
@@ -336,15 +336,15 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($labor_cost);
         $proposalGroup->elements [] = $labor_cost;
 
-        // Service Cost Per Page
+        // Parts Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
         $parts_cost->setLabel('Parts Cost Per Page')
             ->addValidator(new Zend_Validate_Float())
@@ -355,8 +355,8 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -374,8 +374,9 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->setValue(40)
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $averageItHourlyRate->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -393,8 +394,8 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $hoursSpentOnIt->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -412,8 +413,8 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $costOfLabor->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -431,8 +432,8 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $costToExecuteSuppliesOrder->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -450,20 +451,20 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->hoursSpentOnIt, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $numberOfSupplyOrdersPerMonth->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($numberOfSupplyOrdersPerMonth);
         $proposalGroup->elements [] = $numberOfSupplyOrdersPerMonth;
-        
+
         //*****************************************************************
         // BUTTONS
         //*****************************************************************
-        $element = new Zend_Form_Element_Submit('save_settings', array (
-                'disableLoadDefaultDecorators' => true
-        ));
+        $element = new Zend_Form_Element_Submit('save_settings', array(
+                                                                      'disableLoadDefaultDecorators' => true
+                                                                 ));
         $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
         $this->addElement($element);
 
@@ -473,7 +474,7 @@ class Healthcheck_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('onClick', 'javascript: document.location.href="../data/deviceleasing";');
         $this->addElement($element);
 
-        Proposalgen_Form_Assessment_Navigation::addFormActionsToForm(Proposalgen_Form_Assessment_Navigation::BUTTONS_ALL, $this);
+        Healthcheck_Form_Healthcheck_Navigation::addFormActionsToForm(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_ALL, $this);
     }
 
     /**

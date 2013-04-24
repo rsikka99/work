@@ -17,7 +17,7 @@
             <div class="navbar-form pull-right">
                 <div class="btn-group">
                     <?php foreach ($this->formats as $url => $format) : ?>
-                    <a class="btn btn-<?php echo $format->btnstyle; ?> downloadButton" href="<?php echo $this->baseUrl($url); ?>" data-ext="<?php echo $format->extension; ?>" data-loadingmessage="<?php echo $format->loadingmessage; ?>"><?php echo $format->name; ?>
+                    <a class="btn btn-<?php echo $format['btnstyle']; ?> downloadButton" href="<?php echo $this->baseUrl($url); ?>" data-ext="<?php echo $format['extension']; ?>" data-loadingmessage="<?php echo $format['loadingmessage']; ?>"><?php echo $format['name']; ?>
                         <i class="icon-download icon-white"></i></a>
                     <?php endforeach; ?>
                 </div>
