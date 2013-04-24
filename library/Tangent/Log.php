@@ -1,13 +1,14 @@
 <?php
 class Tangent_Log
 {
-    const SOURCE_ZENDLOG      = 1;
-    const SOURCE_LOGINATTEMPT = 2;
-    const SOURCE_PROPOSAL     = 3;
-    const SOURCE_EMAIL        = 4;
-    const SOURCE_SECURITY     = 5;
+    const SOURCE_ZEND_LOG      = 1;
+    const SOURCE_LOGIN_ATTEMPT = 2;
+    const SOURCE_PROPOSAL      = 3;
+    const SOURCE_EMAIL         = 4;
+    const SOURCE_SECURITY      = 5;
 
     /**
+     * The logger
      *
      * @var Zend_Log
      */
@@ -20,6 +21,12 @@ class Tangent_Log
      */
     private static $_uniqueId;
 
+    /**
+     * Gets a unique id for the current page session.
+     * This can be provided to a user so that we can look at the exact error they received
+     *
+     * @return string
+     */
     static function getUniqueId ()
     {
         if (!isset(self::$_uniqueId))
@@ -30,15 +37,26 @@ class Tangent_Log
         return self::$_uniqueId;
     }
 
+    /**
+     * Logs an exception
+     *
+     * @param Exception $e
+     */
     static function logException (Exception $e)
     {
-        $errorMessage = $e->getMessage();
-        $stackTrace   = $e->getTraceAsString();
+        $stackTrace = $e->getTraceAsString();
 
         self::error($e);
         self::error($stackTrace);
     }
 
+    /**
+     * Logs a message
+     *
+     * @param string $message
+     * @param null   $level
+     * @param null   $source
+     */
     static function log ($message, $level = null, $source = null)
     {
         $uid = self::getUniqueId();
@@ -52,7 +70,7 @@ class Tangent_Log
 
             if ($source === null)
             {
-                $source = self::SOURCE_ZENDLOG;
+                $source = self::SOURCE_ZEND_LOG;
             }
 
             $logger->setEventItem('logTypeId', $source);
@@ -60,47 +78,96 @@ class Tangent_Log
         }
     }
 
+    /**
+     * A shortcut to logging a debug message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function debug ($message, $source = null)
     {
         self::log($message, Zend_Log::DEBUG, $source);
     }
 
+    /**
+     * A shortcut to logging an info message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function info ($message, $source = null)
     {
         self::log($message, Zend_Log::INFO, $source);
     }
 
+    /**
+     * A shortcut to logging a notice message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function notice ($message, $source = null)
     {
         self::log($message, Zend_Log::NOTICE, $source);
     }
 
+    /**
+     * A shortcut to logging a warn message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function warn ($message, $source = null)
     {
         self::log($message, Zend_Log::WARN, $source);
     }
 
+    /**
+     * A shortcut to logging an error message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function error ($message, $source = null)
     {
         self::log($message, Zend_Log::ERR, $source);
     }
 
+    /**
+     * A shortcut to logging a critical message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function crit ($message, $source = null)
     {
         self::log($message, Zend_Log::CRIT, $source);
     }
 
+    /**
+     * A shortcut to logging an alert message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function alert ($message, $source = null)
     {
         self::log($message, Zend_Log::ALERT, $source);
     }
 
+    /**
+     * A shortcut to logging an emergency message
+     *
+     * @param      $message
+     * @param null $source
+     */
     static function emerg ($message, $source = null)
     {
         self::log($message, Zend_Log::EMERG, $source);
     }
 
     /**
+     * Gets an instance of the Zend Logger
      *
      * @return Zend_Log
      */
@@ -128,26 +195,5 @@ class Tangent_Log
         }
 
         return self::$logger;
-    }
-
-    /**
-     *
-     * @return Zend_Log_Writer_Firebug
-     */
-    private static function getFirebugLogger ()
-    {
-        if (!isset(self::$firebugLogger))
-        {
-            if (Zend_Registry::isRegistered('Zend_Log_Writer_Firebug'))
-            {
-                self::$firebugLogger = Zend_Registry::get('Zend_Log_Writer_Firebug');
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        return self::$firebugLogger;
     }
 }
