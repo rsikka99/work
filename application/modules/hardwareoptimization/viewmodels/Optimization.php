@@ -1,18 +1,30 @@
 <?php
 class Hardwareoptimization_ViewModel_Optimization
 {
-    /**
-     * @var Hardwareoptimization_Model_Hardware_Optimization
-     */
+    /** @var Hardwareoptimization_Model_Hardware_Optimization */
     protected $_optimization;
-    /**
-     * @var Hardwareoptimization_ViewModel_Devices
-     */
+    /** @var Hardwareoptimization_ViewModel_Devices */
     protected $_purchaseDevices;
-    /**
-     * @var Hardwareoptimization_ViewModel_Devices
-     */
+    /** @var Hardwareoptimization_ViewModel_Devices */
     protected $_leasedDevices;
+    /** @var float */
+    protected $_cashHeldInInventory;
+    /** @var Proposalgen_Model_MasterDevice [] */
+    protected $_uniqueDeviceList;
+    /** @var Proposalgen_Model_MasterDevice [] */
+    protected $_uniquePurchasedDeviceList;
+    /** @var Proposalgen_Model_Toner [] */
+    protected $_uniquePurchasedTonerList;
+    /** @var int */
+    protected $_numberOfUniqueModels;
+    /** @var int */
+    protected $_numberOfColorCapableDevices;
+    /** @var int */
+    protected $_numberOfUniquePurchasedModels;
+    /** @var int */
+    protected $_numberOfUniquePurchasedToners;
+    /** @var int */
+    protected $_maximumMonthlyPrintVolume;
     /**
      * The weighted average monthly cost per page when using replacements
      *
@@ -194,6 +206,43 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
+     * Gets fleet percentages
+     *
+     * @return stdClass
+     */
+    public function getPercentages ()
+    {
+        if (!isset($this->Percentages))
+        {
+            $Percentages                                            = new stdClass();
+            $Percentages->TotalColorPercentage                      = 0;
+            $Percentages->PurchasedVsLeasedBlackAndWhite            = new stdClass();
+            $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = 0;
+            $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = 0;
+            $Percentages->PurchasedVsLeasedColor                    = new stdClass();
+            $Percentages->PurchasedVsLeasedColor->Leased            = 0;
+            $Percentages->PurchasedVsLeasedColor->Purchased         = 0;
+            if ($this->getPageCounts()->Total->Combined->Monthly)
+            {
+                $Percentages->TotalColorPercentage = $this->getPageCounts()->Total->Color->Monthly / $this->getPageCounts()->Total->Combined->Monthly;
+            }
+            if ($this->getPageCounts()->Total->BlackAndWhite->Yearly)
+            {
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getPageCounts()->Leased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getPageCounts()->Purchased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
+            }
+            if ($this->getPageCounts()->Total->Color->Yearly)
+            {
+                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getPageCounts()->Leased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
+                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getPageCounts()->Purchased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
+            }
+            $this->Percentages = $Percentages;
+        }
+
+        return $this->Percentages;
+    }
+
+    /**
      * @return Proposalgen_Model_Rms_Excluded_Row[]
      */
     public function getExcludedDevices ()
@@ -259,6 +308,216 @@ class Hardwareoptimization_ViewModel_Optimization
         return ($deviceA[1] > $deviceB[1]) ? -1 : 1;
     }
 
+    /**
+     * @return int
+     */
+    public function getDeviceCount ()
+    {
+        return count($this->getDevices()->allIncludedDeviceInstances);
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUniqueModels ()
+    {
+        if (!isset($this->_numberOfUniqueModels))
+        {
+            $this->_numberOfUniqueModels = count($this->getUniqueDeviceList());
+        }
+
+        return $this->_numberOfUniqueModels;
+    }
+
+
+    /**
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function getUniqueDeviceList ()
+    {
+        if (!isset($this->_uniqueDeviceList))
+        {
+            $masterDevices = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                if (!in_array($deviceInstance->getMasterDevice(), $masterDevices))
+                {
+                    $masterDevices [] = $deviceInstance->getMasterDevice();
+                }
+            }
+            $this->_uniqueDeviceList = $masterDevices;
+        }
+
+        return $this->_uniqueDeviceList;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfColorCapableDevices ()
+    {
+        if (!isset($this->_numberOfColorCapableDevices))
+        {
+            $numberOfDevices = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            {
+                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                {
+                    $numberOfDevices++;
+                }
+            }
+            $this->_numberOfColorCapableDevices = $numberOfDevices;
+        }
+
+        return $this->_numberOfColorCapableDevices;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUniquePurchasedModels ()
+    {
+        if (!isset($this->_numberOfUniquePurchasedModels))
+        {
+            $numberOfModels   = 0;
+            $uniqueModelArray = array();
+            foreach ($this->getPurchasedDevices() as $device)
+            {
+                if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
+                {
+                    $numberOfModels++;
+                    $uniqueModelArray [] = $device->getMasterDevice()->modelName;
+                }
+            }
+            $this->_numberOfUniquePurchasedModels = $numberOfModels;
+        }
+
+        return $this->_numberOfUniquePurchasedModels;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNumberOfUniquePurchasedToners ()
+    {
+        if (!isset($this->_numberOfUniquePurchasedToners))
+        {
+            $this->_numberOfUniquePurchasedToners = count($this->getUniquePurchasedTonerList());
+        }
+
+        return $this->_numberOfUniquePurchasedToners;
+    }
+
+    /**
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getUniquePurchasedTonerList ()
+    {
+        if (!isset($this->_uniquePurchasedTonerList))
+        {
+            $uniqueToners = array();
+            foreach ($this->getUniquePurchasedDeviceList() as $masterDevice)
+            {
+                $deviceToners = $masterDevice->getTonersForAssessment();
+                foreach ($deviceToners as $toner)
+                {
+                    if (!in_array($toner, $uniqueToners))
+                    {
+                        $uniqueToners [] = $toner;
+                    }
+                }
+            }
+            $this->_uniquePurchasedTonerList = $uniqueToners;
+        }
+
+        return $this->_uniquePurchasedTonerList;
+    }
+
+    /**
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function getUniquePurchasedDeviceList ()
+    {
+        if (!isset($this->_uniquePurchasedDeviceList))
+        {
+            $masterDevices = array();
+            foreach ($this->getPurchasedDevices() as $device)
+            {
+                if (!in_array($device->getMasterDevice(), $masterDevices))
+                {
+                    $masterDevices [] = $device->getMasterDevice();
+                }
+            }
+            $this->_uniquePurchasedDeviceList = $masterDevices;
+        }
+
+        return $this->_uniquePurchasedDeviceList;
+    }
+
+
+    /**
+     * @return float
+     */
+    public function getCashHeldInInventory ()
+    {
+        if (!isset($this->_cashHeldInInventory))
+        {
+            $inventoryCash = 0.0;
+            foreach ($this->getUniquePurchasedTonerList() as $toner)
+            {
+                $inventoryCash += $toner->cost;
+            }
+            $this->_cashHeldInInventory = $inventoryCash * 2;
+        }
+
+        return $this->_cashHeldInInventory;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getMaximumMonthlyPrintVolume ()
+    {
+        if (!isset($this->_maximumMonthlyPrintVolume))
+        {
+            $maxVolume = 0;
+            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            {
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+            $this->_maximumMonthlyPrintVolume = $maxVolume;
+        }
+
+        return $this->_maximumMonthlyPrintVolume;
+    }
+
+    /**
+     * Gets the amount of color capable devices with replacement devices
+     *
+     * @return int
+     */
+    public function getNumberOfColorCapableDevicesWithReplacements ()
+    {
+        $numberOfDevices = 0;
+        foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+        {
+            $replacementDevice = $device->getReplacementMasterDevice();
+            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                if ($replacementDevice->isColor())
+                {
+                    $numberOfDevices++;
+                }
+            }
+            else if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            {
+                $numberOfDevices++;
+            }
+        }
+
+        return $numberOfDevices;
+    }
 
     /**
      * Calculates the dealers monthly cost
@@ -301,6 +560,24 @@ class Hardwareoptimization_ViewModel_Optimization
         }
 
         return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
+    }
+
+    public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
+    {
+        $maxVolume = 0;
+        foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+        {
+            if ($deviceInstance->getReplacementMasterDevice())
+            {
+                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+            else
+            {
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+            }
+        }
+
+        return $maxVolume;
     }
 
     /**
@@ -409,6 +686,8 @@ class Hardwareoptimization_ViewModel_Optimization
                 $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice());
             }
         }
+
         return $this->_dealerMonthlyCostWithReplacements;
     }
+
 }
