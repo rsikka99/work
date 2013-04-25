@@ -49,7 +49,7 @@ class Proposalgen_Model_Optimization_Dealer extends
              * -- Other devices that are in the fleet
              */
             $highest  = (count($this->excess) > count($this->excluded)) ? count($this->excess) : count($this->excluded);
-            $highest  = (count($this->leased) > $highest) ? count($this->leased) : $highest;
+            $highest  = (count($this->leasedDevices) > $highest) ? count($this->leasedDevices) : $highest;
             $barGraph = new gchart\gBarChart(325, 250);
             $barGraph->setTitle("Other Devices");
             $barGraph->setVisibleAxes(array('y'));
@@ -60,7 +60,7 @@ class Proposalgen_Model_Optimization_Dealer extends
             }
             $barGraph->addDataSet(array(count($this->excess)));
             $barGraph->addDataSet(array(count($this->excluded)));
-            $barGraph->addDataSet(array(count($this->leased)));
+            $barGraph->addDataSet(array(count($this->leasedDevices)));
 
             $barGraph->setLegend(array("Excess", "Excluded", "Leased"));
             $barGraph->setLegendPosition("t");

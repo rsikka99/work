@@ -147,8 +147,8 @@ class Proposalgen_Model_Optimization_Customer extends Proposalgen_Model_Optimiza
             $employeeCount            = $proposal->report->getClient()->employeeCount;
             $averageEmployeePerDevice = 4.4;
 
-            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
-            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leased) + count($this->excluded)), 1);
+            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leasedDevices) + count($this->excluded)), 1);
+            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leasedDevices) + count($this->excluded)), 1);
             $highest                     = ($devicesPerEmployee > $averageEmployeePerDevice) ? $devicesPerEmployee : $averageEmployeePerDevice;
             $barGraph                    = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Employees per device");

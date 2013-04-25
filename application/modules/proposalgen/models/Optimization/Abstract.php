@@ -40,7 +40,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
      *
      * @var Proposalgen_Model_DeviceInstance  []
      */
-    public $leased;
+    public $leasedDevices;
     /**
      * Devices that action is replace, with no replacement devices assigned
      *
@@ -305,7 +305,7 @@ abstract class Proposalgen_Model_Optimization_Abstract
         $this->flagged            = $flaggedDevices;
         $this->excluded           = $excludedDevices;
         $this->kept               = $keepDevices;
-        $this->leased             = $leasedDevices;
+        $this->leasedDevices      = $leasedDevices;
         $this->replaced           = $replacedDevices;
         $this->retired            = $retiredDevices;
     }
