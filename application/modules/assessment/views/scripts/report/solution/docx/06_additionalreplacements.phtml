@@ -35,7 +35,7 @@ if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity)
             $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getMasterDevice()->getFullDeviceName(), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
             $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? "Unknown" : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
             $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-            $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+            $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }
 
         $section->addText($this->translate('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. '), 'small_italic_text', 'nospacing');
@@ -59,7 +59,7 @@ if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity)
             $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getMasterDevice()->getFullDeviceName(), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
             $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? "Unknown" : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
             $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-            $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+            $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }
 
         $section->addText($this->translate('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. '), 'small_italic_text', 'nospacing');

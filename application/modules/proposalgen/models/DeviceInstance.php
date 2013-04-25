@@ -250,7 +250,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var float
      */
-    protected $_grossMarginMonthlyBlackAndWhiteCost;
+    protected $_monthlyBlackAndWhiteCost;
 
     /**
      * @var float
@@ -749,11 +749,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getCostOfInkAndToner ($costPerPageSetting)
+    public function getCostOfInkAndToner ($costPerPageSetting, $margin)
     {
         if (!isset($this->_costOfInkAndToner))
         {
-            $this->_costOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting) + $this->getCostOfColorInkAndToner($costPerPageSetting);
+            $this->_costOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting, $margin) + $this->getCostOfColorInkAndToner($costPerPageSetting, $margin);
         }
 
         return $this->_costOfInkAndToner;
@@ -764,11 +764,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getCostOfBlackAndWhiteInkAndToner ($costPerPageSetting)
+    public function getCostOfBlackAndWhiteInkAndToner ($costPerPageSetting, $margin)
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $this->_costOfBlackAndWhiteInkAndToner = $this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount();
+            $margin = (1 - $margin) * 100;
+            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount(), $margin);
         }
 
         return $this->_costOfBlackAndWhiteInkAndToner;
@@ -777,11 +778,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @return float
      */
-    public function getCostOfColorInkAndToner ($costPerPageSetting)
+    public function getCostOfColorInkAndToner ($costPerPageSetting, $margin)
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $this->_costOfColorInkAndToner = $this->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getAverageMonthlyColorPageCount();
+            $margin = (1 - $margin) * 100;
+            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getAverageMonthlyColorPageCount(), $margin);
         }
 
         return $this->_costOfColorInkAndToner;
@@ -1047,27 +1049,30 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getMonthlyBlackAndWhiteCost ($costPerPageSetting)
     {
-        if (!isset($this->_grossMarginMonthlyBlackAndWhiteCost))
+        if (!isset($this->_monthlyBlackAndWhiteCost))
         {
-            $this->_grossMarginMonthlyBlackAndWhiteCost = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount());
+            $this->_monthlyBlackAndWhiteCost = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount());
         }
 
-        return $this->_grossMarginMonthlyBlackAndWhiteCost;
+        return $this->_monthlyBlackAndWhiteCost;
     }
 
     /**
      * Calculates the cost of the device on a monthly basis to compare with
      * replacement devices
      *
+     * @param $costPerPageSetting
+     * @param $margin
+     *
      * @return float
      */
-    public function getMonthlyRate ($costPerPageSetting)
+    public function getMonthlyRate ($costPerPageSetting, $margin)
     {
         if (!isset($this->_monthlyRate))
         {
             $this->_monthlyRate = 0;
-            $this->_monthlyRate += $this->getMonthlyBlackAndWhiteCost($costPerPageSetting);
-            $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting);
+            $this->_monthlyRate += $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting, $margin);
+            $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting, $margin);
             $this->_monthlyRate += ($this->getAverageMonthlyPageCount() * self::getITCostPerPage());
         }
 
@@ -1077,21 +1082,27 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Takes the monthly rate and multiplies it by 12
      *
+     * @param $costPerPageSetting
+     * @param $margin
+     *
      * @return float
      */
-    public function getYearlyRate ($costPerPageSetting)
+    public function getYearlyRate ($costPerPageSetting, $margin)
     {
-        return $this->getMonthlyRate($costPerPageSetting) * 12;
+        return $this->getMonthlyRate($costPerPageSetting, $margin) * 12;
     }
 
     /**
      * @param $monthlyTotalCost
      *
+     * @param $costPerPageSetting
+     * @param $margin
+     *
      * @return float
      */
-    public function getMonthlyRatePercentage ($monthlyTotalCost, $costPerPageSetting)
+    public function getMonthlyRatePercentage ($monthlyTotalCost, $costPerPageSetting, $margin)
     {
-        return ($this->getMonthlyRate($costPerPageSetting) / $monthlyTotalCost) * 100;
+        return ($this->getMonthlyRate($costPerPageSetting, $margin) / $monthlyTotalCost) * 100;
     }
 
     /**
@@ -1124,6 +1135,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public static function getITCostPerPage ()
     {
+
         if (!isset(Proposalgen_Model_DeviceInstance::$ITCostPerPage))
         {
             Proposalgen_Model_DeviceInstance::$ITCostPerPage = 0;

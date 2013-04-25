@@ -190,7 +190,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
         Proposalgen_Model_MasterDevice::setPricingConfig($healthcheckSettings->getAssessmentPricingConfig());
-        $pricingConfig = new Proposalgen_Model_PricingConfig();
+        $pricingConfig                  = new Proposalgen_Model_PricingConfig();
         $pricingConfig->pricingConfigId = Proposalgen_Model_PricingConfig::OEM;
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($pricingConfig);
         Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$healthcheckSettings->assessmentReportMargin)) / 100));
@@ -223,6 +223,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->LeasedDevices;
+    }
+
+    /**
+     * @return float
+     */
+    public function getHealthcheckMargin ()
+    {
+        if (!isset($this->ReportMargin))
+        {
+            $this->ReportMargin = 1 - ((((float)$this->healthcheck->getHealthcheckSettings()->assessmentReportMargin)) / 100);
+        }
+
+        return $this->ReportMargin;
     }
 
     /**

@@ -1450,12 +1450,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
      */
     public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
     {
-        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer()))
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()))
         {
             return 0;
         }
 
-        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer())) ? -1 : 1;
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin())) ? -1 : 1;
     }
 
     /**
@@ -2985,7 +2985,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
                                 // MFP
                                 if ($savings >= $minimumSavings)
                                 {
@@ -2995,7 +2995,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             }
                             else
                             {
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->BlackAndWhite [] = $device;
@@ -3009,7 +3009,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->ColorMFP [] = $device;
@@ -3019,7 +3019,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
                             else
                             {
 
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->Color [] = $device;
@@ -3106,12 +3106,12 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
 
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             $this->LeftOverCostOfColorDevices = $cost * 12;
         }
@@ -3130,11 +3130,11 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             $this->LeftOverCostOfBlackAndWhiteDevices = $cost * 12;
         }
@@ -3166,7 +3166,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             $this->CurrentCostOfReplacedColorMFPPrinters = $cost * 12;
         }
@@ -3185,7 +3185,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             $this->CurrentCostOfReplacedBlackAndWhiteMFPPrinters = $cost * 12;
         }
@@ -3234,7 +3234,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
             $this->CurrentCostOfReplacedColorPrinters = $cost * 12;
         }
@@ -3253,7 +3253,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer(),$this->getReportMargin());
             }
 
             $this->CurrentCostOfReplacedBlackAndWhitePrinters = $cost * 12;
