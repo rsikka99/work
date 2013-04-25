@@ -555,51 +555,6 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     }
 
     /**
-     * Allows the user to set the report settings for a report
-     */
-    public function reportsettingsAction ()
-    {
-        // Mark the step we're on as active
-        $this->setActiveReportStep(Proposalgen_Model_Assessment_Step::STEP_REPORTSETTINGS);
-
-        $reportSettingsService = new Proposalgen_Service_ReportSettings($this->getReport()->id, $this->_userId, $this->_dealerId);
-
-        if ($this->getRequest()->isPost())
-        {
-            $values = $this->getRequest()->getPost();
-
-            if (isset($values ['cancel']))
-            {
-                $this->gotoPreviousStep();
-            }
-            else
-            {
-                if ($reportSettingsService->update($values))
-                {
-                    $this->saveReport();
-                    $this->_flashMessenger->addMessage(array(
-                                                            'success' => 'Settings saved.'
-                                                       ));
-
-
-                    if (isset($values ['saveAndContinue']))
-                    {
-                        $this->gotoNextStep();
-                    }
-                }
-                else
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
-                }
-            }
-        }
-
-        $this->view->form = $reportSettingsService->getForm();
-    }
-
-    /**
      * This is where a user can modify the properties of an rms upload row in a way that will make it valid
      */
     public function editUnknownDeviceAction ()
