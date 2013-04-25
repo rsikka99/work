@@ -1,6 +1,9 @@
 <?php
 class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimization_Model_Optimization_Abstract
 {
+    const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
+    const AVERAGE_MONTHLY_PAGES              = 4200;
+
     /**
      * A list of string to image resources to the graphs
      *
@@ -12,23 +15,90 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
     {
         if (!isset($this->_graphs))
         {
-            $proposal            = $this->proposal;
-            $proposalGraphs      = $proposal->getGraphs();
-            $purchaseDeviceCount = count($proposal->getPurchasedDevices());
+            $purchaseDeviceCount = count($this->_optimization->getPurchasedDevices());
 
             // N = number, p = percent, 0 = number of decimal places.
             // p will take 0.1544 as a number and convert it to 15%
             $percentValueMarker = "N  *p0";
             $numberValueMarker  = "N *sz0";
-            // Graph0
-            $this->_graphs [] = $proposalGraphs[4];
-            // Graph1
-            $this->_graphs [] = $proposalGraphs[5];
+
+            /**
+             * -- AverageMonthlyPagesBarGraph
+             */
+            $averagePageCount = round($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount(), 0);
+            $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES;
+            $barGraph         = new gchart\gBarChart(175, 300);
+            $barGraph->setTitle("Average monthly pages|per networked printer");
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $averagePageCount
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       self::AVERAGE_MONTHLY_PAGES
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      $this->_hardwareOptimization->getClient()->companyName,
+                                      "Average"
+                                 ));
+
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[4]
+            $this->_graphs [] = $barGraph->getUrl();
+
+            /**
+             * -- AverageMonthlyPagesPerEmployeeBarGraph
+             */
+            $pagesPerEmployee = round($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_hardwareOptimization->getClient()->employeeCount);
+            $highest          = (self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
+            $barGraph         = new gchart\gBarChart(175, 300);
+            $barGraph->setTitle("Average monthly pages|per employee");
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $pagesPerEmployee
+                                  ));
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(40, 10);
+            $barGraph->setLegendPosition("bv");
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->setLegend(array(
+                                      $this->_hardwareOptimization->getClient()->companyName,
+                                      "Average"
+                                 ));
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            // Graphs[5]
+            $this->_graphs [] = $barGraph->getUrl();
 
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $pageCounts = $proposal->getPageCounts();
+            $pageCounts = $this->_optimization->getPageCounts();
             $highest    = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
             $barGraph   = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
@@ -101,7 +171,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- Hardware Utilization and Capacity Percent version
              */
-            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->getMaximumMonthlyPrintVolume());
+            $percentage = ($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_optimization->getMaximumMonthlyPrintVolume());
             $percentage = 0.42;
             $highest    = 100;
             $barGraph   = new gchart\gStackedBarChart(600, 160);
@@ -130,7 +200,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
 
             $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',30|';
             $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,E21736,0,1:' . number_format($percentage - .03, 2) . ',10|';
-            $percentage = ($proposal->getPageCounts()->Total->Combined->Monthly / $proposal->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $percentage = ($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_optimization->calculateMaximumMonthlyPrintVolumeWithReplacements());
             $dotProperties .= '@d,000000,0,.5:' . number_format($percentage, 2) . ',20|';
             $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,000000,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
@@ -144,11 +214,11 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $employeeCount            = $proposal->report->getClient()->employeeCount;
+            $employeeCount            = $this->_hardwareOptimization->getClient()->employeeCount;
             $averageEmployeePerDevice = 4.4;
 
-            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leasedDevices) + count($this->excluded)), 1);
-            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leasedDevices) + count($this->excluded)), 1);
+            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
+            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leased) + count($this->excluded)), 1);
             $highest                     = ($devicesPerEmployee > $averageEmployeePerDevice) ? $devicesPerEmployee : $averageEmployeePerDevice;
             $barGraph                    = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Employees per device");
@@ -181,7 +251,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
 
             $jitCompatible          = $this->jitCompatibleCount;
-            $nonJitCompatible       = count($proposal->getPurchasedDevices()) - $this->jitCompatibleCount;
+            $nonJitCompatible       = count($this->_optimization->getPurchasedDevices()) - $this->jitCompatibleCount;
             $optimizedJitCompatible = $this->jitCompatibleCount + $this->replacementJitCompatibleCount;
             $highest                = ($jitCompatible > $nonJitCompatible) ? $jitCompatible : $nonJitCompatible;
             $highest                = ($highest > $optimizedJitCompatible) ? $highest : $optimizedJitCompatible;
@@ -214,18 +284,18 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- LeasedVsPurchasedBarGraph
              */
-            $highest = ($proposal->getLeasedDeviceCount() > $proposal->getPurchasedDeviceCount()) ? $proposal->getLeasedDeviceCount() : $proposal->getPurchasedDeviceCount();
+            $highest = (count($this->_optimization->getLeasedDevices()) > count($this->_optimization->getPurchasedDevices())) ? count($this->_optimization->getLeasedDevices()) : count($this->_optimization->getPurchasedDevices());
 
             $barGraph = new gchart\gBarChart(200, 300);
             $barGraph->setTitle('Leased / purchased devices ');
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
-            $barGraph->addDataSet(array($proposal->getLeasedDeviceCount()));
+            $barGraph->addDataSet(array(count($this->_optimization->getLeasedDevices())));
             $barGraph->addColors(array("E21736"));
-            $barGraph->addDataSet(array($proposal->getPurchasedDeviceCount()));
+            $barGraph->addDataSet(array(count($this->_optimization->getPurchasedDevices())));
             $barGraph->addColors(array("0194D2"));
-            $barGraph->addDataSet(array($proposal->getPurchasedDeviceCount() - count($this->retired)));
+            $barGraph->addDataSet(array(count($this->_optimization->getPurchasedDevices()) - count($this->retired)));
             $barGraph->addColors(array("EF6B18"));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -368,12 +438,12 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
             // Graph12
 
-            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
-            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->proposal->getPurchasedDevices()));
+            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->_optimization->getPurchasedDevices()));
+            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->_optimization->getPurchasedDevices()));
             $diamond           = count($uniqueSupplyTypes) / $highest;
 
             $targetUniqueness = $highest * 0.15;
-            $barGraph = new gchart\gStackedBarChart(600, 160);
+            $barGraph         = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
             $barGraph->setVisibleAxes(array('x'));
             $barGraph->setTitle("Unique Supply Types");
@@ -447,15 +517,43 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Color Capable Devices Graph
              */
             // Graph14
-            $this->_graphs [] = $proposalGraphs[7];
+            /**
+             * -- Color Capable Devices Graph
+             */
+            $colorPercentage = 0;
+            if ($this->getDeviceCount())
+            {
+                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevices() / $this->getDeviceCount()) * 100), 2);
+            }
 
+            $notColorPercentage = 100 - $colorPercentage;
+            $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
+            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
+            $colorCapableGraph->addDataSet(array(
+                                                $colorPercentage,
+                                                $notColorPercentage
+                                           ));
+            $colorCapableGraph->setLegend(array(
+                                               "Color-capable",
+                                               "Black-and-white only"
+                                          ));
+            $colorCapableGraph->setLabels(array(
+                                               "$colorPercentage%"
+                                          ));
+            $colorCapableGraph->addColors(array(
+                                               "E21736",
+                                               "0194D2"
+                                          ));
+            $colorCapableGraph->setLegendPosition("bv");
+            // Graphs[7]
+            $this->_graphs [] = $colorCapableGraph->getUrl();
             /**
              * -- Color Capable Devices Graph With Replacements
              */
             $colorPercentage = 0;
             if ($this->getDeviceCount())
             {
-                $colorPercentage = round((($proposal->getNumberOfColorCapableDevicesWithReplacements() / $this->getDeviceCount()) * 100), 2);
+                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevicesWithReplacements() / $this->getDeviceCount()) * 100), 2);
             }
 
             $notColorPercentage = 100 - $colorPercentage;

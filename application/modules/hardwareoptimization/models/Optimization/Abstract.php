@@ -4,9 +4,13 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     // Used to calculate the average supply count for a fleet
     const SUPPLY_TYPE_THRESHOLD = 0.30;
     /**
-     * @var Hardwareoptimization_Model_Hardware_Optimization
+     * @var Hardwareoptimization_ViewModel_Optimization
      */
     protected $_optimization;
+    /**
+     * @var Hardwareoptimization_Model_Hardware_Optimization|int
+     */
+    protected $_hardwareOptimization;
     /**
      * Devices that have replacement devices attached to them
      *
@@ -153,6 +157,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     public function __construct ($hardwareOptimization)
     {
         $this->_optimization = new Hardwareoptimization_ViewModel_Optimization($hardwareOptimization);
+        $this->_hardwareOptimization = $hardwareOptimization;
 
         // Set up the arrays of devices to be produced
         $retiredDevices                      = array();
