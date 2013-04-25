@@ -407,34 +407,4 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
 
         return $this;
     }
-
-    /**
-     * Gets the gross margin pricing configuration object
-     *
-     * @return Proposalgen_Model_PricingConfig
-     */
-    public function getGrossMarginPricingConfig ()
-    {
-        if (!isset($this->_grossMarginPricingConfig))
-        {
-            $this->_grossMarginPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->grossMarginPricingConfigId);
-        }
-
-        return $this->_grossMarginPricingConfig;
-    }
-
-    /**
-     * Sets the gross margin pricing configuration object
-     *
-     * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
-     *                                  The pricing configuration to set
-     *
-     * @return \Proposalgen_Model_Healthcheck_Setting
-     */
-    public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
-    {
-        $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
-
-        return $this;
-    }
 }

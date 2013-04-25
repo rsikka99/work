@@ -17,7 +17,7 @@
         Hardware Quote <br /> Device Options</a>
 <?php endif; ?>
 
-<?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING)) : ?>
+<?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
     <a class="btn" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-money icon-4x"></i><br /><br />
         Bulk Pricing Updates<br /> <br /> </a>
 <?php endif; ?>

@@ -58,7 +58,7 @@ class Healthcheck_Service_HealthcheckSettings
         $this->_dealerSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchDealerSetting($dealerId);
 //
         $this->_userSettings        = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchUserSetting($userId);
-        $this->_HealthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($HealthcheckId);
+        $this->_HealthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->_Healthcheck->id);
 //
 //        // Calculate the default settings
         $this->_defaultSettings = new Healthcheck_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
@@ -149,16 +149,22 @@ class Healthcheck_Service_HealthcheckSettings
 
             // Save the id as it will get erased
             $HealthcheckSettingsId = $this->_HealthcheckSettings->id;
+            $this->_HealthcheckSettings->populate(array_merge($this->_defaultSettings->toArray(),$validData));
+            $healthcheckSettings = new Healthcheck_Model_Healthcheck_Setting();
+            $healthcheckSettings->populate(array_merge($this->_defaultSettings->toArray(),$validData));
+            $healthcheckSettings->id = $HealthcheckSettingsId;
+            $this->_HealthcheckSettings = $healthcheckSettings;
+//            $this->_HealthcheckSettings->populate($validData);
 
-            $this->_HealthcheckSettings->populate($this->_defaultSettings->toArray());
-            $this->_HealthcheckSettings->populate($validData);
+            $this->getForm()->populate($this->_HealthcheckSettings->toArray());
+            $this->_HealthcheckSettings->costOfLabor                   = ($this->_HealthcheckSettings->costOfLabor != null) ? $this->_HealthcheckSettings->costOfLabor : new Zend_Db_Expr('NULL');
+            $this->_HealthcheckSettings->hoursSpentOnIt                   = ($this->_HealthcheckSettings->hoursSpentOnIt != null) ? $this->_HealthcheckSettings->hoursSpentOnIt : new Zend_Db_Expr('NULL');
 
             // Restore the ID
             $this->_HealthcheckSettings->id = $HealthcheckSettingsId;
 
             Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($this->_HealthcheckSettings);
 
-            $this->getForm()->populate($this->_HealthcheckSettings->toArray());
 
             return true;
         }

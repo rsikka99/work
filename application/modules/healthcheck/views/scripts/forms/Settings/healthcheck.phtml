@@ -19,6 +19,7 @@ $form = $this->element;
             <?php foreach ($group->elements as $element) :
                 $inputPrepend = (strlen($element->getAttrib('inputprepend')) > 0) ? $element->getAttrib('inputprepend') : FALSE;
                 $inputAppend = (strlen($element->getAttrib('inputappend')) > 0) ? $element->getAttrib('inputappend') : FALSE;
+                $append = (strlen($element->getAttrib('append')) > 0) ? $element->getAttrib('append') : FALSE;
             ?>
                 <tr style="height: 50px;">
                     <td><?php echo $element->getLabel(); ?></td>
@@ -35,7 +36,7 @@ $form = $this->element;
                         
                     } 
                     ?></td>
-                    <td style="padding-left: 5px;"><?php echo ($inputAppend) ?: ""; ?></td>
+                    <td style="padding-left: 5px;"><?php echo ($inputAppend . $append) ?: ""; ?></td>
                 </tr>
                 <?php if ($element->hasErrors()) : ?>
                 <tr>

@@ -1,14 +1,9 @@
 <?php
 class Proposalgen_Model_Acl
 {
-
-
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
-    const RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING       = "proposalgen__admin__bulkdevicepricing";
-    const RESOURCE_PROPOSALGEN_ADMIN_BULKFILEPRICING         = "proposalgen__admin__bulkfilepricing";
     const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS            = "proposalgen__admin__devicetoners";
-    const RESOURCE_PROPOSALGEN_ADMIN_EXPORTPRICING           = "proposalgen__admin__exportpricing";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS         = "proposalgen__admin__filterlistitems";
     const RESOURCE_PROPOSALGEN_ADMIN_INDEX                   = "proposalgen__admin__index";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS      = "proposalgen__admin__managereplacements";
@@ -20,13 +15,17 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE         = "proposalgen__admin__search-for-device";
     const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST              = "proposalgen__admin__tonerslist";
 
+    const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING   = "proposalgen__costs__bulkfilepricing";
+    const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__exportpricing";
+
     const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = "proposalgen__fleet__device-summary-list";
     const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = "proposalgen__fleet__excluded-list";
     const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS        = "proposalgen__fleet__reportsettings";
     const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES    = "proposalgen__fleet__edit-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST     = "proposalgen__fleet__device-mapping-list";
     const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
-    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST          = "proposalgen__fleet__rms-upload-list";
+    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST         = "proposalgen__fleet__rms-upload-list";
     const RESOURCE_PROPOSALGEN_FLEET_INDEX                 = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING               = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG    = "proposalgen__fleet__toggle-excluded-flag";
@@ -71,10 +70,7 @@ class Proposalgen_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_INDEX);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_BULKFILEPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_EXPORTPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST);
@@ -84,6 +80,10 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST);
+
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST);
@@ -176,12 +176,12 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTDETAILS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_BULKFILEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_ADMIN_EXPORTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_ADMIN, self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         /**
          * System Admin
          */
