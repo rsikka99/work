@@ -194,6 +194,73 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
+     * @return Proposalgen_Model_Rms_Excluded_Row[]
+     */
+    public function getExcludedDevices ()
+    {
+        if (!isset($this->ExcludedDevices))
+        {
+            $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances, $this->getDevices()->excludedDeviceInstances);
+        }
+
+        return $this->ExcludedDevices;
+    }
+
+    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return Proposalgen_Model_DeviceInstance []
+     */
+    public function getMonthlyHighCostPurchasedDevice (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    {
+        if (!isset($this->highCostPurchasedDevices))
+        {
+            $deviceArray = $this->getPurchasedDevices();
+            $costArray   = array();
+            /**@var $value Proposalgen_Model_DeviceInstance */
+            foreach ($deviceArray as $key => $deviceInstance)
+            {
+                $costArray[] = array($key, ($deviceInstance->getAverageMonthlyColorPageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
+            }
+
+            usort($costArray, array(
+                                   $this,
+                                   "descendingSortDevicesByColorCost"
+                              ));
+            $highCostDevices = array();
+
+            foreach ($costArray as $costs)
+            {
+                $highCostDevices[] = $deviceArray[$costs[0]];
+            }
+
+            $this->highCostPurchasedDevices = $highCostDevices;
+        }
+
+        return $this->highCostPurchasedDevices;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort a device based on power
+     * consumption
+     *
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
+     */
+    public function descendingSortDevicesByColorCost ($deviceA, $deviceB)
+    {
+        if ($deviceA[0] == $deviceB[0])
+        {
+            return 0;
+        }
+
+        return ($deviceA[1] > $deviceB[1]) ? -1 : 1;
+    }
+
+
+    /**
      * Calculates the dealers monthly cost
      *
      * @return number
