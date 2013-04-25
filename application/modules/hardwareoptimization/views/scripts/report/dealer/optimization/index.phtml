@@ -10,8 +10,8 @@ $hardwareOptimization = $this->hardwareOptimization;
 $optimization = $this->optimization;
 
 $costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
-$optimizationDevices = new Proposalgen_Model_Optimization_Dealer($hardwareOptimization);
-$graphs              = $optimizationDevices->getGraphs();
+$optimizationDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
+//$graphs              = $optimizationDevices->getGraphs();
 // Get the count of all the devices used in the system
 $totalDevices = $optimizationDevices->getDeviceCount();
 ?>
@@ -110,8 +110,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
 <h3>Device Summary</h3>
 <table class='center'>
     <tr>
-        <td><img src="<?php echo $graphs[0]; ?>" /></td>
-        <td><img src="<?php echo $graphs[1]; ?>" /></td>
+<!--        <td><img src="--><?php //echo $graphs[0]; ?><!--" /></td>-->
+<!--        <td><img src="--><?php //echo $graphs[1]; ?><!--" /></td>-->
     </tr>
 </table>
 
