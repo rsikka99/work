@@ -34,13 +34,6 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
     protected $_dealerId;
 
     /**
-     * The current proposal
-     *
-     * @var Hardwareoptimization_ViewModel_CustomerHardwareOptimization
-     */
-    protected $_customerHardwareOptimizationViewModel;
-
-    /**
      * @var string
      */
     protected $_firstStepName = Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
@@ -83,6 +76,12 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
                 throw new Exception("Could not open cache folder! PATH:" . $this->_fullCachePath, 0);
             }
         }
+
+        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR(24 / 100);
+        // Gross Margin Report Page Coverage
+        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR(24 / 100);
 
         $this->view->ReportAbsoluteCachePath = $this->_fullCachePath;
         $this->view->ReportCachePath         = $this->_relativeCachePath;
