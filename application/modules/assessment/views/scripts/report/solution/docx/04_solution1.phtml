@@ -45,7 +45,7 @@ $cell = $table->addCell($tc->headerCol2Width, $tc->header->cell2->cellStyle, 2)-
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Ink and toner'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfInkAndToner()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText($this->translate('Monochrome cost per page'), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
 $cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 

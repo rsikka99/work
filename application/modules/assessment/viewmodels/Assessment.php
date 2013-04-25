@@ -573,7 +573,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndTonerMonthly ()
+    public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndTonerMonthly))
         {
@@ -581,7 +581,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner();
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -592,11 +592,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndToner ()
+    public function getCostOfInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndToner))
         {
-            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly() * 12;
+            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly($costPerPageSetting) * 12;
         }
 
         return $this->CostOfInkAndToner;
@@ -1234,7 +1234,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      *
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function getMonthlyHighCostColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostColorDevices ($costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
         {
@@ -1435,12 +1435,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
     {
-        if ($deviceA->getMonthlyRate() == $deviceB->getMonthlyRate())
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer()))
         {
             return 0;
         }
 
-        return ($deviceA->getMonthlyRate() > $deviceB->getMonthlyRate()) ? -1 : 1;
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer())) ? -1 : 1;
     }
 
     /**
@@ -1780,8 +1780,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalCost->Combined      = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost->BlackAndWhite += $device->getGrossMarginMonthlyBlackAndWhiteCost();
-                $totalCost->Color += $device->getGrossMarginMonthlyColorCost();
+                $totalCost->BlackAndWhite += $device->getMonthlyBlackAndWhiteCost($this->getCostPerPageSettingForDealer());
+                $totalCost->Color += $device->calculateMonthlyColorCost($this->getCostPerPageSettingForDealer());
             }
             $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
             $this->GrossMarginTotalMonthlyCost = $totalCost;
@@ -2670,7 +2670,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->EstimatedAnnualSupplyRelatedExpense))
         {
-            $this->EstimatedAnnualSupplyRelatedExpense = $this->getCostOfInkAndToner() + $this->getCostOfExecutingSuppliesOrders();
+            $this->EstimatedAnnualSupplyRelatedExpense = $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer()) + $this->getCostOfExecutingSuppliesOrders();
         }
 
         return $this->EstimatedAnnualSupplyRelatedExpense;
@@ -2729,14 +2729,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $workingCPP                     = 0;
             $monochromeCostPerPage          = 0;
             $costOfBlackAndWhiteInkAndToner = 0;
-            $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner();
+            $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
             if ($this->getPageCounts()->Purchased->Combined->Yearly)
             {
                 $workingCPP = $costWithNoInkToner / $this->getPageCounts()->Purchased->Combined->Yearly;
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner();
+                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly)
             {
@@ -2758,14 +2758,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $workingCPP             = 0;
             $costOfColorInkAndToner = 0;
             $ColorCPP               = 0;
-            $costWithNoInkToner     = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner();
+            $costWithNoInkToner     = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
             if ($this->getPageCounts()->Purchased->Combined->Yearly)
             {
                 $workingCPP = $costWithNoInkToner / $this->getPageCounts()->Purchased->Combined->Yearly;
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner();
+                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->Color->Yearly)
             {
@@ -2970,7 +2970,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
                                 // MFP
                                 if ($savings >= $minimumSavings)
                                 {
@@ -2980,7 +2980,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                             }
                             else
                             {
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->BlackAndWhite [] = $device;
@@ -2994,7 +2994,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->ColorMFP [] = $device;
@@ -3004,7 +3004,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                             else
                             {
 
-                                $savings = $device->getMonthlyRate() - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->Color [] = $device;
@@ -3091,12 +3091,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
 
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             $this->LeftOverCostOfColorDevices = $cost * 12;
         }
@@ -3115,11 +3115,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             $this->LeftOverCostOfBlackAndWhiteDevices = $cost * 12;
         }
@@ -3151,7 +3151,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->ColorMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             $this->CurrentCostOfReplacedColorMFPPrinters = $cost * 12;
         }
@@ -3170,7 +3170,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhiteMFP as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             $this->CurrentCostOfReplacedBlackAndWhiteMFPPrinters = $cost * 12;
         }
@@ -3219,7 +3219,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->Color as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
             $this->CurrentCostOfReplacedColorPrinters = $cost * 12;
         }
@@ -3238,7 +3238,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->BlackAndWhite as $deviceInstance)
             {
-                $cost += $deviceInstance->getMonthlyRate();
+                $cost += $deviceInstance->getMonthlyRate($this->getCostPerPageSettingForCustomer());
             }
 
             $this->CurrentCostOfReplacedBlackAndWhitePrinters = $cost * 12;

@@ -347,7 +347,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndTonerMonthly ()
+    public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndTonerMonthly))
         {
@@ -355,7 +355,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner();
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -366,11 +366,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndToner ()
+    public function getCostOfInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndToner))
         {
-            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly() * 12;
+            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly($costPerPageSetting) * 12;
         }
 
         return $this->CostOfInkAndToner;
@@ -1695,7 +1695,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->EstimatedAnnualSupplyRelatedExpense))
         {
-            $this->EstimatedAnnualSupplyRelatedExpense = $this->getCostOfInkAndToner() + $this->getCostOfExecutingSuppliesOrders();
+            $this->EstimatedAnnualSupplyRelatedExpense = $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer()) + $this->getCostOfExecutingSuppliesOrders();
         }
 
         return $this->EstimatedAnnualSupplyRelatedExpense;

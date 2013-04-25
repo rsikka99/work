@@ -94,7 +94,7 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Annual cost of ink and toner<br/><em>Based on data collected by <?php echo $this->companyName;?>.</em></td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getCostOfInkAndToner()); ?></td>
+        <td class="right">$<?php echo number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
     </tr>
     <tr>
         <td>Annual administration cost of executing supplies orders<br/><em>Based on your questionnaire responses.</em></td>
@@ -173,7 +173,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             <td><div style="width: 225px; padding: 0px;"><?php echo $deviceInstance->getDeviceName(); ?></div></td>
             <td class="center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?> pages</td>
-            <td class="center">$<?php echo number_format($deviceInstance->getMonthlyRate()); ?></td>
+            <td class="center">$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>
