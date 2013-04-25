@@ -89,7 +89,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             $this->view->Weighted_Color_CPP           = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4, '.', '');
             $this->view->Black_And_White_Margin       = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
 
-            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
+            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->combined, 2, '.', '');
             $this->view->Total_Revenue  = number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
             $this->view->Monthly_Profit = number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2, '.', '');
             $this->view->Overall_Margin = number_format($assessmentViewModel->getGrossMarginOverallMargin(), 0, '.', '');
@@ -180,13 +180,14 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList [] = number_format($device->getAverageMonthlyBlackAndWhitePageCount(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($device->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite, 4, '.', '');
-                $fieldList [] = "$" . number_format($device->getGrossMarginMonthlyBlackAndWhiteCost(), 2, '.', '');
+                $fieldList [] = number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
+
+                $fieldList [] = "$" . number_format($device->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
                 $fieldList [] = $isColor ? number_format($device->getAverageMonthlyColorPageCount(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($device->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color, 4, '.', '') : "-";
-                $fieldList [] = $isColor ? "$" . number_format($device->getGrossMarginMonthlyColorCost(), 2, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($device->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
 

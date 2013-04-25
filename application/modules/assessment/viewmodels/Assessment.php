@@ -573,7 +573,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndTonerMonthly ()
+    public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndTonerMonthly))
         {
@@ -581,7 +581,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner();
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -592,11 +592,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getCostOfInkAndToner ()
+    public function getCostOfInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->CostOfInkAndToner))
         {
-            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly() * 12;
+            $this->CostOfInkAndToner = $this->getCostOfInkAndTonerMonthly($costPerPageSetting) * 12;
         }
 
         return $this->CostOfInkAndToner;
@@ -1234,7 +1234,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      *
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function getMonthlyHighCostColorDevices (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getMonthlyHighCostColorDevices ($costPerPageSetting)
     {
         if (!isset($this->HighCostDevices))
         {
@@ -1780,8 +1780,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalCost->Combined      = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost->BlackAndWhite += $device->getGrossMarginMonthlyBlackAndWhiteCost();
-                $totalCost->Color += $device->getGrossMarginMonthlyColorCost();
+                $totalCost->BlackAndWhite += $device->getMonthlyBlackAndWhiteCost($this->getCostPerPageSettingForDealer());
+                $totalCost->Color += $device->calculateMonthlyColorCost($this->getCostPerPageSettingForDealer());
             }
             $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
             $this->GrossMarginTotalMonthlyCost = $totalCost;
@@ -2729,14 +2729,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $workingCPP                     = 0;
             $monochromeCostPerPage          = 0;
             $costOfBlackAndWhiteInkAndToner = 0;
-            $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner();
+            $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
             if ($this->getPageCounts()->Purchased->Combined->Yearly)
             {
                 $workingCPP = $costWithNoInkToner / $this->getPageCounts()->Purchased->Combined->Yearly;
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner();
+                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly)
             {
@@ -2758,14 +2758,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $workingCPP             = 0;
             $costOfColorInkAndToner = 0;
             $ColorCPP               = 0;
-            $costWithNoInkToner     = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner();
+            $costWithNoInkToner     = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
             if ($this->getPageCounts()->Purchased->Combined->Yearly)
             {
                 $workingCPP = $costWithNoInkToner / $this->getPageCounts()->Purchased->Combined->Yearly;
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner();
+                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->Color->Yearly)
             {

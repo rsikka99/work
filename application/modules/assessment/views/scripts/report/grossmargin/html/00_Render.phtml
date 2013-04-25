@@ -178,10 +178,10 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 <div class="right"><?php echo $blackYield ?></div>
             </td>
             <td class="column5 mono">
-                <div class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite, 4); ?></div>
+                <div class="right"><?php echo number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4); ?></div>
             </td>
             <td class="column6 mono">
-                <div class="right">$<?php echo number_format($deviceInstance->getGrossMarginMonthlyBlackAndWhiteCost(), 2); ?></div>
+                <div class="right">$<?php echo number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
             </td>
 
             <!-- Color -->
@@ -196,11 +196,11 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
             </td>
 
             <td class="column10 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color, 4) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4) : "-"; ?></div>
             </td>
 
             <td class="column11 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($deviceInstance->getGrossMarginMonthlyColorCost(), 2) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2) : "-"; ?></div>
             </td>
         </tr>
     <?php endforeach; ?>

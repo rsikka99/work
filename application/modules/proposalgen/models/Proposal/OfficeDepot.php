@@ -1795,8 +1795,8 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             $totalCost->Combined      = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost->BlackAndWhite += $device->getGrossMarginMonthlyBlackAndWhiteCost();
-                $totalCost->Color += $device->getGrossMarginMonthlyColorCost();
+                $totalCost->BlackAndWhite += $device->getMonthlyBlackAndWhiteCost($this->getCostPerPageSettingForDealer());
+                $totalCost->Color += $device->calculateMonthlyColorCost($this->getCostPerPageSettingForDealer());
             }
             $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
             $this->GrossMarginTotalMonthlyCost = $totalCost;
@@ -2751,7 +2751,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner();
+                $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->BlackAndWhite->Yearly)
             {
@@ -2780,7 +2780,7 @@ class Proposalgen_Model_Proposal_OfficeDepot extends Proposalgen_Model_Proposal_
             }
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner();
+                $costOfColorInkAndToner += $device->getCostOfColorInkAndToner($this->getCostPerPageSettingForCustomer());
             }
             if ($this->getPageCounts()->Purchased->Color->Yearly)
             {

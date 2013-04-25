@@ -111,15 +111,15 @@ foreach ($assessmentViewModel->getPurchasedDevices() as $deviceInstance) /* @var
     $table->addCell($tcStyle->col2Width, $mono_toner_class)->addText(number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col3Width, $mono_toner_class)->addText($blackCost, $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col4Width, $mono_toner_class)->addText($blackYield, $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    $table->addCell($tcStyle->col5Width, $mono_toner_class)->addText(number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->BlackAndWhite, 4), $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText("$" .number_format($deviceInstance->getGrossMarginMonthlyBlackAndWhiteCost(), 2), $tcStyle->row->fontStyle, $tcStyle->rightalign);
+    $table->addCell($tcStyle->col5Width, $mono_toner_class)->addText(number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4), $tcStyle->row->fontStyle, $tcStyle->rightalign);
+    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText("$" .number_format($deviceInstance->getMonthlyBlackAndWhiteCost(), 2), $tcStyle->row->fontStyle, $tcStyle->rightalign);
     
     // Color
     $table->addCell($tcStyle->col7Width, $color_toner_class)->addText(($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "-", $tcStyle->row->fontStyle, ($isColor) ? $tcStyle->rightalign : $tcStyle->centeralign);
     $table->addCell($tcStyle->col8Width, $color_toner_class)->addText($colorCost, $tcStyle->row->fontStyle, (trim($colorCost) != "-") ? $tcStyle->rightalign : $tcStyle->centeralign);
     $table->addCell($tcStyle->col9Width, $color_toner_class)->addText($colorYield, $tcStyle->row->fontStyle, (trim($colorYield) != "-") ? $tcStyle->rightalign : $tcStyle->centeralign);
-    $table->addCell($tcStyle->col10Width, $color_toner_class)->addText(($isColor) ? number_format($deviceInstance->getMasterDevice()->getCostPerPage()->Actual->BasePlusService->Color, 4) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
-    $table->addCell($tcStyle->col11Width, $color_toner_class)->addText(($isColor) ? "$" . number_format($deviceInstance->getGrossMarginMonthlyColorCost(), 2) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
+    $table->addCell($tcStyle->col10Width, $color_toner_class)->addText(($isColor) ? number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
+    $table->addCell($tcStyle->col11Width, $color_toner_class)->addText(($isColor) ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
 
 }
 

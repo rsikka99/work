@@ -45,13 +45,13 @@ $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Black And White CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Monthly Profit:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginMonthlyProfit($assessmentViewModel->getCostPerPageSettingForDealer()), 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Weighted Color CPP:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Overall Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($assessmentViewModel->getGrossMarginOverallMargin()) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText(number_format($assessmentViewModel->getGrossMarginOverallMargin($assessmentViewModel->getCostPerPageSettingForDealer())) . '%', $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText($this->translate('Black And White Margin:'), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
