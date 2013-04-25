@@ -3,6 +3,10 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
 {
     public function indexAction ()
     {
+        $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
+        $this->initReportList();
+        $this->view->headScript()->prependFile($this->view->baseUrl("/js/htmlReport.js"));
+
 
     }
 }

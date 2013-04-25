@@ -5,45 +5,38 @@ class Hardwareoptimization_ViewModel_Optimization
      * @var Hardwareoptimization_Model_Hardware_Optimization
      */
     protected $_optimization;
-
     /**
      * @var Hardwareoptimization_ViewModel_Devices
      */
     protected $_purchaseDevices;
-
     /**
      * @var Hardwareoptimization_ViewModel_Devices
      */
     protected $_leasedDevices;
-
     /**
      * The weighted average monthly cost per page when using replacements
      *
      * @var Proposalgen_Model_CostPerPage
      */
     protected $_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
-
     /**
      * The dealers monthly cost with replacements
      *
      * @var number
      */
     protected $_dealerMonthlyCostWithReplacements;
-
     /**
      * Cost per page setting for a dealer
      *
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForDealer;
-
     /**
      * Cost per page setting for replacement devices
      *
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForReplacements;
-
 
     /**
      * Constructor
@@ -77,7 +70,6 @@ class Hardwareoptimization_ViewModel_Optimization
         return $this->_devices;
     }
 
-
     /**
      * @return Proposalgen_Model_DeviceInstance[]
      */
@@ -102,27 +94,6 @@ class Hardwareoptimization_ViewModel_Optimization
         }
 
         return $this->_leasedDevices;
-    }
-
-    /**
-     * Calculates the dealers monthly revenue when using a target cost per page schema
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyRevenueUsingTargetCostPerPage ()
-    {
-        if (!isset($this->_dealerMonthlyRevenueUsingTargetCostPerPage))
-        {
-            $this->_dealerMonthlyRevenueUsingTargetCostPerPage = 0;
-
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
-            {
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $this->_optimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyColorPageCount() * $this->_optimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
-            }
-        }
-
-        return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
     }
 
     /**
@@ -161,41 +132,6 @@ class Hardwareoptimization_ViewModel_Optimization
         }
 
         return $this->_costPerPageSettingForReplacements;
-    }
-
-
-    /**
-     * Calculates the weighted average monthly cost per page of the current fleet
-     *
-     * @return Proposalgen_Model_CostPerPage
-     */
-    public function calculateDealerWeightedAverageMonthlyCostPerPage ()
-    {
-        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPage))
-        {
-            $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
-
-            $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
-            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
-            $colorCpp                      = 0;
-            $monoCpp                       = 0;
-
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
-            {
-                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
-                $monoCpp += ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
-                if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
-                {
-                    $colorCpp += ($deviceInstance->getAverageMonthlyColorPageCount() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
-                }
-            }
-
-            $this->_dealerWeightedAverageMonthlyCostPerPage->monochromeCostPerPage = $monoCpp;
-            $this->_dealerWeightedAverageMonthlyCostPerPage->colorCostPerPage      = $colorCpp;
-        }
-
-        return $this->_dealerWeightedAverageMonthlyCostPerPage;
     }
 
     /**
@@ -280,6 +216,61 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
+     * Calculates the dealers monthly revenue when using a target cost per page schema
+     *
+     * @return number
+     */
+    public function calculateDealerMonthlyRevenueUsingTargetCostPerPage ()
+    {
+        if (!isset($this->_dealerMonthlyRevenueUsingTargetCostPerPage))
+        {
+            $this->_dealerMonthlyRevenueUsingTargetCostPerPage = 0;
+
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount() * $this->_optimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
+                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getAverageMonthlyColorPageCount() * $this->_optimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
+            }
+        }
+
+        return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
+    }
+
+    /**
+     * Calculates the weighted average monthly cost per page of the current fleet
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateDealerWeightedAverageMonthlyCostPerPage ()
+    {
+        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPage))
+        {
+            $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
+
+            $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
+            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
+            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
+            $colorCpp                      = 0;
+            $monoCpp                       = 0;
+
+            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            {
+                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
+                $monoCpp += ($deviceInstance->getAverageMonthlyBlackAndWhitePageCount() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
+                {
+                    $colorCpp += ($deviceInstance->getAverageMonthlyColorPageCount() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                }
+            }
+
+            $this->_dealerWeightedAverageMonthlyCostPerPage->monochromeCostPerPage = $monoCpp;
+            $this->_dealerWeightedAverageMonthlyCostPerPage->colorCostPerPage      = $colorCpp;
+        }
+
+        return $this->_dealerWeightedAverageMonthlyCostPerPage;
+    }
+
+    /**
      * Calculates the dealers monthly profit when using a target cost per page schema
      *
      * @return number
@@ -351,8 +342,6 @@ class Hardwareoptimization_ViewModel_Optimization
                 $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice());
             }
         }
-
         return $this->_dealerMonthlyCostWithReplacements;
     }
-
 }
