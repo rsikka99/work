@@ -72,6 +72,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
                 if (isset($postData['saveAndContinue']))
                 {
+                    $this->updateStepName();
+                    $this->saveHardwareOptimization();
                     $this->gotoNextNavigationStep($this->_navigation);
                 }
             }
@@ -87,7 +89,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_OPTIMIZE);
-
         $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
@@ -108,6 +109,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     {
                         if(isset($postData["saveAndContinue"]))
                         {
+                            $this->updateStepName();
                             $this->saveHardwareOptimization();
                             $this->gotoNextNavigationStep($this->_navigation);
                         }
