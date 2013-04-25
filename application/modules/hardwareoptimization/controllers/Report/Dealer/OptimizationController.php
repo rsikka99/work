@@ -1,8 +1,10 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: swilder
- * Date: 24/04/13
- * Time: 3:06 PM
- * To change this template use File | Settings | File Templates.
- */
+class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardwareoptimization_Library_Controller_Action
+{
+    public function indexAction ()
+    {
+
+        $this->view->hardwareOptimization = $this->_hardwareOptimization;
+        $this->view->optimization          = $this->getOptimizationViewModel();
+    }
+}
