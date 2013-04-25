@@ -91,13 +91,13 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
                 <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
-                <td>$<?php echo number_format($deviceInstance->getMonthlyRate() * 12); ?></td>
+                <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12); ?></td>
                 <td>$<?php echo number_format($replacementDevice->monthlyRate * 12); ?></td>
-                <td>$<?php echo number_format(($deviceInstance->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12)); ?></td>
+                <td>$<?php echo number_format(($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12) - ($replacementDevice->monthlyRate * 12)); ?></td>
             </tr>
             <?php
-            $replacementSavings += ($deviceInstance->getMonthlyRate() * 12) - ($replacementDevice->monthlyRate * 12);
-            $currentCost += $deviceInstance->getMonthlyRate() * 12;
+            $replacementSavings += ($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12) - ($replacementDevice->monthlyRate * 12);
+            $currentCost += $deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12;
             $printIQCost += $replacementDevice->monthlyRate * 12;
         endforeach; ?>
         <tr class="bold center">
@@ -285,7 +285,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
                 <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
-                <td>$<?php echo number_format($deviceInstance->getMonthlyRate() * 12); ?></td>
+                <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>
@@ -315,7 +315,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
                 <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
-                <td>$<?php echo number_format($deviceInstance->getMonthlyRate() * 12); ?></td>
+                <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer()) * 12); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

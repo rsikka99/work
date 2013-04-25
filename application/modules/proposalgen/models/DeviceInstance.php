@@ -1066,8 +1066,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_monthlyRate))
         {
             $this->_monthlyRate = 0;
-            $this->_monthlyRate += ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount());
-            $this->_monthlyRate += ($this->getMasterDevice()->getCostPerPage()->Estimated->BasePlusMargin->Color * $this->getAverageMonthlyColorPageCount());
+            $this->_monthlyRate += $this->getMonthlyBlackAndWhiteCost($costPerPageSetting);
+            $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting);
             $this->_monthlyRate += ($this->getAverageMonthlyPageCount() * self::getITCostPerPage());
         }
 
@@ -1079,9 +1079,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getYearlyRate ()
+    public function getYearlyRate ($costPerPageSetting)
     {
-        return $this->getMonthlyRate() * 12;
+        return $this->getMonthlyRate($costPerPageSetting) * 12;
     }
 
     /**
@@ -1089,9 +1089,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *
      * @return float
      */
-    public function getMonthlyRatePercentage ($monthlyTotalCost)
+    public function getMonthlyRatePercentage ($monthlyTotalCost, $costPerPageSetting)
     {
-        return ($this->getMonthlyRate() / $monthlyTotalCost) * 100;
+        return ($this->getMonthlyRate($costPerPageSetting) / $monthlyTotalCost) * 100;
     }
 
     /**
@@ -1429,7 +1429,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @throws InvalidArgumentException
      * @return Proposalgen_Model_CostPerPage
      */
-    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    public function calculateCostPerPage ($costPerPageSetting, $masterDevice = null)
     {
         // Make sure our array is initialized
         if (!isset($this->_cachedCostPerPage))

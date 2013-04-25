@@ -109,12 +109,12 @@ if ($reportHasDevicesToReplace)
                     $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($device->getUploadDataCollectorRow()->modelName, $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
                     $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText(($device->serialNumber === "") ? 'Unknown' : $device->serialNumber, $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
                     $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(number_format($device->getAverageMonthlyPageCount()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-                    $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getYearlyRate()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+                    $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getYearlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
                     $table->addCell($tc->col5Width, $tc->body->cell5->cellStyle)->addText('$' . number_format($replacementDevice->monthlyRate * 12), $tc->body->cell5->fontStyle, $tc->body->cell5->paragraphStyle);
-                    $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getYearlyRate()) - ($replacementDevice->monthlyRate * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
+                    $table->addCell($tc->col6Width, $tc->body->cell6->cellStyle)->addText('$' . number_format(($device->getYearlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())) - ($replacementDevice->monthlyRate * 12)), $tc->body->cell6->fontStyle, $tc->body->cell6->paragraphStyle);
 
-                    $replacementSavings += ($device->getYearlyRate()) - ($replacementDevice->monthlyRate * 12);
-                    $currentCost += $device->getYearlyRate();
+                    $replacementSavings += ($device->getYearlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())) - ($replacementDevice->monthlyRate * 12);
+                    $currentCost += $device->getYearlyRate($assessmentViewModel->getCostPerPageSettingForCustomer());
                     $printIQCost += $replacementDevice->monthlyRate * 12;
                 }
 

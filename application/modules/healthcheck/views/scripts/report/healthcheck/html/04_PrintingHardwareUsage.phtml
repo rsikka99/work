@@ -139,7 +139,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
         <tr>
             <td><?php echo $deviceName?>
             <td class="center"><?php if($deviceInstance->serialNumber) echo $deviceInstance->serialNumber; else echo 'Unknown';?></td>
-            <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost())), 2) ?>
+            <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(),$healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>
                 %</td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyColorPageCount()); ?></td>
             <td><?php echo $this->currency($deviceInstance->calculateCostPerPage($healthcheckViewModel->getCostPerPageSettingForCustomer())->colorCostPerPage,array('precision' => 4)); ?></td>
