@@ -11,40 +11,40 @@ $optimization = $this->optimization;
 
 $costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
 $optimizationDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
-//$graphs              = $optimizationDevices->getGraphs();
+$graphs              = $optimizationDevices->getGraphs();
 // Get the count of all the devices used in the system
 $totalDevices = $optimizationDevices->getDeviceCount();
 ?>
-<!--<div class="container" id="htmlReportContainer">-->
-<!--    <div class="titlepage">-->
-<!--        <div class="header">-->
-<!--            <div class="title-page-logo-box-wrapper">-->
-<!--                <div class="title-page-logo-box">-->
-<!--                    <img class="title-page-logo" src="--><?php //echo $this->serverUrl($this->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg")) ?><!-- " />-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="title-page-report-title">-->
-<!--            <h2>Hardware Optimization</h2>-->
-<!--        </div>-->
-<!--        <div class="title-page-customer-details">-->
-<!--            <h3>Prepared for:-->
-<!--                --><?php
-//                if (strlen($hardwareOptimization->report->getClient()->companyName) > 26)
-//                {
-//                    echo "<br/>";
-//                }
-//
-//                echo $hardwareOptimization->report->getClient()->companyName;
-//                ?>
-<!--            </h3>-->
-<!---->
-<!--            <h3>--><?php //echo $hardwareOptimization->getDateReportPrepared(); ?><!--</h3>-->
-<!---->
-<!--            <p>--><?php //echo nl2br($hardwareOptimization->report->getClient()->getAddress()); ?><!--</p>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="container" id="htmlReportContainer">
+    <div class="titlepage">
+        <div class="header">
+            <div class="title-page-logo-box-wrapper">
+                <div class="title-page-logo-box">
+                    <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg")) ?> " />
+                </div>
+            </div>
+        </div>
+        <div class="title-page-report-title">
+            <h2>Hardware Optimization</h2>
+        </div>
+        <div class="title-page-customer-details">
+            <h3>Prepared for:
+                <?php
+                if (strlen($hardwareOptimization->getClient()->companyName) > 26)
+                {
+                    echo "<br/>";
+                }
+
+                echo $hardwareOptimization->getClient()->companyName;
+                ?>
+            </h3>
+
+            <h3><?php echo $hardwareOptimization->dateCreated; ?></h3>
+
+            <p><?php echo nl2br($hardwareOptimization->getClient()->getAddress()); ?></p>
+        </div>
+    </div>
+</div>
 
 <div class="container" id="htmlReportContainer">
 <h3>Fleet</h3>
@@ -110,8 +110,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
 <h3>Device Summary</h3>
 <table class='center'>
     <tr>
-<!--        <td><img src="--><?php //echo $graphs[0]; ?><!--" /></td>-->
-<!--        <td><img src="--><?php //echo $graphs[1]; ?><!--" /></td>-->
+        <td><img src="<?php echo $graphs[0]; ?>" /></td>
+        <td><img src="<?php echo $graphs[1]; ?>" /></td>
     </tr>
 </table>
 
