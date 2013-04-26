@@ -393,7 +393,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             {
                 $barGraph->addDataSet(array($deviceCount));
             }
-            $barGraph->setLegend(array_reverse(Proposalgen_Model_Optimization_Abstract::$ageRanks));
+            $barGraph->setLegend(array_reverse(Hardwareoptimization_Model_Optimization_Abstract::$ageRanks));
             $barGraph->setLegendPosition("b");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -421,7 +421,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             {
                 $barGraph->addDataSet(array($deviceCount));
             }
-            $barGraph->setLegend(array_reverse(Proposalgen_Model_Optimization_Abstract::$ageRanks));
+            $barGraph->setLegend(array_reverse(Hardwareoptimization_Model_Optimization_Abstract::$ageRanks));
             $barGraph->setLegendPosition("b");
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
