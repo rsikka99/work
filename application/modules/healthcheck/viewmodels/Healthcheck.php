@@ -1691,7 +1691,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @param array $Graphs
      *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
+     * @return $this
      */
     public function setGraphs ($Graphs)
     {

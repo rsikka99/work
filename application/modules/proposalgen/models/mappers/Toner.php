@@ -272,16 +272,16 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
      */
     public function getReportToners ($masterDeviceId, $dealerId)
     {
-        $db = Zend_Db_Table::getDefaultAdapter();
-        $dealerId                = $db->quote($dealerId, 'INT');
+        $db       = Zend_Db_Table::getDefaultAdapter();
+        $dealerId = $db->quote($dealerId, 'INT');
 
         $select = $db->select()
             ->from('toners', array('*'))
             ->joinLeft('device_toners', 'toner_id = id', array(null))
             ->joinLeft('dealer_toner_attributes', "tonerId = id AND dealerId = {$dealerId}", array(
-                                                                  "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
-                                                                  "dealerSku",
-                                                                 ))
+                                                                                                  "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
+                                                                                                  "dealerSku",
+                                                                                             ))
             ->where('master_device_id = ?', $masterDeviceId);
 
 
@@ -292,7 +292,7 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
 
         foreach ($result as $row)
         {
-            $toner = new Proposalgen_Model_Toner($row);
+            $toner                                                                                     = new Proposalgen_Model_Toner($row);
             $tonerArray [$toner->getPartType()->partTypeId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
             $this->saveItemToCache($toner);
         }
@@ -334,7 +334,7 @@ WHERE `device_toners`.`master_device_id` = ?';
     /**
      * Fetches a list of toners. (Used by Proposalgen_AdminController::devicetonersAction()
      *
-     * @param $tonerIdList A string of id's (comma separated)
+     * @param array $tonerIdList A string of id's (comma separated)
      *
      * @return array
      */

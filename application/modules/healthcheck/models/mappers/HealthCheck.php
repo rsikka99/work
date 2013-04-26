@@ -220,7 +220,7 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
     {
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?"  => $clientId,
-                                    "{$this->col_stepName} <> ?" => Healthcheck_Model_Healthcheck_Step::STEP_FINISHED
+                                    "{$this->col_stepName} <> ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
                                ));
     }
 
@@ -235,7 +235,7 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
     {
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?" => $clientId,
-                                    "{$this->col_stepName} = ?" => Healthcheck_Model_Healthcheck_Step::STEP_FINISHED
+                                    "{$this->col_stepName} = ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
                                ));
     }
 

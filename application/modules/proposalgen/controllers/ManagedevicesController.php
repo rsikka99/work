@@ -600,7 +600,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                             else
                             {
                                 // Set reports modified flag
-                                $reportTableMapper = Proposalgen_Model_Mapper_Assessment::getInstance();
+                                $reportTableMapper = Assessment_Model_Mapper_Assessment::getInstance();
                                 $reportTableMapper->setDevicesModifiedFlagOnAssessments($master_device_id);
 
                                 // DELETE MASTER DEVICE

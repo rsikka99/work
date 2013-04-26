@@ -230,7 +230,7 @@ class Proposal_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Gets the systems assesssment setting object
+     * Gets the systems assessment setting object
      *
      * @return Assessment_Model_Assessment_Setting
      */
@@ -248,52 +248,57 @@ class Proposal_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
      */
     public function fetchUserAssessmentSetting ($userId)
     {
-        $assesssmentSetting = false;
-        $userReportSetting  = Assessment_Model_Mapper_User_Report_Setting::getInstance()->find($userId);
-        if ($userReportSetting)
+        $assessmentSettings = false;
+        $userSetting        = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
+        if ($userSetting)
         {
-            $assesssmentSetting = $this->find($userReportSetting->reportSettingId);
+            $assessmentSettings = $userSetting->getAssessmentSettings();
         }
 
         // If we don't have a setting yet, make a blank one
-        if (!$assesssmentSetting)
+        if (!$assessmentSettings)
         {
-            $assesssmentSetting   = new Assessment_Model_Assessment_Setting();
-            $assesssmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assesssmentSetting);
+            $assessmentSettings  = new Assessment_Model_Assessment_Setting();
+            $assessmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSettings);
 
-            if ($userReportSetting)
+            if ($userSetting)
             {
-                $userReportSetting->reportSettingId = $assesssmentSettingId;
-                Assessment_Model_Mapper_User_Report_Setting::getInstance()->save($userReportSetting);
+                $userSetting->assessmentSettingId = $assessmentSettingId;
+                Preferences_Model_Mapper_User_Setting::getInstance()->save($userSetting);
             }
             else
             {
-                $userReportSetting                  = new Assessment_Model_User_Report_Setting();
-                $userReportSetting->userId          = $userId;
-                $userReportSetting->reportSettingId = $assesssmentSettingId;
-                Assessment_Model_Mapper_User_Report_Setting::getInstance()->insert($userReportSetting);
+                $userReportSetting                      = new Preferences_Model_User_Setting();
+                $userReportSetting->userId              = $userId;
+                $userReportSetting->assessmentSettingId = $assessmentSettingId;
+                Preferences_Model_Mapper_User_Setting::getInstance()->insert($userReportSetting);
             }
         }
 
-        return $assesssmentSetting;
+        return $assessmentSettings;
     }
 
     /**
-     * Gets a assesssments assesssment setting object
+     * Gets a assessments assessment setting object
      *
      * @param int $assessmentId
-     *            The assesssment's id
+     *            The assessment's id
+     *
+     * @throws InvalidArgumentException
      *
      * @return Assessment_Model_Assessment_Setting Returns false if it could not find one.
      */
     public function fetchAssessmentAssessmentSetting ($assessmentId)
     {
-        $assessmentSetting           = false;
-        $assessmentAssessmentSetting = Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->find($assessmentId);
-        if ($assessmentAssessmentSetting)
+        $assessmentSetting = false;
+        $assessment        = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
+        if (!$assessment)
         {
-            $assessmentSetting = $this->find($assessmentAssessmentSetting->assessmentSettingId);
+            throw new \InvalidArgumentException("Assessment must exist in order to retrieve setting.");
         }
+
+
+        $assessmentSetting = $assessment->getAssessmentSettings();
 
         // If we don't have a setting yet, make a blank one
         if (!$assessmentSetting)
@@ -301,18 +306,8 @@ class Proposal_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
             $assessmentSetting   = new Assessment_Model_Assessment_Setting();
             $assessmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
 
-            if ($assessmentAssessmentSetting)
-            {
-                $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
-                Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->save($assessmentAssessmentSetting);
-            }
-            else
-            {
-                $assessmentAssessmentSetting                      = new Assessment_Model_Assessment_Assessment_Setting();
-                $assessmentAssessmentSetting->assessmentId        = $assessmentId;
-                $assessmentAssessmentSetting->assessmentSettingId = $assessmentSettingId;
-                Assessment_Model_Mapper_Assessment_Assessment_Setting::getInstance()->insert($assessmentAssessmentSetting);
-            }
+            $assessment->assessmentSettingId = $assessmentSettingId;
+            Assessment_Model_Mapper_Assessment::getInstance()->save($assessment);
         }
 
         return $assessmentSetting;

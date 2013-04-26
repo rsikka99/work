@@ -283,8 +283,7 @@ class Admin_Form_User extends EasyBib_Form
     }
 
     /**
-     *
-     * @return the $formMode
+     * @return string
      */
     public function getFormMode ()
     {
@@ -292,7 +291,6 @@ class Admin_Form_User extends EasyBib_Form
     }
 
     /**
-     *
      * @param string $formMode
      */
     public function setFormMode ($formMode)

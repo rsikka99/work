@@ -184,34 +184,6 @@ class Admin_DealerController extends Tangent_Controller_Action
                         // Save the dealer with the id to the database
                         $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
 
-                        // Create a new report setting based on the system default report setting
-                        // Then assigned the dealer object the new id.
-                        $reportSetting = new Proposalgen_Model_Assessment_Setting();
-                        $reportSetting->ApplyOverride(Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting());
-                        $dealer->reportSettingId = Proposalgen_Model_Mapper_Assessment_Setting::getInstance()->insert($reportSetting);
-
-                        $surveySetting = new Proposalgen_Model_Survey_Setting();
-                        $surveySetting->ApplyOverride(Proposalgen_Model_Mapper_Survey_Setting::getInstance()->fetchSystemSurveySettings());
-                        $dealer->surveySettingId = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
-
-                        $dealerSetting                      = new Preferences_Model_Dealer_Setting();
-                        $dealerSetting->assessmentSettingId = $dealer->reportSettingId;
-                        $dealerSetting->surveySettingId     = $dealer->surveySettingId;
-                        $dealerSetting->dealerId            = $dealer->id;
-                        Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($dealerSetting);
-
-                        // Create a new quote setting based on the system default quote setting
-                        // Then assigned the dealer quote setting id object it's new id
-                        $quoteSetting = new Quotegen_Model_QuoteSetting();
-                        $quoteSetting->applyOverride(Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting());
-                        $dealer->quoteSettingId = Quotegen_Model_Mapper_QuoteSetting::getInstance()->insert($quoteSetting);
-
-                        $dealerQuoteSetting                 = new Quotegen_Model_DealerQuoteSetting();
-                        $dealerQuoteSetting->quoteSettingId = $dealer->quoteSettingId;
-                        $dealerQuoteSetting->dealerId       = $dealer->id;
-                        Quotegen_Model_Mapper_DealerQuoteSetting::getInstance()->insert($dealerQuoteSetting);
-
-
                         $db->commit();
 
                         if ($dealerId)

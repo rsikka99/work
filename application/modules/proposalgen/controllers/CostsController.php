@@ -28,10 +28,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->_config   = Zend_Registry::get('config');
 
         /**
-         * FIXME: Hardcoded privilege
+         * FIXME: Is this used anymore?
          */
         $this->view->privilege = array('System Admin');
-        $this->privilege       = array('System Admin');
 
         /**
          * Old variables
@@ -352,13 +351,14 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $formData                   = $this->_request->getPost();
-            $company                    = 1;
-            $this->view->company_filter = $company;
+            $formData = $this->_request->getPost();
 
-            // hdnRole is used when logged in as a dealer to differentiatek
-            // between if the dealer is on "update company pricing" or "update
-            // my pricing"
+            // FIXME: What does this do??!?!?
+            $this->view->company_filter = 1;
+
+            /**
+             * hdnRole is used when logged in as a dealer to differentiate between if the dealer is on "update company pricing" or "update my pricing"
+             */
             $hdnRole = $formData ['hdnRole'];
 
             if (isset($formData ['hdnMode']))
@@ -626,7 +626,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                                                         )
                                 );
 
-                                foreach ($results as $key => $value)
+                                foreach ($results as $value)
                                 {
                                     $exists = false;
                                     $insert = false;
@@ -722,204 +722,83 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     }
                                     else
                                     {
-                                        if (in_array("System Admin", $this->privilege) && $company == 1)
+
+                                        $inputFilter->setData(array('cost' => $value ['New Price']));
+                                        // Filter the data -
+                                        $importTonerId   = $value ['Toner ID'];
+                                        $importDealerSku = trim($value ['Dealer Sku']);
+                                        $importCost      = $inputFilter->cost;
+
+                                        $dataArray = array(
+                                            'tonerId'   => $importTonerId,
+                                            'dealerSku' => $importDealerSku,
+                                            'cost'      => $importCost,
+                                            'dealerId'  => $dealerId,
+                                        );
+
+                                        $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
+                                        if (count($toner->toArray()) > 0)
                                         {
-                                            $inputFilter->setData(array('cost' => $value ['New Price']));
-                                            // Filter the data -
-                                            $importTonerId   = $value ['Toner ID'];
-                                            $importDealerSku = trim($value ['Dealer Sku']);
-                                            $importCost      = $inputFilter->cost;
 
-                                            $dataArray = array(
-                                                'tonerId'   => $importTonerId,
-                                                'dealerSku' => $importDealerSku,
-                                                'cost'      => $importCost,
-                                                'dealerId'  => $dealerId,
-                                            );
-
-                                            $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
-                                            if (count($toner->toArray()) > 0)
+                                            $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($importTonerId, $dealerId));
+                                            // Does the toner attribute exists ?
+                                            if ($tonerAttribute)
                                             {
-
-                                                $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($importTonerId, $dealerId));
-                                                // Does the toner attribute exists ?
-                                                if ($tonerAttribute)
+                                                // If cost && sku are empty  or cost = 0 -> delete.
+                                                // Delete
+                                                if (empty($importCost) && empty($importDealerSku))
                                                 {
-                                                    // If cost && sku are empty  or cost = 0 -> delete.
-                                                    // Delete
-                                                    if (empty($importCost) && empty($importDealerSku))
-                                                    {
-                                                        // If the attributes are empty after being found, delete them.
-                                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
-                                                    }
-                                                    else
-                                                    {
-                                                        // Have any values changed
-                                                        $hasChanged = false;
-
-                                                        if (!$inputFilter->isValid('cost'))
-                                                        {
-                                                            $importCost = null;
-                                                        }
-
-                                                        if ((float)$importCost !== (float)$tonerAttribute->cost)
-                                                        {
-                                                            if ($importCost === null)
-                                                            {
-                                                                $importCost = new Zend_Db_Expr('NULL');
-                                                            }
-                                                            $tonerAttribute->cost = $importCost;
-                                                            $hasChanged           = true;
-                                                        }
-
-                                                        if ($tonerAttribute->dealerSku != $importDealerSku)
-                                                        {
-                                                            if (empty($importDealerSku))
-                                                            {
-                                                                $importDealerSku = new Zend_Db_Expr('NULL');
-                                                            }
-                                                            $tonerAttribute->dealerSku = $importDealerSku;
-                                                            $hasChanged                = true;
-                                                        }
-
-                                                        if ($hasChanged)
-                                                        {
-                                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
-
-                                                        }
-                                                    }
+                                                    // If the attributes are empty after being found, delete them.
+                                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
                                                 }
                                                 else
                                                 {
-                                                    if ($importCost > 0 || !empty($importDealerSku))
+                                                    // Have any values changed
+                                                    $hasChanged = false;
+
+                                                    if (!$inputFilter->isValid('cost'))
                                                     {
-                                                        $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                                        $tonerAttribute->populate($dataArray);
-                                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
+                                                        $importCost = null;
                                                     }
+
+                                                    if ((float)$importCost !== (float)$tonerAttribute->cost)
+                                                    {
+                                                        if ($importCost === null)
+                                                        {
+                                                            $importCost = new Zend_Db_Expr('NULL');
+                                                        }
+                                                        $tonerAttribute->cost = $importCost;
+                                                        $hasChanged           = true;
+                                                    }
+
+                                                    if ($tonerAttribute->dealerSku != $importDealerSku)
+                                                    {
+                                                        if (empty($importDealerSku))
+                                                        {
+                                                            $importDealerSku = new Zend_Db_Expr('NULL');
+                                                        }
+                                                        $tonerAttribute->dealerSku = $importDealerSku;
+                                                        $hasChanged                = true;
+                                                    }
+
+                                                    if ($hasChanged)
+                                                    {
+                                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
+
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if ($importCost > 0 || !empty($importDealerSku))
+                                                {
+                                                    $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                                    $tonerAttribute->populate($dataArray);
+                                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
                                                 }
                                             }
                                         }
 
-                                        else if ($hdnRole != "user" && (!in_array("Standard User", $this->privilege) && $company > 1))
-                                        {
-                                            $toner_id          = $results[$key] ['Toner ID'];
-                                            $manufacturer_name = $results[$key] ['Manufacturer'];
-                                            $toner_dealer_sku  = $results[$key] ['SKU'];
-                                            $toner_price       = $results[$key] ['New Override Price'];
-
-                                            $table = new Proposalgen_Model_DbTable_DealerTonerOverride();
-                                            $data  = array(
-                                                'override_toner_price' => $toner_price
-                                            );
-                                            $where = $table->getAdapter()->quoteInto('dealer_company_id = ' . $company . ' AND toner_id = ?', $toner_id, 'INTEGER');
-
-                                            // check to see if it exists
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            't' => 'toner'
-                                                       ), array(
-                                                               'toner_price'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'dto' => 'dealer_toner_override'
-                                                           ), 'dto.toner_id = t.toner_id AND dto.dealer_company_id = ' . $company, array(
-                                                                                                                                        'override_toner_price'
-                                                                                                                                   ))
-                                                ->where('t.toner_id = ?', $toner_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
-                                            {
-                                                if ($toner [0] ['override_toner_price'] > 0)
-                                                {
-                                                    $exists = true;
-
-                                                    // don't update if values match
-                                                    if ($toner_price == 0 || empty($toner_price))
-                                                    {
-                                                        $delete = true;
-                                                    }
-                                                    else if ($toner [0] ['toner_price'] != $toner_price)
-                                                    {
-                                                        $update = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $exists = false;
-                                                    if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
-                                                    {
-                                                        $insert = true;
-
-                                                        $data ['dealer_company_id'] = $company;
-                                                        $data ['toner_id']          = $toner_id;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else if (in_array("Standard User", $this->privilege) || $hdnRole == "user")
-                                        {
-
-                                            $toner_id          = $results[$key] ['Toner ID'];
-                                            $manufacturer_name = $results[$key] ['Manufacturer'];
-                                            $toner_dealer_sku  = $results[$key] ['SKU'];
-                                            $toner_price       = $results[$key] ['New Override Price'];
-
-                                            $table = new Proposalgen_Model_DbTable_UserTonerOverride();
-                                            $data  = array(
-                                                'override_toner_price' => $toner_price
-                                            );
-                                            $where = $table->getAdapter()->quoteInto('user_id = ' . $this->_userId . ' AND toner_id = ?', $toner_id, 'INTEGER');
-
-                                            // check to see if it exists
-                                            $select = new Zend_Db_Select($db);
-                                            $select = $db->select()
-                                                ->from(array(
-                                                            't' => 'toner'
-                                                       ), array(
-                                                               'toner_price'
-                                                          ))
-                                                ->joinLeft(array(
-                                                                'uto' => 'user_toner_override'
-                                                           ), 'uto.toner_id = t.toner_id AND uto.user_id = ' . $this->_userId, array(
-                                                                                                                                    'override_toner_price'
-                                                                                                                               ))
-                                                ->where('t.toner_id = ?', $toner_id);
-                                            $stmt   = $db->query($select);
-                                            $toner  = $stmt->fetchAll();
-
-                                            if (count($toner) > 0)
-                                            {
-                                                if ($toner [0] ['override_toner_price'] > 0)
-                                                {
-                                                    $exists = true;
-
-                                                    // don't update if values match
-                                                    if ($toner_price == 0 || empty($toner_price))
-                                                    {
-                                                        $delete = true;
-                                                    }
-                                                    else if ($toner [0] ['toner_price'] != $toner_price)
-                                                    {
-                                                        $update = true;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $exists = false;
-                                                    if ($toner_price > 0 && $toner [0] ['toner_price'] != $toner_price)
-                                                    {
-                                                        $insert = true;
-
-                                                        $data ['user_id']  = $this->_userId;
-                                                        $data ['toner_id'] = $toner_id;
-                                                    }
-                                                }
-                                            }
-                                        }
                                     }
 
 

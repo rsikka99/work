@@ -174,9 +174,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     }
 
     /**
-     * Returns Json based on id that has been pased via query string
-     *
-     * @return data <json>
+     * Returns Json based on id that has been passed via query string
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
@@ -241,7 +239,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             );
         }
 
-        $this->_helper->json($device);
+        $this->sendJson($device);
     }
 
     /**
@@ -321,7 +319,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         catch (Exception $e)
         {
             $db->rollBack();
-            My_Log::logException($e);
+            Tangent_Log::logException($e);
 
             return false;
         }

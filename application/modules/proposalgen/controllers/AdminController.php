@@ -188,7 +188,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     }
 
     /**
-     * @throws exceptionThis action seems to provide json lists for the following:
+     * @throws \Exception This action seems to provide json lists for the following:
      * - Manufacturers
      * - Toner Colors
      * - Part Types

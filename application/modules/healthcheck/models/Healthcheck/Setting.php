@@ -331,7 +331,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      * @param $HealthcheckPricingConfig Proposalgen_Model_PricingConfig
      *                                  The pricing configuration to set
      *
-     * @return \Proposalgen_Model_Healthcheck_Setting
+     * @return $this
      */
     public function setHealthcheckPricingConfig ($HealthcheckPricingConfig)
     {

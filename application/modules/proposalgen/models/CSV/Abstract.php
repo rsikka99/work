@@ -9,7 +9,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     protected $validateCSV;
     protected $data;
     protected $errors = array();
-    protected $baddata;
+    protected $badData;
     const FIELD_NOTREQUIRED      = 0;
     const FIELD_REQUIRED         = 1;
     const FIELD_REQUIRED_DEPENDS = 2;
@@ -67,7 +67,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                                 }
                                 else
                                 {
-                                    $this->baddata [] = array(
+                                    $this->badData [] = array(
                                         "Row $rownumber Excluded: " . $rowError,
                                         $newRow
                                     );
@@ -75,7 +75,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                             }
                             else
                             {
-                                $this->baddata [] = array(
+                                $this->badData [] = array(
                                     $result = "Incorrect column count. (" . count($row) . " columns) Expected " . $this->headerCount,
                                     $row
                                 );
@@ -177,7 +177,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 
     /**
      *
-     * @return the $headers
+     * @return array
      */
     public function getHeaders ()
     {
@@ -202,8 +202,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $validateCSV
+     * @return boolean
      */
     public function getValidateCSV ()
     {
@@ -228,8 +227,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $data
+     * @return array
      */
     public function getData ()
     {
@@ -254,28 +252,26 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     }
 
     /**
-     *
-     * @return the $baddata
+     * @return array
      */
-    public function getBaddata ()
+    public function getBadData ()
     {
-        if (!isset($this->baddata))
+        if (!isset($this->badData))
         {
-            $this->baddata = array();
+            $this->badData = array();
         }
 
-        return $this->baddata;
+        return $this->badData;
     }
 
     /**
-     *
-     * @param $baddata
+     * @param $badData
      *
      * @return $this
      */
-    public function setBaddata ($baddata)
+    public function setBadData ($badData)
     {
-        $this->baddata = $baddata;
+        $this->badData = $badData;
 
         return $this;
     }
