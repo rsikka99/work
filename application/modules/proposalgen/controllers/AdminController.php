@@ -802,7 +802,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $where  = $tonerTable->getAdapter()->quoteInto('(sku = "' . $toner_sku . '")', null);
                         $toners = $tonerTable->fetchRow($where);
 
-                        if (count($toners) > 0)
+                        if (count($toners->toArray()) > 0)
                         {
                             $message = "The toner already exists.";
                         }

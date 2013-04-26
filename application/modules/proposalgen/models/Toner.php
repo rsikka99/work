@@ -45,7 +45,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     public $tonerColorId;
 
     /**
-     * @var double
+     * @var float
      */
     public $calculatedCost;
 

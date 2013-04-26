@@ -24,11 +24,10 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
     }
 
     /**
-     * Saves an instance of Application_Model_Mapper_User_PasswordResetRequest to the database.
+     * Saves an instance of Application_Model_User_PasswordResetRequest to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Application_Model_Mapper_User_PasswordResetRequest
-     *                The object to insert
+     * @param Application_Model_User_PasswordResetRequest $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -52,9 +51,9 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
     }
 
     /**
-     * Saves (updates) an instance of Application_Model_Mapper_User_PasswordResetRequest to the database.
+     * Saves (updates) an instance of Application_Model_User_PasswordResetRequest to the database.
      *
-     * @param $object     Application_Model_Mapper_User_PasswordResetRequest
+     * @param $object     Application_Model_User_PasswordResetRequest
      *                    The password reset request model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
@@ -85,14 +84,14 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Application_Model_Mapper_User_PasswordResetRequest or the
+     *                This can either be an instance of Application_Model_User_PasswordResetRequest or the
      *                primary key to delete
      *
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Application_Model_Mapper_User_PasswordResetRequest)
+        if ($object instanceof Application_Model_User_PasswordResetRequest)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -111,18 +110,17 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
     }
 
     /**
-     * Finds a Application_Model_Mapper_User_PasswordResetRequest based on it's primaryKey
+     * Finds a Application_Model_User_PasswordResetRequest based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Application_Model_Mapper_User_PasswordResetRequest to find
+     * @param $id int The id of the Application_Model_User_PasswordResetRequest to find
      *
-     * @return Application_Model_User
+     * @return Application_Model_User_PasswordResetRequest
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Application_Model_Mapper_User_PasswordResetRequest)
+        if ($result instanceof Application_Model_User_PasswordResetRequest)
         {
             return $result;
         }
@@ -134,7 +132,7 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
             return false;
         }
         $row    = $result->current();
-        $object = new Application_Model_Mapper_User_PasswordResetRequest($row->toArray());
+        $object = new Application_Model_User_PasswordResetRequest($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -143,7 +141,7 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
     }
 
     /**
-     * Fetches a Application_Model_Mapper_User_PasswordResetRequest
+     * Fetches a Application_Model_User_PasswordResetRequest
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -152,7 +150,7 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return  Application_Model_Mapper_User_PasswordResetRequest
+     * @return  Application_Model_User_PasswordResetRequest
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -189,6 +187,7 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
      * Deletes all objects with the userId given
      *
      * @param $userId
+     *
      * @return int
      */
     public function deleteByUserId ($userId)
@@ -206,9 +205,10 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
         $user = Application_Model_Mapper_User::getInstance()->fetch(Application_Model_Mapper_User::getInstance()->getWhereUsername($username));
         if ($user)
         {
-           return $this->deleteByUserId($user->id);
+            return $this->deleteByUserId($user->id);
 
         }
+
         return false;
     }
 }

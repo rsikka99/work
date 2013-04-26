@@ -2,7 +2,7 @@
 class Healthcheck_ViewModel_Abstract
 {
     /**
-     * @var Proposalgen_Model_Proposal_Devices
+     * @var Healthcheck_ViewModel_Devices
      */
     protected $_devices;
 

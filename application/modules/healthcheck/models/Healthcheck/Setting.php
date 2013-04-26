@@ -167,12 +167,11 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_Healthcheck_Setting $settings
-     *            These can be either a Proposalgen_Model_Healthcheck_Setting or an array of settings
+     * @param array|Healthcheck_Model_Healthcheck_Setting $settings These can be either a Proposalgen_Model_Healthcheck_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
-        if ($settings instanceof Proposalgen_Model_Healthcheck_Setting)
+        if ($settings instanceof Healthcheck_Model_Healthcheck_Setting)
         {
             $settings = $settings->toArray();
         }

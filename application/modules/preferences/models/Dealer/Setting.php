@@ -32,7 +32,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     public $healthcheckSettingId;
 
     /**
-     * @var Proposalgen_Model_Healthcheck_Setting
+     * @var Healthcheck_Model_Healthcheck_Setting
      */
     protected $_healthcheckSetting;
 

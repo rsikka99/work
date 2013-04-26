@@ -266,19 +266,21 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
 
         return $this->fetchAll(array(
                                     "{$this->col_companyName} LIKE ?" => "%{$searchTerm}%",
-                                    "{$this->col_dealerId} = ?" => $dealerId
+                                    "{$this->col_dealerId} = ?"       => $dealerId
                                ));
     }
 
     /**
      * Fetches a list of clients for the dealer
-     * @param int dealer id
      *
-     * @return Application_Model_Client[]
+     * @param int $dealerId
+     *
+     * @return Quotegen_Model_Client[]
      */
     public function fetchClientListForDealer ($dealerId)
     {
         $users = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
         return $users;
     }
 

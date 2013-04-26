@@ -37,7 +37,7 @@ class Quotegen_Model_Device extends My_Model_Abstract
     public $cost;
 
     /**
-     * @var multitype: Quotegen_Model_DeviceOption
+     * @var Quotegen_Model_DeviceOption[]
      */
     protected $_options;
 

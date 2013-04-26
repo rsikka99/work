@@ -23,7 +23,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
     public $description;
 
     /**
-     * @var double
+     * @var float
      */
     public $cost;
 

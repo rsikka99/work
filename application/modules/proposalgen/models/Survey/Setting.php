@@ -26,8 +26,7 @@ class Proposalgen_Model_Survey_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_Survey_Setting $settings
-     *            These can be either a Proposalgen_Model_Survey_Setting or an array of settings
+     * @param Proposalgen_Model_Survey_Setting|array $settings These can be either a Proposalgen_Model_Survey_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
