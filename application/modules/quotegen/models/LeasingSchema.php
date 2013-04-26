@@ -147,8 +147,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all rates for leasing schema
      *
-     * @return array|\multitype 2 dimensional array rates.
-     * @internal param $
+     * @return array|Quotegen_Model_LeasingSchemaRate[]
      */
     public function getRates ()
     {
@@ -163,10 +162,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Sets all rates for leasing schema
      *
-     * @param multitype: $_rates
-     *            2 dimensional array rates.
-     *                 First key is term id.
-     *                 Second key is range id.
+     * @param array|Quotegen_Model_LeasingSchemaRate[] $_rates 2 dimensional array rates. First key is term id. Second key is range id.
      *
      * @return Quotegen_Model_LeasingSchema
      */

@@ -507,28 +507,28 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * Can specify a preferred part type to get.
      * Will return a default toner value if it does not find an appropriate toner
      *
-     * @param int                             $tonerColor (Constant value in Proposalgen_Model_TonerColor)
-     * @param Proposalgen_Model_PricingConfig $pricingConfig
+     * @param int                                  $tonerColor (Constant value in Proposalgen_Model_TonerColor)
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return Proposalgen_Model_Toner
      */
-    public function getCheapestToner ($tonerColor, $pricingConfig)
+    public function getCheapestToner ($tonerColor, $costPerPageSetting)
     {
-        $PricingConfigId   = $pricingConfig->pricingConfigId;
         $preferredPartType = null;
-        if (isset($PricingConfigId))
+        if (isset($costPerPageSetting->pricingConfiguration))
         {
             if ($tonerColor == Proposalgen_Model_TonerColor::BLACK)
             {
-                $preferredPartType = $pricingConfig->getMonoTonerPartType();
+                $preferredPartType = $costPerPageSetting->pricingConfiguration->getMonoTonerPartType();
             }
             else
             {
-                $preferredPartType = $pricingConfig->getColorTonerPartType();
+                $preferredPartType = $costPerPageSetting->pricingConfiguration->getColorTonerPartType();
             }
         }
-        $cheapestToner    = null;
-        $tonersByPartType = $this->getToners(); // Grab this devices toners
+        $cheapestToner     = null;
+        $cheapestTonerRank = null;
+        $tonersByPartType  = $this->getToners(); // Grab this devices toners
 
         // If we have a preferred part type and the device has toners of that type
         if (isset($preferredPartType) &&
@@ -542,18 +542,20 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             /* @var $toner Proposalgen_Model_Toner */
             foreach ($tonersByPartType [$preferredPartType->partTypeId] [$tonerColor] as $toner)
             {
+                $currentTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                 if ($cheapestToner instanceof Proposalgen_Model_Toner)
                 {
-
                     // Compare Toner Ranks to figure out which is the cheapest
-                    if ($toner->getCostPerPage()->Rank < $cheapestToner->getCostPerPage()->Rank)
+                    if ($currentTonerRank < $cheapestTonerRank)
                     {
-                        $cheapestToner = $toner;
+                        $cheapestToner     = $toner;
+                        $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                     }
                 }
                 else
                 {
-                    $cheapestToner = $toner;
+                    $cheapestToner     = $toner;
+                    $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                 }
             }
         }
@@ -568,17 +570,20 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     /* @var $toner Proposalgen_Model_Toner */
                     foreach ($tonersByColor [$tonerColor] as $toner)
                     {
+                        $currentTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                         // Compare Toner Ranks to figure out which is the cheapest
                         if ($cheapestToner instanceof Proposalgen_Model_Toner)
                         {
-                            if ($toner->getCostPerPage()->Rank < $cheapestToner->getCostPerPage()->Rank)
+                            if ($currentTonerRank < $cheapestTonerRank)
                             {
-                                $cheapestToner = $toner;
+                                $cheapestToner     = $toner;
+                                $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                             }
                         }
                         else
                         {
-                            $cheapestToner = $toner;
+                            $cheapestToner     = $toner;
+                            $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                         }
                     }
                 }
@@ -996,7 +1001,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->colorCostPerPage      = 0;
 
             /* @var $toner Proposalgen_Model_Toner */
-            foreach ($this->getCheapestTonerSet($costPerPageSetting->pricingConfiguration) as $toner)
+            foreach ($this->getCheapestTonerSet($costPerPageSetting) as $toner)
             {
                 if ($toner)
                 {
@@ -1015,12 +1020,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * Gets the cheapest tonerset for a pricing configuration
      *
-     * @param Proposalgen_Model_PricingConfig $pricingConfiguration
-     *            The pricing configuration to use
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting The cost per page settings to use
      *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getCheapestTonerSet (Proposalgen_Model_PricingConfig $pricingConfiguration)
+    public function getCheapestTonerSet (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         // Make sure our array is initialized
         if (!isset($this->_cachedCheapestTonerSets))
@@ -1028,14 +1032,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->_cachedCheapestTonerSets = array();
         }
 
-        $cacheKey = "pricingConfiguration_{$pricingConfiguration->pricingConfigId}";
+        $cacheKey = $costPerPageSetting->createCacheKey();
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
             $tonerColors = $this->getRequiredTonerColors();
             $toners      = array();
             foreach ($tonerColors as $tonerColor)
             {
-                $toners [] = $this->getCheapestToner($tonerColor, $pricingConfiguration);
+                $toners [] = $this->getCheapestToner($tonerColor, $costPerPageSetting);
             }
             $this->_cachedCheapestTonerSets [$cacheKey] = $toners;
         }

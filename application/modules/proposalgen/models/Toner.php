@@ -153,48 +153,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     }
 
     /**
-     * Handles processing overrides for a toner
-     *
-     * @param Proposalgen_Model_Assessment $report
-     */
-    public function processOverrides ($report)
-    {
-        if (!$this->_overridesProcessed)
-        {
-            $userTonerOverrideMapper = Proposalgen_Model_Mapper_UserTonerOverride::getInstance();
-
-            $tonerOverride = null;
-            /*
-             * We can never have overrides on an unknown device
-             */
-            if ($this->id > 0)
-            {
-                $tonerOverride = $userTonerOverrideMapper->findOverrideForToner(Zend_Auth::getInstance()->getIdentity()->id, $this->id);
-            }
-            // If we found a toner override, apply it
-            if ($tonerOverride)
-            {
-                $this->cost = $tonerOverride->overrideTonerPrice;
-            }
-
-            $this->_overridesProcessed = true;
-        }
-    }
-
-
-    /**
-     * Deprecated Method.
-     *
-     * @deprecated
-     * @return Proposalgen_Model_Toner[]
-     * @throws BadMethodCallException
-     */
-    public static function getDefaultToners ()
-    {
-        throw new BadMethodCallException('Default toners are now deprecated since master devices require at least 1 set of toners to be defined.');
-    }
-
-    /**
      * @return stdClass
      * @throws Exception
      */
