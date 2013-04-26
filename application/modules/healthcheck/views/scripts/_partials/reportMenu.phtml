@@ -3,8 +3,8 @@
         <div class="container navbar-container">
             <div class="navbar-form pull-left">
                 <div class="btn-group">
-                    <form class="form-inline" method="POST" action="<?php echo $this->url(array('action' => 'index', 'controller' => 'report_index')); ?>">
-                        <button name="goBack" id="goBack" type="submit" class="btn btn-inverse"><i class="icon-arrow-left icon-white"></i> Go Back</button>
+                    <form class="form-inline" method="" action="<?php echo $this->url(array('action' => 'settings', 'controller' => 'index')); ?>">
+                        <button name="goBack" id="goBack" class="btn btn-inverse"><i class="icon-arrow-left icon-white"></i> Go Back</button>
                         <select id="reportNavigator" style='margin-top: 2px;'>
                             <?php foreach ($this->availableReports as $report) : ?>
                                 <option value='<?php echo $report['url']; ?>' <?php echo ($report['active']) ? "selected='selected'" : ""; ?>><?php echo $report['pagetitle']; ?></option>
