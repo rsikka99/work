@@ -17,15 +17,13 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
         {
             $this->clearCacheForReport();
             $this->view->optimization = $this->getOptimizationViewModel();
+            $this->view->availableReports['DealerOptimization']['active'] = true;
+            $this->view->hardwareOptimization                             = $this->_hardwareOptimization;
         }
         catch (Exception $e)
         {
             throw new Exception("Couldn't generate hardware optimization.", 0, $e);
         }
-
-
-        $this->view->availableReports['DealerOptimization']['active'] = true;
-        $this->view->hardwareOptimization                             = $this->_hardwareOptimization;
     }
 
     /**
