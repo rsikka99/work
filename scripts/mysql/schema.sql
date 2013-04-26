@@ -1506,8 +1506,7 @@ CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
     `laborCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `partsCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `adminCostPerPage` DOUBLE NULL DEFAULT NULL ,
-    `assessmentReportMargin` DOUBLE NULL DEFAULT NULL ,
-    `grossMarginReportMargin` DOUBLE NULL DEFAULT NULL ,
+    `healthcheckMargin` DOUBLE NULL DEFAULT NULL ,
     `monthlyLeasePayment` DOUBLE NULL DEFAULT NULL ,
     `defaultPrinterCost` DOUBLE NULL DEFAULT NULL ,
     `leasedBwCostPerPage` DOUBLE NULL DEFAULT NULL ,
@@ -1515,13 +1514,9 @@ CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
     `mpsBwCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `mpsColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `kilowattsPerHour` DOUBLE NULL DEFAULT NULL ,
-    `assessmentPricingConfigId` INT(11) NULL DEFAULT NULL ,
-    `grossMarginPricingConfigId` INT(11) NULL DEFAULT NULL ,
+    `healthcheckPricingConfigId` INT(11) NULL DEFAULT NULL ,
     `reportDate` DATETIME NULL DEFAULT NULL ,
-    `targetMonochromeCostPerPage` DOUBLE NULL DEFAULT NULL ,
-    `targetColorCostPerPage` DOUBLE NULL DEFAULT NULL ,
     `costThreshold` DOUBLE NULL DEFAULT NULL ,
-    `replacementPricingConfigId` INT(11) NULL DEFAULT NULL ,
     `pageCoverageMonochrome` INT(11) NULL DEFAULT NULL ,
     `pageCoverageColor` INT(11) NULL DEFAULT NULL ,
     `averageItHourlyRate` DOUBLE NULL DEFAULT NULL ,
@@ -1530,24 +1525,12 @@ CREATE  TABLE IF NOT EXISTS `healthcheck_settings` (
     `costToExecuteSuppliesOrder` DOUBLE NULL DEFAULT NULL ,
     `numberOfSupplyOrdersPerMonth` DOUBLE NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `healthcheck_settings_ibfk_1_idx` (`assessmentPricingConfigId` ASC) ,
-    INDEX `healthcheck_settings_ibfk_2_idx` (`grossMarginPricingConfigId` ASC) ,
-    INDEX `healthcheck_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
+    INDEX `healthcheck_settings_ibfk_1_idx` (`healthcheckPricingConfigId` ASC) ,
     CONSTRAINT `healthcheck_settings_ibfk_1`
-    FOREIGN KEY (`assessmentPricingConfigId` )
+    FOREIGN KEY (`healthcheckPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE RESTRICT
-        ON UPDATE RESTRICT,
-    CONSTRAINT `healthcheck_settings_ibfk_2`
-    FOREIGN KEY (`grossMarginPricingConfigId` )
-    REFERENCES `pricing_configs` (`id` )
-        ON DELETE RESTRICT
-        ON UPDATE RESTRICT,
-    CONSTRAINT `healthcheck_settings_ibfk_3`
-    FOREIGN KEY (`replacementPricingConfigId` )
-    REFERENCES `pricing_configs` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
+        ON UPDATE RESTRICT)
     AUTO_INCREMENT = 2;
 
 

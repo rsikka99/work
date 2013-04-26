@@ -57,7 +57,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      *
      * @var Proposalgen_Model_Report_Setting
      */
-    protected $_reportSettings;
+    protected $_healthcheckSettings;
 
     /**
      * The report steps for this proposal
@@ -164,12 +164,12 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      */
     public function getHealthcheckSettings ()
     {
-        if (!isset($this->_reportSettings))
+        if (!isset($this->_healthcheckSettings))
         {
-            $this->_reportSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
+            $this->_healthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
         }
 
-        return $this->_reportSettings;
+        return $this->_healthcheckSettings;
     }
 
     /**
@@ -179,9 +179,9 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      *
      * @return Healthcheck_Model_Healthcheck
      */
-    public function setReportSettings ($_reportSettings)
+    public function setHealthcheckSettings ($_reportSettings)
     {
-        $this->_reportSettings = $_reportSettings;
+        $this->_healthcheckSettings = $_reportSettings;
 
         return $this;
     }

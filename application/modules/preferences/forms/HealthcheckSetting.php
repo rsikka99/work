@@ -66,7 +66,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                             'validators' => $coverageValidator
                                                        ));
         // Health Check Elements
-        $this->addElement('text', 'assessmentReportMargin', array(
+        $this->addElement('text', 'healthcheckMargin', array(
                                                                  'label'      => 'Pricing Margin',
                                                                  'append'     => '%',
                                                                  'validators' => $marginValidator
@@ -122,7 +122,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
-        $assessmentPricingConfig = $this->createElement('select', 'assessmentPricingConfigId', array(
+        $healthcehckPricingConfig = $this->createElement('select', 'healthcheckPricingConfigId', array(
                                                                                                     'label' => 'Toner Preference',
                                                                                                     'class' => 'span3 '
                                                                                                ));
@@ -142,7 +142,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
 
         $this->addDisplayGroup(array('pageCoverageMonochrome',
                                      'pageCoverageColor',
-                                     'assessmentReportMargin',
+                                     'healthcheckMargin',
                                      'monthlyLeasePayment',
                                      'defaultPrinterCost',
                                      'leasedBwCostPerPage',
@@ -150,7 +150,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                      'mpsBwCostPerPage',
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
-                                     $assessmentPricingConfig,
+                                     $healthcehckPricingConfig,
                                      'adminCostPerPage',
                                      'laborCostPerPage',
                                      'partsCostPerPage',
@@ -197,7 +197,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
         {
             $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
         }
-        $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
+        $healthcehckPricingConfig->addMultiOptions($pricingConfigOptions);
     }
 
     /**

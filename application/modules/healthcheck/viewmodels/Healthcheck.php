@@ -29,7 +29,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $User;
     protected $DealerCompany;
     protected $CompanyMargin;
-    protected $ReportMargin;
+    protected $healthcheckMargin;
     protected $MaximumMonthlyPrintVolume;
     protected $PageCounts;
     protected $Percentages;
@@ -189,11 +189,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($healthcheckSettings->actualPageCoverageColor / 100);
 
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
-        Proposalgen_Model_MasterDevice::setPricingConfig($healthcheckSettings->getAssessmentPricingConfig());
+        Proposalgen_Model_MasterDevice::setPricingConfig($healthcheckSettings->getHealthcheckPricingConfig());
         $pricingConfig                  = new Proposalgen_Model_PricingConfig();
         $pricingConfig->pricingConfigId = Proposalgen_Model_PricingConfig::OEM;
         Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($pricingConfig);
-        Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$healthcheckSettings->assessmentReportMargin)) / 100));
+        Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$healthcheckSettings->healthcheckMargin)) / 100));
 
         Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
     }
@@ -230,12 +230,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function getHealthcheckMargin ()
     {
-        if (!isset($this->ReportMargin))
+        if (!isset($this->healthcheckMargin))
         {
-            $this->ReportMargin = 1 - ((((float)$this->healthcheck->getHealthcheckSettings()->assessmentReportMargin)) / 100);
+            $this->healthcheckMargin = $this->healthcheck->getHealthcheckSettings()->healthcheckMargin;
         }
 
-        return $this->ReportMargin;
+        return $this->healthcheckMargin;
     }
 
     /**
@@ -1009,8 +1009,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
+            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
+            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
             $this->_averageOemOnlyCostPerPage   = $costPerPage;
         }
 
@@ -1047,8 +1047,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
                 }
             }
-            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->assessmentReportMargin);
+            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
+            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->healthcheck->getHealthcheckSettings()->healthcheckMargin);
             $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
         }
 

@@ -63,14 +63,8 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      *
      * @var int
      */
-    public $assessmentReportMargin;
+    public $healthcheckMargin;
 
-    /**
-     * The margin applied to the gross margin
-     *
-     * @var int
-     */
-    public $grossMarginReportMargin;
 
     /**
      * The monthly lease payment for calculation with leased printers
@@ -157,32 +151,10 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      *
      * @var int
      */
-    public $assessmentPricingConfigId;
+    public $healthcheckPricingConfigId;
 
-    public $replacementPricingConfigId;
+    protected $_healthcheckPricingConfig;
 
-    /**
-     * @var float
-     */
-    public $costThreshold;
-
-    /**
-     * The id of the gross margin pricing configuration
-     *
-     * @var int
-     */
-    public $grossMarginPricingConfigId;
-
-    public $targetMonochromeCostPerPage;
-    public $targetColorCostPerPage;
-    protected $_assessmentPricingConfig;
-
-    /**
-     * The gross margin pricing configuration
-     *
-     * @var Proposalgen_Model_PricingConfig
-     */
-    protected $_grossMarginPricingConfig;
 
     /**
      * Pricing config used for designated which tones to use for replacement devices
@@ -249,13 +221,9 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
-        if (isset($params->assessmentReportMargin) && !is_null($params->assessmentReportMargin))
+        if (isset($params->healthcheckMargin) && !is_null($params->healthcheckMargin))
         {
-            $this->assessmentReportMargin = $params->assessmentReportMargin;
-        }
-        if (isset($params->grossMarginReportMargin) && !is_null($params->grossMarginReportMargin))
-        {
-            $this->grossMarginReportMargin = $params->grossMarginReportMargin;
+            $this->healthcheckMargin = $params->healthcheckMargin;
         }
         if (isset($params->monthlyLeasePayment) && !is_null($params->monthlyLeasePayment))
         {
@@ -285,25 +253,9 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->kilowattsPerHour = $params->kilowattsPerHour;
         }
-        if (isset($params->assessmentPricingConfigId) && !is_null($params->assessmentPricingConfigId))
+        if (isset($params->healthcheckPricingConfigId) && !is_null($params->healthcheckPricingConfigId))
         {
-            $this->assessmentPricingConfigId = $params->assessmentPricingConfigId;
-        }
-        if (isset($params->grossMarginPricingConfigId) && !is_null($params->grossMarginPricingConfigId))
-        {
-            $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
-        }
-        if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
-        {
-            $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
-        }
-        if (isset($params->targetColorCostPerPage) && !is_null($params->targetColorCostPerPage))
-        {
-            $this->targetColorCostPerPage = $params->targetColorCostPerPage;
-        }
-        if (isset($params->costThreshold) && !is_null($params->costThreshold))
-        {
-            $this->costThreshold = $params->costThreshold;
+            $this->healthcheckPricingConfigId = $params->healthcheckPricingConfigId;
         }
         if (isset($params->averageItHourlyRate) && !is_null($params->averageItHourlyRate))
         {
@@ -316,10 +268,6 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         if (isset($params->costOfLabor) && !is_null($params->costOfLabor))
         {
             $this->costOfLabor = $params->costOfLabor;
-        }
-        if (isset($params->replacementPricingConfigId) && !is_null($params->replacementPricingConfigId))
-        {
-            $this->replacementPricingConfigId = $params->replacementPricingConfigId;
         }
         if (isset($params->costToExecuteSuppliesOrder) && !is_null($params->costToExecuteSuppliesOrder))
         {
@@ -345,8 +293,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "laborCostPerPage"             => $this->laborCostPerPage,
             "partsCostPerPage"             => $this->partsCostPerPage,
             "adminCostPerPage"             => $this->adminCostPerPage,
-            "assessmentReportMargin"       => $this->assessmentReportMargin,
-            "grossMarginReportMargin"      => $this->grossMarginReportMargin,
+            "healthcheckMargin"       => $this->healthcheckMargin,
             "monthlyLeasePayment"          => $this->monthlyLeasePayment,
             "defaultPrinterCost"           => $this->defaultPrinterCost,
             "leasedBwCostPerPage"          => $this->leasedBwCostPerPage,
@@ -354,56 +301,42 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "mpsBwCostPerPage"             => $this->mpsBwCostPerPage,
             "mpsColorCostPerPage"          => $this->mpsColorCostPerPage,
             "kilowattsPerHour"             => $this->kilowattsPerHour,
-            "assessmentPricingConfigId"    => $this->assessmentPricingConfigId,
-            "grossMarginPricingConfigId"   => $this->grossMarginPricingConfigId,
-            "costThreshold"                => $this->costThreshold,
-            "targetMonochromeCostPerPage"  => $this->targetMonochromeCostPerPage,
-            "targetColorCostPerPage"       => $this->targetColorCostPerPage,
+            "healthcheckPricingConfigId"    => $this->healthcheckPricingConfigId,
             "averageItHourlyRate"          => $this->averageItHourlyRate,
             "hoursSpentOnIt"               => $this->hoursSpentOnIt,
             "costOfLabor"                  => $this->costOfLabor,
-            "replacementPricingConfigId"   => $this->replacementPricingConfigId,
             "costToExecuteSuppliesOrder"   => $this->costToExecuteSuppliesOrder,
             "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
         );
     }
 
     /**
-     * Gets the assessment pricing configuration object
+     * Gets the healthcheck pricing configuration object
      *
      * @return Proposalgen_Model_PricingConfig
      */
-    public function getAssessmentPricingConfig ()
+    public function getHealthcheckPricingConfig ()
     {
-        if (!isset($this->_assessmentPricingConfig))
+        if (!isset($this->_healthcheckPricingConfig))
         {
-            $this->_assessmentPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->assessmentPricingConfigId);
+            $this->_healthcheckPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->healthcheckPricingConfigId);
         }
 
-        return $this->_assessmentPricingConfig;
+        return $this->_healthcheckPricingConfig;
     }
 
-    public function getReplacementPricingConfig ()
-    {
-        if (!isset($this->_replacementPricingConfig))
-        {
-            $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
-        }
-
-        return $this->_replacementPricingConfig;
-    }
 
     /**
-     * Sets the assessment pricing configuration object
+     * Sets the healthcheck pricing configuration object
      *
-     * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
+     * @param $HealthcheckPricingConfig Proposalgen_Model_PricingConfig
      *                                 The pricing configuration to set
      *
      * @return \Proposalgen_Model_Healthcheck_Setting
      */
-    public function setAssessmentPricingConfig ($AssessmentPricingConfig)
+    public function setHealthcheckPricingConfig ($HealthcheckPricingConfig)
     {
-        $this->_assessmentPricingConfig = $AssessmentPricingConfig;
+        $this->_healthcheckPricingConfig = $HealthcheckPricingConfig;
 
         return $this;
     }
