@@ -63,6 +63,11 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
+                $this->_form->getElement("averageItHourlyRate")->setDescription($populateSettings["averageItHourlyRate"]);
+                $this->_form->getElement("hoursSpentOnIt")->setDescription(($populateSettings["hoursSpentOnIt"] ? $populateSettings["hoursSpentOnIt"] : "15 minutes per week per printer"));
+                $this->_form->getElement("costOfLabor")->setDescription(($populateSettings["costOfLabor"] ? $populateSettings["costOfLabor"] : "$200 per printer"));
+                $this->_form->getElement("costToExecuteSuppliesOrder")->setDescription($populateSettings["costToExecuteSuppliesOrder"]);
+                $this->_form->getElement("numberOfSupplyOrdersPerMonth")->setDescription($populateSettings["numberOfSupplyOrdersPerMonth"]);
                 $this->_form->getElement("healthcheckPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['healthcheckPricingConfigId']]);
                 // Re-load the settings into Healthcheck settings
                 $populateSettings = $this->_defaultSettings;

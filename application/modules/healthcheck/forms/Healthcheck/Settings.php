@@ -262,7 +262,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->pageCoverageMonochrome, 2))
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage);
@@ -281,7 +281,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('style', 'text-align: right')
             ->setAttrib('id', 'actualPageCoverageColor')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->pageCoverageColor, 2))
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage_color);
