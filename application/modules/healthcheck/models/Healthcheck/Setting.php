@@ -59,7 +59,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $adminCostPerPage;
 
     /**
-     * The margin applied to the assessment
+     * The margin applied to the healthcheck
      *
      * @var int
      */
@@ -293,7 +293,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "laborCostPerPage"             => $this->laborCostPerPage,
             "partsCostPerPage"             => $this->partsCostPerPage,
             "adminCostPerPage"             => $this->adminCostPerPage,
-            "healthcheckMargin"       => $this->healthcheckMargin,
+            "healthcheckMargin"            => $this->healthcheckMargin,
             "monthlyLeasePayment"          => $this->monthlyLeasePayment,
             "defaultPrinterCost"           => $this->defaultPrinterCost,
             "leasedBwCostPerPage"          => $this->leasedBwCostPerPage,
@@ -301,7 +301,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "mpsBwCostPerPage"             => $this->mpsBwCostPerPage,
             "mpsColorCostPerPage"          => $this->mpsColorCostPerPage,
             "kilowattsPerHour"             => $this->kilowattsPerHour,
-            "healthcheckPricingConfigId"    => $this->healthcheckPricingConfigId,
+            "healthcheckPricingConfigId"   => $this->healthcheckPricingConfigId,
             "averageItHourlyRate"          => $this->averageItHourlyRate,
             "hoursSpentOnIt"               => $this->hoursSpentOnIt,
             "costOfLabor"                  => $this->costOfLabor,
@@ -330,7 +330,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      * Sets the healthcheck pricing configuration object
      *
      * @param $HealthcheckPricingConfig Proposalgen_Model_PricingConfig
-     *                                 The pricing configuration to set
+     *                                  The pricing configuration to set
      *
      * @return \Proposalgen_Model_Healthcheck_Setting
      */
