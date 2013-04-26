@@ -102,17 +102,17 @@ $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('AGREEMENT ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section1}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('PAGE CHARGES AND OVERAGES ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section2}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('SERVICES AND SUPPLIES ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section3}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('DEVICE USAGE PAYMENTS ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section4}", $this->fontStyle->finePrint);
@@ -122,22 +122,22 @@ $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('REMOTE MONITORING ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section5}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('TAXES ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section6}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('DEFAULT AND REMEDIES ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section7}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('LAW/FORUM ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section8}", $this->fontStyle->finePrint);
 
-$cell->addTextBreak();
+$cell->addTextBreak(1);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('MISCELLANEOUS ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section9}", $this->fontStyle->finePrint);

@@ -142,13 +142,12 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $leasingSchema = $leasingSchemaTerm->getLeasingSchema();
             if ($leasingSchema)
             {
-                // Get all the ranges for the schema, and of course check to make sure theres at least 1
+                // Get all the ranges for the schema, and of course check to make sure there's at least 1
                 $leasingSchemaRanges = $leasingSchema->getRanges();
                 if (count($leasingSchemaRanges) > 0)
                 {
                     // Selected range will be set to the very last schema range if the lease value is too high.
                     $selectedRange = false;
-                    /* @var $leasingSchemaRange Quotegen_Model_LeasingSchemaRange */
                     foreach ($leasingSchemaRanges as $leasingSchemaRange)
                     {
                         $selectedRange = $leasingSchemaRange;
@@ -309,7 +308,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
      * @param Quotegen_Model_QuoteDeviceOption $quoteDeviceOption The quote device option that will be updated
      * @param Quotegen_Model_DeviceOption      $deviceOption      The option to update the quote device option with
      *
-     * @return Quotegen_Model_Option The updated quote device option
+     * @return Quotegen_Model_QuoteDeviceOption The updated quote device option
      */
     protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
     {
@@ -389,7 +388,6 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     public function initDocxContext ()
     {
         // Include php word and initialize a new instance
-        require_once('PHPWord.php');
         $this->view->phpword = new PHPWord();
     }
 
@@ -415,8 +413,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     /**
      * Clones a favorite device into a new quote device
      *
-     * @param Quotegen_Model_DeviceConfiguration $favoriteDevice The device configuration to clone
-     * @param int|float                          $defaultMargin  The margin to apply?
+     * @param int|Quotegen_Model_DeviceConfiguration $favoriteDevice The device configuration to clone
+     * @param int|float                              $defaultMargin  The margin to apply?
      *
      * @return int The quote device id, or false on error
      */

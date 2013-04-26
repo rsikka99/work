@@ -30,8 +30,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchemaRate to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchemaRate Quotegen_Model_LeasingSchemaRate
-     *                           The object to insert
+     * @param Quotegen_Model_LeasingSchemaRate $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -52,10 +51,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRate to the database.
      *
-     * @param $leasingSchemaRate Quotegen_Model_LeasingSchemaRate
-     *                           The leasingSchemaRate model to save to the database
-     * @param $primaryKey        mixed
-     *                           Optional: The original primary key, in case we're changing it
+     * @param  Quotegen_Model_LeasingSchemaRate $object     The leasingSchemaRate model to save to the database
+     * @param mixed                             $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */
@@ -116,8 +113,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     /**
      * Finds a leasingSchemaRate based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the leasingSchemaRate to find
+     * @param array $id The id of the leasingSchemaRate to find
      *
      * @return Quotegen_Model_LeasingSchemaRate
      */
@@ -274,7 +270,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Quotegen_Model_LeasingSchemaRate @object
+     * @param Quotegen_Model_LeasingSchemaRate $object
      *
      * @return array
      */

@@ -213,7 +213,7 @@ class Quotegen_Model_Mapper_LeasedQuote extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Quotegen_Model_LeasedQuote @object
+     * @param Quotegen_Model_LeasedQuote $object
      *
      * @return int
      */

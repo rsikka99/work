@@ -22,7 +22,7 @@
 	                    	<td style="text-align: right;"><?php echo number_format($quoteDeviceGroupDevice->quantity); ?></td>
 	                    	<td style="text-align: right;"><?php echo $this->currency($quoteDeviceGroupDevice->getQuoteDevice()->calculateTotalPrice()); ?></td>
 	                    </tr>
-	                    <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() > 0)) : ?>
+	                    <?php if (count($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions()) > 0) : ?>
 	                        <?php foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption) : /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */ ?>
 	                            <tr class="optionRow">
 	                                <td><?php echo $quoteDeviceOption->name; ?></td>

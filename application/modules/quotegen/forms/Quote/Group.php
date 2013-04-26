@@ -262,5 +262,3 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         return this;
     }
 }
-
-?>

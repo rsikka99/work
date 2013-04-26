@@ -56,6 +56,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
      *
      * @param int $quoteId
      * @param int $deviceId
+     *
+     * @return mixed
      */
     public function insertDeviceInDefaultGroup ($quoteId, $deviceId)
     {
@@ -144,8 +146,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     /**
      * Finds a template based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the template to find
+     * @param array $id The id of the template to find
      *
      * @return Quotegen_Model_QuoteDeviceGroupDevice
      */
@@ -248,7 +249,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     }
 
     /**
-     * @param Quotegen_Model_QuoteDeviceGroupDevice @object
+     * @param Quotegen_Model_QuoteDeviceGroupDevice $object
      *
      * @return array
      */
@@ -263,9 +264,9 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     /**
      * Gets all devices associated with a quote
      *
-     * @param $quoteDeviceId int
-     *                       The quote device group id
+     * @param int $quoteDeviceGroupId
      *
+     * @return \Quotegen_Model_QuoteDeviceGroupDevice[]
      */
     public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
     {

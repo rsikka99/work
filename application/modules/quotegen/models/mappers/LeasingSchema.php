@@ -30,8 +30,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchema to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $client Quotegen_Model_LeasingSchema
-     *                The object to insert
+     * @param Quotegen_Model_LeasingSchema $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -57,10 +56,8 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_LeasingSchema to the database.
      *
-     * @param $client     Quotegen_Model_LeasingSchema
-     *                    The client model to save to the database
-     * @param $primaryKey mixed
-     *                    Optional: The original primary key, in case we're changing it
+     * @param Quotegen_Model_LeasingSchema $object     The client model to save to the database
+     * @param mixed                        $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */
@@ -88,9 +85,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchema to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $client mixed
-     *                This can either be an instance of Quotegen_Model_LeasingSchema or the
-     *                primary key to delete
+     * @param  mixed $leasingSchema This can either be an instance of Quotegen_Model_LeasingSchema or the primary key to delete
      *
      * @return int The primary key of the new row
      */
@@ -218,7 +213,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
      *
      * @return array
      */
-    public function getWhereDealerId($dealerId)
+    public function getWhereDealerId ($dealerId)
     {
         return array(
             "{$this->col_dealerId} = ?" => $dealerId
@@ -226,7 +221,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Quotegen_Model_LeasingSchema @object
+     * @param Quotegen_Model_LeasingSchema $object
      *
      * @return int
      */
@@ -235,7 +230,7 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
-    public function getSchemasForDealer($dealerId)
+    public function getSchemasForDealer ($dealerId)
     {
         return $this->fetchAll($this->getWhereDealerId($dealerId));
     }

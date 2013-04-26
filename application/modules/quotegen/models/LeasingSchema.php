@@ -73,9 +73,9 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"   => $this->id,
-            "dealerId"   => $this->dealerId,
-            "name" => $this->name,
+            "id"       => $this->id,
+            "dealerId" => $this->dealerId,
+            "name"     => $this->name,
         );
     }
 
@@ -89,7 +89,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all terms for leasing schema
      *
-     * @return the $_terms
+     * @return Quotegen_Model_LeasingSchemaTerm[]
      */
     public function getTerms ()
     {
@@ -104,7 +104,9 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Sets all terms for leasing schema
      *
-     * @param multitype: $_terms
+     * @param Quotegen_Form_LeasingSchemaTerm[] $_terms
+     *
+     * @return Quotegen_Model_LeasingSchema
      */
     public function setTerms ($_terms)
     {
@@ -116,7 +118,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all ranges for leasing schema
      *
-     * @return the $_ranges
+     * @return Quotegen_Model_LeasingSchemaRange[]
      */
     public function getRanges ()
     {

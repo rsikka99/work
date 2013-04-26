@@ -18,19 +18,10 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     protected $_userId;
 
-    /**
-     * The namespace for our proposal generator
-     *
-     * @deprecated This will eventually be migrated to be in mps-tools session namespace
-     * @var Zend_Session_Namespace
-     */
-    protected $_proposalSession;
-
     public function init ()
     {
         /* Initialize action controller here */
         $this->_mpsSession      = new Zend_Session_Namespace('mps-tools');
-        $this->_proposalSession = new Zend_Session_Namespace('proposalgenerator_report');
         $this->_userId          = Zend_Auth::getInstance()->getIdentity()->id;
 
 
@@ -137,7 +128,6 @@ class Default_IndexController extends Tangent_Controller_Action
 
                 if ($inArray->isValid($assessmentId))
                 {
-                    $this->_proposalSession->reportId = $assessmentId;
                     $this->_mpsSession->assessmentId  = $assessmentId;
                     $this->redirector('index', 'index', 'assessment');
                 }

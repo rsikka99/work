@@ -1,21 +1,21 @@
 <?php
 class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 {
-
-    /*
-     *
-        */
+    /**
+     * Constants for replacement actions for the solution
+     */
     const ACTION_KEEP    = 'Keep';
     const ACTION_REPLACE = 'Replace';
     const ACTION_RETIRE  = 'Retire';
 
-    /*
-     *
+    /**
+     * These constants help determine whether or not to retire a device
      */
-    const RETIREMENT_AGE           = 10;
-    const RETIREMENT_MAXPAGECOUNT  = 500;
-    const REPLACEMENT_AGE          = 10;
-    const REPLACEMENT_MINPAGECOUNT = 500;
+    const RETIREMENT_AGE             = 10;
+    const RETIREMENT_MAX_PAGE_COUNT  = 500;
+    const REPLACEMENT_AGE            = 10;
+    const REPLACEMENT_MIN_PAGE_COUNT = 500;
+
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
      *
@@ -747,6 +747,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
+     * @param float                                $margin
+     *
      * @return float
      */
     public function getCostOfInkAndToner ($costPerPageSetting, $margin)
@@ -761,6 +763,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float                                $margin
      *
      * @return float
      */
@@ -768,7 +771,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $margin = (1 - $margin) * 100;
             $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount(), $margin);
         }
 
@@ -776,13 +778,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float                                $margin
+     *
      * @return float
      */
     public function getCostOfColorInkAndToner ($costPerPageSetting, $margin)
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $margin = (1 - $margin) * 100;
             $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getAverageMonthlyColorPageCount(), $margin);
         }
 
@@ -824,16 +828,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function getUsage ()
+    public function getUsage ($pricingConfiguration)
     {
         if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by its maximum
-            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) > 0)
             {
-                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration);
             }
         }
 
@@ -841,16 +847,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function getLifeUsage ()
+    public function getLifeUsage ($pricingConfiguration)
     {
         if (!isset($this->_lifeUsage))
         {
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * 36 months)
-            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 36;
             if ($maximumLifeCount > 0)
             {
                 $this->_lifeUsage = $this->getLifePageCount() / $maximumLifeCount;
@@ -1325,11 +1333,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->Action))
         {
-            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT)
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
                 $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
-            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT)
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MIN_PAGE_COUNT)
             {
                 $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
@@ -1548,14 +1556,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * Returns percent of maximum recommended print volume they are printing.
      * If their recommended max is 1000, and they print 2000. This returns 200 (Without % Sign)
      *
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function calculatePercentOfMaximumRecommendedMaxVolume ()
+    public function calculatePercentOfMaximumRecommendedMaxVolume ($pricingConfiguration)
     {
         $percent = 0;
-        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) > 0)
         {
-            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 100);
+            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 100);
         }
 
         return $percent;
@@ -1577,11 +1587,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the max estimated life count
      *
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return int
      */
-    public function calculateEstimatedMaxLifeCount ()
+    public function calculateEstimatedMaxLifeCount ($pricingConfiguration)
     {
-        return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 36;
     }
 
     /**

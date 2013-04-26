@@ -358,6 +358,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
@@ -368,7 +370,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting, $this->getHealthcheckMargin());
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -377,6 +379,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndToner ($costPerPageSetting)
@@ -515,7 +519,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $maxVolume = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
             }
             $this->MaximumMonthlyPrintVolume = $maxVolume;
         }
@@ -634,7 +638,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -655,7 +659,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesOverusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())
+                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
                 {
                     $devicesOverusedCount++;
                 }
@@ -676,7 +680,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -697,7 +701,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getUsage() > 1)
+                if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > 1)
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -742,12 +746,31 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function ascendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage() == $deviceB->getUsage())
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage() < $deviceB->getUsage()) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort a device based on
+     * monthly cost
+     *
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
+     */
+    public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
+    {
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()))
+        {
+            return 0;
+        }
+
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin())) ? -1 : 1;
     }
 
     /**
@@ -760,12 +783,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function descendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage() == $deviceB->getUsage())
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage() > $deviceB->getUsage()) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
     }
 
     /**
@@ -780,10 +803,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
-                    if ($deviceInstance->getUsage() < 1)
+                    if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < 1)
                     {
 
                         //Check to see if it is under the age requirements
@@ -1185,7 +1208,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return int
      */
     public function getNumberOfDevicesReportingTonerLevels ()
     {
@@ -1198,7 +1221,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return int
      */
     public function getNumberOfDevicesNotReportingTonerLevels ()
     {

@@ -479,7 +479,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $postData ["new_printer"]);
                                     $master_device_flagged = $master_deviceTable->fetchRow($where);
 
-                                    if (count($master_device_flagged) > 0)
+                                    if (count($master_device_flagged->toArray()) > 0)
                                     {
                                         $master_device_id = $master_device_flagged ['id'];
 //                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
@@ -515,7 +515,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                                     $where            = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
                                                     $device_toners    = $device_tonerTable->fetchRow($where);
 
-                                                    if (count($device_toners) == 0)
+                                                    if (count($device_toners->toArray()) == 0)
                                                     {
                                                         $device_tonerTable->insert($device_tonerData);
                                                     }
@@ -581,7 +581,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                         $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                         $master_device      = $master_deviceTable->fetchRow($where);
 
-                        if (count($master_device) > 0)
+                        if (count($master_device->toArray()) > 0)
                         {
 
                             $printer_model = $master_device ['modelName'];
@@ -1178,7 +1178,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $formData ["new_printer"]);
                                         $master_device_flagged = $master_deviceTable->fetchRow($where);
 
-                                        if (count($master_device_flagged) > 0)
+                                        if (count($master_device_flagged->toArray()) > 0)
                                         {
                                             $master_device_id = $master_device_flagged ['id'];
 //                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
@@ -1211,7 +1211,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                                         $where            = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
                                                         $device_toners    = $device_tonerTable->fetchRow($where);
 
-                                                        if (count($device_toners) == 0)
+                                                        if (count($device_toners->toArray()) == 0)
                                                         {
                                                             $device_tonerTable->insert($device_tonerData);
                                                         }

@@ -9,10 +9,11 @@ $linkToFile = $this->baseUrl('/downloads/' . $filename);
 
 // This may not need to be removed from here
 // Base path to the files used to render the document
-$basePath = 'quote/reports/contract/docx';
+$basePath            = 'quote/reports/contract/docx';
 $commonPartsBasePath = 'quote/reports/common/docx/contract';
 
-$this->quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+$this->quote = $this->Quote();
+/* @var $quote Quotegen_Model_Quote */
 
 /* @var $phpword PHPWord */
 $phpword = $this->phpword;
@@ -33,7 +34,7 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$section = $phpword->createSection();
+$section       = $phpword->createSection();
 $sectionStyles = $section->getSettings();
 $sectionStyles->setMarginLeft(300);
 $sectionStyles->setMarginBottom(300);
@@ -66,10 +67,10 @@ try
 {
     $objWriter->save($savePath);
 }
-catch ( Exception $e )
+catch (Exception $e)
 {
     echo "Error Writing to File.";
     die();
 }
-?>
-<?php echo $this->baseUrl($linkToFile); ?>
+
+echo $this->baseUrl($linkToFile);

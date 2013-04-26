@@ -77,6 +77,8 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
      * Sets the quote object
      *
      * @param Quotegen_Model_Quote $_quote
+     *
+     * @return $this
      */
     public function setQuote ($_quote)
     {
@@ -104,6 +106,8 @@ class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
      * Sets the lease term object
      *
      * @param Quotegen_Model_LeasingSchemaTerm $_leaseTerm
+     *
+     * @return $this
      */
     public function setLeaseTerm ($_leaseTerm)
     {

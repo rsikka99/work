@@ -53,7 +53,7 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Quotegen_Model_QuoteLeaseTerm @object
+     * @param Quotegen_Model_QuoteLeaseTerm $object
      *
      * @return array
      */

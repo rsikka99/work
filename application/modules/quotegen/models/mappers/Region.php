@@ -223,6 +223,8 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
      * Gets the region by id
      *
      * @param int $id
+     *
+     * @return \Quotegen_Model_Region
      */
     public function getById ($id)
     {
@@ -230,7 +232,7 @@ class Quotegen_Model_Mapper_Region extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param @Quotegen_Model_Region $object
+     * @param Quotegen_Model_Region $object
      *
      * @return int
      */

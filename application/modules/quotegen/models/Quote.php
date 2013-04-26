@@ -343,7 +343,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the pricing config object
      *
      * @param $_pricingConfig Proposalgen_Model_PricingConfig
-     *                        The new princing config.
+     *                        The new pricing config.
+     *
+     * @return $this
      */
     public function setPricingConfig ($_pricingConfig)
     {
@@ -375,6 +377,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      * Sets the leasing schema term
      *
      * @param $_leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm
+     *
+     * @return $this
      */
     public function setLeasingSchemaTerm ($_leasingSchemaTerm)
     {
@@ -401,7 +405,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets all the quote device configurations for a quote
      *
-     * @param multitype:Quotegen_Model_QuoteDevice $_quoteDevices
+     * @param Quotegen_Model_QuoteDevice[] $_quoteDevices
+     *
+     * @return $this
      */
     public function setQuoteDevices ($_quoteDevices)
     {
@@ -715,7 +721,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Gets the cost per page for monochrome pages for the whole quote
      *
-     * @var int the calcuated quote monochrome cpp
+     * @return float
      */
     public function calculateMonochromeCostPerPage ()
     {
@@ -765,7 +771,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Gets the cost per page for color pages for the whole quote
      *
-     * @var int the calcuated quote color cpp
+     * @return float
      */
     public function calculateColorCostPerPage ()
     {
@@ -773,9 +779,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $colorCostPerPage = 0;
         // The quantity of color pages that have been assigned in this quote
         $colorTotal = 0;
-        // The accumication of cost for color pages per device
+        // The accumulation of cost for color pages per device
         $colorPageCostTotal = 0;
-        // The total cpp for all quote devices, used for calcualtion with no pages
+        // The total cpp for all quote devices, used for calculation with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
         $totalDevices = 0;

@@ -78,6 +78,8 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      *
      * @param Quotegen_Model_Device $_device
      *            The device.
+     *
+     * @return $this
      */
     public function setDevice ($_device)
     {
@@ -106,6 +108,7 @@ class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
      *
      * @param Quotegen_Model_QuoteDevice $_quoteDevice
      *            The quote device.
+     * @return $this
      */
     public function setQuoteDevice ($_quoteDevice)
     {

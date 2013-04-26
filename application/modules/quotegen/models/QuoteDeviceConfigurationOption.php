@@ -91,6 +91,8 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
      * Sets the option associated with the device configuration option
      *
      * @param Quotegen_Model_DeviceOption $_deviceOption
+     *
+     * @return $this
      */
     public function setDeviceOption ($_deviceOption)
     {
@@ -119,6 +121,8 @@ class Quotegen_Model_QuoteDeviceConfigurationOption extends My_Model_Abstract
      *
      * @param Quotegen_Model_QuoteDeviceOption $_quoteDeviceOption
      *            The new quote device option
+     *
+     * @return $this
      */
     public function setQuoteDeviceOption ($_quoteDeviceOption)
     {

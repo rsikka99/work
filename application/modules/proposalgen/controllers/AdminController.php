@@ -659,7 +659,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $where  = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
                     $result = $device_tonerTable->fetchRow($where);
 
-                    if (count($result) == 0)
+                    if (count($result->toArray()) == 0)
                     {
                         $device_tonerTable->insert($device_tonerData);
                         $message = "The toner has been added.";
@@ -685,7 +685,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $where  = $tonerTable->getAdapter()->quoteInto('(toner_SKU = "' . $toner_sku . '") OR (manufacturer_id = ' . $manufacturer_id . ' AND tonerColorId = ' . $toner_color_id . ' AND toner_yield = ' . $toner_yield . ')', null);
                     $toners = $tonerTable->fetchRow($where);
 
-                    if (count($toners) > 0)
+                    if (count($toners->toArray()) > 0)
                     {
                         $toner_id = $toners ['toner_id'];
                     }
@@ -1182,7 +1182,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $manufacturer = $manufacturersTable->fetchRow($where);
                         if ($manufacturer_id > 0)
                         {
-                            if (count($manufacturer) > 0)
+                            if (count($manufacturer->toArray()) > 0)
                             {
                                 $this->_flashMessenger->addMessage(array(
                                                                         "error" => 'Manufacturer "' . ucwords(strtolower($manufacturer_name)) . '" already exists.'
@@ -1199,7 +1199,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            if (count($manufacturer) > 0)
+                            if (count($manufacturer->toArray()) > 0)
                             {
                                 if ($manufacturer ['isDeleted'] == 1)
                                 {
@@ -1320,7 +1320,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         try
         {
-            if (count($manufacturer) > 0)
+            if (count($manufacturer->toArray()) > 0)
             {
                 $formData = array(
                     'manufacturer_name'        => Trim(ucwords(strtolower($manufacturer ['fullname']))),
@@ -1428,7 +1428,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         catch (Exception $e)
         {
             throw new Exception("Passing exception up the chain.", 0, $e);
-            Throw new Exception($e->getMessage);
         }
         $this->sendJson($response);
     }
@@ -1754,11 +1753,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
             catch (Exception $e)
             {
-                throw new Exception("Passing Exception Up The Chain", null, $e);
                 $db->rollback();
-                $this->_flashMessenger->addMessage(array(
-                                                        "error" => "Error."
-                                                   ));
+                Tangent_Log::logException($e);
+                $this->_flashMessenger->addMessage(array("error" => "Error getting matchups."));
             }
         }
     }
@@ -2271,7 +2268,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $manufacturer = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($manufacturerId);
             if ($manufacturer instanceof Proposalgen_Model_Manufacturer)
             {
-                $filterByManufacturer = $manufacturer;
+                $filterByManufacturer = $manufacturer->id;
             }
         }
 

@@ -203,7 +203,7 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
          * Launch Date
          */
         $minYear    = 1950;
-        $maxYear    = date('Y') + 2;
+        $maxYear    = ((int)date('Y')) + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
 
         $launchDate->setJQueryParam('dateFormat', 'yy-mm-dd')

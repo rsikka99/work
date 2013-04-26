@@ -511,7 +511,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
                                         $printer = $table->fetchRow($where);
 
-                                        if (count($printer) > 0)
+                                        if (count($printer->toArray()) > 0)
                                         {
                                             // save into array
                                             $final_devices [0] = $master_device_id;
@@ -541,7 +541,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                                         $toner = $table->fetchRow($where);
 
-                                        if (count($toner) > 0)
+                                        if (count($toner->toArray()) > 0)
                                         {
                                             // get current costs
 //                                                $current_toner_price = $toner ['systemCost'];

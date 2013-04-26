@@ -29,7 +29,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchemaRange to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchemaRange Quotegen_Model_LeasingSchemaRange
+     * @param Quotegen_Model_LeasingSchemaRange $object
      *                            The object to insert
      *
      * @return int The primary key of the new row
@@ -56,10 +56,8 @@ class Quotegen_Model_Mapper_LeasingSchemaRange extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_LeasingSchemaRange to the database.
      *
-     * @param $leasingSchemaRange Quotegen_Model_LeasingSchemaRange
-     *                            The leasingSchemaRange model to save to the database
-     * @param $primaryKey         mixed
-     *                            Optional: The original primary key, in case we're changing it
+     * @param Quotegen_Model_LeasingSchemaRange $object     The leasingSchemaRange model to save to the database
+     * @param mixed                             $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */

@@ -156,7 +156,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
      */
     public function __construct ($hardwareOptimization)
     {
-        $this->_optimization = new Hardwareoptimization_ViewModel_Optimization($hardwareOptimization);
+        $this->_optimization         = new Hardwareoptimization_ViewModel_Optimization($hardwareOptimization);
         $this->_hardwareOptimization = $hardwareOptimization;
 
         // Set up the arrays of devices to be produced
@@ -459,7 +459,6 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
                 case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
                     $maximumSupplyCount += 1;
                     break;
-
             }
         }
 

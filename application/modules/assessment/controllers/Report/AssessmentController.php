@@ -69,7 +69,6 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
                 $assessmentViewModel = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);

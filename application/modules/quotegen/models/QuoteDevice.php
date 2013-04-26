@@ -229,7 +229,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $quoteDeviceConfiguration = Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->findByQuoteDeviceId($this->id);
             if ($quoteDeviceConfiguration)
             {
-                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDeviceConfiguration->masterDeviceId,Zend_Auth::getInstance()->getIdentity()->dealerId));
+                $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDeviceConfiguration->masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
             }
         }
 
@@ -241,6 +241,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @param Quotegen_Model_Device $_device
      *            The new device configuration.
+     *
+     * @return $this
      */
     public function setDevice ($_device)
     {
@@ -252,7 +254,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote device options
      *
-     * @return Quotegen_Model_QuoteDeviceOption The quote device options
+     * @return Quotegen_Model_QuoteDeviceOption[]
      */
     public function getQuoteDeviceOptions ()
     {
@@ -269,6 +271,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @param Quotegen_Model_QuoteDeviceOption $_quoteDeviceOptions
      *            The new options for the device
+     *
+     * @return $this
      */
     public function setQuoteDeviceOptions ($_quoteDeviceOptions)
     {
@@ -297,6 +301,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @param Quotegen_Model_Quote $_quote
      *            The quote device group
+     *
+     * @return $this
      */
     public function setQuote ($_quote)
     {

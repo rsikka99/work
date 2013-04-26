@@ -33,7 +33,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     public $description;
 
     /**
-     * @var double
+     * @var float
      */
     public $cost;
 
@@ -153,6 +153,8 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
      * Sets the associated option.
      *
      * @param Quotegen_Model_DeviceOption $_option
+     *
+     * @return $this
      */
     public function setOption ($_option)
     {

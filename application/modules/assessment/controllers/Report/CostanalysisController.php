@@ -41,7 +41,6 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $this->initCSVCostAnalysis();
                 break;
             case "docx" :
-                require_once('PHPWord.php');
                 $this->view->phpword    = new PHPWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->_helper->layout->disableLayout();

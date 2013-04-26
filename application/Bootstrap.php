@@ -159,4 +159,3 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Zend_Currency', $currency);
     }
 }
-

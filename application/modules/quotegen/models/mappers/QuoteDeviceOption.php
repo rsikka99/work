@@ -29,8 +29,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_QuoteDeviceOption to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Quotegen_Model_QuoteDeviceOption
-     *                The object to insert
+     * @param Quotegen_Model_QuoteDeviceOption $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -236,7 +235,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     }
 
     /*
-     * @param Quotegen_Model_QuoteDeviceOption @object
+     * @param Quotegen_Model_QuoteDeviceOption $object
      * return int
      */
     public function getPrimaryKeyValueForObject ($object)

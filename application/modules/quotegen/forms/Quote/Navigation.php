@@ -147,5 +147,3 @@ class Quotegen_Form_Quote_Navigation extends Twitter_Bootstrap_Form
         ));
     }
 }
-
-?>

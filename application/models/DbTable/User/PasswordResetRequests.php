@@ -1,5 +1,4 @@
 <?php
-
 class Application_Model_DbTable_User_PasswordResetRequests extends Zend_Db_Table_Abstract
 {
     //put your code here
@@ -7,5 +6,3 @@ class Application_Model_DbTable_User_PasswordResetRequests extends Zend_Db_Table
     protected $_primary = 'id';
 
 }
-
-?>

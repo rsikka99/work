@@ -118,6 +118,8 @@ class Quotegen_Model_Device extends My_Model_Abstract
      *
      * @param number $_masterDeviceId
      *            The new master device id to set
+     *
+     * @return Quotegen_Model_Device
      */
     public function setMasterDeviceId ($_masterDeviceId)
     {
@@ -129,7 +131,7 @@ class Quotegen_Model_Device extends My_Model_Abstract
     /**
      * Get the array of options for the device
      *
-     * @return multitype:Quotegen_Model_DeviceOption The array of options
+     * @return Quotegen_Model_DeviceOption[]
      */
     public function getDeviceOptions ()
     {
@@ -144,7 +146,9 @@ class Quotegen_Model_Device extends My_Model_Abstract
     /**
      * Set a new array of options for the device
      *
-     * @param multitype: $_options
+     * @param Quotegen_Model_DeviceOption[] $_options
+     *
+     * @return Quotegen_Model_Device
      */
     public function setOptions ($_options)
     {

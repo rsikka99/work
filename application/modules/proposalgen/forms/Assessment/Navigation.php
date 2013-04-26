@@ -156,5 +156,3 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
                                                          ));
     }
 }
-
-?>

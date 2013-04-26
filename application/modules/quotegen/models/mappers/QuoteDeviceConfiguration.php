@@ -281,7 +281,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     }
 
     /**
-     * @param Quotegen_Model_QuoteDeviceConfiguration @object
+     * @param Quotegen_Model_QuoteDeviceConfiguration $object
      *
      * @return array
      */

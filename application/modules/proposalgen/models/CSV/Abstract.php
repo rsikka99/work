@@ -8,10 +8,10 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     protected $headerCount;
     protected $validateCSV;
     protected $data;
-    protected $errors = array ();
+    protected $errors = array();
     protected $baddata;
-    const FIELD_NOTREQUIRED = 0;
-    const FIELD_REQUIRED = 1;
+    const FIELD_NOTREQUIRED      = 0;
+    const FIELD_REQUIRED         = 1;
     const FIELD_REQUIRED_DEPENDS = 2;
 
     public function importCSV ($filename)
@@ -19,18 +19,18 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
         try
         {
             // Open the file
-            if (($handle = fopen($filename, "r")) !== FALSE)
+            if (($handle = fopen($filename, "r")) !== false)
             {
                 // Prime read to fetch headings
-                $row = fgetcsv($handle);
-                $headers = array ();
-                foreach ( $row as $header )
+                $row     = fgetcsv($handle);
+                $headers = array();
+                foreach ($row as $header)
                 {
                     $headers [] = strtolower(trim($header));
                 }
                 $this->headers = $headers;
-                
-                if ($this->headers === FALSE)
+
+                if ($this->headers === false)
                 {
                     throw new Exception("File did not have any data!");
                 }
@@ -41,14 +41,14 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                     {
                         // Fetch one row at a time
                         $rownumber = 0;
-                        while ( ($row = fgetcsv($handle, 1000, ",")) !== FALSE )
+                        while (($row = fgetcsv($handle, 1000, ",")) !== false)
                         {
-                            $rownumber ++;
+                            $rownumber++;
                             // In validate headers the headerCount got set.
                             // Rows should always have the same count
                             if ($this->headerCount === count($row))
                             {
-                                for($i = 0; $i < count($this->headers); $i ++)
+                                for ($i = 0; $i < count($this->headers); $i++)
                                 {
                                     $trimmedValue = trim($row [$i]);
                                     if (strlen($trimmedValue) > 0)
@@ -61,23 +61,23 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                                     }
                                 }
                                 $rowError = $this->checkRowForErrors($newRow);
-                                if ($rowError === FALSE)
+                                if ($rowError === false)
                                 {
                                     $this->data [] = $newRow;
                                 }
                                 else
                                 {
-                                    $this->baddata [] = array (
-                                            "Row $rownumber Excluded: " . $rowError, 
-                                            $newRow 
+                                    $this->baddata [] = array(
+                                        "Row $rownumber Excluded: " . $rowError,
+                                        $newRow
                                     );
                                 }
                             }
                             else
                             {
-                                $this->baddata [] = array (
-                                        $result = "Incorrect column count. (" . count($row) . " columns) Expected " . $this->headerCount, 
-                                        $row 
+                                $this->baddata [] = array(
+                                    $result = "Incorrect column count. (" . count($row) . " columns) Expected " . $this->headerCount,
+                                    $row
                                 );
                             }
                         }
@@ -86,7 +86,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                 fclose($handle);
             }
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
             throw new Exception("Error importing CSV", 0, $e);
         }
@@ -98,35 +98,39 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
         if (isset($this->validHeaders) && isset($this->headers))
         {
             // Normalize all the headers
-            foreach ( $this->headers as &$tempheader )
+            foreach ($this->headers as &$tempheader)
             {
                 $tempheader = strtolower(trim($tempheader));
             }
-            
-            foreach ( $this->validHeaders as $header => $requirement )
+
+            foreach ($this->validHeaders as $header => $requirement)
             {
-                if (! in_array($header, $this->headers) && $requirement == self::FIELD_REQUIRED)
+                if (!in_array($header, $this->headers) && $requirement == self::FIELD_REQUIRED)
                 {
-                    $this->errors [] = "Missing a required header - $header";
+                    $this->errors []  = "Missing a required header - $header";
                     $headingsAreValid = false;
                 }
             }
         }
+
         return $headingsAreValid;
     }
 
     protected function checkRowForErrors ($row)
     {
-        $result = FALSE;
+        $result = false;
         if ($this->getValidateCSV())
         {
             // Do validation here
         }
+
         return $result;
     }
 
     /**
      * Validates the columns of a particular data line
+     *
+     * @param $row
      *
      * @return bool Whether or not the column count is correct
      */
@@ -140,29 +144,34 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                 $validColumnCount = false;
             }
         }
+
         return $validColumnCount;
     }
 
     /**
      *
-     * @return the $validHeaders
+     * @return array
      */
     public function getValidHeaders ()
     {
-        if (! isset($this->validHeaders))
+        if (!isset($this->validHeaders))
         {
             $this->validHeaders = null;
         }
+
         return $this->validHeaders;
     }
 
     /**
      *
-     * @param $validHeaders field_type            
+     * @param array $validHeaders
+     *
+     * @return $this
      */
     public function setValidHeaders ($validHeaders)
     {
         $this->validHeaders = $validHeaders;
+
         return $this;
     }
 
@@ -172,20 +181,23 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
      */
     public function getHeaders ()
     {
-        if (! isset($this->headers))
+        if (!isset($this->headers))
         {
-            $this->headers = array ();
+            $this->headers = array();
         }
+
         return $this->headers;
     }
 
     /**
+     * @param array $headers
      *
-     * @param $headers field_type            
+     * @return $this
      */
     public function setHeaders ($headers)
     {
         $this->headers = $headers;
+
         return $this;
     }
 
@@ -195,20 +207,23 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
      */
     public function getValidateCSV ()
     {
-        if (! isset($this->validateCSV))
+        if (!isset($this->validateCSV))
         {
             $this->validateCSV = true;
         }
+
         return $this->validateCSV;
     }
 
     /**
+     * @param $validateCSV
      *
-     * @param $validateCSV field_type            
+     * @return $this
      */
     public function setValidateCSV ($validateCSV)
     {
         $this->validateCSV = $validateCSV;
+
         return $this;
     }
 
@@ -218,20 +233,23 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
      */
     public function getData ()
     {
-        if (! isset($this->data))
+        if (!isset($this->data))
         {
-            $this->data = array ();
+            $this->data = array();
         }
+
         return $this->data;
     }
 
     /**
+     * @param array $data
      *
-     * @param $data field_type            
+     * @return $this
      */
     public function setData ($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -241,20 +259,24 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
      */
     public function getBaddata ()
     {
-        if (! isset($this->baddata))
+        if (!isset($this->baddata))
         {
-            $this->baddata = array ();
+            $this->baddata = array();
         }
+
         return $this->baddata;
     }
 
     /**
      *
-     * @param $baddata field_type            
+     * @param $baddata
+     *
+     * @return $this
      */
     public function setBaddata ($baddata)
     {
         $this->baddata = $baddata;
+
         return $this;
     }
 }

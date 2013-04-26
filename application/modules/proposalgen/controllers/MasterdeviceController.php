@@ -118,7 +118,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         }
                         catch ( Exception $e )
                         {
-                            throw new Exception($e);
+                            Tangent_Log::logException($e);
                             $this->_flashMessenger->addMessage(array (
                                     'danger' => 'There was an error processing this request.  Please try again.' 
                             ));

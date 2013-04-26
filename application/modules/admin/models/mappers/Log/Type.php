@@ -114,7 +114,7 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the log_type to find
-     * @return void Admin_Model_Log_Type
+     * @return Admin_Model_Log_Type
      */
     public function find ($id)
     {
@@ -129,7 +129,7 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row = $result->current();
         $object = new Admin_Model_Log_Type($row->toArray());
@@ -149,14 +149,14 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL ORDER clause.
      * @param $offset int
      *            OPTIONAL An SQL OFFSET value.
-     * @return void Admin_Model_Log_Type
+     * @return Admin_Model_Log_Type
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
         $row = $this->getDbTable()->fetchRow($where, $order, $offset);
         if (is_null($row))
         {
-            return;
+            return false;
         }
         
         $object = new Admin_Model_Log_Type($row->toArray());
@@ -178,7 +178,7 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
      *            OPTIONAL An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
      *            OPTIONAL An SQL LIMIT offset.
-     * @return multitype:Admin_Model_Log_Type
+     * @return Admin_Model_Log_Type
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {

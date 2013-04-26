@@ -74,7 +74,7 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
     {
         return array(
             "masterDeviceId"   => $this->masterDeviceId,
-            "dealerId"   => $this->dealerId,
+            "dealerId"         => $this->dealerId,
             "optionId"         => $this->optionId,
             "includedQuantity" => $this->includedQuantity,
         );
@@ -100,6 +100,8 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
      *
      * @param Quotegen_Model_Option $_option
      *            The new option
+     *
+     * @return Quotegen_Model_DeviceOption
      */
     public function setOption ($_option)
     {
@@ -110,6 +112,8 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
 
     /**
      * Gets the device configuration option
+     *
+     * @param $deviceConfigurationId
      *
      * @return Quotegen_Model_DeviceConfigurationOption
      */
@@ -134,6 +138,8 @@ class Quotegen_Model_DeviceOption extends My_Model_Abstract
      *
      * @param Quotegen_Model_DeviceConfigurationOption $_deviceConfigurationOption
      *            The new device configuration option
+     *
+     * @return Quotegen_Model_DeviceOption
      */
     public function setDeviceConfigurationOption ($_deviceConfigurationOption)
     {
