@@ -81,7 +81,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
         <?php
         $totalBlackPages += $deviceInstance->getAverageMonthlyBlackAndWhitePageCount();
         $totalColorPages += $deviceInstance->getAverageMonthlyColorPageCount();
-        $totalMonthlyInkAndToner += $deviceInstance->getCostOfInkAndToner($costPerPageSettings);
+        $totalMonthlyInkAndToner += $deviceInstance->getCostOfInkAndToner($costPerPageSettings,$reportMargin);
         ?>
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
@@ -91,7 +91,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
             <td class="debugNumber"><?php echo $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, $reportMargin), array("precision" => 4)); ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, array("precision" => 4)) : ""; ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, $reportMargin), array("precision" => 4)) : ""; ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings), array("precision" => 2)); ?></td>
+            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings, $reportMargin), array("precision" => 2)); ?></td>
             <td>
                 <table class="table-bordered table-condensed debugTable">
                     <thead>
@@ -105,7 +105,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($deviceInstance->getMasterDevice()->getTonersForAssessment() as $tonerColor => $toner) : ?>
+                    <?php foreach ($deviceInstance->getMasterDevice()->getTonersForAssessment($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration) as $tonerColor => $toner) : ?>
                         <tr>
                             <td><?php echo Proposalgen_Model_TonerColor::$ColorNames[$tonerColor]; ?></td>
                             <td><?php echo $toner->getPartType()->typeName; ?></td>

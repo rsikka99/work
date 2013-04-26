@@ -3419,7 +3419,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $uniqueToners = array();
             foreach ($this->getUniqueDeviceList() as $masterDevice)
             {
-                $deviceToners = $masterDevice->getTonersForAssessment();
+                $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
                 foreach ($deviceToners as $toner)
                 {
                     if (!in_array($toner, $uniqueToners))
@@ -3465,7 +3465,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $uniqueToners = array();
             foreach ($this->getUniquePurchasedDeviceList() as $masterDevice)
             {
-                $deviceToners = $masterDevice->getTonersForAssessment();
+                $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
                 foreach ($deviceToners as $toner)
                 {
                     if (!in_array($toner, $uniqueToners))

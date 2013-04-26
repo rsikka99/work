@@ -841,16 +841,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_PricingConfig $pricingConfig
+     *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getTonersForAssessment ()
+    public function getTonersForAssessment (Proposalgen_Model_PricingConfig $pricingConfig)
     {
         if (!isset($this->_tonersForAssessment))
         {
             $toners = array();
             foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
-                $toner = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                $toner = $this->getCheapestToner($tonerColor, $pricingConfig);
                 if ($toner instanceof Proposalgen_Model_Toner)
                 {
                     $toners [$tonerColor] = $toner;
