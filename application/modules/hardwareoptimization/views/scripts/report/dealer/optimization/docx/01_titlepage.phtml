@@ -1,10 +1,12 @@
 <?php
 /**
- * Assessment Title Page
+ * Hardware Optimization Title Page
  */
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
 
 $titleImageStyle = array('align' => 'center');
 
@@ -27,7 +29,7 @@ $section->addText(' ', 'titlepage_address', 'titleStyle3');
 $section->addText(sprintf($this->translate('Prepared For: %1$s'), $this->hardwareOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
-$addressLines = explode("\n", $this->hardwareOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressLines = explode("\n",$hardwareOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {

@@ -1,16 +1,11 @@
 <?php
 /**
- * Cost Analysis - Header information
+ * Device Summary - Header information
  *
- * This script contains everything that comes before the big table of
- * information in the cost analysis.
+ * This script display the two graphs the displays the summary of devices after HWO
  */
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
-/* @var $profitabiltyDevices Proposalgen_Model_Optimization_Dealer */
-$profitabiltyDevices = $this->profitabilityDevices;
 
 $section->addTextBreak();
 $section->addText($this->translate('Device Summary'), array('bold' => true, 'size' => 12));
