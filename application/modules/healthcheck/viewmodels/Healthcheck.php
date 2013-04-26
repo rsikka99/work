@@ -368,7 +368,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting,$this->getHealthcheckMargin());
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -748,6 +748,25 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return ($deviceA->getUsage() < $deviceB->getUsage()) ? -1 : 1;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort a device based on
+     * monthly cost
+     *
+     * @param Proposalgen_Model_DeviceInstance $deviceA
+     * @param Proposalgen_Model_DeviceInstance $deviceB
+     *
+     * @return int
+     */
+    public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
+    {
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()))
+        {
+            return 0;
+        }
+
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin())) ? -1 : 1;
     }
 
     /**

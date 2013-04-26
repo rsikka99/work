@@ -771,7 +771,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $margin                                = (1 - $margin) * 100;
             $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount(), $margin);
         }
 
@@ -788,7 +787,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $margin                        = (1 - $margin) * 100;
             $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getAverageMonthlyColorPageCount(), $margin);
         }
 
