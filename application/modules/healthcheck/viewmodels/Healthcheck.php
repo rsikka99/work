@@ -180,20 +180,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         // Get the report settings
         $healthcheckSettings = $this->healthcheck->getHealthcheckSettings();
 
-        // Set Page Coverage
-        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE($this->getPageCoverageBlackAndWhite() / 100);
-        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR($this->getPageCoverageColor() / 100);
-
-        // Gross Margin Report Page Coverage
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE($healthcheckSettings->actualPageCoverageMono / 100);
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR($healthcheckSettings->actualPageCoverageColor / 100);
-
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
-        Proposalgen_Model_MasterDevice::setPricingConfig($healthcheckSettings->getHealthcheckPricingConfig());
-        $pricingConfig                  = new Proposalgen_Model_PricingConfig();
-        $pricingConfig->pricingConfigId = Proposalgen_Model_PricingConfig::OEM;
-        Proposalgen_Model_MasterDevice::setGrossMarginPricingConfig($pricingConfig);
-        Proposalgen_Model_MasterDevice::setReportMargin(1 - ((((int)$healthcheckSettings->healthcheckMargin)) / 100));
+        $pricingConfig                              = new Proposalgen_Model_PricingConfig();
+        $pricingConfig->pricingConfigId             = Proposalgen_Model_PricingConfig::OEM;
 
         Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
     }
@@ -519,7 +508,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $maxVolume = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer());
             }
             $this->MaximumMonthlyPrintVolume = $maxVolume;
         }
@@ -638,7 +627,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -659,7 +648,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesOverusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
+                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
                 {
                     $devicesOverusedCount++;
                 }
@@ -680,7 +669,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -701,7 +690,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > 1)
+                if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) > 1)
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -746,12 +735,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function ascendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()) < $deviceB->getUsage($this->getCostPerPageSettingForCustomer())) ? -1 : 1;
     }
 
     /**
@@ -783,12 +772,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function descendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()) > $deviceB->getUsage($this->getCostPerPageSettingForCustomer())) ? -1 : 1;
     }
 
     /**
@@ -803,10 +792,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
-                    if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < 1)
+                    if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) < 1)
                     {
 
                         //Check to see if it is under the age requirements
@@ -1856,7 +1845,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $uniqueToners = array();
             foreach ($this->getUniquePurchasedDeviceList() as $masterDevice)
             {
-                $deviceToners = $masterDevice->getTonersForHealthcheck();
+                $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForCustomer());
                 foreach ($deviceToners as $toner)
                 {
                     if (!in_array($toner, $uniqueToners))

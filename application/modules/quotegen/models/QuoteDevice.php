@@ -314,7 +314,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote device group devices
      *
-     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevice An array of quote device group devices
+     * @return Quotegen_Model_QuoteDeviceGroupDevice[]
      */
     public function getQuoteDeviceGroupDevices ()
     {
@@ -329,8 +329,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Sets the quote device group devices
      *
-     * @param array $_quoteDeviceGroupDevices
-     *            An array of qutoe device group devices
+     * @param Quotegen_Model_QuoteDeviceGroupDevice[] $_quoteDeviceGroupDevices An array of quote device group devices
      *
      * @return Quotegen_Model_QuoteDevice
      */

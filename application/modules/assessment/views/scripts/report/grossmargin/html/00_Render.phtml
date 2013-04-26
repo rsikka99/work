@@ -121,8 +121,8 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
         <?php
         $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
         $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
-        $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
-        $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
+        $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+        $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
         $blackToner                = null;
         $colorToner                = null;
         switch ($tonerConfig)

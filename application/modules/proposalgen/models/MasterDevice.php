@@ -9,9 +9,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     const DEVICE_TYPE_COLOR     = 2;
     const DEVICE_TYPE_COLOR_MFP = 3;
 
-    private static $ReportMargin;
-    private static $PricingConfig;
-    private static $GrossMarginPricingConfig;
     static $ReportLaborCostPerPage = 0;
     static $ReportPartsCostPerPage = 0;
 
@@ -230,22 +227,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * given the current pricing configuration
      * SPECIAL: Leased devices have a yield set, so we use that
      *
-     * @param int|Proposalgen_Model_PricingConfig $pricingConfig
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return int $MaximumMonthlyPageVolume
      */
-    public function getMaximumMonthlyPageVolume ($pricingConfig)
+    public function getMaximumMonthlyPageVolume ($costPerPageSetting)
     {
         if (!isset($this->_maximumMonthlyPageVolume))
         {
             $this->_maximumMonthlyPageVolume = array();
         }
-        if (!$pricingConfig instanceof Proposalgen_Model_PricingConfig)
-        {
-            $pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($pricingConfig);
-        }
 
-        $cacheKey = $pricingConfig->monoTonerPartTypeId . "_" . $pricingConfig->colorTonerPartTypeId;
+        $cacheKey = $costPerPageSetting->createCacheKey();
 
         if (!array_key_exists($cacheKey, $this->_maximumMonthlyPageVolume))
         {
@@ -259,7 +252,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                 $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
                 foreach ($requiredToners as $tonerColor)
                 {
-                    $toner = $this->getCheapestToner($tonerColor, self::$PricingConfig);
+                    $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
                     if ($toner instanceof Proposalgen_Model_Toner)
                     {
                         if ($toner->yield < $smallestYield || is_null($smallestYield))
@@ -457,49 +450,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "partsCostPerPage"    => $this->partsCostPerPage,
             "laborCostPerPage"    => $this->laborCostPerPage,
         );
-    }
-
-    /**
-     * @return Proposalgen_Model_PricingConfig
-     */
-    public static function getPricingConfig ()
-    {
-        if (!isset(Proposalgen_Model_MasterDevice::$PricingConfig))
-        {
-
-            Proposalgen_Model_MasterDevice::$PricingConfig = null;
-        }
-
-        return Proposalgen_Model_MasterDevice::$PricingConfig;
-    }
-
-    /**
-     * @param Proposalgen_Model_PricingConfig Proposalgen_Model_PricingConfig $PricingConfig
-     */
-    public static function setPricingConfig ($PricingConfig)
-    {
-        Proposalgen_Model_MasterDevice::$PricingConfig = $PricingConfig;
-    }
-
-    /**
-     * @return float
-     */
-    public static function getReportMargin ()
-    {
-        if (!isset(Proposalgen_Model_MasterDevice::$ReportMargin))
-        {
-            Proposalgen_Model_MasterDevice::$ReportMargin = 1;
-        }
-
-        return Proposalgen_Model_MasterDevice::$ReportMargin;
-    }
-
-    /**
-     * @param float $ReportMargin
-     */
-    public static function setReportMargin ($ReportMargin)
-    {
-        Proposalgen_Model_MasterDevice::$ReportMargin = $ReportMargin;
     }
 
     /**
@@ -736,33 +686,12 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         return ($this->_usingIncompleteColorTonerData);
     }
 
-
     /**
-     * @return Proposalgen_Model_PricingConfig
-     */
-    public static function getGrossMarginPricingConfig ()
-    {
-        if (!isset(Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig))
-        {
-
-            Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig = null;
-        }
-
-        return Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig;
-    }
-
-    /**
-     * @param Proposalgen_Model_PricingConfig $GrossMarginPricingConfig
-     */
-    public static function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
-    {
-        Proposalgen_Model_MasterDevice::$GrossMarginPricingConfig = $GrossMarginPricingConfig;
-    }
-
-    /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return bool
      */
-    public function getHasValidMonoGrossMarginToners ()
+    public function getHasValidMonoGrossMarginToners ($costPerPageSetting)
     {
         if (!isset($this->_hasValidMonoGrossMarginToners))
         {
@@ -770,14 +699,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
             foreach ($requiredToners as $tonerColor)
             {
-                $toner = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
+                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
 
-                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->monoTonerPartTypeId)
+                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != $costPerPageSetting->pricingConfiguration->monoTonerPartTypeId)
                 {
                     $usesAllValidToners = false;
                     break;
                 }
-                else if ($toner->partTypeId != self::getGrossMarginPricingConfig()->colorTonerPartTypeId)
+                else if ($toner->partTypeId != $costPerPageSetting->pricingConfiguration->colorTonerPartTypeId)
                 {
                     //$usesAllValidToners = false;
                     //break;
@@ -803,9 +732,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return bool
      */
-    public function getHasValidColorGrossMarginToners ()
+    public function getHasValidColorGrossMarginToners ($costPerPageSetting)
     {
         if (!isset($this->_hasValidColorGrossMarginToners))
         {
@@ -813,14 +744,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
             foreach ($requiredToners as $tonerColor)
             {
-                $toner = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
+                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
 
-                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != self::getGrossMarginPricingConfig()->monoTonerPartTypeId)
+                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != $costPerPageSetting->pricingConfiguration->monoTonerPartTypeId)
                 {
                     //$usesAllValidToners = false;
                     //break;
                 }
-                else if ($toner->partTypeId != self::getGrossMarginPricingConfig()->colorTonerPartTypeId)
+                else if ($toner->partTypeId != $costPerPageSetting->pricingConfiguration->colorTonerPartTypeId)
                 {
                     $usesAllValidToners = false;
                     break;
@@ -846,16 +777,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getTonersForAssessment ()
+    public function getTonersForAssessment ($costPerPageSetting)
     {
         if (!isset($this->_tonersForAssessment))
         {
             $toners = array();
             foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
-                $toner = $this->getCheapestToner($tonerColor, self::getPricingConfig());
+                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
                 if ($toner instanceof Proposalgen_Model_Toner)
                 {
                     $toners [$tonerColor] = $toner;
@@ -868,16 +801,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getTonersForGrossMargin ()
+    public function getTonersForGrossMargin ($costPerPageSetting)
     {
         if (!isset($this->_tonersForGrossMargin))
         {
             $toners = array();
             foreach ($this->getRequiredTonerColors() as $tonerColor)
             {
-                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, self::getGrossMarginPricingConfig());
+                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, $costPerPageSetting);
             }
             $this->_tonersForGrossMargin = $toners;
         }
@@ -932,28 +867,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         $this->_requiredTonerColors = $RequiredTonerColors;
 
         return $this;
-    }
-
-    /**
-     * @return Proposalgen_Model_Toner[]
-     */
-    public function getTonersForHealthcheck ()
-    {
-        if (!isset($this->_tonersForHealthcheck))
-        {
-            $toners = array();
-            foreach ($this->getRequiredTonerColors() as $tonerColor)
-            {
-                $toner = $this->getCheapestToner($tonerColor, self::getPricingConfig());
-                if ($toner instanceof Proposalgen_Model_Toner)
-                {
-                    $toners [$tonerColor] = $toner;
-                }
-            }
-            $this->_tonersForHealthcheck = $toners;
-        }
-
-        return $this->_tonersForHealthcheck;
     }
 
     /**

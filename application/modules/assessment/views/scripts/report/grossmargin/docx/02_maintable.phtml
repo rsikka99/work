@@ -56,8 +56,8 @@ foreach ($assessmentViewModel->getPurchasedDevices() as $deviceInstance)
     //$device = new Proposalgen_Model_DeviceInstance();
     $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
     $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
-    $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
-    $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
+    $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+    $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
     $blackToner                = null;
     $colorToner                = null;
 
