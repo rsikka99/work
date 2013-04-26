@@ -35,5 +35,3 @@ class Quotegen_Form_AddDevice extends Twitter_Bootstrap_Form_Inline
         ));
     }
 }
-
-?>

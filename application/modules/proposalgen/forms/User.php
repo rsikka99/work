@@ -731,7 +731,4 @@ class Proposalgen_Form_User extends Zend_Form
         }
         return $data;
     }
-} // end class forms_instructorForm
-
-
-?>
+}

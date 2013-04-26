@@ -114,7 +114,7 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
      *
      * @param $id int
      *            The id of the log_type to find
-     * @return void Admin_Model_Log_Type
+     * @return Admin_Model_Log_Type
      */
     public function find ($id)
     {
@@ -129,7 +129,7 @@ class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
         $result = $this->getDbTable()->find($id);
         if (0 == count($result))
         {
-            return;
+            return false;
         }
         $row = $result->current();
         $object = new Admin_Model_Log_Type($row->toArray());
