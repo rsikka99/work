@@ -142,47 +142,6 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         $this->view->hardwareOptimization = $this->_hardwareOptimization;
     }
 
-    /**
-     * Gets the proposal object for reports to use
-     *
-     * @throws Zend_Exception
-     * @return Hardwareoptimization_ViewModel_CustomerHardwareOptimization
-     */
-    public function getCustomerHardwareOptimizationViewModel ()
-    {
-        if (!$this->_customerHardwareOptimizationViewModel)
-        {
-            $this->_customerHardwareOptimizationViewModel = false;
-            $hasError                                     = false;
-            try
-            {
-                $this->_customerHardwareOptimizationViewModel = new Hardwareoptimization_ViewModel_CustomerHardwareOptimization($this->getHardwareOptimization());
-
-                if ($this->getHardwareOptimization()->devicesModified)
-                {
-                    $this->_redirect('/data/modificationwarning');
-                }
-
-                if ($this->_customerHardwareOptimizationViewModel->getDeviceCount() < 1)
-                {
-                    $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
-                    $hasError                     = true;
-                }
-            }
-            catch (Exception $e)
-            {
-                $this->view->ErrorMessages [] = "There was an error getting the reports.";
-                throw new Zend_Exception("Error Getting Customer Hardware Optimization View Model.", 0, $e);
-            }
-
-            if ($hasError)
-            {
-                $this->_customerHardwareOptimizationViewModel = false;
-            }
-        }
-
-        return $this->_customerHardwareOptimizationViewModel;
-    }
 
     /**
      * (non-PHPdoc)
