@@ -122,7 +122,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
             if (!$this->_assessmentSetting instanceof Assessment_Model_Assessment_Setting)
             {
                 // Insert a new copy of the system setting
-                $this->_assessmentSetting = new Proposalgen_Model_Assessment_Setting();
+                $this->_assessmentSetting = new Assessment_Model_Assessment_Setting();
                 Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($this->_assessmentSetting);
                 $this->assessmentSettingId = $this->_assessmentSetting->id;
 

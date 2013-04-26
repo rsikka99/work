@@ -358,6 +358,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
@@ -368,7 +370,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getPurchasedDevices() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting,$this->getHealthcheckMargin());
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting, $this->getHealthcheckMargin());
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -377,6 +379,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndToner ($costPerPageSetting)
@@ -1204,7 +1208,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return int
      */
     public function getNumberOfDevicesReportingTonerLevels ()
     {
@@ -1217,7 +1221,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
+     * @return int
      */
     public function getNumberOfDevicesNotReportingTonerLevels ()
     {

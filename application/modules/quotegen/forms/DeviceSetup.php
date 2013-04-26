@@ -328,7 +328,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Launch Date /
          */
         $minYear    = 1950;
-        $maxYear    = date('Y') + 2;
+        $maxYear    = ((int)date('Y')) + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launchDate');
         $launchDate->setLabel('Launch Date:')
             ->setAttrib('class', 'span2')

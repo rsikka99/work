@@ -113,8 +113,7 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
     /**
      * Finds a leasingSchemaRate based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the leasingSchemaRate to find
+     * @param array $id The id of the leasingSchemaRate to find
      *
      * @return Quotegen_Model_LeasingSchemaRate
      */

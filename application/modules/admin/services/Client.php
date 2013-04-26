@@ -326,7 +326,7 @@ class Admin_Service_Client
      * Checks to see if the country has that region inside it.
      *
      * @param string $countryId
-     * @param string $region
+     * @param string $regionName
      *
      * @return boolean
      */

@@ -9,22 +9,22 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public $id = 0;
 
     /**
-     * @var double
+     * @var float
      */
     public $pageCoverageMonochrome;
 
     /**
-     * @var double
+     * @var float
      */
     public $pageCoverageColor;
 
     /**
-     * @var double
+     * @var float
      */
     public $deviceMargin;
 
     /**
-     * @var double
+     * @var float
      */
     public $pageMargin;
 

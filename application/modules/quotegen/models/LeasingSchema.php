@@ -89,7 +89,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all terms for leasing schema
      *
-     * @return the $_terms
+     * @return Quotegen_Model_LeasingSchemaTerm[]
      */
     public function getTerms ()
     {
@@ -118,7 +118,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Gets all ranges for leasing schema
      *
-     * @return the $_ranges
+     * @return Quotegen_Model_LeasingSchemaRange[]
      */
     public function getRanges ()
     {

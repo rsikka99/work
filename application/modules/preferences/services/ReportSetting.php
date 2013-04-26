@@ -154,13 +154,6 @@ class Preferences_Service_ReportSetting
                 $validData = $form->getValues();
             }
         }
-        else
-        {
-            if ($this->getForm() instanceof EasyBib_Form)
-            {
-                $this->getForm()->buildBootstrapErrorDecorators();
-            }
-        }
 
         return $validData;
     }
@@ -199,24 +192,24 @@ class Preferences_Service_ReportSetting
                 unset($validData ['replacementPricingConfigId']);
             }
 
-            $reportSetting = new Proposalgen_Model_Assessment_Setting();
-            $surveySetting = new Proposalgen_Model_Survey_Setting();
+            $assessmentSetting = new Assessment_Model_Assessment_Setting();
+            $surveySetting     = new Proposalgen_Model_Survey_Setting();
 
-            $reportSetting->populate($validData);
+            $assessmentSetting->populate($validData);
             $surveySetting->populate($validData);
 
             if ($this->_defaultSettings)
             {
-                $reportSetting->id = $this->_defaultSettings['reportSettingId'];
-                $surveySetting->id = $this->_defaultSettings['surveySettingId'];
+                $assessmentSetting->id = $this->_defaultSettings['reportSettingId'];
+                $surveySetting->id     = $this->_defaultSettings['surveySettingId'];
             }
             else
             {
-                $reportSetting->id = $this->_systemReportSettings->id;
-                $surveySetting->id = $this->_systemReportSettings->id;
+                $assessmentSetting->id = $this->_systemReportSettings->id;
+                $surveySetting->id     = $this->_systemReportSettings->id;
             }
 
-            Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($reportSetting);
+            Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($assessmentSetting);
             Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
 
             return true;

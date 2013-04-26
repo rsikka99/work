@@ -33,7 +33,7 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     public $description;
 
     /**
-     * @var double
+     * @var float
      */
     public $cost;
 

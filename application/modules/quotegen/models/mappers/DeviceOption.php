@@ -130,8 +130,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     /**
      * Finds a deviceOption based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the deviceOption to find
+     * @param array|Quotegen_Model_DeviceOption $id The id of the deviceOption to find
      *
      * @return Quotegen_Model_DeviceOption
      */
@@ -277,6 +276,7 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of options for the dealer
+     *
      * @param int $dealerId
      *
      * @return Quotegen_Model_DeviceOption[]
@@ -284,21 +284,25 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function fetchDeviceOptionListForDealer ($dealerId)
     {
         $options = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
         return $options;
     }
 
     /**
      * Fetches a list of device options for the dealer and masterDevice id
+     *
+     * @param int $masterDeviceId
      * @param int $dealerId
      *
      * @return Quotegen_Model_DeviceOption[]
      */
-    public function fetchDeviceOptionListForDealerAndDevice ($masterDeviceId,$dealerId)
+    public function fetchDeviceOptionListForDealerAndDevice ($masterDeviceId, $dealerId)
     {
         $options = $this->fetchAll(array(
                                         "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
-                                        "{$this->col_dealerId} = ?" => $dealerId)
-                                    );
+                                        "{$this->col_dealerId} = ?"       => $dealerId)
+        );
+
         return $options;
     }
 }

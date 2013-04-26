@@ -117,7 +117,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
     /**
      * Gets all categories associated with this objects id
      *
-     * @return Quotegen_Model_Category $_categories
+     * @return Quotegen_Model_Category[]
      */
     public function getCategories ()
     {
@@ -132,8 +132,8 @@ class Quotegen_Model_Option extends My_Model_Abstract
     /**
      * Set new categories for this object
      *
-     * @param multitype: $_categories
-     *                 The new array of categories
+     * @param Quotegen_Model_Category[] $_categories The new array of categories
+     *
      * @return $this
      */
     public function setCategories ($_categories)

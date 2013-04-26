@@ -310,7 +310,7 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param Quotegen_Model_OptionCategory
+     * @param $object Quotegen_Model_OptionCategory
      *
      * @return array
      */

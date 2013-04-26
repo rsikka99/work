@@ -31,8 +31,7 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
      * Saves an instance of Assessment_Model_Report_Setting to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Assessment_Model_Assessment_Setting
-     *                The object to insert
+     * @param Assessment_Model_Assessment_Setting $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -58,10 +57,8 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
     /**
      * Saves (updates) an instance of Assessment_Model_Report_Setting to the database.
      *
-     * @param $object     Assessment_Model_Assessment_Setting
-     *                    The assessment_setting model to save to the database
-     * @param $primaryKey mixed
-     *                    Optional: The original primary key, in case we're changing it
+     * @param Assessment_Model_Assessment_Setting $object     The assessment_setting model to save to the database
+     * @param mixed                               $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */
@@ -268,8 +265,8 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
             }
             else
             {
-                $userReportSetting                  = new Preferences_Model_User_Setting();
-                $userReportSetting->userId          = $userId;
+                $userReportSetting                      = new Preferences_Model_User_Setting();
+                $userReportSetting->userId              = $userId;
                 $userReportSetting->assessmentSettingId = $assesssmentSettingId;
                 Preferences_Model_Mapper_User_Setting::getInstance()->insert($userReportSetting);
             }
@@ -288,9 +285,9 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
      */
     public function fetchAssessmentSetting ($assessmentId)
     {
-        $assessmentSetting           = false;
-        $assessment = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
-        if($assessment)
+        $assessmentSetting = false;
+        $assessment        = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
+        if ($assessment)
         {
             $assessmentSetting = Assessment_Model_Mapper_Assessment_Setting::getInstance()->find($assessment->assessmentSettingId);
         }

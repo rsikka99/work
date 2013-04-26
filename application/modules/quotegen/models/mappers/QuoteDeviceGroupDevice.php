@@ -146,8 +146,7 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     /**
      * Finds a template based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the template to find
+     * @param array $id The id of the template to find
      *
      * @return Quotegen_Model_QuoteDeviceGroupDevice
      */

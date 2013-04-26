@@ -111,7 +111,7 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
             }
             else
             {
-                if (count($usersByEmail) > 0)
+                if (count($usersByEmail->toArray()) > 0)
                 {
                     $this->addError(self::ERROR_USEREMAIL_EXISTS, "A user with this email already exists");
                     $this->_form->getElement('email')->addError("Email already exists");

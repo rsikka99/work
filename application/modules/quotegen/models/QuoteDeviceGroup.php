@@ -350,7 +350,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Gets the quantity of monochrome pages for the group
      *
-     * @return the quantity of monochrome pages
+     * @return float
      */
     public function calculateTotalMonochromePages ()
     {
@@ -366,7 +366,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the total monochrome page cost for the group
+     * Calculates the total monochrome page cost for the group
      *
      * @return float The total cost
      */
@@ -404,7 +404,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Gets the quantity of color pages for the group
      *
-     * @return the quantity of color pages
+     * @return float
      */
     public function calculateTotalColorPages ()
     {
@@ -420,7 +420,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the total color page cost for the group
+     * Calculates the total color page cost for the group
      *
      * @return float The total cost
      */

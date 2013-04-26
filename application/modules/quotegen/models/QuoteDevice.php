@@ -254,7 +254,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * Gets the quote device options
      *
-     * @return Quotegen_Model_QuoteDeviceOption The quote device options
+     * @return Quotegen_Model_QuoteDeviceOption[]
      */
     public function getQuoteDeviceOptions ()
     {

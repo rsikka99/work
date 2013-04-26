@@ -261,11 +261,12 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     public function fetchAllByManufacturerFullName ($criteria, $order = null, $count = 25, $offset = null)
     {
         $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
-        $manufacturer = $manufacturerMapper->fetch(array("{$manufacturerMapper->col_fullName} = ?" => $criteria));
-        if($manufacturer)
+        $manufacturer       = $manufacturerMapper->fetch(array("{$manufacturerMapper->col_fullName} = ?" => $criteria));
+        if ($manufacturer)
         {
             return $this->fetchAll(array("{$this->col_manufacturerId} = ?" => $manufacturer->id), $order, $count, $offset);
         }
+
         return false;
     }
 
@@ -331,8 +332,9 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $masterDevicesTableName = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
         $manufacturerTableName  = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
         $deviceTableName        = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
+        $manufacturerColumns    = array();
 
-        $whereClause = ''; //["{$deviceTableName}.masterDeviceId = ?"] = new Zend_Db_Expr('NULL');
+        $whereClause = array();
         if (strcasecmp($filterByColumn, 'deviceName') === 0 && $filterValue !== '')
         {
             $whereClause ["CONCAT({$manufacturerTableName}.displayname, \" \", {$masterDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
@@ -512,8 +514,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $dealerId                = $db->quote($dealerId, 'INT');
         $select                  = $db->select()
             ->from(array('pmd' => 'master_devices'), array(
-                                                               'pmd.*',
-                                                          ))
+                                                          'pmd.*',
+                                                     ))
             ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
                                                                                                                                                 "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
                                                                                                                                                 "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
