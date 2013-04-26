@@ -414,9 +414,9 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     {
         $uniqueTonerList = array();
 
-        foreach ($masterDevices as $masterDevices)
+        foreach ($masterDevices as $masterDevice)
         {
-            $toners = $masterDevices->getTonersForAssessment();
+            $toners = $masterDevice->getTonersForAssessment();
 
             foreach ($toners as $toner)
             {
@@ -443,9 +443,9 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     {
 
         $maximumSupplyCount = 0;
-        foreach ($masterDevices as $masterDevices)
+        foreach ($masterDevices as $masterDevice)
         {
-            switch ($masterDevices->tonerConfigId)
+            switch ($masterDevice->tonerConfigId)
             {
                 case Proposalgen_Model_TonerConfig::BLACK_ONLY:
                     $maximumSupplyCount += 1;
