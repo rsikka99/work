@@ -828,16 +828,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function getUsage ()
+    public function getUsage ($pricingConfiguration)
     {
         if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by its maximum
-            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) > 0)
             {
-                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $this->_usage = $this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration);
             }
         }
 
@@ -845,16 +847,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function getLifeUsage ()
+    public function getLifeUsage ($pricingConfiguration)
     {
         if (!isset($this->_lifeUsage))
         {
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * 36 months)
-            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 36;
             if ($maximumLifeCount > 0)
             {
                 $this->_lifeUsage = $this->getLifePageCount() / $maximumLifeCount;
@@ -1552,14 +1556,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * Returns percent of maximum recommended print volume they are printing.
      * If their recommended max is 1000, and they print 2000. This returns 200 (Without % Sign)
      *
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return float
      */
-    public function calculatePercentOfMaximumRecommendedMaxVolume ()
+    public function calculatePercentOfMaximumRecommendedMaxVolume ($pricingConfiguration)
     {
         $percent = 0;
-        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume() > 0)
+        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) > 0)
         {
-            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 100);
+            $percent = ($this->getAverageMonthlyPageCount() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 100);
         }
 
         return $percent;
@@ -1581,11 +1587,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Calculates the max estimated life count
      *
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfiguration
+     *
      * @return int
      */
-    public function calculateEstimatedMaxLifeCount ()
+    public function calculateEstimatedMaxLifeCount ($pricingConfiguration)
     {
-        return $this->getMasterDevice()->getMaximumMonthlyPageVolume() * 36;
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume($pricingConfiguration) * 36;
     }
 
     /**

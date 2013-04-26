@@ -478,7 +478,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @param Application_Model_User $User
      *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
+     * @return Assessment_ViewModel_Assessment
      */
     public function setUser ($User)
     {
@@ -570,6 +570,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
 
     /**
+     * Calculates the cost of ink and toner per month
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndTonerMonthly ($costPerPageSetting)
@@ -589,6 +593,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
     public function getCostOfInkAndToner ($costPerPageSetting)
@@ -740,7 +746,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $maxVolume = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
             }
             $this->MaximumMonthlyPrintVolume = $maxVolume;
         }
@@ -755,11 +761,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             if ($deviceInstance->getReplacementMasterDevice())
             {
-                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
             }
             else
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
             }
         }
 
@@ -776,7 +782,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $maxVolume = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume();
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration);
             }
             $this->_maximumMonthlyPurchasedPrintVolume = $maxVolume;
         }
@@ -985,7 +991,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -1006,7 +1012,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesOverusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume())
+                if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
                 {
                     $devicesOverusedCount++;
                 }
@@ -1027,7 +1033,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
+                if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -1045,7 +1051,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                if ($deviceInstance->getUsage() > 1)
+                if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > 1)
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -1090,12 +1096,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function ascendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage() == $deviceB->getUsage())
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage() < $deviceB->getUsage()) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
     }
 
     /**
@@ -1108,12 +1114,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function descendingSortDevicesByUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getUsage() == $deviceB->getUsage())
+        if ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
         {
             return 0;
         }
 
-        return ($deviceA->getUsage() > $deviceB->getUsage()) ? -1 : 1;
+        return ($deviceA->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) > $deviceB->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
     }
 
     /**
@@ -1128,10 +1134,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume() * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()->pricingConfiguration) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
-                    if ($deviceInstance->getUsage() < 1)
+                    if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < 1)
                     {
 
                         //Check to see if it is under the age requirements
@@ -1954,12 +1960,12 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function sortDevicesByLifeUsage ($deviceA, $deviceB)
     {
-        if ($deviceA->getLifeUsage() == $deviceB->getLifeUsage())
+        if ($deviceA->getLifeUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) == $deviceB->getLifeUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration))
         {
             return 0;
         }
 
-        return ($deviceA->getLifeUsage() < $deviceB->getLifeUsage()) ? -1 : 1;
+        return ($deviceA->getLifeUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration) < $deviceB->getLifeUsage($this->getCostPerPageSettingForCustomer()->pricingConfiguration)) ? -1 : 1;
     }
 
     /**
@@ -2640,7 +2646,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @param array $Graphs
      *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
+     * @return Assessment_ViewModel_Assessment
      */
     public function setGraphs ($Graphs)
     {

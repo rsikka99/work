@@ -51,7 +51,7 @@ class Admin_Service_Client
                     Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
                 }
 
-                $address   = new Quotegen_Model_Address($data);
+                $address = new Quotegen_Model_Address($data);
                 Quotegen_Model_Mapper_Address::getInstance()->insert($address);
 
                 // Created a hardware optimization for the client
@@ -158,7 +158,7 @@ class Admin_Service_Client
      * @param int $clientId
      *            The clients id number
      *
-     * @return boolean Returns true if deleted, false if not deleted.
+     * @return boolean|int Returns true if deleted, false if not deleted.
      */
     public function delete ($clientId)
     {
@@ -168,10 +168,8 @@ class Admin_Service_Client
         }
         catch (Exception $e)
         {
-            Throw new exception("Failed to delete client.", 0, $e);
+            return false;
         }
-
-        return false;
     }
 
     /**

@@ -39,7 +39,7 @@ class Default_ErrorController extends Tangent_Controller_Action
                 break;
         }
 
-        $this->_forward($forwardToAction);
+        $this->forward($forwardToAction);
     }
 
     /**

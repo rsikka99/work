@@ -4,10 +4,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /*
      * The different device types
      */
-    const DEVICETYPE_MONO      = 0;
-    const DEVICETYPE_MONO_MFP  = 1;
-    const DEVICETYPE_COLOR     = 2;
-    const DEVICETYPE_COLOR_MFP = 3;
+    const DEVICE_TYPE_MONO      = 0;
+    const DEVICE_TYPE_MONO_MFP  = 1;
+    const DEVICE_TYPE_COLOR     = 2;
+    const DEVICE_TYPE_COLOR_MFP = 3;
 
     private static $ReportMargin;
     private static $PricingConfig;
@@ -230,11 +230,24 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * given the current pricing configuration
      * SPECIAL: Leased devices have a yield set, so we use that
      *
+     * @param int|Proposalgen_Model_PricingConfig $pricingConfig
+     *
      * @return int $MaximumMonthlyPageVolume
      */
-    public function getMaximumMonthlyPageVolume ()
+    public function getMaximumMonthlyPageVolume ($pricingConfig)
     {
         if (!isset($this->_maximumMonthlyPageVolume))
+        {
+            $this->_maximumMonthlyPageVolume = array();
+        }
+        if (!$pricingConfig instanceof Proposalgen_Model_PricingConfig)
+        {
+            $pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($pricingConfig);
+        }
+
+        $cacheKey = $pricingConfig->monoTonerPartTypeId . "_" . $pricingConfig->colorTonerPartTypeId;
+
+        if (!array_key_exists($cacheKey, $this->_maximumMonthlyPageVolume))
         {
             $smallestYield = null;
             if ($this->isLeased)
@@ -256,10 +269,10 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
                     }
                 }
             }
-            $this->_maximumMonthlyPageVolume = $smallestYield;
+            $this->_maximumMonthlyPageVolume[$cacheKey] = $smallestYield;
         }
 
-        return $this->_maximumMonthlyPageVolume;
+        return $this->_maximumMonthlyPageVolume[$cacheKey];
     }
 
     /**
@@ -1043,23 +1056,23 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             {
                 if ($this->isCopier)
                 {
-                    $this->_deviceType = self::DEVICETYPE_MONO_MFP;
+                    $this->_deviceType = self::DEVICE_TYPE_MONO_MFP;
                 }
                 else
                 {
 
-                    $this->_deviceType = self::DEVICETYPE_MONO;
+                    $this->_deviceType = self::DEVICE_TYPE_MONO;
                 }
             }
             else
             {
                 if ($this->isCopier)
                 {
-                    $this->_deviceType = self::DEVICETYPE_COLOR_MFP;
+                    $this->_deviceType = self::DEVICE_TYPE_COLOR_MFP;
                 }
                 else
                 {
-                    $this->_deviceType = self::DEVICETYPE_COLOR;
+                    $this->_deviceType = self::DEVICE_TYPE_COLOR;
                 }
             }
         }

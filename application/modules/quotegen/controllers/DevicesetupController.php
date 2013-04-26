@@ -207,8 +207,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     }
 
                                     $hasValidToners    = false;
-                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);
-                                    ;
+                                    $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);;
                                     $repopulateForm = 1;
                                     break;
                                 }
@@ -280,7 +279,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $device       = new Quotegen_Model_Device();
                                     $devicevalues = array(
                                         'masterDeviceId' => $masterDeviceId,
-                                        'dealerId'      => Zend_Auth::getInstance()->getIdentity()->dealerId,
+                                        'dealerId'       => Zend_Auth::getInstance()->getIdentity()->dealerId,
                                         'oemSku'         => $oemSku,
                                         'dealerSku'      => $dealerSku,
                                         'description'    => $values ['description'],
@@ -457,11 +456,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             if ($formValues ['can_sell'])
                             {
                                 // Get the dealer id from the session
-                                $dealerId                                     = Zend_Auth::getInstance()->getIdentity()->dealerId;
+                                $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
-                                $quoteDevice                                  = new Quotegen_Model_Device($formValues);
-                                $quoteDevice->dealerId                        = $dealerId;
-                                $quoteDevice->masterDeviceId                  = $masterDeviceId;
+                                $quoteDevice                 = new Quotegen_Model_Device($formValues);
+                                $quoteDevice->dealerId       = $dealerId;
+                                $quoteDevice->masterDeviceId = $masterDeviceId;
 
                                 $dealerMasterDeviceAttributes                 = new Proposalgen_Model_Dealer_Master_Device_Attribute($formValues);
                                 $dealerMasterDeviceAttributes->masterDeviceId = $masterDeviceId;
@@ -992,18 +991,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => "An error has occurred."
-                                                       ));
-                    echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                    var_dump($e);
-                    die();
-                }
-                catch (InvalidArgumentException $e)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                    $this->_flashMessenger->addMessage(array('error' => "An error has occurred."));
+                    Tangent_Log::logException($e);
                 }
             }
             else
@@ -1134,15 +1123,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => "An error has occurred."
-                                                       ));
-                }
-                catch (InvalidArgumentException $e)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                    $this->_flashMessenger->addMessage(array('error' => "An error has occurred."));
+                    Tangent_Log::logException($e);
                 }
             }
             else

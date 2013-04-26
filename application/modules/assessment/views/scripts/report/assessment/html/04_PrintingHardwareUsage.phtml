@@ -58,7 +58,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)) ?></div>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -86,7 +86,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume()) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)) ?></div>
             </td>
         </tr>
     <?php endforeach; ?>

@@ -1428,7 +1428,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         catch (Exception $e)
         {
             throw new Exception("Passing exception up the chain.", 0, $e);
-            Throw new Exception($e->getMessage);
         }
         $this->sendJson($response);
     }
@@ -1754,11 +1753,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
             catch (Exception $e)
             {
-                throw new Exception("Passing Exception Up The Chain", null, $e);
                 $db->rollback();
-                $this->_flashMessenger->addMessage(array(
-                                                        "error" => "Error."
-                                                   ));
+                Tangent_Log::logException($e);
+                $this->_flashMessenger->addMessage(array("error" => "Error getting matchups."));
             }
         }
     }

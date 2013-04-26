@@ -8,11 +8,11 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function indexAction ()
     {
-        $this->_redirect('/auth/login');
+        $this->redirector('default', 'auth', 'index');
     }
 
     /**
-     * Gets the auth adapter to use for authenticaiton
+     * Gets the auth adapter to use for authentication
      *
      * @return My_Auth_Adapter
      */
