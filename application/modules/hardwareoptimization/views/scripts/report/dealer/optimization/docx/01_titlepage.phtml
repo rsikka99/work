@@ -2,56 +2,46 @@
 /**
  * Assessment Title Page
  */
-/* @var $phpword PHPWord */
-$phpword = $this->phpword;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
 
 /* @var $section PHPWord_Section */
-$titlepage       = $this->section;
-$titleImageStyle = array(
-    'align' => 'center'
-);
+$section = $this->section;
+
+$titleImageStyle = array('align' => 'center');
 
 // Table to fix the issue of images being different sizes
-$imageTable = $titlepage->addTable(array(
-                                        'borderBottomSize' => 1
-                                   ));
+$imageTable = $section->addTable(array('borderBottomSize' => 1));
 $imageTable->addRow(2500);
-$cell = $imageTable->addCell(15000.8, array(
-                                          'valign' => 'center'
-                                     ));
-$cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/mpstoolbox_logo.jpg", array(
-                                                                                                           'align' => 'center'
-                                                                                                      ));
+$cell = $imageTable->addCell(15000.8, array('valign' => 'center'));
+$cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/mpstoolbox_logo.jpg", array('align' => 'center'));
 
-$titlepage->addTextBreak();
+$section->addTextBreak();
 // Assessment Title
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
-$titlepage->addText($this->translate('  Hardware Optimization'), 'titlepage_title', 'titleStyle2');
-$titlepage->addText($this->translate(''), null, 'titleStyle2');
+$section->addText($this->translate(''), null, 'titleStyle2');
+$section->addText($this->translate('  Hardware Optimization'), 'titlepage_title', 'titleStyle2');
+$section->addText($this->translate(''), null, 'titleStyle2');
 
 
-$titlepage->addTextBreak();
+$section->addTextBreak();
 
-$titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlepage->addText(sprintf($this->translate('Prepared For: %1$s'), $this->proposal->Report->CustomerCompanyName), 'titlepage_subtitle', 'titleStyle3');
+$section->addText(' ', 'titlepage_address', 'titleStyle3');
+$section->addText(sprintf($this->translate('Prepared For: %1$s'), $this->hardwareOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
-$addressLines = explode("\n", $proposal->report->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressLines = explode("\n", $this->hardwareOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
-    $titlepage->addText($line, 'titlepage_address', 'titleStyle3');
+    $section->addText($line, 'titlepage_address', 'titleStyle3');
     $addressCount++;
 }
-$titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlepage->addText($this->translate('Date:') . " " . $proposal->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
+$section->addText(' ', 'titlepage_address', 'titleStyle3');
+$section->addText($this->translate('Date:') . " " . $hardwareOptimization->dateCreated, 'titlepage_address', 'titleStyle3');
+
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)
 {
     for ($i = 0; $i < 11 - $addressCount; $i++)
     {
-        $titlepage->addText(' ', 'titlepage_address', 'titleStyle3');
+        $section->addText(' ', 'titlepage_address', 'titleStyle3');
     }
 }

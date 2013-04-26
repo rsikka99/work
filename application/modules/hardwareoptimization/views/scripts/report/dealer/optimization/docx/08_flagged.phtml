@@ -8,8 +8,8 @@
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
 /* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
 $optimizationDevices = $this->profitabilityDevices;
 
@@ -54,7 +54,7 @@ foreach ($optimizationDevices->flagged as $device)
 
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()): 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
-    $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($proposal->getCostPerPageSettingForDealer())), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
 }

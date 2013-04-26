@@ -1,8 +1,11 @@
 <?php
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
 /* @var $phpWord PHPWord */
 $phpWord = $this->phpword;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
 
 // Initialize some properties
 $properties = $phpWord->getProperties();
@@ -478,13 +481,14 @@ $styles               = (object)array(
         "excluded"    => $excludedTable,
         "twocenter"   => $doubleCenterTable,
     ));
-$profitabilityDevices = new Proposalgen_Model_Optimization_Dealer($this->proposal);
+$profitabilityDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
 /**
  * An array of view variables to pass to the partial scripts
  */
 $data = array(
-    "phpword"              => $this->phpword,
-    "proposal"             => $this->proposal,
+    "phpword"              => $phpWord,
+    "hardwareOptimization" => $hardwareOptimization,
+    "optimization"         => $optimization,
     "section"              => $mainSection,
     "profitabilityDevices" => $profitabilityDevices,
     "graphs"               => $this->graphs,
@@ -495,16 +499,16 @@ $data = array(
  * Render each of the view scripts for different parts of the document
  */
 
-$this->partial("report/optimization/dealer/docx/01_titlepage.phtml", $data);
-$this->partial("report/optimization/dealer/docx/02_costanalysis.phtml", $data);
-$this->partial("report/optimization/dealer/docx/03_devicesummary.phtml", $data);
-$this->partial("report/optimization/dealer/docx/04_replacements.phtml", $data);
-$this->partial("report/optimization/dealer/docx/05_acceptable.phtml", $data);
-$this->partial("report/optimization/dealer/docx/06_excess.phtml", $data);
-$this->partial("report/optimization/dealer/docx/07_retired.phtml", $data);
-$this->partial("report/optimization/dealer/docx/08_flagged.phtml", $data);
-$this->partial("report/optimization/dealer/docx/09_leased.phtml", $data);
-$this->partial("report/optimization/dealer/docx/10_excluded.phtml", $data);
+$this->partial("report/dealer/optimization/docx/01_titlepage.phtml", $data);
+$this->partial("report/dealer/optimization/docx/02_costanalysis.phtml", $data);
+$this->partial("report/dealer/optimization/docx/03_devicesummary.phtml", $data);
+$this->partial("report/dealer/optimization/docx/04_replacements.phtml", $data);
+$this->partial("report/dealer/optimization/docx/05_acceptable.phtml", $data);
+$this->partial("report/dealer/optimization/docx/06_excess.phtml", $data);
+$this->partial("report/dealer/optimization/docx/07_retired.phtml", $data);
+$this->partial("report/dealer/optimization/docx/08_flagged.phtml", $data);
+$this->partial("report/dealer/optimization/docx/09_leased.phtml", $data);
+$this->partial("report/dealer/optimization/docx/10_excluded.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($this->phpword, 'Word2007');
 $objWriter->save($this->savePath);

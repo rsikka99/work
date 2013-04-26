@@ -8,8 +8,8 @@
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
 /* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
 $optimizationDevices = $this->profitabilityDevices;
 
@@ -51,6 +51,6 @@ foreach ($optimizationDevices->excess as $device)
 
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getLifePageCount()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $style)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($proposal->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
 }

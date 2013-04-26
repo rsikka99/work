@@ -8,11 +8,11 @@
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
-/* @var $proposal Proposalgen_Model_Proposal_OfficeDepot */
-$proposal = $this->proposal;
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
 /* @var $optimizationDevices Proposalgen_Model_Optimization_Dealer */
 $optimizationDevices = $this->profitabilityDevices;
-$costPerPageSetting  = $proposal->getCostPerPageSettingForDealer();
+$costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
