@@ -34,9 +34,9 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     protected $_device;
 
     /**
-     * The options added to the configuraiton
+     * The options added to the configuration
      *
-     * @var multitype: Quotegen_Model_DeviceOption
+     * @var Quotegen_Model_DeviceOption[]
      */
     protected $_options;
 

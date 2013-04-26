@@ -53,18 +53,9 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
 
     // Non database fields
     /**
-     * The report settings for this proposal
-     *
-     * @var Proposalgen_Model_Report_Setting
+     * @var Healthcheck_Model_Healthcheck_Setting
      */
-    protected $_reportSettings;
-
-    /**
-     * The report steps for this proposal
-     *
-     * @var Healthcheck_Model_Healthcheck_Step
-     */
-    protected $_reportSteps;
+    protected $_healthcheckSettings;
 
     /**
      * @var Quotegen_Model_Client
@@ -144,16 +135,16 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                           => $this->id,
-            "clientId"                     => $this->clientId,
-            "dealerId"                     => $this->dealerId,
-            "healthcheckSettingId"         => $this->healthcheckSettingId,
-            "rmsUploadId"                  => $this->rmsUploadId,
-            "stepName"                     => $this->stepName,
-            "dateCreated"                  => $this->dateCreated,
-            "lastModified"                 => $this->lastModified,
-            "reportDate"                   => $this->reportDate,
-            "devicesModified"              => $this->devicesModified,
+            "id"                   => $this->id,
+            "clientId"             => $this->clientId,
+            "dealerId"             => $this->dealerId,
+            "healthcheckSettingId" => $this->healthcheckSettingId,
+            "rmsUploadId"          => $this->rmsUploadId,
+            "stepName"             => $this->stepName,
+            "dateCreated"          => $this->dateCreated,
+            "lastModified"         => $this->lastModified,
+            "reportDate"           => $this->reportDate,
+            "devicesModified"      => $this->devicesModified,
         );
     }
 
@@ -164,60 +155,27 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      */
     public function getHealthcheckSettings ()
     {
-        if (!isset($this->_reportSettings))
+        if (!isset($this->_healthcheckSettings))
         {
-            $this->_reportSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
+            $this->_healthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSetting($this->id);
         }
 
-        return $this->_reportSettings;
+        return $this->_healthcheckSettings;
     }
 
     /**
      * Sets the report settings for the report
      *
-     * @param Healthcheck_Model_Healthcheck_Setting $_reportSettings
+     * @param Healthcheck_Model_Healthcheck_Setting $_healthcheckSettings
      *
      * @return Healthcheck_Model_Healthcheck
      */
-    public function setReportSettings ($_reportSettings)
+    public function setHealthcheckSettings ($_healthcheckSettings)
     {
-        $this->_reportSettings = $_reportSettings;
+        $this->_healthcheckSettings = $_healthcheckSettings;
 
         return $this;
     }
-
-    /**
-     * Gets the report steps for this report
-     *
-     * @return Healthcheck_Model_Healthcheck_Steps
-     */
-    public function getReportSteps ()
-    {
-        if (!isset($this->_reportSteps))
-        {
-            $stage = ($this->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD;
-
-            $this->_reportSteps = Healthcheck_Model_Healthcheck_Steps::getInstance()->steps;
-            Healthcheck_Model_Healthcheck_Steps::getInstance()->updateAccessibleSteps($this->_reportSteps, $stage);
-        }
-
-        return $this->_reportSteps;
-    }
-
-    /**
-     * Sets the report steps for this report
-     *
-     * @param Healthcheck_Model_Healthcheck_Steps $ReportSteps
-     *
-     * @return Healthcheck_Model_Healthcheck
-     */
-    public function setReportSteps ($ReportSteps)
-    {
-        $this->_reportSteps = $ReportSteps;
-
-        return $this;
-    }
-
 
     /**
      * Gets the client

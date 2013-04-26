@@ -16,42 +16,43 @@ $savePath = $savePath . $filename;
 $linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
 
 
-$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
+$quote = $this->Quote();
+/* @var $quote Quotegen_Model_Quote */
 $totalQuantity = 1;
 
-$titles = array (
-        "Item", 
-        "SKU (OEM)", 
-        "SKU (DEALER)", 
-        "Serial Number", 
-        "Location" 
+$titles = array(
+    "Item",
+    "SKU (OEM)",
+    "SKU (DEALER)",
+    "Serial Number",
+    "Location"
 );
 
-$headerFill = array (
-        'type' => PHPExcel_Style_Fill::FILL_SOLID, 
-        'color' => array (
-                'rgb' => 'D8D8D8' 
-        ) 
+$headerFill = array(
+    'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+    'color' => array(
+        'rgb' => 'D8D8D8'
+    )
 );
 
-$boldFont = array (
-        'font' => array (
-                'bold' => true 
-        ) 
+$boldFont = array(
+    'font' => array(
+        'bold' => true
+    )
 );
 
-$styleHeader = array (
-        'fill' => $headerFill, 
-        'font' => array (
-                'bold' => true, 
-                'size' => '16' 
-        ) 
+$styleHeader   = array(
+    'fill' => $headerFill,
+    'font' => array(
+        'bold' => true,
+        'size' => '16'
+    )
 );
-$styleFillBold = array (
-        'fill' => $headerFill, 
-        'font' => array (
-                'bold' => true 
-        ) 
+$styleFillBold = array(
+    'fill' => $headerFill,
+    'font' => array(
+        'bold' => true
+    )
 );
 
 // Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
@@ -78,64 +79,64 @@ $activeSheet->getRowDimension('1')->setRowHeight(25);
 
 // Go through each device and build and array for output
 $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
-//var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-foreach ( $quoteDeviceGroups as $quoteDeviceGroup )
+/* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
+foreach ($quoteDeviceGroups as $quoteDeviceGroup)
 {
-    //var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-    foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+    /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
+    foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
     {
         $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice();
         // $device builds an array used to output quote device information
-        $device = array (
-                $quoteDevice->name,
-                $quoteDevice->oemSku,
-                $quoteDevice->dealerSku
+        $device = array(
+            $quoteDevice->name,
+            $quoteDevice->oemSku,
+            $quoteDevice->dealerSku
         );
-        
+
         // $deviceOptions builds an array of arrays representing quote device options
-        $deviceOptions = array ();
+        $deviceOptions = array();
         //var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-        foreach ( $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption )
+        foreach ($quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions() as $quoteDeviceOption)
         {
-            $deviceOptions [] = array (
-                    "name" => $quoteDeviceOption->name,
-                    "oemSku" => $quoteDeviceOption->oemSku,
-                    "dealerSku" => $quoteDeviceOption->dealerSku
+            $deviceOptions [] = array(
+                "name"      => $quoteDeviceOption->name,
+                "oemSku"    => $quoteDeviceOption->oemSku,
+                "dealerSku" => $quoteDeviceOption->dealerSku
             );
         }
-        
-        // Build the datasheet
+
+        // Build the data sheet
         // Object->getHighestRow() will return the row index where data has been entered in last.
-        // This as well applies styles that have been defined that the beginning of the funciton
-        for($deviceCount = 0; $deviceCount < $quoteDeviceGroupDevice->quantity; $deviceCount ++)
+        // This as well applies styles that have been defined that the beginning of the function
+        for ($deviceCount = 0; $deviceCount < $quoteDeviceGroupDevice->quantity; $deviceCount++)
         {
             // Device Number Row
             $currentRow = $activeSheet->getHighestRow() + 2;
             $activeSheet->setCellValue("A{$currentRow}", "Device {$totalQuantity}");
             $activeSheet->mergeCells("A{$currentRow}:E{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
-            
+
             // Title Row
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($titles, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
-            
+
             // Deivce Row
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($device, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}")->applyFromArray($boldFont);
-            
+
             // Option Row
             // Use a foreach to go through options instead of using fromArray just in case
             // we require to style the option rows.
-            foreach ( $deviceOptions as $option )
+            foreach ($deviceOptions as $option)
             {
                 $currentRow = $activeSheet->getHighestRow() + 1;
                 $activeSheet->setCellValue("A{$currentRow}", "     {$option ['name']}");
                 $activeSheet->setCellValue("B{$currentRow}", $option ["oemSku"]);
                 $activeSheet->setCellValue("C{$currentRow}", $option ["dealerSku"]);
             }
-            $totalQuantity ++;
+            $totalQuantity++;
         }
     }
 }

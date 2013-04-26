@@ -484,7 +484,7 @@ class Hardwareoptimization_ViewModel_Optimization
             $maxVolume = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements()->pricingConfiguration);
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
             }
             $this->_maximumMonthlyPrintVolume = $maxVolume;
         }
@@ -569,11 +569,11 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             if ($deviceInstance->getReplacementMasterDevice())
             {
-                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements()->pricingConfiguration);
+                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
             }
             else
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements()->pricingConfiguration);
+                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
             }
         }
 

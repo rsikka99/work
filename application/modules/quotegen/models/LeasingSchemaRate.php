@@ -101,7 +101,7 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
     /**
      * Gets the range for the leasing schema rate
      *
-     * @return the $_range
+     * @return Quotegen_Model_LeasingSchemaRange
      */
     public function getRange ()
     {

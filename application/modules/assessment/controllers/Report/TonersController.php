@@ -71,7 +71,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
     {
         try
         {
-            /* @var $assessmentViewModel Proposalgen_Model_Proposal_OfficeDepot */
+            /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
             $assessmentViewModel = $this->getAssessmentViewModel();
         }
         catch (Exception $e)

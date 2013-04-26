@@ -1,19 +1,13 @@
 <?php
-
-/**
- * User Form: Used to manage Healthcheck settings
- *
- * @version v1.0
- */
 class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Vertical
 {
     /**
      * The default settings
      *
-     * @var Proposalgen_Model_Healthcheck_Setting
+     * @var Healthcheck_Model_Healthcheck_Setting
      */
     protected $_defaultSettings;
-    
+
     /**
      * Groups of elements
      *
@@ -21,7 +15,7 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
      */
     protected $_formElementGroups;
 
-    public function __construct (Proposalgen_Model_Healthcheck_Setting $defaultSettings, $options = null)
+    public function __construct (Healthcheck_Model_Healthcheck_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
         parent::__construct($options);
@@ -34,7 +28,7 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         /**
          * Add class to form for label alignment
          *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
          * over controls (default)
          * - Inline .form-inline Left-aligned label and inline-block controls
          * for compact style
@@ -45,44 +39,44 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        
+
         $this->setMethod("POST");
-        
+
         // What does this currency regex validate?
-        $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
+        $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
         $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
-        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
-        
+        $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+
         // Setup some form element groups
-        $generalGroup = new stdClass();
-        $generalGroup->title = "General";
-        $generalGroup->elements = array ();
+        $generalGroup                = new stdClass();
+        $generalGroup->title         = "General";
+        $generalGroup->elements      = array();
         $this->_formElementGroups [] = $generalGroup;
-        
-        $proposalGroup = new stdClass();
-        $proposalGroup->title = "Assessment / Solution";
-        $proposalGroup->elements = array ();
+
+        $proposalGroup               = new stdClass();
+        $proposalGroup->title        = "Assessment / Solution";
+        $proposalGroup->elements     = array();
         $this->_formElementGroups [] = $proposalGroup;
-        
-        $grossMarginGroup = new stdClass();
-        $grossMarginGroup->title = "Gross Margin";
-        $grossMarginGroup->elements = array ();
+
+        $grossMarginGroup            = new stdClass();
+        $grossMarginGroup->title     = "Gross Margin";
+        $grossMarginGroup->elements  = array();
         $this->_formElementGroups [] = $grossMarginGroup;
 
-        $optimization = new stdClass();
-        $optimization->title = "Optimization";
-        $optimization->elements = array ();
+        $optimization                = new stdClass();
+        $optimization->title         = "Optimization";
+        $optimization->elements      = array();
         $this->_formElementGroups [] = $optimization;
-        
+
         //*****************************************************************
         // GENERAL SETTING FIELDS
         //*****************************************************************
-        
 
-        $minYear = (int)date('Y') - 2;
-        $maxYear = $minYear + 4;
+
+        $minYear     = (int)date('Y') - 2;
+        $maxYear     = $minYear + 4;
         $report_date = new ZendX_JQuery_Form_Element_DatePicker('reportDate');
         //$report_date = new My_Form_Element_DateTimePicker('reportDate');
         $report_date->setLabel('Report Date')
@@ -95,15 +89,15 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('class', 'span2')
             ->setAttrib('style', 'text-align: right')
             ->setRequired(true);
-        $report_date->addFilters(array (
-                'StringTrim', 
-                'StripTags' 
-        ));
-        
+        $report_date->addFilters(array(
+                                      'StringTrim',
+                                      'StripTags'
+                                 ));
+
         $this->addElement($report_date);
-        
+
         $generalGroup->elements [] = $report_date;
-        
+
         //*****************************************************************
         // PROPOSAL SETTING FIELDS
         //*****************************************************************
@@ -113,10 +107,10 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin')
             ->addValidator(new Zend_Validate_Float())
-            ->addValidator(new Zend_Validate_Between(array (
-                'min' => 0,
-                'max' => 99
-        )))
+            ->addValidator(new Zend_Validate_Between(array(
+                                                          'min' => 0,
+                                                          'max' => 99
+                                                     )))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -141,14 +135,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->monthlyLeasePayment, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Default Printer Cost
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost')
@@ -160,14 +154,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->defaultPrinterCost, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / device')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Leased Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost')
@@ -179,14 +173,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Leased Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost')
@@ -198,14 +192,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // MPS Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel('MPS Monochrome Cost')
@@ -217,14 +211,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsBwCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // MPS Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel('MPS Color Cost')
@@ -238,14 +232,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsColorCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        
+
         // Energy Cost ($/KW/H)
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost')
@@ -257,54 +251,54 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / KWh')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         // Toner preference for the assessment
-        $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
+        $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
-            ->configName)
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()
+                ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        
+
         $this->addElement($pricing_config);
         $proposalGroup->elements [] = $pricing_config;
-        
+
         //*****************************************************************
         // GROSS MARGIN SETTING FIELDS
         //*****************************************************************
-        
+
         // Actual Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
         $actual_page_coverage->setLabel('Page Coverage Monochrome')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
             ->setAttrib('inputappend', '%');
-        
+
         $this->addElement($actual_page_coverage);
         $grossMarginGroup->elements [] = $actual_page_coverage;
-        
+
         // Actual Page Coverage (Color)
         $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
         $actual_page_coverage_color->setLabel('Page Coverage Color')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(0, 100), false)
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ))
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ))
             ->setAttrib('class', 'span1')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
@@ -312,10 +306,10 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setDescription('%')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
             ->setAttrib('inputappend', '%');
-        
+
         $this->addElement($actual_page_coverage_color);
         $grossMarginGroup->elements [] = $actual_page_coverage_color;
-        
+
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge')
@@ -327,14 +321,14 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($admin_charge);
         $grossMarginGroup->elements [] = $admin_charge;
-        
+
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
         $labor_cost->setLabel('Labor Cost')
@@ -346,11 +340,11 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                'min' => 0 
-        ));
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
+                                                ));
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
-        
+
         $this->addElement($labor_cost);
         $grossMarginGroup->elements [] = $labor_cost;
 
@@ -365,22 +359,22 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / page')
-            ->addValidator('greaterThan', true, array (
-                                                      'min' => 0
+            ->addValidator('greaterThan', true, array(
+                                                     'min' => 0
                                                 ));
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($parts_cost);
         $grossMarginGroup->elements [] = $parts_cost;
-        
+
         // Toner preference for the gross marginm
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
         $gross_margin_pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
             ->setAttrib('data-defaultvalue', $this->_defaultSettings->getGrossMarginPricingConfig()
-            ->configName)
+                ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-        
+
         $this->addElement($gross_margin_pricing_config);
         $grossMarginGroup->elements [] = $gross_margin_pricing_config;
 
@@ -430,13 +424,13 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
             ->setAttrib('class', 'input-mini');
         $target_color->setLabel('Target Color')
             ->setAttrib('class', 'input-mini');
-        
+
         //*****************************************************************
         // BUTTONS
         //*****************************************************************
-        $element = new Zend_Form_Element_Submit('save_settings', array (
-                'disableLoadDefaultDecorators' => true
-        ));
+        $element = new Zend_Form_Element_Submit('save_settings', array(
+                                                                      'disableLoadDefaultDecorators' => true
+                                                                 ));
         $element->setLabel('Save and continue')->setAttrib('class', 'btn btn-primary');
         $this->addElement($element);
 

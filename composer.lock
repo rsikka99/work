@@ -48,12 +48,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lrobert/PHPWord.git",
-                "reference": "4a699532099242aba29b6dfa74705a02fb6e3f86"
+                "reference": "d4a7667a4d2b2e50391b9b7ea7bf27871a284e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lrobert/PHPWord/zipball/4a699532099242aba29b6dfa74705a02fb6e3f86",
-                "reference": "4a699532099242aba29b6dfa74705a02fb6e3f86",
+                "url": "https://api.github.com/repos/lrobert/PHPWord/zipball/d4a7667a4d2b2e50391b9b7ea7bf27871a284e6a",
+                "reference": "d4a7667a4d2b2e50391b9b7ea7bf27871a284e6a",
                 "shasum": ""
             },
             "require": {
@@ -81,7 +81,7 @@
                 "source": "https://github.com/lrobert/PHPWord/tree/master",
                 "issues": "https://github.com/lrobert/PHPWord/issues"
             },
-            "time": "2013-03-07 14:20:44"
+            "time": "2013-04-26 14:10:04"
         },
         {
             "name": "phpexcel/phpexcel",

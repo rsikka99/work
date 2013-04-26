@@ -134,27 +134,27 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             /* @var $device Proposalgen_Model_DeviceInstance() */
             foreach ($assessmentViewModel->getPurchasedDevices() as $device)
             {
-                $tonerConfig              = $device->getMasterDevice()->tonerConfigId;
-                $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-                $blackToner               = null;
-                $colorToner               = null;
+                $tonerConfig               = $device->getMasterDevice()->tonerConfigId;
+                $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
+                $blackToner                = null;
+                $colorToner                = null;
 
                 switch ($tonerConfig)
                 {
                     case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
+                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $dealerCostPerPageSettings);
                         break;
                     case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
+                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $dealerCostPerPageSettings);
                         break;
                     case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
+                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $dealerCostPerPageSettings);
                         $colorToner = $blackToner;
                         break;
                     default :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
                         break;
                 }
 

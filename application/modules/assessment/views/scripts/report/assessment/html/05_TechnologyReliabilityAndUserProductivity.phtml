@@ -56,11 +56,12 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div>
             </td>
             <td class="column6">
-                <div class=" center"><?php echo number_format($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)); ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>
             </td>
         </tr>
         <?php $ctr++;
-        if ($ctr > 2) {
+        if ($ctr > 2)
+        {
             break;
         } endforeach; ?>
     </tbody>

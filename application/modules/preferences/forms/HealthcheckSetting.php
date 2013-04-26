@@ -66,7 +66,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                             'validators' => $coverageValidator
                                                        ));
         // Health Check Elements
-        $this->addElement('text', 'assessmentReportMargin', array(
+        $this->addElement('text', 'healthcheckMargin', array(
                                                                  'label'      => 'Pricing Margin',
                                                                  'append'     => '%',
                                                                  'validators' => $marginValidator
@@ -122,12 +122,40 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
-        $assessmentPricingConfig = $this->createElement('select', 'assessmentPricingConfigId', array(
+        $this->addElement('text', 'averageItHourlyRate', array(
+                                                           'label'      => 'Estimated Average It Hourly Rate',
+                                                           'append' => '$',
+                                                           'validators' => $costValidator
+                                                      ));
+        $hoursSpentOnIt = $this->createElement('text', 'hoursSpentOnIt', array(
+                                                           'label'      => 'Estimated Hours Spent On It',
+                                                           'append'     => 'hours',
+                                                           'validators' => $costValidator
+                                                      ));
+        $hoursSpentOnIt->setRequired(false);
+        $hoursSpentOnIt->setAttrib('class', 'span2 ');
+        $annualCostOfLabor = $this->createElement('text', 'costOfLabor', array(
+                                                           'label'      => 'Annual Cost Of Labor',
+                                                           'append'     => '$ / fleet',
+                                                           'validators' => $costValidator
+                                                      ));
+        $annualCostOfLabor->setAttrib('class', 'span2 ');
+        $this->addElement('text', 'costToExecuteSuppliesOrder', array(
+                                                           'label'      => 'Estimated Cost To Execute Supplies Order',
+                                                           'append'     => '$ / order',
+                                                           'validators' => $costValidator
+                                                      ));
+        $this->addElement('text', 'numberOfSupplyOrdersPerMonth', array(
+                                                           'label'      => 'Estimated Supply Orders Per Month',
+                                                           'append'     => '/ month',
+                                                           'validators' => $costValidator
+                                                      ));
+        $healthcehckPricingConfig = $this->createElement('select', 'healthcheckPricingConfigId', array(
                                                                                                     'label' => 'Toner Preference',
                                                                                                     'class' => 'span3 '
                                                                                                ));
 
-
+$this->allowNullValues();
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
         foreach ($this->getElements() as $element)
@@ -142,7 +170,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
 
         $this->addDisplayGroup(array('pageCoverageMonochrome',
                                      'pageCoverageColor',
-                                     'assessmentReportMargin',
+                                     'healthcheckMargin',
                                      'monthlyLeasePayment',
                                      'defaultPrinterCost',
                                      'leasedBwCostPerPage',
@@ -150,10 +178,15 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                      'mpsBwCostPerPage',
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
-                                     $assessmentPricingConfig,
+                                     $healthcehckPricingConfig,
                                      'adminCostPerPage',
                                      'laborCostPerPage',
                                      'partsCostPerPage',
+                                     'averageItHourlyRate',
+                                     $hoursSpentOnIt,
+                                     $annualCostOfLabor,
+                                     'costToExecuteSuppliesOrder',
+                                     'numberOfSupplyOrdersPerMonth',
                                ), 'assessment', array('legend' => 'Health Check Settings',));
 
         $this->setElementDecorators(array(
@@ -197,7 +230,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
         {
             $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
         }
-        $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
+        $healthcehckPricingConfig->addMultiOptions($pricingConfigOptions);
     }
 
     /**

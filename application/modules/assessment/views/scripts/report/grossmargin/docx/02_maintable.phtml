@@ -23,7 +23,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 // $section->addPageBreak();
 
 $tcStyle = $this->styles->tables->grossMargin;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 
 // Table header
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
@@ -34,8 +34,8 @@ $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText($thi
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
 
 $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->header->notopborder);
-$column1 ->addText($this->translate('Device Name'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$column1 ->addText($this->translate('(IP Address - Serial Number)'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$column1->addText($this->translate('Device Name'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$column1->addText($this->translate('(IP Address - Serial Number)'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 $table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('Toner Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
@@ -49,71 +49,71 @@ $table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText($this->tr
 $table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText($this->translate('Total Printing Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 
-foreach ($assessmentViewModel->getPurchasedDevices() as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */{
+foreach ($assessmentViewModel->getPurchasedDevices() as $deviceInstance)
+    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+{
     // This is only here for zend content assist
     //$device = new Proposalgen_Model_DeviceInstance();
-    $tonerConfig = $deviceInstance->getMasterDevice()->tonerConfigId;
-    $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-    $completeMonoToners = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
-    $completeColorToners = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
-    $blackToner = null;
-    $colorToner = null;
-
-
+    $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
+    $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
+    $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+    $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+    $blackToner                = null;
+    $colorToner                = null;
 
 
     switch ($tonerConfig)
     {
         case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-            $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
+            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+            $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $dealerCostPerPageSettings);
             break;
         case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-            $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
+            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+            $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $dealerCostPerPageSettings);
             break;
         case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
+            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $dealerCostPerPageSettings);
             $colorToner = $blackToner;
             break;
         default:
-            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+            $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
             break;
     }
 
     // Black Toner
-    $blackCost = "$" . number_format($blackToner->cost, 2);
+    $blackCost  = "$" . number_format($blackToner->cost, 2);
     $blackYield = number_format($blackToner->yield);
 
     // Color Toner
-    $colorCost = "-";
+    $colorCost  = "-";
     $colorStyle = "style='text-align: center;'";
     $colorYield = "-";
-    $isColor = false;
+    $isColor    = false;
     if ($colorToner)
     {
-        $colorCost = "$" . number_format($colorToner->cost, 2);
+        $colorCost  = "$" . number_format($colorToner->cost, 2);
         $colorYield = number_format($colorToner->yield);
         $colorStyle = 'right';
-        $isColor = true;
+        $isColor    = true;
     }
-    
+
     // Row Colors
-    $mono_toner_class = ($completeMonoToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
+    $mono_toner_class  = ($completeMonoToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
     $color_toner_class = ($completeColorToners) ? $tcStyle->row->cell : $tcStyle->row->highlightcell;
-    
+
     $table->addRow($tcStyle->cell->rowheight);
     $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
-    $column1 ->addText( $this->translate(str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ), $tcStyle->row->fontStyle, $tcStyle->leftalign);
-    $column1 ->addText("(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
-    
+    $column1->addText($this->translate(str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName())), $tcStyle->row->fontStyle, $tcStyle->leftalign);
+    $column1->addText("(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")", $tcStyle->row->fontStyle, $tcStyle->leftalign);
+
     // Mono
     $table->addCell($tcStyle->col2Width, $mono_toner_class)->addText(number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col3Width, $mono_toner_class)->addText($blackCost, $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col4Width, $mono_toner_class)->addText($blackYield, $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col5Width, $mono_toner_class)->addText(number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4), $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText("$" .number_format($deviceInstance->getMonthlyBlackAndWhiteCost(), 2), $tcStyle->row->fontStyle, $tcStyle->rightalign);
-    
+    $table->addCell($tcStyle->col6Width, $mono_toner_class)->addText("$" . number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2), $tcStyle->row->fontStyle, $tcStyle->rightalign);
+
     // Color
     $table->addCell($tcStyle->col7Width, $color_toner_class)->addText(($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "-", $tcStyle->row->fontStyle, ($isColor) ? $tcStyle->rightalign : $tcStyle->centeralign);
     $table->addCell($tcStyle->col8Width, $color_toner_class)->addText($colorCost, $tcStyle->row->fontStyle, (trim($colorCost) != "-") ? $tcStyle->rightalign : $tcStyle->centeralign);
@@ -125,7 +125,7 @@ foreach ($assessmentViewModel->getPurchasedDevices() as $deviceInstance) /* @var
 
 // Table footer (totals row)
 $table->addRow($tcStyle->footer->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $assessmentViewModel->getPurchasedDeviceCount(). ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $assessmentViewModel->getPurchasedDeviceCount() . ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText(number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col4Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

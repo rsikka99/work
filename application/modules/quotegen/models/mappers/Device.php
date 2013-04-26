@@ -116,7 +116,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Finds a device based on it's primaryKey
      *
-     * @param int $id The id of the device to find
+     * @param array $id The id of the device to find
      *
      * @return Quotegen_Model_Device
      */
@@ -238,7 +238,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
     /**
      * Fetches a list of devices for the dealer
      *
-     * @param int dealer id
+     * @param int $dealerId
      *
      * @return Quotegen_Model_Device[]
      */

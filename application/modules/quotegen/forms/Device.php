@@ -8,18 +8,18 @@ class Quotegen_Form_Device extends EasyBib_Form
      * @var int
      */
     protected $_deviceId;
-    
+
     /**
-     * An array of elements that repeneds Quotegen_Model_Option objects
+     * An array of elements that represents Quotegen_Model_Option objects
      *
      * @var array
      */
-    protected $_deviceOptionElements = array ();
-    
+    protected $_deviceOptionElements = array();
+
     /**
      * Options for the devices
      *
-     * @var Quotegen_Model_Option array
+     * @var Quotegen_Model_Option[]
      */
     protected $_deviceOptions;
 
@@ -36,7 +36,7 @@ class Quotegen_Form_Device extends EasyBib_Form
         /**
          * Add class to form for label alignment
          *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
          * over controls (default)
          * - Inline .form-inline Left-aligned label and inline-block controls
          * for compact style
@@ -47,88 +47,90 @@ class Quotegen_Form_Device extends EasyBib_Form
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        
+
         if ($this->_deviceId)
         {
-            $device = Quotegen_Model_Mapper_Device::getInstance()->find($this->_deviceId);
+            $device     = Quotegen_Model_Mapper_Device::getInstance()->find($this->_deviceId);
             $deviceName = new My_Form_Element_Paragraph('deviceName');
             $deviceName->setValue($device->getMasterDevice()
                 ->getFullDeviceName());
             $deviceName->setName('deviceName');
-            
+
             $this->addElement($deviceName);
-            
-            $this->addElement('text', 'oemSku', array (
-                    'label' => 'OEM SKU:', 
-                    'required' => true, 
-                    'filters' => array (
-                            'StringTrim', 
-                            'StripTags' 
-                    ), 
-                    'validators' => array (
-                            array (
-                                    'validator' => 'StringLength', 
-                                    'options' => array (
-                                            1, 
-                                            255 
-                                    ) 
-                            ) 
-                    ) 
-            ));
-            
+
+            $this->addElement('text', 'oemSku', array(
+                                                     'label'      => 'OEM SKU:',
+                                                     'required'   => true,
+                                                     'filters'    => array(
+                                                         'StringTrim',
+                                                         'StripTags'
+                                                     ),
+                                                     'validators' => array(
+                                                         array(
+                                                             'validator' => 'StringLength',
+                                                             'options'   => array(
+                                                                 1,
+                                                                 255
+                                                             )
+                                                         )
+                                                     )
+                                                ));
+
             /* @var $deviceOption Quotegen_Model_DeviceOption */
-            foreach ( $device->getDeviceOptions() as $deviceOption )
+            foreach ($device->getDeviceOptions() as $deviceOption)
             {
                 $object = new stdClass();
 
                 // Create a unique element with a unique id
 
-                if (! $deviceOption->includedQuantity)
+                if (!$deviceOption->includedQuantity)
+                {
                     $deviceOption->includedQuantity = 0;
-                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", array (
-                        'label' => $deviceOption->getOption()->name,
-                        'value' => $deviceOption->includedQuantity,
-                        'class' => 'span1' 
-                ));
-                
+                }
+                $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", array(
+                                                                                                              'label' => $deviceOption->getOption()->name,
+                                                                                                              'value' => $deviceOption->includedQuantity,
+                                                                                                              'class' => 'span1'
+                                                                                                         ));
+
                 // Add the elements to the table
                 $this->addElement($optionElement);
-                
+
                 $object->deviceOptionElement = $optionElement;
-                $object->deviceOption = $deviceOption;
-                $object->option = $deviceOption->getOption();
-                
+                $object->deviceOption        = $deviceOption;
+                $object->option              = $deviceOption->getOption();
+
                 // Add the elements to the options array
                 $this->_deviceOptionElements [] = $object;
             }
         }
         else
         {
-            $masterDeviceList = array ();
+            $masterDeviceList = array();
             /* @var $masterDevice Proposalgen_Model_MasterDevice */
-            foreach ( Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice )
+            foreach (Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllAvailableMasterDevices() as $masterDevice)
             {
                 $masterDeviceList [$masterDevice->id] = $masterDevice->getFullDeviceName();
             }
-            $this->addElement('select', 'masterDeviceId', array (
-                    'label' => 'Master Device', 
-                    'multiOptions' => $masterDeviceList 
-            ));
+            $this->addElement('select', 'masterDeviceId', array(
+                                                               'label'        => 'Master Device',
+                                                               'multiOptions' => $masterDeviceList
+                                                          ));
         }
-        
+
 
         // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
-                'label' => 'Save' 
-        ));
-        
+        $this->addElement('submit', 'submit', array(
+                                                   'ignore' => true,
+                                                   'label'  => 'Save'
+                                              ));
+
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        
+        $this->addElement('submit', 'cancel', array(
+                                                   'ignore' => true,
+                                                   'label'  => 'Cancel'
+                                              ));
+
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 
@@ -136,20 +138,20 @@ class Quotegen_Form_Device extends EasyBib_Form
     {
         if ($this->_deviceId)
         {
-            $this->setDecorators(array (
-                    array (
-                            'ViewScript', 
-                            array (
-                                    'viewScript' => 'device/form/edit.phtml' 
-                            ) 
-                    ) 
-            ));
+            $this->setDecorators(array(
+                                      array(
+                                          'ViewScript',
+                                          array(
+                                              'viewScript' => 'device/form/edit.phtml'
+                                          )
+                                      )
+                                 ));
         }
     }
 
     /**
      *
-     * @return the $_deviceOptionElements
+     * @return Zend_Form_Element[]
      */
     public function getDeviceOptionElements ()
     {
@@ -158,7 +160,7 @@ class Quotegen_Form_Device extends EasyBib_Form
 
     /**
      *
-     * @param multitype: $_deviceOptionElements            
+     * @param Zend_Form_Element[] $_deviceOptionElements
      */
     public function setDeviceOptionElements ($_deviceOptionElements)
     {
@@ -166,8 +168,7 @@ class Quotegen_Form_Device extends EasyBib_Form
     }
 
     /**
-     *
-     * @return the $_deviceOptions
+     * @return Quotegen_Model_Option[]
      */
     public function getDeviceOptions ()
     {
@@ -175,11 +176,14 @@ class Quotegen_Form_Device extends EasyBib_Form
     }
 
     /**
+     * @param Quotegen_Model_Option[] $_deviceOptions
      *
-     * @param field_type $_deviceOptions            
+     * @return $this
      */
     public function setDeviceOptions ($_deviceOptions)
     {
         $this->_deviceOptions = $_deviceOptions;
+
+        return $this;
     }
 }

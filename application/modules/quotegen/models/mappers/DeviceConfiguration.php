@@ -307,13 +307,15 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
 
     /**
      * Fetches a list of device configurations for the dealer
-     * @param int dealer id
+     *
+     * @param int $dealerId
      *
      * @return Quotegen_Model_DeviceConfiguration[]
      */
     public function fetchDeviceConfigurationListForDealer ($dealerId)
     {
         $devices = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
+
         return $devices;
     }
 }

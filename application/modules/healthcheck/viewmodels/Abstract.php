@@ -2,7 +2,7 @@
 class Healthcheck_ViewModel_Abstract
 {
     /**
-     * @var Proposalgen_Model_Proposal_Devices
+     * @var Healthcheck_ViewModel_Devices
      */
     protected $_devices;
 
@@ -81,7 +81,7 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->adminCostPerPage       = $healthcheckSettings->adminCostPerPage;
             $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->pricingConfiguration   = $healthcheckSettings->getAssessmentPricingConfig();
+            $this->_costPerPageSettingForCustomer->pricingConfiguration   = $healthcheckSettings->getHealthcheckPricingConfig();
         }
 
         return $this->_costPerPageSettingForCustomer;

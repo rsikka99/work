@@ -105,7 +105,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($deviceInstance->getMasterDevice()->getTonersForAssessment($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration) as $tonerColor => $toner) : ?>
+                    <?php foreach ($deviceInstance->getMasterDevice()->getTonersForAssessment($assessmentViewModel->getCostPerPageSettingForCustomer()) as $tonerColor => $toner) : ?>
                         <tr>
                             <td><?php echo Proposalgen_Model_TonerColor::$ColorNames[$tonerColor]; ?></td>
                             <td><?php echo $toner->getPartType()->typeName; ?></td>

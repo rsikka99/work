@@ -421,8 +421,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Populate SKU
         $oemSku                     = null;
-        $devicemapper               = new Quotegen_Model_Mapper_Device();
-        $quoteDevice                = $devicemapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
+        $deviceMapper               = new Quotegen_Model_Mapper_Device();
+        $quoteDevice                = $deviceMapper->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $quoteDevice;
         if ($quoteDevice)
         {
@@ -480,7 +480,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                                                        ));
                                 }
 
-                                $devicemapper->delete($quoteDevice);
+                                $deviceMapper->delete($quoteDevice);
                                 $this->view->quotegendevice = null;
                             }
 
@@ -633,7 +633,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $device                     = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
         $this->view->quotegendevice = $device;
 
-        // Populate manufacturers dropdown
+        // Populate manufacturers drop down
         $manufacturers             = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
         $this->view->manufacturers = $manufacturers;
 

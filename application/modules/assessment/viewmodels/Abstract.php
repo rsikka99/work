@@ -2,7 +2,7 @@
 class Assessment_ViewModel_Abstract
 {
     /**
-     * @var Proposalgen_Model_Proposal_Devices
+     * @var Assessment_ViewModel_Devices
      */
     protected $_devices;
 

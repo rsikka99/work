@@ -52,7 +52,7 @@ class Preferences_Service_HealthcheckSetting
             {
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
-                $this->_form->getElement("assessmentReportMargin")->setDescription($populateSettings["assessmentReportMargin"]);
+                $this->_form->getElement("healthcheckMargin")->setDescription($populateSettings["healthcheckMargin"]);
                 $this->_form->getElement("monthlyLeasePayment")->setDescription($populateSettings["monthlyLeasePayment"]);
                 $this->_form->getElement("defaultPrinterCost")->setDescription($populateSettings["defaultPrinterCost"]);
                 $this->_form->getElement("leasedBwCostPerPage")->setDescription($populateSettings["leasedBwCostPerPage"]);
@@ -63,7 +63,12 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-                $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
+                $this->_form->getElement("averageItHourlyRate")->setDescription($populateSettings["averageItHourlyRate"]);
+                $this->_form->getElement("hoursSpentOnIt")->setDescription(($populateSettings["hoursSpentOnIt"] ? $populateSettings["hoursSpentOnIt"] : "15 minutes per week per printer"));
+                $this->_form->getElement("costOfLabor")->setDescription(($populateSettings["costOfLabor"] ? $populateSettings["costOfLabor"] : "$200 per printer"));
+                $this->_form->getElement("costToExecuteSuppliesOrder")->setDescription($populateSettings["costToExecuteSuppliesOrder"]);
+                $this->_form->getElement("numberOfSupplyOrdersPerMonth")->setDescription($populateSettings["numberOfSupplyOrdersPerMonth"]);
+                $this->_form->getElement("healthcheckPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['healthcheckPricingConfigId']]);
                 // Re-load the settings into Healthcheck settings
                 $populateSettings = $this->_defaultSettings;
             }
@@ -173,9 +178,9 @@ class Preferences_Service_HealthcheckSetting
             }
 
             // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            if ((int)$validData ['healthcheckPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['assessmentPricingConfigId']);
+                unset($validData ['healthcheckPricingConfigId']);
             }
 
             $HealthcheckSetting = new Healthcheck_Model_Healthcheck_Setting();

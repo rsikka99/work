@@ -70,12 +70,12 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     protected $_quoteDeviceGroups;
 
     /**
-     * @var double
+     * @var float
      */
     public $pageCoverageMonochrome;
 
     /**
-     * @var double
+     * @var float
      */
     public $pageCoverageColor;
 
@@ -131,7 +131,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * The quote device configurations in this quote
      *
-     * @var multitype:Quotegen_Model_QuoteDevice
+     * @var Quotegen_Model_QuoteDevice[]
      */
     protected $_quoteDevices;
 
@@ -296,7 +296,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Gets the quote devices for the quote
      *
-     * @return multitype:Quotegen_Model_QuoteDevice The quote devices.
+     * @return Quotegen_Model_QuoteDevice[].
      *
      */
     public function getQuoteDeviceGroups ()
@@ -312,8 +312,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Sets the quote devices for the quote
      *
-     * @param $_quoteDeviceGroups multitype:Quotegen_Model_QuoteDeviceGroup
-     *                            The quote devices.
+     * @param  Quotegen_Model_QuoteDeviceGroup[] $_quoteDeviceGroups The quote devices.
      *
      * @return \Quotegen_Model_Quote
      */

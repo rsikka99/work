@@ -54,7 +54,7 @@ foreach ($assessmentViewModel->getLeastUsedDevices() as $device)
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing');
-    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)), null, 'nospacing');
+    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing');
 }
 
 $section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
@@ -74,7 +74,7 @@ foreach ($assessmentViewModel->getMostUsedDevices() as $device)
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing');
-    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)), null, 'nospacing');
+    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing');
 }
 $section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
 $section->addTextBreak();

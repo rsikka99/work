@@ -161,8 +161,7 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param Proposalgen_Model_Assessment_Setting $settings
-     *            These can be either a Proposalgen_Model_Report_Setting or an array of settings
+     * @param array|Proposalgen_Model_Assessment_Setting $settings These can be either a Proposalgen_Model_Report_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {

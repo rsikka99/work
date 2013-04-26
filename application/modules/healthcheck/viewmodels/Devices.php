@@ -33,7 +33,7 @@ class Healthcheck_ViewModel_Devices
     public $unmappedDeviceInstances = array();
 
     /**
-     * @var Healthcheck_Model_Healthcehck
+     * @var Healthcheck_Model_Healthcheck
      */
     protected $_healthcheck;
 
@@ -49,7 +49,7 @@ class Healthcheck_ViewModel_Devices
      */
     public function __construct (Healthcheck_Model_Healthcheck $healthcheck)
     {
-        $this->_healthcheck                                      = $healthcheck;
+        $this->_healthcheck                                     = $healthcheck;
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $healthcheck->getHealthcheckSettings()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $healthcheck->getHealthcheckSettings()->partsCostPerPage;
         $this->_fetchAndSortAllDevices($healthcheck->getRmsUpload()->id);

@@ -69,8 +69,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="column1"><div ><?php echo $deviceInstance->getDeviceName() ?></div></td>
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown'; ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
-            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)) ?></div></td>
-            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration), 1) ?>%</div></td>
+            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div></td>
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div></td>
 
         </tr>
         <?php endforeach; ?>
@@ -93,8 +93,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="column1"><div ><?php echo $deviceInstance->getDeviceName() ?></div></td>
             <td class="column2"><div class=" center"><?php echo ($deviceInstance->serialNumber) ?: 'Unknown' ?></div></td>
             <td class="column3"><div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()) ?></div></td>
-            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration)) ?></div></td>
-            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()->pricingConfiguration), 1) ?>%</div></td>
+            <td class="column4"><div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div></td>
+            <td class="column5"><div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div></td>
 
         </tr>
         <?php endforeach; ?>

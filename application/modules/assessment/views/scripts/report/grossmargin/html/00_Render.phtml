@@ -119,28 +119,28 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
     <tbody>
     <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
         <?php
-        $tonerConfig              = $deviceInstance->getMasterDevice()->tonerConfigId;
-        $grossMarginPricingConfig = Proposalgen_Model_MasterDevice::getGrossMarginPricingConfig();
-        $completeMonoToners       = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners();
-        $completeColorToners      = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners();
-        $blackToner               = null;
-        $colorToner               = null;
+        $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
+        $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
+        $completeMonoToners        = $deviceInstance->getMasterDevice()->getHasValidMonoGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+        $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
+        $blackToner                = null;
+        $colorToner                = null;
         switch ($tonerConfig)
         {
             case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $grossMarginPricingConfig);
+                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $dealerCostPerPageSettings);
                 break;
             case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
-                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $grossMarginPricingConfig);
+                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
+                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $dealerCostPerPageSettings);
                 break;
             case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $grossMarginPricingConfig);
+                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $dealerCostPerPageSettings);
                 $colorToner = $blackToner;
                 break;
             case Proposalgen_Model_TonerConfig::BLACK_ONLY:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $grossMarginPricingConfig);
+                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
                 break;
             default:
                 break;
@@ -181,7 +181,8 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 <div class="right"><?php echo number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4); ?></div>
             </td>
             <td class="column6 mono">
-                <div class="right">$<?php echo number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
+                <div class="right">
+                    $<?php echo number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
             </td>
 
             <!-- Color -->

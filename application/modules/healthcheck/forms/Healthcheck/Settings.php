@@ -81,7 +81,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
 
         // Page Pricing Margin
-        $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
+        $pricing_margin = new Zend_Form_Element_Text('healthcheckMargin');
         $pricing_margin->setLabel('Pricing Margin')
             ->addValidator(new Zend_Validate_Float())
             ->addValidator(new Zend_Validate_Between(array(
@@ -93,7 +93,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
             ->setValue('20')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->assessmentReportMargin, 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->healthcheckMargin, 2))
             ->setAttrib('inputappend', '%');
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
@@ -236,10 +236,10 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         // Toner preference for the assessment
-        $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
+        $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()
                 ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
 
@@ -262,7 +262,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->pageCoverageMonochrome, 2))
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage);
@@ -281,7 +281,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('style', 'text-align: right')
             ->setAttrib('id', 'actualPageCoverageColor')
             ->setDescription('%')
-            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
+            ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->pageCoverageColor, 2))
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage_color);
