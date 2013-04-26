@@ -135,10 +135,11 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
      */
     public function initReportVariables ($filename)
     {
-        $this->view->publicFileName = $this->_relativeCachePath . "/" . $filename;
-        $this->view->savePath       = $this->_fullCachePath . "/" . $filename;
-        $this->view->dealerLogoFile = $this->getDealerLogoFile();
-        $this->view->proposal       = $this->getCustomerHardwareOptimizationViewModel();
+        $this->view->publicFileName       = $this->_relativeCachePath . "/" . $filename;
+        $this->view->savePath             = $this->_fullCachePath . "/" . $filename;
+        $this->view->dealerLogoFile       = $this->getDealerLogoFile();
+        $this->view->optimization         = $this->getOptimizationViewModel();
+        $this->view->hardwareOptimization = $this->_hardwareOptimization;
     }
 
     /**
