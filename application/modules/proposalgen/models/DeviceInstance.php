@@ -1,21 +1,21 @@
 <?php
 class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 {
-
-    /*
-     *
-        */
+    /**
+     * Constants for replacement actions for the solution
+     */
     const ACTION_KEEP    = 'Keep';
     const ACTION_REPLACE = 'Replace';
     const ACTION_RETIRE  = 'Retire';
 
-    /*
-     *
+    /**
+     * These constants help determine whether or not to retire a device
      */
-    const RETIREMENT_AGE           = 10;
-    const RETIREMENT_MAXPAGECOUNT  = 500;
-    const REPLACEMENT_AGE          = 10;
-    const REPLACEMENT_MINPAGECOUNT = 500;
+    const RETIREMENT_AGE             = 10;
+    const RETIREMENT_MAX_PAGE_COUNT  = 500;
+    const REPLACEMENT_AGE            = 10;
+    const REPLACEMENT_MIN_PAGE_COUNT = 500;
+
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
      *
@@ -747,6 +747,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
+     * @param float                                $margin
+     *
      * @return float
      */
     public function getCostOfInkAndToner ($costPerPageSetting, $margin)
@@ -761,6 +763,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float                                $margin
      *
      * @return float
      */
@@ -768,7 +771,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $margin = (1 - $margin) * 100;
+            $margin                                = (1 - $margin) * 100;
             $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getAverageMonthlyBlackAndWhitePageCount(), $margin);
         }
 
@@ -776,13 +779,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float                                $margin
+     *
      * @return float
      */
     public function getCostOfColorInkAndToner ($costPerPageSetting, $margin)
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $margin = (1 - $margin) * 100;
+            $margin                        = (1 - $margin) * 100;
             $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getAverageMonthlyColorPageCount(), $margin);
         }
 
@@ -1325,11 +1331,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->Action))
         {
-            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAXPAGECOUNT)
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getAverageMonthlyPageCount() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
                 $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
-            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MINPAGECOUNT)
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getAverageMonthlyPageCount() > self::REPLACEMENT_MIN_PAGE_COUNT)
             {
                 $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
