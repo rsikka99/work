@@ -29,8 +29,7 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
      * Saves an instance of Quotegen_Model_LeasingSchemaTerm to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm
-     *                           The object to insert
+     * @param Quotegen_Model_LeasingSchemaTerm $object The object to insert
      *
      * @return int The primary key of the new row
      */
@@ -56,10 +55,8 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_LeasingSchemaTerm to the database.
      *
-     * @param $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm
-     *                           The leasingSchemaTerm model to save to the database
-     * @param $primaryKey        mixed
-     *                           Optional: The original primary key, in case we're changing it
+     * @param Quotegen_Model_LeasingSchemaTerm $object     The leasingSchemaTerm model to save to the database
+     * @param mixed                            $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */

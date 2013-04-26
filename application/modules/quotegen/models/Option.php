@@ -134,6 +134,7 @@ class Quotegen_Model_Option extends My_Model_Abstract
      *
      * @param multitype: $_categories
      *                 The new array of categories
+     * @return $this
      */
     public function setCategories ($_categories)
     {
@@ -144,6 +145,8 @@ class Quotegen_Model_Option extends My_Model_Abstract
 
     /**
      * Gets the included quantity for a device option
+     *
+     * @param $deviceId
      *
      * @return int $includedQuantity
      */

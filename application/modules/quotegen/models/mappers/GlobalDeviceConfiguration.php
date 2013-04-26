@@ -227,7 +227,7 @@ class Quotegen_Model_Mapper_GlobalDeviceConfiguration extends My_Model_Mapper_Ab
     }
 
     /**
-     * @param Quotegen_Model_GlobalDeviceConfiguration @object
+     * @param Quotegen_Model_GlobalDeviceConfiguration $object
      *
      * @return int
      */

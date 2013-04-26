@@ -8,14 +8,14 @@ class Admin_Model_Log_Type extends My_Model_Abstract
      * @var number
      */
     protected $_id;
-    
+
     /**
      * The log type name
      *
      * @var string
      */
     protected $_name;
-    
+
     /*
      * (non-PHPdoc) @see My_Model_Abstract::populate()
      */
@@ -25,22 +25,26 @@ class Admin_Model_Log_Type extends My_Model_Abstract
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        
-        if (isset($params->id) && ! is_null($params->id))
+
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->setId($params->id);
-        
-        if (isset($params->name) && ! is_null($params->name))
+        }
+
+        if (isset($params->name) && !is_null($params->name))
+        {
             $this->setName($params->name);
+        }
     }
-    
+
     /*
      * (non-PHPdoc) @see My_Model_Abstract::toArray()
      */
     public function toArray ()
     {
-        return array (
-                "id" => $this->getId(), 
-                "name" => $this->getName() 
+        return array(
+            "id"   => $this->getId(),
+            "name" => $this->getName()
         );
     }
 
@@ -59,10 +63,13 @@ class Admin_Model_Log_Type extends My_Model_Abstract
      *
      * @param number $_id
      *            The new value
+     *
+     * @return $this
      */
     public function setId ($_id)
     {
         $this->_id = $_id;
+
         return $this;
     }
 
@@ -81,10 +88,13 @@ class Admin_Model_Log_Type extends My_Model_Abstract
      *
      * @param string $_name
      *            The new value
+     *
+     * @return $this
      */
     public function setName ($_name)
     {
         $this->_name = $_name;
+
         return $this;
     }
 }

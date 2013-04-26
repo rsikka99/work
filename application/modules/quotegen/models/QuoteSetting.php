@@ -178,7 +178,9 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
      * Sets the pricing config object
      *
      * @param Proposalgen_Model_PricingConfig $_pricingConfig
-     *            The new princing config.
+     *            The new pricing config.
+     *
+     * @return $this
      */
     public function setPricingConfig ($_pricingConfig)
     {

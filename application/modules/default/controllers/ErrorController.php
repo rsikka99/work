@@ -60,8 +60,9 @@ class Default_ErrorController extends Tangent_Controller_Action
     /**
      * Logs the error and prepares the view with the appropriate information
      *
-     * @param unknown_type $errors
-     * @param unknown_type $priority
+     * @param stdClass $errors
+     * @param int      $priority
+     * @param int      $code
      */
     public function logAndPrepareExceptions ($errors, $priority, $code)
     {
@@ -73,6 +74,7 @@ class Default_ErrorController extends Tangent_Controller_Action
         $this->view->uid = $uid;
         $exceptions      = array();
 
+        /* @var $ex \Exception */
         $ex = $errors->exception;
 
         // Declare the start of the trace
@@ -82,7 +84,7 @@ class Default_ErrorController extends Tangent_Controller_Action
         do
         {
             // Log exception, if logger available
-            Tangent_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occured in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
+            Tangent_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occurred in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
             Tangent_Log::log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
             $exceptions [] = $ex;
         } while (!is_null($ex = $ex->getPrevious()));
@@ -111,7 +113,7 @@ class Default_ErrorController extends Tangent_Controller_Action
         $this->getResponse()->setHttpResponseCode(403);
     }
 
-    public function fourOhFourAction()
+    public function fourOhFourAction ()
     {
         $this->getResponse()->setHttpResponseCode(404);
     }

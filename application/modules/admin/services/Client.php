@@ -12,6 +12,8 @@ class Admin_Service_Client
     /**
      * Gets the client form
      *
+     * @param bool $dealerManagement
+     *
      * @return Admin_Form_Client
      */
     public function getForm ($dealerManagement = true)

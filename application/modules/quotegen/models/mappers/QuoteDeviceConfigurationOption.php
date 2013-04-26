@@ -53,7 +53,7 @@ class Quotegen_Model_Mapper_QuoteDeviceConfigurationOption extends My_Model_Mapp
     }
 
     /**
-     * @param Quotegen_Model_QuoteDeviceConfigurationOption @object
+     * @param Quotegen_Model_QuoteDeviceConfigurationOption $object
      *
      * @return array
      */

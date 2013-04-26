@@ -111,6 +111,8 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      * Sets the quote device
      *
      * @param Quotegen_Model_QuoteDevice $_quoteDevice
+     *
+     * @return $this
      */
     public function setQuoteDevice ($_quoteDevice)
     {
@@ -138,6 +140,8 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      * Sets the quote device group
      *
      * @param Quotegen_Model_QuoteDeviceGroup $_quoteDeviceGroup
+     *
+     * @return $this
      */
     public function setQuoteDeviceGroup ($_quoteDeviceGroup)
     {

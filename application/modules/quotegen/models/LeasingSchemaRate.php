@@ -88,6 +88,8 @@ class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
      * Sets the term for the leasing schema rate
      *
      * @param Quotegen_Model_LeasingSchemaTerm $_term
+     *
+     * @return $this
      */
     public function setTerm ($_term)
     {

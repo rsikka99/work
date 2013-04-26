@@ -84,7 +84,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         return array(
             "id"             => $this->id,
-            "dealerId"             => $this->dealerId,
+            "dealerId"       => $this->dealerId,
             "masterDeviceId" => $this->masterDeviceId,
             "name"           => $this->name,
             "description"    => $this->description,
@@ -100,7 +100,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     {
         if (!isset($this->_device))
         {
-            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($this->masterDeviceId,$this->dealerId));
+            $this->_device = Quotegen_Model_Mapper_Device::getInstance()->find(array($this->masterDeviceId, $this->dealerId));
         }
 
         return $this->_device;
@@ -110,6 +110,8 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
      * Sets the quote device associated with this configuration
      *
      * @param Quotegen_Model_Device $_device
+     *
+     * @return Quotegen_Model_DeviceConfiguration
      */
     public function setDevice ($_device)
     {
@@ -121,7 +123,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     /**
      * Get the array of options for the device
      *
-     * @return multitype:Quotegen_Model_DeviceConfigurationOption The array of options
+     * @return Quotegen_Model_DeviceOption[]
      */
     public function getOptions ()
     {
@@ -136,7 +138,9 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     /**
      * Set a new array of options for the device
      *
-     * @param multitype:Quotegen_Model_DeviceOption $_options
+     * @param Quotegen_Model_DeviceOption[] $_options
+     *
+     * @return Quotegen_Model_DeviceConfiguration
      */
     public function setOptions ($_options)
     {

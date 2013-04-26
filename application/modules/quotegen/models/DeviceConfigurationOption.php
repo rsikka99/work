@@ -86,6 +86,7 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
      * Sets the option associated with the device configuration option
      *
      * @param Quotegen_Model_Option $_option
+     * @return Quotegen_Model_DeviceConfigurationOption
      */
     public function setOption ($_option)
     {

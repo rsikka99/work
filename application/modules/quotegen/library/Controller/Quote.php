@@ -389,7 +389,6 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     public function initDocxContext ()
     {
         // Include php word and initialize a new instance
-        require_once('PHPWord.php');
         $this->view->phpword = new PHPWord();
     }
 

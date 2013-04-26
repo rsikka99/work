@@ -64,7 +64,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     }
 
     /**
-     * @param Quotegen_Model_DeviceConfiguration @object
+     * @param Quotegen_Model_DeviceConfiguration $object
      *
      * @return array
      */

@@ -57,10 +57,8 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     /**
      * Saves (updates) an instance of Quotegen_Model_QuoteSetting to the database.
      *
-     * @param $objects    Quotegen_Model_QuoteSetting
-     *                    The quoteSetting model to save to the database
-     * @param $primaryKey mixed
-     *                    Optional: The original primary key, in case we're changing it
+     * @param Quotegen_Model_QuoteSetting $object     The quoteSetting model to save to the database
+     * @param mixed                       $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */
@@ -223,7 +221,7 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
     }
 
     /*
-     * @param Quotegen_Model_QuoteSetting @object
+     * @param Quotegen_Model_QuoteSetting $object
      * @return int
      */
     public function getPrimaryKeyValueForObject ($object)

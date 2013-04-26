@@ -69,7 +69,6 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
                 $healthcheck         = $this->getHealthcheckViewModel();
                 $graphs              = $this->cachePNGImages($healthcheck->getGraphs(), true);

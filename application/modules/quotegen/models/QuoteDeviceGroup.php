@@ -102,6 +102,8 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * Sets the group pages flag
      *
      * @param number $_groupPages
+     *
+     * @return $this
      */
     public function setGroupPages ($_groupPages)
     {
@@ -134,6 +136,8 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
      * Sets the quote
      *
      * @param $_quote Quotegen_Model_Quote
+     *
+     * @return $this
      */
     public function setQuote ($_quote)
     {
@@ -145,8 +149,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Gets the quote devices
      *
-     * @return multitype:Quotegen_Model_QuoteDeviceGroupDevice
-     *
+     * @return Quotegen_Model_QuoteDeviceGroupDevice[]
      */
     public function getQuoteDeviceGroupDevices ()
     {
@@ -161,8 +164,10 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     /**
      * Sets the quote devices
      *
-     * @param $_quoteDeviceGroupDevices multitype:Quotegen_Model_QuoteDeviceGroupDevice
+     * @param $_quoteDeviceGroupDevices Quotegen_Model_QuoteDeviceGroupDevice[]
      *                                  The quote devices
+     *
+     * @return $this
      */
     public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
     {

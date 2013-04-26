@@ -38,7 +38,6 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 $this->_helper->layout->disableLayout();
                 break;
             case "docx" :
-                require_once('PHPWord.php');
                 $this->view->phpword = new PHPWord();
                 $assessmentViewModel = $this->getAssessmentViewModel();
                 $graphs              = $this->cachePNGImages($assessmentViewModel->getGraphs(), true);

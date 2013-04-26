@@ -236,7 +236,7 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     }
 
     /*
-     * @param Quotegen_Model_QuoteDeviceOption @object
+     * @param Quotegen_Model_QuoteDeviceOption $object
      * return int
      */
     public function getPrimaryKeyValueForObject ($object)
