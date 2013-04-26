@@ -142,9 +142,9 @@ class Healthcheck_Service_HealthcheckSettings
                 }
             }
             // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            if ((int)$validData ['healthcheckPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
             {
-                unset($validData ['assessmentPricingConfigId']);
+                unset($validData ['healthcheckPricingConfigId']);
             }
 
             // Save the id as it will get erased

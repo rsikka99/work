@@ -265,10 +265,10 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
         // Toner preference for the assessment
-        $pricing_config = new Zend_Form_Element_Select('assessmentPricingConfigId');
+        $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getAssessmentPricingConfig()
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()
             ->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
         
