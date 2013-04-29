@@ -1515,7 +1515,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 'GROUP_CONCAT(CONCAT(mdm.fullname," ",md.modelName) SEPARATOR "; ") AS device_list'
             );
         }
-        $formData = null;
+        $formData = new stdClass();
 
         $dealerId = $this->dealerId;
         try
@@ -1635,10 +1635,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($formData);
     }
 
-    protected function getmodelsAction ()
+    /**
+     *
+     */
+    protected function getModelsAction ()
     {
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
         $terms      = explode(" ", trim($_REQUEST ["searchText"]));
         $searchTerm = "%";
         foreach ($terms as $term)
@@ -1665,106 +1666,26 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 "manufacturer" => ucwords(strtolower($row ["displayname"]))
             );
         }
-        $lawl = Zend_Json::encode($devices);
-        print $lawl;
+
+        $this->sendJson($devices);
     }
 
     public function managematchupsAction ()
     {
-        $db                 = Zend_Db_Table::getDefaultAdapter();
         $this->view->title  = 'Manage Printer Matchups';
         $this->view->source = "PrintFleet";
-//        $this->view->pf_model_id = '';
 
-        // fill manufacturers dropdown
+        // Fill manufacturers drop down
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullname');
         $this->view->manufacturer_list = $manufacturers;
-
-        if ($this->_request->isPost())
-        {
-            $formData = $this->_request->getPost();
-            // print_r($formData); die;
-
-
-            if (isset($formData ['ticket_id']))
-            {
-                $this->view->form_mode     = $formData ['form_mode'];
-                $this->view->ticket_id     = $formData ['ticket_id'];
-                $this->view->devices_pf_id = $formData ['devices_pf_id'];
-            }
-
-            $db->beginTransaction();
-            try
-            {
-                if (isset($formData ['hdnIdArray']))
-                {
-                    $master_matchup_pfTable      = new Proposalgen_Model_DbTable_PFMasterMatchup();
-                    $id_array                    = (explode(",", $formData ['hdnIdArray']));
-                    $this->view->criteria_filter = $formData ['criteria_filter'];
-
-                    foreach ($id_array as $key)
-                    {
-                        $devices_pf_id    = $formData ['hdnDevicesPFID' . $key];
-                        $master_device_id = $formData ['hdnMasterDevicesValue' . $key];
-
-                        if ($devices_pf_id > 0 && $master_device_id > 0)
-                        {
-                            $master_matchup_pfData ['master_device_id'] = $master_device_id;
-
-                            // check to see if matchup exists for devices_pf_id
-                            $where   = $master_matchup_pfTable->getAdapter()->quoteInto('pf_device_id = ?', $devices_pf_id, 'INTEGER');
-                            $matchup = $master_matchup_pfTable->fetchRow($where);
-
-                            if (count($matchup) > 0)
-                            {
-                                $master_matchup_pfTable->update($master_matchup_pfData, $where);
-                            }
-                            else
-                            {
-                                $master_matchup_pfData ['pf_device_id'] = $devices_pf_id;
-                                $master_matchup_pfTable->insert($master_matchup_pfData);
-                            }
-                        }
-                        else if ($devices_pf_id > 0)
-                        {
-                            // no matchup set so remove any records for device
-                            $where = $master_matchup_pfTable->getAdapter()->quoteInto('master_device_id = ?', $devices_pf_id, 'INTEGER');
-                            $master_matchup_pfTable->delete($where);
-                        }
-                        unset($master_matchup_pfData);
-                    }
-                    $db->commit();
-                    $this->_flashMessenger->addMessage(array(
-                                                            "success" => "The matchups have been saved."
-                                                       ));
-                }
-                else
-                {
-                    // set criteria = pf model id
-                    $device_pfTable = new Proposalgen_Model_DbTable_PFDevice();
-                    $device_pf      = $device_pfTable->fetchRow('id = ' . $formData ['devices_pf_id']);
-
-                    if (count($device_pf) > 0)
-                    {
-                        $this->view->pf_model_id = $device_pf ['pf_model_id'];
-                    }
-                }
-            }
-            catch (Exception $e)
-            {
-                $db->rollback();
-                Tangent_Log::logException($e);
-                $this->_flashMessenger->addMessage(array("error" => "Error getting matchups."));
-            }
-        }
     }
 
     /**
      * This action handles mapping rms models to master devices.
      * If masterDeviceId is set to -1 it will delete the matchup
      */
-    public function setmappedtoAction ()
+    public function setMappedToAction ()
     {
         $errorMessage = false;
 

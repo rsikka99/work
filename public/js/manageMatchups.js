@@ -102,7 +102,7 @@ $(document).ready(function ()
                 source   : function (request, response)
                 {
                     $.ajax({
-                        url     : TMTW_BASEURL + 'proposalgen/admin/getmodels',
+                        url     : TMTW_BASEURL + 'proposalgen/admin/get-models',
                         dataType: "json",
                         data    : {
                             searchText: request.term
@@ -208,17 +208,16 @@ $(document).ready(function ()
 /**
  * Sets a device mapping to a new master device
  *
- * @param rmsUploadRowId
- *            The upload row id
- * @param masterDeviceId
- *            The master device id. Can be 0 or false
+ * @param {Number} rmsProviderId The rms provider id
+ * @param {Number} rmsModelId The rms model id
+ * @param {Number} masterDeviceId The master device id. Can be 0 or false
  */
 function set_mapped(rmsProviderId, rmsModelId, masterDeviceId)
 {
     $.ajax({
         type       : "GET",
         contentType: "application/json; charset=utf-8",
-        url        : TMTW_BASEURL + 'proposalgen/admin/setmappedto',
+        url        : TMTW_BASEURL + 'proposalgen/admin/set-mapped-to',
         data       : {
             "rmsProviderId" : rmsProviderId,
             "rmsModelId"    : rmsModelId,
