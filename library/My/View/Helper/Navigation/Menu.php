@@ -72,15 +72,13 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
                 {
                     $item->setAttribute('class', 'dropdown-toggle');
                 }
-                
+
                 if (strpos($item->getAttribute('class'), 'subdropdown'))
                 {
-                    $subResult = $xpath->query('ul', $item);
-                    if ($result->length === 1)
+                    $subResult = $xpath->query('..', $item);
+                    if ($subResult->length === 1)
                     {
-                        $caret = $domDoc->createElement('b', ' ');
-                        $caret->setAttribute('class', 'right-caret pull-right');
-                        $item->insertBefore($caret, $item->childNodes->item(0));
+                        $subResult->item(0)->setAttribute('class', 'dropdown-submenu');
                     }
                 }
                 else

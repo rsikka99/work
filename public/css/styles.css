@@ -25,24 +25,6 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.right-caret {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  text-indent: -99999px;
-  margin-left: 5px;
-  *text-indent: 0;
-  vertical-align: middle;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-  border-left: 4px solid #000000;
-  opacity: 0.003;
-  filter: alpha(opacity=0.3);
-  content: ">";
-}
-.right-caret.pull-right {
-  margin-top: 5px;
-}
 .nav li.dropdown ul.dropdown-menu li:HOVER ul,
 .adminNav ul.dropdown-menu li:HOVER ul {
   display: block;
