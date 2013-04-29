@@ -33,10 +33,10 @@ $section->addTextBreak(2);
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.')
-    , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances)) //1
+    , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->_deviceInstances)) //1
     , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
-    , count($healthcheckViewModel->getLeasedDevices()) //3
-    , number_format(count($healthcheckViewModel->getPurchasedDevices())) //4
+    , count($healthcheckViewModel->getDevices()->leasedDeviceInstances->_deviceInstances) //3
+    , number_format(count($healthcheckViewModel->getDevices()->purchasedDeviceInstances->_deviceInstances)) //4
     , number_format($healthcheckViewModel->getNumberOfUniquePurchasedModels()) //5
     , number_format($healthcheckViewModel->getNumberOfUniquePurchasedToners()) //6
     , number_format($healthcheckViewModel->getCashHeldInInventory())//7

@@ -85,8 +85,8 @@ class Healthcheck_ViewModel_Ranking extends Tangent_Model_Abstract
         {
             $criteria                             = $this->getRankingCriteria();
             $criteria                             = $criteria ["PrintingHardwareUsage"];
-            $AverageMonthlyPrintVolumePerPrinter  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPageCounts()->Purchased->Combined->Monthly, $criteria ["AverageMonthlyPrintVolumePerPrinter"]);
-            $AverageMonthlyPrintVolumePerEmployee = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPageCounts()->Total->Combined->Monthly / $this->proposal->getEmployeeCount(), $criteria ["AverageMonthlyPrintVolumePerEmployee"]);
+            $AverageMonthlyPrintVolumePerPrinter  = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly(), $criteria ["AverageMonthlyPrintVolumePerPrinter"]);
+            $AverageMonthlyPrintVolumePerEmployee = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->proposal->getEmployeeCount(), $criteria ["AverageMonthlyPrintVolumePerEmployee"]);
             $NumberOfEmployeesPerDevice           = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getEmployeeCount() / $this->proposal->getDeviceCount(), $criteria ["NumberOfEmployeesPerDevice"]);
             $UnderusedDevices                     = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesUnderused(), $criteria ["UnderusedDevices"]);
             $OverusedDevices                      = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getPercentDevicesOverused(), $criteria ["OverusedDevices"]);

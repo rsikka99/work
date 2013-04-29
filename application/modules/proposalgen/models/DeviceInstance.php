@@ -272,6 +272,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     protected $_averageDailyPowerCost;
 
+    /**
+     * @var Healthcheck_Model_PageCounts
+     */
+    protected $_pageCounts;
+
     /*
      * ********************************************************************************
      * Non calculated fields
@@ -1607,6 +1612,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
     {
         return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDevice());
+    }
+
+    /**
+     * Gets this devices page counts
+     */
+    public function getPageCounts ()
+    {
+        $pageCounts = new Healthcheck_Model_PageCounts();
+        $pageCounts->monochrome->setDaily($this->getAverageDailyBlackAndWhitePageCount());
+        $pageCounts->color->setDaily($this->getAverageDailyColorPageCount());
+
+        return $pageCounts;
     }
 
 

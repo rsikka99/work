@@ -22,10 +22,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $Ranking;
     protected $ReportId;
     protected $DefaultToners;
-    protected $Devices;
-    protected $ExcludedDevices;
-    protected $LeasedDevices;
-    protected $PurchasedDevices;
     protected $User;
     protected $DealerCompany;
     protected $CompanyMargin;
@@ -162,6 +158,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_includedDevicesSortedAscendingByAge;
     protected $_includedDevicesSortedDescendingByAge;
 
+    protected $_pageCounts;
     public $highCostPurchasedDevices;
 
     /**
@@ -184,9 +181,20 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $pricingConfig                              = new Proposalgen_Model_PricingConfig();
         $pricingConfig->pricingConfigId             = Proposalgen_Model_PricingConfig::OEM;
 
-        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getPageCounts()->Purchased->Combined->Yearly);
+        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly());
+//        $this->_pageCount = new Proposalgen_Model_PageCounts();
+//        $this->_pageCount->add($this->getDevices()->allIncludedDeviceInstances->devices);
     }
 
+    public function getPageCounts()
+    {
+        if(!isset($this->_pageCounts))
+        {
+//            $this->_pageCount = new Proposalgen_Model_PageCounts(array($this->getDevices()->purchasedDeviceInstances->devices, $this->getLeasedDevices()));
+            $this->_pageCounts = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
+        }
+        return $this->_pageCounts;
+    }
     /**
      * @return Healthcheck_ViewModel_Ranking
      */
@@ -198,20 +206,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->Ranking;
-    }
-
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getLeasedDevices ()
-    {
-        if (!isset($this->LeasedDevices))
-        {
-            $this->LeasedDevices = $this->getDevices()->leasedDeviceInstances;
-        }
-
-        return $this->LeasedDevices;
     }
 
     /**
@@ -232,7 +226,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function getDeviceCount ()
     {
-        return count($this->getDevices()->allIncludedDeviceInstances);
+        return count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances());
     }
 
     /**
@@ -240,28 +234,15 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function getLeasedDeviceCount ()
     {
-        return count($this->getLeasedDevices());
+        return count($this->getDevices()->leasedDeviceInstances->getDeviceInstances());
     }
 
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getPurchasedDevices ()
-    {
-        if (!isset($this->PurchasedDevices))
-        {
-            $this->PurchasedDevices = $this->getDevices()->purchasedDeviceInstances;
-        }
-
-        return $this->PurchasedDevices;
-    }
-
-    /**
+        /**
      * @return int
      */
     public function getPurchasedDeviceCount ()
     {
-        return count($this->getPurchasedDevices());
+        return count($this->getDevices()->purchasedDeviceInstances->getDeviceInstances());
     }
 
     /**
@@ -326,7 +307,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             $totalAge = 0;
 
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $totalAge += $device->getAge();
             }
@@ -357,7 +338,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             // Calculate
             $totalCost = 0;
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $totalCost += $device->getCostOfInkAndToner($costPerPageSetting, $this->getHealthcheckMargin());
             }
@@ -390,7 +371,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->NumberOfScanCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isScanner)
                 {
@@ -411,7 +392,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_numberOfCopyCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isCopier)
                 {
@@ -432,7 +413,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->NumberOfDuplexCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getMasterDevice()->isDuplex)
                 {
@@ -453,7 +434,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->NumberOfFaxCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->isFax)
                 {
@@ -506,7 +487,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->MaximumMonthlyPrintVolume))
         {
             $maxVolume = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer());
             }
@@ -524,7 +505,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->NumberOfColorCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
@@ -545,7 +526,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_numberOfColorCapablePurchasedDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
@@ -559,65 +540,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Gets fleet page counts
-     *
-     * @return stdClass
-     */
-    public function getPageCounts ()
-    {
-        if (!isset($this->PageCounts))
-        {
-            $pageCounts = new stdClass();
-            // Purchased Pages
-            $pageCounts->Purchased                         = new stdClass();
-            $pageCounts->Purchased->BlackAndWhite          = new stdClass();
-            $pageCounts->Purchased->BlackAndWhite->Monthly = 0;
-            $pageCounts->Purchased->Color                  = new stdClass();
-            $pageCounts->Purchased->Color->Monthly         = 0;
-            $pageCounts->Purchased->Combined               = new stdClass();
-            foreach ($this->getPurchasedDevices() as $device)
-            {
-                $pageCounts->Purchased->BlackAndWhite->Monthly += $device->getAverageMonthlyBlackAndWhitePageCount();
-                $pageCounts->Purchased->Color->Monthly += $device->getAverageMonthlyColorPageCount();
-            }
-            $pageCounts->Purchased->BlackAndWhite->Yearly = $pageCounts->Purchased->BlackAndWhite->Monthly * 12;
-            $pageCounts->Purchased->Color->Yearly         = $pageCounts->Purchased->Color->Monthly * 12;
-            $pageCounts->Purchased->Combined->Monthly     = $pageCounts->Purchased->BlackAndWhite->Monthly + $pageCounts->Purchased->Color->Monthly;
-            $pageCounts->Purchased->Combined->Yearly      = $pageCounts->Purchased->BlackAndWhite->Yearly + $pageCounts->Purchased->Color->Yearly;
-            // Leased Pages
-            $pageCounts->Leased                         = new stdClass();
-            $pageCounts->Leased->BlackAndWhite          = new stdClass();
-            $pageCounts->Leased->BlackAndWhite->Monthly = 0;
-            $pageCounts->Leased->Color                  = new stdClass();
-            $pageCounts->Leased->Color->Monthly         = 0;
-            $pageCounts->Leased->Combined               = new stdClass();
-            foreach ($this->getLeasedDevices() as $device)
-            {
-                $pageCounts->Leased->BlackAndWhite->Monthly += $device->getAverageMonthlyBlackAndWhitePageCount();
-                $pageCounts->Leased->Color->Monthly += $device->getAverageMonthlyColorPageCount();
-            }
-            $pageCounts->Leased->BlackAndWhite->Yearly = $pageCounts->Leased->BlackAndWhite->Monthly * 12;
-            $pageCounts->Leased->Color->Yearly         = $pageCounts->Leased->Color->Monthly * 12;
-            $pageCounts->Leased->Combined->Monthly     = $pageCounts->Leased->BlackAndWhite->Monthly + $pageCounts->Leased->Color->Monthly;
-            $pageCounts->Leased->Combined->Yearly      = $pageCounts->Leased->BlackAndWhite->Yearly + $pageCounts->Leased->Color->Yearly;
-            // Total Pages
-            $pageCounts->Total                         = new stdClass();
-            $pageCounts->Total->BlackAndWhite          = new stdClass();
-            $pageCounts->Total->BlackAndWhite->Monthly = $pageCounts->Purchased->BlackAndWhite->Monthly + $pageCounts->Leased->BlackAndWhite->Monthly;
-            $pageCounts->Total->BlackAndWhite->Yearly  = $pageCounts->Purchased->BlackAndWhite->Yearly + $pageCounts->Leased->BlackAndWhite->Yearly;
-            $pageCounts->Total->Color                  = new stdClass();
-            $pageCounts->Total->Color->Monthly         = $pageCounts->Purchased->Color->Monthly + $pageCounts->Leased->Color->Monthly;
-            $pageCounts->Total->Color->Yearly          = $pageCounts->Purchased->Color->Yearly + $pageCounts->Leased->Color->Yearly;
-            $pageCounts->Total->Combined               = new stdClass();
-            $pageCounts->Total->Combined->Monthly      = $pageCounts->Purchased->Combined->Monthly + $pageCounts->Leased->Combined->Monthly;
-            $pageCounts->Total->Combined->Yearly       = $pageCounts->Purchased->Combined->Yearly + $pageCounts->Leased->Combined->Yearly;
-            $this->PageCounts                          = $pageCounts;
-        }
-
-        return $this->PageCounts;
-    }
-
-    /**
      * @return float
      */
     public function getPercentDevicesUnderused ()
@@ -625,14 +547,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->PercentDevicesUnderused))
         {
             $devicesUnderusedCount = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
             }
-            $this->PercentDevicesUnderused = ($devicesUnderusedCount / count($this->getDevices()->allIncludedDeviceInstances)) * 100;
+            $this->PercentDevicesUnderused = ($devicesUnderusedCount / count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances())) * 100;
         }
 
         return $this->PercentDevicesUnderused;
@@ -646,14 +568,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->PercentDevicesOverused))
         {
             $devicesOverusedCount = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getAverageMonthlyPageCount() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
                 {
                     $devicesOverusedCount++;
                 }
             }
-            $this->PercentDevicesOverused = ($devicesOverusedCount / count($this->getDevices()->allIncludedDeviceInstances)) * 100;
+            $this->PercentDevicesOverused = ($devicesOverusedCount / count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances())) * 100;
         }
 
         return $this->PercentDevicesOverused;
@@ -667,7 +589,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_underutilizedDevices))
         {
             $devicesArray = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getAverageMonthlyPageCount() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
@@ -688,7 +610,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_overutilizedDevices))
         {
             $devicesArray = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) > 1)
                 {
@@ -709,7 +631,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->LeastUsedDevices))
         {
-            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
                                      $this,
                                      "ascendingSortDevicesByUsage"
@@ -788,7 +710,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_optimizedDevices))
         {
             $deviceArray = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
 
                 //Check to see if it is not underutilized
@@ -827,7 +749,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->MostUsedDevices))
         {
-            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
                                      $this,
                                      "descendingSortDevicesByUsage"
@@ -851,11 +773,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->AverageAgeOfDevices))
         {
             $totalAge = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $totalAge += $deviceInstance->getAge();
             }
-            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices()->allIncludedDeviceInstances);
+            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances());
         }
 
         return $this->AverageAgeOfDevices;
@@ -868,7 +790,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->HighPowerConsumptionDevices))
         {
-            $deviceArray = $this->getDevices()->allIncludedDeviceInstances;
+            $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
                                      $this,
                                      "ascendingSortDevicesByPowerConsumption"
@@ -888,7 +810,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->HighCostDevices))
         {
-            $deviceArray = $this->getDevices()->purchasedDeviceInstances;
+            $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
@@ -981,7 +903,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $costPerPage->monochromeCostPerPage       = 0;
             $costPerPage->colorCostPerPage            = 0;
             $numberOfColorDevices                     = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
                 if ($deviceInstance->getMasterDevice()->isColor())
@@ -989,7 +911,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $numberOfColorDevices++;
                 }
             }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances->getDeviceInstances());
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
@@ -1019,7 +941,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
             $costPerPage                              = new Proposalgen_Model_CostPerPage();
             $numberOfColorDevices                     = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
                 if ($deviceInstance->getMasterDevice()->isColor())
@@ -1027,7 +949,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $numberOfColorDevices++;
                 }
             }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances->getDeviceInstances());
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
@@ -1053,7 +975,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             $totalPowerUsage       = 0;
             $devicesReportingPower = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->getMasterDevice()->wattsPowerNormal > 0)
                 {
@@ -1125,7 +1047,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             $averageAge    = 0;
             $cumulativeAge = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $cumulativeAge += $deviceInstance->getAge();
             }
@@ -1148,7 +1070,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             $numberOfModels   = 0;
             $uniqueModelArray = array();
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
                 {
@@ -1168,7 +1090,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function getDevicesReportingTonerLevels ()
     {
         $devicesReportingTonerLevels = array();
-        foreach ($this->getPurchasedDevices() as $device)
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
             if ($device->isCapableOfReportingTonerLevels())
             {
@@ -1185,7 +1107,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function getDevicesNotReportingTonerLevels ()
     {
         $devicesNotReportingTonerLevels = array();
-        foreach ($this->getDevices()->purchasedDeviceInstances as $device)
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
             if ($device->isCapableOfReportingTonerLevels() == false)
             {
@@ -1288,7 +1210,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_oldDevices))
         {
             $devices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getAge() > self::OLD_DEVICE_THRESHHOLD)
                 {
@@ -1415,24 +1337,24 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[1]
             $this->Graphs [] = $barGraph->getUrl();
-
+            $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $highest  = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
+            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
             $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       round($pageCounts->Leased->Combined->Monthly)
+                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       round($pageCounts->Purchased->Combined->Monthly)
+                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -1456,7 +1378,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- UniqueDevicesGraph
              */
             $uniqueModelArray = array();
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (array_key_exists($device->getMasterDevice()->modelName, $uniqueModelArray))
                 {
@@ -1790,7 +1712,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->AverageOperatingWatts))
         {
             $totalWatts = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $totalWatts += $deviceInstance->getMasterDevice()->wattsPowerNormal;
             }
@@ -1822,7 +1744,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->UniquePurchasedDeviceList))
         {
             $masterDevices = array();
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice(), $masterDevices))
                 {
@@ -1906,7 +1828,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->UniqueDeviceList))
         {
             $masterDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if (!in_array($deviceInstance->getMasterDevice(), $masterDevices))
                 {
@@ -1935,11 +1857,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculatePercentageOfFleetReportingTonerLevels ()
     {
         $percentage       = 0;
-        $totalDeviceCount = count($this->getDevices()->allIncludedDeviceInstances);
+        $totalDeviceCount = count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances());
         if ($totalDeviceCount > 0)
         {
             $deviceCount = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if ($deviceInstance->isCapableOfReportingTonerLevels())
                 {
@@ -1970,7 +1892,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $hasFourColorCombinedDevices  = false;
 
 
-        foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
             switch ($deviceInstance->getMasterDevice()->tonerConfigId)
             {
@@ -2026,7 +1948,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $deviceCount = $this->getPurchasedDeviceCount();
         if ($deviceCount > 0)
         {
-            foreach ($this->getDevices()->purchasedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $totalAge += $deviceInstance->getAge();
             }
@@ -2139,7 +2061,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Pages Printed on JIT devices"     => 0,
                 "Pages Printed on non-JIT devices" => 0
             );
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->isCapableOfReportingTonerLevels())
                 {
@@ -2252,16 +2174,16 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ColorVSBWPagesGraph
              */
-            $blackAndWhitePageCount = $pageCounts->Purchased->Combined->Monthly - $pageCounts->Purchased->Color->Monthly;
+            $blackAndWhitePageCount = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() - $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
 
-            $highest  = ($pageCounts->Purchased->Color->Monthly > $blackAndWhitePageCount) ? $pageCounts->Purchased->Color->Monthly : $blackAndWhitePageCount;
+            $highest  = ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > $blackAndWhitePageCount) ? $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() : $blackAndWhitePageCount;
             $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color vs Black/White Pages");
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       $pageCounts->Purchased->Color->Monthly
+                                       $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
@@ -2451,7 +2373,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "6-8 years old"         => 0,
                 "More than 8 years old" => 0
             );
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getAge() < 3)
                 {
