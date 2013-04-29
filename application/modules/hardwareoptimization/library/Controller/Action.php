@@ -77,11 +77,11 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
             }
         }
 
-        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
-        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR(24 / 100);
-        // Gross Margin Report Page Coverage
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
-        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR(24 / 100);
+//        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+//        Proposalgen_Model_Toner::setESTIMATED_PAGE_COVERAGE_COLOR(24 / 100);
+//         Gross Margin Report Page Coverage
+//        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_BLACK_AND_WHITE(6 / 100);
+//        Proposalgen_Model_Toner::setACTUAL_PAGE_COVERAGE_COLOR(24 / 100);
 
         $this->view->ReportAbsoluteCachePath = $this->_fullCachePath;
         $this->view->ReportCachePath         = $this->_relativeCachePath;
