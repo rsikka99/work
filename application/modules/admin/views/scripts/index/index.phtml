@@ -32,6 +32,13 @@
                     System User Management</a>
             </div>
         <?php endif; ?>
+
+        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managematchups", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-bar-chart icon-4x"></i><br /><br />
+                    Manage Master Matchups</a>
+            </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>
 <h3>Device Management</h3>
