@@ -23,7 +23,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 $section->addTextBreak();
 
 $section->addTitle($this->translate('Energy Consumption'), 2);
-$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), number_format($assessmentViewModel->getAveragePowerCostPerMonth()), number_format($assessmentViewModel->Report->ReportKilowattsPerHour, 2)));
+$section->addText(sprintf($this->translate('You are currently using an estimated average of %1$s kWh per month to operate printing devices at an estimated monthly cost of $%2$s, assuming a cost of $%3$s per kWh.'), number_format($assessmentViewModel->getAveragePowerUsagePerMonth()), number_format($assessmentViewModel->getAveragePowerCostPerMonth()), number_format($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2)));
 $section->addText($this->translate('The following lists the devices with the highest average power consumption per month.'));
 
 $cellWidths = array(

@@ -13,7 +13,7 @@ class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
      *
      * @param string $searchString
      *
-     * @return Ambigous <Zend_Db_Statement_Interface, Zend_Db_Statement, PDOStatement>
+     * @return array
      */
     public function searchByNameOrSku ($searchString)
     {

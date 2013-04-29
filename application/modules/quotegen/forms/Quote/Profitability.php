@@ -73,22 +73,28 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
 
             $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
             $leasingSchemaTerms = array();
-            $firstId = null;
+            $firstId            = null;
             if ($leasingSchema && $leasingSchemas)
             {
                 /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                 foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)
                 {
                     $leasingSchemaTerms [$leasingSchemaTerm->id] = number_format($leasingSchemaTerm->months) . " months";
-                    if($firstId == null)
+                    if ($firstId == null)
+                    {
                         $firstId = $leasingSchemaTerm->id;
+                    }
                 }
             }
 
-            if(!$this->getQuote()->getLeasingSchemaTerm() && $firstId != null)
+            if (!$this->getQuote()->getLeasingSchemaTerm() && $firstId != null)
+            {
                 $termId = $firstId;
+            }
             else
+            {
                 $termId = $this->getQuote()->getLeasingSchemaTerm()->id;
+            }
             $this->addElement('select', 'leasingSchemaTermId', array(
                                                                     'label'        => 'Lease Term:',
                                                                     'class'        => 'input-medium',
@@ -200,11 +206,13 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
      * Sets the quote
      *
      * @param Quotegen_Model_Quote $_quote
+     *
+     * @return $this
      */
     public function setQuote ($_quote)
     {
         $this->_quote = $_quote;
 
-        return this;
+        return $this;
     }
 }

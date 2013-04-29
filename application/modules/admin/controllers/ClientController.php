@@ -2,6 +2,10 @@
 
 class Admin_ClientController extends Tangent_Controller_Action
 {
+    /**
+     * @var Zend_Session_Namespace
+     */
+    protected $_mpsSession;
 
     public function init ()
     {
@@ -37,8 +41,8 @@ class Admin_ClientController extends Tangent_Controller_Action
         if (!$clientId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a client to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a client to delete first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -47,8 +51,8 @@ class Admin_ClientController extends Tangent_Controller_Action
         if (!$client)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the client to delete.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the client to delete.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -77,14 +81,14 @@ class Admin_ClientController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
-                                                       ));
+                                                                'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
+                                                           ));
                         $this->redirector('index');
                     }
 
                     $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client  {$client->companyName} was deleted successfully."
-                                                   ));
+                                                            'success' => "Client  {$client->companyName} was deleted successfully."
+                                                       ));
                     $this->redirector('index');
                 }
             }
@@ -123,8 +127,8 @@ class Admin_ClientController extends Tangent_Controller_Action
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    'success' => "Client successfully created."
-                                               ));
+                                                        'success' => "Client successfully created."
+                                                   ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
                                                             'clientId' => $clientId
@@ -133,8 +137,8 @@ class Admin_ClientController extends Tangent_Controller_Action
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    'danger' => "Please correct the errors below."
-                                               ));
+                                                        'danger' => "Please correct the errors below."
+                                                   ));
             }
         }
 
@@ -180,8 +184,8 @@ class Admin_ClientController extends Tangent_Controller_Action
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    'success' => "Client {$client->companyName} successfully updated."
-                                               ));
+                                                        'success' => "Client {$client->companyName} successfully updated."
+                                                   ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
                                                             'clientId' => $clientId
@@ -190,8 +194,8 @@ class Admin_ClientController extends Tangent_Controller_Action
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                    'danger' => "Please correct the errors below."
-                                               ));
+                                                        'danger' => "Please correct the errors below."
+                                                   ));
             }
         }
         $this->view->form = $clientService->getForm(false);

@@ -101,7 +101,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * The devices attached to a group
      *
-     * @var Quotegen_Model_QuoteDeviceGroupDevices
+     * @var Quotegen_Model_QuoteDeviceGroupDevice[]
      */
     protected $_quoteDeviceGroupDevices;
 
@@ -331,13 +331,13 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      *
      * @param Quotegen_Model_QuoteDeviceGroupDevice[] $_quoteDeviceGroupDevices An array of quote device group devices
      *
-     * @return Quotegen_Model_QuoteDevice
+     * @return $this
      */
     public function setQuoteDeviceGroupDevices ($_quoteDeviceGroupDevices)
     {
         $this->_quoteDeviceGroupDevices = $_quoteDeviceGroupDevices;
 
-        return this;
+        return $this;
     }
 
     /**

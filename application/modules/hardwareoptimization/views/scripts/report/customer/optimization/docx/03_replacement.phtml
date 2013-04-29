@@ -5,11 +5,11 @@ $optimization = $this->optimization;
 $section = $this->section;
 $section->addPageBreak();
 
-/* @var $profitabiltyDevices Hardwareoptimizaiton_Model_Optimization_Customer */
-$profitabiltyDevices = $this->profitabilityDevices;
-
-$deviceCount = count($profitabiltyDevices->replaced);
+/* @var $profitabilityDevices Hardwareoptimization_Model_Optimization_Customer */
+$profitabilityDevices  = $this->profitabilityDevices;
+$deviceCount           = count($profitabilityDevices->replaced);
 $totalPurchasedDevices = count($optimization->getPurchasedDevices());
+
 $section->addTitle(sprintf($this->translate('Suggested Replacement Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
 $section->addText($this->translate('The following devices have been targeted for replacements: '));
 
@@ -24,11 +24,11 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 // Begin with data rows
-foreach ($profitabiltyDevices->replaced as $device)
+foreach ($profitabilityDevices->replaced as $device)
 {
     $replacementDevice = $device->getReplacementMasterDevice();
     $isColor           = $device->getMasterDevice()->isColor();
-    $cycle   = ($this->cycle(array(true, false))->next()->current());
+    $cycle             = ($this->cycle(array(true, false))->next()->current());
     if ($cycle)
     {
         $ampvStyle = $tcStyle->body->cell5->even;
@@ -71,7 +71,7 @@ $section->addTextBreak();
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [5],array('align' => 'center'));
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [6],array('align' => 'center'));
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [7],array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($this->graphs [5], array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [6], array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [7], array('align' => 'center'));
 $section->addTextBreak();

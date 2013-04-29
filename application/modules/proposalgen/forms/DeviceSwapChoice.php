@@ -6,10 +6,10 @@
  */
 class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 {
-    const DEVICETYPE_MONO      = 0;
-    const DEVICETYPE_MONO_MFP  = 1;
-    const DEVICETYPE_COLOR     = 2;
-    const DEVICETYPE_COLOR_MFP = 3;
+    const DEVICE_TYPE_MONO      = 0;
+    const DEVICE_TYPE_MONO_MFP  = 1;
+    const DEVICE_TYPE_COLOR     = 2;
+    const DEVICE_TYPE_COLOR_MFP = 3;
 
 
     /**
@@ -161,16 +161,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         }
 
 
-    }
-
-    /**
-     * Getter for $proposal
-     *
-     * @return Proposalgen_Model_Proposal_OfficeDepot
-     */
-    public function getProposal ()
-    {
-        return $this->proposal;
     }
 
     /**

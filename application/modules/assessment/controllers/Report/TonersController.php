@@ -164,33 +164,5 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         $this->view->excludedTableTitle = "Excluded Devices";
         $this->view->excludedTitles     = implode(",", $excluded_titles) . "\n";
         $this->view->excludedValues     = $excluded_values;
-
-        // Removes spaces from company name, otherwise CSV filename contains + symbol
-        $companyName = str_replace(array(
-                                        " ",
-                                        "/",
-                                        "\\",
-                                        ";",
-                                        "?",
-                                        "\"",
-                                        "'",
-                                        ",",
-                                        "%",
-                                        "&",
-                                        "#",
-                                        "@",
-                                        "!",
-                                        ">",
-                                        "<",
-                                        "+",
-                                        "=",
-                                        "{",
-                                        "}",
-                                        "[",
-                                        "]",
-                                        "|",
-                                        "~",
-                                        "`"
-                                   ), "_", $assessmentViewModel->Report->CustomerCompanyName);
     }
 }
