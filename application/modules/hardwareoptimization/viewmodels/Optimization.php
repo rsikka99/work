@@ -418,7 +418,7 @@ class Hardwareoptimization_ViewModel_Optimization
             $uniqueToners = array();
             foreach ($this->getUniquePurchasedDeviceList() as $masterDevice)
             {
-                $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForDealer()->pricingConfiguration);
+                $deviceToners = $masterDevice->getTonersForAssessment($this->getCostPerPageSettingForDealer());
                 foreach ($deviceToners as $toner)
                 {
                     if (!in_array($toner, $uniqueToners))

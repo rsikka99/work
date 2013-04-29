@@ -416,7 +416,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
 
         foreach ($masterDevices as $masterDevice)
         {
-            $toners = $masterDevice->getTonersForAssessment($this->_optimization->getCostPerPageSettingForDealer()->pricingConfiguration);
+            $toners = $masterDevice->getTonersForAssessment($this->_optimization->getCostPerPageSettingForDealer());
 
             foreach ($toners as $toner)
             {
