@@ -82,7 +82,7 @@ $formActions [] = $form->getElement('Analyze');
             $masterDevice     = $device->getMasterDevice();
             $manufacturerName = $masterDevice->getManufacturer()->fullname;
             // Check to see if there is a monthly color volume
-            $monthlyColorVolume = ($device->getAverageMonthlyColorPageCount() > 0) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A';
+            $monthlyColorVolume = ($device->getPageCounts()->color->getMonthly() > 0) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';
             $isDeviceColor      = ($device->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
             $costDelta = $device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice());
@@ -91,7 +91,7 @@ $formActions [] = $form->getElement('Analyze');
                 'deviceInstanceId' => $device->id,
                 'isColor'          => (int)$isDeviceColor,
                 'device'           => "{$manufacturerName}<br/>{$masterDevice->modelName}",
-                'monoAmpv'         => number_format($device->getAverageMonthlyBlackAndWhitePageCount()),
+                'monoAmpv'         => number_format($device->getPageCounts()->monochrome->getMonthly()),
                 'colorAmpv'        => $monthlyColorVolume,
                 'monoCpp'          => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
                 'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,

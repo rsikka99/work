@@ -50,7 +50,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?></div>
             </td>
             <td class="column5">
                 <div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div>

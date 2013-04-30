@@ -522,7 +522,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     $row = array(
                         "id"         => $deviceInstance->id,
                         "isExcluded" => $deviceInstance->isExcluded,
-                        "ampv"       => number_format($deviceInstance->getAverageMonthlyPageCount()),
+                        "ampv"       => number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()),
                         "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
                     );
 

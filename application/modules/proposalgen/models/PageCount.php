@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Healthcheck_Model_PageCount
+ * Class Proposalgen_Model_PageCount
  */
-class Healthcheck_Model_PageCount
+class Proposalgen_Model_PageCount
 {
     /**
      * The days in a time interval.
@@ -45,7 +45,7 @@ class Healthcheck_Model_PageCount
     /**
      * Adds a page count
      *
-     * @param Healthcheck_Model_PageCount $pageCount
+     * @param Proposalgen_Model_PageCount $pageCount
      *
      * @return $this
      */
@@ -60,7 +60,7 @@ class Healthcheck_Model_PageCount
     /**
      * Subtracts a page count
      *
-     * @param Healthcheck_Model_PageCount $pageCount
+     * @param Proposalgen_Model_PageCount $pageCount
      *
      * @return $this
      */

@@ -64,7 +64,7 @@ foreach ($assessmentViewModel->getHighRiskDevices() as $device)
     $highRiskDevicesTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAge()) . " year(s)", null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(number_format($device->getAverageMonthlyPageCount()), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(number_format($device->getPageCounts()->getCombined()->getMonthly()), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->getLifePageCount()), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $rowCount++;

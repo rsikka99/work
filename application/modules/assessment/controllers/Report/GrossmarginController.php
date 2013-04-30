@@ -179,13 +179,13 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
                 $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->getDeviceName()) . " (" . $device->ipAddress . " - " . $device->serialNumber . ")";
-                $fieldList [] = number_format($device->getAverageMonthlyBlackAndWhitePageCount(), 0, '.', '');
+                $fieldList [] = number_format($device->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
                 $fieldList [] = number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
 
                 $fieldList [] = "$" . number_format($device->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
-                $fieldList [] = $isColor ? number_format($device->getAverageMonthlyColorPageCount(), 0, '.', '') : "-";
+                $fieldList [] = $isColor ? number_format($device->getPageCounts()->color->getMonthly(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
                 $fieldList [] = $isColor ? "$" . number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";

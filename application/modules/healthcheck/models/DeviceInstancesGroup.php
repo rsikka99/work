@@ -10,7 +10,7 @@ class Healthcheck_Model_DeviceInstancesGroup
     protected $_deviceInstances = array();
 
     /**
-     * @var Healthcheck_Model_PageCounts
+     * @var Proposalgen_Model_PageCounts
      */
     protected $_pageCounts;
 
@@ -24,7 +24,7 @@ class Healthcheck_Model_DeviceInstancesGroup
      */
     public function __construct ()
     {
-        $this->_pageCounts = new Healthcheck_Model_PageCounts();
+        $this->_pageCounts = new Proposalgen_Model_PageCounts();
     }
 
     /**
@@ -82,7 +82,7 @@ class Healthcheck_Model_DeviceInstancesGroup
     /**
      * Getter for _pageCounts
      *
-     * @return \Healthcheck_Model_PageCounts
+     * @return \Proposalgen_Model_PageCounts
      */
     public function getPageCounts ()
     {

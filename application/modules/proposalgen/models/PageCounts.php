@@ -1,21 +1,21 @@
 <?php
 /**
- * Class Healthcheck_Model_PageCounts
+ * Class Proposalgen_Model_PageCounts
  */
-class Healthcheck_Model_PageCounts
+class Proposalgen_Model_PageCounts
 {
     /**
-     * @var Healthcheck_Model_PageCount
+     * @var Proposalgen_Model_PageCount
      */
     public $monochrome;
 
     /**
-     * @var Healthcheck_Model_PageCount
+     * @var Proposalgen_Model_PageCount
      */
     public $color;
 
     /**
-     * @var Healthcheck_Model_PageCount
+     * @var Proposalgen_Model_PageCount
      */
     protected $_combined;
 
@@ -29,15 +29,15 @@ class Healthcheck_Model_PageCounts
      */
     public function __construct ()
     {
-        $this->monochrome = new Healthcheck_Model_PageCount();
-        $this->color      = new Healthcheck_Model_PageCount();
-        $this->_combined  = new Healthcheck_Model_PageCount();
+        $this->monochrome = new Proposalgen_Model_PageCount();
+        $this->color      = new Proposalgen_Model_PageCount();
+        $this->_combined  = new Proposalgen_Model_PageCount();
     }
 
     /**
      * Adds a page count
      *
-     * @param Healthcheck_Model_PageCounts $pageCounts
+     * @param Proposalgen_Model_PageCounts $pageCounts
      */
     public function add ($pageCounts)
     {
@@ -49,7 +49,7 @@ class Healthcheck_Model_PageCounts
     /**
      * Subtracts a page count
      *
-     * @param Healthcheck_Model_PageCounts $pageCounts
+     * @param Proposalgen_Model_PageCounts $pageCounts
      */
     public function subtract ($pageCounts)
     {
@@ -61,14 +61,14 @@ class Healthcheck_Model_PageCounts
     /**
      * Gets the combined page count
      *
-     * @return Healthcheck_Model_PageCount
+     * @return Proposalgen_Model_PageCount
      */
     public function getCombined ()
     {
         if (!isset($this->_combined) || $this->_recalculateCombined)
         {
             $this->_recalculateCombined = false;
-            $this->_combined            = new Healthcheck_Model_PageCount();
+            $this->_combined            = new Proposalgen_Model_PageCount();
             $this->_combined->add($this->monochrome);
             $this->_combined->add($this->color);
         }

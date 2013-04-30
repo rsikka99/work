@@ -168,7 +168,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 <div><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>
             </td>
             <td class="column2 mono">
-                <div class="right"><?php echo number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()); ?></div>
+                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()); ?></div>
             </td>
 
             <td class="column3 mono">
@@ -187,7 +187,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 
             <!-- Color -->
             <td class="column7 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getAverageMonthlyColorPageCount()) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : "-"; ?></div>
             </td>
             <td class="column8 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo $colorCost ?></div>

@@ -42,7 +42,7 @@ foreach($assessmentViewModel->getDevices()->allIncludedDeviceInstances as $devic
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->getMasterDevice()->isLeased) ? "Leased" : "Purchased", $tcStyle->row->fontStyle, $tcStyle->centeralign);
-    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(number_format($deviceInstance->getAverageMonthlyPageCount()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->isCapableOfReportingTonerLevels()) ? "Yes" : "No", $tcStyle->row->fontStyle, $tcStyle->centeralign);
 }
 

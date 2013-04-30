@@ -90,7 +90,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
             <tr class="center">
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
-                <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
+                <td><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?></td>
                 <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12); ?></td>
                 <td>$<?php echo number_format($replacementDevice->monthlyRate * 12); ?></td>
                 <td>$<?php echo number_format(($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12) - ($replacementDevice->monthlyRate * 12)); ?></td>
@@ -284,7 +284,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
             <tr class="center">
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
-                <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
+                <td><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?></td>
                 <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12); ?></td>
             </tr>
         <?php endforeach; ?>
@@ -314,7 +314,7 @@ if ($reportHasDevicesToReplace) : // See "endif; // $reportHasDevicesToReplace" 
             <tr class="center">
                 <td class="left"><?php echo $modelName ?></td>
                 <td><?php echo $SerialNo ?></td>
-                <td><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?></td>
+                <td><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?></td>
                 <td>$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12); ?></td>
             </tr>
         <?php endforeach; ?>
