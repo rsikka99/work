@@ -617,12 +617,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                                 foreach ($results as $value)
                                 {
-                                    $exists = false;
-                                    $insert = false;
-                                    $update = false;
-                                    $delete = false;
-
-                                    // update records
+                                    // Update records
                                     if ($import_type == 'printer')
                                     {
                                         $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
@@ -788,24 +783,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                             }
                                         }
 
-                                    }
-
-
-                                    // update database
-                                    if ($exists == true)
-                                    {
-                                        if ($delete == true)
-                                        {
-                                            $table->delete($where);
-                                        }
-                                        else if ($update == true)
-                                        {
-                                            $table->update($data, $where);
-                                        }
-                                    }
-                                    else if ($insert == true)
-                                    {
-                                        $table->insert($data);
                                     }
                                 }
                                 $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
