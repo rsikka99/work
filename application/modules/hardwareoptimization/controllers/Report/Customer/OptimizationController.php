@@ -4,7 +4,7 @@
  */
 class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwareoptimization_Library_Controller_Action
 {
-    public function indexAction()
+    public function indexAction ()
     {
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
         $this->initHtmlReport();
@@ -17,9 +17,9 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
         try
         {
             $this->clearCacheForReport();
-            $this->view->optimization = $this->getOptimizationViewModel();
+            $this->view->optimization                                       = $this->getOptimizationViewModel();
             $this->view->availableReports['CustomerOptimization']['active'] = true;
-            $this->view->hardwareOptimization = $this->_hardwareOptimization;
+            $this->view->hardwareOptimization                               = $this->_hardwareOptimization;
 
         }
         catch (Exception $e)
@@ -41,10 +41,8 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $customerOptimization = new Hardwareoptimization_Model_Optimization_Customer($this->_hardwareOptimization);
-                $graphs             = $this->cachePNGImages($customerOptimization->getGraphs(), true);
-
-                require_once ('PHPWord.php');
+                $customerOptimization   = new Hardwareoptimization_Model_Optimization_Customer($this->_hardwareOptimization);
+                $graphs                 = $this->cachePNGImages($customerOptimization->getGraphs(), true);
                 $this->view->phpword    = new PHPWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs     = $graphs;

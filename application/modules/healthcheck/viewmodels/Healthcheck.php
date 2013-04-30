@@ -189,15 +189,20 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 //        $this->_pageCount->add($this->getDevices()->allIncludedDeviceInstances->devices);
     }
 
-    public function getPageCounts()
+    /**
+     * @return Healthcheck_Model_PageCounts
+     */
+    public function getPageCounts ()
     {
-        if(!isset($this->_pageCounts))
+        if (!isset($this->_pageCounts))
         {
 //            $this->_pageCount = new Proposalgen_Model_PageCounts(array($this->getDevices()->purchasedDeviceInstances->devices, $this->getLeasedDevices()));
             $this->_pageCounts = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
         }
+
         return $this->_pageCounts;
     }
+
     /**
      * @return Healthcheck_ViewModel_Ranking
      */
@@ -240,7 +245,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return count($this->getDevices()->leasedDeviceInstances->getDeviceInstances());
     }
 
-        /**
+    /**
      * @return int
      */
     public function getPurchasedDeviceCount ()

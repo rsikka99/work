@@ -79,4 +79,3 @@ foreach ($optimizationDevices->replaced as $device)
     $table->addCell($tcStyle->col11Width, $style)->addText(($isColor) ? number_format($device->getAverageMonthlyColorPageCount()) : 'N/A', $tcStyle->body->cell11->fontStyle, $tcStyle->body->cell11->paragraphStyle);
     $table->addCell($tcStyle->col12Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice())), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
 }
-?>

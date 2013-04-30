@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Model_PageCount
+ */
 class Healthcheck_Model_PageCount
 {
     /**

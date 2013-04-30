@@ -20,6 +20,10 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
      */
     protected $_optionElements = array();
 
+    /**
+     * @param int  $id
+     * @param null $options
+     */
     public function __construct ($id = 0, $options = null)
     {
         $this->_id = $id;

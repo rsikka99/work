@@ -19,7 +19,7 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
         try
         {
             $this->clearCacheForReport();
-            $this->view->optimization = $this->getOptimizationViewModel();
+            $this->view->optimization                                     = $this->getOptimizationViewModel();
             $this->view->availableReports['DealerOptimization']['active'] = true;
             $this->view->hardwareOptimization                             = $this->_hardwareOptimization;
         }
@@ -42,10 +42,8 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
                 throw new Exception("CSV Format not available through this page yet!");
                 break;
             case "docx" :
-                $dealerOptimization = new Hardwareoptimization_Model_Optimization_Dealer($this->_hardwareOptimization);
-                $graphs             = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
-
-                require_once ('PHPWord.php');
+                $dealerOptimization     = new Hardwareoptimization_Model_Optimization_Dealer($this->_hardwareOptimization);
+                $graphs                 = $this->cachePNGImages($dealerOptimization->getGraphs(), true);
                 $this->view->phpword    = new PHPWord();
                 $this->view->wordStyles = $this->getWordStyles();
                 $this->view->graphs     = $graphs;

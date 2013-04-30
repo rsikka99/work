@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Model_PageCounts
+ */
 class Healthcheck_Model_PageCounts
 {
     /**
@@ -21,6 +24,9 @@ class Healthcheck_Model_PageCounts
      */
     protected $_recalculateCombined = false;
 
+    /**
+     * Creates a page counts object
+     */
     public function __construct ()
     {
         $this->monochrome = new Healthcheck_Model_PageCount();
