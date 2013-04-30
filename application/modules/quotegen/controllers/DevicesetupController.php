@@ -446,39 +446,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         /**
                          * With can sell flag on, that means we are saving it to the dealer table.  Regardless of if the system admin is signed in.
                          */
-                        if (!$isAdmin)
-                        {
-                            if ($formValues ['can_sell'])
-                            {
-                                // Get the dealer id from the session
-                                $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-
-                                $quoteDevice                 = new Quotegen_Model_Device($formValues);
-                                $quoteDevice->dealerId       = $dealerId;
-                                $quoteDevice->masterDeviceId = $masterDeviceId;
-
-                                $dealerMasterDeviceAttributes                 = new Proposalgen_Model_Dealer_Master_Device_Attribute($formValues);
-                                $dealerMasterDeviceAttributes->masterDeviceId = $masterDeviceId;
-                                $dealerMasterDeviceAttributes->dealerId       = $dealerId;
-
-                                $quoteDevice->saveObject();
-                                $dealerMasterDeviceAttributes->saveObject();
-
-                                $this->view->quotegendevice = $quoteDevice;
-                            }
-                            else
-                            {
-                                if ($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'] || $formValues ['partsCostPerPage'] || $formValues ['laborCostPerPage'])
-                                {
-                                    $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save Oem Sku, Dealer Sku, Standard Features or Device Cost."));
-                                }
-
-                                $deviceMapper->delete($quoteDevice);
-                                $this->view->quotegendevice = null;
-                            }
-
-                        }
-                        else
+                        if ($isAdmin)
                         {
                             // Save Master Device
                             $mapper       = new Proposalgen_Model_Mapper_MasterDevice();
@@ -496,11 +464,39 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             // Save to the database with cascade insert turned on
                             $mapper->save($masterDevice, $masterDeviceId);
                         }
-                        $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The device has been updated successfully."
-                                                           ));
+
+                        // Process the can sell part of the form
+                        if ($formValues ['can_sell'])
+                        {
+                            // Get the dealer id from the session
+                            $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+
+                            $quoteDevice                 = new Quotegen_Model_Device($formValues);
+                            $quoteDevice->dealerId       = $dealerId;
+                            $quoteDevice->masterDeviceId = $masterDeviceId;
+
+                            $dealerMasterDeviceAttributes                 = new Proposalgen_Model_Dealer_Master_Device_Attribute($formValues);
+                            $dealerMasterDeviceAttributes->masterDeviceId = $masterDeviceId;
+                            $dealerMasterDeviceAttributes->dealerId       = $dealerId;
+
+                            $quoteDevice->saveObject();
+                            $dealerMasterDeviceAttributes->saveObject();
+
+                            $this->view->quotegendevice = $quoteDevice;
+                        }
+                        else
+                        {
+                            if ($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'] || $formValues ['partsCostPerPage'] || $formValues ['laborCostPerPage'])
+                            {
+                                $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save Oem Sku, Dealer Sku, Standard Features or Device Cost."));
+                            }
+
+                            $deviceMapper->delete($quoteDevice);
+                            $this->view->quotegendevice = null;
+                        }
+
+                        $this->_flashMessenger->addMessage(array('success' => "The device has been updated successfully."));
                     }
-                    // Error
                     else
                     {
                         throw new InvalidArgumentException("Please correct the errors below");
@@ -508,9 +504,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 }
                 catch (InvalidArgumentException $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                    $this->_flashMessenger->addMessage(array('danger' => $e->getMessage()));
                 }
             }
             else
