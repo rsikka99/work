@@ -599,13 +599,11 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                                ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
-        else
-        {
-            $message = "Are you sure you want to delete term {$term->months} months?";
-        }
-        $form = new Application_Form_Delete($message);
 
+        $message = "Are you sure you want to delete term {$term->months} months?";
+        $form    = new Application_Form_Delete($message);
         $request = $this->getRequest();
+
         if ($request->isPost())
         {
             $db->beginTransaction();

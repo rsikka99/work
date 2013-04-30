@@ -191,17 +191,17 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
     public function leasingdetailsAction ()
     {
         // Disable the default layout
-        $this->_helper->layout->disableLayout();
         $leasingSchemaId = $this->_getParam('schemaId', false);
+        $formData        = new stdClass();
 
         try
         {
             if ($leasingSchemaId > 0)
             {
-                $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
+                $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
                 if ($leasingSchema)
                 {
-                    $formData = new stdClass();
+
                     /* @var $leasingSchemaTerm Quotegen_Model_LeasingSchemaTerm */
                     $i = 0;
                     foreach ($leasingSchema->getTerms() as $leasingSchemaTerm)

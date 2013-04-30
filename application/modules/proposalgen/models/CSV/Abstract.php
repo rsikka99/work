@@ -50,14 +50,16 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                     if ($this->validateHeaders())
                     {
                         // Fetch one row at a time
-                        $rownumber = 0;
+                        $rowNumber = 0;
                         while (($row = fgetcsv($handle, 1000, ",")) !== false)
                         {
-                            $rownumber++;
+                            $rowNumber++;
                             // In validate headers the headerCount got set.
                             // Rows should always have the same count
                             if ($this->headerCount === count($row))
                             {
+                                $newRow = array();
+
                                 for ($i = 0; $i < count($this->headers); $i++)
                                 {
                                     $trimmedValue = trim($row [$i]);
@@ -70,7 +72,9 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                                         $newRow [$this->headers [$i]] = null;
                                     }
                                 }
+
                                 $rowError = $this->checkRowForErrors($newRow);
+
                                 if ($rowError === false)
                                 {
                                     $this->data [] = $newRow;
@@ -78,7 +82,7 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
                                 else
                                 {
                                     $this->badData [] = array(
-                                        "Row $rownumber Excluded: " . $rowError,
+                                        "Row $rowNumber Excluded: " . $rowError,
                                         $newRow
                                     );
                                 }

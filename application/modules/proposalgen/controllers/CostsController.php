@@ -808,10 +808,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         $table->insert($data);
                                     }
                                 }
-                                $this->_flashMessenger->addMessage(array(
-
-                                                                        "success" => "Your pricing updates have been applied successfully."
-                                                                   ));
+                                $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
                                 $db->commit();
                             }
                             catch
@@ -819,24 +816,14 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             {
 
                                 $db->rollback();
-                                $this->_flashMessenger->addMessage(array(
-                                                                        "error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."
-                                                                   ));
+                                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                             }
-
-
-                            ///////////////////////////////
-                            //////////////////////////////////////////
-                            ////End Saving
-                            //////////////////////////////////////////
                         }
                     }
                     catch (Exception $e)
                     {
                         $db->rollback();
-                        $this->_flashMessenger->addMessage(array(
-                                                                "error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."
-                                                           ));
+                        $this->_flashMessenger->addMessage(array("error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                     }
 
                     // delete the file we just uploaded

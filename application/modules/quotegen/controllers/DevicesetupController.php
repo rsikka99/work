@@ -639,6 +639,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     // Get Toner Id
                     $tonerId = $values ['tonerid'];
 
+                    $view   = null;
+                    $filter = null;
+
                     if (!isset($values ['btnClearSearch']))
                     {
                         // Filter view
@@ -725,21 +728,17 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         // If it's safe to delete, do so.
                         if ($safeToDelete)
                         {
-                            $devicetonerMapper = new Proposalgen_Model_Mapper_DeviceToner();
-                            $devicetonerMapper->delete(array(
-                                                            'toner_id = ?'         => $tonerId,
-                                                            'master_device_id = ?' => $masterDeviceId
-                                                       ));
+                            $deviceTonerMapper1 = new Proposalgen_Model_Mapper_DeviceToner();
+                            $deviceTonerMapper1->delete(array(
+                                                             'toner_id = ?'         => $tonerId,
+                                                             'master_device_id = ?' => $masterDeviceId
+                                                        ));
 
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The toner was unassigned successfully."
-                                                               ));
+                            $this->_flashMessenger->addMessage(array('success' => "The toner was unassigned successfully."));
                         }
                         else
                         {
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'You must have at least 1 complete set of toners for this device. If you must unassign this toner you will need to assign a new one before being able to unassign this one.'
-                                                               ));
+                            $this->_flashMessenger->addMessage(array('danger' => 'You must have at least 1 complete set of toners for this device. If you must unassign this toner you will need to assign a new one before being able to unassign this one.'));
                         }
                     }
 

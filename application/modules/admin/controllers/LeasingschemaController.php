@@ -549,16 +549,12 @@ class Admin_LeasingschemaController extends Tangent_Controller_Action
         $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll('leasingSchemaId = ' . $leasingSchemaId);
         if (count($leasingSchemaTerms) <= 1)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                    'danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."
-                                               ));
+            $this->_flashMessenger->addMessage(array('danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
-        else
-        {
-            $message = "Are you sure you want to delete term {$term->months} months?";
-        }
-        $form = new Application_Form_Delete($message);
+
+        $message = "Are you sure you want to delete term {$term->months} months?";
+        $form    = new Application_Form_Delete($message);
 
         $request = $this->getRequest();
         if ($request->isPost())
