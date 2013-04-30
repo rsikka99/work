@@ -107,7 +107,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                          ));
         $this->addElement('text', 'kilowattsPerHour', array(
                                                            'label'      => 'Energy Cost',
-                                                           'append'     => '/ KWh',
+                                                           'append'     => '$ / KWh',
                                                            'validators' => $costValidator
                                                       ));
         $this->addElement('text', 'adminCostPerPage', array(
@@ -127,7 +127,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                       ));
         $this->addElement('text', 'averageItHourlyRate', array(
                                                            'label'      => 'Estimated Average It Hourly Rate',
-                                                           'append' => '$',
+                                                           'append' => '$ / hour',
                                                            'validators' => $costValidator
                                                       ));
         $hoursSpentOnIt = $this->createElement('text', 'hoursSpentOnIt', array(

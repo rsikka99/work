@@ -84,8 +84,6 @@ class Healthcheck_Service_HealthcheckSettings
         if (!isset($this->_form))
         {
             $this->_form = new Healthcheck_Form_Healthcheck_Settings($this->_defaultSettings);
-            // Populate with initial data?
-//            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_HealthcheckSettings->toArray()));
             $this->_form->populate($this->_healthcheckSettings->toArray());
             $reportDate = date('m/d/Y', strtotime($this->_healthcheck->reportDate));
             $this->_form->populate(array(
@@ -156,7 +154,6 @@ class Healthcheck_Service_HealthcheckSettings
 
             // Save the id as it will get erased
             $HealthcheckSettingsId = $this->_healthcheckSettings->id;
-            $this->_healthcheckSettings->populate(array_merge($this->_defaultSettings->toArray(), $validData));
             $healthcheckSettings = new Healthcheck_Model_Healthcheck_Setting();
             $healthcheckSettings->populate(array_merge($this->_defaultSettings->toArray(), $validData));
             $healthcheckSettings->id    = $HealthcheckSettingsId;
@@ -166,9 +163,6 @@ class Healthcheck_Service_HealthcheckSettings
             $this->getForm()->populate($this->_healthcheckSettings->toArray());
             $this->_healthcheckSettings->costOfLabor    = ($this->_healthcheckSettings->costOfLabor != null) ? $this->_healthcheckSettings->costOfLabor : new Zend_Db_Expr('NULL');
             $this->_healthcheckSettings->hoursSpentOnIt = ($this->_healthcheckSettings->hoursSpentOnIt != null) ? $this->_healthcheckSettings->hoursSpentOnIt : new Zend_Db_Expr('NULL');
-
-            // Restore the ID
-            $this->_healthcheckSettings->id = $HealthcheckSettingsId;
 
             Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($this->_healthcheckSettings);
 

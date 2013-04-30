@@ -53,6 +53,11 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $proposalGroup->elements     = array();
         $this->_formElementGroups [] = $proposalGroup;
 
+        $dealerGroup                 = new stdClass();
+        $dealerGroup->title          = "Dealer Settings (Not for customer eyes)";
+        $dealerGroup->elements       = array();
+        $this->_formElementGroups [] = $dealerGroup;
+
         //*****************************************************************
         // GENERAL SETTING FIELDS
         //*****************************************************************
@@ -241,7 +246,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        // Toner preference for the assessment
+        // Toner preference for the healthcheck
         $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
         $pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
@@ -250,13 +255,9 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
 
         $this->addElement($pricing_config);
-        $proposalGroup->elements [] = $pricing_config;
+        $dealerGroup->elements [] = $pricing_config;
 
-        //*****************************************************************
-        // GROSS MARGIN SETTING FIELDS
-        //*****************************************************************
-
-        // Actual Page Coverage (Monochrome)
+        // Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('pageCoverageMonochrome');
         $actual_page_coverage->setLabel('Page Coverage Monochrome')
             ->addValidator(new Zend_Validate_Float())
@@ -272,7 +273,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage);
-        $proposalGroup->elements [] = $actual_page_coverage;
+        $dealerGroup->elements [] = $actual_page_coverage;
 
         // Actual Page Coverage (Color)
         $actual_page_coverage_color = new Zend_Form_Element_Text('pageCoverageColor');
@@ -291,7 +292,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage_color);
-        $proposalGroup->elements [] = $actual_page_coverage_color;
+        $dealerGroup->elements [] = $actual_page_coverage_color;
 
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
@@ -310,7 +311,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($admin_charge);
-        $proposalGroup->elements [] = $admin_charge;
+        $dealerGroup->elements [] = $admin_charge;
 
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
@@ -329,7 +330,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($labor_cost);
-        $proposalGroup->elements [] = $labor_cost;
+        $dealerGroup->elements [] = $labor_cost;
 
         // Parts Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
@@ -348,7 +349,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($parts_cost);
-        $proposalGroup->elements [] = $parts_cost;
+        $dealerGroup->elements [] = $parts_cost;
 
         // Average It Hourly Rate
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
@@ -357,7 +358,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
-            ->setDescription('$')
+            ->setDescription('$ / hour')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->averageItHourlyRate, 2))
             ->setAttrib('inputprepend', '$')
             ->addValidator('greaterThan', true, array(
@@ -376,7 +377,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', "15 minutes per week per printer")
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->hoursSpentOnIt > 0 ? $this->_defaultSettings->hoursSpentOnIt : "15 minutes per week per printer"))
             ->setAttrib('append', ' hours')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
@@ -394,7 +395,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', "200 per printer")
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->costOfLabor > 0 ? $this->_defaultSettings->costOfLabor : "200 per printer"))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('append', ' / fleet')
             ->addValidator('greaterThan', true, array(
