@@ -142,8 +142,8 @@ Ideally, you should have the minimum amount of printing hardware required to mee
             <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin())), 2) ?>
                 %</td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyColorPageCount()); ?></td>
-            <td><?php echo $this->currency($deviceInstance->calculateCostPerPage($healthcheckViewModel->getCostPerPageSettingForCustomer())->colorCostPerPage,array('precision' => 4)); ?></td>
-            <td><?php echo $this->currency($deviceInstance->calculateMonthlyColorCost($healthcheckViewModel->getCostPerPageSettingForCustomer()),array('precision' => 2)) ?></td>
+            <td><?php echo $this->currency($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin()),array('precision' => 4)); ?></td>
+            <td><?php echo $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin()),array('precision' => 2)) ?></td>
         </tr>
             <?php $ctr++; if ($ctr > 2) break; endforeach; ?>
     </tbody>

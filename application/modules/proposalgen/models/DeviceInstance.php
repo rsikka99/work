@@ -802,6 +802,30 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * gets the monochrome CPP with a margin
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float $margin
+     *
+     * @return float
+     */
+    public function getColorCostPerPageWithMargin($costPerPageSetting, $margin)
+    {
+        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, $margin);
+    }
+
+    /**
+     * gets the monochrome CPP with a margin
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param float $margin
+     *
+     * @return float
+     */
+    public function getMonochromeCostPerPageWithMargin($costPerPageSetting, $margin)
+    {
+        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, $margin);
+    }
+
+    /**
      * @return string
      */
     public function getDeviceName ()
