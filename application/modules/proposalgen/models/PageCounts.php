@@ -31,7 +31,6 @@ class Proposalgen_Model_PageCounts
     {
         $this->monochrome = new Proposalgen_Model_PageCount();
         $this->color      = new Proposalgen_Model_PageCount();
-        $this->_combined  = new Proposalgen_Model_PageCount();
     }
 
     /**
