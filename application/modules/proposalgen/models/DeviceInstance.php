@@ -108,6 +108,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     protected $_meters;
 
     /**
+     * The device instance's pageCounts
+     *
+     * @var Healthcheck_Model_Healthcheck
+     */
+    protected $_pageCounts;
+    /**
      * Used in determining actions for replacement devices.
      *
      * @var String
@@ -274,11 +280,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var float
      */
     protected $_averageDailyPowerCost;
-
-    /**
-     * @var Healthcheck_Model_PageCounts
-     */
-    protected $_pageCounts;
 
     /*
      * ********************************************************************************
@@ -803,24 +804,26 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * gets the monochrome CPP with a margin
+     *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float $margin
+     * @param float                                $margin
      *
      * @return float
      */
-    public function getColorCostPerPageWithMargin($costPerPageSetting, $margin)
+    public function getColorCostPerPageWithMargin ($costPerPageSetting, $margin)
     {
         return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, $margin);
     }
 
     /**
      * gets the monochrome CPP with a margin
+     *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float $margin
+     * @param float                                $margin
      *
      * @return float
      */
-    public function getMonochromeCostPerPageWithMargin($costPerPageSetting, $margin)
+    public function getMonochromeCostPerPageWithMargin ($costPerPageSetting, $margin)
     {
         return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, $margin);
     }
@@ -1642,16 +1645,32 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Gets this devices page counts
+     * Gets this device instance's page counts
+     *
+     * @return Healthcheck_Model_PageCounts
      */
     public function getPageCounts ()
     {
-        $pageCounts = new Healthcheck_Model_PageCounts();
-        $pageCounts->monochrome->setDaily($this->getAverageDailyBlackAndWhitePageCount());
-        $pageCounts->color->setDaily($this->getAverageDailyColorPageCount());
+        if (!isset($this->_pageCounts))
+        {
+            $pageCounts = new Healthcheck_Model_PageCounts();
+            $meters     = $this->getMeters();
 
-        return $pageCounts;
+            // Black page counts
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
+            {
+                $pageCounts->monochrome->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->calculateAverageDailyPageVolume());
+            }
+
+            // Color page counts
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
+            {
+                $pageCounts->color->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->calculateAverageDailyPageVolume());
+            }
+
+            $this->_pageCounts = $pageCounts;
+        }
+
+        return $this->_pageCounts;
     }
-
-
 }

@@ -83,6 +83,21 @@ class Healthcheck_Model_PageCount
     }
 
     /**
+     * Sets the daily value
+     *
+     * @param int $pageCount
+     *
+     * @return $this
+     */
+    public function setDaily ($pageCount)
+    {
+        $this->_recalculate = true;
+        $this->_daily       = $pageCount;
+
+        return $this;
+    }
+
+    /**
      * Gets the weekly page count
      *
      * @return int
@@ -172,14 +187,5 @@ class Healthcheck_Model_PageCount
         $this->_monthly     = null;
         $this->_quarterly   = null;
         $this->_yearly      = null;
-    }
-
-    /**
-     * Sets the daily value
-     * @param int $pageCount
-     */
-    public function setDaily($pageCount)
-    {
-        $this->_daily = $pageCount;
     }
 }
