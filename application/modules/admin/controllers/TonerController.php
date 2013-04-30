@@ -182,7 +182,7 @@ class Admin_TonerController extends Tangent_Controller_Action
 
                         $mapper->save($toner, $tonerId);
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "The toner was updated sucessfully."
+                                                            'success' => "The toner was updated successfully."
                                                        ));
 
                         $this->redirector('index');

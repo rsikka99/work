@@ -217,7 +217,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                         $mapper->save($manufacturer, $manufacturerId);
                         
                         $this->_flashMessenger->addMessage(array (
-                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated sucessfully."
+                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated successfully."
                         ));
                     }
                     else

@@ -266,7 +266,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Device configuration '{$deviceConfiguration->id}' was updated sucessfully."
+                                                                    'success' => "Device configuration '{$deviceConfiguration->id}' was updated successfully."
                                                                ));
 
                             // Send back to the main list

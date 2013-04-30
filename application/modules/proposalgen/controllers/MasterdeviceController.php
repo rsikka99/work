@@ -209,7 +209,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         $mapper->save($masterDevice, $masterDeviceId);
                         
                         $this->_flashMessenger->addMessage(array (
-                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 
+                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated successfully."
                         ));
                     }
                     else

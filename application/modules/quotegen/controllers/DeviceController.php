@@ -248,7 +248,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                         }
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated sucessfully."
+                                                                'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated successfully."
                                                            ));
 
                         // Save new device attributes (sku)

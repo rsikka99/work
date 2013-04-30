@@ -288,7 +288,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $devicemapper->insert($device);
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "The {$masterDevice->getFullDeviceName()} device has been updated sucessfully."
+                                                                        'success' => "The {$masterDevice->getFullDeviceName()} device has been updated successfully."
                                                                    ));
 
                                 // Redirect them here so that the form reloads
@@ -364,9 +364,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If they haven't provided an id, send them back to the view all masterDevice page
         if (!$masterDeviceId)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to edit first.'
-                                               ));
+            $this->_flashMessenger->addMessage(array('warning' => 'Please select a master device to edit first.'));
             $this->redirector('index');
         }
 
@@ -378,9 +376,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         // If the masterDevice doesn't exist, send them back to the view all masterDevices page
         if (!$masterDevice)
         {
-            $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the master device to edit.'
-                                               ));
+            $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the master device to edit.'));
             $this->redirector('index');
         }
 
@@ -474,9 +470,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             {
                                 if ($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'] || $formValues ['partsCostPerPage'] || $formValues ['laborCostPerPage'])
                                 {
-                                    $this->_flashMessenger->addMessage(array(
-                                                                            'warning' => "Can Sell must be selected to save Parts Cost, Labor Cost, Oem Sku, Dealer Sku, Standard Features or Device Cost."
-                                                                       ));
+                                    $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save Oem Sku, Dealer Sku, Standard Features or Device Cost."));
                                 }
 
                                 $deviceMapper->delete($quoteDevice);
@@ -503,7 +497,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $mapper->save($masterDevice, $masterDeviceId);
                         }
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The device has been updated sucessfully."
+                                                                'success' => "The device has been updated successfully."
                                                            ));
                     }
                     // Error
@@ -714,8 +708,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             Proposalgen_Model_TonerColor::FOUR_COLOR  => 0
                         );
 
-                        $safeToDelete      = true;
-                        $tonersByPartType  = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
+                        $safeToDelete     = true;
+                        $tonersByPartType = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
 
                         // Count the toners
                         foreach ($tonersByPartType as $tonersByColor)

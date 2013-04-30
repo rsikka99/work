@@ -261,7 +261,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         }
                         $optionMapper->save($option, $optionId);
                         $this->_flashMessenger->addMessage(array (
-                                'success' => "Category setting was updated sucessfully." 
+                                'success' => "Category setting was updated successfully."
                         ));
                         
                         $this->redirector('index');

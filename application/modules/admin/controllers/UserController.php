@@ -92,7 +92,7 @@ class Admin_UserController extends Tangent_Controller_Action
                                     }
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "User '" . $this->view->escape($values ["email"]) . "' saved sucessfully."
+                                                                    'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
                                                                    ));
 
                                 // Reset the form after everything is saved successfully

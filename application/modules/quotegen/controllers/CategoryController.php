@@ -191,7 +191,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
                         
                         $this->_flashMessenger->addMessage(array (
-                                'success' => "Category was updated sucessfully." 
+                                'success' => "Category was updated successfully."
                         ));
                         
                         $this->redirector('index');
