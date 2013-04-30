@@ -33,10 +33,10 @@ $section->addTextBreak(2);
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
 $section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.')
-    , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->_deviceInstances)) //1
+    , number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()) //1
     , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
-    , count($healthcheckViewModel->getDevices()->leasedDeviceInstances->_deviceInstances) //3
-    , number_format(count($healthcheckViewModel->getDevices()->purchasedDeviceInstances->_deviceInstances)) //4
+    , $healthcheckViewModel->getDevices()->leasedDeviceInstances->getCount() //3
+    , number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getCount()) //4
     , number_format($healthcheckViewModel->getNumberOfUniquePurchasedModels()) //5
     , number_format($healthcheckViewModel->getNumberOfUniquePurchasedToners()) //6
     , number_format($healthcheckViewModel->getCashHeldInInventory())//7
@@ -88,7 +88,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 //Black Toner
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Black Toner'), 'bold_text', 'nospacing');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly()), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
@@ -97,7 +97,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 //Color Toner
 $estimatedTonerCostsTable->addRow($this->styles->tables->estimatedTonerCosts->rowheight);
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Color Toner'), 'bold_text', 'nospacing');
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getPageCounts()->Purchased->Color->Monthly), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell2)->addText(number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell3)->addText($this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell4)->addText($this->currency($healthcheckViewModel->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)), null, 'nospacing_rightalign');
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)), null, 'nospacing_rightalign');

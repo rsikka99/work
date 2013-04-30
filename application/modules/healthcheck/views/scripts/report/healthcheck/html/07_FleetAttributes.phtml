@@ -32,7 +32,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getPageCounts()->total->monochrome->daily), 2) ?>%</td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
         </tr>
@@ -143,7 +143,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                 <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to a newer JIT compatible device.</td>
@@ -179,7 +179,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                     <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount(), 0) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getPageCounts()->Total->Combined->Monthly), 2) ?>%</td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->getIsLeased() ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(),$healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
             <td class="center"> <?php echo ($deviceInstance->getIsLeased() ? 'N' : ($deviceInstance->isCapableOfReportingTonerLevels() ? 'Y' : 'N')) ?></td>
             <td>Migrate all page volume to JIT compatible device.</td>

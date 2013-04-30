@@ -22,7 +22,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($healthcheckViewModel->getDeviceCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($healthcheckViewModel->getDeviceCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
 
 $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
@@ -46,7 +46,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 
 $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of total printed pages, per month'), null, null);
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->getPageCounts()->Total->Combined->Monthly), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()), null, 'nospacing_rightalign');
 
 $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of pages per device, per month'), null, null);
@@ -122,7 +122,7 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Color Usage'), 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($healthcheckViewModel->getNumberOfColorCapablePurchasedDevices()), number_format($healthcheckViewModel->getPageCounts()->Purchased->Color->Monthly), number_format($healthcheckViewModel->calculatePercentOfTotalVolumePurchasedColorMonthly(), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($healthcheckViewModel->getNumberOfColorCapablePurchasedDevices()), number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumePurchasedColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

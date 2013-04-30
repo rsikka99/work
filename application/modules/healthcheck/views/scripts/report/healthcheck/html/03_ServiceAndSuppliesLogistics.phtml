@@ -66,7 +66,7 @@ $graphs   = $healthcheckViewModel->getGraphs();
     <tbody>
         <tr>
             <td><strong>Black Toner</strong></td>
-            <td class="right"><?php echo number_format($healthcheckViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly) ?></td>
+            <td class="right"><?php echo number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly()) ?></td>
             <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
             <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)) ?></td>
             <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
@@ -74,7 +74,7 @@ $graphs   = $healthcheckViewModel->getGraphs();
         </tr>
         <tr>
             <td><strong>Color Toner</strong></td>
-            <td class="right"><?php echo number_format($healthcheckViewModel->getPageCounts()->Purchased->Color->Monthly) ?></td>
+            <td class="right"><?php echo number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()) ?></td>
             <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
             <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)) ?></td>
             <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
