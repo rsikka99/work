@@ -5,29 +5,57 @@
  */
 class Application_Model_User_PasswordResetRequest extends My_Model_Abstract
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var string
+     */
     public $dateRequested;
+
+    /**
+     * @var string
+     */
     public $resetToken;
+
+    /**
+     * @var string
+     */
     public $ipAddress;
+
+    /**
+     * @var bool
+     */
     public $resetVerified;
+
+    /**
+     * @var int
+     */
     public $userId;
+
+    /**
+     * @var bool
+     */
     public $resetUsed;
 
-    /*
- * (non-PHPdoc) @see My_Model_Abstract::toArray()
- */
+    /**
+     * @return array
+     */
     public function toArray ()
     {
         return array(
-            'id'                       => $this->id,
-            'dateRequested'                 => $this->dateRequested,
-            'resetToken'                 => $this->resetToken,
-            'ipAddress'                => $this->ipAddress,
-            'resetVerified'                 => $this->resetVerified,
-            'userId'                    => $this->userId,
-            'resetUsed'              => $this->resetUsed
+            'id'            => $this->id,
+            'dateRequested' => $this->dateRequested,
+            'resetToken'    => $this->resetToken,
+            'ipAddress'     => $this->ipAddress,
+            'resetVerified' => $this->resetVerified,
+            'userId'        => $this->userId,
+            'resetUsed'     => $this->resetUsed
         );
     }
+
     /**
      * @param array $params An array of data to populate the model with
      */
@@ -67,5 +95,4 @@ class Application_Model_User_PasswordResetRequest extends My_Model_Abstract
             $this->resetUsed = $params->resetUsed;
         }
     }
-
 }

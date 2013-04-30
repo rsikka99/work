@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_ClientController
+ */
 class Admin_ClientController extends Tangent_Controller_Action
 {
     /**

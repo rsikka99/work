@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Quote_ReportsController
+ */
 class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
 {
     public $contexts = array (
@@ -36,8 +39,6 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
         $request = $this->getRequest();
         
         $form = new Quotegen_Form_Quote_General($this->_quote);
-        $populateData = $this->_quote->toArray();
-        
         if ($request->isPost())
         {
             $values = $request->getPost();

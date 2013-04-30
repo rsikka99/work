@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Template
+ */
 class Quotegen_Model_Template extends My_Model_Abstract
 {
     /**

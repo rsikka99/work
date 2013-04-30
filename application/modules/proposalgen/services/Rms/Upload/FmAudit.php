@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Service_Rms_Upload_FmAudit
+ */
 class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**

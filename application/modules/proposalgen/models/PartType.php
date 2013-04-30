@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_PartType
+ */
 class Proposalgen_Model_PartType extends My_Model_Abstract
 {
     const OEM  = 1;

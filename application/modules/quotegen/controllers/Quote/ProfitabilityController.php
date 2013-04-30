@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Quote_ProfitabilityController
+ */
 class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller_Quote
 {
 
@@ -196,7 +199,6 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
             if ($leasingSchemaId > 0)
             {
                 $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
-                $leasingSchemaTerms = array();
                 if ($leasingSchema)
                 {
                     $formData = new stdClass();

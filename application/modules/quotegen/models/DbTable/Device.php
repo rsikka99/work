@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_DbTable_Device
+ */
 class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
 {
     protected $_name = 'devices';

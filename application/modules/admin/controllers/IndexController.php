@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_IndexController
+ */
 class Admin_IndexController extends Tangent_Controller_Action
 {
 

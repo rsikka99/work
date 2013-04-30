@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Mapper_Assessment_Setting
+ */
 class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
 {
     /*
@@ -296,7 +299,7 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
         if (!$assessmentSetting)
         {
             $assessmentSetting   = new Assessment_Model_Assessment_Setting();
-            $assessmentSettingId = Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
+            Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
         }
 
         return $assessmentSetting;

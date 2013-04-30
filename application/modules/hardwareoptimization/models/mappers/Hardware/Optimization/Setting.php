@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting
+ */
 class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting extends My_Model_Mapper_Abstract
 {
     /*

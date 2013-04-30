@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_QuoteController
+ */
 class Preferences_QuoteController extends Tangent_Controller_Action
 {
     public function indexAction () { /**Do Nothing*/ }

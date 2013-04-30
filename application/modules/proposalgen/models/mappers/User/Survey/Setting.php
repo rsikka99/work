@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_User_Survey_Setting
+ */
 class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstract
 {
     /**

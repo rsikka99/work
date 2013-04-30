@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Default_Model_Acl
+ */
 class Default_Model_Acl
 {
     const RESOURCE_DEFAULT_WILDCARD            = "default__%__%";

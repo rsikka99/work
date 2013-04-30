@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Service_Rms_Upload_Line
+ */
 class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
 {
     const METER_IS_VALID       = 0;
@@ -784,6 +787,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         );
     }
 
+    /**
+     * @param $incomingDateFormat
+     *
+     * @return bool|string
+     */
     public function isValid ($incomingDateFormat)
     {
         // Settings

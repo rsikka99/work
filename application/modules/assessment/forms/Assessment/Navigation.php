@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Form_Assessment_Navigation
+ */
 class Assessment_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
 {
     const BUTTONS_ALL       = 1;
@@ -43,10 +46,8 @@ class Assessment_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
     /**
      * Adds form actions to a given form
      *
-     * @param
-     *            The mode for the buttons $buttonMode
-     * @param
-     *            The form to add the actions to $form
+     * @param int       $buttonMode The mode for the buttons
+     * @param Zend_Form $form       The form to add the actions to
      *
      * @throws InvalidArgumentException This is thrown when you specify an invalid button mode
      */

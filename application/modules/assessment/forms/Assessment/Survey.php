@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Form_Assessment_Survey
+ */
 class Assessment_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizontal
 {
 
@@ -20,6 +23,9 @@ class Assessment_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizonta
         '75' => 'More than 50%'
     );
 
+    /**
+     * @param null|array $options
+     */
     public function __construct ($options = null)
     {
         $this->currency      = new Zend_Currency();

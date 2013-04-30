@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Application_Model_DbTable_User_PasswordResetRequests
+ */
 class Application_Model_DbTable_User_PasswordResetRequests extends Zend_Db_Table_Abstract
 {
     //put your code here

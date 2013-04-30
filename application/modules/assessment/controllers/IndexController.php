@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_IndexController
+ */
 class Assessment_IndexController extends Assessment_Library_Controller_Action
 {
     /**

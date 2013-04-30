@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_ViewModel_Devices
+ */
 class Hardwareoptimization_ViewModel_Devices
 {
     /**

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_View_Helper_ProposalMenu
+ */
 class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
 {
 

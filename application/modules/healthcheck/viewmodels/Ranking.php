@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_ViewModel_Ranking
+ */
 class Healthcheck_ViewModel_Ranking extends Tangent_Model_Abstract
 {
     protected $proposal;

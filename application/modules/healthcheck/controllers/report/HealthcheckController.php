@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Report_HealthcheckController
+ */
 class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Controller_Action
 {
 

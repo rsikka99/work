@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_QuoteController
+ */
 class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
 {
 

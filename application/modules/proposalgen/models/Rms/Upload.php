@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Rms_Upload
+ */
 class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
 {
     /**

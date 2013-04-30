@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Service_Rms_Upload_Abstract
+ */
 abstract class Proposalgen_Service_Rms_Upload_Abstract
 {
     /**

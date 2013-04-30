@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Service_Assessment_Survey
+ */
 class Assessment_Service_Assessment_Survey
 {
 
@@ -17,6 +20,10 @@ class Assessment_Service_Assessment_Survey
      */
     protected $_form;
 
+    /**
+     * @param Assessment_Model_Assessment_Survey $assessmentSurvey
+     * @param Proposalgen_Model_Survey_Setting   $surveySetting
+     */
     public function __construct ($assessmentSurvey, $surveySetting)
     {
         $this->_assessmentSurvey        = $assessmentSurvey;

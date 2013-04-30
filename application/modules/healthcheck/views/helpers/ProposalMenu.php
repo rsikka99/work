@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_View_Helper_ProposalMenu
+ */
 class Healthcheck_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
 {
 
@@ -30,10 +33,7 @@ class Healthcheck_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
                 }
 
                 // Get the url and name
-                $url  = $this->view->url(array(
-                                              'controller' => $step->controller,
-                                              'action'     => $step->action
-                                         ));
+                $url  = $this->view->url(array('controller' => $step->controller, 'action' => $step->action));
                 $name = $step->name;
 
                 if ($step->canAccess)

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Application_Model_Mapper_User
+ */
 class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 {
     // Column Names
@@ -201,6 +204,9 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         return $entries;
     }
 
+    /**
+     * @return Application_Model_User[]
+     */
     public function fetchAllExceptRoot ()
     {
         return $this->fetchAll(array("{$this->col_id} != 1"));
@@ -267,7 +273,6 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      */
     public function fetchUserList ($includeRootUser = false)
     {
-        $users = array();
         if ($includeRootUser)
         {
             $users = $this->fetchAll();

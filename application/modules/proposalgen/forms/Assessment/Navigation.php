@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_Assessment_Navigation
+ */
 class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
 {
     const BUTTONS_ALL       = 1;
@@ -43,10 +46,8 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
     /**
      * Adds form actions to a given form
      *
-     * @param
-     *            The mode for the buttons $buttonMode
-     * @param
-     *            The form to add the actions to $form
+     * @param int $buttonMode The mode for the buttons
+     * @param     $form       Zend_Form The form to add the actions to
      *
      * @throws InvalidArgumentException This is thrown when you specify an invalid button mode
      */
@@ -148,7 +149,7 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
         $form->addDisplayGroup($addedButtons, 'actions', array(
                                                               'disableLoadDefaultDecorators' => true,
                                                               'decorators'                   => array(
-                                                                  'Actions','FieldSize',
+                                                                  'Actions', 'FieldSize',
                                                                   'ViewHelper',
                                                                   'Addon',
                                                                   'ElementErrors',

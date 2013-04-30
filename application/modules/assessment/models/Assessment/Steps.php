@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Assessment_Steps
+ */
 class Assessment_Model_Assessment_Steps extends My_Navigation_Abstract
 {
     const STEP_FLEET_UPLOAD = 'upload';
@@ -58,6 +61,9 @@ class Assessment_Model_Assessment_Steps extends My_Navigation_Abstract
         return self::$_instance;
     }
 
+    /**
+     * Creates a new set of assessment steps
+     */
     public function __construct ()
     {
         $this->_setNewSteps(self::$stepNames);

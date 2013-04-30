@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_LeasingSchema
+ */
 class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
 {
     /**
@@ -230,6 +233,11 @@ class Quotegen_Model_Mapper_LeasingSchema extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
+    /**
+     * @param $dealerId
+     *
+     * @return Quotegen_Model_LeasingSchema[]
+     */
     public function getSchemasForDealer ($dealerId)
     {
         return $this->fetchAll($this->getWhereDealerId($dealerId));

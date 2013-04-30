@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Rms_Excluded_Row
+ */
 class Proposalgen_Model_Rms_Excluded_Row extends My_Model_Abstract
 {
     /**

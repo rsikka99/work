@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Default_AuthController
+ */
 class Default_AuthController extends Tangent_Controller_Action
 {
 
@@ -245,6 +248,7 @@ class Default_AuthController extends Tangent_Controller_Action
      *
      * @param int $min The minimum number generated
      * @param int $max The maximum number generated
+     *
      * @return int
      */
     function getRandom ($min, $max)
@@ -357,7 +361,6 @@ class Default_AuthController extends Tangent_Controller_Action
     function resetpasswordAction ()
     {
         $this->logout();
-        $validVerification = false;
         $form              = new Default_Form_ResetPassword();
         // Step 1. Get the reset id
         $request = $this->getRequest();
@@ -434,21 +437,21 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function verifyPasswordReset ($resetUid)
     {
-        $passwordresetrequest = false;
+        $passwordResetRequest = false;
         if ($resetUid !== null)
         {
             // Step 2. Verify the reset id and update the request
-            $passwordresetrequest = Application_Model_Mapper_User_PasswordResetRequest::getInstance()->fetch(array(
+            $passwordResetRequest = Application_Model_Mapper_User_PasswordResetRequest::getInstance()->fetch(array(
                                                                                                                   "resetToken = ?" => $resetUid
                                                                                                              ));
-            if ($passwordresetrequest)
+            if ($passwordResetRequest)
             {
                 // If we already reset our password with this hash, then it should no longer be valid
-                if ($passwordresetrequest->resetUsed == false)
+                if ($passwordResetRequest->resetUsed == false)
                 {
                     //Check to see if we are the same ip address
                     $currentIp = $_SERVER ['REMOTE_ADDR'];
-                    if ($passwordresetrequest->ipAddress != $currentIp)
+                    if ($passwordResetRequest->ipAddress != $currentIp)
                     {
 
 
@@ -456,29 +459,29 @@ class Default_AuthController extends Tangent_Controller_Action
                          * Check the timeframe of the password reset.
                          * This should be within 24 hours of the request
                          */
-                        $timeRequested = new DateTime($passwordresetrequest->dateRequested);
+                        $timeRequested = new DateTime($passwordResetRequest->dateRequested);
                         $currentTime   = new DateTime();
                         $timeDiff      = $currentTime->diff($timeRequested, true);
                         //Check to see if it has expired
                         if ($timeDiff->h > 24 || $timeDiff->d > 0 || $timeDiff->m > 0 || $timeDiff->y > 0)
                         {
-                            $passwordresetrequest = false;
+                            $passwordResetRequest = false;
                         }
                     }
                 }
                 else
                 {
-                    $passwordresetrequest = false;
+                    $passwordResetRequest = false;
                 }
             }
             else
             {
-                $passwordresetrequest = false;
+                $passwordResetRequest = false;
             }
 
         }
 
-        return $passwordresetrequest;
+        return $passwordResetRequest;
     }
 
     /**
@@ -509,7 +512,14 @@ class Default_AuthController extends Tangent_Controller_Action
         $mail->setFrom($email->username, 'Forgot Password');
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
-        $link = $this->view->ServerUrl('/auth/resetpassword/verify/' . $token);
+
+        $link = $this->view->url(array(
+                                      'action'     => 'resetpassword',
+                                      'controller' => 'auth',
+                                      'module'     => 'default',
+                                      'verify'     => $token
+                                 ));
+
         $body = "<body>";
         $body .= "<h2>" . $this->view->App()->title . " Password Reset Request</h2>";
         $body .= "<p>A password reset request for your " . $this->view->App()->title . " account has been submitted. If you did not make this request, please contact your system administrator immediately.</p>";

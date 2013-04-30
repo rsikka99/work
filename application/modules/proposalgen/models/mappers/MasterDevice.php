@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_MasterDevice
+ */
 class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 {
     /*
@@ -504,7 +507,14 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         return $result;
     }
 
-
+    /**
+     * @param     $masterDeviceId
+     * @param     $dealerId
+     * @param int $defaultLaborCostPerPage
+     * @param int $defaultPartsCostPerPage
+     *
+     * @return bool|Proposalgen_Model_MasterDevice
+     */
     public function findForReports ($masterDeviceId, $dealerId, $defaultLaborCostPerPage = 0, $defaultPartsCostPerPage = 0)
     {
 

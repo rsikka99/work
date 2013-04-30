@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Default_IndexController
+ */
 class Default_IndexController extends Tangent_Controller_Action
 {
     /**

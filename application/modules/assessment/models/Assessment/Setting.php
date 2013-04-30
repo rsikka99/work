@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Assessment_Setting
+ */
 class Assessment_Model_Assessment_Setting extends My_Model_Abstract
 {
     const SERVICE_BILLING_PREFERENCE_NOT_SET  = null;
@@ -313,6 +316,9 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
         return $this->_assessmentPricingConfig;
     }
 
+    /**
+     * @return Proposalgen_Model_PricingConfig
+     */
     public function getReplacementPricingConfig ()
     {
         if (!isset($this->_replacementPricingConfig))

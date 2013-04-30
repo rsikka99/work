@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Quote_Group
+ */
 class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
 {
     /**
@@ -9,6 +12,10 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
      */
     protected $_quote;
 
+    /**
+     * @param null|Quotegen_Model_Quote $quote
+     * @param null|array                $options
+     */
     public function __construct ($quote = null, $options = null)
     {
         $this->_quote = $quote;
@@ -23,16 +30,16 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         $this->_addClassNames('form-center-actions');
 
         // ----------------------------------------------------------------------
-        // Validation Varaibles
+        // Validation Variables
         // ----------------------------------------------------------------------
         $minDeviceQuantity = 0;
         $maxDeviceQuantity = 999;
 
         // ----------------------------------------------------------------------
-        // Add device to group subform
+        // Add device to group sub form
         // ----------------------------------------------------------------------
-        $addDeviceToGroupSubform = new Twitter_Bootstrap_Form_Inline();
-        $addDeviceToGroupSubform->setElementDecorators(array(
+        $addDeviceToGroupSubForm = new Twitter_Bootstrap_Form_Inline();
+        $addDeviceToGroupSubForm->setElementDecorators(array(
                                                             'FieldSize',
                                                             'ViewHelper',
                                                             'Addon',
@@ -40,10 +47,10 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                                                             'Wrapper'
                                                        ));
 
-        $this->addSubForm($addDeviceToGroupSubform, 'addDeviceToGroup');
+        $this->addSubForm($addDeviceToGroupSubForm, 'addDeviceToGroup');
 
         // Quantity of the new device
-        $addDeviceToGroupSubform->addElement('text', 'quantity', array(
+        $addDeviceToGroupSubForm->addElement('text', 'quantity', array(
                                                                       'label'      => 'Quantity',
                                                                       'class'      => 'span1',
                                                                       'value'      => 1,
@@ -60,7 +67,7 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
                                                                  ));
 
         // Available devices
-        $deviceDropdown = $addDeviceToGroupSubform->createElement('select', 'quoteDeviceId', array(
+        $deviceDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceId', array(
                                                                                                   'label' => 'Devices:'
                                                                                              ));
 
@@ -70,10 +77,10 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
             $deviceDropdown->addMultiOption($quoteDevice->id, $quoteDevice->name);
         }
 
-        $addDeviceToGroupSubform->addElement($deviceDropdown);
+        $addDeviceToGroupSubForm->addElement($deviceDropdown);
 
         // Groups
-        $groupDropdown = $addDeviceToGroupSubform->createElement('select', 'quoteDeviceGroupId', array(
+        $groupDropdown = $addDeviceToGroupSubForm->createElement('select', 'quoteDeviceGroupId', array(
                                                                                                       'label' => 'Groups:'
                                                                                                  ));
 
@@ -81,10 +88,10 @@ class Quotegen_Form_Quote_Group extends Twitter_Bootstrap_Form_Inline
         {
             $groupDropdown->addMultiOption("{$quoteDeviceGroup->id}", $quoteDeviceGroup->name);
         }
-        $addDeviceToGroupSubform->addElement($groupDropdown);
+        $addDeviceToGroupSubForm->addElement($groupDropdown);
 
         // Add button
-        $addDeviceToGroupSubform->addElement('button', 'addDevice', array(
+        $addDeviceToGroupSubForm->addElement('button', 'addDevice', array(
                                                                          'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS,
                                                                          'type'       => 'submit',
                                                                          'label'      => 'Add'

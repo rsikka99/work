@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Model_Mapper_Healthcheck_Setting
+ */
 class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstract
 {
     /*

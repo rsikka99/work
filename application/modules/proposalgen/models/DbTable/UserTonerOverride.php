@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_DbTable_UserTonerOverride
+ */
 class Proposalgen_Model_DbTable_UserTonerOverride extends Zend_Db_Table_Abstract
 {
     //put your code here

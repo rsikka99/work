@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_UserTonerOverride
+ */
 class Proposalgen_Model_UserTonerOverride extends My_Model_Abstract
 {
     /**

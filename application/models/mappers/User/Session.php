@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Application_Model_Mapper_User_Session
+ */
 class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
 {
     /*

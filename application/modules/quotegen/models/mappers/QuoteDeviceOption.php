@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_QuoteDeviceOption
+ */
 class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
 {
     /**
@@ -234,9 +237,10 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
         );
     }
 
-    /*
+    /**
      * @param Quotegen_Model_QuoteDeviceOption $object
-     * return int
+     *
+     * @return int
      */
     public function getPrimaryKeyValueForObject ($object)
     {

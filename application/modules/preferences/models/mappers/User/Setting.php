@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Model_Mapper_User_Setting
+ */
 class Preferences_Model_Mapper_User_Setting extends My_Model_Mapper_Abstract
 {
     /*

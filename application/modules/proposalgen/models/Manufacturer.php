@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Manufacturer
+ */
 class Proposalgen_Model_Manufacturer extends My_Model_Abstract
 {
     /**

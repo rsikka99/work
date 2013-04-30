@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Form_ReportSetting
+ */
 class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     public $allowsNull = false;

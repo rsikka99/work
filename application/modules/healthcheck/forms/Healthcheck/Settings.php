@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Form_Healthcheck_Settings
+ */
 class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
@@ -15,6 +18,10 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
      */
     protected $_formElementGroups;
 
+    /**
+     * @param Healthcheck_Model_Healthcheck_Setting $defaultSettings
+     * @param null|array                            $options
+     */
     public function __construct (Healthcheck_Model_Healthcheck_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
@@ -33,8 +40,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
-        $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
-        $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
         // Setup some form element groups
         $generalGroup                = new stdClass();

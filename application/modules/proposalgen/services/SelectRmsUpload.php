@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Service_SelectRmsUpload
+ */
 class Proposalgen_Service_SelectRmsUpload
 {
     /**

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_DeviceController
+ */
 class Quotegen_DeviceController extends Tangent_Controller_Action
 {
 

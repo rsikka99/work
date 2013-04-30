@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Report_IndexController
+ */
 class Assessment_Report_IndexController extends Assessment_Library_Controller_Action
 {
     function init ()

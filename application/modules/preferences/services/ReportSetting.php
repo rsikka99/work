@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Preferences_Service_ReportSetting
+ */
 class Preferences_Service_ReportSetting
 {
     /**

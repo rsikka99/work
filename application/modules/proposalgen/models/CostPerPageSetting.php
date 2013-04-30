@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_CostPerPageSetting
+ */
 class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
 {
     /**

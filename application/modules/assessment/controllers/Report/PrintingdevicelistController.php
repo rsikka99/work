@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Report_PrintingdevicelistController
+ */
 class Assessment_Report_PrintingdevicelistController extends Assessment_Library_Controller_Action
 {
     public function indexAction ()
@@ -87,9 +90,9 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->assessmentViewModel = $assessmentViewModel;
         // Define our field titles
 
-        $jitcompat = ($this->view->App()->theme === 'printiq' ? 'Office Depot ATR Compatible' : 'JIT Compatible');
+        $justInTimeCompatibleTitle = 'JIT Compatible';
 
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV," . $jitcompat;
+        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV,{$justInTimeCompatibleTitle}";
 
         $appendix_values = "";
         try

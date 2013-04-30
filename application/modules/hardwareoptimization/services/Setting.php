@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Hardwareoptimization_Service_Setting
+ */
 class Hardwareoptimization_Service_Setting
 {
     /**
@@ -115,13 +118,6 @@ class Hardwareoptimization_Service_Setting
         if ($form->isValid($data))
         {
             $validData = $form->getValues();
-        }
-        else
-        {
-            if ($this->getForm() instanceof EasyBib_Form)
-            {
-                $this->getForm()->buildBootstrapErrorDecorators();
-            }
         }
 
         return $validData;

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_DbTable_PartType
+ */
 class Proposalgen_Model_DbTable_PartType extends Zend_Db_Table_Abstract
 {
     protected $_name = 'part_types';

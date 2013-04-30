@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Configuration
+ */
 class Quotegen_Form_Configuration extends EasyBib_Form
 {
 
@@ -34,7 +37,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
-                'required' => true, 
+                'required' => true,
                 'maxlength' => 255,
                 'filters' => array (
                         'StringTrim', 
@@ -44,7 +47,7 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         
         $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
-                'required' => true, 
+                'required' => true,
                 'style' => 'height: 100px', 
                 'maxlength' => 255,
                 'filters' => array (
@@ -55,13 +58,13 @@ class Quotegen_Form_Configuration extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

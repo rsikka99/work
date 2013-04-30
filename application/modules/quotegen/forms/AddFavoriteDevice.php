@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_AddFavoriteDevice
+ */
 class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
 {
 
@@ -10,7 +13,7 @@ class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
         
         // An add configuration button for the favorite devices
         $submitButton = $this->createElement('submit', 'addDeviceConfiguration', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Add', 
                 'class' => 'btn btn-success' 
         ));

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Hardware_Optimization
+ */
 class Hardwareoptimization_Model_Hardware_Optimization extends My_Model_Abstract
 {
     /**

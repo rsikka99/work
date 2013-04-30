@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Default_InfoController
+ */
 class Default_InfoController extends Tangent_Controller_Action
 {
 

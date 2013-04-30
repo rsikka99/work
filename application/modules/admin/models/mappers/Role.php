@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Mapper_Role
+ */
 class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
 {
     /*
@@ -235,6 +238,9 @@ class Admin_Model_Mapper_Role extends My_Model_Mapper_Abstract
         return $object->id;
     }
 
+    /**
+     * @return Admin_Model_Role[]
+     */
     public function getRolesAvailableForDealers ()
     {
         return $this->fetchAll(array("{$this->col_systemRole} = ?" => 0));

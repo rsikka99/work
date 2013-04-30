@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Device_Instance_Master_Device
+ */
 class Proposalgen_Model_Mapper_Device_Instance_Master_Device extends My_Model_Mapper_Abstract
 {
     /*

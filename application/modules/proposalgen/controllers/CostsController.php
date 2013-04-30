@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_CostsController
+ */
 class Proposalgen_CostsController extends Tangent_Controller_Action
 {
     /**
@@ -207,10 +210,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             // Regardless we can get the mater device it from the end of the element
 
                             // Find out the cost we are dealing with
-                            $element = false;
                             if (strstr($key, "laborCostPerPage"))
                             {
-                                $element        = (strstr($key, "laborCostPerPage")) ? 'laborCostPerPage' : false;
                                 $masterDeviceId = str_replace("laborCostPerPage", "", $key);
                                 $price          = $value;
 
@@ -245,7 +246,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             }
                             else if (strstr($key, "partsCostPerPage"))
                             {
-                                $element        = (strstr($key, "partsCostPerPage")) ? 'partsCostPerPage' : false;
                                 $masterDeviceId = str_replace("partsCostPerPage", "", $key);
                                 $price          = $value;
 
@@ -359,8 +359,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             /**
              * hdnRole is used when logged in as a dealer to differentiate between if the dealer is on "update company pricing" or "update my pricing"
              */
-            $hdnRole = $formData ['hdnRole'];
-
             if (isset($formData ['hdnMode']))
             {
                 // ************************************************************/
@@ -396,7 +394,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 {
                     $is_valid      = true;
                     $columns       = array();
-                    $headers       = array();
                     $final_devices = array();
                     $finalDevices  = array();
 
@@ -409,31 +406,28 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         $headers = str_getcsv(strtolower($lines [0]));
 
                         // default column keys
-                        $key_toner_id          = null;
-                        $key_manufacturer      = null;
-                        $key_part_type         = null;
-                        $key_sku               = null;
-                        $key_color             = null;
-                        $key_yield             = null;
-                        $key_new_price         = null;
-                        $key_master_printer_id = null;
-                        $key_printer_model     = null;
-                        $key_dealer_sku        = null;
-                        $key_parts_cpp         = null;
-                        $key_labor_cpp         = null;
-                        $key_system_cost       = null;
+                        $key_manufacturer  = null;
+                        $key_part_type     = null;
+                        $key_sku           = null;
+                        $key_color         = null;
+                        $key_yield         = null;
+                        $key_new_price     = null;
+                        $key_printer_model = null;
+                        $key_dealer_sku    = null;
+                        $key_parts_cpp     = null;
+                        $key_labor_cpp     = null;
+                        $key_system_cost   = null;
 
                         $import_type = false;
                         /**
                          * Finds where each column is located inside the CSV
                          */
                         $array_key = 0;
-                        foreach ($headers as $key => $value)
+                        foreach ($headers as $value)
                         {
                             if (strtolower($value) == "toner id")
                             {
-                                $import_type  = "toner";
-                                $key_toner_id = $array_key;
+                                $import_type = "toner";
                             }
                             else if (strtolower($value) == "manufacturer")
                             {
@@ -461,8 +455,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             }
                             else if (strtolower($value) == "master printer id")
                             {
-                                $import_type           = "printer";
-                                $key_master_printer_id = $array_key;
+                                $import_type = "printer";
                             }
                             else if (strtolower($value) == "printer model")
                             {
@@ -524,8 +517,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     }
                                     else
                                     {
-                                        $current_toner_price = 0;
-
                                         $toner_id    = $devices [$key] [0];
                                         $columns [0] = "Toner ID";
                                         $columns [1] = "Manufacturer";
@@ -543,8 +534,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                                         if (count($toner->toArray()) > 0)
                                         {
-                                            // get current costs
-//                                                $current_toner_price = $toner ['systemCost'];
                                             // save into array
                                             $final_devices [0] = $toner_id;
                                             $final_devices [1] = $devices [$key] [$key_manufacturer];
@@ -914,7 +903,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             ));
                 $stmt   = $db->query($select);
                 $result = $stmt->fetchAll();
-                foreach ($result as $key => $value)
+                foreach ($result as $value)
                 {
                     $fieldList [] = array(
                         $value ['master_id'],
@@ -976,7 +965,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $result = $stmt->fetchAll();
 
 
-                foreach ($result as $key => $value)
+                foreach ($result as $value)
                 {
                     $fieldList [] = array(
                         $value ['toners_id'],

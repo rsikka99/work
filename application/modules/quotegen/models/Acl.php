@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Acl
+ */
 class Quotegen_Model_Acl
 {
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_QuoteDevice
+ */
 class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
 {
 
@@ -24,6 +27,10 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
      */
     protected $_optionElements = array();
 
+    /**
+     * @param int        $id      The quote device id
+     * @param null|array $options The form options
+     */
     public function __construct ($id = 0, $options = null)
     {
         $this->_id = $id;
@@ -153,7 +160,7 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
             /* @var $device Quotegen_Model_Device */
             foreach (Quotegen_Model_Mapper_Device::getInstance()->fetchAll() as $quoteDevice)
             {
-                $quoteDeviceList [$quoteDevice->getMasterDeviceId()] = $quoteDevice->getMasterDevice()->getFullDeviceName();
+                $quoteDeviceList [$quoteDevice->masterDeviceId] = $quoteDevice->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array(
                                                                'label'        => 'Available Devices:',

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Report_SolutionController
+ */
 class Assessment_Report_SolutionController extends Assessment_Library_Controller_Action
 {
 

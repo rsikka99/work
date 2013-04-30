@@ -296,7 +296,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * Gets the quote devices for the quote
      *
-     * @return Quotegen_Model_QuoteDevice[].
+     * @return Quotegen_Model_QuoteDeviceGroup[].
      *
      */
     public function getQuoteDeviceGroups ()
@@ -459,7 +459,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
         foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
-            $leaseValue += $quoteDeviceGroup->calculateHardwareLeaseValue();
+            $leaseValue += $quoteDeviceGroup->calculateLeaseValue();
         }
 
         return $leaseValue;
@@ -725,9 +725,8 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateMonochromeCostPerPage ()
     {
         // Represents quote total page weight
-        $monochromeCostPerPage = 0;
         $monochromeTotal       = 0;
-        // The total cpp for all quote devices, used for calcualtion with no pages
+        // The total cpp for all quote devices, used for calculation with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
         $totalDevices = 0;
@@ -774,8 +773,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     public function calculateColorCostPerPage ()
     {
-        // The calculated quote CPP for color pages
-        $colorCostPerPage = 0;
         // The quantity of color pages that have been assigned in this quote
         $colorTotal = 0;
         // The accumulation of cost for color pages per device
@@ -833,7 +830,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the total color page cost for the quote
+     * Calculates the total color page cost for the quote
      *
      * @return float the total color page cost for the quote
      */
@@ -849,7 +846,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the revenue for monocchrome pages
+     * Calculates the revenue for monochrome pages
      *
      * @return float the calculated price per page
      */
@@ -859,7 +856,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the overage monochrome price per page based on color overage margin
+     * Calculates the overage monochrome price per page based on color overage margin
      *
      * @return float the calculated overage monochrome price per page
      */
@@ -869,7 +866,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the revenue for color pages
+     * Calculates the revenue for color pages
      *
      * @return float the calculated price per page
      */
@@ -879,7 +876,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the overage color price per page based on color overage margin
+     * Calculates the overage color price per page based on color overage margin
      *
      * @return float the calculated overage color price per page
      */
@@ -889,7 +886,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the revenue for monochrome pages
+     * Calculates the revenue for monochrome pages
      *
      * @return float the calculated price per page
      */
@@ -899,7 +896,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
-     * Calcuates the revenue for color pages
+     * Calculates the revenue for color pages
      *
      * @return float the calculated price per page
      */

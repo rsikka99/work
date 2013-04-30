@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Form_User
+ */
 class Admin_Form_User extends EasyBib_Form
 {
     const MODE_CREATE    = 0;
@@ -12,21 +15,32 @@ class Admin_Form_User extends EasyBib_Form
      *
      * @var integer
      */
-    protected $formMode = self::MODE_CREATE;
-    protected $roles;
-    protected $dealerManagement;
+    protected $_formMode = self::MODE_CREATE;
 
-    /*
-     * (non-PHPdoc) @see Zend_Form::__construct()
+    /**
+     * @var Admin_Model_Role[]
+     */
+    protected $_roles;
+
+    /**
+     * @var bool
+     */
+    protected $_dealerManagement;
+
+    /**
+     * @param null|int                $formMode
+     * @param null|Admin_Model_Role[] $roles
+     * @param null|array              $options
+     * @param bool                    $dealerManagement
      */
     public function __construct ($formMode = null, $roles = null, $options = null, $dealerManagement = true)
     {
         if (null !== $formMode)
         {
-            $this->formMode = $formMode;
+            $this->_formMode = $formMode;
         }
-        $this->dealerManagement = $dealerManagement;
-        $this->roles            = $roles;
+        $this->_dealerManagement = $dealerManagement;
+        $this->_roles            = $roles;
 
         parent::__construct($options);
     }
@@ -35,19 +49,6 @@ class Admin_Form_User extends EasyBib_Form
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
         $this->setAttrib('class', 'form-horizontal button-styled');
 
         // Filters
@@ -119,15 +120,15 @@ class Admin_Form_User extends EasyBib_Form
                                                 )
                                            ));
 
-        if ($this->roles)
+        if ($this->_roles)
         {
             $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
             $userRoles->setLabel("User Roles:");
             $userRoles->setRequired(true);
-            /* @var $role Admin_Model_Role */
-            foreach ($this->roles as $role)
+
+            foreach ($this->_roles as $role)
             {
-                if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->dealerManagement == false))
+                if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->_dealerManagement == false))
                 {
                     $userRoles->addMultiOption($role->id, $role->name);
                 }
@@ -135,7 +136,7 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($userRoles);
         }
         $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ($isAdmin && $this->dealerManagement == false)
+        if ($isAdmin && $this->_dealerManagement == false)
         {
             $firstDealerId = null;
             $dealers       = array();
@@ -287,7 +288,7 @@ class Admin_Form_User extends EasyBib_Form
      */
     public function getFormMode ()
     {
-        return $this->formMode;
+        return $this->_formMode;
     }
 
     /**
@@ -295,6 +296,6 @@ class Admin_Form_User extends EasyBib_Form
      */
     public function setFormMode ($formMode)
     {
-        $this->formMode = $formMode;
+        $this->_formMode = $formMode;
     }
 }

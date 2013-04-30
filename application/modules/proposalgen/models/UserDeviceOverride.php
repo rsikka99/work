@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_UserDeviceOverride
+ */
 class Proposalgen_Model_UserDeviceOverride extends My_Model_Abstract
 {
     /**

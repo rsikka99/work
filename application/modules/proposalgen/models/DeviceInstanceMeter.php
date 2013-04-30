@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_DeviceInstanceMeter
+ */
 class Proposalgen_Model_DeviceInstanceMeter extends My_Model_Abstract
 {
     const METER_TYPE_LIFE        = 'LIFE';

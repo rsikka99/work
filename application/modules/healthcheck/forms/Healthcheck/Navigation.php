@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Healthcheck_Form_Healthcheck_Navigation
+ */
 class Healthcheck_Form_Healthcheck_Navigation extends Twitter_Bootstrap_Form
 {
     const BUTTONS_ALL       = 1;
@@ -43,10 +46,8 @@ class Healthcheck_Form_Healthcheck_Navigation extends Twitter_Bootstrap_Form
     /**
      * Adds form actions to a given form
      *
-     * @param
-     *            The mode for the buttons $buttonMode
-     * @param
-     *            The form to add the actions to $form
+     * @param int $buttonMode The mode for the buttons
+     * @param     $form       Zend_Form The form to add the actions to
      *
      * @throws InvalidArgumentException This is thrown when you specify an invalid button mode
      */

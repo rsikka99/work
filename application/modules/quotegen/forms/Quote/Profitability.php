@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Quote_Profitability
+ */
 class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
 {
     protected $_leasingSchemaId;
@@ -10,6 +13,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
      */
     protected $_quote;
 
+    /**
+     * @param null|Quotegen_Model_Quote $quote
+     * @param null|int                  $leasingSchemaId
+     * @param null|array                $options
+     */
     public function __construct ($quote = null, $leasingSchemaId = null, $options = null)
     {
         $this->_leasingSchemaId = $leasingSchemaId;

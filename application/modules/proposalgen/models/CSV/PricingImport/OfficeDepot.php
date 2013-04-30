@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_CSV_PricingImport_OfficeDepot
+ */
 class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_CSV_Abstract
 {
     public $test = array (
@@ -141,12 +144,17 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
     public static $skuList = array ();
     public static $modelNameList = array ();
 
+    /**
+     * @param $row
+     *
+     * @return bool|string
+     */
     protected function checkRowForErrors (&$row)
     {
         set_time_limit(10);
         $hasData = false;
         $result = parent::checkRowForErrors($row);
-        if ($result === FALSE && $this->getValidateCSV())
+        if ($result === false && $this->getValidateCSV())
         {
             $errorMessage = false;
             $invalidTonerData = true;
@@ -255,7 +263,7 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
                                 else
                                 {
                                     // Incomplete Data
-                                    $invalidBlackTonerData = true;
+                                    $invalidTonerData = true;
                                     break;
                                 }
                             }
@@ -282,7 +290,7 @@ class Proposalgen_Model_CSV_PricingImport_OfficeDepot extends Proposalgen_Model_
                         $tonerConfig = Proposalgen_Model_TonerConfig::BLACK_ONLY;
                     }
                     
-                    if (stripos($row ['modelname'], "color") !== FALSE || stripos($row ['modelname'], "colour") !== FALSE)
+                    if (stripos($row ['modelname'], "color") !== false || stripos($row ['modelname'], "colour") !== false)
                     {
                         // Device is some kind of color
                         $requiresColorToner = true;

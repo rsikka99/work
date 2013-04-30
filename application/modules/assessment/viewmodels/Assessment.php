@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_ViewModel_Assessment
+ */
 class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 {
     /**
@@ -743,6 +746,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this->MaximumMonthlyPrintVolume;
     }
 
+    /**
+     * @return int
+     */
     public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
     {
         $maxVolume = 0;
@@ -1032,25 +1038,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
         return $this->_underutilizedDevices;
     }
-
-    public function getOverutilizedDevices ()
-    {
-        if (!isset($this->_overutilizedDevices))
-        {
-            $devicesArray = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
-            {
-                if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) > 1)
-                {
-                    $devicesArray[] = $deviceInstance;
-                }
-            }
-            $this->_overutilizedDevices = $devicesArray;
-        }
-
-        return $this->_overutilizedDevices;
-    }
-
 
     /**
      * @return \Proposalgen_Model_DeviceInstance[]

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Rms_Provider
+ */
 class Proposalgen_Model_Rms_Provider extends My_Model_Abstract
 {
     const RMS_PROVIDER_PRINTFLEET = 1;

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Service_DeviceMapping_UserMatchup
+ */
 class Proposalgen_Service_DeviceMapping_UserMatchup extends Proposalgen_Service_DeviceMapping_Abstract
 {
     /**

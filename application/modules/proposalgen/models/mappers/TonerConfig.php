@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_TonerConfig
+ */
 class Proposalgen_Model_Mapper_TonerConfig extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_TonerConfig";

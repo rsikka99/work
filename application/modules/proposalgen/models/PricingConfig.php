@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_PricingConfig
+ */
 class Proposalgen_Model_PricingConfig extends My_Model_Abstract
 {
     const NONE              = 1;

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Form_Role
+ */
 class Admin_Form_Role extends EasyBib_Form
 {
 
@@ -24,14 +27,14 @@ class Admin_Form_Role extends EasyBib_Form
         
         $this->addElement('text', 'name', array (
                 'label' => 'Role Name:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags', 
                         array (
                                 'validator' => 'Alnum', 
                                 'options' => array (
-                                        true 
+                                        true
                                 ) 
                         ) 
                 ), 
@@ -48,13 +51,13 @@ class Admin_Form_Role extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_QuoteDeviceGroupDevice
+ */
 class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
 {
     /**
@@ -157,6 +160,6 @@ class Quotegen_Model_QuoteDeviceGroupDevice extends My_Model_Abstract
      */
     public function calculateSubtotal ()
     {
-        return $this->quantity * $this->getQuoteDevice()->getPackagePrice();
+        return $this->quantity * $this->getQuoteDevice()->calculatePackagePrice();
     }
 }

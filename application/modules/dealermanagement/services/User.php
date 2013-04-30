@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Dealermanagement_Service_User
+ */
 class Dealermanagement_Service_User extends Tangent_Service_Abstract
 {
     const ERROR_USERNAME_EXISTS     = "UsernameExists";

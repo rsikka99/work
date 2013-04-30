@@ -42,17 +42,11 @@ $section->addText(sprintf($this->translate('Out of your %1$s networked printing 
     , number_format($healthcheckViewModel->getCashHeldInInventory())//7
 ));
 
-$imageTable = $section->addTable(array(
-                                      'borderBottomSize' => 1
-                                 ));
+$imageTable = $section->addTable(array('borderBottomSize' => 1));
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array(
-                                          'valign' => 'center'
-                                     ));
+$cell = $imageTable->addCell(9028.8, array('valign' => 'center'));
 
-$cell->addImage($graphs[3], array(
-                                 'align' => 'center'
-                            ));
+$cell->addImage($graphs[3], array('align' => 'center'));
 
 $section->addText(sprintf($this->translate('By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'), $this->companyName));
 $section->addTextBreak(2);

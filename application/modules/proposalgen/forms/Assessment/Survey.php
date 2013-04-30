@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_Assessment_Survey
+ */
 class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizontal
 {
 
@@ -20,6 +23,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
         '75' => 'More than 50%'
     );
 
+    /**
+     * @param null|array $options
+     */
     public function __construct ($options = null)
     {
         $this->currency      = new Zend_Currency();
@@ -177,7 +183,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
          */
         $itHoursRadio = $this->createElement('radio', 'itHoursRadio');
         $itHoursRadio->addMultiOptions(array(
-                                            'guess'                   => 'I don\'t know',
+                                            'guess' => 'I don\'t know',
                                             'exact' => 'I know the exact amount'
                                        ))
             ->setValue('exact');
@@ -193,9 +199,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setDescription('hours')
             ->setAllowEmpty(false)
             ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
-                                                                                                                   new Zend_Validate_NotEmpty(),
-                                                                                                                   new Zend_Validate_Digits()
-                                                                                                              )), true)
+                                                                                                 new Zend_Validate_NotEmpty(),
+                                                                                                 new Zend_Validate_Digits()
+                                                                                            )), true)
             ->setLabel("How many hours per week do IT personnel spend servicing and supporting printers? If you select \"I don't know\", an average of 15 minutes per week per printer will be used.");
         $this->addElement($itHours);
 

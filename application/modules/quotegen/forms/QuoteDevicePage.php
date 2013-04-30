@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_QuoteDevicePage
+ */
 class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
 {
 
@@ -42,7 +45,7 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
         
         $this->addElement('text', 'costPerPageColor', array (
                 'label' => 'CPP Color:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -60,7 +63,7 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
         
         $this->addElement('select', 'pageBillingPreference', array (
                 'label' => 'Page Billing Preference:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -69,7 +72,7 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
         
         $this->addElement('text', 'margin', array (
                 'label' => 'Margin:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -87,13 +90,13 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
 

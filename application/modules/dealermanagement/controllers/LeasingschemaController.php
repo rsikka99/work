@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Dealermanagement_LeasingschemaController
+ */
 class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 {
 
@@ -16,16 +19,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchemaId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'error' => 'That schema does not exist'
-                                           ));
+                                                    'error' => 'That schema does not exist'
+                                               ));
             $this->redirector('index');
         }
         $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
         // Display all of the leasing schema rates in a grid
@@ -40,16 +43,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchemaId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'error' => 'That schema does not exist'
-                                           ));
+                                                    'error' => 'That schema does not exist'
+                                               ));
             $this->redirector('index');
         }
         $leasingSchema = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
         $form             = new  Admin_Form_LeasingSchema(true);
@@ -69,21 +72,21 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     $db->beginTransaction();
                     try
                     {
-                        $leasingSchemaMapper     = Quotegen_Model_Mapper_LeasingSchema::getInstance();
+                        $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
                         $leasingSchema->populate($values);
                         $leasingSchemaMapper->save($leasingSchema);
                         $db->commit();
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "{$leasingSchema->name} has been saved successfully."
-                                                       ));
+                                                                'success' => "{$leasingSchema->name} has been saved successfully."
+                                                           ));
                         $this->redirector('index');
                     }
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                                                                'danger' => $e->getMessage()
+                                                           ));
                     }
                 }
             }
@@ -149,20 +152,20 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
                         $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
                         $leasingSchemaRateModel->rate                 = $rate;
-                        $leasingSchemaRateId                          = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
+                        $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
 
                         $db->commit();
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "{$leasingSchema->name} has been created successfully."
-                                                       ));
+                                                                'success' => "{$leasingSchema->name} has been created successfully."
+                                                           ));
                         $this->redirector('index');
                     }
                     catch (InvalidArgumentException $e)
                     {
                         $db->rollback();
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                                                                'danger' => $e->getMessage()
+                                                           ));
                     }
                 }
             }
@@ -181,8 +184,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchemaId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a leasing schema to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a leasing schema to delete first.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -191,8 +194,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot delete this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot delete this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
         $message = "Are you sure you want to completely delete {$leasingSchema->name}?";
@@ -214,14 +217,14 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     catch (Exception $e)
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "Failed to delete"
-                                                       ));
+                                                                'danger' => "Failed to delete"
+                                                           ));
                         $this->redirector('index');
                     }
 
                     $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Leasing Schema  {$leasingSchema->name} was deleted successfully."
-                                                   ));
+                                                            'success' => "Leasing Schema  {$leasingSchema->name} was deleted successfully."
+                                                       ));
                     $this->redirector('index');
                 }
             }
@@ -247,15 +250,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchema)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'The leasing schema does not exist.'
-                                           ));
+                                                    'warning' => 'The leasing schema does not exist.'
+                                               ));
             $this->redirector('index');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -265,8 +268,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchemaRanges)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'No ranges exist.'
-                                           ));
+                                                    'warning' => 'No ranges exist.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
 
@@ -319,15 +322,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                             $db->commit();
 
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The term {$months} months was added successfully."
-                                                           ));
+                                                                    'success' => "The term {$months} months was added successfully."
+                                                               ));
                         }
                         else
                         {
                             $db->rollBack();
                             $this->_flashMessenger->addMessage(array(
-                                                                'danger' => "The term {$months} months already exists."
-                                                           ));
+                                                                    'danger' => "The term {$months} months already exists."
+                                                               ));
                         }
                     }
                     else
@@ -339,8 +342,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 {
                     $db->rollback();
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -379,15 +382,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchema)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'The leasing schema does not exist.'
-                                           ));
+                                                    'warning' => 'The leasing schema does not exist.'
+                                               ));
             $this->redirector('index');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -397,8 +400,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchemaRanges)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'No ranges exist.'
-                                           ));
+                                                    'warning' => 'No ranges exist.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
 
@@ -452,28 +455,28 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                     $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
                                     $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
                                     $leasingSchemaRateModel->rate                 = $rate;
-                                    $leasingSchemaRateId                          = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
+                                    $leasingSchemaRateMapper->save($leasingSchemaRateModel);
                                 }
                                 $db->commit();
 
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The term {$months} months was updated successfully."
-                                                               ));
+                                                                        'success' => "The term {$months} months was updated successfully."
+                                                                   ));
                             }
                             else
                             {
                                 $db->rollBack();
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => "The term {$months} months already exists."
-                                                               ));
+                                                                        'danger' => "The term {$months} months already exists."
+                                                                   ));
                             }
                         }
                         else
                         {
                             $db->rollBack();
                             $this->_flashMessenger->addMessage(array(
-                                                                'error' => "No term was selected. Please try again."
-                                                           ));
+                                                                    'error' => "No term was selected. Please try again."
+                                                               ));
                         }
                     }
                     else
@@ -486,8 +489,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     // Save Error
                     $db->rollBack();
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
             }
             else
@@ -509,8 +512,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 if (!$leasingSchemaTerm)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'warning' => 'The leasing schema term does not exist.'
-                                                   ));
+                                                            'warning' => 'The leasing schema term does not exist.'
+                                                       ));
                     $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
                 }
 
@@ -562,8 +565,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$termId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a term to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a term to delete first.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
@@ -571,8 +574,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -582,8 +585,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$termId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the term to delete.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the term to delete.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
 
@@ -592,8 +595,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (count($leasingSchemaTerms) <= 1)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."
-                                           ));
+                                                    'danger' => "You cannot delete term {$term->months} months as it is the last term for this leasing schema."
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
         else
@@ -618,8 +621,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $mapper->delete($term);
                         $db->commit();
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "The term {$months} months was deleted successfully."
-                                                       ));
+                                                                'success' => "The term {$months} months was deleted successfully."
+                                                           ));
                         $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
                     }
                 }
@@ -633,8 +636,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
             {
                 $db->rollBack();
                 $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the term to delete.'
-                                               ));
+                                                        'danger' => 'There was an error selecting the term to delete.'
+                                                   ));
                 $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
             }
         }
@@ -655,15 +658,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchema)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'The leasing schema does not exist.'
-                                           ));
+                                                    'warning' => 'The leasing schema does not exist.'
+                                               ));
             $this->redirector('index');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
         // Get form and pass terms for this schema
@@ -720,15 +723,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                             $db->commit();
 
                             $this->_flashMessenger->addMessage(array(
-                                                                'success' => "The range \${$startRange} was added successfully."
-                                                           ));
+                                                                    'success' => "The range \${$startRange} was added successfully."
+                                                               ));
                         }
                         else
                         {
                             $db->rollBack();
                             $this->_flashMessenger->addMessage(array(
-                                                                'danger' => "The range \${$startRange} already exists."
-                                                           ));
+                                                                    'danger' => "The range \${$startRange} already exists."
+                                                               ));
                         }
                     }
                     else
@@ -740,16 +743,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 {
                     $db->rollBack();
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => $e->getMessage()
-                                                   ));
+                                                            'danger' => $e->getMessage()
+                                                       ));
                 }
                 catch (Exception $e)
                 {
                     // Insert Error
                     $db->rollBack();
                     $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'There was an error processing the insert. Please try again.'
-                                                   ));
+                                                            'danger' => 'There was an error processing the insert. Please try again.'
+                                                       ));
                 }
             }
             else
@@ -788,15 +791,15 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$leasingSchema)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'The leasing schema does not exist.'
-                                           ));
+                                                    'warning' => 'The leasing schema does not exist.'
+                                               ));
             $this->redirector('index');
         }
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -854,20 +857,20 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                         $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
                                         $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
                                         $leasingSchemaRateModel->rate                 = $rate;
-                                        $leasingSchemaRateId                          = $leasingSchemaRateMapper->save($leasingSchemaRateModel);
+                                        $leasingSchemaRateMapper->save($leasingSchemaRateModel);
                                     }
                                     $db->commit();
 
                                     $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "The range was updated successfully."
-                                                                   ));
+                                                                            'success' => "The range was updated successfully."
+                                                                       ));
                                 }
                                 else
                                 {
                                     $db->rollBack();
                                     $this->_flashMessenger->addMessage(array(
-                                                                        'danger' => "The range \${$startRange} already exists."
-                                                                   ));
+                                                                            'danger' => "The range \${$startRange} already exists."
+                                                                       ));
                                 }
                             }
                             catch (Exception $e)
@@ -875,8 +878,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                                 // Save Error
                                 $db->rollBack();
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error processing the update.  Please try again.'
-                                                               ));
+                                                                        'danger' => 'There was an error processing the update.  Please try again.'
+                                                                   ));
                             }
                         }
                     }
@@ -884,8 +887,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                     {
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array(
-                                                            'error' => "Please review and complete all required fields."
-                                                       ));
+                                                                'error' => "Please review and complete all required fields."
+                                                           ));
                     }
                 }
                 else
@@ -913,8 +916,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 if (!$leasingSchemaRange)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                        'warning' => 'The leasing schema range does not exist.'
-                                                   ));
+                                                            'warning' => 'The leasing schema range does not exist.'
+                                                       ));
                     $this->redirector('index');
                 }
 
@@ -966,8 +969,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$rangeId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'warning' => 'Please select a range to delete first.'
-                                           ));
+                                                    'warning' => 'Please select a range to delete first.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
         $leasingSchemaMapper = Quotegen_Model_Mapper_LeasingSchema::getInstance();
@@ -975,8 +978,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
 
@@ -986,8 +989,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (!$rangeId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'There was an error selecting the range to delete.'
-                                           ));
+                                                    'danger' => 'There was an error selecting the range to delete.'
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
 
@@ -996,8 +999,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if (count($leasingSchemaRanges) <= 1)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."
-                                           ));
+                                                    'danger' => "You cannot delete the range \${$range->startRange}  as it is the last range for this Leasing Schema."
+                                               ));
             $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
         }
         else
@@ -1021,8 +1024,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $mapper->delete($range);
                         $db->commit();
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "The range \${$this->view->escape($range->startRange)} was deleted successfully."
-                                                       ));
+                                                                'success' => "The range \${$this->view->escape($range->startRange)} was deleted successfully."
+                                                           ));
                         $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
                     }
                 }
@@ -1036,8 +1039,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
             {
                 $db->rollBack();
                 $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the term to delete.'
-                                               ));
+                                                        'danger' => 'There was an error selecting the term to delete.'
+                                                   ));
                 $this->redirector('view', null, null, array("leasingSchemaId" => $leasingSchemaId));
             }
         }
@@ -1062,8 +1065,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         if ($leasingSchema && $leasingSchema->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
-                                           ));
+                                                    'danger' => 'Insufficient Privilege: You cannot view this leasing schema.'
+                                               ));
             $this->redirector('index');
         }
         // Reset the grid to default values
@@ -1107,23 +1110,23 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         $leasingSchemaRateModel->leasingSchemaTermId  = $termId;
                         $leasingSchemaRateModel->leasingSchemaRangeId = $rangeId;
                         $leasingSchemaRateModel->rate                 = $rate;
-                        $leasingSchemaRateId                          = $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
+                        $leasingSchemaRateMapper->insert($leasingSchemaRateModel);
 
                         // Commit changes
                         $db->commit();
 
                         // Send success message to the screen
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "The leasing schema has been successfully reset."
-                                                       ));
+                                                                'success' => "The leasing schema has been successfully reset."
+                                                           ));
                     }
                     else
                     {
                         // Delete current failed
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array(
-                                                            'error' => "An error occured while deleting the current schema."
-                                                       ));
+                                                                'error' => "An error occured while deleting the current schema."
+                                                           ));
                     }
                 }
                 else
@@ -1137,8 +1140,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 // Delete current failed
                 $db->rollBack();
                 $this->_flashMessenger->addMessage(array(
-                                                    'error' => "An error occured while deleting the current schema."
-                                               ));
+                                                        'error' => "An error occured while deleting the current schema."
+                                                   ));
             }
 
             // Always redirect back to index
@@ -1146,17 +1149,16 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
         }
     }
 
+    /**
+     * @param $leasingSchemaId
+     *
+     * @return bool
+     */
     public function emptySchema ($leasingSchemaId)
     {
         // Prep mappers
-        $leasingSchemaRateMapper  = Quotegen_Model_Mapper_LeasingSchemaRate::getInstance();
         $leasingSchemaRangeMapper = Quotegen_Model_Mapper_LeasingSchemaRange::getInstance();
         $leasingSchemaTermMapper  = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance();
-
-        // Prep models
-        $leasingSchemaRateModel  = new Quotegen_Model_LeasingSchemaRate();
-        $leasingSchemaRangeModel = new Quotegen_Model_LeasingSchemaRange();
-        $leasingSchemaTermModel  = new Quotegen_Model_LeasingSchemaTerm();
 
         try
         {

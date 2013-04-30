@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_DbTable_UserDeviceOverride
+ */
 class Proposalgen_Model_DbTable_UserDeviceOverride extends Zend_Db_Table_Abstract
 {
     //put your code here

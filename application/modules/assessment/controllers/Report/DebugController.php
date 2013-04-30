@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Report_DebugController
+ */
 class Assessment_Report_DebugController extends Assessment_Library_Controller_Action
 {
 

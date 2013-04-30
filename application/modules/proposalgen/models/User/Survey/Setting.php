@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_User_Survey_Setting
+ */
 class Proposalgen_Model_User_Survey_Setting extends My_Model_Abstract
 {
     /**

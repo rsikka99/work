@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_LeasingSchemaRate
+ */
 class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
 {
     /**

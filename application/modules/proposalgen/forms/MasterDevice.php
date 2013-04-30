@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_MasterDevice
+ */
 class Proposalgen_Form_MasterDevice extends EasyBib_Form
 {
 

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Form_Dealer
+ */
 class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
 {
 

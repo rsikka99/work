@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_ViewModel_Ranking
+ */
 class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
 {
     protected $proposal;

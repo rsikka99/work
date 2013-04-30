@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Dealer
+ */
 class Admin_Model_Dealer extends My_Model_Abstract
 {
     /**

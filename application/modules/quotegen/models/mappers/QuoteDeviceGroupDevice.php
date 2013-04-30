@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_QuoteDeviceGroupDevice
+ */
 class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstract
 {
     /*

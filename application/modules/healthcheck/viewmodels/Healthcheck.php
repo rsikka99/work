@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_ViewModel_Healthcheck
+ */
 class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 {
     /**
@@ -676,12 +679,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
     {
-        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()))
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()))
         {
             return 0;
         }
 
-        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin())) ? -1 : 1;
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin())) ? -1 : 1;
     }
 
     /**
@@ -2038,6 +2041,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
     }
 
+    /**
+     * Gets an array of graphs
+     *
+     * @return array
+     */
     public function getGraphs ()
     {
 

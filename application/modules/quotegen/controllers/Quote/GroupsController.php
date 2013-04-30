@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Quote_GroupsController
+ */
 class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 {
 
@@ -33,15 +36,14 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                 if (isset($values ['addGroup']))
                 {
                     // Adding a new group
-                    $addGroupSubform = $form->getSubForm('addGroup');
+                    $addGroupSubForm = $form->getSubForm('addGroup');
                     
-                    $addDeviceToGroupSubform = $form->getSubForm('addDeviceToGroup');
-                    if ($addGroupSubform->isValid($values))
+                    if ($addGroupSubForm->isValid($values))
                     {
                         // Add the new group
                         $quoteDeviceGroup = new Quotegen_Model_QuoteDeviceGroup();
                         $quoteDeviceGroup->quoteId = $this->_quoteId;
-                        $quoteDeviceGroup->name = $addGroupSubform->getValue('name');
+                        $quoteDeviceGroup->name = $addGroupSubForm->getValue('name');
                         $quoteDeviceGroup->isDefault = 0;
                         
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_DbTable_Hardware_Optimization
+ */
 class Hardwareoptimization_Model_DbTable_Hardware_Optimization extends Zend_Db_Table_Abstract
 {
     protected $_primary = 'id';

@@ -1,6 +1,9 @@
 
 <?php
 
+/**
+ * Class Quotegen_OptionController
+ */
 class Quotegen_OptionController extends Tangent_Controller_Action
 {
 

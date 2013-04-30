@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Role
+ */
 class Admin_Model_Role extends My_Model_Abstract
 {
     /**

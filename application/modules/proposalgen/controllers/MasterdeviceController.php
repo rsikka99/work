@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_MasterdeviceController
+ */
 class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
 {
 
@@ -107,7 +110,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                             }
                             
                             $masterDevice->populate($values);
-                            $masterDeviceId = $mapper->insert($masterDevice);
+                            $mapper->insert($masterDevice);
                             
                             $this->_flashMessenger->addMessage(array (
                                     'success' => "MasterDevice " . $this->view->escape($masterDevice->getFullDeviceName()) . " was added successfully." 
@@ -203,7 +206,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         $masterDevice->id = $masterDeviceId;
                         
                         // Save to the database with cascade insert turned on
-                        $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
+                        $mapper->save($masterDevice, $masterDeviceId);
                         
                         $this->_flashMessenger->addMessage(array (
                                 'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated sucessfully." 

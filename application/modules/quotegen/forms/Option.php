@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Option
+ */
 class Quotegen_Form_Option extends EasyBib_Form
 {
 
@@ -25,7 +28,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
                 'class' => 'span3', 
-                'required' => true, 
+                'required' => true,
                 'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
@@ -41,7 +44,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('textarea', 'description', array (
                 'label' => 'Description:', 
                 'class' => 'span3', 
-                'required' => true, 
+                'required' => true,
                 'style' => 'height: 100px', 
                 'maxlength' => 255, 
                 'filters' => array (
@@ -58,7 +61,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'cost', array (
                 'label' => 'Price:', 
                 'class' => 'span1', 
-                'required' => true, 
+                'required' => true,
                 'maxlength' => 8, 
                 'filters' => array (
                         'StringTrim', 
@@ -72,7 +75,7 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->addElement('text', 'oemSku', array (
                 'label' => 'OEM SKU:', 
                 'class' => 'span3', 
-                'required' => true, 
+                'required' => true,
                 'maxlength' => 255, 
                 'filters' => array (
                         'StringTrim', 
@@ -117,13 +120,13 @@ class Quotegen_Form_Option extends EasyBib_Form
             
             // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

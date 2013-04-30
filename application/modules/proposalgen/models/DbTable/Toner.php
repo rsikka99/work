@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_DbTable_Toner
+ */
 class Proposalgen_Model_DbTable_Toner extends Zend_Db_Table_Abstract
 {
     protected $_name = 'toners';

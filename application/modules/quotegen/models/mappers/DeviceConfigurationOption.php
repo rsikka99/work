@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_DeviceConfigurationOption
+ */
 class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Abstract
 {
     /**

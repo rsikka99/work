@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_LeasingSchemaTerm
+ */
 class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
 {
     /**
@@ -222,8 +225,9 @@ class Quotegen_Model_Mapper_LeasingSchemaTerm extends My_Model_Mapper_Abstract
                                ), 'months ASC');
     }
 
-    /*
+    /**
      * @param Quotegen_Model_LeasingSchemaTerm $object
+     *
      * @return int
      */
     public function getPrimaryKeyValueForObject ($object)

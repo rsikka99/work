@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Mapper_Assessment_Survey
+ */
 class Assessment_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstract
 {
     /*

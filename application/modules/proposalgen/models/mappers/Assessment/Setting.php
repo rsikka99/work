@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposal_Model_Mapper_Assessment_Setting
+ */
 class Proposal_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
 {
     /*
@@ -290,7 +293,6 @@ class Proposal_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstract
      */
     public function fetchAssessmentAssessmentSetting ($assessmentId)
     {
-        $assessmentSetting = false;
         $assessment        = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
         if (!$assessment)
         {

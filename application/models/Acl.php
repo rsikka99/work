@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Application_Model_Acl
+ */
 class Application_Model_Acl extends Zend_Acl
 {
     /**

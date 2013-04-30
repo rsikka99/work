@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Model_Acl
+ */
 class Preferences_Model_Acl
 {
     /**

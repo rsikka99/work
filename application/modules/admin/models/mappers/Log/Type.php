@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Model_Mapper_Log_Type
+ */
 class Admin_Model_Mapper_Log_Type extends My_Model_Mapper_Abstract
 {
     /*

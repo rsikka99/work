@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Model_Log_Type
+ */
 class Admin_Model_Log_Type extends My_Model_Abstract
 {
     /**
@@ -16,8 +19,8 @@ class Admin_Model_Log_Type extends My_Model_Abstract
      */
     protected $_name;
 
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -37,8 +40,8 @@ class Admin_Model_Log_Type extends My_Model_Abstract
         }
     }
 
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+    /**
+     * @return array
      */
     public function toArray ()
     {

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Country
+ */
 class Quotegen_Model_Country extends My_Model_Abstract
 {
     const COUNTRY_CANADA        = 1;

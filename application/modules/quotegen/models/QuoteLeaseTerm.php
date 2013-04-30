@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_QuoteLeaseTerm
+ */
 class Quotegen_Model_QuoteLeaseTerm extends My_Model_Abstract
 {
     /**

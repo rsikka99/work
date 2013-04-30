@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Survey_Setting
+ */
 class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
 {
     /**
@@ -163,9 +166,9 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
         return $entries;
     }
 
-    /*
-     * @param $userId int
-     *                The id of the user to find
+    /**
+     * @param $userId int The id of the user to find
+     *
      * @return Proposalgen_Model_User_Survey_Setting
      */
     public function fetchUserSurveySetting ($userId)
@@ -201,9 +204,14 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
 
     }
 
+    /**
+     * @param $dealerId
+     *
+     * @return bool|Proposalgen_Model_Survey_Setting
+     */
     public function fetchDealerSurveySetting ($dealerId)
     {
-        $surveySetting       = false;
+        $surveySetting = false;
         $dealerSetting = Preferences_Model_Mapper_Dealer_Setting::getInstance()->find($dealerId);
         if ($dealerSetting)
         {
@@ -212,7 +220,7 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
 
         if (!$surveySetting)
         {
-            $surveySetting   = new Proposalgen_Model_Survey_Setting();
+            $surveySetting     = new Proposalgen_Model_Survey_Setting();
             $surveySetting->id = Proposalgen_Model_Mapper_Survey_Setting::getInstance()->insert($surveySetting);
 
             if ($dealerSetting)

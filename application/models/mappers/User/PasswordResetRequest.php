@@ -1,17 +1,20 @@
 <?php
 
+/**
+ * Class Application_Model_Mapper_User_PasswordResetRequest
+ */
 class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper_Abstract
 {
     // Column Names
     public $col_id = "id";
     public $userId = "userId";
+
     /**
      * The default db table class to use
      *
      * @var String
-     *
      */
-    protected $_defaultDbTable = 'Application_Model_DbTable_user_passwordresetrequests';
+    protected $_defaultDbTable = 'Application_Model_DbTable_User_PasswordResetRequests';
 
     /**
      * Gets an instance of the mapper
@@ -178,6 +181,12 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
         return $object->id;
     }
 
+    /**
+     * @param null $where
+     * @param null $order
+     * @param int  $count
+     * @param null $offset
+     */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
         // TODO: Implement fetchAll() method.
@@ -200,6 +209,13 @@ class Application_Model_Mapper_User_PasswordResetRequest extends My_Model_Mapper
         return $rowsAffected;
     }
 
+    /**
+     * Deletes all password reset requests for a user
+     *
+     * @param $username
+     *
+     * @return bool|int
+     */
     public function clearAllTokensForUser ($username)
     {
         $user = Application_Model_Mapper_User::getInstance()->fetch(Application_Model_Mapper_User::getInstance()->getWhereUsername($username));

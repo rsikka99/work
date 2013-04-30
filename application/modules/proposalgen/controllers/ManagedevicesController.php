@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_ManagedevicesController
+ */
 class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 {
 
@@ -219,7 +222,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                     $has_toner = true;
                                     $curColor  = strtolower($curToner [0] ['toner_color_name']);
-                                    $curType   = strtolower($curToner [0] ['type_name']);
                                     if ($curColor == "black")
                                     {
                                         $has_black = true;
@@ -297,28 +299,16 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                             }
                                             else
                                             {
-                                                if (!empty($toner_error_colors))
-                                                {
-                                                    $toner_error_colors .= ", ";
-                                                }
                                                 $toner_error_colors = "Magenta";
                                             }
                                         }
                                         else
                                         {
-                                            if (!empty($toner_error_colors))
-                                            {
-                                                $toner_error_colors .= ", ";
-                                            }
                                             $toner_error_colors = "Yellow";
                                         }
                                     }
                                     else
                                     {
-                                        if (!empty($toner_error_colors))
-                                        {
-                                            $toner_error_colors .= ", ";
-                                        }
                                         $toner_error_colors = "Black";
                                     }
 
@@ -349,10 +339,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                     }
                                     else
                                     {
-                                        if (!empty($toner_error_colors))
-                                        {
-                                            $toner_error_colors .= ", ";
-                                        }
                                         $toner_error_colors = "Black";
                                     }
 
@@ -574,8 +560,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     $db->beginTransaction();
                     try
                     {
-
-                        $printer_model      = '';
                         $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
                         $master_device_id   = $postData ['printer_model'];
                         $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
@@ -919,7 +903,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
                                         $has_toner = true;
                                         $curColor  = strtolower($curToner [0] ['toner_color_name']);
-                                        $curType   = strtolower($curToner [0] ['type_name']);
                                         if ($curColor == "black")
                                         {
                                             $has_black = true;
@@ -997,28 +980,16 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                                 }
                                                 else
                                                 {
-                                                    if (!empty($toner_error_colors))
-                                                    {
-                                                        $toner_error_colors .= ", ";
-                                                    }
                                                     $toner_error_colors = "Magenta";
                                                 }
                                             }
                                             else
                                             {
-                                                if (!empty($toner_error_colors))
-                                                {
-                                                    $toner_error_colors .= ", ";
-                                                }
                                                 $toner_error_colors = "Yellow";
                                             }
                                         }
                                         else
                                         {
-                                            if (!empty($toner_error_colors))
-                                            {
-                                                $toner_error_colors .= ", ";
-                                            }
                                             $toner_error_colors = "Black";
                                         }
 
@@ -1049,10 +1020,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                                         }
                                         else
                                         {
-                                            if (!empty($toner_error_colors))
-                                            {
-                                                $toner_error_colors .= ", ";
-                                            }
                                             $toner_error_colors = "Black";
                                         }
 

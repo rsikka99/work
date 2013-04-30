@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_IndexController
+ */
 class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
 {
 
@@ -60,7 +63,6 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 $quoteDeviceGroup->isDefault = 1;
                 $quoteDeviceGroup->setGroupPages(0);
                 $quoteDeviceGroup->quoteId = $quoteId;
-                $quoteDeviceGroupId        = Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
 
                 // If this is a leased quote, select the first leasing schema term
                 if ($this->_quote->isLeased())
@@ -101,7 +103,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 // Get the clientId and find the client
                 $clientId = $this->_getParam('clientId');
                 // Load the quotes for the current client
-                $this->view->quotes = $this->getQuotesForClient($clientId, $this->_userId);
+                $this->view->quotes = $this->getQuotesForClient($clientId);
 
                 // Existing Quote
                 if ($existingQuoteForm->isValid($values))
@@ -126,11 +128,12 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
      * Gets an array of quotes that belong to a user/client
      *
      * @param int $clientId
-     * @param int $userId
+     *
+     * @internal param int $userId
      *
      * @return array The array of quotes
      */
-    public function getQuotesForClient ($clientId, $userId)
+    public function getQuotesForClient ($clientId)
     {
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
 
@@ -139,7 +142,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         if ($client instanceof Quotegen_Model_Client)
         {
             // If the client exist get all quotes for the client
-            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClientByUser($client->id, $this->_userId);
+            $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($client->id);
 
             // Create a quote array to create option data
             /* @var $quote Quotegen_Model_Quote */
@@ -162,7 +165,7 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
     {
         // Get the clientId and find the client
         $clientId           = $this->_getParam('clientId');
-        $this->view->quotes = $this->getQuotesForClient($clientId, $this->_userId);
+        $this->view->quotes = $this->getQuotesForClient($clientId);
     }
 
     public function createClientAction ()

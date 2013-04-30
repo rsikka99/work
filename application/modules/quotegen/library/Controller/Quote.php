@@ -226,6 +226,9 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         return true;
     }
 
+    /**
+     * @param Quotegen_Model_QuoteDevice $quoteDevice
+     */
     protected function recalculateQuoteDevice (Quotegen_Model_QuoteDevice &$quoteDevice)
     {
         // Recalculate the package cost
@@ -487,22 +490,20 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
      */
     public function getTotalPages ()
     {
-        $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
-
-        $quanities                             = array();
-        $quanities ['monochromePagesQuantity'] = 0;
-        $quanities ['colorPagesQuantity']      = 0;
+        $quantities                             = array();
+        $quantities ['monochromePagesQuantity'] = 0;
+        $quantities ['colorPagesQuantity']      = 0;
 
         foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
             foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
             {
-                $quanities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->monochromePagesQuantity;
-                $quanities ['colorPagesQuantity'] += $quoteDeviceGroupDevice->colorPagesQuantity;
+                $quantities ['monochromePagesQuantity'] += $quoteDeviceGroupDevice->monochromePagesQuantity;
+                $quantities ['colorPagesQuantity'] += $quoteDeviceGroupDevice->colorPagesQuantity;
             }
         }
 
-        return $quanities;
+        return $quantities;
     }
 }
 

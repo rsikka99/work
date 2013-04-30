@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Dealermanagement_IndexController
+ */
 class Dealermanagement_IndexController extends Tangent_Controller_Action
 {
     /**

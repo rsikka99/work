@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Device
+ */
 class Quotegen_Model_Device extends My_Model_Abstract
 {
     /**
@@ -157,7 +160,11 @@ class Quotegen_Model_Device extends My_Model_Abstract
         return $this;
     }
 
-
+    /**
+     * Saves the current object
+     *
+     * @return $this
+     */
     public function saveObject ()
     {
         // Do we have an instance of it in our database?

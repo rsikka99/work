@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Template
+ */
 class Proposalgen_Model_Template extends My_Model_Abstract
 {
     /**

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Optimization_Abstract
+ */
 abstract class Hardwareoptimization_Model_Optimization_Abstract
 {
     // Used to calculate the average supply count for a fleet

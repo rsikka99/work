@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_LeasingSchemaRate
+ */
 class Quotegen_Model_LeasingSchemaRate extends My_Model_Abstract
 {
 

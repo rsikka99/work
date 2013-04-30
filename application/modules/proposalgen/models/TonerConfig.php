@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_TonerConfig
+ */
 class Proposalgen_Model_TonerConfig extends My_Model_Abstract
 {
     const BLACK_ONLY            = 1;

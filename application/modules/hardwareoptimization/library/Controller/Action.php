@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Library_Controller_Action
+ */
 class Hardwareoptimization_Library_Controller_Action extends My_Controller_Report
 {
 
@@ -156,6 +159,9 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
     }
 
+    /**
+     * @return stdClass
+     */
     public function getWordStyles ()
     {
         if (!isset($this->_wordStyles))

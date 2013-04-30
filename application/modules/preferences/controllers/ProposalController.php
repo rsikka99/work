@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_ProposalController
+ */
 class Preferences_ProposalController extends Tangent_Controller_Action
 {
     public function indexAction () { /** Do nothing */ }

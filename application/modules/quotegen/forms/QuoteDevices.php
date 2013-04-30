@@ -1,22 +1,29 @@
 <?php
 
+/**
+ * Class Quotegen_Form_QuoteDevices
+ */
 class Quotegen_Form_QuoteDevices extends EasyBib_Form
 {
-    
+
     /**
      * If this is set to false it the form will display a dropdown to select a device.
      *
      * @var Quotegen_Model_Quote
      */
     protected $_quote;
-    
+
     /**
      * Contains all the information to edit multiple quote devices on the fly
      *
      * @var mixed
      */
-    protected $_quoteDeviceGroups = array ();
-    
+    protected $_quoteDeviceGroups = array();
+
+    /**
+     * @param null|Quotegen_Model_Quote $quote
+     * @param null|array                $options
+     */
     public function __construct ($quote, $options = null)
     {
         $this->_quote = $quote;
@@ -27,189 +34,175 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        
-        $this->addElement('hash', 'crsf_check', array (
-                'ignore' => true, 
-                'ErrorMessages' => array (
-                        'Please press a save button to save this form. Waiting too long or refreshing the page will cause this message to appear.' 
-                ) 
-        ));
-        
+
+        $this->addElement('hash', 'crsf_check', array(
+                                                     'ignore'        => true,
+                                                     'ErrorMessages' => array(
+                                                         'Please press a save button to save this form. Waiting too long or refreshing the page will cause this message to appear.'
+                                                     )
+                                                ));
+
         /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-        foreach ( $this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+        foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
-            $group = new stdClass();
-            $group->sets = array ();
-            $group->quoteDeviceGroup = $quoteDeviceGroup;
-            $group->quoteDeviceGroupPages = array ();
-            
+            $group                        = new stdClass();
+            $group->sets                  = array();
+            $group->quoteDeviceGroup      = $quoteDeviceGroup;
+            $group->quoteDeviceGroupPages = array();
+
             /* @var $quoteDeviceGroupPage Quotegen_Model_QuoteDeviceGroupPage */
-            foreach ( $quoteDeviceGroup->getPages() as $quoteDeviceGroupPage )
+            foreach ($quoteDeviceGroup->getPages() as $quoteDeviceGroupPage)
             {
-                $quoteDeviceGroupPageId = $quoteDeviceGroupPage->getId();
-                $elementSet = new stdClass();
+                $quoteDeviceGroupPageId           = $quoteDeviceGroupPage->getId();
+                $elementSet                       = new stdClass();
                 $elementSet->quoteDeviceGroupPage = $quoteDeviceGroupPage;
-                
-                $elementSet->includedQuantity = $this->createElement('text', "includedQuantity-{$quoteDeviceGroupPageId}", array (
-                        'label' => 'Included Quantity:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDeviceGroupPage->getIncludedQuantity(), 
-                        'validators' => array (
-                                'Int', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 50000, 
-                                                'inclusive' => true 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
-                $elementSet->includedPrice = $this->createElement('text', "includedPrice-{$quoteDeviceGroupPageId}", array (
-                        'label' => 'Included Price:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDeviceGroupPage->getIncludedPrice(), 
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 5000, 
-                                                'inclusive' => true 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
-                $elementSet->pricePerPage = $this->createElement('text', "pricePerPage-{$quoteDeviceGroupPageId}", array (
-                        'label' => 'Included Price:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDeviceGroupPage->getPricePerPage(), 
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 5, 
-                                                'inclusive' => false 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
+
+                $elementSet->includedQuantity = $this->createElement('text', "includedQuantity-{$quoteDeviceGroupPageId}", array(
+                                                                                                                                'label'      => 'Included Quantity:',
+                                                                                                                                'class'      => 'input-mini',
+                                                                                                                                'value'      => $quoteDeviceGroupPage->getIncludedQuantity(),
+                                                                                                                                'validators' => array(
+                                                                                                                                    'Int',
+                                                                                                                                    array(
+                                                                                                                                        'validator' => 'Between',
+                                                                                                                                        'options'   => array(
+                                                                                                                                            'min'       => 0,
+                                                                                                                                            'max'       => 50000,
+                                                                                                                                            'inclusive' => true
+                                                                                                                                        )
+                                                                                                                                    )
+                                                                                                                                )
+                                                                                                                           ));
+
+                $elementSet->includedPrice = $this->createElement('text', "includedPrice-{$quoteDeviceGroupPageId}", array(
+                                                                                                                          'label'      => 'Included Price:',
+                                                                                                                          'class'      => 'input-mini',
+                                                                                                                          'value'      => $quoteDeviceGroupPage->getIncludedPrice(),
+                                                                                                                          'validators' => array(
+                                                                                                                              'Float',
+                                                                                                                              array(
+                                                                                                                                  'validator' => 'Between',
+                                                                                                                                  'options'   => array(
+                                                                                                                                      'min'       => 0,
+                                                                                                                                      'max'       => 5000,
+                                                                                                                                      'inclusive' => true
+                                                                                                                                  )
+                                                                                                                              )
+                                                                                                                          )
+                                                                                                                     ));
+
+                $elementSet->pricePerPage = $this->createElement('text', "pricePerPage-{$quoteDeviceGroupPageId}", array(
+                                                                                                                        'label'      => 'Included Price:',
+                                                                                                                        'class'      => 'input-mini',
+                                                                                                                        'value'      => $quoteDeviceGroupPage->getPricePerPage(),
+                                                                                                                        'validators' => array(
+                                                                                                                            'Float',
+                                                                                                                            array(
+                                                                                                                                'validator' => 'Between',
+                                                                                                                                'options'   => array(
+                                                                                                                                    'min'       => 0,
+                                                                                                                                    'max'       => 5,
+                                                                                                                                    'inclusive' => false
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                        )
+                                                                                                                   ));
+
                 // Add all our elements
                 $this->addElement($elementSet->includedQuantity);
                 $this->addElement($elementSet->includedPrice);
                 $this->addElement($elementSet->pricePerPage);
-                
+
                 $group->quoteDeviceGroupPages [] = $elementSet;
             }
-            
-            /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-            foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice )
+
+            foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDevice)
             {
-                
-                $quoteDeviceId = $quoteDevice->id;
-                $elementSet = new stdClass();
+
+                $quoteDeviceId           = $quoteDevice->id;
+                $elementSet              = new stdClass();
                 $elementSet->quoteDevice = $quoteDevice;
-                
-                $elementSet->packagePrice = $this->createElement('text', "packagePrice-{$quoteDeviceId}", array (
-                        'label' => 'Package Price:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDevice->getPackagePrice(), 
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 250000, 
-                                                'inclusive' => false 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
+
+                $elementSet->packagePrice = $this->createElement('text', "packagePrice-{$quoteDeviceId}", array(
+                                                                                                               'label'      => 'Package Price:',
+                                                                                                               'class'      => 'input-mini',
+                                                                                                               'value'      => $quoteDevice->getPackagePrice(),
+                                                                                                               'validators' => array(
+                                                                                                                   'Float',
+                                                                                                                   array(
+                                                                                                                       'validator' => 'Between',
+                                                                                                                       'options'   => array(
+                                                                                                                           'min'       => 0,
+                                                                                                                           'max'       => 250000,
+                                                                                                                           'inclusive' => false
+                                                                                                                       )
+                                                                                                                   )
+                                                                                                               )
+                                                                                                          ));
+
                 $lessThanElementValidator = new My_Validate_LessThanFormValue($elementSet->packagePrice);
-                $elementSet->residual = $this->createElement('text', "residual-{$quoteDeviceId}", array (
-                        'label' => 'Residual:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDevice->residual,
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 250000 
-                                        ) 
-                                ), 
-                                $lessThanElementValidator 
-                        ) 
-                ));
-                
-                $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array (
-                        'label' => 'Margin:', 
-                        'class' => 'input-mini', 
-                        'value' => $quoteDevice->margin,
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => - 100, 
-                                                'max' => 100, 
-                                                'inclusive' => false 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
-                $elementSet->quantity = $this->createElement('text', "quantity-{$quoteDeviceId}", array (
-                        'label' => 'Quantity:', 
-                        'class' => 'span1', 
-                        'validators' => array (
-                                'Float', 
-                                array (
-                                        'validator' => 'Between', 
-                                        'options' => array (
-                                                'min' => 0, 
-                                                'max' => 250, 
-                                                'inclusive' => false 
-                                        ) 
-                                ) 
-                        ) 
-                ));
-                
+                $elementSet->residual     = $this->createElement('text', "residual-{$quoteDeviceId}", array(
+                                                                                                           'label'      => 'Residual:',
+                                                                                                           'class'      => 'input-mini',
+                                                                                                           'value'      => $quoteDevice->residual,
+                                                                                                           'validators' => array(
+                                                                                                               'Float',
+                                                                                                               array(
+                                                                                                                   'validator' => 'Between',
+                                                                                                                   'options'   => array(
+                                                                                                                       'min' => 0,
+                                                                                                                       'max' => 250000
+                                                                                                                   )
+                                                                                                               ),
+                                                                                                               $lessThanElementValidator
+                                                                                                           )
+                                                                                                      ));
+
+                $elementSet->margin = $this->createElement('text', "margin-{$quoteDeviceId}", array(
+                                                                                                   'label'      => 'Margin:',
+                                                                                                   'class'      => 'input-mini',
+                                                                                                   'value'      => $quoteDevice->margin,
+                                                                                                   'validators' => array(
+                                                                                                       'Float',
+                                                                                                       array(
+                                                                                                           'validator' => 'Between',
+                                                                                                           'options'   => array(
+                                                                                                               'min'       => -100,
+                                                                                                               'max'       => 100,
+                                                                                                               'inclusive' => false
+                                                                                                           )
+                                                                                                       )
+                                                                                                   )
+                                                                                              ));
+
+                $elementSet->quantity = $this->createElement('text', "quantity-{$quoteDeviceId}", array(
+                                                                                                       'label'      => 'Quantity:',
+                                                                                                       'class'      => 'span1',
+                                                                                                       'validators' => array(
+                                                                                                           'Float',
+                                                                                                           array(
+                                                                                                               'validator' => 'Between',
+                                                                                                               'options'   => array(
+                                                                                                                   'min'       => 0,
+                                                                                                                   'max'       => 250,
+                                                                                                                   'inclusive' => false
+                                                                                                               )
+                                                                                                           )
+                                                                                                       )
+                                                                                                  ));
+
                 // Add all our elements
                 $this->addElement($elementSet->packagePrice);
                 $this->addElement($elementSet->margin);
                 $this->addElement($elementSet->quantity);
                 $this->addElement($elementSet->residual);
-                
+
                 $group->sets [] = $elementSet;
             }
             $this->_quoteDeviceGroups [] = $group;
         }
-        
+
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 
@@ -218,14 +211,14 @@ class Quotegen_Form_QuoteDevices extends EasyBib_Form
         // Only show the custom view script if we are showing defaults
         if ($this->_quote)
         {
-            $this->setDecorators(array (
-                    array (
-                            'ViewScript', 
-                            array (
-                                    'viewScript' => 'quote/devices/form/quotedevices.phtml' 
-                            ) 
-                    ) 
-            ));
+            $this->setDecorators(array(
+                                      array(
+                                          'ViewScript',
+                                          array(
+                                              'viewScript' => 'quote/devices/form/quotedevices.phtml'
+                                          )
+                                      )
+                                 ));
         }
     }
 

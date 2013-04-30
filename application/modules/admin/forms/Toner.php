@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Form_Toner
+ */
 class Admin_Form_Toner extends EasyBib_Form
 {
 

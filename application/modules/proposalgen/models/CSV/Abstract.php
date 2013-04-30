@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Model_CSV_Abstract
+ */
 class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
 {
     public $validHeaders;
@@ -14,6 +17,13 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
     const FIELD_REQUIRED         = 1;
     const FIELD_REQUIRED_DEPENDS = 2;
 
+    /**
+     * Imports a save
+     *
+     * @param string $filename The CSV file
+     *
+     * @throws Exception
+     */
     public function importCSV ($filename)
     {
         try
@@ -92,6 +102,9 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
         }
     }
 
+    /**
+     * @return bool
+     */
     protected function validateHeaders ()
     {
         $headingsAreValid = true;
@@ -116,6 +129,11 @@ class Proposalgen_Model_CSV_Abstract extends Tangent_Model_Abstract
         return $headingsAreValid;
     }
 
+    /**
+     * @param $row
+     *
+     * @return bool
+     */
     protected function checkRowForErrors ($row)
     {
         $result = false;

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_DeviceToner
+ */
 class Proposalgen_Model_DeviceToner extends My_Model_Abstract
 {
     /**

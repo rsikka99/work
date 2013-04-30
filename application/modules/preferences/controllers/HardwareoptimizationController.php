@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_HardwareoptimizationController
+ */
 class Preferences_HardwareoptimizationController extends Tangent_Controller_Action
 {
     public function indexAction () { /** Do nothing */ }

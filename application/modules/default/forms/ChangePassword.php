@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Default_Form_ChangePassword
+ */
 class Default_Form_ChangePassword extends EasyBib_Form
 {
 
@@ -26,7 +29,7 @@ class Default_Form_ChangePassword extends EasyBib_Form
         // Add the password element
         $currentPassword = new Zend_Form_Element_Password('current_password', array (
                 'label' => 'Current Password:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim' 
                 ), 
@@ -45,7 +48,7 @@ class Default_Form_ChangePassword extends EasyBib_Form
         
         $newPassword = new Zend_Form_Element_Password('password', array (
                 'label' => 'New Password:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim' 
                 ), 
@@ -64,7 +67,7 @@ class Default_Form_ChangePassword extends EasyBib_Form
         
         $newPasswordConfirm = new Zend_Form_Element_Password('password_confirm', array (
                 'label' => 'Confirm New Password:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim' 
                 ), 
@@ -90,13 +93,13 @@ class Default_Form_ChangePassword extends EasyBib_Form
         $this->addElement($newPasswordConfirm);
         
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

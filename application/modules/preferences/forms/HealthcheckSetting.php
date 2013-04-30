@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Form_HealthcheckSetting
+ */
 class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     public $allowsNull = false;

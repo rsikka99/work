@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_QuoteDeviceGroup
+ */
 class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
 {
 
@@ -312,9 +315,9 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ($this->getQuoteDeviceGroupDevices() as $quoteDevice)
         {
-            if ($quoteDevice->getQuantity() > 0)
+            if ($quoteDevice->calculateTotalQuantity() > 0)
             {
-                $totalCost += $quoteDevice->calculatePackageCost() * $quoteDevice->getQuantity();
+                $totalCost += $quoteDevice->calculatePackageCost() * $quoteDevice->calculateTotalQuantity();
             }
         }
 
@@ -329,7 +332,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
     public function calculatePurchaseSubtotal ()
     {
         $subTotal     = 0;
-        $packagePrice = (float)$this->getPackagePrice();
+        $packagePrice = (float)$this->calculateTotalCost();
 
         $quantity = $this->quantity;
 

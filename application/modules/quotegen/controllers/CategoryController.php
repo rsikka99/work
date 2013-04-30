@@ -1,6 +1,9 @@
 
 <?php
 
+/**
+ * Class Quotegen_CategoryController
+ */
 class Quotegen_CategoryController extends Tangent_Controller_Action
 {
 

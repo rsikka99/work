@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Address
+ */
 class Quotegen_Model_Address extends My_Model_Abstract
 {
 
@@ -112,8 +115,9 @@ class Quotegen_Model_Address extends My_Model_Abstract
         );
     }
 
-    /*
+    /**
      * Gets the countries name
+     *
      * @return string
      */
     public function getCountry ()
@@ -122,7 +126,8 @@ class Quotegen_Model_Address extends My_Model_Abstract
             ->name;
     }
 
-    /**Gets a the region and then gets the name
+    /**
+     * Gets a the region and then gets the name
      *
      * @return string
      */
@@ -175,6 +180,9 @@ class Quotegen_Model_Address extends My_Model_Abstract
         return $address;
     }
 
+    /**
+     * @return string
+     */
     public function __toString ()
     {
         return $this->getFullAddressMultipleLines();

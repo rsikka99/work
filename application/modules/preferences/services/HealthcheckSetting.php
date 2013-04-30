@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Preferences_Service_HealthcheckSetting
+ */
 class Preferences_Service_HealthcheckSetting
 {
     /**
@@ -144,13 +147,6 @@ class Preferences_Service_HealthcheckSetting
             else
             {
                 $validData = $form->getValues();
-            }
-        }
-        else
-        {
-            if ($this->getForm() instanceof EasyBib_Form)
-            {
-                $this->getForm()->buildBootstrapErrorDecorators();
             }
         }
 

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_Manufacturer
+ */
 class Proposalgen_Form_Manufacturer extends EasyBib_Form
 {
 
@@ -24,7 +27,7 @@ class Proposalgen_Form_Manufacturer extends EasyBib_Form
         
         $this->addElement('text', 'fullname', array (
                 'label' => 'Full Name:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -42,7 +45,7 @@ class Proposalgen_Form_Manufacturer extends EasyBib_Form
         
         $this->addElement('text', 'displayname', array (
                 'label' => 'Display Name:', 
-                'required' => false, 
+                'required' => false,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -67,13 +70,13 @@ class Proposalgen_Form_Manufacturer extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

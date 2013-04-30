@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Application_Model_User
+ */
 class Application_Model_User extends My_Model_Abstract
 {
     /**
@@ -95,6 +98,11 @@ class Application_Model_User extends My_Model_Abstract
      */
     protected $_userRoles;
 
+    /**
+     * Checks if the user is frozen
+     *
+     * @return bool
+     */
     public function isFrozen ()
     {
         $frozenDate  = new DateTime($this->frozenUntil);
@@ -104,8 +112,8 @@ class Application_Model_User extends My_Model_Abstract
         return (!$diff->invert && ($diff->s > 0 || $diff->i > 0 || $diff->h > 0 || $diff->days > 0));
     }
 
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
@@ -159,8 +167,8 @@ class Application_Model_User extends My_Model_Abstract
         }
     }
 
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+    /**
+     * @return array
      */
     public function toArray ()
     {

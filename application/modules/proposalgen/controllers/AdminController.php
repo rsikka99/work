@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_AdminController
+ */
 class Proposalgen_AdminController extends Tangent_Controller_Action
 {
     /**
@@ -366,13 +369,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $db       = Zend_Db_Table::getDefaultAdapter();
         $toner_id = $this->_getParam('tonerid', 0);
 
-        $formData = array();
+        $formData = new stdClass();
         if ($toner_id > 0)
         {
             $filter   = $this->_getParam('filter', false);
             $criteria = trim($this->_getParam('criteria', false));
-
-            $formData = new stdClass();
             $page     = $_GET ['page'];
             $limit    = $_GET ['rows'];
             $sidx     = $_GET ['sidx'];
@@ -437,7 +438,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $master_device_id = $key->masterDeviceId;
 
                     // GET ALL SAME COLOR TONERS FOR DEVICE
-                    $select = new Zend_Db_Select($db);
                     $select = $db->select();
                     $select->from(array(
                                        'dt' => 'device_toners'
@@ -456,7 +456,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
 
                 // GET SAME COLOR TONERS
-                $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
                                    't' => 'toners'
@@ -490,7 +489,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
 
                 $start  = $limit * $page - $limit;
-                $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
                                    't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
@@ -514,7 +512,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 if ($count > 0)
                 {
                     $i                 = 0;
-                    $type_name         = '';
                     $formData->page    = $page;
                     $formData->total   = $total_pages;
                     $formData->records = $count;
@@ -584,7 +581,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $master_device_id = $key->masterDeviceId;
                 // GET ALL SAME COLOR TONERS FOR DEVICE
-                $select = new Zend_Db_Select($db);
                 $select = $db->select();
                 $select->from(array(
                                    'dt' => 'device_toners'
@@ -792,9 +788,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                     if ($toner_id > 0)
                     {
-                        $where    = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
-                        $toner_id = $tonerTable->update($tonerData, $where);
-                        $message  = "The toner has been updated.";
+                        $where = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
+                        $tonerTable->update($tonerData, $where);
+                        $message = "The toner has been updated.";
                     }
                     else
                     {
@@ -808,7 +804,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            $toner_id = $tonerTable->insert($tonerData);
+                            $tonerTable->insert($tonerData);
 
                             $message = "The toner has been added.";
                         }
@@ -828,7 +824,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     public function replacetonerAction ()
     {
-        $message     = '';
         $toner_count = 0;
         $db          = Zend_Db_Table::getDefaultAdapter();
 
@@ -893,7 +888,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         {
                             // UPDATE ONLY DEVICES WHERE THIS IS THE LAST OF
                             // IT'S COLOR ($toner_color_id)
-                            $select = new Zend_Db_Select($db);
                             $select = $db->select();
                             $select->from(array(
                                                'dt' => 'device_toners'
@@ -1350,10 +1344,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     public function masterdeviceslistAction ()
     {
-        // Get the total amount of mater devices that we are working with.
-        $count    = Proposalgen_Model_Mapper_MasterDevice::getInstance()->count();
         $response = new stdClass();
-        // Criteria is the vlaues that the client wants to search by
+        // Criteria is the values that the client wants to search by
         $criteria = $this->_getParam('criteria', false);
         // Filter is what column the client wants to do a search by
         $filter = $this->_getParam('filter', false);
@@ -1371,7 +1363,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         try
         {
             // Based on the filter allow the mappers to return the appropriate device
-            $count = 0;
             if ($filter === 'manufacturerId' && $criteria != '')
             {
                 $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria, "{$sortIndex} {$sortOrder}", 100, $start);
@@ -1862,11 +1853,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->view->title = 'Manage Replacement Printers';
         $this->view->repop = false;
 
-        $form                         = new Proposalgen_Form_ReplacementPrinter(null, '');
+        $form                         = new Proposalgen_Form_ReplacementPrinter(null);
         $this->view->replacement_form = $form;
 
         // fill manufacturer drop down
-        $list               = "";
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers      = $manufacturersTable->fetchAll('isDeleted = 0', 'fullname');
         $currElement        = $form->getElement('manufacturer_id');
@@ -1951,12 +1941,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     {
         $db = Zend_Db_Table::getDefaultAdapter();
 
-        $form     = new Proposalgen_Form_ReplacementPrinter(null, '');
-        $formData = $this->_getAllParams();
-
-
-        $hdnManId             = $formData ['hdnManId'];
-        $hdnMasId             = $formData ['hdnMasId'];
+        $formData             = $this->getAllParams();
         $manufacturer_id      = $formData ['manufacturer_id'];
         $printer_model        = $formData ['printer_model'];
         $hdnOriginalCategory  = $formData ['hdnOriginalCategory'];
@@ -2060,7 +2045,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                     if ($is_valid === true)
                     {
-                        $where             = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $printer_model, 'INTEGER');
                         $replacementDevice = new Proposalgen_Model_ReplacementDevice();
                         $replacementDevice->populate($replacement_devicesData);
                         $replacementDevice->dealerId       = $this->dealerId;
@@ -2142,7 +2126,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             if ($device_id > 0)
             {
-                $select = new Zend_Db_Select($db);
                 $select = $db->select()
                     ->from(array(
                                 'rd' => 'replacement_devices'

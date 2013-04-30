@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_DeviceInstanceMeter
+ */
 class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstract
 {
     /*

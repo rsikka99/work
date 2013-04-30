@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Mapper_Dealer
+ */
 class Admin_Model_Mapper_Dealer extends My_Model_Mapper_Abstract
 {
     /*

@@ -9,6 +9,9 @@
 class Application_View_Helper_Adminmenu extends Zend_View_Helper_Abstract
 {
 
+    /**
+     * @return string
+     */
     public function Adminmenu ()
     {
         // Get the container

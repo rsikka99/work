@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Rms_Upload_Row
+ */
 class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
 {
     /*
@@ -344,7 +347,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
             $toner->yield        = $tonerYield;
             $toner->cost         = $tonerCost;
             $toner->tonerColorId = $tonerColor;
-            $toner->partTypeId   = Proposalgen_Model_PartType::OEM;
+            $toner->partTypeId   = $partType;
         }
 
 

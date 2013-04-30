@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_GlobalDeviceConfiguration
+ */
 class Quotegen_Model_GlobalDeviceConfiguration extends My_Model_Abstract
 {
 

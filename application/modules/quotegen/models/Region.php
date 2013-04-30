@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Region
+ */
 class Quotegen_Model_Region extends My_Model_Abstract
 {
     /**

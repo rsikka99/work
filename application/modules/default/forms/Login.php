@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Default_Form_Login
+ */
 class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
 {
 

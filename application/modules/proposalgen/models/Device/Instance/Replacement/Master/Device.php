@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Device_Instance_Replacement_Master_Device
+ */
 class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Model_Abstract
 {
     /**

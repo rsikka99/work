@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Optimization_Customer
+ */
 class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimization_Model_Optimization_Abstract
 {
     const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
@@ -11,6 +14,11 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
      */
     protected $_graphs;
 
+    /**
+     * Gets the array of graphs
+     *
+     * @return array|string[]
+     */
     public function getGraphs ()
     {
         if (!isset($this->_graphs))
@@ -172,7 +180,6 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Hardware Utilization and Capacity Percent version
              */
             $percentage = ($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_optimization->getMaximumMonthlyPrintVolume());
-            $percentage = 0.42;
             $highest    = 100;
             $barGraph   = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);

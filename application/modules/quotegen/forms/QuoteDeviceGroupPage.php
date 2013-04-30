@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_QuoteDeviceGroupPage
+ */
 class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
 {
 
@@ -24,7 +27,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         $this->addElement('text', 'name', array (
                 'label' => 'Name:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -42,7 +45,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         $this->addElement('text', 'oemSku', array (
                 'label' => 'OEM Sku	:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -60,7 +63,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         $this->addElement('text', 'pricePerPage', array (
                 'label' => 'Price Per Page:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -72,7 +75,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5, 
-                                        'inclusive' => false 
+                                        'inclusive' => false
                                 ) 
                         ) 
                 ) 
@@ -80,7 +83,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         $this->addElement('text', 'includedPrice', array (
                 'label' => 'Included Price:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -92,7 +95,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 5000, 
-                                        'inclusive' => true 
+                                        'inclusive' => true
                                 ) 
                         ) 
                 ) 
@@ -100,7 +103,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         $this->addElement('text', 'includedQuantity', array (
                 'label' => 'Included Quantity:', 
-                'required' => true, 
+                'required' => true,
                 'filters' => array (
                         'StringTrim', 
                         'StripTags' 
@@ -112,7 +115,7 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
                                 'options' => array (
                                         'min' => 0, 
                                         'max' => 50000, 
-                                        'inclusive' => true 
+                                        'inclusive' => true
                                 ) 
                         ) 
                 ) 
@@ -120,13 +123,13 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         
         // Add the submit button
         $this->addElement('submit', 'submit', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Save' 
         ));
         
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
+                'ignore' => true,
                 'label' => 'Cancel' 
         ));
         

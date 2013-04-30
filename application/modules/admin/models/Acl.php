@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Acl
+ */
 class Admin_Model_Acl
 {
     /**

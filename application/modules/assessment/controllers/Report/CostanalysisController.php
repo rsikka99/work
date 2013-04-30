@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Report_CostanalysisController
+ */
 class Assessment_Report_CostanalysisController extends Assessment_Library_Controller_Action
 {
     public function indexAction ()

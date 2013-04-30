@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Quote_Page
+ */
 class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
@@ -9,6 +12,10 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
      */
     private $_quote;
 
+    /**
+     * @param null|Quotegen_Model_Quote $quote
+     * @param null|array                $options
+     */
     public function __construct ($quote = null, $options = null)
     {
         $this->_quote = $quote;

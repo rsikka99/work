@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_IndexController
+ */
 class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_Controller_Action
 {
     /**
@@ -107,21 +110,17 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 {
                     if ($this->_processSaveProfitability($form))
                     {
-                        if(isset($postData["saveAndContinue"]))
+                        if (isset($postData["saveAndContinue"]))
                         {
                             $this->updateStepName();
                             $this->saveHardwareOptimization();
                             $this->gotoNextNavigationStep($this->_navigation);
                         }
-                        $this->_helper->flashMessenger(array(
-                                                            'success' => "Your changes have been saved."
-                                                       ));
+                        $this->_flashMessenger->addMessage(array('success' => "Your changes have been saved."));
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
-                                                            'danger' => "There was an error saving your replacement choices."
-                                                       ));
+                        $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
                     }
                 }
                 else if ($form->getValue('Analyze'))
@@ -129,32 +128,24 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     // Analyze the fleet. If it is successful we need to rebuild our form
                     if ($this->_analyzeFleet())
                     {
-                        $this->_helper->flashMessenger(array(
-                                                            'success' => "We've optimized your fleet. Please review the changes before proceeding."
-                                                       ));
-                        $this->_helper->redirector('optimize', null, null, array());
+                        $this->_flashMessenger->addMessage(array('success' => "We've optimized your fleet. Please review the changes before proceeding."));
+                        $this->redirector('optimize', null, null, array());
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
-                                                            'danger' => "There was an error saving your replacement choices."
-                                                       ));
+                        $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
                     }
                 }
                 else if ($form->getValue('ResetReplacements'))
                 {
                     if ($this->_resetReplacements())
                     {
-                        $this->_helper->flashMessenger(array(
-                                                            'success' => "Device replacements have been reset."
-                                                       ));
-                        $this->_helper->redirector('optimize', null, null, array());
+                        $this->_flashMessenger->addMessage(array('success' => "Device replacements have been reset."));
+                        $this->redirector('optimize', null, null, array());
                     }
                     else
                     {
-                        $this->_helper->flashMessenger(array(
-                                                            'danger' => "There was an error resetting your replacement choices."
-                                                       ));
+                        $this->_flashMessenger->addMessage(array('danger' => "There was an error resetting your replacement choices."));
                     }
                 }
                 else if ($form->getValues('Cancel'))
@@ -169,8 +160,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $this->view->devices              = $devices;
         $this->view->hardwareOptimization = $this->_hardwareOptimization;
         $this->view->optmizationViewModel = $this->getOptimizationViewModel();
-        $this->view->navigationForm = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
-        $this->view->title          = 'Hardware Optimization';
+        $this->view->navigationForm       = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
+        $this->view->title                = 'Hardware Optimization';
     }
 
     /**
@@ -198,14 +189,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "lifePageCount"         => number_format($deviceInstance->getLifePageCount()),
                 "monoAmpv"              => number_format($deviceInstance->getAverageMonthlyBlackAndWhitePageCount()),
                 "colorAmpv"             => number_format($deviceInstance->getAverageMonthlyColorPageCount()),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)
-                    ->monochromeCostPerPage, array(
-                                                  "precision" => 4
-                                             )),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)
-                    ->colorCostPerPage, array(
-                                             "precision" => 4
-                                        )),
+                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array("precision" => 4)),
+                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array("precision" => 4)),
                 "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
                 "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
                 "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
@@ -222,14 +207,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
                 "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)
-                    ->monochromeCostPerPage, array(
-                                                  "precision" => 4
-                                             )),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)
-                    ->colorCostPerPage, array(
-                                             "precision" => 4
-                                        )),
+                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->monochromeCostPerPage, array("precision" => 4)),
+                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "isScan"                => (int)$replacementDevice->isScanner,

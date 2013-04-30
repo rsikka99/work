@@ -1,25 +1,35 @@
 <?php
+/**
+ * Class Proposalgen_Bootstrap
+ */
 class Proposalgen_Bootstrap extends Zend_Application_Module_Bootstrap
 {
 
     protected function _initNavigation ()
     {
-        $view   = $this->getApplication()->getResource('view');
         $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
         /* @var $container Zend_Navigation */
         $container = Zend_Registry::get('Zend_Navigation');
         $container->addPages($config);
     }
 
-    protected function _initAutoloader ()
+    /**
+     * @return Zend_Loader_Autoloader
+     */
+    protected function _initAutoLoader ()
     {
-        $autoloader = Zend_Loader_Autoloader::getInstance();
-        $autoloader->registerNamespace('Custom_');
-        $autoloader->registerNamespace('Tangent_');
-        $autoloader->registerNamespace('gchart');
+        $autoLoader = Zend_Loader_Autoloader::getInstance();
+        $autoLoader->registerNamespace('Custom_');
+        $autoLoader->registerNamespace('Tangent_');
+        $autoLoader->registerNamespace('gchart');
+
+        return $autoLoader;
     }
 
-    protected function _initLibraryAutoloader ()
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
+    protected function _initLibraryAutoLoader ()
     {
         return $this->getResourceLoader()->addResourceType('library', 'library', 'library');
     }

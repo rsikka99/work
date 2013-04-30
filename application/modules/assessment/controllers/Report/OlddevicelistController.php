@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Report_OldDeviceListController
+ */
 class Assessment_Report_OldDeviceListController extends Assessment_Library_Controller_Action
 {
 

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Report_GrossmarginController
+ */
 class Assessment_Report_GrossmarginController extends Assessment_Library_Controller_Action
 {
 

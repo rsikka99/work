@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_Mapper_Contact
+ */
 class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
 {
     /**
@@ -65,7 +68,6 @@ class Quotegen_Model_Mapper_Contact extends My_Model_Mapper_Abstract
      */
     public function save ($object, $primaryKey = null)
     {
-        $data = $object->toArray();
         $data = $this->unsetNullValues($object->toArray());
         if ($primaryKey === null)
         {

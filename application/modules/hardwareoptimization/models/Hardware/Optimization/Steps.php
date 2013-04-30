@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Hardware_Optimization_Steps
+ */
 class Hardwareoptimization_Model_Hardware_Optimization_Steps extends My_Navigation_Abstract
 {
     const STEP_FLEET_UPLOAD = 'upload';
@@ -58,6 +61,9 @@ class Hardwareoptimization_Model_Hardware_Optimization_Steps extends My_Navigati
         return self::$_instance;
     }
 
+    /**
+     * Creates a new set of optimization steps
+     */
     public function __construct ()
     {
         $this->_setNewSteps(self::$stepNames);

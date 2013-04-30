@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_ManufacturerController
+ */
 class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 {
 
@@ -102,8 +105,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                             }
                             
                             $manufacturer->populate($values);
-                            $manufacturerId = $mapper->insert($manufacturer);
-                            
+                            $mapper->insert($manufacturer);
+
                             $this->_flashMessenger->addMessage(array (
                                     'success' => "Manufacturer " . $this->view->escape($manufacturer->fullname) . " was added successfully."
                             ));
@@ -211,7 +214,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                         $manufacturer->id = $manufacturerId;
                         
                         // Save to the database with cascade insert turned on
-                        $manufacturerId = $mapper->save($manufacturer, $manufacturerId);
+                        $mapper->save($manufacturer, $manufacturerId);
                         
                         $this->_flashMessenger->addMessage(array (
                                 'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated sucessfully."

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Dealer_Master_Device_Attribute
+ */
 class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
 {
     /**
@@ -65,6 +68,10 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         );
     }
 
+    /**
+     * Saves a dealer master device attribute
+     * @return $this
+     */
     public function saveObject ()
     {
         // Do we have an instance of it in our database?

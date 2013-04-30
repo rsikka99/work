@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Toner
+ */
 class Proposalgen_Model_Toner extends My_Model_Abstract
 {
     const MANUFACTURER_ASSUMED_COVERAGE = 0.05;

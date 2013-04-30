@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Form_Manufacturers
+ */
 class Proposalgen_Form_Manufacturers extends Zend_Form
 {
     /**
@@ -267,8 +270,7 @@ class Proposalgen_Form_Manufacturers extends Zend_Form
                 ) 
         ));
         array_push($elements, $back);
-        $elementCounter ++;
-        
+
         $this->setDecorators(array (
                 'FormElements', 
                 array (

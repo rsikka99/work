@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_DeviceSwap
+ */
 class Proposalgen_Form_DeviceSwap extends Zend_Form
 {
 

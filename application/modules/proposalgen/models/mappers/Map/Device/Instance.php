@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Map_Device_Instance
+ */
 class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstract
 {
     /*
@@ -82,13 +85,10 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
     /**
      * Finds a Map_Device_Instance based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Map_Device_Instance to find
-     *
      * @throws BadMethodCallException
      * @return Proposalgen_Model_Map_Device_Instance
      */
-    public function find ($id) { throw new BadMethodCallException("This method is not available for this mapper."); }
+    public function find () { throw new BadMethodCallException("This method is not available for this mapper."); }
 
     /**
      * Fetches a Map_Device_Instance

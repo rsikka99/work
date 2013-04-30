@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_Address
+ */
 class Quotegen_Model_Mapper_Address extends My_Model_Mapper_Abstract
 {
     /**

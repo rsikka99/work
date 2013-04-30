@@ -1,12 +1,19 @@
 <?php
 
+/**
+ * Class Admin_Form_Client
+ */
 class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
 {
+    /**
+     * @var bool
+     */
     protected $_dealerManagement;
 
-    /*
- * (non-PHPdoc) @see Zend_Form::__construct()
- */
+    /**
+     * @param bool       $dealerManagement
+     * @param null|array $options
+     */
     public function __construct ($dealerManagement = false, $options = null)
     {
         $this->_dealerManagement = $dealerManagement;
@@ -18,20 +25,6 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
-
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         // setup account number
@@ -58,11 +51,11 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             ->setAllowEmpty(true);
 
         //setup contact last name
-        $lastName      = $this->createElement('text', 'lastName')
+        $lastName     = $this->createElement('text', 'lastName')
             ->addErrorMessage("Please enter a last name")
             ->setLabel("Last Name:")
             ->setAllowEmpty(true);
-        $dealerSelect  = null;
+        $dealerSelect = null;
         // If they have admin privileges for this, and are not within the dealer form
         if ($this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN) && $this->_dealerManagement == false)
         {

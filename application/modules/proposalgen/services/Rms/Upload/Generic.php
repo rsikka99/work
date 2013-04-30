@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Service_Rms_Upload_Generic
+ */
 class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**

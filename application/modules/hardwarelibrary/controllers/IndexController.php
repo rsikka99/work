@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwarelibrary_IndexController
+ */
 class Hardwarelibrary_IndexController extends Tangent_Controller_Action
 {
     /**

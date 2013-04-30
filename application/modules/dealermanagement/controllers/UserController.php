@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Dealermanagement_UserController
+ */
 class Dealermanagement_UserController extends Tangent_Controller_Action
 {
     /**

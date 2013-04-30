@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Acl
+ */
 class Assessment_Model_Acl
 {
 

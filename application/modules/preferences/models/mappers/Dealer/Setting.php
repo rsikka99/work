@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Model_Mapper_Dealer_Setting
+ */
 class Preferences_Model_Mapper_Dealer_Setting extends My_Model_Mapper_Abstract
 {
     /*

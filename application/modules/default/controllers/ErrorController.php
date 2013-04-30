@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Default_ErrorController
+ */
 class Default_ErrorController extends Tangent_Controller_Action
 {
 

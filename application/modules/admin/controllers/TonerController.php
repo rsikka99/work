@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_TonerController
+ */
 class Admin_TonerController extends Tangent_Controller_Action
 {
     /**

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_Mapper_QuoteSetting
+ */
 class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
 {
     /**
@@ -220,8 +223,9 @@ class Quotegen_Model_Mapper_QuoteSetting extends My_Model_Mapper_Abstract
         );
     }
 
-    /*
+    /**
      * @param Quotegen_Model_QuoteSetting $object
+     *
      * @return int
      */
     public function getPrimaryKeyValueForObject ($object)

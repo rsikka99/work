@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_IndexController
+ */
 class Preferences_IndexController extends Tangent_Controller_Action
 {
     /**

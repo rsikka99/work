@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Bootstrap
+ */
 class Healthcheck_Bootstrap extends Zend_Application_Module_Bootstrap
 {
     protected function _initNavigation ()
@@ -17,14 +20,20 @@ class Healthcheck_Bootstrap extends Zend_Application_Module_Bootstrap
         Zend_View_Helper_PaginationControl::setDefaultViewPartial('_partials/paginator.phtml');
     }
 
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
     protected function _initLibraryAutoloader ()
     {
         return $this->getResourceLoader()->addResourceType('library', 'library', 'library');
     }
 
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
     protected function _initViewModelAutoloader ()
     {
-        $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
+        return $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
     }
 
     protected function _initAddToAcl ()

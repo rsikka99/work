@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Service_Rms_Upload_PrintFleet
+ */
 class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**

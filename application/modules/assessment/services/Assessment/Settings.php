@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Assessment_Service_Assessment_Settings
+ */
 class Assessment_Service_Assessment_Settings
 {
     /**
@@ -51,6 +54,11 @@ class Assessment_Service_Assessment_Settings
      */
     protected $_assessment;
 
+    /**
+     * @param int $assessmentId
+     * @param int $userId
+     * @param int $dealerId
+     */
     public function __construct ($assessmentId, $userId, $dealerId)
     {
         $user                      = Application_Model_Mapper_User::getInstance()->find($userId);

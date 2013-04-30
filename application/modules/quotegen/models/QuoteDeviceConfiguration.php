@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Quotegen_Model_QuoteDeviceConfiguration
+ */
 class Quotegen_Model_QuoteDeviceConfiguration extends My_Model_Abstract
 {
     /**

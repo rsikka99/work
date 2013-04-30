@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_Model_Optimization_Dealer
+ */
 class Hardwareoptimization_Model_Optimization_Dealer extends
     Hardwareoptimization_Model_Optimization_Abstract
 {
@@ -9,6 +12,10 @@ class Hardwareoptimization_Model_Optimization_Dealer extends
      */
     protected $_graphs;
 
+    /**
+     * Gets the array of graphs
+     * @return array
+     */
     public function getGraphs ()
     {
         if (!isset($this->graphs))

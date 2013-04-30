@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Assessment_Step
+ */
 class Proposalgen_Model_Assessment_Step extends My_Model_Abstract
 {
     const STEP_SURVEY               = 'survey';

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Model_Acl
+ */
 class Healthcheck_Model_Acl
 {
 

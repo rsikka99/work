@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Model_Assessment
+ */
 class Assessment_Model_Assessment extends My_Model_Abstract
 {
     /**

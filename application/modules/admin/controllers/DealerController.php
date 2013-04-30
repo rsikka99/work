@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_DealerController
+ */
 class Admin_DealerController extends Tangent_Controller_Action
 {
     /**
@@ -130,7 +133,6 @@ class Admin_DealerController extends Tangent_Controller_Action
                 {
                     imagepng($uploadedImage, $uploadedImagePath);
                     $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
-                    $data              = $base64ImageString;
 
                     /**
                      * Insert the image into the database

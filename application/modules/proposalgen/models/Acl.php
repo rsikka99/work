@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Acl
+ */
 class Proposalgen_Model_Acl
 {
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";

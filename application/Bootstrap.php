@@ -7,20 +7,26 @@
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
 
+    /**
+     * Initializes the Zend_Config object into the registry
+     *
+     * @return Zend_Config
+     */
     protected function _initConfig ()
     {
         $config = new Zend_Config($this->getOptions());
-        if (! Zend_Registry::isRegistered("config"))
+        if (!Zend_Registry::isRegistered("config"))
         {
             Zend_Registry::set("config", $config);
         }
+
         return $config;
     }
-    
+
     /**
      * Start session
      */
-    public function _initCoreSession()
+    public function _initCoreSession ()
     {
         $this->bootstrap('db');
         $this->bootstrap('session');
@@ -34,7 +40,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $options = $this->getOptions();
         date_default_timezone_set($options ["phpSettings"] ["timezone"]);
-        
+
         // Turn on the display of errors
         if (APPLICATION_ENV != 'production')
         {
@@ -58,21 +64,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initLoggerToRegistry ()
     {
         $this->bootstrap('Log');
-//        $this->bootstrap('Db');
         if ($this->hasResource('Log'))
         {
-            $logger = $this->getResource('Log');
-//            assert($logger != null);
-//            $db = Zend_Db_Table::getDefaultAdapter();
-//            // Set up the logging system and put it in the Zend Registry.
-//            $columnMapping = array (
-//                    'priority' => 'priority',
-//                    'message' => 'message',
-//                    'logTypeId' => 'logTypeId',
-//                    'userId' => 'userId'
-//            );
-//            $logger->addWriter(new Zend_Log_Writer_Db($db, 'logs', $columnMapping));
-            
             Zend_Registry::set('Zend_Log', $this->getResource('Log'));
         }
     }
@@ -84,20 +77,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $this->bootstrap('view');
         $view = $this->getResource('view');
-        
+
         // Set the doctype to HTML5 so components know how to render items
         $view->doctype('HTML5');
-        
+
         // Initialize the twitter bootstrap menu plugin
         $view->registerHelper(new My_View_Helper_Navigation_Menu(), 'menu');
-        
+
         // Setup default styles
         $view->headLink()->prependStylesheet($view->theme("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.10.2.custom.min.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.css"));
-        
+
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
@@ -113,6 +106,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $acl = Application_Model_Acl::getInstance();
         Zend_Registry::set('Zend_Acl', $acl);
+
         return $acl;
     }
 
@@ -124,7 +118,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('view');
         /* @var $view Zend_View */
         $view = $this->getResource('view');
-        
+
         $this->bootstrap('acl');
         $acl = Zend_Registry::get('Zend_Acl');
 
@@ -132,7 +126,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $navigation = $view->navigation();
 
         $navigation->setAcl($acl);
-        
+
         $auth = Zend_Auth::getInstance();
         if ($auth->hasIdentity())
         {
@@ -142,7 +136,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             $navigation->setRole(null);
         }
-        
+
         $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
         /* @var $container Zend_Navigation */
         $container = $view->navigation()->getContainer();

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Report_TonersController
+ */
 class Assessment_Report_TonersController extends Assessment_Library_Controller_Action
 {
     public function indexAction ()

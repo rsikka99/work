@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_DeviceSetup
+ */
 class Quotegen_Form_DeviceSetup extends EasyBib_Form
 {
 

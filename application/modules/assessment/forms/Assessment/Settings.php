@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_Form_Assessment_Settings
+ */
 class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertical
 {
     /**
@@ -15,6 +18,10 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
      */
     protected $_formElementGroups;
 
+    /**
+     * @param Assessment_Model_Assessment_Setting $defaultSettings
+     * @param array|null                          $options
+     */
     public function __construct (Assessment_Model_Assessment_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
@@ -33,8 +40,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
-        $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
-        $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
         $customerGroup               = new stdClass();
         $customerGroup->title        = "Customer Facing Settings";

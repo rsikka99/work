@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Hardwareoptimization_ViewModel_Optimization
+ */
 class Hardwareoptimization_ViewModel_Optimization
 {
     /** @var Hardwareoptimization_Model_Hardware_Optimization */
@@ -562,6 +565,9 @@ class Hardwareoptimization_ViewModel_Optimization
         return $this->_dealerMonthlyRevenueUsingTargetCostPerPage;
     }
 
+    /**
+     * @return int
+     */
     public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
     {
         $maxVolume = 0;

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_FleetController
+ */
 class Proposalgen_FleetController extends Tangent_Controller_Action
 {
     /**

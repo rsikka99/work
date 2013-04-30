@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Form_Settings_Healthcheck
+ */
 class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Vertical
 {
     /**
@@ -15,6 +18,10 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
      */
     protected $_formElementGroups;
 
+    /**
+     * @param Healthcheck_Model_Healthcheck_Setting $defaultSettings
+     * @param null|array                            $options
+     */
     public function __construct (Healthcheck_Model_Healthcheck_Setting $defaultSettings, $options = null)
     {
         $this->_defaultSettings = $defaultSettings;
@@ -25,19 +32,6 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         $this->setMethod("POST");
@@ -46,8 +40,7 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $currencyRegex     = '/^\d+(?:\.\d{0,2})?$/';
         $currencyValidator = new Zend_Validate_Regex($currencyRegex);
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
-        $greaterThanZeroValidator = new Zend_Validate_GreaterThan(0);
-        $datetimeValidator        = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
+        $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
         // Setup some form element groups
         $generalGroup                = new stdClass();
@@ -371,8 +364,7 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $gross_margin_pricing_config = new Zend_Form_Element_Select('grossMarginPricingConfigId');
         $gross_margin_pricing_config->setLabel('Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getGrossMarginPricingConfig()
-                ->configName)
+            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()->configName)
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
 
         $this->addElement($gross_margin_pricing_config);
@@ -415,7 +407,7 @@ class Proposalgen_Form_Settings_Healthcheck extends Twitter_Bootstrap_Form_Verti
         $replacementDeviceTonerPreference = new Zend_Form_Element_Select('replacementPricingConfigId');
         $replacementDeviceTonerPreference->setLabel('Replacement Device Toner Preference')
             ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getReplacementPricingConfig() ? $this->_defaultSettings->getReplacementPricingConfig()->configName : null))
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->getHealthcheckPricingConfig() ? $this->_defaultSettings->getHealthcheckPricingConfig()->configName : null))
             ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
         $this->addElement($replacementDeviceTonerPreference);
         $optimization->elements [] = $replacementDeviceTonerPreference;

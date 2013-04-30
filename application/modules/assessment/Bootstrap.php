@@ -1,6 +1,12 @@
 <?php
+/**
+ * Class Assessment_Bootstrap
+ */
 class Assessment_Bootstrap extends Zend_Application_Module_Bootstrap
 {
+    /**
+     * Adds navigation
+     */
     protected function _initNavigation ()
     {
         $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
@@ -10,16 +16,27 @@ class Assessment_Bootstrap extends Zend_Application_Module_Bootstrap
     }
 
 
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
     protected function _initLibraryAutoloader ()
     {
         return $this->getResourceLoader()->addResourceType('library', 'library', 'library');
     }
 
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
     protected function _initViewModelAutoloader ()
     {
-        $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
+        return $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
     }
 
+    /**
+     * Adds ACL
+     *
+     * @return Application_Model_Acl|mixed
+     */
     protected function _initAddToAcl ()
     {
         $acl = Zend_Registry::get('Zend_Acl');
@@ -27,6 +44,8 @@ class Assessment_Bootstrap extends Zend_Application_Module_Bootstrap
         {
             Assessment_Model_Acl::setupAcl($acl);
         }
+
+        return $acl;
     }
 
 }

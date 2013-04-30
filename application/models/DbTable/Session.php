@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Application_Model_DbTable_Session
+ */
 class Application_Model_DbTable_Session extends Zend_Db_Table_Abstract
 {
     protected $_name = 'sessions';

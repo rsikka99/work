@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_DevicesetupController
+ */
 class Quotegen_DevicesetupController extends Tangent_Controller_Action
 {
 
@@ -102,7 +105,6 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Populate manufacturers drop down
         $manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
-        $toner_array   = array();
 
         // Create a new form with the mode and roles set
         $form = new Quotegen_Form_DeviceSetup();
@@ -158,7 +160,6 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     else if ($form->isValid($values))
                     {
                         $toner_config_id = $values ['tonerConfigId'];
-                        $toner_array     = $values['toner_array'];
                         $toners          = explode(',', $values ['toner_array']);
                         foreach ($toners as $key => $toner_id)
                         {
@@ -182,7 +183,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         $hasValidToners    = true;
 
                         // Count the toners
-                        foreach ($toners as $key => $toner_id)
+                        foreach ($toners as $toner_id)
                         {
                             // Validate that the toner exists in our database
                             if (($curToner = Proposalgen_Model_Mapper_Toner::getInstance()->find((int)$toner_id)) != false)
@@ -208,7 +209,6 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
                                     $hasValidToners    = false;
                                     $tonerErrorMessage = "You must have at least one of the following toner colors: " . implode(', ', $requiredTonerList);;
-                                    $repopulateForm = 1;
                                     break;
                                 }
                             }
@@ -219,7 +219,6 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 {
                                     $hasValidToners    = false;
                                     $tonerErrorMessage = "You cannot add a " . Proposalgen_Model_TonerColor::$ColorNames [$tonerColorId] . " toner to this device because your toner configuration is set to " . Proposalgen_Model_TonerConfig::$TonerConfigNames [$toner_config_id] . ".";
-                                    $repopulateForm    = 1;
                                     break;
                                 }
                             }
@@ -259,7 +258,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 $masterDeviceId = $masterDeviceMapper->insert($masterDevice);
 
                                 // Save Toners
-                                foreach ($toners as $key => $value)
+                                foreach ($toners as $value)
                                 {
                                     $deviceTonerMapper           = new Proposalgen_Model_Mapper_DeviceToner();
                                     $deviceToner                 = new Proposalgen_Model_DeviceToner();
@@ -501,7 +500,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $masterDevice->id = $masterDeviceId;
 
                             // Save to the database with cascade insert turned on
-                            $masterDeviceId = $mapper->save($masterDevice, $masterDeviceId);
+                            $mapper->save($masterDevice, $masterDeviceId);
                         }
                         $this->_flashMessenger->addMessage(array(
                                                                 'success' => "The device has been updated sucessfully."
@@ -715,12 +714,11 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             Proposalgen_Model_TonerColor::FOUR_COLOR  => 0
                         );
 
-                        $tonerErrorMessage = "";
                         $safeToDelete      = true;
                         $tonersByPartType  = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
 
                         // Count the toners
-                        foreach ($tonersByPartType as $partTypeId => $tonersByColor)
+                        foreach ($tonersByPartType as $tonersByColor)
                         {
                             foreach ($tonersByColor as $tonerColorId => $toners)
                             {

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_Model_Healthcheck_Steps
+ */
 class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
 {
     const STEP_SETTINGS      = 'settings';
@@ -51,6 +54,9 @@ class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
         return self::$_instance;
     }
 
+    /**
+     * Creates a new healthcheck step
+     */
     public function __construct ()
     {
         $this->_setNewSteps(self::$stepNames);

@@ -1,13 +1,12 @@
 <?php
-
 /**
- * Quotegen_View_Helper_Indexmenu
- *
- * @author Lee Robert
- *        
+ * Class Quotegen_View_Helper_Indexmenu
  */
 class Quotegen_View_Helper_Indexmenu extends Zend_View_Helper_Abstract
 {
+    /**
+     * @return string
+     */
     public function Indexmenu ()
     {
         // Get the container

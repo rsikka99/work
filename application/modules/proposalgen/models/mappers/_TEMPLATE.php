@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Template
+ */
 class Proposalgen_Model_Mapper_Template extends My_Model_Mapper_Abstract
 {
     /*

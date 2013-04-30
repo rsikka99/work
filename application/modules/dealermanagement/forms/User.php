@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Dealermanagement_Form_User
+ */
 class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
@@ -109,7 +112,7 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                 $roleMultiOptions[$role->id] = $role->name;
             }
 
-            $userRoles = $this->addElement('multiCheckbox', 'userRoles', array(
+            $this->addElement('multiCheckbox', 'userRoles', array(
                                                                               'label'        => 'User Roles:',
                                                                               'required'     => true,
                                                                               'multiOptions' => $roleMultiOptions,

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_ViewModel_Devices
+ */
 class Assessment_ViewModel_Devices
 {
     /**

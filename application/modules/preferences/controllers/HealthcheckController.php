@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_HealthcheckController
+ */
 class Preferences_HealthcheckController extends Tangent_Controller_Action
 {
     public function indexAction () { /** Do nothing */ }

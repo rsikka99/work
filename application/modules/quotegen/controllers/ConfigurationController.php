@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_ConfigurationController
+ */
 class Quotegen_ConfigurationController extends Tangent_Controller_Action
 {
 
@@ -490,9 +493,9 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
      */
     public function addoptionsAction ()
     {
-        $id = $this->_getParam('id', FALSE);
-        $configurationId = $this->_getParam('configurationid', FALSE);
-        $page = $this->_getParam('page', FALSE);
+        $id = $this->_getParam('id', false);
+        $configurationId = $this->_getParam('configurationid', false);
+        $page = $this->_getParam('page', false);
         
         $availableOptions = Quotegen_Model_Mapper_Option::getInstance()->fetchAll();
         if (count($availableOptions) < 1)
@@ -627,8 +630,8 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
      */
     public function deleteoptionAction ()
     {
-        $id = $this->_getParam('id', FALSE);
-        $optionId = $this->_getParam('optionId', FALSE);
+        $id = $this->_getParam('id', false);
+        $optionId = $this->_getParam('optionId', false);
         
         try
         {

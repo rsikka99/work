@@ -1,6 +1,7 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
+
 ?>
 <div class="h1">Analysis: Expense</div>
 <table cellspacing="0" class="gradesTable">
@@ -8,18 +9,24 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="gradeDescription">
 
             <p><?php echo
-            // FIXME: The way we change the reportname
-                $rankingText = str_replace("reportName",$this->brandName, $assessmentViewModel->getRanking()->getExpense()->RankingText);
+                    // FIXME: The way we change the reportname
+                $rankingText = str_replace("reportName", $this->brandName, $assessmentViewModel->getRanking()->getExpense()->RankingText);
                 htmlentities($rankingText); ?></p>
         </td>
         <td class="gradeNumber"><?php echo number_format($assessmentViewModel->getRanking()->getExpense()->Rank, 1); ?></td>
     </tr>
 </table>
 <br />
-<p>Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to our <?php echo $this->brandName; ?> program and be managed by <?php echo $this->companyName;?>.</p>
+<p>Gartner Group called office printing the last great hidden expense in the office. They estimate the companies spend 1% to 3% of their revenue on office
+    printing. Based on data collected from your printing devices and your questionnaire responses, we have estimated your annual printing expenses. We have
+    separated your expenses into the cost of your leased printing devices and the cost of your purchased devices. Your leased devices are typically large
+    multifunction devices and are assumed to be on an existing service contract. Your purchased devices are ones that can typically be transferred to
+    our <?php echo $this->brandName; ?> program and be managed by <?php echo $this->companyName; ?>.</p>
 <br />
 <div class="pheader">Total Estimated Annual Printing Costs</div>
-<p>Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your average costs since they are based on actual observed usage.</p>
+<p>Combining all costs, your current estimated annual printing expenses are as follows. Please note that our estimated costs may not match your actual
+    purchases, due to factors including inventory on hand, returns, timing of the assessment, etc., but our estimates should be a good representation of your
+    average costs since they are based on actual observed usage.</p>
 <br />
 <table cellspacing="0" style="font-size: 10.5pt;">
     <tr>
@@ -38,7 +45,8 @@ $assessmentViewModel = $this->assessmentViewModel;
 <br />
 
 <div class="pheader">Cost of Hardware Assumed to be Leased</div>
-<p>To calculate your cost of leased printing devices, we assumed that you are paying a monthly lease rate in addition to a per-page cost, which includes supplies and service for each device.</p>
+<p>To calculate your cost of leased printing devices, we assumed that you are paying a monthly lease rate in addition to a per-page cost, which includes
+    supplies and service for each device.</p>
 <br />
 <table cellspacing="0" style="font-size: 10.5pt">
     <tr>
@@ -50,12 +58,13 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Leased->BlackAndWhite->Yearly); ?></td>
     </tr>
     <tr>
-        <td>    </td>
+        <td></td>
         <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Leased->Color->Yearly); ?></td>
     </tr>
     <tr>
-        <td>Estimated annual total lease payments<br/><em>Based on $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->monthlyLeasePayment); ?> per month per device</em></td>
-       
+        <td>Estimated annual total lease payments<br /><em>Based on
+                $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->monthlyLeasePayment); ?> per month per device</em></td>
+
         <td class="right">$<?php echo number_format($assessmentViewModel->getCombinedAnnualLeasePayments()); ?></td>
     </tr>
     <tr>
@@ -85,19 +94,24 @@ $assessmentViewModel = $this->assessmentViewModel;
 </table>
 <br />
 <div class="pheader">Cost of Hardware Suitable for Transfer to a Managed Print Solution</div>
-<p>Your <strong><?php echo count($assessmentViewModel->getPurchasedDevices()); ?></strong> print devices that are assumed to not be attached to leases may be suitable for transfer to a managed print program. Currently, you are paying for supplies and service separately for these devices and your internal IT staff spends time servicing them when they break down.</p>
-<p>The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of <strong><?php echo number_format($assessmentViewModel->getPageCoverageBlackAndWhite()); ?>%</strong> and color coverage of <strong><?php echo number_format($assessmentViewModel->getPageCoverageColor()); ?>%</strong>.</p>
+<p>Your <strong><?php echo count($assessmentViewModel->getPurchasedDevices()); ?></strong> print devices that are assumed to not be attached to leases may be
+    suitable for transfer to a managed print program. Currently, you are paying for supplies and service separately for these devices and your internal IT staff
+    spends time servicing them when they break down.</p>
+<p>The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of
+    <strong><?php echo number_format($assessmentViewModel->getPageCoverageBlackAndWhite()); ?>%</strong> and color coverage of
+    <strong><?php echo number_format($assessmentViewModel->getPageCoverageColor()); ?>%</strong>.</p>
 <table cellspacing="0" style="font-size: 10pt;">
     <tr>
         <td style="width: 565px;" class="bold">Supplies</td>
         <td style="width: 80px;" class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td>Annual cost of ink and toner<br/><em>Based on data collected by <?php echo $this->companyName;?>.</em></td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
+        <td>Annual cost of ink and toner<br /><em>Based on data collected by <?php echo $this->companyName; ?>.</em></td>
+        <td class="right">
+            $<?php echo number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
     </tr>
     <tr>
-        <td>Annual administration cost of executing supplies orders<br/><em>Based on your questionnaire responses.</em></td>
+        <td>Annual administration cost of executing supplies orders<br /><em>Based on your questionnaire responses.</em></td>
         <td class="right">$<?php echo number_format($assessmentViewModel->getCostOfExecutingSuppliesOrders()); ?></td>
     </tr>
     <tr>
@@ -111,11 +125,11 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="right">&nbsp;</td>
     </tr>
     <tr>
-        <td style="width: 565px;">Annual cost of sourcing outside service organizations<br/><em>Based on your questionnaire responses.</em></td>
-        <td style="width: 80px;"class="right">$<?php echo number_format($assessmentViewModel->getAnnualCostOfOutSourcing()); ?></td>
+        <td style="width: 565px;">Annual cost of sourcing outside service organizations<br /><em>Based on your questionnaire responses.</em></td>
+        <td style="width: 80px;" class="right">$<?php echo number_format($assessmentViewModel->getAnnualCostOfOutSourcing()); ?></td>
     </tr>
     <tr>
-        <td>Annual cost of internal IT servicing and supporting printing devices<br/><em>Based on your questionnaire responses.</em></td>
+        <td>Annual cost of internal IT servicing and supporting printing devices<br /><em>Based on your questionnaire responses.</em></td>
         <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualITCost()); ?></td>
     </tr>
     <tr>
@@ -128,11 +142,12 @@ $assessmentViewModel = $this->assessmentViewModel;
         <td class="bold">Hardware</td>
         <td class="right">&nbsp;</td>
     </tr>
-     <tr>
-        <td style="width: 565px;"><strong>Total estimated annual cost of hardware purchases</strong><br/><em>Based on the age of your devices and an average purchase price of $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->defaultPrinterCost)?>.</em></td>
+    <tr>
+        <td style="width: 565px;"><strong>Total estimated annual cost of hardware purchases</strong><br /><em>Based on the age of your devices and an average
+                purchase price of $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->defaultPrinterCost) ?>.</em></td>
         <td style="width: 80px;" class="right bold">$<?php echo number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases()); ?></td>
     </tr>
-     <tr>
+    <tr>
         <td class="bold topborder">TOTAL ESTIMATED ANNUAL COST</td>
         <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getTotalPurchasedAnnualCost()); ?></td>
     </tr>
@@ -146,35 +161,45 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td class="bold">Estimated all-in cost for a monochrome page</td>
-        <td class="right bold">$<?php echo number_format($assessmentViewModel->getEstimatedAllInBlackAndWhiteCPP(),4); ?></td>
+        <td class="right bold">$<?php echo number_format($assessmentViewModel->getEstimatedAllInBlackAndWhiteCPP(), 4); ?></td>
     </tr>
     <tr>
         <td class="bold">Estimated all-in cost for a color page</td>
-        <td class="right bold">$<?php echo number_format($assessmentViewModel->getEstimatedAllInColorCPP(),4); ?></td>
+        <td class="right bold">$<?php echo number_format($assessmentViewModel->getEstimatedAllInColorCPP(), 4); ?></td>
     </tr>
 </table>
 <br />
-<p>Through our <?php echo $this->brandName; ?> program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering with <?php echo $this->companyName;?> as your single-source provider, your printing devices will be efficiently managed and your staff can get back to concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:</p>
+<p>Through our <?php echo $this->brandName; ?> program, we can wrap supplies and service for these machines into a single cost-per-page rate. By partnering
+    with <?php echo $this->companyName; ?> as your single-source provider, your printing devices will be efficiently managed and your staff can get back to
+    concentrating on their core responsibilities. Out of these devices, below are the top three most expensive to operate:</p>
 <br />
 <table cellspacing="0" class="genericTable">
     <thead>
-        <tr>
-            <th style="width: 225px;">Printing Device</th>
-            <th style="width: 125px;" class="center">Serial No.</th>
-            <th style="width: 125px;" class="center">Monthly Volume</th>
-            <th style="width: 115px;" class="center">Monthly Cost</th>
-        </tr>
+    <tr>
+        <th style="width: 225px;">Printing Device</th>
+        <th style="width: 125px;" class="center">Serial No.</th>
+        <th style="width: 125px;" class="center">Monthly Volume</th>
+        <th style="width: 115px;" class="center">Monthly Cost</th>
+    </tr>
     </thead>
     <tbody>
 
-        <?php $ctr = 0; foreach ($assessmentViewModel->getMostExpensiveDevices() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-            $ctr++; if ($ctr > 3) { break; } ?>
+    <?php $ctr = 0;
+    foreach ($assessmentViewModel->getMostExpensiveDevices() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+        $ctr++;
+        if ($ctr > 3)
+        {
+            break;
+        } ?>
         <tr>
-            <td><div style="width: 225px; padding: 0px;"><?php echo $deviceInstance->getDeviceName(); ?></div></td>
+            <td>
+                <div style="width: 225px; padding: 0px;"><?php echo $deviceInstance->getDeviceName(); ?></div>
+            </td>
             <td class="center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPageCount()); ?> pages</td>
-            <td class="center">$<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin())); ?></td>
+            <td class="center">
+                $<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(), $assessmentViewModel->getReportMargin())); ?></td>
         </tr>
-        <?php endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
 </table>

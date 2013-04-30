@@ -1,12 +1,25 @@
 <?php
 
+/**
+ * Class Quotegen_Form_SelectOptions
+ */
 class Quotegen_Form_SelectOptions extends EasyBib_Form
 {
-    protected $_availableOptions;
+    /**
+     * @var Quotegen_Model_Option[]
+     */
+    protected $_availableOptions = array();
 
+    /**
+     * @param null|Quotegen_Model_Option[] $availableOptions
+     * @param null|array                   $options
+     */
     public function __construct ($availableOptions, $options = null)
     {
-        $this->_availableOptions = $availableOptions;
+        if (is_array($availableOptions) && count($availableOptions) > 0)
+        {
+            $this->_availableOptions = $availableOptions;
+        }
         parent::__construct($options);
     }
 
@@ -14,40 +27,28 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
+
         $this->setAttrib('class', 'form-horizontal form-center-actions');
-        
-        $optionList = array ();
+
+        $optionList = array();
         /* @var $option Quotegen_Model_Option */
         if (count($this->_availableOptions) > 0)
         {
-            foreach ( $this->_availableOptions as $option )
+            foreach ($this->_availableOptions as $option)
             {
                 $optionList [$option->id] = $option->name;
             }
-            
-            $this->addElement('multiCheckbox', 'options', array (
-                    'label' => 'Options', 
-                    'multiOptions' => $optionList 
-            ));
-            
+
+            $this->addElement('multiCheckbox', 'options', array(
+                                                               'label'        => 'Options',
+                                                               'multiOptions' => $optionList
+                                                          ));
+
             // Add the submit button
-            $this->addElement('submit', 'submit', array (
-                    'ignore' => true, 
-                    'label' => 'Save' 
-            ));
+            $this->addElement('submit', 'submit', array(
+                                                       'ignore' => true,
+                                                       'label'  => 'Save'
+                                                  ));
         }
         else
         {
@@ -56,11 +57,11 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
             $this->addElement($paragraph);
         }
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true, 
-                'label' => 'Cancel' 
-        ));
-        
+        $this->addElement('submit', 'cancel', array(
+                                                   'ignore' => true,
+                                                   'label'  => 'Cancel'
+                                              ));
+
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

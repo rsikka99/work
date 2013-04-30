@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_DeviceInstance
+ */
 class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
 {
     /*
@@ -228,57 +231,6 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     {
         return $object->id;
     }
-
-    /**
-     * Gets all the device instances for a report
-     *
-     * @param int $reportId
-     * @param int $isLeased   Whether or not to fetch leased devices. When true it only returns leased devices
-     * @param int $isExcluded Whether or not to fetch excluded devices. When true it only returns excluded devices
-     *
-     * @return Proposalgen_Model_DeviceInstance[]
-     * @throws Exception
-     */
-    public function getDevicesForReport ($reportId, $isLeased = 0, $isExcluded = 0)
-    {
-        $masterDeviceTableName   = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
-        $deviceInstanceTableName = $this->getTableName();
-
-        $reportId = 10;
-        $devices  = array();
-        try
-        {
-            $dbTable = $this->getDbTable();
-            $select  = $dbTable->select(Zend_Db_Table::SELECT_WITH_FROM_PART);
-            $select->joinLeft(array(
-                                   'md' => $masterDeviceTableName
-                              ), "{$deviceInstanceTableName}.master_device_id = md.id", '*')
-                ->where("{$deviceInstanceTableName}.is_excluded = ?", $isExcluded)
-                ->where("{$deviceInstanceTableName}.report_id = ?", $reportId)
-                ->setIntegrityCheck(false)
-                ->limit(1000);
-            $rows = $dbTable->fetchAll($select);
-            if (!$rows)
-            {
-                throw new Exception('No devices found');
-            }
-            else
-            {
-                foreach ($rows as $row)
-                {
-                    $device     = new Proposalgen_Model_DeviceInstance($row);
-                    $devices [] = $device;
-                }
-            }
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Error fetching devices for report", 0, $e);
-        }
-
-        return $devices;
-    }
-
 
     /**
      * Counts how many device instance rows we have for the report

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Assessment_View_Helper_AssessmentMenu
+ */
 class Assessment_View_Helper_AssessmentMenu extends Zend_View_Helper_Abstract
 {
 
@@ -30,10 +33,7 @@ class Assessment_View_Helper_AssessmentMenu extends Zend_View_Helper_Abstract
                 }
 
                 // Get the url and name
-                $url  = $this->view->url(array(
-                                              'controller' => $step->controller,
-                                              'action'     => $step->action
-                                         ));
+                $url  = $this->view->url(array('controller' => $step->controller, 'action' => $step->action));
                 $name = $step->name;
 
                 if ($step->canAccess)

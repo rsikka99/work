@@ -1,12 +1,17 @@
 <?php
+/**
+ * Class Proposalgen_Form_ReplacementPrinter
+ */
 class Proposalgen_Form_ReplacementPrinter extends Zend_Form
 {
 
-    public function __construct ($options = null, $type = null)
+    /**
+     * @param null|array $options
+     */
+    public function __construct ($options = null)
     {
         // Call parent constructor
         parent::__construct($options);
-        $currencyRegex  = '/^\d+(?:\.\d{0,2})?$/';
         $elements       = array();
         $elementCounter = 0;
 
@@ -270,9 +275,8 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
         $element->getValidator('Float')->setMessage('Please enter a number.');
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
-        $elementCounter++;
 
         //add all defined elements to the form
         $this->addElements($elements);
-    } //end function __construct
+    }
 }

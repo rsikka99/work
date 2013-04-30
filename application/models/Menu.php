@@ -4,39 +4,40 @@
  * My_Model_Menu
  *
  * @author Lee Robert
- *        
+ *
  */
 class My_Model_Menu extends My_Model_Abstract
 {
-    
+
     /**
      * The id assigned by the database
      *
      * @var int
      */
     protected $_id = 0;
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::populate()
+
+    /**
+     * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
     {
-        $page = new Zend_Navigation_Page_Mvc();
         if (is_array($params))
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->id) && ! is_null($params->id))
+        if (isset($params->id) && !is_null($params->id))
+        {
             $this->setId($params->id);
+        }
     }
-    
-    /*
-     * (non-PHPdoc) @see My_Model_Abstract::toArray()
+
+    /**
+     * @return array
      */
     public function toArray ()
     {
-        return array (
-                'id' => $this->getId() 
+        return array(
+            'id' => $this->getId()
         );
     }
 

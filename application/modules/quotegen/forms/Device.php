@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_Device
+ */
 class Quotegen_Form_Device extends EasyBib_Form
 {
     /**
@@ -23,6 +26,10 @@ class Quotegen_Form_Device extends EasyBib_Form
      */
     protected $_deviceOptions;
 
+    /**
+     * @param null|int   $deviceId
+     * @param null|array $options
+     */
     public function __construct ($deviceId = null, $options = null)
     {
         $this->_deviceId = $deviceId;

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Mapper_Dealer_Toner_Attribute
+ */
 class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Abstract
 {
     /*

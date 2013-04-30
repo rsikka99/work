@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Dealermanagement_Model_Acl
+ */
 class Dealermanagement_Model_Acl
 {
     const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";

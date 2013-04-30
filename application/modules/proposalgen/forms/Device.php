@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Form_Device
+ */
 class Proposalgen_Form_Device extends Zend_Form
 {
 
@@ -167,7 +170,7 @@ class Proposalgen_Form_Device extends Zend_Form
         //add printer
         $add_printer = new Zend_Form_Element_Text('new_printer');
         $add_printer->setLabel('* Printer Model:')
-        //->setAttrib('size',30)
+            //->setAttrib('size',30)
             ->setAttrib('maxlength', 50)
             ->setAttrib('id', 'new_printer')
             ->setDescription('<a id="edit_link" href="javascript: add_printer(false);" onclick="$(\'#message_container\').html(\'\');">Edit Existing Model</a>')
@@ -911,10 +914,15 @@ class Proposalgen_Form_Device extends Zend_Form
                                  )
                             ));
         array_push($elements, $back);
-        /* Add the elements to the form */
+
         $this->addElements($elements);
     }
 
+    /**
+     * @param $data
+     *
+     * @return mixed
+     */
     public function set_validation ($data)
     {
         /**

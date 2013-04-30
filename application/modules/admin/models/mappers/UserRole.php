@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Admin_Model_Mapper_UserRole
+ */
 class Admin_Model_Mapper_UserRole extends My_Model_Mapper_Abstract
 {
     /**

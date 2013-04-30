@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Healthcheck_ViewModel_Devices
+ */
 class Healthcheck_ViewModel_Devices
 {
     /**

@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Preferences_Form_HardwareoptimizationSetting
+ */
 class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     public $allowsNull = false;

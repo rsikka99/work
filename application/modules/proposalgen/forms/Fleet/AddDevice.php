@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Form_Fleet_AddDevice
+ */
 class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
 {
 

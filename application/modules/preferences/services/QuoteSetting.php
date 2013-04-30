@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Preferences_Service_QuoteSetting
+ */
 class Preferences_Service_QuoteSetting
 {
     /**
@@ -134,13 +137,6 @@ class Preferences_Service_QuoteSetting
             else
             {
                 $validData = $form->getValues();
-            }
-        }
-        else
-        {
-            if ($this->getForm() instanceof EasyBib_Form)
-            {
-                $this->getForm()->buildBootstrapErrorDecorators();
             }
         }
 

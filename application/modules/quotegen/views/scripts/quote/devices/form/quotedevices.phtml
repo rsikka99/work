@@ -65,7 +65,7 @@ $addDeviceOptionsHtml = implode("\n", $addDeviceOptions);
             <tr class="deviceRow">
                 <th>
                     <h5><?php echo $quoteDevice->name; ?><br>
-                        <small><?php echo $quoteDevice->getSku(); ?></small>
+                        <small><?php echo $quoteDevice->oemSku; ?></small>
                     </h5>
                 </th>
                 <td style="text-align: right;"><?php echo $this->currency($quoteDevice->calculatePackageCost()); ?></td>

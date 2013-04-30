@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Model_DbTable_QuoteSetting
+ */
 class Quotegen_Model_DbTable_QuoteSetting extends Zend_Db_Table_Abstract
 {
     protected $_name = 'quote_settings';

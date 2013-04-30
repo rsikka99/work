@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Admin_Service_Client
+ */
 class Admin_Service_Client
 {
     /**
@@ -103,7 +106,7 @@ class Admin_Service_Client
                 else
                 {
                     $client->populate($data);
-                    $rowsAffected = Quotegen_Model_Mapper_Client::getInstance()->save($client);
+                    Quotegen_Model_Mapper_Client::getInstance()->save($client);
                 }
 
                 //Contact
@@ -113,7 +116,7 @@ class Admin_Service_Client
                     $contact = new Quotegen_Model_Contact($data);
                     if (!$contact->isEmpty())
                     {
-                        $contactId = Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
+                        Quotegen_Model_Mapper_Contact::getInstance()->insert($contact);
                     }
                 }
                 else
@@ -125,7 +128,7 @@ class Admin_Service_Client
                     }
                     else
                     {
-                        $rowsAffected = Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
+                        Quotegen_Model_Mapper_Contact::getInstance()->save($contact);
                     }
                 }
 
@@ -134,12 +137,12 @@ class Admin_Service_Client
                 if (!$address)
                 {
                     $address   = new Quotegen_Model_Address($data);
-                    $addressId = Quotegen_Model_Mapper_Address::getInstance()->insert($address);
+                    Quotegen_Model_Mapper_Address::getInstance()->insert($address);
                 }
                 else
                 {
                     $address->populate($data);
-                    $rowsAffected = Quotegen_Model_Mapper_Address::getInstance()->save($address);
+                    Quotegen_Model_Mapper_Address::getInstance()->save($address);
                 }
 
                 $success = true;

@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Quote_DevicesController
+ */
 class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 {
 
@@ -129,13 +132,13 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
 
         // Get the quote device (Also does validation)
         $quoteDevice    = $this->getQuoteDevice('id');
-        $optionsDeleted = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->id);
+        Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->id);
 
         // Delete grouped devices as well.
         //$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
 
 
-        $quoteDevicesDeleted = Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
+        Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
 
         // Update the quote
         $this->saveQuote();
@@ -465,7 +468,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
 
-        $device = $quoteDevice->getDevice();
         if ($this->performSyncOnQuoteDevice($quoteDevice))
         {
             // Update the quote

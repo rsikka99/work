@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_ReplacementDevice
+ */
 class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
 {
     const REPLACEMENT_BW       = 1;

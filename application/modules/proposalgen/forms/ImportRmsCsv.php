@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Proposalgen_Form_ImportRmsCsv
+ */
 class Proposalgen_Form_ImportRmsCsv extends Twitter_Bootstrap_Form_Horizontal
 {
     /**

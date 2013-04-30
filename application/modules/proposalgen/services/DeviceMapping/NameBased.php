@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Service_DeviceMapping_NameBased
+ */
 class Proposalgen_Service_DeviceMapping_NameBased extends Proposalgen_Service_DeviceMapping_Abstract
 {
     /**

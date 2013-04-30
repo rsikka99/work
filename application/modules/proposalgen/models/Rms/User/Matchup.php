@@ -1,4 +1,7 @@
 <?php
+/**
+ * Class Proposalgen_Model_Rms_User_Matchup
+ */
 class Proposalgen_Model_Rms_User_Matchup extends My_Model_Abstract
 {
     /**

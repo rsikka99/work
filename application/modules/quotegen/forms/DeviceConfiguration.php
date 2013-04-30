@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class Quotegen_Form_DeviceConfiguration
+ */
 class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
 {
 
@@ -27,19 +30,6 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
     {
         // Set the method for the display form to POST
         $this->setMethod('POST');
-        /**
-         * Add class to form for label alignment
-         *
-         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
-         * over controls (default)
-         * - Inline .form-inline Left-aligned label and inline-block controls
-         * for compact style
-         * - Search .form-search Extra-rounded text input for a typical search
-         * aesthetic
-         * - Horizontal .form-horizontal
-         *
-         * Use .form-horizontal to have same experience as with Bootstrap v1!
-         */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         if ($this->_id > 0)
