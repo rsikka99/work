@@ -39,7 +39,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      *
      * @var Proposalgen_Model_DeviceInstance[]
      */
-    protected $colorMfpReplacementDevicecs;
+    protected $colorMfpReplacementDevices;
 
 
     /**
@@ -159,8 +159,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             }
             $deviceElement->setMultiOptions($replacementDevices);
         }
-
-
     }
 
     /**
@@ -244,7 +242,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      */
     public function getColorMfpReplacementDevices ()
     {
-        if (!isset($this->colorMfpReplacementDevicecs))
+        if (!isset($this->colorMfpReplacementDevices))
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
@@ -258,9 +256,9 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 }
             }
 
-            $this->colorMfpReplacementDevicecs = $deviceArray;
+            $this->colorMfpReplacementDevices = $deviceArray;
         }
 
-        return $this->colorMfpReplacementDevicecs;
+        return $this->colorMfpReplacementDevices;
     }
 }

@@ -98,7 +98,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances, Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         // Get all devices
-        // $devices = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchDevicesInstancesForMapping($this->getProposal()->report->rmsUploadId, 'id', 'asc');
         $devices = $devicesViewModel->purchasedDeviceInstances;
 
         if ($this->_request->isPost())
