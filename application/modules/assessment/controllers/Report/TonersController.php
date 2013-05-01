@@ -96,7 +96,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($assessmentViewModel->getPurchasedDevices() as $device)
+            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $toners    = $device->getMasterDevice()->getToners();
                 $oemToners = $toners[Proposalgen_Model_PartType::OEM];

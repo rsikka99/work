@@ -117,7 +117,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
+    <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
         <?php
         $tonerConfig               = $deviceInstance->getMasterDevice()->tonerConfigId;
         $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
@@ -207,17 +207,17 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
     <?php endforeach; ?>
     <tr class="totals">
         <td class="column1">
-            <div>Totals for <?php echo $assessmentViewModel->getPurchasedDeviceCount(); ?> devices:</div>
+            <div>Totals for <?php echo $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount(); ?> devices:</div>
         </td>
         <td>
-            <div class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly); ?></div>
+            <div class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td class="column2">
             <div class="right">$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2); ?></div>
         </td>
         <td>
-            <div class="center"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Monthly); ?></div>
+            <div class="center"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td>

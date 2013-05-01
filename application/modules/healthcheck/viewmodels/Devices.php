@@ -5,33 +5,33 @@
 class Healthcheck_ViewModel_Devices
 {
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $allDeviceInstances;
 
 
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $allIncludedDeviceInstances;
 
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $excludedDeviceInstances;
 
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $leasedDeviceInstances;
 
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $purchasedDeviceInstances;
 
     /**
-     * @var Healthcheck_Model_DeviceInstancesGroup
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $unmappedDeviceInstances;
 
@@ -70,7 +70,7 @@ class Healthcheck_ViewModel_Devices
     {
         if (!$this->_devicesFetchedAndSorted)
         {
-            $this->allDeviceInstances = new Healthcheck_Model_DeviceInstancesGroup();
+            $this->allDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
 
             $deviceInstances          = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
             foreach ($deviceInstances as $device)
@@ -78,11 +78,11 @@ class Healthcheck_ViewModel_Devices
                 $this->allDeviceInstances->add($device);
             }
 
-            $this->allIncludedDeviceInstances = new Healthcheck_Model_DeviceInstancesGroup();
-            $this->excludedDeviceInstances    = new Healthcheck_Model_DeviceInstancesGroup();
-            $this->leasedDeviceInstances      = new Healthcheck_Model_DeviceInstancesGroup();
-            $this->purchasedDeviceInstances   = new Healthcheck_Model_DeviceInstancesGroup();
-            $this->unmappedDeviceInstances    = new Healthcheck_Model_DeviceInstancesGroup();
+            $this->allIncludedDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->excludedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->leasedDeviceInstances      = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->purchasedDeviceInstances   = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->unmappedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
 
             /*
              * Sort our devices into their categories

@@ -57,7 +57,7 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     </tr>
     <tr>
         <td>Average time between printer breaking down and printer being fixed</td>
-        <td class="right"><?php echo $assessmentViewModel->getAverageTimeBetweenBreakdownAndFix(); ?> day(s)</td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()); ?> day(s)</td>
     </tr>
     <tr>
         <td>Annual downtime resulting from printer breakdowns<br />(Based on an 8 hour work day)</td>
@@ -88,10 +88,10 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
     supplies and service into a single invoice - and if you need new hardware, that can be included too.</p>
 <br />
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
-<p>Out of your <strong><?php echo $assessmentViewModel->getDeviceCount(); ?></strong> networked printing devices, you have of
+<p>Out of your <strong><?php echo $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
     <strong><?php echo $assessmentViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model
-    type. We estimate that <strong><?php echo count($assessmentViewModel->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for
-    which supplies are included in your contract. The <strong><?php echo count($assessmentViewModel->getPurchasedDevices()); ?></strong> remaining machines
+    type. We estimate that <strong><?php echo count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for
+    which supplies are included in your contract. The <strong><?php echo count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines
     consist of <strong><?php echo $assessmentViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
     <strong><?php echo $assessmentViewModel->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in
     inventory, you have an estimated <strong>$<?php echo number_format($assessmentViewModel->getCashHeldInInventory()); ?> in operating cash held in printer

@@ -196,7 +196,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->_pageCounts))
         {
-//            $this->_pageCount = new Proposalgen_Model_PageCounts(array($this->getDevices()->purchasedDeviceInstances->devices, $this->getLeasedDevices()));
             $this->_pageCounts = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
         }
 
@@ -261,7 +260,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->CombinedAnnualLeasePayments))
         {
 
-            $this->CombinedAnnualLeasePayments = $this->healthcheck->getHealthcheckSettings()->monthlyLeasePayment * $this->getLeasedDeviceCount() * 12;
+            $this->CombinedAnnualLeasePayments = $this->healthcheck->getHealthcheckSettings()->monthlyLeasePayment * $this->getDevices()->leasedDeviceInstances->getCount() * 12;
         }
 
         return $this->CombinedAnnualLeasePayments;
@@ -320,10 +319,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $totalAge += $device->getAge();
             }
 
-            if ($this->getPurchasedDeviceCount())
+            if ($this->getDevices()->purchasedDeviceInstances->getCount())
             {
-                $averageAge                          = $totalAge / $this->getPurchasedDeviceCount();
-                $this->AnnualCostOfHardwarePurchases = ($this->getDeviceCount() / $averageAge) * $this->healthcheck->getHealthcheckSettings()->defaultPrinterCost;
+                $averageAge                          = $totalAge / $this->getDevices()->purchasedDeviceInstances->getCount();
+                $this->AnnualCostOfHardwarePurchases = ($this->getDevices()->allIncludedDeviceInstances->getCount() / $averageAge) * $this->healthcheck->getHealthcheckSettings()->defaultPrinterCost;
             }
             else
             {
@@ -997,7 +996,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             }
             else
             {
-                $totalPowerUsage = ($totalPowerUsage / $devicesReportingPower) * $this->getDeviceCount();
+                $totalPowerUsage = ($totalPowerUsage / $devicesReportingPower) * $this->getDevices()->allIncludedDeviceInstances->getCount();
             }
             $this->NumberOfDevicesReportingPower = $devicesReportingPower;
             $this->AveragePowerUsagePerMonth     = $totalPowerUsage;
@@ -1061,7 +1060,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             }
             if ($cumulativeAge > 0)
             {
-                $averageAge = $cumulativeAge / $this->getDeviceCount();
+                $averageAge = $cumulativeAge / $this->getDevices()->allIncludedDeviceInstances->getCount();
             }
             $this->AverageDeviceAge = $averageAge;
         }
@@ -1159,7 +1158,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->PercentageOfDevicesReportingPower))
         {
-            $this->PercentageOfDevicesReportingPower = $this->getNumberOfDevicesReportingPower() / $this->getDeviceCount();
+            $this->PercentageOfDevicesReportingPower = $this->getNumberOfDevicesReportingPower() / $this->getDevices()->allIncludedDeviceInstances->getCount();
         }
 
         return $this->PercentageOfDevicesReportingPower;
@@ -1245,7 +1244,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $this->WeeklyITHours = $this->healthcheck->getHealthcheckSettings()->hoursSpentOnIt;
             if (!$this->WeeklyITHours)
             {
-                $this->WeeklyITHours = $this->getDeviceCount() * 0.25;
+                $this->WeeklyITHours = $this->getDevices()->allIncludedDeviceInstances->getCount() * 0.25;
             }
         }
 
@@ -1315,19 +1314,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- LeasedVsPurchasedBarGraph
              */
-            $highest  = ($this->getLeasedDeviceCount() > $this->getPurchasedDeviceCount()) ? $this->getLeasedDeviceCount() : $this->getPurchasedDeviceCount();
+            $highest  = ($this->getDevices()->leasedDeviceInstances->getCount() > $this->getDevices()->purchasedDeviceInstances->getCount()) ? $this->getDevices()->leasedDeviceInstances->getCount() : $this->getDevices()->purchasedDeviceInstances->getCount();
             $barGraph = new gchart\gBarChart(225, 265);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       $this->getLeasedDeviceCount()
+                                       $this->getDevices()->leasedDeviceInstances->getCount()
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       $this->getPurchasedDeviceCount()
+                                       $this->getDevices()->purchasedDeviceInstances->getCount()
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -1423,7 +1422,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDeviceCount(), 0);
+            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -1496,7 +1495,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $devicesPerEmployee = round($employeeCount / $this->getDeviceCount(), 2);
+            $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
             $barGraph           = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Employees per|printing device");
@@ -1550,9 +1549,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- DuplexCapableDevicesGraph
              */
             $duplexPercentage = 0;
-            if ($this->getDeviceCount())
+            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notDuplexPercentage = 100 - $duplexPercentage;
@@ -1580,9 +1579,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ScanCapableDevicesGraph
              */
-            if ($this->getDeviceCount())
+            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
             else
             {
@@ -1665,7 +1664,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $this->AnnualCostOfOutSourcing = $this->healthcheck->getHealthcheckSettings()->costOfLabor;
             if ($this->AnnualCostOfOutSourcing === null)
             {
-                $this->AnnualCostOfOutSourcing = $this->getPurchasedDeviceCount() * 200;
+                $this->AnnualCostOfOutSourcing = $this->getDevices()->purchasedDeviceInstances->getCount() * 200;
             }
         }
 
@@ -1723,7 +1722,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 $totalWatts += $deviceInstance->getMasterDevice()->wattsPowerNormal;
             }
-            $this->AverageOperatingWatts = ($totalWatts > 0) ? $totalWatts / $this->getDeviceCount() : 0;
+            $this->AverageOperatingWatts = ($totalWatts > 0) ? $totalWatts / $this->getDevices()->allIncludedDeviceInstances->getCount() : 0;
         }
 
         return $this->AverageOperatingWatts;
@@ -1952,7 +1951,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $averageAge = 0;
 
         $totalAge    = 0;
-        $deviceCount = $this->getPurchasedDeviceCount();
+        $deviceCount = $this->getDevices()->purchasedDeviceInstances->getCount();
         if ($deviceCount > 0)
         {
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
@@ -1972,7 +1971,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAveragePagesPerDeviceMonthly ()
     {
-        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDeviceCount();
+        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
     }
 
     /**
@@ -2151,7 +2150,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ColorCapablePrintingDevices
              */
-            $highest  = ($this->getPurchasedDeviceCount() - $this->getNumberOfColorCapablePurchasedDevices() > $this->getNumberOfColorCapablePurchasedDevices()) ? ($this->getPurchasedDeviceCount() - $this->getNumberOfColorCapablePurchasedDevices()) : $this->getNumberOfColorCapablePurchasedDevices();
+            $highest  = ($this->getDevices()->purchasedDeviceInstances->getCount() - $this->getNumberOfColorCapablePurchasedDevices() > $this->getNumberOfColorCapablePurchasedDevices()) ? ($this->getDevices()->purchasedDeviceInstances->getCount() - $this->getNumberOfColorCapablePurchasedDevices()) : $this->getNumberOfColorCapablePurchasedDevices();
             $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color-Capable Printing Devices");
             $barGraph->setVisibleAxes(array(
@@ -2164,7 +2163,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       $this->getPurchasedDeviceCount() - $this->getNumberOfColorCapablePurchasedDevices()
+                                       $this->getDevices()->purchasedDeviceInstances->getCount() - $this->getNumberOfColorCapablePurchasedDevices()
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -2225,9 +2224,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- colorCapablePieChart
              */
             $colorPercentage = 0;
-            if ($this->getDeviceCount())
+            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $colorPercentage = round((($this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notColorPercentage = 100 - $colorPercentage;
@@ -2468,9 +2467,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- DuplexCapableDevicesGraph
              */
             $duplexPercentage = 0;
-            if ($this->getDeviceCount())
+            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notDuplexPercentage = 100 - $duplexPercentage;
@@ -2498,7 +2497,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDeviceCount(), 0);
+            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
             $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -2571,7 +2570,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- EmployeesPerDeviceBarGraph
              */
-            $devicesPerEmployee = round($employeeCount / $this->getDeviceCount(), 2);
+            $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
             $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
             $barGraph           = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Employees per|printing device");
@@ -2606,9 +2605,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CopyCapableDevicesGraph
              */
-            if ($this->getDeviceCount())
+            if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $copyPercentage = round((($this->getNumberOfCopyCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $copyPercentage = round((($this->getNumberOfCopyCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
             else
             {

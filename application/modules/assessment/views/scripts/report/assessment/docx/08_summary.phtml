@@ -68,11 +68,11 @@ $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $t
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('Predicted annual monochrome pages'), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Yearly), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('Predicted annual color pages'), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Yearly), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText($this->translate('Cost of monochrome pages'), null, 'nospacing');

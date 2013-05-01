@@ -57,9 +57,9 @@ $totalDevices = $optimizationDevices->getDeviceCount();
     </tr>
     <tr>
         <td><strong>Monthly Monochrome Page Count:</strong></td>
-        <td><?php echo number_format($optimization->getPageCounts()->Purchased->BlackAndWhite->Monthly);?></td>
+        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly());?></td>
         <td><strong>Monthly Color Page Count:</strong></td>
-        <td><?php echo number_format($optimization->getPageCounts()->Purchased->Color->Monthly);?></td>
+        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly());?></td>
     </tr>
 </table>
 <br />
@@ -78,9 +78,9 @@ $totalDevices = $optimizationDevices->getDeviceCount();
     </tr>
     <tr>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td><?php echo ($optimization->getPageCounts()->Purchased->Color->Monthly > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
+        <td><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td style='width:250px;'><?php echo ($optimization->getPageCounts()->Purchased->Color->Monthly > 0) ?$this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
+        <td style='width:250px;'><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0) ?$this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
     </tr>
     <tr>
         <td style='width:150px;'><strong>Total Cost:</strong></td>

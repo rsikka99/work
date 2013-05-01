@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Healthcheck_Model_DeviceInstancesGroup
+ * Class Proposalgen_Model_DeviceInstancesGroup
  */
-class Healthcheck_Model_DeviceInstancesGroup
+class Proposalgen_Model_DeviceInstancesGroup
 {
     /**
      * @var Proposalgen_Model_DeviceInstance []

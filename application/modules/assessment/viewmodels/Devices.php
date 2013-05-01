@@ -5,35 +5,35 @@
 class Assessment_ViewModel_Devices
 {
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $allDeviceInstances = array();
+    public $allDeviceInstances;
 
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $allIncludedDeviceInstances = array();
+    public $allIncludedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $excludedDeviceInstances = array();
+    public $excludedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $leasedDeviceInstances = array();
+    public $leasedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $purchasedDeviceInstances = array();
+    public $purchasedDeviceInstances;
 
     /**
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    public $unmappedDeviceInstances = array();
+    public $unmappedDeviceInstances;
 
     /**
      * @var Assessment_Model_Assessment
@@ -69,20 +69,31 @@ class Assessment_ViewModel_Devices
     {
         if (!$this->_devicesFetchedAndSorted)
         {
+            $this->allDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
 
-            $this->allDeviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
+            $deviceInstances          = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
+            foreach ($deviceInstances as $device)
+            {
+                $this->allDeviceInstances->add($device);
+            }
+
+            $this->allIncludedDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->excludedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->leasedDeviceInstances      = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->purchasedDeviceInstances   = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->unmappedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
 
             /*
              * Sort our devices into their categories
              */
-            foreach ($this->allDeviceInstances as $deviceInstance)
+            foreach ($this->allDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 /*
                  * Sort excluded devices
                  */
                 if ($deviceInstance->isExcluded)
                 {
-                    $this->excludedDeviceInstances[] = $deviceInstance;
+                    $this->excludedDeviceInstances->add($deviceInstance);
                 }
                 else
                 {
@@ -92,17 +103,17 @@ class Assessment_ViewModel_Devices
                     $masterDevice = $deviceInstance->getMasterDevice();
                     if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                     {
-                        $this->allIncludedDeviceInstances[] = $deviceInstance;
+                        $this->allIncludedDeviceInstances->add($deviceInstance);
                         /*
                          * Sort leased and purchased devices
                          */
                         if ($masterDevice->isLeased)
                         {
-                            $this->leasedDeviceInstances[] = $deviceInstance;
+                            $this->leasedDeviceInstances->add($deviceInstance);
                         }
                         else
                         {
-                            $this->purchasedDeviceInstances[] = $deviceInstance;
+                            $this->purchasedDeviceInstances->add($deviceInstance);
                         }
 
                         // Might as well process the overrides now too
@@ -110,10 +121,9 @@ class Assessment_ViewModel_Devices
                     }
                     else
                     {
-                        $this->unmappedDeviceInstances[] = $deviceInstance;
+                        $this->unmappedDeviceInstances->add($deviceInstance);
                     }
                 }
-
             }
 
             $this->_devicesFetchedAndSorted = true;

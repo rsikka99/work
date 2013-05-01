@@ -27,7 +27,7 @@ $this->companyName = "MPSToolbox.com";
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
+    <?php foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) : /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ ?>
         <tr>
             <td class="column1">
                 <div><?php echo $deviceInstance->getMasterDevice()->getManufacturer()->displayname; ?></div>

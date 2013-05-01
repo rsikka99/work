@@ -52,7 +52,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             </thead>
             <tbody>
             <?php
-            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances as $device) :
+            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) :
                 $toners    = $device->getMasterDevice()->getToners();
                 $oemToners = $toners[Proposalgen_Model_PartType::OEM];?>
 
@@ -166,7 +166,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($assessmentViewModel->getDevices()->excludedDeviceInstances as $device):
+            <?php foreach ($assessmentViewModel->getDevices()->excludedDeviceInstances->getDeviceInstances() as $device):
                 /* @var $device Proposalgen_Model_DeviceInstance */
                 ?>
                 <?php $SerialNumber = (strlen($device->serialNumber) === "") ? 'Unknown Serial' : $device->serialNumber; ?>

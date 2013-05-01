@@ -135,7 +135,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         {
             $fieldList_Values = "";
             /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($assessmentViewModel->getPurchasedDevices() as $device)
+            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $tonerConfig               = $device->getMasterDevice()->tonerConfigId;
                 $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
@@ -194,13 +194,14 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             }
 
             $fieldTotals    = array();
-            $fieldTotals [] = 'Totals for ' . $assessmentViewModel->getDeviceCount() . ' devices:';
-            $fieldTotals [] = number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Monthly, 0, '.', '');
+            $fieldTotals [] = 'Totals for ' . $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount() . ' devices:';
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
-            $fieldTotals [] = number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Monthly, 0, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly(), 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';

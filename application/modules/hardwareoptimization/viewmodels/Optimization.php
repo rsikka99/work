@@ -6,10 +6,6 @@ class Hardwareoptimization_ViewModel_Optimization
 {
     /** @var Hardwareoptimization_Model_Hardware_Optimization */
     protected $_optimization;
-    /** @var Hardwareoptimization_ViewModel_Devices */
-    protected $_purchaseDevices;
-    /** @var Hardwareoptimization_ViewModel_Devices */
-    protected $_leasedDevices;
     /** @var float */
     protected $_cashHeldInInventory;
     /** @var Proposalgen_Model_MasterDevice [] */
@@ -28,6 +24,8 @@ class Hardwareoptimization_ViewModel_Optimization
     protected $_numberOfUniquePurchasedToners;
     /** @var int */
     protected $_maximumMonthlyPrintVolume;
+    /** @var  Proposalgen_Model_PageCounts */
+    protected $_pageCounts;
     /**
      * The weighted average monthly cost per page when using replacements
      *
@@ -86,32 +84,6 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getPurchasedDevices ()
-    {
-        if (!isset($this->_purchaseDevices))
-        {
-            $this->_purchaseDevices = $this->getDevices()->purchasedDeviceInstances;
-        }
-
-        return $this->_purchaseDevices;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getLeasedDevices ()
-    {
-        if (!isset($this->_leasedDevices))
-        {
-            $this->_leasedDevices = $this->getDevices()->leasedDeviceInstances;
-        }
-
-        return $this->_leasedDevices;
-    }
-
-    /**
      * Gets the cost per page settings for the dealers point of view
      *
      * @return Proposalgen_Model_CostPerPageSetting
@@ -150,62 +122,18 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
-     * Gets fleet page counts
+     * Gets the page counts
      *
-     * @return stdClass
+     * @return Proposalgen_Model_PageCounts
      */
     public function getPageCounts ()
     {
-        if (!isset($this->PageCounts))
+        if (!isset($this->_pageCounts))
         {
-            $pageCounts = new stdClass();
-            // Purchased Pages
-            $pageCounts->Purchased                         = new stdClass();
-            $pageCounts->Purchased->BlackAndWhite          = new stdClass();
-            $pageCounts->Purchased->BlackAndWhite->Monthly = 0;
-            $pageCounts->Purchased->Color                  = new stdClass();
-            $pageCounts->Purchased->Color->Monthly         = 0;
-            $pageCounts->Purchased->Combined               = new stdClass();
-            foreach ($this->getPurchasedDevices() as $device)
-            {
-                $pageCounts->Purchased->BlackAndWhite->Monthly += $device->getPageCounts()->monochrome->getMonthly();
-                $pageCounts->Purchased->Color->Monthly += $device->getPageCounts()->color->getMonthly();
-            }
-            $pageCounts->Purchased->BlackAndWhite->Yearly = $pageCounts->Purchased->BlackAndWhite->Monthly * 12;
-            $pageCounts->Purchased->Color->Yearly         = $pageCounts->Purchased->Color->Monthly * 12;
-            $pageCounts->Purchased->Combined->Monthly     = $pageCounts->Purchased->BlackAndWhite->Monthly + $pageCounts->Purchased->Color->Monthly;
-            $pageCounts->Purchased->Combined->Yearly      = $pageCounts->Purchased->BlackAndWhite->Yearly + $pageCounts->Purchased->Color->Yearly;
-            // Leased Pages
-            $pageCounts->Leased                         = new stdClass();
-            $pageCounts->Leased->BlackAndWhite          = new stdClass();
-            $pageCounts->Leased->BlackAndWhite->Monthly = 0;
-            $pageCounts->Leased->Color                  = new stdClass();
-            $pageCounts->Leased->Color->Monthly         = 0;
-            $pageCounts->Leased->Combined               = new stdClass();
-            foreach ($this->getLeasedDevices() as $device)
-            {
-                $pageCounts->Leased->BlackAndWhite->Monthly += $device->getPageCounts()->monochrome->getMonthly();
-                $pageCounts->Leased->Color->Monthly += $device->getPageCounts()->color->getMonthly();
-            }
-            $pageCounts->Leased->BlackAndWhite->Yearly = $pageCounts->Leased->BlackAndWhite->Monthly * 12;
-            $pageCounts->Leased->Color->Yearly         = $pageCounts->Leased->Color->Monthly * 12;
-            $pageCounts->Leased->Combined->Monthly     = $pageCounts->Leased->BlackAndWhite->Monthly + $pageCounts->Leased->Color->Monthly;
-            $pageCounts->Leased->Combined->Yearly      = $pageCounts->Leased->BlackAndWhite->Yearly + $pageCounts->Leased->Color->Yearly;
-            // Total Pages
-            $pageCounts->Total                         = new stdClass();
-            $pageCounts->Total->BlackAndWhite          = new stdClass();
-            $pageCounts->Total->BlackAndWhite->Monthly = $pageCounts->Purchased->BlackAndWhite->Monthly + $pageCounts->Leased->BlackAndWhite->Monthly;
-            $pageCounts->Total->BlackAndWhite->Yearly  = $pageCounts->Purchased->BlackAndWhite->Yearly + $pageCounts->Leased->BlackAndWhite->Yearly;
-            $pageCounts->Total->Color                  = new stdClass();
-            $pageCounts->Total->Color->Monthly         = $pageCounts->Purchased->Color->Monthly + $pageCounts->Leased->Color->Monthly;
-            $pageCounts->Total->Color->Yearly          = $pageCounts->Purchased->Color->Yearly + $pageCounts->Leased->Color->Yearly;
-            $pageCounts->Total->Combined               = new stdClass();
-            $pageCounts->Total->Combined->Monthly      = $pageCounts->Purchased->Combined->Monthly + $pageCounts->Leased->Combined->Monthly;
-            $pageCounts->Total->Combined->Yearly       = $pageCounts->Purchased->Combined->Yearly + $pageCounts->Leased->Combined->Yearly;
-            $this->PageCounts                          = $pageCounts;
+            $this->_pageCounts = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
         }
 
-        return $this->PageCounts;
+        return $this->_pageCounts;
     }
 
     /**
@@ -225,19 +153,19 @@ class Hardwareoptimization_ViewModel_Optimization
             $Percentages->PurchasedVsLeasedColor                    = new stdClass();
             $Percentages->PurchasedVsLeasedColor->Leased            = 0;
             $Percentages->PurchasedVsLeasedColor->Purchased         = 0;
-            if ($this->getPageCounts()->Total->Combined->Monthly)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
             {
-                $Percentages->TotalColorPercentage = $this->getPageCounts()->Total->Color->Monthly / $this->getPageCounts()->Total->Combined->Monthly;
+                $Percentages->TotalColorPercentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
             }
-            if ($this->getPageCounts()->Total->BlackAndWhite->Yearly)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly())
             {
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getPageCounts()->Leased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getPageCounts()->Purchased->BlackAndWhite->Yearly / $this->getPageCounts()->Total->BlackAndWhite->Yearly;
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly();
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly();
             }
-            if ($this->getPageCounts()->Total->Color->Yearly)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly())
             {
-                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getPageCounts()->Leased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
-                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getPageCounts()->Purchased->Color->Yearly / $this->getPageCounts()->Total->Color->Yearly;
+                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly();
+                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly();
             }
             $this->Percentages = $Percentages;
         }
@@ -252,7 +180,7 @@ class Hardwareoptimization_ViewModel_Optimization
     {
         if (!isset($this->ExcludedDevices))
         {
-            $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances, $this->getDevices()->excludedDeviceInstances);
+            $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances->getDeviceInstances(), $this->getDevices()->excludedDeviceInstances->getDeviceInstances());
         }
 
         return $this->ExcludedDevices;
@@ -267,7 +195,7 @@ class Hardwareoptimization_ViewModel_Optimization
     {
         if (!isset($this->highCostPurchasedDevices))
         {
-            $deviceArray = $this->getPurchasedDevices();
+            $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             $costArray   = array();
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
@@ -341,7 +269,7 @@ class Hardwareoptimization_ViewModel_Optimization
         if (!isset($this->_uniqueDeviceList))
         {
             $masterDevices = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 if (!in_array($deviceInstance->getMasterDevice(), $masterDevices))
                 {
@@ -362,7 +290,7 @@ class Hardwareoptimization_ViewModel_Optimization
         if (!isset($this->_numberOfColorCapableDevices))
         {
             $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
@@ -384,7 +312,7 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $numberOfModels   = 0;
             $uniqueModelArray = array();
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
                 {
@@ -444,7 +372,7 @@ class Hardwareoptimization_ViewModel_Optimization
         if (!isset($this->_uniquePurchasedDeviceList))
         {
             $masterDevices = array();
-            foreach ($this->getPurchasedDevices() as $device)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 if (!in_array($device->getMasterDevice(), $masterDevices))
                 {
@@ -485,7 +413,7 @@ class Hardwareoptimization_ViewModel_Optimization
         if (!isset($this->_maximumMonthlyPrintVolume))
         {
             $maxVolume = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
             }
@@ -503,7 +431,7 @@ class Hardwareoptimization_ViewModel_Optimization
     public function getNumberOfColorCapableDevicesWithReplacements ()
     {
         $numberOfDevices = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
+        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
         {
             $replacementDevice = $device->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id);
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
@@ -535,7 +463,7 @@ class Hardwareoptimization_ViewModel_Optimization
 
             $costPerPageSetting = $this->getCostPerPageSettingForDealer();
 
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $this->_dealerMonthlyCost += $deviceInstance->calculateMonthlyCost($costPerPageSetting);
             }
@@ -555,7 +483,7 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_dealerMonthlyRevenueUsingTargetCostPerPage = 0;
 
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->monochrome->getMonthly() * $this->_optimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
                 $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->color->getMonthly() * $this->_optimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
@@ -571,7 +499,7 @@ class Hardwareoptimization_ViewModel_Optimization
     public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
     {
         $maxVolume = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
+        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
             if ($deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id))
             {
@@ -598,12 +526,12 @@ class Hardwareoptimization_ViewModel_Optimization
             $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
-            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
+            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
             $colorCpp                      = 0;
             $monoCpp                       = 0;
 
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
                 $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
@@ -642,12 +570,12 @@ class Hardwareoptimization_ViewModel_Optimization
             $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements = new Proposalgen_Model_CostPerPage();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted  = $this->getPageCounts()->Purchased->BlackAndWhite->Monthly;
-            $totalMonthlyColorPagesPrinted = $this->getPageCounts()->Purchased->Color->Monthly;
+            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
             $colorCpp                      = 0;
             $monoCpp                       = 0;
 
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage = $deviceInstance->calculateCostPerPageWithReplacement($costPerPageSetting);
                 $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
@@ -687,7 +615,7 @@ class Hardwareoptimization_ViewModel_Optimization
 
             $costPerPageSetting = $this->getCostPerPageSettingForDealer();
 
-            foreach ($this->getPurchasedDevices() as $deviceInstance)
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id));
             }

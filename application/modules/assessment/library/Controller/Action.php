@@ -178,7 +178,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             {
                 $this->_assessmentViewModel = new Assessment_ViewModel_Assessment($this->getAssessment());
 
-                if ($this->_assessmentViewModel->getDeviceCount() < 1)
+                if ($this->_assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount() < 1)
                 {
                     $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
                     $hasError                     = true;

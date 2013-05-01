@@ -95,7 +95,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
-        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances, Zend_Auth::getInstance()->getIdentity()->dealerId, $this->_hardwareOptimization->id);
+        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances->getDeviceInstances(), Zend_Auth::getInstance()->getIdentity()->dealerId, $this->_hardwareOptimization->id);
 
         // Get all devices
         $devices = $devicesViewModel->purchasedDeviceInstances;
@@ -239,7 +239,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             /*
              * Loop through our devices
              */
-            foreach ($optimization->getPurchasedDevices() as $deviceInstance)
+            foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $masterDeviceId = $form->getValue("deviceInstance_{$deviceInstance->id}");
 
@@ -371,7 +371,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
             $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
 
-            foreach ($optimization->getPurchasedDevices() as $deviceInstance)
+            foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $suggestedDevice = null;
 

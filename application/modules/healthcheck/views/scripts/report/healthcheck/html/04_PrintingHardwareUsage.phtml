@@ -14,7 +14,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 </table>
 <br />
 <div class="pheader">Print Volume and Number of Printing Devices</div>
-<p>You currently have <strong><?php echo $healthcheckViewModel->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
+<p>You currently have <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
 </strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()); ?></strong> pages.
 Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
@@ -30,7 +30,7 @@ Ideally, you should have the minimum amount of printing hardware required to mee
 <table cellspacing="0" class="genericTable">
     <tr>
         <td width="400px">Number of networked printing devices</td>
-        <td width="400px" style="text-align:right"><?php echo $healthcheckViewModel->getDeviceCount() ?></td>
+        <td width="400px" style="text-align:right"><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() ?></td>
     </tr>
     <tr>
         <td width="400px">Average number of total printed pages per month</td>

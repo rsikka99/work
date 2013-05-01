@@ -43,11 +43,11 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Predicted annual monochrome pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Predicted annual color pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Cost of monochrome pages</td>

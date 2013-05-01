@@ -8,7 +8,7 @@ $section = $this->section;
 $profitabiltyDevices = $this->profitabilityDevices;
 
 $deviceCount           = count($profitabiltyDevices->flagged);
-$totalPurchasedDevices = count($optimization->getPurchasedDevices());
+$totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 ;
 $section->addTitle(sprintf($this->translate('Flagged Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
 $section->addText($this->translate('The following devices have been targeted for replacements: '));

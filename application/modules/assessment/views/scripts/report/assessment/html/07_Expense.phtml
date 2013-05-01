@@ -51,15 +51,15 @@ $assessmentViewModel = $this->assessmentViewModel;
 <table cellspacing="0" style="font-size: 10.5pt">
     <tr>
         <td style="width: 565px;">Number of printing devices assumed to be on a lease</td>
-        <td style="width: 80px;" class="right"><?php echo count($assessmentViewModel->getLeasedDevices()); ?></td>
+        <td style="width: 80px;" class="right"><?php echo count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></td>
     </tr>
     <tr>
         <td>Predicted average annual monochrome prints on leased machines</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Leased->BlackAndWhite->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
     </tr>
     <tr>
         <td></td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Leased->Color->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Estimated annual total lease payments<br /><em>Based on
@@ -94,7 +94,7 @@ $assessmentViewModel = $this->assessmentViewModel;
 </table>
 <br />
 <div class="pheader">Cost of Hardware Suitable for Transfer to a Managed Print Solution</div>
-<p>Your <strong><?php echo count($assessmentViewModel->getPurchasedDevices()); ?></strong> print devices that are assumed to not be attached to leases may be
+<p>Your <strong><?php echo count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> print devices that are assumed to not be attached to leases may be
     suitable for transfer to a managed print program. Currently, you are paying for supplies and service separately for these devices and your internal IT staff
     spends time servicing them when they break down.</p>
 <p>The costs below are based on data collected using remote monitoring software and your questionnaire responses. It also assumes a monochrome page coverage of
@@ -153,11 +153,11 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Predicted average annual monochrome prints</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->BlackAndWhite->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Predicted average annual color prints</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getPageCounts()->Purchased->Color->Yearly); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
     </tr>
     <tr>
         <td class="bold">Estimated all-in cost for a monochrome page</td>

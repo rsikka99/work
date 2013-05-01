@@ -71,7 +71,7 @@ $formActions [] = $form->getElement('Analyze');
         $jsonRows           = array();
         $deviceCount        = 0;
         /* @var $device Proposalgen_Model_DeviceInstance */
-        foreach ($optimization->getPurchasedDevices() as $device) :
+        foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) :
             $deviceCount++;
             $replacementDeviceElement = $form->getElement("deviceInstance_{$device->id}");
 

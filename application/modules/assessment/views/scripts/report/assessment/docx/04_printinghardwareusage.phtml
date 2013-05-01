@@ -22,7 +22,7 @@ $gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($assessmentViewModel->getDeviceCount()), number_format($assessmentViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($assessmentViewModel->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($assessmentViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
@@ -81,7 +81,7 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Color Usage'), 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($assessmentViewModel->getNumberOfColorCapableDevices()), number_format($assessmentViewModel->getPageCounts()->Total->Color->Monthly), number_format(($assessmentViewModel->getPercentages()->TotalColorPercentage * 100), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($assessmentViewModel->getNumberOfColorCapableDevices()), number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()), number_format(($assessmentViewModel->getPercentages()->TotalColorPercentage * 100), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

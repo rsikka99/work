@@ -149,7 +149,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
             {
                 $this->_healthcheckViewModel = new Healthcheck_ViewModel_Healthcheck($this->getHealthcheck());
 
-                if ($this->_healthcheckViewModel->getDeviceCount() < 1)
+                if ($this->_healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() < 1)
                 {
                     $this->view->ErrorMessages [] = "All uploaded printers were excluded from your report. Reports can not be generated until at least 1 printer is added.";
                     $hasError                     = true;

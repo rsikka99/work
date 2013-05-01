@@ -23,7 +23,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
     {
         if (!isset($this->_graphs))
         {
-            $purchaseDeviceCount = count($this->_optimization->getPurchasedDevices());
+            $purchaseDeviceCount = count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
             // N = number, p = percent, 0 = number of decimal places.
             // p will take 0.1544 as a number and convert it to 15%
@@ -33,7 +33,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->getDeviceCount(), 0);
+            $averagePageCount = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->_optimization->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -70,7 +70,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_hardwareOptimization->getClient()->employeeCount);
+            $pagesPerEmployee = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->_hardwareOptimization->getClient()->employeeCount);
             $highest          = (self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
@@ -106,14 +106,13 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $pageCounts = $this->_optimization->getPageCounts();
-            $highest    = ($pageCounts->Leased->Combined->Monthly > $pageCounts->Purchased->Combined->Monthly) ? $pageCounts->Leased->Combined->Monthly : $pageCounts->Purchased->Combined->Monthly;
+            $highest    = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
             $barGraph   = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
             $barGraph->setVisibleAxes(array('y'));
-            $barGraph->addDataSet(array(round($pageCounts->Leased->Combined->Monthly)));
+            $barGraph->addDataSet(array(round($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
             $barGraph->addColors(array("E21736"));
-            $barGraph->addDataSet(array(round($pageCounts->Purchased->Combined->Monthly)));
+            $barGraph->addDataSet(array(round($this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(40, 10);
@@ -179,7 +178,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- Hardware Utilization and Capacity Percent version
              */
-            $percentage = ($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_optimization->getMaximumMonthlyPrintVolume());
+            $percentage = ($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->_optimization->getMaximumMonthlyPrintVolume());
             $highest    = 100;
             $barGraph   = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
@@ -207,7 +206,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
 
             $dotProperties = '@d,E21736,0,.5:' . number_format($percentage, 2) . ',30|';
             $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,E21736,0,1:' . number_format($percentage - .03, 2) . ',10|';
-            $percentage = ($this->_optimization->getPageCounts()->Total->Combined->Monthly / $this->_optimization->calculateMaximumMonthlyPrintVolumeWithReplacements());
+            $percentage = ($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->_optimization->calculateMaximumMonthlyPrintVolumeWithReplacements());
             $dotProperties .= '@d,000000,0,.5:' . number_format($percentage, 2) . ',20|';
             $dotProperties .= '@t' . number_format($percentage * 100, 2) . '%,000000,0,-2.5:' . number_format($percentage - .03, 2) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
@@ -224,8 +223,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $employeeCount            = $this->_hardwareOptimization->getClient()->employeeCount;
             $averageEmployeePerDevice = 4.4;
 
-            $devicesPerEmployee          = round($employeeCount / ($this->getDeviceCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
-            $devicesPerEmployeeOptimized = round($employeeCount / ($this->getDeviceCount() + count($this->leased) + count($this->excluded)), 1);
+            $devicesPerEmployee          = round($employeeCount / ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
+            $devicesPerEmployeeOptimized = round($employeeCount / ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount() + count($this->leased) + count($this->excluded)), 1);
             $highest                     = ($devicesPerEmployee > $averageEmployeePerDevice) ? $devicesPerEmployee : $averageEmployeePerDevice;
             $barGraph                    = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Employees per device");
@@ -258,7 +257,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
 
             $jitCompatible          = $this->jitCompatibleCount;
-            $nonJitCompatible       = count($this->_optimization->getPurchasedDevices()) - $this->jitCompatibleCount;
+            $nonJitCompatible       = count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()) - $this->jitCompatibleCount;
             $optimizedJitCompatible = $this->jitCompatibleCount + $this->replacementJitCompatibleCount;
             $highest                = ($jitCompatible > $nonJitCompatible) ? $jitCompatible : $nonJitCompatible;
             $highest                = ($highest > $optimizedJitCompatible) ? $highest : $optimizedJitCompatible;
@@ -291,18 +290,18 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- LeasedVsPurchasedBarGraph
              */
-            $highest = (count($this->_optimization->getLeasedDevices()) > count($this->_optimization->getPurchasedDevices())) ? count($this->_optimization->getLeasedDevices()) : count($this->_optimization->getPurchasedDevices());
+            $highest = (count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()) > count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())) ? count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()) : count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
             $barGraph = new gchart\gBarChart(200, 300);
             $barGraph->setTitle('Leased / purchased devices ');
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
-            $barGraph->addDataSet(array(count($this->_optimization->getLeasedDevices())));
+            $barGraph->addDataSet(array(count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances())));
             $barGraph->addColors(array("E21736"));
-            $barGraph->addDataSet(array(count($this->_optimization->getPurchasedDevices())));
+            $barGraph->addDataSet(array(count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())));
             $barGraph->addColors(array("0194D2"));
-            $barGraph->addDataSet(array(count($this->_optimization->getPurchasedDevices()) - count($this->retired)));
+            $barGraph->addDataSet(array(count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()) - count($this->retired)));
             $barGraph->addColors(array("EF6B18"));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -445,8 +444,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
             // Graph12
 
-            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->_optimization->getPurchasedDevices()));
-            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->_optimization->getPurchasedDevices()));
+            $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()));
+            $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()));
             $diamond           = count($uniqueSupplyTypes) / $highest;
 
             $targetUniqueness = $highest * 0.15;
@@ -528,9 +527,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Color Capable Devices Graph
              */
             $colorPercentage = 0;
-            if ($this->getDeviceCount())
+            if ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevices() / $this->getDeviceCount()) * 100), 2);
+                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevices() / $this->_optimization->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notColorPercentage = 100 - $colorPercentage;
@@ -558,9 +557,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              * -- Color Capable Devices Graph With Replacements
              */
             $colorPercentage = 0;
-            if ($this->getDeviceCount())
+            if ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevicesWithReplacements() / $this->getDeviceCount()) * 100), 2);
+                $colorPercentage = round((($this->_optimization->getNumberOfColorCapableDevicesWithReplacements() / $this->_optimization->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notColorPercentage = 100 - $colorPercentage;

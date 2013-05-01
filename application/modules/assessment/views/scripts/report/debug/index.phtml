@@ -77,7 +77,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
     $totalColorPages = 0;
     $totalMonthlyInkAndToner = 0;
     ?>
-    <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances as $deviceInstance) : ?>
+    <?php foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
         <?php
         $totalBlackPages += $deviceInstance->getPageCounts()->monochrome->getMonthly();
         $totalColorPages += $deviceInstance->getPageCounts()->color->getMonthly();

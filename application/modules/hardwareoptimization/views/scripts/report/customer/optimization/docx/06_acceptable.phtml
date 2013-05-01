@@ -7,7 +7,7 @@ $section = $this->section;
 $profitabiltyDevices = $this->profitabilityDevices;
 
 $deviceCount           = count($profitabiltyDevices->kept);
-$totalPurchasedDevices = count($optimization->getPurchasedDevices());
+$totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 $section->addTitle($this->translate("Acceptable Devices ({$deviceCount} of {$totalPurchasedDevices}) "), 2);
 $section->addText($this->translate('The following devices have been deemed productive and we suggest keeping these devices.'));
 
@@ -52,7 +52,7 @@ foreach ($profitabiltyDevices->kept as $device)
 
 $section->addTextBreak();
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2);
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format(count($optimization->getPurchasedDevices())), number_format($optimization->getNumberOfUniqueModels()), number_format(count($optimization->getLeasedDevices())), number_format(count($optimization->getPurchasedDevices())), number_format($optimization->getNumberOfUniquePurchasedModels()), number_format($optimization->getNumberOfUniquePurchasedToners()), number_format($optimization->getCashHeldInInventory())));
+$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.'), number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($optimization->getNumberOfUniqueModels()), number_format(count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances())), number_format(count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($optimization->getNumberOfUniquePurchasedModels()), number_format($optimization->getNumberOfUniquePurchasedToners()), number_format($optimization->getCashHeldInInventory())));
 $section->addTextBreak();
 
 $section->addImage($this->graphs [12], array('align' => 'center'));
@@ -63,7 +63,7 @@ $section->addText($this->translate('By using printing devices with the same supp
 Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
 
 $section->addTitle($this->translate('Color Usage'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($optimization->getNumberOfColorCapableDevices()), number_format($optimization->getPageCounts()->Total->Color->Monthly), number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($optimization->getNumberOfColorCapableDevices()), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()), number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2)));
 
 $section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
 company\'s professional image, improve comprehension and increase readership. Office Depot can help you track your color printing and provide low-cost color hardware options.'));

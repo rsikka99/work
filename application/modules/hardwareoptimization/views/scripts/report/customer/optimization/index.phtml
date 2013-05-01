@@ -14,7 +14,7 @@ $optimization = $this->optimization;
 
 $customerOptimization = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
 $graphs = $customerOptimization->getGraphs();
-$totalPurchasedDevices = count($optimization->getPurchasedDevices());
+$totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 ?>
 
 <div class="container" id="htmlReportContainer">
@@ -126,8 +126,8 @@ $totalPurchasedDevices = count($optimization->getPurchasedDevices());
 <div class="pheader">
     Print Volume and Number of Printing Devices
 </div>
-<p>You currently have <strong><?php echo $optimization->getDeviceCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($optimization->getPageCounts()->Total->Combined->Monthly / $optimization->getDeviceCount())); ?>
-    </strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($optimization->getPageCounts()->Total->Combined->Monthly); ?></strong> pages.
+<p>You currently have <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print an average of <strong><?php echo number_format(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())); ?>
+    </strong> pages each per month, for an average total monthly print volume of <strong><?php echo number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()); ?></strong> pages.
     Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <table class='center'>
     <tr>
@@ -262,7 +262,7 @@ $totalPurchasedDevices = count($optimization->getPurchasedDevices());
 <div class="pheader">
     Number of Printing Device Models and Supply Types
 </div>
-<p>Out of your <strong><?php echo $optimization->getDeviceCount(); ?></strong> networked printing devices, you have of <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($optimization->getLeasedDevices()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php  echo number_format($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
+<p>Out of your <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo $totalPurchasedDevices; ?></strong> remaining machines consist of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php  echo number_format($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies inventory</strong> at any given time.</p>
 <table class='center'>
     <tr>
         <td><img src="<?php echo $graphs[12]; ?>" /></td>
@@ -277,7 +277,7 @@ $totalPurchasedDevices = count($optimization->getPurchasedDevices());
 <div class="pheader">
     Color Usage
 </div>
-<p>You currently have <strong><?php echo $optimization->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($optimization->getPageCounts()->Total->Color->Monthly); ?></strong> color pages per month, which is <strong><?php echo number_format(($optimization->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
+<p>You currently have <strong><?php echo $optimization->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of <strong><?php echo number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()); ?></strong> color pages per month, which is <strong><?php echo number_format(($optimization->getPercentages()->TotalColorPercentage * 100),2); ?>%</strong> of your total monthly print volume.</p>
 <table class='center'>
     <tr>
         <td><img src="<?php echo $graphs[14]; ?>" /></td>

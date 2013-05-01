@@ -58,7 +58,7 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
         }
 
 
-        $filename = "dealerHardwareOptimization.$format";
+        $filename = "CustomerHardwareOptimization.$format";
 
         $this->initReportVariables($filename);
         // Render early

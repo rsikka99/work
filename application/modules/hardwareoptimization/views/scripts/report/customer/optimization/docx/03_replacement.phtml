@@ -10,7 +10,7 @@ $section->addPageBreak();
 /* @var $profitabilityDevices Hardwareoptimization_Model_Optimization_Customer */
 $profitabilityDevices  = $this->profitabilityDevices;
 $deviceCount           = count($profitabilityDevices->replaced);
-$totalPurchasedDevices = count($optimization->getPurchasedDevices());
+$totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
 $section->addTitle(sprintf($this->translate('Suggested Replacement Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
 $section->addText($this->translate('The following devices have been targeted for replacements: '));
@@ -68,7 +68,7 @@ $section->addTextBreak();
 $section->addTitle($this->translate('Hardware Utilization and Capacity'), 2);
 $section->addImage($this->graphs[4], $this->styles->images->center);
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($optimization->getDeviceCount()), number_format(($optimization->getPageCounts()->Total->Combined->Monthly / $optimization->getDeviceCount())), number_format($optimization->getPageCounts()->Total->Combined->Monthly)));
+$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), number_format(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
 $section->addTextBreak();
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

@@ -51,7 +51,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     </tbody>
 </table>
 <br />
-<?php } else echo "<p>".$healthcheckViewModel->getNumberOfDevicesReportingPower()." of your ".$healthcheckViewModel->getDeviceCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
+<?php } else echo "<p>".$healthcheckViewModel->getNumberOfDevicesReportingPower()." of your ".$healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()." printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";?>
 <div class="pheader">Green Features: Duplex Printing and Scanning</div>
 <p>If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption by using a scanner and e-mailing documents instead of printing copies for distribution.</p>
 <p>By printing 25% more documents on both sides of the page than you are now, you could save <strong><?php echo number_format($healthcheckViewModel->calculateQuarterOfNumberOfTreesUsed()) ?> trees</strong> and <strong><?php echo number_format($healthcheckViewModel->calculateQuarterOfNumberOfGallonsWaterUsed()) ?> gallons of water</strong> used in paper production per year.</p>

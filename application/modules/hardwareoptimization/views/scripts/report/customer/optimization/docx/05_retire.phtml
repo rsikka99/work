@@ -9,7 +9,7 @@ $profitabiltyDevices = $this->profitabilityDevices;
 
 // Table with values
 $deviceCount           = count($profitabiltyDevices->retired);
-$totalPurchasedDevices = count($optimization->getPurchasedDevices());
+$totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 $section->addTitle(sprintf($this->translate('Retired Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
 $section->addText($this->translate('Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device. '));
 

@@ -98,7 +98,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         try
         {
             /* @var $device Proposalgen_Model_DeviceInstance */
-            foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances as $device)
+            foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 $row    = array();
                 $row [] = $device->getMasterDevice()->getFullDeviceName();

@@ -318,11 +318,11 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
         }
 
 //        $this->averageSupplyCount   = '';
-//        $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($proposal->getPurchasedDevices())));
+//        $this->supplyTypeCount      = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($proposal->getDevices()->purchasedDeviceInstances->getDeviceInstances())));
 //        $this->optimizedSupplyCount = count($this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements())));
 
         $excludedDevices = $this->_optimization->getExcludedDevices();
-        $leasedDevices   = $this->_optimization->getLeasedDevices();
+        $leasedDevices   = $this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances();
 
         $this->actionKeepCount    = $actionKeep;
         $this->actionReplaceCount = $actionReplace;
@@ -363,30 +363,29 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     protected function getUniquePurchasedMasterDevices ($devices)
     {
         $masterDeviceList = array();
-
-        if ($devices[0] instanceof Proposalgen_Model_DeviceInstance)
+        if (reset($devices) instanceof Proposalgen_Model_DeviceInstance)
         {
             foreach ($devices as $deviceInstance)
             {
                 $masterDeviceModel = $deviceInstance->getMasterDevice();
                 // Does the master device exist in the array
                 // if not add in it.
-                if (!in_array($masterDeviceModel, $masterDeviceList))
+                if (!isset($masterDeviceList[$masterDeviceModel->id]))
                 {
-                    $masterDeviceList [] = $masterDeviceModel;
+                    $masterDeviceList [$masterDeviceModel->id] = $masterDeviceModel;
                 }
 
             }
         }
-        else if ($devices[0] instanceof Proposalgen_Model_MasterDevice)
+        else if (reset($devices) instanceof Proposalgen_Model_MasterDevice)
         {
             foreach ($devices as $masterDevice)
             {
                 // Does the master device exist in the array
                 // if not add in it.
-                if (!in_array($masterDevice, $masterDeviceList))
+                if (!isset($masterDeviceList[$masterDevice->id]))
                 {
-                    $masterDeviceList [] = $masterDevice;
+                    $masterDeviceList [$masterDevice->id] = $masterDevice;
                 }
             }
         }
@@ -407,7 +406,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     {
         $masterDevices = array();
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($this->_optimization->getPurchasedDevices() as $deviceInstance)
+        foreach ($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
             if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {

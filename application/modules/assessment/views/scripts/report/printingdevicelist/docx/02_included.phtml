@@ -35,7 +35,7 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->tra
 $table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText($this->translate('JIT Compatible'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
-foreach($assessmentViewModel->getDevices()->allIncludedDeviceInstances as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ {
+foreach($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ {
     $table->addRow($tcStyle->cell->rowheight);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->row->fontStyle, $tcStyle->leftalign);
