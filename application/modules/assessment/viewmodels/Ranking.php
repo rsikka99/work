@@ -277,8 +277,8 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
      */
     public function getOverallRankingText ($rank, $sectionName)
     {
-        $ratingText    = "";
-        $ratings = array(
+        $ratingText = "";
+        $ratings    = array(
             "poor"          => 2.0,
             "below average" => 4.0,
             "average"       => 6.0,

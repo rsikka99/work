@@ -35,7 +35,8 @@ $this->companyName = "MPSToolbox.com";
     <tbody>
     <tr>
         <td>Ink and toner</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
+        <td class="right">
+            $<?php echo number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
 
         <td>Monochrome cost per page</td>
         <td class="right">$<?php echo number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4); ?></td>

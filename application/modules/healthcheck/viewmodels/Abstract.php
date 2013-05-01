@@ -20,12 +20,14 @@ class Healthcheck_ViewModel_Abstract
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForCustomer;
+
     /**
      * The cost page setting when displaying numbers to a dealer
      *
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForDealer;
+
     /**
      * The cost page setting when selecting replacement devices
      *
@@ -80,7 +82,7 @@ class Healthcheck_ViewModel_Abstract
         if (!isset($this->_costPerPageSettingForCustomer))
         {
             $this->_costPerPageSettingForCustomer                         = new Proposalgen_Model_CostPerPageSetting();
-            $healthcheckSettings                                           = $this->healthcheck->getHealthcheckSettings();
+            $healthcheckSettings                                          = $this->healthcheck->getHealthcheckSettings();
             $this->_costPerPageSettingForCustomer->adminCostPerPage       = $healthcheckSettings->adminCostPerPage;
             $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
@@ -89,7 +91,6 @@ class Healthcheck_ViewModel_Abstract
 
         return $this->_costPerPageSettingForCustomer;
     }
-
 
 
     /**

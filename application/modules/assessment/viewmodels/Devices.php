@@ -71,7 +71,7 @@ class Assessment_ViewModel_Devices
         {
             $this->allDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
 
-            $deviceInstances          = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
+            $deviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
             foreach ($deviceInstances as $device)
             {
                 $this->allDeviceInstances->add($device);

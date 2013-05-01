@@ -52,7 +52,7 @@ class Hardwareoptimization_ViewModel_Devices
      */
     public function __construct (Hardwareoptimization_Model_Hardware_Optimization $hardwareOptimization)
     {
-        $this->_hardwareOptimization                                      = $hardwareOptimization;
+        $this->_hardwareOptimization = $hardwareOptimization;
         $this->_fetchAndSortAllDevices($hardwareOptimization->getRmsUpload()->id);
     }
 
@@ -69,7 +69,7 @@ class Hardwareoptimization_ViewModel_Devices
         {
             $this->allDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
 
-            $deviceInstances          = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
+            $deviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
             foreach ($deviceInstances as $device)
             {
                 $this->allDeviceInstances->add($device);
