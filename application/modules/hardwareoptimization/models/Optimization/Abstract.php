@@ -6,26 +6,31 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
 {
     // Used to calculate the average supply count for a fleet
     const SUPPLY_TYPE_THRESHOLD = 0.30;
+
     /**
      * @var Hardwareoptimization_ViewModel_Optimization
      */
     protected $_optimization;
+
     /**
      * @var Hardwareoptimization_Model_Hardware_Optimization|int
      */
     protected $_hardwareOptimization;
+
     /**
      * Devices that have replacement devices attached to them
      *
      * @var Proposalgen_Model_DeviceInstance []
      */
     public $replaced;
+
     /**
      * Deices that have their action flagged as retire
      *
      * @var Proposalgen_Model_DeviceInstance []
      */
     public $retired;
+
     /**
      * Devices that are either replacement devices that haven't been replacement, or good devices that haven't been
      * replaced
@@ -33,102 +38,119 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
      * @var Proposalgen_Model_DeviceInstance []
      */
     public $kept;
+
     /**
      * Devices that have been swapped out
      *
      * @var Proposalgen_Model_DeviceInstance []
      */
     public $excess;
+
     /**
      * Devices that have been excluded from the original reporting
      *
      * @var Proposalgen_Model_DeviceInstance []
      */
     public $excluded;
+
     /**
      * Devices that are leased
      *
      * @var Proposalgen_Model_DeviceInstance  []
      */
     public $leased;
+
     /**
      * Devices that action is replace, with no replacement devices assigned
      *
      * @var Proposalgen_Model_DeviceInstance  []
      */
     public $flagged;
+
     /**
      * The count of devices that's action is Keep
      *
      * @var number
      */
     public $actionKeepCount;
+
     /**
      * The count of devices that's action is Replace
      *
      * @var number
      */
     public $actionReplaceCount;
+
     /**
      * The count of devices that's action is Retire
      *
      * @var number
      */
     public $actionRetireCount;
+
     /**
      * Gets the amount of purchased devices that are JIT Compatible
      *
      * @var int
      */
     public $jitCompatibleCount;
+
     /**
      * Gets the amount of replacement devices that are JIT compatible
      *
      * @var int
      */
     public $replacementJitCompatibleCount;
+
     /**
      * Stores count of devices based on age ranking
      *
      * @var array
      */
     public $deviceAges = array();
+
     /**
      * Stores count of devices based on age ranking
      *
      * @var array
      */
     public $deviceAgesOptimized = array();
+
     /**
      * Stores the count of devices based on categories required
      *
      * @var array
      */
     public $deviceCategories = array();
+
     /**
      * What a client should be a for average supplies
      *
      * @var int
      */
     public $averageSupplyType;
+
     /**
      * The number of supply types used the clients fleet
      *
      * @var int
      */
     public $supplyTypeCount;
+
     /**
      * The number of supply types used in a fleet after optimized
      *
      * @var int
      */
     public $optimizedSupplyType;
+
     /**
      * The number of the devices that are used in hardware optimization
      *
      * @var int
      */
     protected $_deviceCount;
+
     /**
      * The ages that are shown inside the age graph inside the customer facing report.
      *

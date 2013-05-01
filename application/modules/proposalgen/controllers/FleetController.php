@@ -812,7 +812,6 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         {
             $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
         }
-
     }
 
     /**
@@ -826,8 +825,6 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         if ($rmsUploadId > 0)
         {
-
-
             $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
 
             /*
