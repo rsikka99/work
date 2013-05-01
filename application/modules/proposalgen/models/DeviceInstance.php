@@ -1142,6 +1142,25 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * @param $hardwareOptimizationId
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getReplacementMasterDeviceForHardwareOptimization ($hardwareOptimizationId)
+    {
+        if (!isset($this->_replacementMasterDevice))
+        {
+            $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find(array($this->id, $hardwareOptimizationId));
+            if ($deviceInstanceReplacementMasterDevice)
+            {
+                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDevice();
+            }
+        }
+
+        return $this->_replacementMasterDevice;
+    }
+
+    /**
      *Sets the replacement master device
      *
      * @param Proposalgen_Model_MasterDevice $replacementMasterDevice
