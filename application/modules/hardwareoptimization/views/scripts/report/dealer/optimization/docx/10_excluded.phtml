@@ -10,14 +10,14 @@
 $section = $this->section;
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
-/* @var $optimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
-$optimizationDevices = $this->profitabilityDevices;
+/* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
+$hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
 
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun(array("spaceAfter" => 0));
 $headerTextRun->addText($this->translate('Excluded Devices'),'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->excluded).  ')');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->excluded).  ')');
 $section->addText("Devices that have either been manually excluded or haven't been mapped during previous steps.");
 
 // Table with values
@@ -32,7 +32,7 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-foreach ($optimizationDevices->excluded as $device)
+foreach ($hardwareOptimizationDevices->excluded as $device)
 {
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;

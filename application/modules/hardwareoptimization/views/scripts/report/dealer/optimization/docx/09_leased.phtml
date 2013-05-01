@@ -11,14 +11,14 @@
 $section = $this->section;
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
-/* @var $optimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
-$optimizationDevices = $this->profitabilityDevices;
+/* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
+$hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
 $costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText($this->translate('Leased Devices'),'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->leased). $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased). $this->translate(' of ') . $hardwareOptimizationDevices->getDeviceCount() . ')');
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
@@ -33,7 +33,7 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-foreach ($optimizationDevices->leased as $device)
+foreach ($hardwareOptimizationDevices->leased as $device)
 {
     $masterDevice = $device->getMasterDevice();
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;

@@ -12,14 +12,14 @@ $section = $this->section;
 $optimization = $this->optimization;
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
-/* @var $optimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
-$optimizationDevices = $this->profitabilityDevices;
+/* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
+$hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
 $costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText($this->translate('Suggested Replacement Devices'), 'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($optimizationDevices->replaced) . $this->translate(' of ') . $optimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->replaced) . $this->translate(' of ') . $hardwareOptimizationDevices->getDeviceCount() . ')');
 $costThreshold = number_format($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold);
 $section->addText($this->translate('The following devices have been targeted for replacement, either for a monthly cost savings greater than {$costThreshold} or manual replacement.'));
 
@@ -47,7 +47,7 @@ $table->addCell($tcStyle->col11Width, $tcStyle->header->sub_header->cellStyle)->
 $table->addCell($tcStyle->col12Width, $tcStyle->header->sub_header->cellStyle)->addText($this->translate('Cost Delta'), $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);
 
 // Begin with data rows
-foreach ($optimizationDevices->replaced as $device)
+foreach ($hardwareOptimizationDevices->replaced as $device)
 {
     $masterDevice      = $device->getMasterDevice();
     $replacementDevice = $device->getReplacementMasterDevice();

@@ -469,7 +469,7 @@ $doubleCenterTable = (object)array(
  * Here we put all our table styles into an object that gets passed to each of
  * the view scripts
  */
-$styles               = (object)array(
+$styles                      = (object)array(
     "tables" => (object)array(
         "compare"     => $compareTable,
         "replacement" => $replacementTable,
@@ -481,18 +481,18 @@ $styles               = (object)array(
         "excluded"    => $excludedTable,
         "twocenter"   => $doubleCenterTable,
     ));
-$profitabilityDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
+$hardwareOptimizationDevices = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
 /**
  * An array of view variables to pass to the partial scripts
  */
 $data = array(
-    "phpword"              => $phpWord,
-    "hardwareOptimization" => $hardwareOptimization,
-    "optimization"         => $optimization,
-    "section"              => $mainSection,
-    "profitabilityDevices" => $profitabilityDevices,
-    "graphs"               => $this->graphs,
-    "styles"               => $styles
+    "phpword"                     => $phpWord,
+    "hardwareOptimization"        => $hardwareOptimization,
+    "optimization"                => $optimization,
+    "section"                     => $mainSection,
+    "hardwareOptimizationDevices" => $hardwareOptimizationDevices,
+    "graphs"                      => $this->graphs,
+    "styles"                      => $styles
 );
 
 /**
