@@ -36,4 +36,20 @@ class Hardwareoptimization_Bootstrap extends Zend_Application_Module_Bootstrap
         return $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
     }
 
+    /**
+     * Adds ACL
+     *
+     * @return Application_Model_Acl|mixed
+     */
+    protected function _initAddToAcl ()
+    {
+        $acl = Zend_Registry::get('Zend_Acl');
+        if ($acl instanceof Application_Model_Acl)
+        {
+            Hardwareoptimization_Model_Acl::setupAcl($acl);
+        }
+
+        return $acl;
+    }
+
 }
