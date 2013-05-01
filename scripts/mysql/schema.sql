@@ -1427,7 +1427,7 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     `masterDeviceId` INT(11) NOT NULL ,
     INDEX `device_instance_replacement_master_devices_ibfk_1_idx` (`masterDeviceId` ASC) ,
     INDEX `device_instance_replacement_master_devices_ibfk_2_idx` (`deviceInstanceId` ASC) ,
-    PRIMARY KEY (`deviceInstanceId`) ,
+    PRIMARY KEY (`deviceInstanceId`, `hardwareOptimizationId`) ,
     UNIQUE INDEX `deviceInstanceId_UNIQUE` (`deviceInstanceId` ASC, `hardwareOptimizationId` ASC) ,
     INDEX `device_instance_replacement_master_devices_ibfk_3_idx` (`hardwareOptimizationId` ASC) ,
     CONSTRAINT `device_instance_replacement_master_devices_ibfk_1`
