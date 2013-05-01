@@ -71,12 +71,13 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_deviceInstanceId];
+            $primaryKey = $this->getPrimaryKeyValueForObject($object);
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceInstanceId} = ?" => $primaryKey
+                                                                "{$this->col_deviceInstanceId} = ?"       => $primaryKey[0],
+                                                                "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[1]
                                                            ));
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -99,14 +100,16 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         {
             $id          = $object->deviceInstanceId;
             $whereClause = array(
-                "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId
+                "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId,
+                "{$this->col_deviceInstanceId} = ?" => $object->hardwareOptimizationId
             );
         }
         else
         {
             $id          = $object;
             $whereClause = array(
-                "{$this->col_deviceInstanceId} = ?" => $object
+                "{$this->col_deviceInstanceId} = ?"       => $object[0],
+                "{$this->col_hardwareOptimizationId} = ?" => $object[1]
             );
         }
 
@@ -119,8 +122,7 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     /**
      * Finds a Device_Instance_Master_Device based on it's primaryKey
      *
-     * @param $id int
-     *            The id of the Device_Instance_Master_Device to find
+     * @param array $id The id of the Device_Instance_Master_Device to find
      *
      * @return Proposalgen_Model_Device_Instance_Replacement_Master_Device
      */
@@ -134,7 +136,7 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         }
 
         // Assuming we don't have a cached object, lets go get it.
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->find($id[0], $id[1]);
         if (0 == count($result))
         {
             return false;
@@ -231,7 +233,8 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_deviceInstanceId} = ?" => $id
+            "{$this->col_deviceInstanceId} = ?"       => $id[0],
+            "{$this->col_hardwareOptimizationId} = ?" => $id[1]
         );
     }
 
@@ -242,7 +245,6 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
      */
     public function getPrimaryKeyValueForObject ($object)
     {
-        return $object->deviceInstanceId;
+        return array($object->deviceInstanceId, $object->hardwareOptimizationId);
     }
-
 }

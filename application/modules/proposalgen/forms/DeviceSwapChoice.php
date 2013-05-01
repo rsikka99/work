@@ -16,25 +16,35 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $_devices;
+
     /**
      * @var int
      */
     protected $_dealerId;
+
+    /**
+     * @var int
+     */
+    protected $_hardwareOptimizationId;
+
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $blackReplacementDevices;
+
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $blackMfpReplacementDevices;
+
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $colorReplacementDevices;
+
     /**
      *
      * @var Proposalgen_Model_DeviceInstance[]
@@ -44,13 +54,15 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
     /**
      * @param null $devices
-     * @param      $dealerId
+     * @param      $dealerId int
+     * @param      $hardwareOptimizationId int
      * @param null $options
      */
-    public function __construct ($devices, $dealerId, $options = null)
+    public function __construct ($devices, $dealerId, $hardwareOptimizationId, $options = null)
     {
-        $this->_devices  = $devices;
-        $this->_dealerId = $dealerId;
+        $this->_devices                = $devices;
+        $this->_dealerId               = $dealerId;
+        $this->_hardwareOptimizationId = $hardwareOptimizationId;
         parent::__construct($options);
     }
 
@@ -127,8 +139,8 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                         $replacementDevices = $this->getColorReplacementDevices();
                     }
                 }
-                $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDevice();
-            }
+                $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimizationId);
+}
             else
             {
                 $replacementDevices                    = array();
