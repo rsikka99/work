@@ -129,6 +129,7 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
             }
             catch (Exception $e)
             {
+                Tangent_Log::logException($e);
                 $clientId = false;
             }
 
