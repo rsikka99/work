@@ -95,7 +95,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
         // Every time we save anything related to a report, we should save it (updates the modification date)
-        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances, Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances, Zend_Auth::getInstance()->getIdentity()->dealerId, $this->_hardwareOptimization->id);
 
         // Get all devices
         $devices = $devicesViewModel->purchasedDeviceInstances;
@@ -176,7 +176,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
         $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
 
-        $replacementDevice    = $deviceInstance->getReplacementMasterDevice();
+        $replacementDevice    = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
         $hasReplacementDevice = ($replacementDevice instanceof Proposalgen_Model_MasterDevice);
 
         $device = array(
@@ -249,7 +249,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     continue;
                 }
 
-                $currentReplacementMasterDevice = $deviceInstance->getReplacementMasterDevice();
+                $currentReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
                 /*
                  * We should only save if we have a new master device id and the device isn't supposed to be retired
                  */
@@ -274,7 +274,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         $deviceInstanceReplacement                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
                         $deviceInstanceReplacement->masterDeviceId         = (int)$masterDeviceId;
                         $deviceInstanceReplacement->deviceInstanceId       = $deviceInstance->id;
-                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_dealerId;
+                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_hardwareOptimization->id;
                         $deviceInstanceReplacementMapper->insert($deviceInstanceReplacement);
                     }
                 }
@@ -413,6 +413,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         catch (Exception $e)
         {
             $db->rollBack();
+            Tangent_Log::logException($e);
 
             return false;
         }

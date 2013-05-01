@@ -92,7 +92,7 @@ $totalPurchasedDevices = count($optimization->getPurchasedDevices());
         <?php foreach ($customerOptimization->replaced as $deviceInstance) : ?>
             <?php $masterDevice = $deviceInstance->getMasterDevice(); ?>
             <?php
-            $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+            $replacementDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id);
             $isColor = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
             ?>
             <tr>

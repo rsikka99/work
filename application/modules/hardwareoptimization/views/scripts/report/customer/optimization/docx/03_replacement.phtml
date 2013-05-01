@@ -1,6 +1,8 @@
 <?php
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 $section->addPageBreak();
@@ -26,7 +28,7 @@ $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addTe
 // Begin with data rows
 foreach ($profitabilityDevices->replaced as $device)
 {
-    $replacementDevice = $device->getReplacementMasterDevice();
+    $replacementDevice = $device->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization);
     $isColor           = $device->getMasterDevice()->isColor();
     $cycle             = ($this->cycle(array(true, false))->next()->current());
     if ($cycle)

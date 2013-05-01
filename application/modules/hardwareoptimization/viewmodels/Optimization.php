@@ -505,7 +505,7 @@ class Hardwareoptimization_ViewModel_Optimization
         $numberOfDevices = 0;
         foreach ($this->getDevices()->allIncludedDeviceInstances as $device)
         {
-            $replacementDevice = $device->getReplacementMasterDevice();
+            $replacementDevice = $device->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id);
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
             {
                 if ($replacementDevice->isColor())
@@ -573,9 +573,9 @@ class Hardwareoptimization_ViewModel_Optimization
         $maxVolume = 0;
         foreach ($this->getDevices()->allIncludedDeviceInstances as $deviceInstance)
         {
-            if ($deviceInstance->getReplacementMasterDevice())
+            if ($deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id))
             {
-                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
+                $maxVolume += $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id)->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
             }
             else
             {
@@ -689,7 +689,7 @@ class Hardwareoptimization_ViewModel_Optimization
 
             foreach ($this->getPurchasedDevices() as $deviceInstance)
             {
-                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice());
+                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id));
             }
         }
 

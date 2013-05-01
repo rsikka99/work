@@ -85,7 +85,7 @@ $formActions [] = $form->getElement('Analyze');
             $monthlyColorVolume = ($device->getPageCounts()->color->getMonthly() > 0) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';
             $isDeviceColor      = ($device->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
-            $costDelta = $device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice());
+            $costDelta = $device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
 
             $rowJson    = array(
                 'deviceInstanceId' => $device->id,

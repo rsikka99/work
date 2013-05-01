@@ -230,7 +230,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
             // Get the age rank of the device instance
             $ageRank = Tangent_Functions::getValueFromRangeStepTable($deviceInstance->getMasterDevice()->getAge(), self::$ageRankTable, false);
             // Get the replacement device of the device instance if there is one
-            $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+            $replacementDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization(($hardwareOptimization->id));
             if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 // Assigned the optimized age rank if replacement device exists
@@ -389,7 +389,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
         {
             if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
-                $replacementDevice = $deviceInstance->getReplacementMasterDevice();
+                $replacementDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
                 {
                     $masterDevices [] = $replacementDevice;
