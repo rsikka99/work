@@ -377,7 +377,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->hoursSpentOnIt > 0 ? $this->_defaultSettings->hoursSpentOnIt : "15 minutes per week per printer"))
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->hoursSpentOnIt > 0 ? $this->_defaultSettings->hoursSpentOnIt . " hours" : "15 minutes per week per printer"))
             ->setAttrib('append', ' hours')
             ->addValidator('greaterThan', true, array(
                                                      'min' => 0
@@ -395,7 +395,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
             ->setDescription('$')
-            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->costOfLabor > 0 ? $this->_defaultSettings->costOfLabor : "200 per printer"))
+            ->setAttrib('data-defaultvalue', ($this->_defaultSettings->costOfLabor > 0 ? $this->_defaultSettings->costOfLabor . " / fleet": "200 per printer"))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('append', ' / fleet')
             ->addValidator('greaterThan', true, array(

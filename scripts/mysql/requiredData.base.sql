@@ -51,6 +51,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (2, 9),
 (2, 10),
 (2, 11),
+(2, 12),
+(2, 13),
 
 -- swilder
 (4, 2),
@@ -63,6 +65,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (4, 9),
 (4, 10),
 (4, 11),
+(4, 12),
+(4, 13),
 -- jlarochelle
 (5, 2),
 (5, 3),
@@ -74,6 +78,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (5, 9),
 (5, 10),
 (5, 11),
+(5, 12),
+(5, 13),
 -- nmcconkey
 (6, 2),
 (6, 3),
@@ -85,6 +91,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (6, 9),
 (6, 10),
 (6, 11),
+(6, 12),
+(6, 13),
 -- standarduser
 (8, 3),
 (8, 5),
@@ -100,6 +108,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (9, 9),
 (9, 10),
 (9, 11),
+(9, 12),
+(9, 13),
 -- odadmin
 (10, 2),
 (10, 3),
@@ -111,6 +121,8 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (10, 9),
 (10, 10),
 (10, 11),
+(10, 12),
+(10, 13),
 -- canon
 (11, 2),
 (11, 3),
@@ -121,7 +133,9 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 (11, 8),
 (11, 9),
 (11, 10),
-(11, 11);
+(11, 11),
+(11, 12),
+(11, 13);
 
 /* Add privileges to the roles */
 -- INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES

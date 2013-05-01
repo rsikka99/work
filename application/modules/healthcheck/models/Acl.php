@@ -7,6 +7,7 @@ class Healthcheck_Model_Acl
 
 
     const RESOURCE_HEALTHCHECK_INDEX_WILDCARD = "healthcheck__index__%";
+    const RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK = "healthcheck__report_healthcheck__%";
 
 
     /**
@@ -28,6 +29,7 @@ class Healthcheck_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD);
+        $acl->addResource(self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK);
 
     }
 
@@ -42,5 +44,6 @@ class Healthcheck_Model_Acl
          * Healthcheck user
          */
         $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }
