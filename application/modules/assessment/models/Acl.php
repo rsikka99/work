@@ -4,10 +4,7 @@
  */
 class Assessment_Model_Acl
 {
-
-
-    const RESOURCE_ASSESSMENT_INDEX_WILDCARD = "assessment__index__%";
-
+    const RESOURCE_ASSESSMENT_WILDCARD = "assessment__%__%";
 
     /**
      * Sets up acl resources and access for a module
@@ -27,7 +24,7 @@ class Assessment_Model_Acl
      */
     private static function setupAclResources (Application_Model_Acl $acl)
     {
-        $acl->addResource(self::RESOURCE_ASSESSMENT_INDEX_WILDCARD);
+        $acl->addResource(self::RESOURCE_ASSESSMENT_WILDCARD);
 
     }
 
@@ -41,6 +38,6 @@ class Assessment_Model_Acl
         /**
          * Any logged in user
          */
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_ASSESSMENT_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }
