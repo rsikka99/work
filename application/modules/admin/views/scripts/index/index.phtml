@@ -78,6 +78,13 @@
                 Replacement Devices<br /> <br /> </a>
         </div>
     <?php endif; ?>
+
+    <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
+        <div class="span2">
+            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                Manage Device <br /> Swaps <br /> </a>
+        </div>
+    <?php endif; ?>
 </div>
 <h3>Account Management</h3>
 <div class="row">
