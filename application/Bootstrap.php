@@ -94,6 +94,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/select2/select2.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
