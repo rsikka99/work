@@ -59,8 +59,6 @@ class Admin_Service_Client
                 $address = new Quotegen_Model_Address($data);
                 Quotegen_Model_Mapper_Address::getInstance()->insert($address);
 
-                // Created a hardware optimization for the client
-                Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->insert(new Hardwareoptimization_Model_Hardware_Optimization(array("clientId" => $clientId)));
                 $db->commit();
             }
             catch (Exception $e)

@@ -256,7 +256,7 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $this->redirector('index', 'fleet', 'proposalgen', array('rmsUploadId' => $rmsUploadId));
+                    $this->redirector('mapping', 'fleet', 'proposalgen', array('rmsUploadId' => $rmsUploadId));
                 }
             }
         }
