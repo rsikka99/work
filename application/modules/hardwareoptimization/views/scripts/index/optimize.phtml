@@ -130,7 +130,7 @@ $formActions [] = $form->getElement('Analyze');
     var targetCostPerPageColor              = <?php echo $targetColorCPP; ?>;
     var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
     var jsonRows                            = <?php echo json_encode($jsonRows); ?>;
-    var deviceListUrl                       = '<?php echo $this->baseUrl('proposalgen/optimization/get-device-by-device-instance-id'); ?>'
+    var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/optimization/deviceListing.js')); ?>
