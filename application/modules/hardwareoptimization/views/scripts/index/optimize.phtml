@@ -106,7 +106,7 @@ $formActions [] = $form->getElement('Analyze');
             $jsonRows[] = $rowJson;
             ?>
         <?php endforeach; ?>
-        <em>The following <?php echo $deviceCount; ?> out of <?php echo count($optimization->getDevices()->allIncludedDeviceInstances);?> devices are eligible for potential optimization.</em>
+        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount();?> devices are eligible for potential optimization.</em>
         <!-- Form Actions -->
         <div class="clearfix">
             <?php foreach ($formActions as $element) : ?>

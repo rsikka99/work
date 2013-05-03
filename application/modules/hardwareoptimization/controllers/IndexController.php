@@ -4,6 +4,7 @@
  */
 class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_Controller_Action
 {
+
     /**
      * This action will redirect us to the latest available step
      */
@@ -213,7 +214,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "isScan"                => (int)$replacementDevice->isScanner,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
                 "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
-                "reason"                => 'Reason preset, change me.'
+                "reason"                => $deviceInstance->getReason()
             );
         }
 
