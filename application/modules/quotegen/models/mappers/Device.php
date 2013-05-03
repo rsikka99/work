@@ -251,5 +251,35 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
 
         return $devices;
     }
+
+    public function searchByName ($searchTerm, $manufacturerId = null)
+    {
+        $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+        $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+
+        $returnLimit = 10;
+        $sortOrder   = 'device_name ASC';
+
+        $db     = Zend_Db_Table::getDefaultAdapter();
+        $select = $db->select();
+        $select->from(array($this->getTableName()))
+            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+            ->where("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName}) LIKE ? AND m.isDeleted = 0")
+            ->limit($returnLimit)
+            ->order($sortOrder);
+        /*
+         * Filter by manufacturer id if provided
+         */
+        if ($manufacturerId)
+        {
+            $select->where("{$manufacturerMapper->col_fullName} = ?", $manufacturerId);
+        }
+
+        $stmt   = $db->query($select, $searchTerm);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 }
 

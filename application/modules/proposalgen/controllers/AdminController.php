@@ -2159,10 +2159,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     }
 
     /**
-     * This action is used for searching for master devices via ajax
+     * This action is used for searching for master devices via
+     *
      */
     public function searchForDeviceAction ()
     {
+        $onlyQuoteDevices = $this->_getParam("onlyQuoteDevices", false);
         $searchTerm     = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
         $manufacturerId = $this->_getParam('manufacturerId', false);
 
@@ -2176,7 +2178,15 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
         }
 
-        $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+        if ($onlyQuoteDevices)
+        {
+            $jsonResponse = Quotegen_Model_Mapper_Device::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+        }
+        else
+        {
+            $jsonResponse = Proposalgen_Model_Mapper_MasterDevice::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+        }
+
 
         $this->sendJson($jsonResponse);
 
