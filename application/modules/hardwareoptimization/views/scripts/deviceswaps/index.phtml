@@ -1,6 +1,53 @@
-
 <?php $this->headScript()->appendFile($this->baseUrl('js/hardwareoptimization/deviceListings.js')); ?>
+<h4> Manage Device Swaps </h4>
+
+<div class="modal hide">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h3 style="text-align: center">Add Device Swap</h3>
+    </div>
+    <div class="modal-body well" style="height: 300px;">
+        <?php echo $this->form; ?>
+    </div>
+</div>
 
 <div class="well">
-    <?php echo $this->form; ?>
+    <button id="trigger" style="float:right; margin: 20px;" class="btn btn-success">Create new</button>
+    <?php
+    /* @var $deviceSwapViewModel Hardwareoptimization_ViewModel_DeviceSwap */
+    $deviceSwapViewModel = $this->deviceSwap;
+    /* @var $deviceSwap Hardwareoptimization_Model_Device_Swap */
+    foreach ($deviceSwapViewModel->getReplacementModelsByType() as $replacementDeviceCategory => $deviceSwaps) : ?>
+        <table class="table">
+            <tr>
+                <th colspan="7" style="text-align: center"> <?php echo $replacementDeviceCategory; ?></th>
+            </tr>
+            <tr>
+                <th> Manufacturer</th>
+                <th> Device Name</th>
+                <th> Monochrome CPP <sup>*</sup></th>
+                <th> Color CPP <sup>*</sup></th>
+                <th> Min Page Count</th>
+                <th> Max Page Count</th>
+                <th> Action</th>
+            </tr>
+            <?php
+            foreach ($deviceSwaps as $deviceSwap) : ?>
+                <tr>
+                    <td> <?php echo $deviceSwap['manufacturer']; ?> </td>
+                    <td> <?php echo $deviceSwap['deviceName']; ?> </td>
+                    <td> <?php echo $this->currency($deviceSwap['monochromeCPP'], array('precision' => 4)); ?> </td>
+                    <td> <?php echo $deviceSwap['isColor'] ? $this->currency($deviceSwap['colorCPP'], array("precision" => 4)) : 'N/A'; ?> </td>
+                    <td> <?php echo $deviceSwap['minPageCount']; ?> </td>
+                    <td> <?php echo $deviceSwap['maxPageCount']; ?> </td>
+                    <td><a class="btn btn-warning btn-mini"><i class="icon-pencil"></i></a><a class="btn btn-danger btn-mini"><i class="icon-trash"></i></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+    <?php endforeach; ?>
+    <br />
+    <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
+
+
 </div>
