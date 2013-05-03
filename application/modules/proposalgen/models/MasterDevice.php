@@ -12,6 +12,14 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     const DEVICE_TYPE_COLOR     = 2;
     const DEVICE_TYPE_COLOR_MFP = 3;
 
+    static $TonerConfigNames = array(
+        self::DEVICE_TYPE_MONO      => "Monochrome",
+        self::DEVICE_TYPE_MONO_MFP  => "Monochrome Mfp",
+        self::DEVICE_TYPE_COLOR     => "Color",
+        self::DEVICE_TYPE_COLOR_MFP => "Color Mfp"
+    );
+
+
     static $ReportLaborCostPerPage = 0;
     static $ReportPartsCostPerPage = 0;
 
