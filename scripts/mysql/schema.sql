@@ -501,14 +501,14 @@ CREATE  TABLE IF NOT EXISTS `pricing_configs` (
 -- Table `replacement_devices`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `replacement_devices` (
-    `dealerId` INT NOT NULL ,
     `masterDeviceId` INT(11) NOT NULL ,
+    `dealerId` INT NOT NULL ,
     `replacementCategory` ENUM('BLACK & WHITE','BLACK & WHITE MFP','COLOR','COLOR MFP') NULL DEFAULT NULL ,
     `printSpeed` INT(11) NULL ,
     `resolution` INT(11) NULL DEFAULT NULL ,
     `monthlyRate` DOUBLE NULL ,
     INDEX `replacement_devices_ibfk_2_idx` (`dealerId` ASC) ,
-    PRIMARY KEY (`dealerId`, `masterDeviceId`) ,
+    PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
     CONSTRAINT `replacement_devices_ibfk_1`
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
@@ -1787,6 +1787,30 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
     REFERENCES `quote_settings` (`id` )
         ON DELETE SET NULL
         ON UPDATE CASCADE)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `device_swaps`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `device_swaps` (
+    `masterDeviceId` INT NOT NULL ,
+    `dealerId` INT NOT NULL ,
+    `minimumPageCount` INT NULL ,
+    `maximumPageCount` INT NULL ,
+    PRIMARY KEY (`masterDeviceId`, `dealerId`) ,
+    INDEX `device_swaps_ibkf1_idx` (`masterDeviceId` ASC) ,
+    INDEX `device_swaps_ibkf2_idx` (`dealerId` ASC) ,
+    CONSTRAINT `device_swaps_ibkf1`
+    FOREIGN KEY (`masterDeviceId` )
+    REFERENCES `master_devices` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `device_swaps_ibkf2`
+    FOREIGN KEY (`dealerId` )
+    REFERENCES `dealers` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
 
