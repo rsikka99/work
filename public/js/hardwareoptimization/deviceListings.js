@@ -2,7 +2,7 @@ $(function ()
 {
     // Setup autocomplete for our textbox
 
-    $("#deviceName").select2({
+    $("#masterDeviceId").select2({
         placeholder       : "Search for a device",
         minimumInputLength: 1,
         ajax              : { // instead of writing the function to execute the request we use select2's convenient helper
@@ -12,6 +12,7 @@ $(function ()
             {
                 return {
                     searchTerm: term, // search term
+                    onlyQuoteDevices: true,
                     page_limit: 10
                 };
             },
@@ -26,5 +27,10 @@ $(function ()
                 return {results: newData};
             }
         }
+    });
+
+    $("#trigger").click(function()
+    {
+        $(".modal").modal("show");
     });
 });
