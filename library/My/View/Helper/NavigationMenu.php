@@ -54,6 +54,7 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 //                    break;
                 }
             }
+                $html [] = "<li class='active pull-right'><p>" . $navigation->title . " - " . $navigation->clientName . "</p></a>";
             $html [] = '</ul>';
         }
 

@@ -65,6 +65,10 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
                 $this->redirector('index', 'index', 'index');
             }
+            else
+            {
+                $this->_navigation->clientName = $client->companyName;
+            }
         }
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/healthcheck/" . $this->getHealthcheck()->id;

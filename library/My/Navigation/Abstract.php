@@ -17,6 +17,11 @@ abstract class My_Navigation_Abstract
     public $title;
 
     /**
+     * @var string
+     */
+    public $clientName;
+
+    /**
      * Sets which steps are accessible
      *
      * @param string $stepName The last step that is accessible
@@ -45,7 +50,7 @@ abstract class My_Navigation_Abstract
             if (strcasecmp($step->enumValue, $stepName) === 0)
             {
                 $this->activeStep = $step;
-                $step->active      = true;
+                $step->active     = true;
                 break;
             }
         }
