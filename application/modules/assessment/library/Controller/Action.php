@@ -209,7 +209,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         $stage = ($this->getAssessment()->stepName) ? : Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD;
         $this->_navigation->updateAccessibleSteps($stage);
 
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
     }
 
     /**
