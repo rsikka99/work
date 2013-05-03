@@ -12,6 +12,11 @@ abstract class My_Navigation_Abstract
     public $activeStep;
 
     /**
+     * @var string
+     */
+    public $title;
+
+    /**
      * Sets which steps are accessible
      *
      * @param string $stepName The last step that is accessible
