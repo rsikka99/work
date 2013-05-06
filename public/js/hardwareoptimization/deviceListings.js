@@ -12,21 +12,14 @@ $(function ()
                 name    : 'id',
                 label   : 'id',
                 index   : 'id',
-                width   : 60,
                 sortable: false,
                 hidden  : true
-            },
-            {
-                name : 'fullname',
-                index: 'fullname',
-                label: 'Manufacturer',
-                width: 90
             },
             {
                 name    : 'device_name',
                 index   : 'device_name',
                 label   : 'Device Name',
-                width   : 100,
+                width   : 420,
                 editable: true
             },
             {
@@ -52,23 +45,23 @@ $(function ()
                 name    : 'minimumPageCount',
                 index   : 'minimumPageCount',
                 label   : 'Min Page Count',
-                width   : 80,
+                width   : 150,
                 align   : "right",
-                sortable: false
+                sortable: true
             },
             {
                 name    : 'maximumPageCount',
                 index   : 'maximumPageCount',
                 label   : 'Max Page Count',
-                width   : 390,
+                width   : 150,
                 align   : "right",
-                sortable: false
+                sortable: true
             },
             {
                 name  : 'deviceType',
                 index : 'deviceType',
                 label : 'Device Type',
-                width : 346,
+                width : 150,
                 align : "right",
                 hidden: true
             }
@@ -80,7 +73,7 @@ $(function ()
         groupingView: {
             groupField     : ['deviceType'],
             groupColumnShow: [false],
-            groupOrder     : [' ']
+            groupOrder     : ['asc']
         },
         caption     : "Device Swaps"
     });
