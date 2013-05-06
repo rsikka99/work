@@ -231,4 +231,73 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $object->dealerId
         );
     }
+
+    /**
+     * @param                                      $dealerId
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param                                      $sortColumn
+     * @param                                      $sortDirection
+     * @param null                                 $limit
+     * @param null                                 $offset
+     * @param bool                                 $justCount
+     *
+     * @return array|int
+     */
+    public function fetAllForDealer ($dealerId, $costPerPageSetting, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    {
+        $db       = $this->getDbTable()->getAdapter();
+        $dealerId = $db->quote($dealerId, 'INTEGER');
+
+        if ($justCount)
+        {
+            $select = $db->select()->from("{$this->getTableName()}", "COUNT(*)")->where("{$this->col_dealerId} = ?", $dealerId);
+
+            return $db->query($select)->fetchColumn();
+        }
+        else
+        {
+            $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+
+            $returnLimit = 10;
+            $order[]     = "{$sortColumn} {$sortDirection}";
+
+            if (!$limit)
+            {
+                $limit  = "25";
+                $offset = ($offset > 0) ? $offset : 0;
+            }
+
+            $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND NOT md.tonerConfigId = 1 THEN 'Monochrome MFP'
+            WHEN md.isCopier AND NOT md.tonerConfigId > 1 THEN 'Color MFP'
+            WHEN NOT md.isCopier AND NOT md.tonerConfigId > 1 THEN 'Color '
+            WHEN NOT md.isCopier AND NOT md.tonerConfigId = 1 THEN 'Monochrome'
+            END AS deviceType");
+
+
+            $db     = Zend_Db_Table::getDefaultAdapter();
+            $select = $db->select();
+            $select->from(array($this->getTableName()),$caseStatement)
+                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+                ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+                ->limit($returnLimit, $offset)
+                ->order(array("deviceType", "fullname"));
+
+            $query = $db->query($select);
+
+            $excludedRows = array();
+            foreach ($query->fetchAll() as $row)
+            {
+                $masterDevice         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($row['id']);
+                $row['deviceType']    = Proposalgen_Model_MasterDevice::$TonerConfigNames[$masterDevice->getDeviceType()];
+                $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
+                $row['colorCpp']      = $masterDevice->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
+
+                $excludedRows[] = $row;
+            }
+
+            return $excludedRows;
+        }
+    }
 }
