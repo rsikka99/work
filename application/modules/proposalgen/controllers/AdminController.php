@@ -2165,8 +2165,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     public function searchForDeviceAction ()
     {
         $onlyQuoteDevices = $this->_getParam("onlyQuoteDevices", false);
-        $searchTerm     = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
-        $manufacturerId = $this->_getParam('manufacturerId', false);
+        $searchTerm       = "%" . implode('%', explode(' ', $this->_getParam('searchTerm', ''))) . "%";
+        $manufacturerId   = $this->_getParam('manufacturerId', false);
 
         $filterByManufacturer = null;
         if ($manufacturerId !== false)
@@ -2180,7 +2180,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         if ($onlyQuoteDevices)
         {
-            $jsonResponse = Quotegen_Model_Mapper_Device::getInstance()->searchByName($searchTerm, $filterByManufacturer);
+            $jsonResponse = Quotegen_Model_Mapper_Device::getInstance()->searchByName($searchTerm, Zend_Auth::getInstance()->getIdentity()->dealerId, $filterByManufacturer);
         }
         else
         {

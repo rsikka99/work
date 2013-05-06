@@ -252,7 +252,7 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         return $devices;
     }
 
-    public function searchByName ($searchTerm, $manufacturerId = null)
+    public function searchByName ($searchTerm, $dealerId = null, $manufacturerId = null)
     {
         $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
         $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
@@ -268,12 +268,18 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
             ->where("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName}) LIKE ? AND m.isDeleted = 0")
             ->limit($returnLimit)
             ->order($sortOrder);
+
         /*
          * Filter by manufacturer id if provided
          */
         if ($manufacturerId)
         {
             $select->where("{$manufacturerMapper->col_fullName} = ?", $manufacturerId);
+        }
+
+        if ($dealerId)
+        {
+            $select->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId);
         }
 
         $stmt   = $db->query($select, $searchTerm);
