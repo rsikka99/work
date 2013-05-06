@@ -65,7 +65,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
          * Grab the incoming parameters
          */
         $jqGridServiceParameters = array(
-            'sidx' => $this->_getParam('sidx', 'fullname'),
+            'sidx' => $this->_getParam('sidx', 'deviceType'),
             'sord' => $this->_getParam('sord', 'desc'),
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10)
@@ -74,18 +74,21 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         // Set up validation arrays
         $blankModel    = new Hardwareoptimization_Model_Device_Swap();
         $sortColumns   = array_keys($blankModel->toArray());
-        $sortColumns[] = "deviceType  , ";
-        $sortColumns[] = "fullname";
+        $sortColumns[] = "device_name";
 
         $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
         $jqGridService->setValidSortColumns($sortColumns);
+
+        $groupColumns   = array();
+        $groupColumns[] = "deviceType";
+        $jqGridService->setValidGroupByColumns($groupColumns);
 
         $deviceSwapViewModel = new Hardwareoptimization_ViewModel_DeviceSwap();
         $costPerPageSetting  = $deviceSwapViewModel->getCostPerPageSetting();
 
         if ($jqGridService->sortingIsValid())
         {
-            $jqGridService->setRecordCount($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, null, null, null, null, null, true));
+            $jqGridService->setRecordCount($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, null, null, null, null, true));
 
             // Validate current page number since we don't want to be out of bounds
             if ($jqGridService->getCurrentPage() < 1)
@@ -105,7 +108,20 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
                 $startRecord = 0;
             }
 
-            $jqGridService->setRows($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, $costPerPageSetting, $jqGridService->getSortColumn() . " " . $jqGridService->getSortDirection(), $jqGridService->getRecordsPerPage(), $startRecord));
+            $sortOrder = array();
+
+            if ($jqGridService->hasGrouping())
+            {
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
+            }
+
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+
+
+            $jqGridService->setRows($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, $costPerPageSetting, $sortOrder, $jqGridService->getSortDirection()), $jqGridService->getRecordsPerPage(), $startRecord);
 
             // Send back jqGrid json data
             $this->sendJson($jqGridService->createPagerResponseArray());
@@ -117,7 +133,6 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
                                  'error' => 'Sorting parameters are invalid'
                             ));
         }
-
 
         $json = json_encode($jsonArray);
         $this->sendJson($json);
