@@ -112,6 +112,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     }
 
     /**
+     * Takes initialized caches and puts them into the registry
+     */
+    protected function _initPutCachesIntoRegistry()
+    {
+        $this->bootstrap('cachemanager');
+        /* @var $cacheManager Zend_Cache_Manager */
+        $cacheManager = $this->getResource('cachemanager');
+
+        Zend_Registry::set('navigationCache', $cacheManager->getCache('navigation_cache'));
+        Zend_Registry::set('aclCache', $cacheManager->getCache('acl_cache'));
+    }
+
+    /**
      * Loads the navigation.xml and sets up navigation to be used by the navigation view helper
      */
     protected function _initNavigation ()
