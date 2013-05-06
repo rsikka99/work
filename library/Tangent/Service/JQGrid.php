@@ -13,6 +13,13 @@ class Tangent_Service_JQGrid
     protected $_validSortColumns = array();
 
     /**
+     * The column to group by
+     *
+     * @var array
+     */
+    protected $_validGroupByColumns = array();
+
+    /**
      * The column to sort by
      *
      * @var string
@@ -25,6 +32,20 @@ class Tangent_Service_JQGrid
      * @var string
      */
     protected $_sortDirection;
+
+    /**
+     * The column to group by
+     *
+     * @var string
+     */
+    protected $_groupByColumn;
+
+    /**
+     * The direction to sort the group by column
+     *
+     * @var string
+     */
+    protected $_groupBySortOrder;
 
     /**
      * The rows of data to send back to the jqgrid client
@@ -69,7 +90,27 @@ class Tangent_Service_JQGrid
 
         if (isset($postData->sidx) && !is_null($postData->sidx))
         {
-            $this->setSortColumn($postData->sidx);
+            /**
+             * Separate Data
+             */
+            $sortIndexSections = explode(', ', $postData->sidx);
+
+            if (count($sortIndexSections) > 1)
+            {
+                $this->setSortColumn($sortIndexSections[1]);
+
+                $groupByParameters = explode(' ', $sortIndexSections[0]);
+
+                if (count($groupByParameters) === 2)
+                {
+                    $this->_groupByColumn    = $groupByParameters[0];
+                    $this->_groupBySortOrder = $groupByParameters[1];
+                }
+            }
+            else
+            {
+                $this->setSortColumn($sortIndexSections[0]);
+            }
         }
 
         if (isset($postData->sord) && !is_null($postData->sord))
@@ -112,34 +153,33 @@ class Tangent_Service_JQGrid
      */
     public function sortingIsValid ()
     {
+        $isValid = true;
         // Sort column must exist in our valid columns list
-        if (!in_array($this->getSortColumn(), $this->getValidSortColumns()))
+        if (!in_array($this->getSortColumn(), $this->getValidSortColumns()) && !empty($this->_sortColumn))
         {
-            return false;
+            $isValid = false;
+        }
+
+        if ($this->_groupByColumn !== null)
+        {
+            if ((strcasecmp(self::JQGRID_SORT_ASC, $this->getGroupBySortOrder()) !== 0) && (strcasecmp(self::JQGRID_SORT_DESC, $this->getGroupBySortOrder()) !== 0))
+            {
+                $isValid = false;
+            }
+
+            if (!in_array($this->getGroupByColumn(), $this->getValidGroupByColumns()))
+            {
+                $isValid = false;
+            }
         }
 
         // Sort direction can only be ASC or DESC
-        if ((strcasecmp(self::JQGRID_SORT_ASC, $this->getSortDirection()) !== 0) && (strcasecmp(self::JQGRID_SORT_DESC, $this->getSortDirection()) !== 0))
+        if ((strcasecmp(self::JQGRID_SORT_ASC, $this->getSortDirection()) !== 0) && (strcasecmp(self::JQGRID_SORT_DESC, $this->getSortDirection()) !== 0) && isset($this->_sortDirection))
         {
-            return false;
+            $isValid = false;
         }
 
-        return true;
-    }
-
-    /**
-     * Validates all the information
-     *
-     * @return boolean
-     */
-    public function isValid ()
-    {
-        if (!$this->sortingIsValid())
-        {
-            return false;
-        }
-
-        return true;
+        return $isValid;
     }
 
     /**
@@ -155,6 +195,7 @@ class Tangent_Service_JQGrid
      *
      * @param array $_validSortColumns
      *                 The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setValidSortColumns ($_validSortColumns)
@@ -179,6 +220,7 @@ class Tangent_Service_JQGrid
      *
      * @param string $_sortColumn
      *            The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setSortColumn ($_sortColumn)
@@ -203,6 +245,7 @@ class Tangent_Service_JQGrid
      *
      * @param string $_sortDirection
      *            The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setSortDirection ($_sortDirection)
@@ -252,6 +295,7 @@ class Tangent_Service_JQGrid
      *
      * @param number $_recordCount
      *            The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setRecordCount ($_recordCount)
@@ -276,6 +320,7 @@ class Tangent_Service_JQGrid
      *
      * @param number $_currentPage
      *            The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setCurrentPage ($_currentPage)
@@ -300,6 +345,7 @@ class Tangent_Service_JQGrid
      *
      * @param number $_recordsPerPage
      *            The new value
+     *
      * @return \Tangent_Service_JQGrid
      */
     public function setRecordsPerPage ($_recordsPerPage)
@@ -324,5 +370,100 @@ class Tangent_Service_JQGrid
 
         return $totalPages;
     }
-}
 
+    /**
+     * Setter for _groupByColumn
+     *
+     * @param string $groupByColumn
+     */
+    public function setGroupByColumn ($groupByColumn)
+    {
+        $this->_groupByColumn = $groupByColumn;
+    }
+
+    /**
+     * Getter for _groupByColumn
+     *
+     * @return string
+     */
+    public function getGroupByColumn ()
+    {
+        if (!isset($this->_groupByColumn))
+        {
+            $this->_groupByColumn = null;
+        }
+
+        return $this->_groupByColumn;
+    }
+
+    /**
+     * Setter for _groupBySortOrder
+     *
+     * @param string $groupBySortOrder
+     */
+    public function setGroupBySortOrder ($groupBySortOrder)
+    {
+        $this->_groupBySortOrder = $groupBySortOrder;
+    }
+
+    /**
+     * Getter for _groupBySortOrder
+     *
+     * @return string
+     */
+    public function getGroupBySortOrder ()
+    {
+        if (!isset($this->_groupBySortOrder))
+        {
+            $this->_groupBySortOrder = null;
+        }
+
+        return $this->_groupBySortOrder;
+    }
+
+    /**
+     * Setter for _validGroupByColumns
+     *
+     * @param array $validGroupByColumns
+     */
+    public function setValidGroupByColumns ($validGroupByColumns)
+    {
+        $this->_validGroupByColumns = $validGroupByColumns;
+    }
+
+    /**
+     * Getter for _validGroupByColumns
+     *
+     * @return array
+     */
+    public function getValidGroupByColumns ()
+    {
+        if (!isset($this->_validGroupByColumns))
+        {
+            $this->_validGroupByColumns = null;
+        }
+
+        return $this->_validGroupByColumns;
+    }
+
+    /**
+     * Returns whether or not grouping should take effect
+     *
+     * @return bool
+     */
+    public function hasGrouping ()
+    {
+        return ($this->_groupByColumn !== null && $this->_groupBySortOrder !== null);
+    }
+
+
+    /**
+     * Return whether or not we have columns to sort by
+     *
+     * @return bool
+     */
+    public function hasColumns ()
+    {
+        return (!empty($this->_sortColumn)&& !empty($this->_sortDirection));
+    }
+}
