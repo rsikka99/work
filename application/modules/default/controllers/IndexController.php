@@ -24,8 +24,8 @@ class Default_IndexController extends Tangent_Controller_Action
     public function init ()
     {
         /* Initialize action controller here */
-        $this->_mpsSession      = new Zend_Session_Namespace('mps-tools');
-        $this->_userId          = Zend_Auth::getInstance()->getIdentity()->id;
+        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_userId     = Zend_Auth::getInstance()->getIdentity()->id;
 
 
         if (isset($this->_mpsSession->selectedClientId))
@@ -45,8 +45,6 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-        $test = Zend_Registry::getInstance()->getArrayCopy();
-
         $this->view->userId = $this->_userId;
 
         $availableReports               = array();
@@ -133,7 +131,7 @@ class Default_IndexController extends Tangent_Controller_Action
 
                 if ($inArray->isValid($assessmentId))
                 {
-                    $this->_mpsSession->assessmentId  = $assessmentId;
+                    $this->_mpsSession->assessmentId = $assessmentId;
                     $this->redirector('index', 'index', 'assessment');
                 }
             }
