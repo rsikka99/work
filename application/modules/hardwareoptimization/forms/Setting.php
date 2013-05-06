@@ -150,12 +150,12 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                    'FormElements',
                                    array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
                                    array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-                                   'FieldSet'
+                                   'Fieldset'
                               ));
     }
 
     /**
-     * Allows the form to allow null vlaues
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {
