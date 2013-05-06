@@ -1,5 +1,0 @@
-placeholder.txt
-@author:  Chris Garrah
-
-Empty folders are ignored when uploaded to server by zend studio.  This dummy file
-ensures that the parent folder will be uploaded to the webserver.  
