@@ -66,7 +66,7 @@ class Assessment_Model_Assessment_Steps extends My_Navigation_Abstract
      */
     public function __construct ()
     {
-        $this->title = "Hardware Optimization";
+        $this->title = "Assessment";
         $this->_setNewSteps(self::$stepNames);
     }
 
