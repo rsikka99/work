@@ -66,6 +66,10 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
 
                 $this->redirector('index', 'index', 'index');
             }
+            else
+            {
+                $this->_navigation->clientName = $client->companyName;
+            }
         }
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/hardwareoptimization/" . $this->getHardwareOptimization()->id;
@@ -156,7 +160,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         $stage = ($this->getHardwareOptimization()->stepName) ? : $this->_firstStepName;
         $this->_navigation->updateAccessibleSteps($stage);
 
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
     }
 
     /**

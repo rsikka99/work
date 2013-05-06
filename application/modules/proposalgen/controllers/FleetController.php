@@ -154,8 +154,15 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             {
                 $startRecord = 0;
             }
+            $rmsUploads = $uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord);
 
-            $jqGrid->setRows($uploadMapper->fetchAllForClient($clientId, $jqGrid->getSortColumn() . " " . $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
+            foreach ($rmsUploads as $rmsUpload)
+            {
+
+                $rmsUpload->providerName = $rmsUpload->getRmsProvider()->name;
+            }
+
+            $jqGrid->setRows($rmsUploads);
 
             // Send back jqGrid json data
             $this->sendJson($jqGrid->createPagerResponseArray());

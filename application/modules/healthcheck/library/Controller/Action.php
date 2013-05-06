@@ -65,6 +65,10 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
                 $this->redirector('index', 'index', 'index');
             }
+            else
+            {
+                $this->_navigation->clientName = $client->companyName;
+            }
         }
 
         $this->_fullCachePath     = PUBLIC_PATH . "/cache/reports/healthcheck/" . $this->getHealthcheck()->id;
@@ -180,7 +184,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
         $stage = ($this->getHealthcheck()->stepName) ? : Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD;
         $this->_navigation->updateAccessibleSteps($stage);
 
-        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation->steps));
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
     }
 
     /**

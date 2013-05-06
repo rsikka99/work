@@ -3,13 +3,14 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 {
 
     /**
-     * @param My_Navigation_Step[] $steps
+     * @param My_Navigation_Abstract $navigation
      *
      * @return string
      */
-    public function NavigationMenu ($steps = null)
+    public function NavigationMenu ($navigation = null)
     {
-        $html = array();
+        $steps = $navigation->steps;
+        $html  = array();
         if ($steps !== null)
         {
             $html [] = '<ul class="nav nav-tabs" id="navigationMenu">';
@@ -53,6 +54,7 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 //                    break;
                 }
             }
+                $html [] = "<li class='active pull-right'><p>" . $navigation->title . " - " . $navigation->clientName . "</p></a>";
             $html [] = '</ul>';
         }
 

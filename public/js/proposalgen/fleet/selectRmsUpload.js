@@ -18,7 +18,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 200,
+                    width   : 190,
                     name    : 'uploadDate',
                     index   : 'uploadDate',
                     label   : 'Date Uploaded',
@@ -26,15 +26,15 @@ $(function ()
                     sortable: true
                 },
                 {
-                    width   : 150,
-                    name    : 'rmsProviderId',
+                    width   : 80,
+                    name    : 'providerName',
                     index   : 'rmsProviderId',
                     label   : 'Type',
                     title   : false,
                     sortable: true
                 },
                 {
-                    width   : 150,
+                    width   : 350,
                     name    : 'fileName',
                     index   : 'fileName',
                     label   : 'File',
@@ -42,20 +42,22 @@ $(function ()
                     sortable: true
                 },
                 {
-                    width   : 80,
+                    width   : 75,
                     name    : 'validRowCount',
                     index   : 'validRowCount',
                     label   : 'Valid',
                     title   : false,
-                    sortable: true
+                    sortable: true,
+                    align   : 'right'
                 },
                 {
-                    width   : 80,
+                    width   : 75,
                     name    : 'invalidRowCount',
                     index   : 'invalidRowCount',
                     label   : 'Invalid',
                     title   : false,
-                    sortable: true
+                    sortable: true,
+                    align   : 'right'
                 },
                 {
                     width   : 100,

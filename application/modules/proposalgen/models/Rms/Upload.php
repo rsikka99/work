@@ -52,7 +52,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
     /**
      * @var Proposalgen_Model_Rms_Provider
      */
-    protected $_rmsProvider;
+    public $rmsProvider;
 
 
     /**
@@ -155,12 +155,12 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
      */
     public function getRmsProvider ()
     {
-        if (!isset($this->_rmsProvider))
+        if (!isset($this->rmsProvider))
         {
-            $this->_rmsProvider = Proposalgen_Model_Mapper_Rms_Provider::getInstance()->find($this->rmsProviderId);
+            $this->rmsProvider = Proposalgen_Model_Mapper_Rms_Provider::getInstance()->find($this->rmsProviderId);
         }
 
-        return $this->_rmsProvider;
+        return $this->rmsProvider;
     }
 
     /**
@@ -170,7 +170,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
      */
     public function setRmsProvider ($rmsProvider)
     {
-        $this->_rmsProvider = $rmsProvider;
+        $this->rmsProvider = $rmsProvider;
 
         return $this;
     }

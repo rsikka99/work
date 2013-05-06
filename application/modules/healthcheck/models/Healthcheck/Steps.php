@@ -59,6 +59,7 @@ class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
      */
     public function __construct ()
     {
+        $this->title = "Health Check";
         $this->_setNewSteps(self::$stepNames);
     }
 }

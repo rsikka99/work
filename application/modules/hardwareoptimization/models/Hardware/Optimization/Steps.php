@@ -66,6 +66,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_Steps extends My_Navigati
      */
     public function __construct ()
     {
+        $this->title = "Hardware Optimization";
         $this->_setNewSteps(self::$stepNames);
     }
 
