@@ -235,15 +235,14 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
     /**
      * @param                                      $dealerId
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param                                      $sortColumn
-     * @param                                      $sortDirection
+     * @param                                      $sortOrder
      * @param null                                 $limit
      * @param null                                 $offset
      * @param bool                                 $justCount
      *
      * @return array|int
      */
-    public function fetAllForDealer ($dealerId, $costPerPageSetting, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function fetAllForDealer ($dealerId, $costPerPageSetting, $sortOrder, $limit = null, $offset = null, $justCount = false)
     {
         $db       = $this->getDbTable()->getAdapter();
         $dealerId = $db->quote($dealerId, 'INTEGER');
@@ -260,7 +259,6 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
 
             $returnLimit = 10;
-            $order[]     = "{$sortColumn} {$sortDirection}";
 
             if (!$limit)
             {
@@ -282,7 +280,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
                 ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
                 ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
                 ->limit($returnLimit, $offset)
-                ->order(array("deviceType", "fullname"));
+                ->order($sortOrder);
 
             $query = $db->query($select);
 
