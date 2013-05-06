@@ -1,10 +1,6 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: swilder
- * Date: 28/01/13
- * Time: 9:22 AM
- * To change this template use File | Settings | File Templates.
+ * Class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device
  */
 class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends My_Model_Mapper_Abstract
 {

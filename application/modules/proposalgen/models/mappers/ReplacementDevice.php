@@ -1,10 +1,6 @@
 <?php
 /**
- * Created by JetBrains PhpStorm.
- * User: swilder
- * Date: 29/01/13
- * Time: 8:57 AM
- * To change this Replacement Device use File | Settings | File Replacement Devices.
+ * Class Proposalgen_Model_Mapper_ReplacementDevice
  */
 class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstract
 {
@@ -250,9 +246,9 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $this->fetch(array(
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]    = $this->fetch(array(
                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
@@ -262,9 +258,9 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $this->fetch(array(
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP] = $this->fetch(array(
                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP
+                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP
                                                                                                        ), array(
                                                                                                                "{$this->col_monthlyRate} ASC"
                                                                                                           ));
@@ -313,11 +309,11 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
         $replacementDevices = $this->fetchAllForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
-            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP])
+            if ($replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
             {
                 $deviceArray [] = $replacementDevice->getMasterDevice();
             }
-            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP])
+            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
             {
                 $deviceArray [] = $replacementDevice->getMasterDevice();
             }
@@ -344,7 +340,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
             {
                 $deviceArray [] = $replacementDevice->getMasterDevice();
             }
-            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP])
+            else if ($allowUpgrades && $replacementDevice->replacementCategory === Proposalgen_Model_ReplacementDevice::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
             {
                 $deviceArray [] = $replacementDevice->getMasterDevice();
             }

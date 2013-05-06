@@ -1,4 +1,4 @@
-Changelog for MPS Tools
+Change Log for MPS Tools
 -----------------------
 This file contains information on what has changed in each version of the 
 software. The information may not be entirely complete or accurate and is 

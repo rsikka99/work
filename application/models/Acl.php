@@ -42,6 +42,12 @@ class Application_Model_Acl extends Zend_Acl
     protected static $_instance;
 
     /**
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+
+
+    /**
      * Gets a instance of Application_Model_Acl
      *
      * @return Application_Model_Acl
@@ -71,7 +77,7 @@ class Application_Model_Acl extends Zend_Acl
      */
     public function __construct ()
     {
-        /*
+        /**
          * Add our various roles
          */
         $this->addRole(self::ROLE_GUEST);
@@ -111,7 +117,9 @@ class Application_Model_Acl extends Zend_Acl
         $roles                 = array();
         $resourceAssertionList = array();
 
-        /*
+        $userId = 0;
+
+        /**
          * Massage roles into a workable array
          */
         if (is_array($role))
@@ -139,25 +147,35 @@ class Application_Model_Acl extends Zend_Acl
             }
             else
             {
-                $user = Application_Model_Mapper_User::getInstance()->find($userId);
-                if ($user)
+                /**
+                 * Get Cached Roles
+                 */
+                $roles = $this->getFromCache("userRolesFor_{$userId}");
+
+                if ($roles === false)
                 {
-                    $userRoles = $user->getUserRoles();
-                    if ($userRoles && count($userRoles) > 0)
+                    $user = Application_Model_Mapper_User::getInstance()->find($userId);
+                    if ($user)
                     {
-                        foreach ($userRoles as $userRole)
+                        $userRoles = $user->getUserRoles();
+                        if ($userRoles && count($userRoles) > 0)
                         {
-                            $roles[] = $userRole->roleId;
+                            foreach ($userRoles as $userRole)
+                            {
+                                $roles[] = $userRole->roleId;
+                            }
+                        }
+                        else
+                        {
+                            $roles[] = self::ROLE_GUEST;
                         }
                     }
                     else
                     {
                         $roles[] = self::ROLE_GUEST;
                     }
-                }
-                else
-                {
-                    $roles[] = self::ROLE_GUEST;
+
+                    $this->saveToCache($roles, "userRolesFor_{$userId}");
                 }
             }
         }
@@ -166,7 +184,8 @@ class Application_Model_Acl extends Zend_Acl
             $roles[] = $role;
         }
 
-        /*
+
+        /**
          * Massage our resource into a list of resources to test
          */
         if ($resource instanceof Zend_Controller_Request_Abstract)
@@ -198,7 +217,7 @@ class Application_Model_Acl extends Zend_Acl
             $resourceAssertionList[] = $resourceExplosion[0] . self::SEPARATOR . $resourceExplosion[1] . self::SEPARATOR . $resourceExplosion[2];
         }
 
-        /*
+        /**
          * Set our privilege to View if we didn't get passed a privilege
          */
         if ($privilege === null)
@@ -206,31 +225,127 @@ class Application_Model_Acl extends Zend_Acl
             $privilege = self::PRIVILEGE_VIEW;
         }
 
+        $userAccess = $this->getFromCache("userAccessRules_{$userId}");
+        if ($userAccess === false)
+        {
+            $userAccess = array();
+        }
 
-        /*
+        /**
          * Test each resource to see if we have access
          */
-        foreach ($roles as $roleToTest)
+        foreach ($resourceAssertionList as $resourceToTest)
         {
-            foreach ($resourceAssertionList as $resourceToTest)
+            if (isset($userAccess[$resourceToTest]))
             {
-                try
+                if ($userAccess[$resourceToTest])
                 {
-                    if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
+                    $isAllowed = true;
+                    break;
+                }
+            }
+            else
+            {
+                foreach ($roles as $roleToTest)
+                {
+                    try
                     {
-                        $isAllowed = true;
-                        break;
+                        if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
+                        {
+                            $isAllowed                   = true;
+                            $userAccess[$resourceToTest] = true;
+                            $this->saveToCache($userAccess, "userAccessRules_{$userId}");
+                            break 2;
+                        }
+                    }
+                    catch (Exception $e)
+                    {
+                        // Do nothing as the user is not allowed.
                     }
                 }
-                catch (Exception $e)
-                {
-                    // Do nothing as the user is not allowed.
-                }
+
+                $userAccess[$resourceToTest] = false;
+                $this->saveToCache($userAccess, "userAccessRules_{$userId}");
             }
         }
 
         return $isAllowed;
     }
 
+    /**
+     * Setter for _cache
+     *
+     * @param \Zend_Cache_Core $cache
+     */
+    public function setCache ($cache)
+    {
+        $this->_cache = $cache;
+    }
 
+    /**
+     * Getter for _cache
+     *
+     * @return \Zend_Cache_Core
+     */
+    public function getCache ()
+    {
+        if (!isset($this->_cache))
+        {
+            $cache = Zend_Registry::get('aclCache');
+            if ($cache)
+            {
+                $this->_cache = $cache;
+            }
+            else
+            {
+                $this->_cache = false;
+            }
+        }
+
+        return $this->_cache;
+    }
+
+    /**
+     * @param      $id
+     * @param bool $doNotTestCacheValidity
+     * @param bool $doNotUnserialize
+     *
+     * @see Zend_Cache_Core::load()
+     *
+     * @return bool|mixed
+     */
+    public function getFromCache ($id, $doNotTestCacheValidity = false, $doNotUnserialize = false)
+    {
+        $cache = $this->getCache();
+        if ($cache !== false)
+        {
+            return $cache->load($id, $doNotTestCacheValidity, $doNotUnserialize);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param       $data
+     * @param null  $id
+     * @param array $tags
+     * @param bool  $specificLifetime
+     * @param int   $priority
+     *
+     * @see Zend_Cache_Core::save()
+     *
+     * @return bool
+     */
+    public function saveToCache ($data, $id = null, $tags = array(), $specificLifetime = false, $priority = 8)
+    {
+        $cache = $this->getCache();
+        if ($cache !== false)
+        {
+            $cache->save($data, $id, $tags, $specificLifetime, $priority);
+
+            return true;
+        }
+
+        return false;
+    }
 }

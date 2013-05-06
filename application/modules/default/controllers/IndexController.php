@@ -45,6 +45,8 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $test = Zend_Registry::getInstance()->getArrayCopy();
+
         $this->view->userId = $this->_userId;
 
         $availableReports               = array();

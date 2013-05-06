@@ -17,17 +17,17 @@ $listParagraphStyle = array(
 
 $replacementDevices                                                              = $assessmentViewModel->getReplacementDevices();
 $replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]          = 'MONOCHROME';
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]       = 'MONOCHROME MFP';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]       = 'MONOCHROME MFP';
 $replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]       = 'COLOR';
-$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]    = 'COLOR MFP';
+$replacementTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP]    = 'COLOR MFP';
 $printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]              = 'Monochrome printer(s)';
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]           = 'Monochrome MFP(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]           = 'Monochrome MFP(s)';
 $printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]           = 'Color printer(s)';
-$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]        = 'Color MFP(s)';
+$printerTypes [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP]        = 'Color MFP(s)';
 $devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $assessmentViewModel->getDevicesToBeReplaced()->BlackAndWhite;
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]    = $assessmentViewModel->getDevicesToBeReplaced()->BlackAndWhiteMFP;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]    = $assessmentViewModel->getDevicesToBeReplaced()->BlackAndWhiteMFP;
 $devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $assessmentViewModel->getDevicesToBeReplaced()->Color;
-$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP] = $assessmentViewModel->getDevicesToBeReplaced()->ColorMFP;
+$devicesToBeReplaced [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP] = $assessmentViewModel->getDevicesToBeReplaced()->ColorMFP;
 
 $reportHasDevicesToReplace = false;
 foreach ($devicesToBeReplaced as $deviceList)
