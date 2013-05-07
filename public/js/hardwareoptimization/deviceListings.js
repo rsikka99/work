@@ -139,7 +139,6 @@ $(function ()
             },
             error  : function ()
             {
-                console.log('test');
             }
         });
     });
