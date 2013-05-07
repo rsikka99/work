@@ -137,4 +137,30 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         $json = json_encode($jsonArray);
         $this->sendJson($json);
     }
+
+    public function updateDeviceAction ()
+    {
+        $postData = array(
+            "maximumPageCount" => $this->getParam("maximumPageCount"),
+            "minimumPageCount" => $this->getParam("minimumPageCount"),
+            "masterDeviceId"   => $this->getParam("masterDeviceId"),
+        );
+
+        $form = new Hardwareoptimization_Form_DeviceSwaps();
+        if ($form->isValid($postData))
+        {
+            $deviceSwap = new Hardwareoptimization_Model_Device_Swap();
+            $deviceSwap->populate($postData);
+            $deviceSwap->dealerId = $this->_identity->dealerId;
+            $deviceSwap->saveObject();
+            $this->sendJson($deviceSwap->toArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $deviceSwap = array("error" => "Error saving");
+            $this->sendJson($deviceSwap);
+        }
+
+    }
 }
