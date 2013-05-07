@@ -25,6 +25,26 @@ class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Provides data for applyMarginoutOfBounds
+     */
+    public function outOfBoundsMarginData ()
+    {
+        return array(
+            array(1, -150,),
+            array(1, 150,),
+        );
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error_Notice
+     * @dataProvider outOfBoundsMarginData
+     */
+    public function testApplyMarginOutOfBounds ($cost, $marginPercent)
+    {
+        Tangent_Accounting::applyMargin($cost, $marginPercent);
+    }
+
+    /**
      * Provides data for applyMargin
      */
     public function reverseMarginData ()
