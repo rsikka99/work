@@ -4,6 +4,24 @@
  */
 class Hardwareoptimization_Model_Device_Swap extends My_Model_Abstract
 {
+    const REPLACEMENT_BW        = 1;
+    const REPLACEMENT_BW_MFP    = 2;
+    const REPLACEMENT_COLOR     = 3;
+    const REPLACEMENT_COLOR_MFP = 4;
+
+    /**
+     * An array of replacement type names with the id as the array key
+     *
+     * @var string[]
+     */
+    public static $replacementTypes = array(
+        self::REPLACEMENT_BW        => 'monochrome',
+        self::REPLACEMENT_BW_MFP    => 'monochromeMfp',
+        self::REPLACEMENT_COLOR     => 'color',
+        self::REPLACEMENT_COLOR_MFP => 'colorMfp'
+    );
+
+
     /**
      * @var int
      */
@@ -28,6 +46,11 @@ class Hardwareoptimization_Model_Device_Swap extends My_Model_Abstract
      * @var Proposalgen_Model_CostPerPage
      */
     protected $_costPerPage;
+
+    /**
+     * @var string
+     */
+    protected $_replacementCategory;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -199,4 +222,31 @@ class Hardwareoptimization_Model_Device_Swap extends My_Model_Abstract
     {
         return $this->_costPerPage;
     }
+
+    /**
+     * Setter for _replacementCategory
+     *
+     * @param string $replacementCategory
+     */
+    public function setReplacementCategory ($replacementCategory)
+    {
+        $this->_replacementCategory = $replacementCategory;
+    }
+
+    /**
+     * Getter for _replacementCategory
+     *
+     * @return string
+     */
+    public function getReplacementCategory ()
+    {
+        if (!isset($this->_replacementCategory))
+        {
+            $this->_replacementCategory = null;
+        }
+
+        return $this->_replacementCategory;
+    }
+
+
 }

@@ -309,11 +309,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     /**
      * Finds a suitable replacement for a device instance or returns null if no replacement was found
      *
-     * @param Proposalgen_Model_DeviceInstance     $deviceInstance
-     * @param Proposalgen_Model_MasterDevice[]     $replacementDevices
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting
-     * @param number                               $costSavingsThreshold
+     * @param Proposalgen_Model_DeviceInstance         $deviceInstance
+     * @param Hardwareoptimization_Model_Device_Swap[] $replacementDevices
+     * @param Proposalgen_Model_CostPerPageSetting     $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting     $replacementCostPerPageSetting
+     * @param number                                   $costSavingsThreshold
      *
      * @return Proposalgen_Model_MasterDevice
      */
@@ -323,14 +323,13 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $greatestSavings           = 0;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
 
-        /* @var $replacementDevice Proposalgen_Model_MasterDevice */
-        foreach ($replacementDevices as $masterDevice)
+        foreach ($replacementDevices as $deviceSwap)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $masterDevice);
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $deviceSwap->getMasterDevice());
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
-                $suggestedDevice = $masterDevice;
+                $suggestedDevice = $deviceSwap->getMasterDevice();
                 $greatestSavings = $costDelta;
             }
         }
@@ -358,15 +357,15 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 throw new Exception("Error resetting replacements!");
             }
 
-            $blackReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->_dealerId, false);
-            $blackMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->_dealerId, false);
-            $colorReplacementDevices    = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId, false);
-            $colorMfpReplacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
+            $blackReplacementDevices    = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId, false);
+            $blackMfpReplacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId, false);
+            $colorReplacementDevices    = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId, false);
+            $colorMfpReplacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
 
-            /* @var $replacementMasterDevice Proposalgen_Model_MasterDevice */
+            /* @var $replacementMasterDevice Hardwareoptimization_Model_Device_Swap */
             foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
             {
-                $replacementMasterDevice->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
+                $replacementMasterDevice->getMasterDevice()->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
             }
 
             $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();

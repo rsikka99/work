@@ -4,9 +4,9 @@
  */
 class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
 {
-    const REPLACEMENT_BW       = 1;
+    const REPLACEMENT_BW        = 1;
     const REPLACEMENT_BW_MFP    = 2;
-    const REPLACEMENT_COLOR    = 3;
+    const REPLACEMENT_COLOR     = 3;
     const REPLACEMENT_COLOR_MFP = 4;
 
     /**
@@ -15,10 +15,10 @@ class Proposalgen_Model_ReplacementDevice extends My_Model_Abstract
      * @var string[]
      */
     public static $replacementTypes = array(
-        self::REPLACEMENT_BW       => 'BLACK & WHITE',
-        self::REPLACEMENT_BW_MFP    => 'BLACK & WHITE MFP',
-        self::REPLACEMENT_COLOR    => 'COLOR',
-        self::REPLACEMENT_COLOR_MFP => 'COLOR MFP'
+        self::REPLACEMENT_BW        => 'monochrome',
+        self::REPLACEMENT_BW_MFP    => 'monochromeMfp',
+        self::REPLACEMENT_COLOR     => 'color',
+        self::REPLACEMENT_COLOR_MFP => 'colorMfp'
     );
 
     /**

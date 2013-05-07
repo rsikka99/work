@@ -13,7 +13,8 @@ class Hardwareoptimization_Form_DeviceSwaps extends Twitter_Bootstrap_Form_Horiz
             array(
                 'validator' => 'greaterThan',
                 'options'   => array(
-                    'min' => 0
+                    'min'       => 0,
+                    'inclusive' => true
                 )
             ),
             'Int'
@@ -24,7 +25,6 @@ class Hardwareoptimization_Form_DeviceSwaps extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement("text", "minimumPageCount", array("label" => "Max Page Count Volume", "validators" => $numberValidator));
         $this->addElement("text", "maximumPageCount", array("label" => "Min Page Count Volume", "validators" => $numberValidator));
-
 
 //        Hardwareoptimization_Form_Hardware_Optimization_Navigation::addFormActionsToForm(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_SAVE, $this);
     }

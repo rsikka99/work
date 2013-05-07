@@ -19,6 +19,11 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
     protected $_defaultDbTable = 'Hardwareoptimization_Model_DbTable_Device_Swap';
 
     /**
+     * @var Hardwareoptimization_Model_Device_Swap[]
+     */
+    protected $_replacementDevices;
+
+    /**
      * Gets an instance of the mapper
      *
      * @return Hardwareoptimization_Model_Mapper_Device_Swap
@@ -275,7 +280,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
 
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
-            $select->from(array($this->getTableName()),$caseStatement)
+            $select->from(array($this->getTableName()), $caseStatement)
                 ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
                 ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
                 ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
@@ -284,7 +289,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
 
             $query = $db->query($select);
 
-            $excludedRows = array();
+            $deviceSwaps = array();
             foreach ($query->fetchAll() as $row)
             {
                 $masterDevice         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($row['id']);
@@ -292,10 +297,157 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
                 $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
                 $row['colorCpp']      = $masterDevice->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
 
-                $excludedRows[] = $row;
+                $deviceSwaps[] = $row;
             }
 
-            return $excludedRows;
+            return $deviceSwaps;
         }
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Black Devices
+     *
+     * @param      $dealerId
+     * @param bool $allowUpgrades
+     *
+     * @return Hardwareoptimization_Model_Device_Swap []
+     */
+    public function getBlackReplacementDevices ($dealerId, $allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+            else if ($allowUpgrades)
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Black MFP Devices
+     *
+     * @param      $dealerId
+     * @param bool $allowUpgrades
+     *
+     * @return Hardwareoptimization_Model_Device_Swap []
+     */
+    public function getBlackMfpReplacementDevices ($dealerId, $allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+            else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Color Devices
+     *
+     * @param      $dealerId
+     * @param bool $allowUpgrades
+     *
+     * @return Hardwareoptimization_Model_Device_Swap []
+     */
+    public function getColorReplacementDevices ($dealerId, $allowUpgrades = true)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+            else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * Gets the replacement devices that are eligible for replacing Color MFP Devices
+     *
+     * @param $dealerId
+     *
+     * @return Hardwareoptimization_Model_Device_Swap []
+     */
+    public function getColorMfpReplacementDevices ($dealerId)
+    {
+        $deviceArray        = array();
+        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+        foreach ($replacementDevices as $replacementDevice)
+        {
+            $deviceArray [] = $replacementDevice;
+        }
+
+        return $deviceArray;
+    }
+
+    /**
+     * @param $dealerId
+     * @param $order
+     *
+     * @return Hardwareoptimization_Model_Device_Swap[]
+     */
+    public function fetchAllReplacementsForDealer ($dealerId, $order = null)
+    {
+        if (!isset($this->_replacementDevices))
+        {
+            $db       = $this->getDbTable()->getAdapter();
+            $dealerId = $db->quote($dealerId, 'INTEGER');
+
+            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+
+            $caseStatement = new Zend_Db_Expr("device_swaps.*,
+                        CASE WHEN md.isCopier AND NOT md.tonerConfigId = 1 THEN 'monochromeMfp'
+                        WHEN md.isCopier AND NOT md.tonerConfigId > 1 THEN 'colorMfp'
+                        WHEN NOT md.isCopier AND NOT md.tonerConfigId > 1 THEN 'color '
+                        WHEN NOT md.isCopier AND NOT md.tonerConfigId = 1 THEN 'monochrome'
+                        END AS replacementCategory");
+
+
+            $db     = Zend_Db_Table::getDefaultAdapter();
+            $select = $db->select();
+            $select->from(array($this->getTableName()), $caseStatement)
+                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+                ->order($order);
+
+            $query = $db->query($select);
+
+            $deviceSwaps = array();
+            foreach ($query->fetchAll() as $row)
+            {
+                $deviceSwap = new Hardwareoptimization_Model_Device_Swap();
+                $deviceSwap->populate($row);
+                $deviceSwap->setReplacementCategory($row['replacementCategory']);
+                $deviceSwaps[] = $deviceSwap;
+            }
+
+            $this->_replacementDevices = $deviceSwaps;
+        }
+
+        return $this->_replacementDevices;
     }
 }

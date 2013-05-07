@@ -184,11 +184,11 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackReplacementDevices($this->_dealerId);
+            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
-                $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
+                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
+                $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
             $this->blackReplacementDevices = $deviceArray;
@@ -208,10 +208,10 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
+            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
@@ -232,10 +232,10 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorReplacementDevices($this->_dealerId);
+            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
                     $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
@@ -258,10 +258,10 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         {
             $deviceArray        = array();
             $deviceArray [0]    = 'Keep';
-            $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
+            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->id);
+                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isCopier)
                 {
                     $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
