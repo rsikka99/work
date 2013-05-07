@@ -1,10 +1,12 @@
 $(function ()
 {
+    var lastsel2;
+
     jQuery("#deviceSwapsTable").jqGrid({
         url         : TMTW_BASEURL + 'hardwareoptimization/deviceswaps/device-swap-list',
         datatype    : 'json',
-        height      : 'auto',
-        width       : "100%",
+        width       : '100%',
+        height      : '100%',
         rowNum      : 30,
         rowList     : [10, 20, 30],
         colModel    : [
@@ -16,30 +18,27 @@ $(function ()
                 hidden  : true
             },
             {
-                name    : 'device_name',
-                index   : 'device_name',
-                label   : 'Device Name',
-                width   : 420,
-                editable: true
+                name : 'device_name',
+                index: 'device_name',
+                label: 'Device Name',
+                width: 340
             },
             {
                 name     : 'monochromeCpp',
                 index    : 'monochromeCpp',
-                label    : 'Monochrome CPP',
-                width    : 80,
+                label    : 'Monochrome CPP*',
+                width    : 120,
                 align    : "right",
                 sortable : false,
-                formatter: "number",
-                editable : true
+                formatter: "number"
             },
             {
                 name    : 'colorCpp',
                 index   : 'colorCpp',
-                label   : 'Color CPP',
-                width   : 80,
+                label   : 'Color CPP*',
+                width   : 120,
                 align   : "right",
-                sortable: false,
-                editable: true
+                sortable: false
             },
             {
                 name    : 'minimumPageCount',
@@ -47,7 +46,8 @@ $(function ()
                 label   : 'Min Page Count',
                 width   : 150,
                 align   : "right",
-                sortable: true
+                sortable: true,
+                editable: true
             },
             {
                 name    : 'maximumPageCount',
@@ -55,13 +55,14 @@ $(function ()
                 label   : 'Max Page Count',
                 width   : 150,
                 align   : "right",
-                sortable: true
+                sortable: true,
+                editable: true
             },
             {
                 name  : 'deviceType',
                 index : 'deviceType',
                 label : 'Device Type',
-                width : 150,
+                width : 140,
                 align : "right",
                 hidden: true
             }
@@ -75,14 +76,24 @@ $(function ()
             groupColumnShow: [false],
             groupOrder     : ['asc']
         },
-        caption     : "Device Swaps"
+        caption     : "Device Swaps",
+        onSelectRow : function (rowid)
+        {
+            var grid = $(this);
+            var myCellData = grid.getRowData(rowid);
+            $(".modal").modal("show");
+            $('#masterDeviceId').select2('data', { id: myCellData.id, text: myCellData.device_name});
+            $('#minimumPageCount').val(myCellData.minimumPageCount);
+            $('#maximumPageCount').val(myCellData.maximumPageCount);
+        }
     });
 
     // Setup autocomplete for our textbox
     $("#masterDeviceId").select2({
         placeholder       : "Search for a device",
         minimumInputLength: 1,
-        ajax              : { // instead of writing the function to execute the request we use select2's convenient helper
+        ajax              : {
+            // Instead of writing the function to execute the request we use select2's convenient helper
             url     : TMTW_BASEURL + "proposalgen/admin/search-for-device",
             dataType: 'json',
             data    : function (term, page)
@@ -94,7 +105,8 @@ $(function ()
                 };
             },
             results : function (data, page)
-            { // parse the results into the format expected by select2.
+            {
+                // Parse the results into the format expected by select2.
                 // Since we are using custom formatting functions we do not need to alter remote JSON data
                 var newData = $.map(data, function (device)
                 {
@@ -109,5 +121,26 @@ $(function ()
     $("#trigger").click(function ()
     {
         $(".modal").modal("show");
+        $('#masterDeviceId').select2('data', {text: "Begin typing to search"});
+        $('#minimumPageCount').val(0);
+        $('#maximumPageCount').val(0);
+    });
+
+    $("#saveTest").click(function ()
+    {
+        $.ajax({
+            url    : TMTW_BASEURL + "hardwareoptimization/deviceswaps/update-device",
+            type   : "post",
+            data   : $("#deviceSwap").serialize(),
+            success: function ()
+            {
+                $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
+                $(".modal").modal('hide');
+            },
+            error  : function ()
+            {
+                console.log('test');
+            }
+        });
     });
 });
