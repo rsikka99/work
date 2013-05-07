@@ -49,7 +49,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->_formElementGroups [] = $generalGroup;
 
         $proposalGroup               = new stdClass();
-        $proposalGroup->title        = "Health Check";
+        $proposalGroup->title        = "Customer Facing Settings";
         $proposalGroup->elements     = array();
         $this->_formElementGroups [] = $proposalGroup;
 
