@@ -225,36 +225,18 @@ class Application_Model_Acl extends Zend_Acl
             $privilege = self::PRIVILEGE_VIEW;
         }
 
-        $userAccess = $this->getFromCache("userAccessRules_{$userId}");
-        if ($userAccess === false)
-        {
-            $userAccess = array();
-        }
-
         /**
          * Test each resource to see if we have access
          */
         foreach ($resourceAssertionList as $resourceToTest)
         {
-            if (isset($userAccess[$resourceToTest]))
+            foreach ($roles as $roleToTest)
             {
-                if ($userAccess[$resourceToTest])
-                {
-                    $isAllowed = true;
-                    break;
-                }
-            }
-            else
-            {
-                foreach ($roles as $roleToTest)
-                {
                     try
                     {
                         if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
                         {
                             $isAllowed                   = true;
-                            $userAccess[$resourceToTest] = true;
-                            $this->saveToCache($userAccess, "userAccessRules_{$userId}");
                             break 2;
                         }
                     }
@@ -264,9 +246,6 @@ class Application_Model_Acl extends Zend_Acl
                     }
                 }
 
-                $userAccess[$resourceToTest] = false;
-                $this->saveToCache($userAccess, "userAccessRules_{$userId}");
-            }
         }
 
         return $isAllowed;
