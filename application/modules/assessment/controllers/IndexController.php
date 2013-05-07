@@ -39,6 +39,10 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                     $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
                 }
             }
+            else if (isset($postData['noUploads']))
+            {
+                $this->redirector('index', 'fleet', 'proposalgen');
+            }
 
             if ($this->getAssessment()->rmsUploadId > 0)
             {
@@ -48,9 +52,9 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
                 }
             }
         }
-
-        $this->view->rmsUpload      = $this->getAssessment()->getRmsUpload();
-        $this->view->navigationForm = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT);
+        $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getAssessment()->clientId));
+        $this->view->rmsUpload       = $this->getAssessment()->getRmsUpload();
+        $this->view->navigationForm  = new Assessment_Form_Assessment_Navigation(Assessment_Form_Assessment_Navigation::BUTTONS_NEXT);
     }
 
     /**

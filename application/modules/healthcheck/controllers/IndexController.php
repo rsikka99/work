@@ -43,7 +43,10 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                     $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
                 }
             }
-
+            else if (isset($postData['noUploads']))
+            {
+                $this->redirector('index', 'fleet', 'proposalgen');
+            }
             if ($this->getHealthcheck()->rmsUploadId > 0)
             {
                 if (isset($postData['saveAndContinue']))
@@ -52,8 +55,9 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 }
             }
         }
-        $this->view->navigationForm = new Healthcheck_Form_Healthcheck_Navigation(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_NEXT);
-        $this->view->rmsUpload      = $healthcheck->getRmsUpload();
+        $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getHealthcheck()->clientId));
+        $this->view->navigationForm  = new Healthcheck_Form_Healthcheck_Navigation(Healthcheck_Form_Healthcheck_Navigation::BUTTONS_NEXT);
+        $this->view->rmsUpload       = $healthcheck->getRmsUpload();
     }
 
     /**

@@ -40,7 +40,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
                 }
             }
-
+            else if (isset($postData['noUploads']))
+            {
+                $this->redirector('index', 'fleet', 'proposalgen');
+            }
             if ($this->getHardwareOptimization()->rmsUploadId > 0)
             {
                 if (isset($postData['saveAndContinue']))
@@ -49,7 +52,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 }
             }
         }
-
+        $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getHardwareOptimization()->clientId));
         $this->view->rmsUpload      = $this->getHardwareOptimization()->getRmsUpload();
         $this->view->navigationForm = new Hardwareoptimization_Form_Hardware_Optimization_Navigation(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_NEXT);
     }
