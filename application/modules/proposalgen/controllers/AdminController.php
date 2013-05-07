@@ -393,7 +393,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    if ($filter == "manufacturer_name")
+                    if ($filter == "manufacturer_name" || $filter == "manufacturer_id")
                     {
                         $filter = "fullname";
                     }
@@ -724,10 +724,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         // grab all variables from $_POST
         $id              = $this->_getParam('id', null);
         $toner_id        = $this->_getParam('toner_id', null);
-        $toner_sku       = $this->_getParam('toner_sku', null);
+        $toner_sku       = $this->_getParam('toner_SKU', null);
         $part_type_id    = $this->_getParam('part_type_id', null);
-        $manufacturer_id = $this->_getParam('manufacturer_id', null);
-        $toner_color_id  = $this->_getParam('toner_color_id', null);
+        $manufacturer_id = $this->_getParam('manufacturer_name', null);
+        $toner_color_id  = $this->_getParam('toner_color_name', null);
         $toner_yield     = $this->_getParam('toner_yield', null);
         $toner_price     = $this->_getParam('toner_price', null);
         $operation       = $this->_getParam('oper', null);
@@ -798,7 +798,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $where  = $tonerTable->getAdapter()->quoteInto('(sku = "' . $toner_sku . '")', null);
                         $toners = $tonerTable->fetchRow($where);
 
-                        if (count($toners->toArray()) > 0)
+                        if ($toners != null)
                         {
                             $message = "The toner already exists.";
                         }
