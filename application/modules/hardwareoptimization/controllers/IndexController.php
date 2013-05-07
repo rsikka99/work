@@ -280,12 +280,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     }
                 }
                 else
-                    // 1635
                 {
                     if ($currentReplacementMasterDevice)
                     {
-                        $deviceInstanceReplacement                   = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                        $deviceInstanceReplacement->deviceInstanceId = $deviceInstance->id;
+                        $deviceInstanceReplacement                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                        $deviceInstanceReplacement->deviceInstanceId       = $deviceInstance->id;
+                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_hardwareOptimization->id;
                         $deviceInstanceReplacementMapper->delete($deviceInstanceReplacement);
                         // Make sure the instance doesn't remember the replacement device
                         $deviceInstance->setReplacementMasterDevice(null);
