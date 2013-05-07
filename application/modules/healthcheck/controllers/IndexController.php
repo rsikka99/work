@@ -32,7 +32,6 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 $rmsUpload              = $selectRmsUploadService->validateRmsUploadId($postData['selectRmsUploadId']);
                 if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
                 {
-                    $this->_flashMessenger->addMessage(array('success' => 'The Upload you selected is valid.'));
                     $this->getHealthcheck()->rmsUploadId = $postData["selectRmsUploadId"];
                     $this->updateHealthcheckStepName();
                     $this->saveHealthcheck();
