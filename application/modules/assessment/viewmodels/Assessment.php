@@ -1666,7 +1666,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $totalCost->Combined      = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
-                $totalCost->BlackAndWhite += $device->getMonthlyBlackAndWhiteCost($this->getCostPerPageSettingForDealer());
+                // Total cost += monochrome cost
+                $totalCost->BlackAndWhite += $device->calculateMonthlyMonoCost($this->getCostPerPageSettingForDealer());
                 $totalCost->Color += $device->calculateMonthlyColorCost($this->getCostPerPageSettingForDealer());
             }
             $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
