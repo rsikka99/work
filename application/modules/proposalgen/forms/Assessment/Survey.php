@@ -78,7 +78,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAttrib('placeholder', 'Enter Amount...')
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('toner_cost_radio', 'exact', array(
+            ->addValidator(new Tangent_Validate_FieldDependsOnValue('toner_cost_radio', 'exact', array(
                                                                                                      new Zend_Validate_NotEmpty(),
                                                                                                      new Zend_Validate_Float()
                                                                                                 )), true);
@@ -101,7 +101,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAttrib('placeholder', 'Enter Amount...')
             ->setDescription($this->currency->getSymbol())
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('labor_cost_radio', 'exact', array(
+            ->addValidator(new Tangent_Validate_FieldDependsOnValue('labor_cost_radio', 'exact', array(
                                                                                                      new Zend_Validate_NotEmpty(),
                                                                                                      new Zend_Validate_Float()
                                                                                                 )), true);
@@ -170,7 +170,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
         $ink_toner_order->setAttrib('maxlength', 3)
             ->setAttrib('class', 'span1')
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('inkTonerOrderRadio', 'Times per month', array(
+            ->addValidator(new Tangent_Validate_FieldDependsOnValue('inkTonerOrderRadio', 'Times per month', array(
                                                                                                                  new Zend_Validate_NotEmpty(),
                                                                                                                  new Zend_Validate_Digits()
                                                                                                             )), true)
@@ -198,7 +198,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAttrib('class', 'span1')
             ->setDescription('hours')
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
+            ->addValidator(new Tangent_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
                                                                                                  new Zend_Validate_NotEmpty(),
                                                                                                  new Zend_Validate_Digits()
                                                                                             )), true)
@@ -213,7 +213,7 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
             ->setAttrib('class', 'span1')
             ->setDescription('breakdowns per month')
             ->setAllowEmpty(false)
-            ->addValidator(new Custom_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
+            ->addValidator(new Tangent_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
                                                                                                           new Zend_Validate_NotEmpty(),
                                                                                                           new Zend_Validate_Digits()
                                                                                                      )), true)

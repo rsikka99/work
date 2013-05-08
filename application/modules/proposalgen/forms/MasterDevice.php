@@ -308,7 +308,7 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
                                                              ),
                                                              'allowEmpty' => false,
                                                              'validators' => array(
-                                                                 new Custom_Validate_FieldDependsOnValue('is_leased', '1', array(
+                                                                 new Tangent_Validate_FieldDependsOnValue('is_leased', '1', array(
                                                                                                                                 new Zend_Validate_NotEmpty(),
                                                                                                                                 new Zend_Validate_Int(),
                                                                                                                                 new Zend_Validate_Between(array(
