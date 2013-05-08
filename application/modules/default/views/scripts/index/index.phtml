@@ -5,6 +5,7 @@
 <div class="row">
 <div class="span3">
     <div class="well well-small">
+
         <?php if (isset($this->selectedClientId)) :
             $selectedClient = Quotegen_Model_Mapper_Client::getInstance()->find($this->selectedClientId);
             ?>
@@ -69,14 +70,15 @@
 <?php if (isset($this->selectedClientId)) : ?>
     <div class="tabbable">
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#assessmentTabPane" data-toggle="tab">Assessment</a></li>
-            <li><a href="#hardwareOptimizationTabPane" data-toggle="tab">Hardware Optimize</a></li>
-            <li><a href="#healthcheckTabPane" data-toggle="tab">Health Check</a></li>
-            <li><a href="#quoteTabPane" data-toggle="tab">Quote</a></li>
+            <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
+            <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+            <li><a href="#healthcheckTabPane" data-toggle="tab"title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
+            <li><a href="#quoteTabPane" data-toggle="tab"title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
         </ul>
 
         <div class="tab-content">
             <div class="tab-pane active" id="assessmentTabPane">
+                <p>Assessment</p>
                 <form method="POST">
                     <table class="table table-striped table-condensed table-bordered">
                         <tr>
@@ -117,6 +119,7 @@
 
             </div>
             <div class="tab-pane" id="hardwareOptimizationTabPane">
+                <p>Hardware Optimization</p>
                 <form method="POST">
                     <table class="table table-striped table-condensed table-bordered">
                         <tr>
@@ -158,6 +161,7 @@
                 </form>
             </div>
             <div class="tab-pane" id="healthcheckTabPane">
+                <p>Health Check</p>
                 <form method="POST">
                     <table class="table table-striped table-condensed table-bordered">
                         <tr>
@@ -198,6 +202,7 @@
                 </form>
             </div>
             <div class="tab-pane" id="quoteTabPane">
+                <p>Hardware Quote</p>
                 <form method="POST">
                     <p>
                         <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
