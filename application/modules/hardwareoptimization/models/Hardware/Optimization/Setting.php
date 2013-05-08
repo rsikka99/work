@@ -49,6 +49,16 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
      */
     public $adminCostPerPage;
 
+    /**
+     * @var float
+     */
+    public $laborCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $partsCostPerPage;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -99,9 +109,20 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
         {
             $this->replacementPricingConfigId = $params->replacementPricingConfigId;
         }
+
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
+        }
+
+        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
+        {
+            $this->laborCostPerPage = $params->laborCostPerPage;
+        }
+
+        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
+        {
+            $this->partsCostPerPage = $params->partsCostPerPage;
         }
 
     }
@@ -121,6 +142,8 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "replacementPricingConfigId"  => $this->replacementPricingConfigId,
             "adminCostPerPage"            => $this->adminCostPerPage,
+            "laborCostPerPage"            => $this->laborCostPerPage,
+            "partsCostPerPage"            => $this->partsCostPerPage,
         );
     }
 
