@@ -12,20 +12,20 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
         $this->setMethod('POST');
         // Add an email element
         $this->addElement('text', 'email', array(
-                                                   'label'      => 'Email:',
-                                                   'required'   => true,
-                                                   'filters'    => array('StringTrim', 'StripTags'),
-                                                   'validators' => array(
-                                                       array(
-                                                           'validator' => 'StringLength',
-                                                           'options'   => array(
-                                                               'min' => 4,
-                                                               'max' => 255
-                                                           )
-                                                       ),
-                                                       'EmailAddress'
-                                                   )
-                                              ));
+                                                'label'      => 'Email:',
+                                                'required'   => true,
+                                                'filters'    => array('StringTrim', 'StripTags'),
+                                                'validators' => array(
+                                                    array(
+                                                        'validator' => 'StringLength',
+                                                        'options'   => array(
+                                                            'min' => 4,
+                                                            'max' => 255
+                                                        )
+                                                    ),
+                                                    'EmailAddress'
+                                                )
+                                           ));
 
         // Add the password element
         $this->addElement('password', 'password', array(
@@ -47,14 +47,14 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
                                                   ));
 
 
-        $formActions[] = array();
+        $formActions = array();
 
         //setup submit button
         $formActions[] = $this->createElement('submit', 'login', array(
-                                                                     'label'      => 'Sign In',
-                                                                     'ignore'     => true,
-                                                                     'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
-                                                                ));
+                                                                      'label'      => 'Sign In',
+                                                                      'ignore'     => true,
+                                                                      'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
+                                                                 ));
 
         /*
          * Forgot password action
