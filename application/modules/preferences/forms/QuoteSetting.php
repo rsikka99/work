@@ -57,7 +57,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'pageCoverageMonochrome', array(
                                                                  'label'      => 'Page Coverage Mono:',
                                                                  'required'   => true,
-                                                                 'append'     => '$',
+                                                                 'append'     => '%',
                                                                  'filters'    => array(
                                                                      'StringTrim',
                                                                      'StripTags'
@@ -68,7 +68,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'pageCoverageColor', array(
                                                             'label'      => 'Page Coverage Color:',
                                                             'required'   => true,
-                                                            'append'     => '$',
+                                                            'append'     => '%',
                                                             'filters'    => array(
                                                                 'StringTrim',
                                                                 'StripTags'
