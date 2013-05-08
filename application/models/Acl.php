@@ -147,36 +147,27 @@ class Application_Model_Acl extends Zend_Acl
             }
             else
             {
-                /**
-                 * Get Cached Roles
-                 */
-                $roles = $this->getFromCache("userRolesFor_{$userId}");
-
-                if ($roles === false)
+                $user = Application_Model_Mapper_User::getInstance()->find($userId);
+                if ($user)
                 {
-                    $user = Application_Model_Mapper_User::getInstance()->find($userId);
-                    if ($user)
+                    $userRoles = $user->getUserRoles();
+                    if ($userRoles && count($userRoles) > 0)
                     {
-                        $userRoles = $user->getUserRoles();
-                        if ($userRoles && count($userRoles) > 0)
+                        foreach ($userRoles as $userRole)
                         {
-                            foreach ($userRoles as $userRole)
-                            {
-                                $roles[] = $userRole->roleId;
-                            }
-                        }
-                        else
-                        {
-                            $roles[] = self::ROLE_GUEST;
+                            $roles[] = $userRole->roleId;
                         }
                     }
                     else
                     {
                         $roles[] = self::ROLE_GUEST;
                     }
-
-                    $this->saveToCache($roles, "userRolesFor_{$userId}");
                 }
+                else
+                {
+                    $roles[] = self::ROLE_GUEST;
+                }
+
             }
         }
         else
@@ -232,19 +223,19 @@ class Application_Model_Acl extends Zend_Acl
         {
             foreach ($roles as $roleToTest)
             {
-                    try
+                try
+                {
+                    if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
                     {
-                        if (parent::isAllowed((string)$roleToTest, $resourceToTest, $privilege))
-                        {
-                            $isAllowed                   = true;
-                            break 2;
-                        }
-                    }
-                    catch (Exception $e)
-                    {
-                        // Do nothing as the user is not allowed.
+                        $isAllowed = true;
+                        break 2;
                     }
                 }
+                catch (Exception $e)
+                {
+                    // Do nothing as the user is not allowed.
+                }
+            }
 
         }
 
