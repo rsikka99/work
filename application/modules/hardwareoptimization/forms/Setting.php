@@ -61,8 +61,19 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         $this->addElement('text', 'adminCostPerPage', array(
                                                            'label'      => 'Admin Cost Per Page',
                                                            'append'     => '$',
-                                                           'validators' => $costValidator,
+                                                           'validators' => $cppValidator,
                                                       ));
+        $this->addElement('text', 'partsCostPerPage', array(
+                                                           'label'      => 'Parts Cost Per Page',
+                                                           'append'     => '$',
+                                                           'validators' => $cppValidator,
+                                                      ));
+        $this->addElement('text', 'laborCostPerPage', array(
+                                                           'label'      => 'Labor Cost Per Page',
+                                                           'append'     => '$',
+                                                           'validators' => $cppValidator,
+                                                      ));
+
 
         $this->addElement('text', 'targetMonochromeCostPerPage', array(
                                                                       'label'      => 'Target Monochrome Cost Per Page',
@@ -101,7 +112,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
 
 
-        $this->addDisplayGroup(array('costThreshold', 'dealerMargin',"adminCostPerPage", 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
+        $this->addDisplayGroup(array('costThreshold', 'dealerMargin', "partsCostPerPage", "laborCostPerPage", "adminCostPerPage", 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
 
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(

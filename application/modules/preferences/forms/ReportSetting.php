@@ -145,26 +145,6 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                                                                       'class' => 'span3 '
                                                                                                  ));
 
-        // Hardware Optimization Elements
-        $this->addElement('text', 'costThreshold', array(
-                                                        'label'      => 'Cost Threshold',
-                                                        'append'     => '$',
-                                                        'validators' => $costValidator
-                                                   ));
-        $this->addElement('text', 'targetMonochromeCostPerPage', array(
-                                                                      'label'      => 'Target Monochrome Cost Per Page',
-                                                                      'append'     => '$ / page',
-                                                                      'validators' => $cppValidator
-                                                                 ));
-        $this->addElement('text', 'targetColorCostPerPage', array(
-                                                                 'label'      => 'Target Color Cost Per Page',
-                                                                 'append'     => '$ / page',
-                                                                 'validators' => $cppValidator
-                                                            ));
-        $replacementPricingConfig = $this->createElement('select', 'replacementPricingConfigId', array(
-                                                                                                    'label' => 'Toner Preference',
-                                                                                                    'class' => 'span3 '
-                                                                                               ));
 
 
         // Set a span 2 to all elements that do not have a class
@@ -191,7 +171,6 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      $assessmentPricingConfig,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
         $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
-        $this->addDisplayGroup(array('costThreshold', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
                                          'FieldSize',
@@ -235,7 +214,6 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
             $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
         }
         $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
-        $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
         $grossMarginPricingConfig->addMultiOptions($pricingConfigOptions);
     }
 

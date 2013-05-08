@@ -52,6 +52,9 @@ class Preferences_Service_HardwareoptimizationSetting
             {
                 $this->_form->getElement("dealerMargin")->setDescription($populateSettings["dealerMargin"]);
                 $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
+                $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
+                $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
+                $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
                 $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
                 $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 $this->_form->getElement("replacementPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['replacementPricingConfigId']]);
