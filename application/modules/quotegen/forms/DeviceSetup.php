@@ -89,7 +89,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                  ),
                                                  'allowEmpty' => false,
                                                  'validators' => array(
-                                                     new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                     new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
                                                                                                                    new Zend_Validate_NotEmpty()
                                                                                                               ), array(
                                                                                                                       'validator' => 'StringLength',
@@ -111,7 +111,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                         'StripTags'
                                                     ),
                                                     'validators' => array(
-                                                        new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                        new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
                                                                                                                       new Zend_Validate_NotEmpty()
                                                                                                                  ), array(
                                                                                                                          'validator' => 'StringLength',
@@ -152,7 +152,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                    'StripTags'
                                                ),
                                                'validators' => array(
-                                                   new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                   new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
                                                                                                                  new Zend_Validate_NotEmpty(),
                                                                                                                  new Zend_Validate_Float(),
                                                                                                                  new Zend_Validate_Between(array(
@@ -295,7 +295,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StringTrim',
                                                                'StripTags'
                                                            ),
-                                                           'validators' => array(new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                           'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
                                                                                                                                                new Zend_Validate_NotEmpty(),
                                                                                                                                                new Zend_Validate_Float(),
                                                                                                                                                new Zend_Validate_Between(array(
@@ -317,7 +317,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StringTrim',
                                                                'StripTags'
                                                            ),
-                                                           'validators' => array(new Custom_Validate_FieldDependsOnValue('can_sell', '1', array(
+                                                           'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
                                                                                                                                                new Zend_Validate_NotEmpty(),
                                                                                                                                                new Zend_Validate_Float(),
                                                                                                                                                new Zend_Validate_Between(array(
@@ -442,7 +442,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                            ),
                                                            'allowEmpty' => false,
                                                            'validators' => array(
-                                                               new Custom_Validate_FieldDependsOnValue('isLeased', '1', array(
+                                                               new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
                                                                                                                              new Zend_Validate_NotEmpty(),
                                                                                                                              new Zend_Validate_Int(),
                                                                                                                              new Zend_Validate_Between(array(
