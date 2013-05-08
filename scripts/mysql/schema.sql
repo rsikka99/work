@@ -10,8 +10,7 @@ CREATE  TABLE IF NOT EXISTS `images` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `image` MEDIUMBLOB NOT NULL ,
     `filename` VARCHAR(255) NOT NULL ,
-    PRIMARY KEY (`id`) )
-    ENGINE = InnoDB;
+    PRIMARY KEY (`id`) );
 
 
 -- -----------------------------------------------------
@@ -29,8 +28,7 @@ CREATE  TABLE IF NOT EXISTS `dealers` (
     FOREIGN KEY (`dealerLogoImageId` )
     REFERENCES `images` (`id` )
         ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -103,8 +101,7 @@ CREATE  TABLE IF NOT EXISTS `manufacturers` (
 CREATE  TABLE IF NOT EXISTS `rms_providers` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
-    PRIMARY KEY (`id`) )
-    ENGINE = InnoDB;
+    PRIMARY KEY (`id`) );
 
 
 -- -----------------------------------------------------
@@ -130,8 +127,7 @@ CREATE  TABLE IF NOT EXISTS `rms_uploads` (
     FOREIGN KEY (`rmsProviderId` )
     REFERENCES `rms_providers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1169,8 +1165,7 @@ CREATE  TABLE IF NOT EXISTS `quote_lease_terms` (
     FOREIGN KEY (`leasingSchemaTermId` )
     REFERENCES `leasing_schema_terms` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1188,8 +1183,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_groups` (
     FOREIGN KEY (`quoteId` )
     REFERENCES `quotes` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1213,8 +1207,7 @@ CREATE  TABLE IF NOT EXISTS `quote_device_group_devices` (
     FOREIGN KEY (`quoteDeviceGroupId` )
     REFERENCES `quote_device_groups` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1236,8 +1229,7 @@ CREATE  TABLE IF NOT EXISTS `contacts` (
     FOREIGN KEY (`clientId` )
     REFERENCES `clients` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1247,8 +1239,7 @@ CREATE  TABLE IF NOT EXISTS `countries` (
     `id` INT(11) NOT NULL AUTO_INCREMENT ,
     `name` VARCHAR(255) NOT NULL ,
     `locale` VARCHAR(255) NOT NULL ,
-    PRIMARY KEY (`id`) )
-    ENGINE = InnoDB;
+    PRIMARY KEY (`id`) );
 
 
 -- -----------------------------------------------------
@@ -1275,8 +1266,7 @@ CREATE  TABLE IF NOT EXISTS `addresses` (
     FOREIGN KEY (`countryId` )
     REFERENCES `countries` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1292,8 +1282,7 @@ CREATE  TABLE IF NOT EXISTS `regions` (
     FOREIGN KEY (`countryId` )
     REFERENCES `countries` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1314,8 +1303,7 @@ CREATE  TABLE IF NOT EXISTS `device_instance_master_devices` (
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1338,8 +1326,7 @@ CREATE  TABLE IF NOT EXISTS `rms_excluded_rows` (
     FOREIGN KEY (`rmsUploadId` )
     REFERENCES `rms_uploads` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1355,6 +1342,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `targetMonochromeCostPerPage` DOUBLE NULL ,
     `replacementPricingConfigId` INT NULL ,
     `adminCostPerPage` DOUBLE NULL ,
+    `laborCostPerPage` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `hardware_optimization_settings_ibfk_1_idx` (`customerPricingConfigId` ASC) ,
     INDEX `hardware_optimization_settings_ibfk_2_idx` (`dealerPricingConfigId` ASC) ,
@@ -1373,8 +1361,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     FOREIGN KEY (`replacementPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
         ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1414,8 +1401,7 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimizations` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1444,8 +1430,7 @@ CREATE  TABLE IF NOT EXISTS `device_instance_replacement_master_devices` (
     FOREIGN KEY (`hardwareOptimizationId` )
     REFERENCES `hardware_optimizations` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1469,8 +1454,7 @@ CREATE  TABLE IF NOT EXISTS `assessment_surveys` (
     FOREIGN KEY (`reportId` )
     REFERENCES `assessments` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1492,8 +1476,7 @@ CREATE  TABLE IF NOT EXISTS `user_sessions` (
     FOREIGN KEY (`sessionId` )
     REFERENCES `sessions` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1573,8 +1556,7 @@ CREATE  TABLE IF NOT EXISTS `healthchecks` (
     FOREIGN KEY (`healthcheckSettingId` )
     REFERENCES `healthcheck_settings` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1594,8 +1576,7 @@ CREATE  TABLE IF NOT EXISTS `user_password_reset_requests` (
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1618,8 +1599,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_master_device_attributes` (
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1642,8 +1622,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_toner_attributes` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1665,8 +1644,7 @@ CREATE  TABLE IF NOT EXISTS `user_viewed_clients` (
     FOREIGN KEY (`userId` )
     REFERENCES `users` (`id` )
         ON DELETE CASCADE
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1688,8 +1666,7 @@ CREATE  TABLE IF NOT EXISTS `rms_device_matchups` (
     FOREIGN KEY (`masterDeviceId` )
     REFERENCES `master_devices` (`id` )
         ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1737,8 +1714,7 @@ CREATE  TABLE IF NOT EXISTS `dealer_settings` (
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `quote_settings` (`id` )
         ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1786,8 +1762,7 @@ CREATE  TABLE IF NOT EXISTS `user_settings` (
     FOREIGN KEY (`quoteSettingId` )
     REFERENCES `quote_settings` (`id` )
         ON DELETE SET NULL
-        ON UPDATE CASCADE)
-    ENGINE = InnoDB;
+        ON UPDATE CASCADE);
 
 
 -- -----------------------------------------------------
@@ -1810,8 +1785,8 @@ CREATE  TABLE IF NOT EXISTS `device_swaps` (
     FOREIGN KEY (`dealerId` )
     REFERENCES `dealers` (`id` )
         ON DELETE NO ACTION
-        ON UPDATE NO ACTION)
-    ENGINE = InnoDB;
+        ON UPDATE NO ACTION);
+
 
 
 
