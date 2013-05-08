@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Class Bootstrap
  * This class prepares the application with all the needed settings before anything is routed
@@ -114,7 +113,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     /**
      * Takes initialized caches and puts them into the registry
      */
-    protected function _initPutCachesIntoRegistry()
+    protected function _initPutCachesIntoRegistry ()
     {
         $this->bootstrap('cachemanager');
         /* @var $cacheManager Zend_Cache_Manager */
@@ -130,6 +129,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initNavigation ()
     {
         $this->bootstrap('view');
+        $this->bootstrap('putcachesintoregistry');
+
         /* @var $view Zend_View */
         $view = $this->getResource('view');
 
@@ -151,10 +152,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $navigation->setRole(null);
         }
 
-        $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
-        /* @var $container Zend_Navigation */
-        $container = $view->navigation()->getContainer();
-        $container->addPages($config);
+        $cache     = Zend_Registry::get('navigationCache');
+        $container = $cache->load('navigationCache');
+        if ($container === false)
+        {
+            $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
+
+            /* @var $container Zend_Navigation */
+            $container = $view->navigation()->getContainer();
+            $container->addPages($config);
+
+            $cache->save($container, 'navigationCache');
+        }
+
+        $view->navigation()->setContainer($container);
+
         Zend_Registry::set('Zend_Navigation', $container);
     }
 
