@@ -475,7 +475,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setLegendPosition("t");
 
             $dotProperties = '@d,E21736,0,.5:' . number_format($diamond, 7) . ',30|';
-            $dotProperties .= '@t' . count($uniqueSupplyTypes)/2 . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
+            $dotProperties .= '@t' . count($uniqueSupplyTypes) . ',E21736,0,-1:' . number_format($diamond - 0.012, 7) . ',10';
             $barGraph->setProperty('chm', $dotProperties);
             $barGraph->addColors(array("0194D2"));
             $barGraph->setProperty('chxs', '0N*sz0*');
