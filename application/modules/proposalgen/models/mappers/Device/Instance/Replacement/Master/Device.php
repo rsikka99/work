@@ -98,15 +98,12 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         if ($object instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
         {
-            $id          = $object->deviceInstanceId;
-            $whereClause = array(
-                "{$this->col_deviceInstanceId} = ?" => $object->deviceInstanceId,
-                "{$this->col_deviceInstanceId} = ?" => $object->hardwareOptimizationId
-            );
+            $id          = array($object->deviceInstanceId, $object->hardwareOptimizationId);
+            $whereClause = $this->getPrimaryKeyValueForObject($object);
         }
         else
         {
-            $id          = $object;
+            $id          = array($object[0], $object[1]);
             $whereClause = array(
                 "{$this->col_deviceInstanceId} = ?"       => $object[0],
                 "{$this->col_hardwareOptimizationId} = ?" => $object[1]
