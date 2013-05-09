@@ -1471,11 +1471,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page
      *
+     * @param  int                                 $hardwareOptimizationId
+     *
      * @return Proposalgen_Model_CostPerPage
      */
-    public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $hardwareOptimizationId)
     {
-        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDevice());
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
     }
 
     /**

@@ -158,7 +158,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         else
         {
             $this->_response->setHttpResponseCode(500);
-            $deviceSwap = array("error" => "Error saving");
+            $deviceSwap = array("error" => $form->getErrors());
             $this->sendJson($deviceSwap);
         }
 

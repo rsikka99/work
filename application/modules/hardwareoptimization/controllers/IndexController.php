@@ -53,8 +53,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             }
         }
         $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getHardwareOptimization()->clientId));
-        $this->view->rmsUpload      = $this->getHardwareOptimization()->getRmsUpload();
-        $this->view->navigationForm = new Hardwareoptimization_Form_Hardware_Optimization_Navigation(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_NEXT);
+        $this->view->rmsUpload       = $this->getHardwareOptimization()->getRmsUpload();
+        $this->view->navigationForm  = new Hardwareoptimization_Form_Hardware_Optimization_Navigation(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_NEXT);
     }
 
     public function settingsAction ()
@@ -332,8 +332,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
-                $suggestedDevice = $deviceSwap->getMasterDevice();
-                $greatestSavings = $costDelta;
+                // We replaced the device on cost at this point, we need to look at ampv
+                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombined()->getMonthly() > $deviceSwap->minimumPageCount)
+                {
+                    $suggestedDevice = $deviceSwap->getMasterDevice();
+                    $greatestSavings = $costDelta;
+                }
             }
         }
 
