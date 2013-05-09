@@ -577,7 +577,7 @@ class Hardwareoptimization_ViewModel_Optimization
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage = $deviceInstance->calculateCostPerPageWithReplacement($costPerPageSetting);
+                $costPerPage = $deviceInstance->calculateCostPerPageWithReplacement($costPerPageSetting, $this->_optimization->id);
                 $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
                 if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
                 {

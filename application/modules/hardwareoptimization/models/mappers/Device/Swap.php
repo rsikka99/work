@@ -398,7 +398,10 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
         $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
-            $deviceArray [] = $replacementDevice;
+            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+            {
+                $deviceArray [] = $replacementDevice;
+            }
         }
 
         return $deviceArray;
@@ -420,10 +423,10 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
 
             $caseStatement = new Zend_Db_Expr("device_swaps.*,
-                        CASE WHEN md.isCopier AND NOT md.tonerConfigId = 1 THEN 'monochromeMfp'
-                        WHEN md.isCopier AND NOT md.tonerConfigId > 1 THEN 'colorMfp'
-                        WHEN NOT md.isCopier AND NOT md.tonerConfigId > 1 THEN 'color '
-                        WHEN NOT md.isCopier AND NOT md.tonerConfigId = 1 THEN 'monochrome'
+                        CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'monochromeMfp'
+                        WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'colorMfp'
+                        WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'color'
+                        WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'monochrome'
                         END AS replacementCategory");
 
 

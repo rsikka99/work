@@ -54,7 +54,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
     /**
      * @param null $devices
-     * @param      $dealerId int
+     * @param      $dealerId               int
      * @param      $hardwareOptimizationId int
      * @param null $options
      */
@@ -140,7 +140,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                     }
                 }
                 $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimizationId);
-}
+            }
             else
             {
                 $replacementDevices                    = array();
@@ -187,7 +187,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
+                $masterDevice                                            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
@@ -211,8 +211,8 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                $masterDevice                         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
-                $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
+                $masterDevice                                            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
+                $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
 
             $this->blackMfpReplacementDevices = $deviceArray;
@@ -238,7 +238,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
-                    $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
+                    $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
             $this->colorReplacementDevices = $deviceArray;
@@ -264,7 +264,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isCopier)
                 {
-                    $deviceArray [$replacementDevice->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
+                    $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
 
