@@ -54,7 +54,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                    ));
 
         $this->addElement('text', 'dealerMargin', array(
-                                                       'label'      => 'Cost Threshold',
+                                                       'label'      => 'Dealer Margin',
                                                        'append'     => '$',
                                                        'validators' => $marginValidator
                                                   ));
@@ -87,15 +87,15 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                  'validators' => $cppValidator
                                                             ));
         $replacementPricingConfig = $this->createElement('select', 'replacementPricingConfigId', array(
-                                                                                                      'label' => 'Toner Preference',
+                                                                                                      'label' => 'Replacement Toner Preference',
                                                                                                       'class' => 'span3 '
                                                                                                  ));
         $dealerPricingConfigId    = $this->createElement('select', 'dealerPricingConfigId', array(
-                                                                                                 'label' => 'Toner Preference',
+                                                                                                 'label' => 'Dealer Toner Preference',
                                                                                                  'class' => 'span3 '
                                                                                             ));
         $customerPricingConfigId  = $this->createElement('select', 'customerPricingConfigId', array(
-                                                                                                   'label' => 'Toner Preference',
+                                                                                                   'label' => 'Customer Toner Preference',
                                                                                                    'class' => 'span3 '
                                                                                               ));
 
@@ -149,15 +149,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                               'Fieldset'
                                          ));
 
-        $pricingConfigOptions = array();
-        // Add multi options to toner preferences.
-        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
-        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
-        {
-            $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
-        }
-        $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
-
+        $this->_populatePricingConfigDropdowns();
     }
 
     /**
@@ -172,6 +164,8 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'FieldSet'
                                          ));
+
+        $this->_populatePricingConfigDropdowns(true);
     }
 
     /**
@@ -186,4 +180,34 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         }
         $this->allowsNull = true;
     }
+
+    protected function _populatePricingConfigDropdowns ($allowDefault = false)
+    {
+        $pricingConfigOptions = array();
+
+        $replacementPricingConfig = $this->getElement('replacementPricingConfigId');
+        $customerPricingConfigId  = $this->getElement('dealerPricingConfigId');
+        $dealerPricingConfigId    = $this->getElement('customerPricingConfigId');
+
+        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
+        {
+            if ($allowDefault)
+            {
+                $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
+            }
+            else
+            {
+                if ($pricingConfig->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
+                {
+                    $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
+
+                }
+            }
+        }
+
+        $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
+        $customerPricingConfigId->addMultiOptions($pricingConfigOptions);
+        $dealerPricingConfigId->addMultiOptions($pricingConfigOptions);
+    }
+
 }

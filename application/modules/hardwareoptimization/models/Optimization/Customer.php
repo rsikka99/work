@@ -454,7 +454,6 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setVisibleAxes(array('x'));
             $barGraph->setTitle("Unique Supply Types");
 
-
             $barGraph->addColors(array("0194D2"));
             $barGraph->addDataSet(array(0));
             $barGraph->addColors(array("E21736"));
@@ -464,12 +463,13 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addColors(array("0194D2"));
             $barGraph->addDataSet(array($targetUniqueness));
 
-
             $barGraph->setLegend(array(
                                       "Ideal Supply Uniqueness",
                                       "Your Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 0, $highest, 3);
+            //Ticksize is used to scale the number of ticks on the x axis to never go above 21
+            $tickSize = (int)($highest/20 + 1);
+            $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
@@ -505,7 +505,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                                       "Ideal Supply Uniqueness",
                                       "Your Optimized Supply Uniqueness"
                                  ));
-            $barGraph->addAxisRange(0, 0, $highest, 3);
+            //Ticksize is used to scale the number of ticks on the x axis to never go above 21
+            $tickSize = (int)($highest/20 + 1);
+            $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");

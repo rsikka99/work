@@ -53,8 +53,8 @@ $assessmentViewModel = $this->assessmentViewModel;
             <tbody>
             <?php
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) :
-                $toners    = $device->getMasterDevice()->getToners();
-                $oemToners = $toners[Proposalgen_Model_PartType::OEM];?>
+                $toners    = $device->getMasterDevice()->getToners();?>
+
 
                 <tr class="center">
                     <td class="column1">
@@ -68,40 +68,40 @@ $assessmentViewModel = $this->assessmentViewModel;
                     </td>
                     <!-- OEM -->
                     <td class="column4">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? $oemToners[Proposalgen_Model_TonerColor::BLACK][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::BLACK])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::BLACK][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column5">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::BLACK][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::BLACK])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::BLACK][0]->cost : "-"; ?></div>
                     </td>
                     <td class="column6">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? $oemToners[Proposalgen_Model_TonerColor::CYAN][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::CYAN])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::CYAN][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column7">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::CYAN][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::CYAN])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::CYAN][0]->cost : "-"; ?></div>
                     </td>
                     <td class="column8">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $oemToners[Proposalgen_Model_TonerColor::MAGENTA][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::MAGENTA])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::MAGENTA][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column9">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::MAGENTA][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::MAGENTA])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::MAGENTA][0]->cost : "-"; ?></div>
                     </td>
                     <td class="column10">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? $oemToners[Proposalgen_Model_TonerColor::YELLOW][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::YELLOW])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::YELLOW][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column11">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::YELLOW][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::YELLOW])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::YELLOW][0]->cost : "-"; ?></div>
                     </td>
                     <td class="column12">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::THREE_COLOR])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::THREE_COLOR][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column13">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::THREE_COLOR])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::THREE_COLOR][0]->cost : "-"; ?></div>
                     </td>
                     <td class="column14">
-                        <div class="center"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR][0]->sku : "-"; ?></div>
+                        <div class="center"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::FOUR_COLOR][0]->sku : "-"; ?></div>
                     </td>
                     <td class="column15">
-                        <div class="right"><?php echo (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? "$" . $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR][0]->cost : "-"; ?></div>
+                        <div class="right"><?php echo (isset($toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::FOUR_COLOR])) ? "$" . $toners[Proposalgen_Model_PartType::OEM][Proposalgen_Model_TonerColor::FOUR_COLOR][0]->cost : "-"; ?></div>
                     </td>
                     <!-- COMPATIBLE -->
                     <td class="column16">
