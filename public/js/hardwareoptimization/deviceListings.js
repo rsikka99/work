@@ -77,6 +77,7 @@ $(function ()
             groupOrder     : ['asc']
         },
         caption     : "Device Swaps",
+        // When we click a row, we will allow the user to edit that device
         onSelectRow : function (rowid)
         {
             var grid = $(this);
@@ -98,6 +99,7 @@ $(function ()
             dataType: 'json',
             data    : function (term, page)
             {
+                // onlyQuoteDevices will only return devices that are quote devices
                 return {
                     searchTerm      : term, // search term
                     onlyQuoteDevices: true,
@@ -118,6 +120,7 @@ $(function ()
         }
     });
 
+    // Trigger is used for the create new button, displays the modal.
     $("#trigger").click(function ()
     {
         $(".modal").modal("show");
@@ -126,6 +129,7 @@ $(function ()
         $('#maximumPageCount').val(0);
     });
 
+    // Save button on the modal will trigger a json response to save the data
     $("#saveTest").click(function ()
     {
         $.ajax({
@@ -137,9 +141,16 @@ $(function ()
                 $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
                 $(".modal").modal('hide');
             },
-            error  : function ()
+            error  : function (data)
             {
+                $("#login-error").show();
             }
         });
     });
+
+    // When modal hides function is triggered, clear preivious messages
+    $('.modal').on('hidden', function ()
+    {
+        $("#login-error").hide();
+    })
 });
