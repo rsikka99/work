@@ -3753,40 +3753,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
 
     /**
-     * Calculates the weighted average monthly cost per page when using replacements
-     *
-     * @return Proposalgen_Model_CostPerPage
-     */
-    public function calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements ()
-    {
-        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements))
-        {
-            $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements = new Proposalgen_Model_CostPerPage();
-
-            $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
-            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
-            $colorCpp                      = 0;
-            $monoCpp                       = 0;
-
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $costPerPage = $deviceInstance->calculateCostPerPageWithReplacement($costPerPageSetting);
-                $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
-                if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
-                {
-                    $colorCpp += ($deviceInstance->getPageCounts()->color->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
-                }
-            }
-
-            $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements->monochromeCostPerPage = $monoCpp;
-            $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements->colorCostPerPage      = $colorCpp;
-        }
-
-        return $this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
-    }
-
-    /**
      * calculate Estimated Annual Cost Of Printing
      *
      * @return float
