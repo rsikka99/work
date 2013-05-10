@@ -6,10 +6,10 @@ $optimization = $this->optmizationViewModel;
 /* @var $form Proposalgen_Form_DeviceSwapChoice */
 $form = $this->form;
 
-$thresholdPercent  = 30;
-$targetBlackCPP    = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
+$thresholdPercent = 30;
+$targetBlackCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage;
 $thresholdBlackCpp = $targetBlackCPP * (1 - ($thresholdPercent / 100));
-$targetColorCPP    = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
+$targetColorCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage;
 $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
 $formActions [] = $form->getElement('ResetReplacements');
@@ -21,9 +21,15 @@ $formActions [] = $form->getElement('Analyze');
 <table style="width: 65%">
     <tbody>
     <tr>
-        <td><strong>Monochrome: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4));?> </td>
-        <td><strong>Color: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4));?> </td>
-        <td><strong>Total Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2))?></td>
+        <td>
+            <strong>Monochrome: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4));?>
+        </td>
+        <td>
+            <strong>Color: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4));?>
+        </td>
+        <td><strong>Total
+                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2))?>
+        </td>
     </tr>
     </tbody>
 </table>
@@ -43,22 +49,24 @@ $formActions [] = $form->getElement('Analyze');
     </thead>
     <tbody>
     <tr>
-        <td> Current </td>
+        <td> Current</td>
         <td><?php echo $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4));?></td>
         <td><?php echo ($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage > 0) ? $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
         <td><?php echo $this->currency($optimization->calculateDealerMonthlyCost());?></td>
         <td><?php echo $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage());?></td>
         <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2);?>
-            %</td>
+            %
+        </td>
     </tr>
     <tr>
-        <td> Optimized </td>
+        <td> Optimized</td>
         <td><?php echo $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4))?></td>
         <td><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
         <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2))?></td>
         <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2))?></td>
         <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
-            %</td>
+            %
+        </td>
     </tr>
     </tbody>
 </table>
@@ -68,8 +76,8 @@ $formActions [] = $form->getElement('Analyze');
     <div class='replacementDevices'>
         <?php
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
-        $jsonRows           = array();
-        $deviceCount        = 0;
+        $jsonRows = array();
+        $deviceCount = 0;
         /* @var $device Proposalgen_Model_DeviceInstance */
         foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) :
             $deviceCount++;
@@ -85,7 +93,9 @@ $formActions [] = $form->getElement('Analyze');
             $monthlyColorVolume = ($device->getPageCounts()->color->getMonthly() > 0) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';
             $isDeviceColor      = ($device->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
-            $costDelta = $device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
+
+            $deviceInstanceMonthlyCost = $device->calculateMonthlyCost($costPerPageSetting);
+            $costDelta                 = $deviceInstanceMonthlyCost - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
 
             $rowJson    = array(
                 'deviceInstanceId' => $device->id,
@@ -97,7 +107,7 @@ $formActions [] = $form->getElement('Analyze');
                 'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,
                 'colorCpp'         => ($isDeviceColor) ? $this->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
                 'rawColorCpp'      => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
-                'monthlyCost'      => $this->currency($device->calculateMonthlyCost($costPerPageSetting), array('precision' => 2)),
+                'monthlyCost'      => $this->currency($deviceInstanceMonthlyCost, array('precision' => 2)),
                 'action'           => $replacementDeviceElement->renderViewHelper(),
                 'costDelta'        => $this->currency($costDelta, array('precision' => 2)),
                 'rawCostDelta'     => $costDelta,
@@ -106,7 +116,8 @@ $formActions [] = $form->getElement('Analyze');
             $jsonRows[] = $rowJson;
             ?>
         <?php endforeach; ?>
-        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount();?> devices are eligible for potential optimization.</em>
+        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount();?> devices are
+            eligible for potential optimization.</em>
         <!-- Form Actions -->
         <div class="clearfix">
             <?php foreach ($formActions as $element) : ?>
@@ -125,12 +136,12 @@ $formActions [] = $form->getElement('Analyze');
 
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 
-    var targetCostPerPageMono               = <?php echo $targetBlackCPP; ?>;
-    var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp; ?>;
-    var targetCostPerPageColor              = <?php echo $targetColorCPP; ?>;
-    var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
-    var jsonRows                            = <?php echo json_encode($jsonRows); ?>;
-    var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
+var targetCostPerPageMono               = <?php echo $targetBlackCPP; ?>;
+var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp; ?>;
+var targetCostPerPageColor              = <?php echo $targetColorCPP; ?>;
+var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
+var jsonRows                            = <?php echo json_encode($jsonRows); ?>;
+var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/optimization/deviceListing.js')); ?>
