@@ -2031,7 +2031,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $OD_AverageEmployeesPerDevice      = 4.4;
 
             // Other variables used in several places
-            $pageCounts    = $this->getPageCounts();
             $companyName   = $this->assessment->getClient()->companyName;
             $employeeCount = $this->assessment->getClient()->employeeCount;
 
@@ -2881,7 +2880,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLORMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP]->monthlyRate;
                                 if ($savings >= $minimumSavings)
                                 {
                                     $replacedDevices->ColorMFP [] = $device;
