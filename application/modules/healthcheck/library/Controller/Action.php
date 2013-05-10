@@ -91,11 +91,6 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = array(
-            "Reports"     => array(
-                "pagetitle" => "Select a report...",
-                "active"    => false,
-                "url"       => $this->view->baseUrl('/healthcheck/report_healthcheck/index')
-            ),
             "Healthcheck" => array(
                 "pagetitle" => "Healthcheck",
                 "active"    => false,
