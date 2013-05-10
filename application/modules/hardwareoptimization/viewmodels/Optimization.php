@@ -26,6 +26,8 @@ class Hardwareoptimization_ViewModel_Optimization
     protected $_maximumMonthlyPrintVolume;
     /** @var  Proposalgen_Model_PageCounts */
     protected $_pageCounts;
+    /** @var Hardwareoptimization_ViewModel_Devices */
+    protected $_devices;
     /**
      * The weighted average monthly cost per page when using replacements
      *

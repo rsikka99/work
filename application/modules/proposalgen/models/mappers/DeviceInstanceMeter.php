@@ -230,6 +230,8 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
         return $object->id;
     }
 
+
+    protected $_ICACHETHINGS = array();
     /**
      * Fetches all the meters for a given device instance
      *
@@ -239,16 +241,19 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
      */
     public function fetchAllForDeviceInstance ($deviceInstanceId)
     {
+        if (!isset($this->_ICACHETHINGS[$deviceInstanceId]))
+        {
         $meterArray = array();
-        $meters     = $this->fetchAll(array(
-                                           "{$this->col_deviceInstanceId} = ?" => $deviceInstanceId
-                                      ));
+        $meters     = $this->fetchAll(array("{$this->col_deviceInstanceId} = ?" => $deviceInstanceId));
 
         foreach ($meters as $meter)
         {
             $meterArray[$meter->meterType] = $meter;
         }
 
-        return $meterArray;
+            $this->_ICACHETHINGS[$deviceInstanceId] = $meterArray;
+        }
+
+        return $this->_ICACHETHINGS[$deviceInstanceId];
     }
 }

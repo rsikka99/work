@@ -110,7 +110,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * The device instance's pageCounts
      *
-     * @var Healthcheck_Model_Healthcheck
+     * @var Proposalgen_Model_PageCounts
      */
     protected $_pageCounts;
     /**
@@ -1200,23 +1200,23 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getAction ()
     {
-        if (!isset($this->Action))
+        if (!isset($this->_deviceAction))
         {
             if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombined()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
+                $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
             else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getPageCounts()->getCombined()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
             {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
+                $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
             else
             {
-                $this->Action = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
+                $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_KEEP;
             }
         }
 
-        return $this->Action;
+        return $this->_deviceAction;
     }
 
     /**

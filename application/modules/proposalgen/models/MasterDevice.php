@@ -193,6 +193,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_tonersForHealthcheck;
     protected $_tonersForGrossMargin;
     protected $_requiredTonerColors;
+    protected $_age;
 
     protected $_dealerAttributes;
 
@@ -1021,18 +1022,18 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public function getAge ()
     {
-        if (!isset($this->Age))
+        if (!isset($this->_age))
         {
             // Get the time difference in seconds
             $launchDate          = time() - strtotime($this->launchDate);
             $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
-            $this->Age           = floor($correctedLaunchDate / 31556926);
-            if ($this->Age == 0)
+            $this->_age           = floor($correctedLaunchDate / 31556926);
+            if ($this->_age == 0)
             {
-                $this->Age = 1;
+                $this->_age = 1;
             }
         }
 
-        return $this->Age;
+        return $this->_age;
     }
 }

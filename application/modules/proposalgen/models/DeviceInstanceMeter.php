@@ -67,6 +67,11 @@ class Proposalgen_Model_DeviceInstanceMeter extends My_Model_Abstract
     protected $_averageDailyPageVolume;
 
     /**
+     * @var DateTime
+     */
+    protected $_mpsMonitorInterval;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
