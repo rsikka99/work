@@ -5,6 +5,7 @@ class Hardwareoptimization_Form_DeviceSwaps extends Twitter_Bootstrap_Form_Horiz
     {
         $this->setMethod("POST");
         $this->_addClassNames('reportSettingsForm form-center-actions');
+        $this->setAttrib('id', 'deviceSwap');
 
         $numberValidator = array(
             array(
