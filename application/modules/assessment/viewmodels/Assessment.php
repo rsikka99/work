@@ -2857,7 +2857,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
                             if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
                             {
-                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BWMFP]->monthlyRate;
+                                $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]->monthlyRate;
                                 // MFP
                                 if ($savings >= $minimumSavings)
                                 {
