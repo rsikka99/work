@@ -162,7 +162,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                               array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
-                                              'FieldSet'
+                                              'Fieldset'
                                          ));
 
         $this->_populatePricingConfigDropdowns(true);
