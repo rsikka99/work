@@ -14,6 +14,8 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 
 # Folders under the data folder need to be writable by the web user
 chmod 777 "${DIR}/data/cache"
+chmod 777 "${DIR}/data/cache/acl"
+chmod 777 "${DIR}/data/cache/navigation"
 chmod 777 "${DIR}/data/indexes"
 chmod 777 "${DIR}/data/logs"
 chmod 777 "${DIR}/data/sessions"
