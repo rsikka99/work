@@ -73,34 +73,34 @@ class Preferences_Model_Acl
     private static function setupAclAccess (Application_Model_Acl $acl)
     {
         // Proposal Admin
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_PROPOSAL_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Proposal User
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_PROPOSAL_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Quote Admin
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_INDEX_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_QUOTE_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Quote User
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_INDEX_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_QUOTE_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Healthcheck User
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_PREFERENCES_HEALTHCHECK_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_HEALTHCHECK_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Healthcheck Administrator
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_ADMIN, self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Hardware Optimization User
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_OPTIMIZATION_USER, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Hardware Optimization Administrator
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_OPTIMIZATION_ADMIN, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // System Admin
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);

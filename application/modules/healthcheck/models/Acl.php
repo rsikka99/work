@@ -43,7 +43,7 @@ class Healthcheck_Model_Acl
         /**
          * Healthcheck user
          */
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_HEALTHCHECK_USER, self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }

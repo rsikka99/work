@@ -70,10 +70,10 @@ class Default_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_LOGIN, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_GUEST, self::RESOURCE_DEFAULT_AUTH_RESETPASSWORD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_DEFAULT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 

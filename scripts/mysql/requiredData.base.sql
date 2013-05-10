@@ -21,18 +21,8 @@ INSERT INTO `users` (`id`, `dealerId`, `password`, `firstname`, `lastname`, `ema
 
 INSERT INTO `roles` VALUES
 (1, 'System Administrator', 1),
-(2, 'Assessment Administrator', 0),
-(3, 'Assessment User', 0),
-(4, 'Quote Administrator', 0),
-(5, 'Quote User', 0),
-(6, 'Dealer Administrator', 0),
-(7, 'Hardware Administrator', 0),
-(8, 'Client Administrator', 0),
-(9, 'Lease Rate Administrator', 0),
-(10, 'Hardware Optimization User', 0),
-(11, 'Healthcheck User', 0),
-(12, 'Healthcheck Administrator', 0),
-(13, 'Hardware Optimization Administrator', 0);
+(2, 'Company Administrator', 0),
+(3, 'Hardware & Pricing Administrator', 0);
 
 
 /* Add roles to users */
@@ -43,109 +33,32 @@ INSERT INTO `user_roles` (`userId`, `roleId`) VALUES
 -- lrobert
 (2, 2),
 (2, 3),
-(2, 4),
-(2, 5),
-(2, 6),
-(2, 7),
-(2, 8),
-(2, 9),
-(2, 10),
-(2, 11),
-(2, 12),
-(2, 13),
 
 -- swilder
 (4, 2),
 (4, 3),
-(4, 4),
-(4, 5),
-(4, 6),
-(4, 7),
-(4, 8),
-(4, 9),
-(4, 10),
-(4, 11),
-(4, 12),
-(4, 13),
+
 -- jlarochelle
 (5, 2),
 (5, 3),
-(5, 4),
-(5, 5),
-(5, 6),
-(5, 7),
-(5, 8),
-(5, 9),
-(5, 10),
-(5, 11),
-(5, 12),
-(5, 13),
+
 -- nmcconkey
 (6, 2),
 (6, 3),
-(6, 4),
-(6, 5),
-(6, 6),
-(6, 7),
-(6, 8),
-(6, 9),
-(6, 10),
-(6, 11),
-(6, 12),
-(6, 13),
--- standarduser
-(8, 3),
-(8, 5),
+
+-- standarduser doens't get any extra permissions
 
 -- triehl
 (9, 2),
 (9, 3),
-(9, 4),
-(9, 5),
-(9, 6),
-(9, 7),
-(9, 8),
-(9, 9),
-(9, 10),
-(9, 11),
-(9, 12),
-(9, 13),
+
 -- odadmin
 (10, 2),
 (10, 3),
-(10, 4),
-(10, 5),
-(10, 6),
-(10, 7),
-(10, 8),
-(10, 9),
-(10, 10),
-(10, 11),
-(10, 12),
-(10, 13),
+
 -- canon
 (11, 2),
-(11, 3),
-(11, 4),
-(11, 5),
-(11, 6),
-(11, 7),
-(11, 8),
-(11, 9),
-(11, 10),
-(11, 11),
-(11, 12),
-(11, 13);
-
-/* Add privileges to the roles */
--- INSERT INTO `privileges` (`roleId`, `module`, `controller`, `action`) VALUES
--- -- ROOT
---     (1, 'admin', 'index', '%'),
---     (1, 'admin', 'toner', '%'),
---     (1, 'admin', 'user', '%'),
---     (1, 'default', '%', '%'),
---     (1, 'quotegen', '%', '%'),
---     (1, 'proposalgen', 'manufacturer', '%');
+(11, 3);
 
 INSERT INTO `log_types` (`id`, `name`) VALUES
 (1, 'Application Log'),

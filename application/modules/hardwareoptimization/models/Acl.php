@@ -38,6 +38,6 @@ class Hardwareoptimization_Model_Acl
         /**
          * Any logged in user
          */
-        $acl->allow(Application_Model_Acl::ROLE_HARDWARE_OPTIMIZATION_USER, self::RESOURCE_HARDWAREOPTIMIZATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HARDWAREOPTIMIZATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }

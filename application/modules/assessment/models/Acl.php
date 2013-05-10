@@ -38,6 +38,6 @@ class Assessment_Model_Acl
         /**
          * Any logged in user
          */
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }

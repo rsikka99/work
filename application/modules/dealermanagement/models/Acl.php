@@ -57,31 +57,31 @@ class Dealermanagement_Model_Acl
         /*
          * Assessment User
          */
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_ASSESSMENT_USER, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /*
          * Quote User
          */
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_QUOTE_USER, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Client Admin
-        $acl->allow(Application_Model_Acl::ROLE_CLIENT_ADMIN, self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Dealer Admin
-        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_DEALER_ADMIN, self::RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_COMPANY_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
         // Lease Rate Admin
-        $acl->allow(Application_Model_Acl::ROLE_LEASERATE_ADMIN, self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_LEASERATE_ADMIN, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_DEALERMANAGEMENT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 
 }
