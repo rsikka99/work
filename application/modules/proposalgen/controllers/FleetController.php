@@ -674,6 +674,13 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $this->_flashMessenger->addMessage(array("danger" => "Please check the errors below and resubmit your request."));
                     }
                 }
+                else
+                {
+                    if(isset($postData['cancel']))
+                    {
+                        $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
+                    }
+                }
             }
             $this->view->form = $form;
         }

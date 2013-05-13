@@ -405,8 +405,17 @@ class Proposalgen_Form_Fleet_AddDevice extends Twitter_Bootstrap_Form_Horizontal
                                                    'type'       => 'submit',
 
                                               ));
+
+        /*
+ * Buttons
+ */
+        $this->addElement('button', 'cancel', array(
+                                                   'label'      => 'Cancel',
+                                                   'type'       => 'submit',
+
+                                              ));
         // Add the buttons the the form actions
-        $this->addDisplayGroup(array('submit'), 'actions', array(
+        $this->addDisplayGroup(array('submit','cancel'), 'actions', array(
                                                                 'disableLoadDefaultDecorators' => true,
                                                                 'decorators'                   => array(
                                                                     'Actions'
