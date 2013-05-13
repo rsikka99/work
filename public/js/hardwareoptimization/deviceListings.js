@@ -20,32 +20,35 @@ $(function ()
             {
                 name : 'device_name',
                 index: 'device_name',
-                label: 'Device Name',
-                width: 340
+                width: 310,
+                label: 'Device Name'
             },
             {
-                name     : 'monochromeCpp',
-                index    : 'monochromeCpp',
-                label    : 'Monochrome CPP*',
-                width    : 120,
-                align    : "right",
-                sortable : false,
-                formatter: "number"
+                name         : 'monochromeCpp',
+                index        : 'monochromeCpp',
+                label        : 'Monochrome CPP*',
+                width        : 120,
+                align        : 'right',
+                sortable     : false,
+                formatter    : 'currency',
+                formatoptions: {decimalSeparator: ".", decimalPlaces: 4, prefix: "$ "}
             },
             {
-                name    : 'colorCpp',
-                index   : 'colorCpp',
-                label   : 'Color CPP*',
-                width   : 120,
-                align   : "right",
-                sortable: false
+                name         : 'colorCpp',
+                index        : 'colorCpp',
+                label        : 'Color CPP*',
+                width        : 120,
+                align        : 'right',
+                formatter    : 'currency',
+                formatoptions: {decimalSeparator: ".", decimalPlaces: 4, prefix: "$ "},
+                sortable     : false
             },
             {
                 name    : 'minimumPageCount',
                 index   : 'minimumPageCount',
                 label   : 'Min Page Count',
-                width   : 150,
-                align   : "right",
+                width   : 120,
+                align   : 'right',
                 sortable: true,
                 editable: true
             },
@@ -53,8 +56,8 @@ $(function ()
                 name    : 'maximumPageCount',
                 index   : 'maximumPageCount',
                 label   : 'Max Page Count',
-                width   : 150,
-                align   : "right",
+                width   : 120,
+                align   : 'right',
                 sortable: true,
                 editable: true
             },
@@ -62,9 +65,17 @@ $(function ()
                 name  : 'deviceType',
                 index : 'deviceType',
                 label : 'Device Type',
-                width : 140,
-                align : "right",
+                align : 'right',
                 hidden: true
+            },
+            {
+                width   : 85,
+                name    : 'action',
+                index   : 'action',
+                label   : 'Action',
+                title   : false,
+                sortable: false,
+                align   : 'center'
             }
         ],
         pager       : "#pager",
@@ -78,18 +89,33 @@ $(function ()
         },
         caption     : "Device Swaps",
         // When we click a row, we will allow the user to edit that device
-        onSelectRow : function (rowid)
+//        onSelectRow : function (rowid)
+//        {
+//            var grid = $(this);
+//            var myCellData = grid.getRowData(rowid);
+//            $(".modal").modal("show");
+//            $('#masterDeviceId').select2('data', { id: myCellData.id, text: myCellData.device_name});
+//            $('#minimumPageCount').val(myCellData.minimumPageCount);
+//            $('#maximumPageCount').val(myCellData.maximumPageCount);
+//        },
+        gridComplete: function ()
         {
+            // Get the grid object (cache in variable)
             var grid = $(this);
-            var myCellData = grid.getRowData(rowid);
-            $(".modal").modal("show");
-            $('#masterDeviceId').select2('data', { id: myCellData.id, text: myCellData.device_name});
-            $('#minimumPageCount').val(myCellData.minimumPageCount);
-            $('#maximumPageCount').val(myCellData.maximumPageCount);
+            var ids = grid.getDataIDs();
+
+            for (var i = 0; i < ids.length; i++)
+            {
+                // Get the data so we can use and manipulate it.
+                var row = grid.getRowData(ids[i]);
+
+                row.action = '<input style="width:75px;" title="Delete Device" class="btn btn-small btn-danger deleteDevice" type="button"  data-device-instance-ids="' + row.id + '" value="Delete" />';
+                grid.setRowData(ids[i], row);
+            }
         }
     });
 
-    // Setup autocomplete for our textbox
+    // Setup auto complete for our text box
     $("#masterDeviceId").select2({
         placeholder       : "Search for a device",
         minimumInputLength: 1,
@@ -123,10 +149,48 @@ $(function ()
     // Trigger is used for the create new button, displays the modal.
     $("#trigger").click(function ()
     {
-        $(".modal").modal("show");
+        $("#deviceAdd").modal("show");
         $('#masterDeviceId').select2('data', {text: "Begin typing to search"});
         $('#minimumPageCount').val(0);
         $('#maximumPageCount').val(0);
+    });
+
+
+    /**
+     * Adding/Editing of the unknown device
+     */
+    $(document).on("click", "#deleteDeviceBtn", function ()
+    {
+        $('#deviceInstanceId').val($("#deleteDeviceBtn").val());
+
+        $.ajax({
+            url    : TMTW_BASEURL + "hardwareoptimization/deviceswaps/delete-device",
+            type   : "post",
+            data   : $("#deleteDeviceForm").serialize(),
+            success: function ()
+            {
+                $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
+                $("#deleteModal").modal('hide');
+            },
+            error  : function (data)
+            {
+//                $("#login-error").show();
+            }
+        });
+    });
+
+    /**
+     * Adding/Editing of the unknown device
+     */
+    $(document).on("click", "#cancelDeviceBtn", function ()
+    {
+        $("#deleteModal").modal("hide");
+    });
+
+    $(document).on("click", ".deleteDevice", function ()
+    {
+        $("#deleteDeviceBtn").val($(this).data("device-instance-ids"));
+        $("#deleteModal").modal("show");
     });
 
     // Save button on the modal will trigger a json response to save the data

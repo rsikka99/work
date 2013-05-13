@@ -1,9 +1,10 @@
 <?php $this->headScript()->appendFile($this->baseUrl('js/hardwareoptimization/deviceListings.js')); ?>
 <h4> Manage Device Swaps </h4>
 
-<div class="modal hide" id="myModal">
+<div class="modal hide" id="deviceAdd">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">x</a>
+
         <h3 style="text-align: center">Add Device Swap</h3>
     </div>
     <div class="modal-body well" style="height: 300px;">
@@ -15,14 +16,30 @@
     </div>
 </div>
 
+<div class="modal hide" id="deleteModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center">Confirm Delete Device Swap</h3>
+    </div>
+    <div class="modal-body well" style="height: 50px; text-align: center">
+        <form id="deleteDeviceForm">
+            <input type="hidden" name="deviceInstanceId" id="deviceInstanceId" />
+            <button type="button" id="cancelDeviceBtn" class="btn btn-inverse" style="width: 40%; padding: 4px;">Cancel</button>
+            <button type="button" id="deleteDeviceBtn" class="btn btn-danger" style="width: 40%; padding: 4px;">Delete</button>
+        </form>
+    </div>
+</div>
+
 <div class="well">
     <button id="trigger" class="btn btn-success" style="float:right">Create new</button>
-    <br/><br/>
+    <br /><br />
+
     <table id='deviceSwapsTable' style="width: 100%" class="scroll">
         <tr>
             <td></td>
         </tr>
     </table>
-    <br/>
+    <br />
     <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
 </div>

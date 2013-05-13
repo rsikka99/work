@@ -163,4 +163,22 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         }
 
     }
+
+    public function deleteDeviceAction ()
+    {
+        $masterDeviceId = $this->_getParam("deviceInstanceId");
+        $rowsDeleted    = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->delete(array($masterDeviceId, $this->_identity->dealerId));
+
+        if ($rowsDeleted > 0)
+        {
+
+            $json = array("rowsDeleted" => $rowsDeleted);
+        }
+        else
+        {
+            $json = array("error" => "Error deleting device swap.");
+        }
+
+        $this->sendJson($json);
+    }
 }
