@@ -55,7 +55,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
 
         $this->addElement('text', 'dealerMargin', array(
                                                        'label'      => 'Dealer Margin',
-                                                       'append'     => '$',
+                                                       'append'     => '%',
                                                        'validators' => $marginValidator
                                                   ));
         $this->addElement('text', 'partsCostPerPage', array(

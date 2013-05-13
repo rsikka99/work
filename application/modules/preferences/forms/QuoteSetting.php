@@ -79,7 +79,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'deviceMargin', array(
                                                        'label'      => 'Device Margin:',
                                                        'required'   => true,
-                                                       'append'     => '$',
+                                                       'append'     => '%',
                                                        'filters'    => array(
                                                            'StringTrim',
                                                            'StripTags'
@@ -90,7 +90,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement('text', 'pageMargin', array(
                                                      'label'      => 'Page Margin:',
                                                      'required'   => true,
-                                                     'append'     => '$',
+                                                     'append'     => '%',
                                                      'filters'    => array(
                                                          'StringTrim',
                                                          'StripTags'
