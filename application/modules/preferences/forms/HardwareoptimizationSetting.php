@@ -189,6 +189,13 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         $customerPricingConfigId  = $this->getElement('dealerPricingConfigId');
         $dealerPricingConfigId    = $this->getElement('customerPricingConfigId');
 
+        if ($allowDefault)
+        {
+            $replacementPricingConfig->setMultioptions(array());
+            $customerPricingConfigId->setMultioptions(array());
+            $dealerPricingConfigId->setMultioptions(array());
+        }
+
         foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
         {
             if ($allowDefault)
