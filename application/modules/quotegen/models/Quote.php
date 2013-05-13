@@ -725,7 +725,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function calculateMonochromeCostPerPage ()
     {
         // Represents quote total page weight
-        $monochromeTotal       = 0;
+        $monochromeTotal = 0;
         // The total cpp for all quote devices, used for calculation with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
@@ -753,14 +753,17 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 $totalDevices++;
             }
         }
-
+        $monochromeCostPerPage = 0;
         if ($quoteHasPages)
         {
             $monochromeCostPerPage = $quoteDeviceGroupDeviceCost / $monochromeTotal;
         }
         else
         {
-            $monochromeCostPerPage = $totalCpp / $totalDevices;
+            if ($totalCpp != 0 || $totalDevices != 0)
+            {
+                $monochromeCostPerPage = $totalCpp / $totalDevices;
+            }
         }
 
         return $monochromeCostPerPage;
@@ -799,14 +802,17 @@ class Quotegen_Model_Quote extends My_Model_Abstract
                 $totalDevices++;
             }
         }
-
+        $colorCostPerPage = 0;
         if ($quoteHasPages)
         {
             $colorCostPerPage = $colorPageCostTotal / $colorTotal;
         }
         else
         {
-            $colorCostPerPage = $totalCpp / $totalDevices;
+            if ($totalCpp != 0 || $totalDevices != 0)
+            {
+                $colorCostPerPage = $totalCpp / $totalDevices;
+            }
         }
 
         return (float)$colorCostPerPage;
