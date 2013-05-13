@@ -203,24 +203,5 @@ class Admin_ClientController extends Tangent_Controller_Action
         }
         $this->view->form = $clientService->getForm(false);
     }
-
-    /**
-     * The view action
-     */
-    public function viewAction ()
-    {
-        $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
-        if (!$this->view->client)
-        {
-            $this->redirector('index');
-        }
-        $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));
-        $contact             = Quotegen_Model_Mapper_Contact::getInstance()->getContactByClientId($this->_getParam('id', false));
-        if (!$contact)
-        {
-            $contact = new Quotegen_Model_Contact();
-        }
-        $this->view->contact = $contact;
-    }
 }
 

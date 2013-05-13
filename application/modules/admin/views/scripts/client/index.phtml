@@ -12,7 +12,7 @@
             <th>Company Name</th>
             <th>Legal Name</th>
             <th>Dealer Name</th>
-            <th style="width: 120px;">Action</th>
+            <th style="width: 60px;">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +25,6 @@
             <td><?php echo $this->escape(Admin_Model_Mapper_Dealer::getInstance()->find($client->dealerId)->dealerName); ?></td>
             <td>
                 <div class="btn-group">
-	                <a class="btn btn-info" title="View" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $client->id)); ?>"><i class="icon-eye-open"></i></a>
                     <a class="btn btn-warning" title="Edit" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $client->id)); ?>"><i class="icon-pencil"></i></a>
                     <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->id)); ?>"><i class="icon-trash"></i></a>
                 </div>
