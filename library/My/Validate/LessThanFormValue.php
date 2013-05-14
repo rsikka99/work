@@ -25,6 +25,7 @@ class My_Validate_LessThanFormValue extends Zend_Validate_Abstract
     private $_elementToValidateAgainst;
 
     protected $_greaterThanOrEqual;
+    protected $_max;
 
     public function __construct (Zend_Form_Element $elementToBeLessThan, $greaterThanOrEqual = false)
     {
