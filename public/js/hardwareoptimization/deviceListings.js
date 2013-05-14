@@ -88,16 +88,6 @@ $(function ()
             groupOrder     : ['asc']
         },
         caption     : "Device Swaps",
-        // When we click a row, we will allow the user to edit that device
-//        onSelectRow : function (rowid)
-//        {
-//            var grid = $(this);
-//            var myCellData = grid.getRowData(rowid);
-//            $(".modal").modal("show");
-//            $('#masterDeviceId').select2('data', { id: myCellData.id, text: myCellData.device_name});
-//            $('#minimumPageCount').val(myCellData.minimumPageCount);
-//            $('#maximumPageCount').val(myCellData.maximumPageCount);
-//        },
         gridComplete: function ()
         {
             // Get the grid object (cache in variable)
@@ -109,21 +99,25 @@ $(function ()
                 // Get the data so we can use and manipulate it.
                 var row = grid.getRowData(ids[i]);
 
-                row.action = '<input style="width:75px;" title="Delete Device" class="btn btn-small btn-danger deleteDevice" type="button"  data-device-instance-ids="' + row.id + '" value="Delete" />';
+                // Add an edit button and a delete button for each device swap
+                row.action = '<button type="button" title="Edit" class="btn btn-warning btn-mini editDeviceAction" style="margin:2px;" ><i class="icon-pencil icon-pencil"></i></button>';
+                row.action += '<button type="button" title="Delete" class="btn btn-danger btn-mini deleteDeviceAction" data-device-instance-ids="' + row.id + '" ><i class="icon-trash icon-white"></i></button>';
+
                 grid.setRowData(ids[i], row);
             }
         }
     });
 
+    var masterDeviceSelect = $("#masterDeviceId");
     // Setup auto complete for our text box
-    $("#masterDeviceId").select2({
+    masterDeviceSelect.select2({
         placeholder       : "Search for a device",
         minimumInputLength: 1,
         ajax              : {
             // Instead of writing the function to execute the request we use select2's convenient helper
             url     : TMTW_BASEURL + "proposalgen/admin/search-for-device",
             dataType: 'json',
-            data    : function (term, page)
+            data    : function (term)
             {
                 // onlyQuoteDevices will only return devices that are quote devices
                 return {
@@ -132,7 +126,7 @@ $(function ()
                     page_limit      : 10
                 };
             },
-            results : function (data, page)
+            results : function (data)
             {
                 // Parse the results into the format expected by select2.
                 // Since we are using custom formatting functions we do not need to alter remote JSON data
@@ -140,14 +134,22 @@ $(function ()
                 {
                     device.text = device.device_name;
                     return device;
-                })
+                });
+
                 return {results: newData};
             }
         }
     });
 
+    masterDeviceSelect
+        .on("change", function (e)
+        {
+            $('#deviceType').val($(this).select2('data').deviceType);
+        })
+
+
     // Trigger is used for the create new button, displays the modal.
-    $("#trigger").click(function ()
+    $("#createNewBtn").click(function ()
     {
         $("#deviceAdd").modal("show");
         $('#masterDeviceId').select2('data', {text: "Begin typing to search"});
@@ -155,46 +157,41 @@ $(function ()
         $('#maximumPageCount').val(0);
     });
 
-
-    /**
-     * Adding/Editing of the unknown device
-     */
-    $(document).on("click", "#deleteDeviceBtn", function ()
+    // Persist the jqGrid row id to the hidden form element inside the model
+    $(document).on("click", ".editDeviceAction", function ()
     {
-        $('#deviceInstanceId').val($("#deleteDeviceBtn").val());
+        $("#deviceAdd").modal("show");
 
-        $.ajax({
-            url    : TMTW_BASEURL + "hardwareoptimization/deviceswaps/delete-device",
-            type   : "post",
-            data   : $("#deleteDeviceForm").serialize(),
-            success: function ()
-            {
-                $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
-                $("#deleteModal").modal('hide');
-            },
-            error  : function (data)
-            {
-//                $("#login-error").show();
-            }
-        });
+        // Get the data from the selected row
+        var row_data = getJqGridRow(jQuery("#deviceSwapsTable"));
+
+        $('#masterDeviceId').select2('data', { id: row_data.id, text: row_data.device_name});
+        $('#minimumPageCount').val(row_data.minimumPageCount);
+        $('#maximumPageCount').val(row_data.maximumPageCount);
+        $('#deviceType').val(row_data.deviceType);
     });
 
-    /**
-     * Adding/Editing of the unknown device
-     */
+    // Cancel the deletion process
     $(document).on("click", "#cancelDeviceBtn", function ()
     {
         $("#deleteModal").modal("hide");
     });
 
-    $(document).on("click", ".deleteDevice", function ()
+    // Cancel the save process
+    $(document).on("click", "#cancelSave", function ()
     {
-        $("#deleteDeviceBtn").val($(this).data("device-instance-ids"));
+        $("#deviceAdd").modal("hide");
+    });
+
+    // Persist the jqGrid row id to the hidden form element inside the model
+    $(document).on("click", ".deleteDeviceAction", function ()
+    {
         $("#deleteModal").modal("show");
     });
 
+
     // Save button on the modal will trigger a json response to save the data
-    $("#saveTest").click(function ()
+    $(document).on("click", "#saveDevice", function ()
     {
         $.ajax({
             url    : TMTW_BASEURL + "hardwareoptimization/deviceswaps/update-device",
@@ -203,18 +200,74 @@ $(function ()
             success: function ()
             {
                 $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
-                $(".modal").modal('hide');
+                $("#deviceAdd").modal('hide');
             },
-            error  : function (data)
+            error  : function (xhr)
             {
-                $("#login-error").show();
+                // Show the error message
+                var errorMessageElement = $("#save-error");
+
+                try
+                {
+                    // a try/catch is recommended as the error handler
+                    // could occur in many events and there might not be
+                    // a JSON response from the server
+
+                    var json = $.parseJSON(xhr.responseText);
+                    errorMessageElement.html('<ol>');
+
+                    for (var i = 0; i < json.error.length; i++)
+                    {
+                        errorMessageElement.append('<li>' + json.error[i] + '</li>');
+                    }
+
+                    errorMessageElement.append('</ol>');
+                }
+                catch (e)
+                {
+                    console.log('Something bad happened.');
+                }
+
+                errorMessageElement.show();
             }
         });
     });
 
-    // When modal hides function is triggered, clear preivious messages
+    $(document).on("click", "#deleteDeviceBtn", function ()
+    {
+        // Get the jqGrid row that we have selected when we clicked the button
+        var row_data = getJqGridRow(jQuery("#deviceSwapsTable"))
+
+        $.ajax({
+            url     : TMTW_BASEURL + "hardwareoptimization/deviceswaps/delete-device",
+            dataType: 'json',
+            data    : {
+                deviceInstanceId: row_data.id
+            },
+            success : function ()
+            {
+                $("#deviceSwapsTable").jqGrid().trigger('reloadGrid');
+                $("#deleteModal").modal('hide');
+            }
+        });
+    });
+
+    // When modal hides function is triggered, clear previous messages
     $('.modal').on('hidden', function ()
     {
-        $("#login-error").hide();
+        var errorMessageElement = $("#save-error");
+        errorMessageElement.hide();
+        $('#deviceType').val("");
     })
 });
+
+/**
+ * Gets row of jqGrid data for the grid provided.
+ *
+ * @param jqGrid jqGrid
+ * @returns {*}
+ */
+function getJqGridRow(jqGrid)
+{
+    return jqGrid.getRowData(jqGrid.jqGrid('getGridParam', 'selrow'));
+}
