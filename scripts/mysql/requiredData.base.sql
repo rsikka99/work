@@ -69,7 +69,8 @@ INSERT INTO `log_types` (`id`, `name`) VALUES
 
 INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`, `isDeleted`) VALUES
 (1, 'Brother', 'Brother', 0),
-(3, 'Clover Technologies Group', 'Clover', 0),
+    -- Clover renamed to compatible vendor
+(3, 'Compatible Vendor 1', 'Comp. Vendor 1', 0),
 (4, 'Dell', 'Dell', 0),
 (5, 'Hewlett-Packard', 'HP', 0),
 (6, 'Image Projections West Inc', 'Image Projections West Inc', 0),
