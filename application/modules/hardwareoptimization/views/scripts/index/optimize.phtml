@@ -16,32 +16,15 @@ $formActions [] = $form->getElement('ResetReplacements');
 $formActions [] = $form->getElement('Submit');
 $formActions [] = $form->getElement('Analyze');
 ?>
-<!-- Begin target cost per page table -->
-<h3>Target Cost Per Page: </h3>
-<table style="width: 65%">
-    <tbody>
-    <tr>
-        <td>
-            <strong>Monochrome: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4));?>
-        </td>
-        <td>
-            <strong>Color: </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4));?>
-        </td>
-        <td><strong>Total
-                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2))?>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<!-- End target cost per page table -->
-<br />
+
+<br/>
 <!-- Begin Optimization Summary table -->
-<table class='summaryReport' style="width: 100%">
+<table class='table table-condensed' style="width: 100%">
     <thead>
     <tr class='header'>
-        <td></td>
-        <td><strong>Mono CPP</strong></td>
-        <td><strong>Color CPP</strong></td>
+        <td><strong>Fleet</strong></td>
+        <td><strong>Weighted Monochrome CPP</strong></td>
+        <td><strong>Weighted Color CPP</strong></td>
         <td><strong>Total Cost</strong></td>
         <td><strong>Margin $</strong></td>
         <td><strong>Margin %</strong></td>
@@ -70,8 +53,7 @@ $formActions [] = $form->getElement('Analyze');
     </tr>
     </tbody>
 </table>
-<!-- End Optimization Summary table -->
-<em> * Note: Cost per page in the table above are the weighted average for the fleet. </em>
+
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <div class='replacementDevices'>
         <?php
@@ -116,14 +98,14 @@ $formActions [] = $form->getElement('Analyze');
             $jsonRows[] = $rowJson;
             ?>
         <?php endforeach; ?>
-        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount();?> devices are
-            eligible for potential optimization.</em>
         <!-- Form Actions -->
         <div class="clearfix">
             <?php foreach ($formActions as $element) : ?>
                 <?php echo $element->renderViewHelper(); ?>
             <?php endforeach; ?>
         </div>
+        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount();?> devices are
+            eligible for potential optimization.</em>
         <br />
         <!-- End Form Actions -->
         <table id='replacementDeviceTable' style="width: 100%" class="scroll">
@@ -133,6 +115,29 @@ $formActions [] = $form->getElement('Analyze');
         </table>
     </div>
 </form>
+
+<!-- Begin target cost per page table -->
+<table class="table">
+    <tbody>
+    <tr>
+        <td>
+            <strong>Target Monochrome CPP
+                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4));?>
+        </td>
+        <td>
+            <strong>Target Color CPP
+                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4));?>
+        </td>
+        <td>
+            <strong>Cost Threshold : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->costThreshold);?>
+        </td>
+        <td><strong>Total
+                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2))?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!-- End target cost per page table -->
 
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 
