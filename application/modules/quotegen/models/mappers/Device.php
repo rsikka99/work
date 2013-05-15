@@ -260,9 +260,16 @@ class Quotegen_Model_Mapper_Device extends My_Model_Mapper_Abstract
         $returnLimit = 10;
         $sortOrder   = 'device_name ASC';
 
+        $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
+            WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'Color MFP'
+            WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'Color '
+            WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome'
+            END AS deviceType");
+
+
         $db     = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
-        $select->from(array($this->getTableName()))
+        $select->from(array($this->getTableName()),$caseStatement)
             ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
             ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
             ->where("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName}) LIKE ? AND m.isDeleted = 0")

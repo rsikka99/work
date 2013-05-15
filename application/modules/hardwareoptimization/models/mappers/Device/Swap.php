@@ -271,10 +271,10 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
                 $offset = ($offset > 0) ? $offset : 0;
             }
 
-            $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND NOT md.tonerConfigId = 1 THEN 'Monochrome MFP'
-            WHEN md.isCopier AND NOT md.tonerConfigId > 1 THEN 'Color MFP'
-            WHEN NOT md.isCopier AND NOT md.tonerConfigId > 1 THEN 'Color '
-            WHEN NOT md.isCopier AND NOT md.tonerConfigId = 1 THEN 'Monochrome'
+            $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
+            WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'Color MFP'
+            WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'Color '
+            WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome'
             END AS deviceType");
 
 
