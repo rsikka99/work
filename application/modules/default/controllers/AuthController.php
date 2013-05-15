@@ -180,10 +180,11 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
+        // check if this page has been posted to
         $request = $this->getRequest();
-        if ($request->isGet())
+        if ($request->getParam('email'))
         {
-            $email = $this->_getParam('email', false);
+            $email = $request->getParam('email');
             if ($email !== false)
             {
                 // Find user by email
@@ -361,7 +362,7 @@ class Default_AuthController extends Tangent_Controller_Action
     function resetpasswordAction ()
     {
         $this->logout();
-        $form              = new Default_Form_ResetPassword();
+        $form = new Default_Form_ResetPassword();
         // Step 1. Get the reset id
         $request = $this->getRequest();
         $values  = $request->getPost();
@@ -488,8 +489,7 @@ class Default_AuthController extends Tangent_Controller_Action
      * @param $user  Application_Model_User
      * @param $token String
      */
-    public
-    function sendForgotPasswordEmail ($user, $token)
+    public function sendForgotPasswordEmail ($user, $token)
     {
         $config = Zend_Registry::get('config');
         $email  = $config->email;
@@ -512,13 +512,13 @@ class Default_AuthController extends Tangent_Controller_Action
         $mail->setFrom($email->username, 'Forgot Password');
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
+        $link = $this->view->serverUrl($this->view->url(array(
+                                                             'action'     => 'resetpassword',
+                                                             'controller' => 'auth',
+                                                             'module'     => 'default',
+                                                             'verify'     => $token
+                                                        )));
 
-        $link = $this->view->url(array(
-                                      'action'     => 'resetpassword',
-                                      'controller' => 'auth',
-                                      'module'     => 'default',
-                                      'verify'     => $token
-                                 ));
 
         $body = "<body>";
         $body .= "<h2>" . $this->view->App()->title . " Password Reset Request</h2>";
