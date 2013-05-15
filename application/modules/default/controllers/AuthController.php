@@ -180,66 +180,53 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
+        // check if this page has been posted to
         $request = $this->getRequest();
-        if ($request->isGet())
+        $email   = $request->getParam('email', false);
+        if ($email !== false)
         {
-            $email = $this->_getParam('email', false);
-            if ($email !== false)
+            // Find user by email
+            $user = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($email);
+
+            if ($user)
             {
-                // Find user by email
-                $user = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($email);
+                $db = Zend_Db_Table::getDefaultAdapter();
 
-                if ($user)
+                $db->beginTransaction();
+                try
                 {
-                    $db = Zend_Db_Table::getDefaultAdapter();
+                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                    $time                                = date("Y-m-d H:i:s");
+                    $passwordResetRequest                = new Application_Model_User_PasswordResetRequest();
+                    $passwordResetRequest->dateRequested = $time;
+                    $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
+                    $passwordResetRequest->resetVerified = false;
+                    $passwordResetRequest->userId        = $user->id;
+                    $passwordResetRequest->resetUsed     = false;
+                    // Create a unique hash for the reset token
+                    // Random number + user id + unique id
+                    $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
 
-                    $db->beginTransaction();
-                    try
-                    {
-                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
-                        $time                                = date("Y-m-d H:i:s");
-                        $passwordResetRequest                = new Application_Model_User_PasswordResetRequest();
-                        $passwordResetRequest->dateRequested = $time;
-                        $passwordResetRequest->ipAddress     = $_SERVER ['REMOTE_ADDR'];
-                        $passwordResetRequest->resetVerified = false;
-                        $passwordResetRequest->userId        = $user->id;
-                        $passwordResetRequest->resetUsed     = false;
-                        // Create a unique hash for the reset token
-                        // Random number + user id + unique id
-                        $passwordResetRequest->resetToken = uniqid($this->getRandom(0, 12800) . $user->id, true);
+                    Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
+                    $db->commit();
+                    $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
 
-                        Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
-                        $db->commit();
-                        $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
-                        $this->view->forgotMessage = "A verification email has been sent!";
-//                        $this->view->forgotMessage = "<p>To Reset your password please <a href='/auth/resetpassword/verify/" . $passwordResetRequest->resetToken . "'>Click Here</a></p>";
-                    }
-                    catch (Exception $e)
-                    {
-                        $db->rollback();
-                        Tangent_Log::logException($e);
-
-                        // prepare error message stating user not found
-                        $this->view->message = "An error occurred while resetting your password.";
-                    }
                 }
-                else
+                catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "There are no users with the email '" . $email . "'"
-                                                       ));
-                    $this->redirector('index', 'index');
+                    $db->rollback();
+                    Tangent_Log::logException($e);
                 }
+            }
 
-            }
-            else
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'A email is required to use forgot password'
-                                                   ));
-                $this->redirector('index', 'index');
-            }
+            $this->_flashMessenger->addMessage(array('success' => "A verification email will be sent out if an account exists with this email"));
         }
+        else
+        {
+            $this->_flashMessenger->addMessage(array('danger' => 'A email is required to use forgot password'));
+        }
+
+        $this->redirector('auth', 'login');
 
     }
 
@@ -361,7 +348,7 @@ class Default_AuthController extends Tangent_Controller_Action
     function resetpasswordAction ()
     {
         $this->logout();
-        $form              = new Default_Form_ResetPassword();
+        $form = new Default_Form_ResetPassword();
         // Step 1. Get the reset id
         $request = $this->getRequest();
         $values  = $request->getPost();
@@ -488,8 +475,7 @@ class Default_AuthController extends Tangent_Controller_Action
      * @param $user  Application_Model_User
      * @param $token String
      */
-    public
-    function sendForgotPasswordEmail ($user, $token)
+    public function sendForgotPasswordEmail ($user, $token)
     {
         $config = Zend_Registry::get('config');
         $email  = $config->email;
@@ -512,13 +498,13 @@ class Default_AuthController extends Tangent_Controller_Action
         $mail->setFrom($email->username, 'Forgot Password');
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
+        $link = $this->view->serverUrl($this->view->url(array(
+                                                             'action'     => 'resetpassword',
+                                                             'controller' => 'auth',
+                                                             'module'     => 'default',
+                                                             'verify'     => $token
+                                                        )));
 
-        $link = $this->view->url(array(
-                                      'action'     => 'resetpassword',
-                                      'controller' => 'auth',
-                                      'module'     => 'default',
-                                      'verify'     => $token
-                                 ));
 
         $body = "<body>";
         $body .= "<h2>" . $this->view->App()->title . " Password Reset Request</h2>";
