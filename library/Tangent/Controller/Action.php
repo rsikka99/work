@@ -87,6 +87,19 @@ class Tangent_Controller_Action extends Zend_Controller_Action
     }
 
     /**
+     * Used to send json error to the client.
+     *
+     * @param string $message
+     * @param bool   $sendNow
+     * @param bool   $keepLayouts
+     */
+    public function sendJsonError ($message, $sendNow = true, $keepLayouts = false)
+    {
+        $this->getResponse()->setHttpResponseCode(500);
+        $this->_helper->json(array("error" => $message), $sendNow, $keepLayouts);
+    }
+
+    /**
      * Used to redirect a client to an action
      *
      * @see Zend_Controller_Action_Helper_Redirector::direct()
