@@ -25,7 +25,7 @@ $(function ()
         datatype    : 'local',
         data        : jsonRows,
         colModel    : [
-            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148 , frozen: true},
+            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148, frozen: true},
             { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
             { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
             { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
@@ -85,10 +85,7 @@ $(function ()
                 }
                 // Put our new data back into the grid
                 grid.setRowData(ids[i], row);
-
             }
-
-
         },
         onCellSelect: function (rowid, iCol, cellcontent, e)
         {
@@ -316,4 +313,31 @@ $(function ()
 
     });
     jQuery("#replacementDeviceTable").jqGrid('setFrozenColumns');
+
+    $('select').change(function ()
+    {
+        var elementId = $(this).attr("id");
+        var replacementDeviceId = $(this).val();
+
+        $.ajax({
+            url     : TMTW_BASEURL + "hardwareoptimization/index/update-replacement-device",
+            dataType: 'json',
+            data    : {
+                deviceInstanceId   : elementId,
+                replacementDeviceId: replacementDeviceId,
+            },
+            success : function (data)
+            {
+                // Update the calculation
+                $("#monochromeCpp").html(data.monochromeCpp);
+                $("#colorCpp").html(data.colorCpp);
+                $("#totalCost").html(data.totalCost);
+                $("#marginDollar").html(data.marginDollar);
+                $("#marginPercent").html(data.marginPercent);
+            },
+            error   : function (xhr)
+            {
+            }
+        });
+    });
 });
