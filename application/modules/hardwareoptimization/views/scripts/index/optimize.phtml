@@ -60,30 +60,31 @@ $formActions [] = $form->getElement('Analyze');
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
         $jsonRows = array();
         $deviceCount = 0;
-        /* @var $device Proposalgen_Model_DeviceInstance */
-        foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device) :
+        /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+        foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) :
             $deviceCount++;
-            $replacementDeviceElement = $form->getElement("deviceInstance_{$device->id}");
+            $replacementDeviceElement = $form->getElement("deviceInstance_{$deviceInstance->id}");
+
 
             // Cpp used to show and threshold cpp
-            $deviceCostPerPage = $device->calculateCostPerPage($costPerPageSetting);
+            $deviceCostPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
 
             // Get the manufacturer from the master device
-            $masterDevice     = $device->getMasterDevice();
+            $masterDevice     = $deviceInstance->getMasterDevice();
             $manufacturerName = $masterDevice->getManufacturer()->fullname;
             // Check to see if there is a monthly color volume
-            $monthlyColorVolume = ($device->getPageCounts()->color->getMonthly() > 0) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';
-            $isDeviceColor      = ($device->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+            $monthlyColorVolume = ($deviceInstance->getPageCounts()->color->getMonthly() > 0) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : 'N/A';
+            $isDeviceColor      = ($deviceInstance->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
 
-            $deviceInstanceMonthlyCost = $device->calculateMonthlyCost($costPerPageSetting);
-            $costDelta                 = $deviceInstanceMonthlyCost - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
+            $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
+            $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
 
             $rowJson    = array(
-                'deviceInstanceId' => $device->id,
+                'deviceInstanceId' => $deviceInstance->id,
                 'isColor'          => (int)$isDeviceColor,
                 'device'           => "{$manufacturerName}<br/>{$masterDevice->modelName}",
-                'monoAmpv'         => number_format($device->getPageCounts()->monochrome->getMonthly()),
+                'monoAmpv'         => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
                 'colorAmpv'        => $monthlyColorVolume,
                 'monoCpp'          => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
                 'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,
@@ -93,7 +94,7 @@ $formActions [] = $form->getElement('Analyze');
                 'action'           => $replacementDeviceElement->renderViewHelper(),
                 'costDelta'        => $this->currency($costDelta, array('precision' => 2)),
                 'rawCostDelta'     => $costDelta,
-                'reason'           => $device->getReason(),
+                'reason'           => $deviceInstance->getReason(),
             );
             $jsonRows[] = $rowJson;
             ?>
