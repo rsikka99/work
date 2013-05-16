@@ -3,6 +3,7 @@ vendor/
 
 #Ignore the application settings since we should have a template
 application/configs/application.ini
+application/configs/*local.php
 
 # Ignore Files created by Zend Studio/Eclipse
 .settings/

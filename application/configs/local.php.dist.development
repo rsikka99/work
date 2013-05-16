@@ -1,0 +1,34 @@
+<?php
+return array(
+    'app'         => array(
+        'title'        => 'MPS Toolbox',
+        'theme'        => 'default',
+        'useAnalytics' => false,
+    ),
+    'email'       => array(
+        'host'     => '',
+        'ssl'      => 'SSL',
+        'port'     => '465',
+        'username' => '',
+        'password' => '',
+    ),
+    'phpSettings' => array(
+        'display_errors'    => true,
+        'displayExceptions' => true,
+    ),
+    'resources'   => array(
+        'db'              => array(
+            'params' => array(
+                'host'     => '127.0.0.1',
+                'username' => 'USERNAME',
+                'password' => 'PASSWORD',
+                'dbname'   => 'DBNAME',
+            ),
+        ),
+        'frontController' => array(
+            'params' => array(
+                'displayExceptions' => true,
+            ),
+        ),
+    ),
+);
