@@ -519,11 +519,13 @@ class Hardwareoptimization_ViewModel_Optimization
     /**
      * Calculates the weighted average monthly cost per page of the current fleet
      *
+     * @param bool $recalculate
+     *
      * @return Proposalgen_Model_CostPerPage
      */
-    public function calculateDealerWeightedAverageMonthlyCostPerPage ()
+    public function calculateDealerWeightedAverageMonthlyCostPerPage ($recalculate = false)
     {
-        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPage))
+        if (!isset($this->_dealerWeightedAverageMonthlyCostPerPage) || $recalculate)
         {
             $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
 

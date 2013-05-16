@@ -43,11 +43,11 @@ $formActions [] = $form->getElement('Analyze');
     </tr>
     <tr>
         <td> Optimized</td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4))?></td>
-        <td><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2))?></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2))?></td>
-        <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
+        <td id="monochromeCpp"><?php echo $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4))?></td>
+        <td id="colorCpp"><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
+        <td id="totalCost"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2))?></td>
+        <td id="marginDollar"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2))?></td>
+        <td id="marginPercent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2)?>
             %
         </td>
     </tr>
@@ -87,9 +87,7 @@ $formActions [] = $form->getElement('Analyze');
                 'monoAmpv'         => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
                 'colorAmpv'        => $monthlyColorVolume,
                 'monoCpp'          => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
-                'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,
                 'colorCpp'         => ($isDeviceColor) ? $this->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
-                'rawColorCpp'      => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
                 'monthlyCost'      => $this->currency($deviceInstanceMonthlyCost, array('precision' => 2)),
                 'action'           => $replacementDeviceElement->renderViewHelper(),
                 'costDelta'        => $this->currency($costDelta, array('precision' => 2)),

@@ -449,4 +449,65 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         return true;
     }
+
+    public function updateReplacementDeviceAction ()
+    {
+        $deviceInstanceReplacementMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+
+        if ($deviceInstanceId === false)
+        {
+            $this->sendJsonError("Invalid data passed.");
+        }
+
+        $deviceInstanceId = (int)str_replace("deviceInstance_", "", $deviceInstanceId);
+        $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+
+        if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
+        {
+            $this->sendJsonError("You do not have permission to edit this device instance.");
+        }
+
+        // Check if device belongs to rms
+        $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
+
+        $whereKey = array($deviceInstanceId, $this->_hardwareOptimization->id);
+
+        if ($replacementDeviceId == 0)
+        {
+            // Delete the row from the database
+            $deviceInstanceReplacementMasterDeviceMapper->delete($whereKey);
+        }
+        else
+        {
+            $deviceInstanceReplacementMasterDevice = $deviceInstanceReplacementMasterDeviceMapper->find($whereKey);
+            if ($deviceInstanceReplacementMasterDevice instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
+            {
+                // Update the device information
+                $deviceInstanceReplacementMasterDevice->masterDeviceId = $replacementDeviceId;
+                $deviceInstanceReplacementMasterDeviceMapper->save($deviceInstanceReplacementMasterDevice);
+            }
+            else
+            {
+                // Insert the device into the table
+                $deviceInstanceReplacementMasterDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                $deviceInstanceReplacementMasterDevice->deviceInstanceId       = $deviceInstanceId;
+                $deviceInstanceReplacementMasterDevice->masterDeviceId         = $replacementDeviceId;
+                $deviceInstanceReplacementMasterDevice->hardwareOptimizationId = $this->_hardwareOptimization->id;
+                $deviceInstanceReplacementMasterDeviceMapper->insert($deviceInstanceReplacementMasterDevice);
+            }
+        }
+        $optimization = $this->getOptimizationViewModel();
+
+        // Add calculated amounts to json
+        // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
+        $this->sendJson(array(
+                             "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
+                             "colorCpp"      => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
+                             "totalCost"     => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
+                             "marginDollar"  => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
+                             "marginPercent" => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
+                        ));
+    }
 }
