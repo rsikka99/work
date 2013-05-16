@@ -270,6 +270,10 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
      */
     public function syncCostPerPageForDevice (Quotegen_Model_QuoteDevice $quoteDevice, Proposalgen_Model_MasterDevice $masterDevice)
     {
+        if (stripos($masterDevice->modelName, '6010') !== false)
+        {
+            $test = 0;
+        }
         $OEMpricingConfig  = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
         $COMPpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
 
@@ -277,8 +281,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         $oemCostPerPageSetting->adminCostPerPage       = 0;
         $oemCostPerPageSetting->laborCostPerPage       = 0;
         $oemCostPerPageSetting->partsCostPerPage       = 0;
-        $oemCostPerPageSetting->pageCoverageMonochrome = ($this->_quote->pageCoverageMonochrome) ? $this->_quote->pageCoverageMonochrome / 100 : 0.94;
-        $oemCostPerPageSetting->pageCoverageColor      = ($this->_quote->pageCoverageColor) ? $this->_quote->pageCoverageColor / 100 : 0.76;
+        $oemCostPerPageSetting->pageCoverageMonochrome = ($this->_quote->pageCoverageMonochrome) ? $this->_quote->pageCoverageMonochrome : 6;
+        $oemCostPerPageSetting->pageCoverageColor      = ($this->_quote->pageCoverageColor) ? $this->_quote->pageCoverageColor : 24;
         $oemCostPerPageSetting->pricingConfiguration   = $OEMpricingConfig;
 
         $compCostPerPageSetting                       = clone $oemCostPerPageSetting;
