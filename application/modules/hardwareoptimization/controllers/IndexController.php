@@ -172,6 +172,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
         $optimization       = $this->getOptimizationViewModel();
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
