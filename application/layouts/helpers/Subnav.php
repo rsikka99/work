@@ -19,7 +19,7 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
         $html = "";
 
         /* @var $pages Zend_Navigation */
-        $pages = $this->view->navigation()->getContainer();
+        $pages = $this->view->MyNavigation()->getContainer();
 
         /* @var $rootPage Zend_Navigation_Page[] */
         $rootPage = $pages->getPages();
@@ -38,7 +38,7 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
         // Only render if we have items to show
         if ($container && $container->hasPages())
         {
-            $html = $this->view->navigation()
+            $html = $this->view->MyNavigation()
                 ->menu()
                 ->setUlClass($navClass)
                 ->setMaxDepth($maxDepth)
