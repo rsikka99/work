@@ -114,6 +114,7 @@
                             <controller>quotegen_index</controller>
                             <action>index</action>
                             <class>dropdown subdropdown</class>
+                            <resource>hardwarelibrary__quote_index__index</resource>
                             <pages>
                                 <viewalldevices>
                                     <label>All Devices</label>
