@@ -17,7 +17,7 @@ class Application_View_Helper_Adminmenu extends Zend_View_Helper_Abstract
         // Get the container
         $html = "";
         /* @var $pages Zend_Navigation */
-        $pages = $this->view->navigation()->getContainer();
+        $pages = $this->view->MyNavigation()->getContainer();
         $container = $pages->findBy('id', 'adminmenu');
         if ($container && $container->hasPages())
         {
@@ -30,7 +30,7 @@ class Application_View_Helper_Adminmenu extends Zend_View_Helper_Abstract
             }
             
             // Render the menu
-            $html = $this->view->navigation()
+            $html = $this->view->MyNavigation()
                 ->menu()
                 ->renderMenu($container, array (
                     'minDepth' => 0, 

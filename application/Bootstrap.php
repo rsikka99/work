@@ -30,6 +30,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->bootstrap('db');
         $this->bootstrap('session');
         Zend_Session::start();
+
+        $auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity())
+        {
+            if ($auth->getIdentity()->id > 0)
+            {
+                Application_Service_Navigation::$userId = $auth->getIdentity()->id;
+            }
+        }
     }
 
     /**
@@ -121,53 +130,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         Zend_Registry::set('navigationCache', $cacheManager->getCache('navigation_cache'));
         Zend_Registry::set('aclCache', $cacheManager->getCache('acl_cache'));
-    }
-
-    /**
-     * Loads the navigation.xml and sets up navigation to be used by the navigation view helper
-     */
-    protected function _initNavigation ()
-    {
-        $this->bootstrap('view');
-        $this->bootstrap('putcachesintoregistry');
-
-        /* @var $view Zend_View */
-        $view = $this->getResource('view');
-
-        $this->bootstrap('acl');
-        $acl = Zend_Registry::get('Zend_Acl');
-
-        /* @var $navigation Zend_View_Helper_Navigation */
-        $navigation = $view->navigation();
-
-        $navigation->setAcl($acl);
-
-        $auth = Zend_Auth::getInstance();
-        if ($auth->hasIdentity())
-        {
-            $navigation->setRole("{$auth->getIdentity()->id}");
-        }
-        else
-        {
-            $navigation->setRole(null);
-        }
-
-        $cache     = Zend_Registry::get('navigationCache');
-        $container = $cache->load('navigationCache');
-        if ($container === false)
-        {
-            $config = new Zend_Config_Xml(__DIR__ . '/configs/navigation.xml', 'nav');
-
-            /* @var $container Zend_Navigation */
-            $container = $view->navigation()->getContainer();
-            $container->addPages($config);
-
-            $cache->save($container, 'navigationCache');
-        }
-
-        $view->navigation()->setContainer($container);
-
-        Zend_Registry::set('Zend_Navigation', $container);
     }
 
     /**

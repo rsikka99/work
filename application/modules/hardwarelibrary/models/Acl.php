@@ -5,7 +5,8 @@
 class Hardwarelibrary_Model_Acl
 {
 
-    const RESOURCE_HARDWARELIBRARY_INDEX_INDEX = "hardwarelibrary__index__index";
+    const RESOURCE_HARDWARELIBRARY_INDEX_INDEX      = "hardwarelibrary__index__index";
+    const RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX = "hardwarelibrary__quote_index__index";
 
     /**
      * Sets up acl resources and access for a module
@@ -26,6 +27,7 @@ class Hardwarelibrary_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX);
+        $acl->addResource(self::RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX);
     }
 
     /**
@@ -37,6 +39,7 @@ class Hardwarelibrary_Model_Acl
     {
         //Hardware Admin
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
          * Quote User
