@@ -337,8 +337,6 @@ $(function ()
             {
                 $('#loadingDiv').show();
                 ajaxCounter++;
-                console.log("Added element to array " + ajaxCounter);
-
             },
             complete  : function ()
             {
@@ -347,12 +345,11 @@ $(function ()
                 {
                     $('#loadingDiv').hide();
                 }
-                console.log("Removing element from array " + ajaxCounter);
             },
             success   : function (data)
             {
                 grid.setCell(rowId, 'reason', data.replaceReason);
-                grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "" : "negativeCostDelta");
+                grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
                 // Update the calculation
                 $("#monochromeCpp").html(data.monochromeCpp);
                 $("#colorCpp").html(data.colorCpp);
@@ -367,6 +364,9 @@ $(function ()
         });
     });
 
-    $('#loadingDiv').hide();
-
+    // Hide the loading div at the beginning
+    $('#optimizationTable').load(TMTW_BASEURL + 'hardwareoptimization/index/summary-table', '', function ()
+    {
+        $('#loadingDiv').hide();
+    });
 });

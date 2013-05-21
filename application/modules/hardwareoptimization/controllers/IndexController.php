@@ -521,4 +521,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                              "marginPercent" => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
                         ));
     }
+
+    public function summaryTableAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->optmizationViewModel = $this->getOptimizationViewModel();
+    }
 }

@@ -13,54 +13,26 @@ $targetColorCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()
 $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
 $formActions [] = $form->getElement('ResetReplacements');
-$formActions [] = $form->getElement('Submit');
+//$formActions [] = $form->getElement('Submit');
 $formActions [] = $form->getElement('Analyze');
 ?>
-
 <br />
-<!-- Begin Optimization Summary table -->
-<div id="optimizationSummary" style="position: relative">
-    <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: rgb(255,255,255);">
-        <div class="AjaxLoadingIcon"></div>
-    </div>
-    <table class='table table-condensed' style="width: 100%">
-        <thead>
-        <tr class='header'>
-            <td><strong>Fleet</strong></td>
-            <td><strong>Weighted Monochrome CPP</strong></td>
-            <td><strong>Weighted Color CPP</strong></td>
-            <td><strong>Total Cost</strong></td>
-            <td><strong>Margin $</strong></td>
-            <td><strong>Margin %</strong></td>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td> Current</td>
-            <td><?php echo $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)); ?></td>
-            <td><?php echo ($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage > 0) ? $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'N/A'; ?></td>
-            <td><?php echo $this->currency($optimization->calculateDealerMonthlyCost()); ?></td>
-            <td><?php echo $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?></td>
-            <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>
-                %
-            </td>
-        </tr>
-        <tr>
-            <td> Optimized</td>
-            <td id="monochromeCpp"><?php echo $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array('precision' => 4)) ?></td>
-            <td id="colorCpp"><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A'; ?></td>
-            <td id="totalCost"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements(), array('precision' => 2)) ?></td>
-            <td id="marginDollar"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements(), array('precision' => 2)) ?></td>
-            <td id="marginPercent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
-                %
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
+    <div class="clearfix">
+        <?php foreach ($formActions as $element) : ?>
+            <?php echo $element->renderViewHelper(); ?>
+        <?php endforeach; ?>
+    </div>
+    <br/>
+    <!-- Begin Optimization Summary table -->
+    <div id="optimizationSummary" style="position: relative; min-height: 100px">
+        <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: rgb(255,255,255);">
+            <div class="AjaxLoadingIcon"></div>
+        </div>
+        <div id="optimizationTable">
+        </div>
+    </div>
+
     <div class='replacementDevices'>
         <?php
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
@@ -101,16 +73,9 @@ $formActions [] = $form->getElement('Analyze');
             $jsonRows[] = $rowJson;
             ?>
         <?php endforeach; ?>
-        <!-- Form Actions -->
-        <div class="clearfix">
-            <?php foreach ($formActions as $element) : ?>
-                <?php echo $element->renderViewHelper(); ?>
-            <?php endforeach; ?>
-        </div>
+
         <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are
             eligible for potential optimization.</em>
-        <br />
-        <!-- End Form Actions -->
         <table id='replacementDeviceTable' style="width: 100%" class="scroll">
             <tr>
                 <td></td>
