@@ -1,5 +1,8 @@
 $(function ()
 {
+//    var ajaxArray = [];
+    var ajaxCounter = 0;
+
     $("#deviceInstanceInformationModal").hide();
     var getColumnSrcIndexByName = function (grid, columnName)
     {
@@ -319,15 +322,37 @@ $(function ()
         var elementId = $(this).attr("id");
         var replacementDeviceId = $(this).val();
 
+        // Get the jqGrid and the id of the row we changed
+        var grid = jQuery("#replacementDeviceTable");
+        var rowId = $(this).closest('tr').attr('id');
+
         $.ajax({
-            url     : TMTW_BASEURL + "hardwareoptimization/index/update-replacement-device",
-            dataType: 'json',
-            data    : {
+            url       : TMTW_BASEURL + "hardwareoptimization/index/update-replacement-device",
+            dataType  : 'json',
+            data      : {
                 deviceInstanceId   : elementId,
-                replacementDeviceId: replacementDeviceId,
+                replacementDeviceId: replacementDeviceId
             },
-            success : function (data)
+            beforeSend: function ()
             {
+                $('#loadingDiv').show();
+                ajaxCounter++;
+                console.log("Added element to array " + ajaxCounter);
+
+            },
+            complete  : function ()
+            {
+                ajaxCounter--;
+                if (ajaxCounter < 1)
+                {
+                    $('#loadingDiv').hide();
+                }
+                console.log("Removing element from array " + ajaxCounter);
+            },
+            success   : function (data)
+            {
+                grid.setCell(rowId, 'reason', data.replaceReason);
+                grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "" : "negativeCostDelta");
                 // Update the calculation
                 $("#monochromeCpp").html(data.monochromeCpp);
                 $("#colorCpp").html(data.colorCpp);
@@ -335,9 +360,13 @@ $(function ()
                 $("#marginDollar").html(data.marginDollar);
                 $("#marginPercent").html(data.marginPercent);
             },
-            error   : function (xhr)
+            error     : function (xhr)
             {
+
             }
         });
     });
+
+    $('#loadingDiv').hide();
+
 });

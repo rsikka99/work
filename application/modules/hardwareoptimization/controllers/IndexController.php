@@ -174,8 +174,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
-        $optimization       = $this->getOptimizationViewModel();
-        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+        $optimization                                           = $this->getOptimizationViewModel();
+        $costPerPageSetting                                     = $optimization->getCostPerPageSettingForDealer();
 
         $instanceId     = $this->_getParam('deviceInstanceId');
         $deviceInstance = null;
@@ -464,15 +464,15 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $deviceInstanceId = (int)str_replace("deviceInstance_", "", $deviceInstanceId);
         $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
 
+        // Check if device belongs to rms
         if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
         {
             $this->sendJsonError("You do not have permission to edit this device instance.");
         }
 
-        // Check if device belongs to rms
-        $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
 
-        $whereKey = array($deviceInstanceId, $this->_hardwareOptimization->id);
+        $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
+        $whereKey            = array($deviceInstanceId, $this->_hardwareOptimization->id);
 
         if ($replacementDeviceId == 0)
         {
@@ -498,7 +498,15 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $deviceInstanceReplacementMasterDeviceMapper->insert($deviceInstanceReplacementMasterDevice);
             }
         }
+
+        // Setup the master device labor and parts cost per page
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+
         $optimization = $this->getOptimizationViewModel();
+        $costDelta    = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                        $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDeviceId));
+
 
         // Add calculated amounts to json
         // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
@@ -506,7 +514,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                              "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
                              "colorCpp"      => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
                              "totalCost"     => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
+                             "replaceReason" => $deviceInstance->getReason(),
                              "marginDollar"  => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
+                             "costDelta"     => $this->view->currency($costDelta),
+                             "rawCostDelta"  => (float)$costDelta,
                              "marginPercent" => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
                         ));
     }
