@@ -25,8 +25,8 @@ $(function ()
     };
 
     $("#replacementDeviceTable").jqGrid({
-        datatype    : 'local',
-        data        : jsonRows,
+        url         : TMTW_BASEURL + 'hardwareoptimization/index/device-list',
+        datatype    : 'json',
         colModel    : [
             { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148, frozen: true},
             { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
@@ -50,16 +50,18 @@ $(function ()
         shrinkToFit : false,
         sortname    : 'monthlyCost',
         sortorder   : 'desc',
+        jsonReader  : { repeatitems: false },
         caption     : "Purchased Devices",
-        loadComplete: function ()
+        gridComplete: function ()
         {
             var grid = $(this);
             var ids = grid.getDataIDs();
             for (var i = 0; i < ids.length; i++)
             {
-                // Get the data so we can use and manipualte it.
+                // Get the data so we can use and manipulate it.
                 var row = grid.getRowData(ids[i]);
-                row.info = "<button type='button' class='btn btn-inverse btn-mini'><i class='icon-search icon-white'></i></button>";
+                var button = "<button type='button' class='btn btn-inverse btn-mini'><i class='icon-search icon-white'></i></button>";
+                grid.setCell(ids[i], 'info', button);
 
                 if (row.rawMonoCpp > targetCostPerPageMono)
                 {
@@ -86,8 +88,6 @@ $(function ()
                 {
                     grid.setCell(ids[i], 'costDelta', '', 'negativeCostDelta');
                 }
-                // Put our new data back into the grid
-                grid.setRowData(ids[i], row);
             }
         },
         onCellSelect: function (rowid, iCol, cellcontent, e)
@@ -153,16 +153,6 @@ $(function ()
                         $row.append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> ");
                         $table.append($row);
                         $row = $("<tr></tr>");
-
-//                        if (data.deviceInstance.jitSuppliesSupported)
-//                        {
-//                            $row.append("<td>JIT Supplies Capable</td><td>Yes</td>");
-//                        }
-//                        else
-//                        {
-//                            $row.append("<td>JIT Supplies Capable</td><td>No</td>");
-//                        }
-//                        $table.append($row);
 
                         $row = $("<tr></tr>");
                         if (data.deviceInstance.isCopy)
@@ -317,56 +307,53 @@ $(function ()
     });
     jQuery("#replacementDeviceTable").jqGrid('setFrozenColumns');
 
-    $('select').change(function ()
-    {
-        var elementId = $(this).attr("id");
-        var replacementDeviceId = $(this).val();
-
-        // Get the jqGrid and the id of the row we changed
-        var grid = jQuery("#replacementDeviceTable");
-        var rowId = $(this).closest('tr').attr('id');
-
-        $.ajax({
-            url       : TMTW_BASEURL + "hardwareoptimization/index/update-replacement-device",
-            dataType  : 'json',
-            data      : {
-                deviceInstanceId   : elementId,
-                replacementDeviceId: replacementDeviceId
-            },
-            beforeSend: function ()
-            {
-                $('#loadingDiv').show();
-                ajaxCounter++;
-            },
-            complete  : function ()
-            {
-                ajaxCounter--;
-                if (ajaxCounter < 1)
-                {
-                    $('#loadingDiv').hide();
-                }
-            },
-            success   : function (data)
-            {
-                grid.setCell(rowId, 'reason', data.replaceReason);
-                grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
-                // Update the calculation
-                $("#monochromeCpp").html(data.monochromeCpp);
-                $("#colorCpp").html(data.colorCpp);
-                $("#totalCost").html(data.totalCost);
-                $("#marginDollar").html(data.marginDollar);
-                $("#marginPercent").html(data.marginPercent);
-            },
-            error     : function (xhr)
-            {
-
-            }
-        });
-    });
-
     // Hide the loading div at the beginning
     $('#optimizationTable').load(TMTW_BASEURL + 'hardwareoptimization/index/summary-table', '', function ()
     {
         $('#loadingDiv').hide();
     });
+
+    $(document).on('change', 'select',
+        function ()
+        {
+            var elementId = $(this).attr("id");
+            var replacementDeviceId = $(this).val();
+
+            // Get the jqGrid and the id of the row we changed
+            var grid = jQuery("#replacementDeviceTable");
+            var rowId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url       : TMTW_BASEURL + 'hardwareoptimization/index/update-replacement-device',
+                dataType  : 'json',
+                data      : {
+                    deviceInstanceId   : elementId,
+                    replacementDeviceId: replacementDeviceId
+                },
+                beforeSend: function ()
+                {
+                    $('#loadingDiv').show();
+                    ajaxCounter++;
+                },
+                complete  : function ()
+                {
+                    ajaxCounter--;
+                    if (ajaxCounter < 1)
+                    {
+                        $('#loadingDiv').hide();
+                    }
+                },
+                success   : function (data)
+                {
+                    grid.setCell(rowId, 'reason', data.replaceReason);
+                    grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                    // Update the calculation
+                    $('#monochromeCpp').html(data.monochromeCpp);
+                    $('#colorCpp').html(data.colorCpp);
+                    $('#totalCost').html(data.totalCost);
+                    $('#marginDollar').html(data.marginDollar);
+                    $('#marginPercent').html(data.marginPercent);
+                }
+            });
+        });
 });

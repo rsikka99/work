@@ -4,6 +4,14 @@
  */
 class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_Controller_Action
 {
+    /**
+     * @var Proposalgen_Form_DeviceSwap
+     */
+    protected $_deviceSwapForm;
+    /**
+     * @var Hardwareoptimization_ViewModel_Devices
+     */
+    protected $_deviceViewModel;
 
     /**
      * This action will redirect us to the latest available step
@@ -96,13 +104,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_OPTIMIZE);
-        $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
-        // Every time we save anything related to a report, we should save it (updates the modification date)
-        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances->getDeviceInstances(), Zend_Auth::getInstance()->getIdentity()->dealerId, $this->_hardwareOptimization->id);
-
-        // Get all devices
-        $devices = $devicesViewModel->purchasedDeviceInstances;
+        // $form = $this->getDeviceSwapForm($this->getDeviceViewModel()->purchasedDeviceInstances->getDeviceInstances());
+        $form = new Hardwareoptimization_Form_OptimizeActions();
 
         if ($this->_request->isPost())
         {
@@ -160,11 +164,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         $this->view->form                 = $form;
-        $this->view->devices              = $devices;
         $this->view->hardwareOptimization = $this->_hardwareOptimization;
-        $this->view->optmizationViewModel = $this->getOptimizationViewModel();
         $this->view->navigationForm       = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
-        $this->view->title                = 'Hardware Optimization';
     }
 
     /**
@@ -522,9 +523,75 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         ));
     }
 
-    public function summaryTableAction()
+    public function summaryTableAction ()
     {
         $this->_helper->layout()->disableLayout();
+        $this->view->hardwareoptimization = $this->_hardwareOptimization;
         $this->view->optmizationViewModel = $this->getOptimizationViewModel();
+    }
+
+    public function deviceListAction ()
+    {
+        $form = $this->getDeviceSwapForm($this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances());
+
+        $costPerPageSetting = $this->getOptimizationViewModel()->getCostPerPageSettingForDealer();
+        $jsonRows           = new stdClass();
+        $jsonRows->total    = 0;
+        $jsonRows->page     = 1;
+        $jsonRows->records  = 0;
+
+        /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+        foreach ($this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
+        {
+            $replacementDeviceElement = $form->getElement("deviceInstance_{$deviceInstance->id}");
+            // Cpp used to show and threshold cpp
+            $deviceCostPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
+            // Get the manufacturer from the master device
+            $masterDevice     = $deviceInstance->getMasterDevice();
+            $manufacturerName = $masterDevice->getManufacturer()->fullname;
+            // Check to see if there is a monthly color volume
+            $monthlyColorVolume = ($deviceInstance->getPageCounts()->color->getMonthly() > 0) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : 'N/A';
+            $isDeviceColor      = ($deviceInstance->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+            // Device costs
+            $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
+            $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id));
+
+            $rowJson          = array(
+                'deviceInstanceId' => $deviceInstance->id,
+                'isColor'          => (int)$isDeviceColor,
+                'device'           => "{$manufacturerName}<br/>{$masterDevice->modelName}",
+                'monoAmpv'         => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
+                'colorAmpv'        => $monthlyColorVolume,
+                'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,
+                'monoCpp'          => $this->view->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
+                'rawColorCpp'      => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
+                'colorCpp'         => ($isDeviceColor) ? $this->view->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
+                'monthlyCost'      => $this->view->currency($deviceInstanceMonthlyCost, array('precision' => 2)),
+                'action'           => $replacementDeviceElement->renderViewHelper(),
+                'costDelta'        => $this->view->currency($costDelta, array('precision' => 2)),
+                'rawCostDelta'     => $costDelta,
+                'reason'           => $deviceInstance->getReason(),
+            );
+            $jsonRows->rows[] = $rowJson;
+        }
+        $this->sendJson($jsonRows);
+    }
+
+
+    /**
+     * Getter for _deviceSwapForm
+     *
+     * @param $devices
+     *
+     * @return \Proposalgen_Form_DeviceSwap
+     */
+    public function getDeviceSwapForm ($devices)
+    {
+        if (!isset($this->_deviceSwapForm))
+        {
+            $this->_deviceSwapForm = new Proposalgen_Form_DeviceSwapChoice($devices, $this->_identity->dealerId, $this->_hardwareOptimization->id);
+        }
+
+        return $this->_deviceSwapForm;
     }
 }

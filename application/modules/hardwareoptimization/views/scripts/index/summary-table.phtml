@@ -1,7 +1,33 @@
 <?php
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optmizationViewModel;
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareoptimization;
 ?>
+
+<!-- Begin target cost per page table-->
+<table class="table">
+    <tbody>
+    <tr>
+        <td>
+            <strong>Target Monochrome CPP
+                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4)); ?>
+        </td>
+        <td>
+            <strong>Target Color CPP
+                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4)); ?>
+        </td>
+        <td>
+            <strong>Cost Threshold : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?>
+        </td>
+        <td><strong>Total
+                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2)) ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!-- End target cost per page table -->
+
 <table class='table table-condensed' style="width: 100%">
     <thead>
     <tr class='header'>
@@ -36,3 +62,6 @@ $optimization = $this->optmizationViewModel;
     </tr>
     </tbody>
 </table>
+<em>The following <?php echo count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?> out
+    of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are
+    eligible for potential optimization.</em>

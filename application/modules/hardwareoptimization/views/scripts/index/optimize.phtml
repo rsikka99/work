@@ -1,8 +1,6 @@
 <?php
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
-/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
-$optimization = $this->optmizationViewModel;
 /* @var $form Proposalgen_Form_DeviceSwapChoice */
 $form = $this->form;
 
@@ -15,6 +13,7 @@ $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 $formActions [] = $form->getElement('ResetReplacements');
 //$formActions [] = $form->getElement('Submit');
 $formActions [] = $form->getElement('Analyze');
+
 ?>
 <br />
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
@@ -23,7 +22,7 @@ $formActions [] = $form->getElement('Analyze');
             <?php echo $element->renderViewHelper(); ?>
         <?php endforeach; ?>
     </div>
-    <br/>
+    <br />
     <!-- Begin Optimization Summary table -->
     <div id="optimizationSummary" style="position: relative; min-height: 100px">
         <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: rgb(255,255,255);">
@@ -33,79 +32,19 @@ $formActions [] = $form->getElement('Analyze');
         </div>
     </div>
 
-    <div class='replacementDevices'>
-        <?php
-        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
-        $jsonRows = array();
-        $deviceCount = 0;
-        /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance) :
-            $deviceCount++;
-            $replacementDeviceElement = $form->getElement("deviceInstance_{$deviceInstance->id}");
+    <div id='replacementDevices'>
 
-            // Cpp used to show and threshold cpp
-            $deviceCostPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
-
-            // Get the manufacturer from the master device
-            $masterDevice     = $deviceInstance->getMasterDevice();
-            $manufacturerName = $masterDevice->getManufacturer()->fullname;
-            // Check to see if there is a monthly color volume
-            $monthlyColorVolume = ($deviceInstance->getPageCounts()->color->getMonthly() > 0) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : 'N/A';
-            $isDeviceColor      = ($deviceInstance->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-            // Device costs
-            $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-            $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimization->id));
-
-            $rowJson    = array(
-                'deviceInstanceId' => $deviceInstance->id,
-                'isColor'          => (int)$isDeviceColor,
-                'device'           => "{$manufacturerName}<br/>{$masterDevice->modelName}",
-                'monoAmpv'         => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
-                'colorAmpv'        => $monthlyColorVolume,
-                'monoCpp'          => $this->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
-                'colorCpp'         => ($isDeviceColor) ? $this->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
-                'monthlyCost'      => $this->currency($deviceInstanceMonthlyCost, array('precision' => 2)),
-                'action'           => $replacementDeviceElement->renderViewHelper(),
-                'costDelta'        => $this->currency($costDelta, array('precision' => 2)),
-                'rawCostDelta'     => $costDelta,
-                'reason'           => $deviceInstance->getReason(),
-            );
-            $jsonRows[] = $rowJson;
-            ?>
-        <?php endforeach; ?>
-
-        <em>The following <?php echo $deviceCount; ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are
-            eligible for potential optimization.</em>
-        <table id='replacementDeviceTable' style="width: 100%" class="scroll">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
     </div>
+
+    <table id='replacementDeviceTable' style="width: 100%" class="scroll">
+        <tr>
+            <td></td>
+        </tr>
+    </table>
+
 </form>
 
-<!-- Begin target cost per page table -->
-<table class="table">
-    <tbody>
-    <tr>
-        <td>
-            <strong>Target Monochrome CPP
-                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage, array('precision' => 4)); ?>
-        </td>
-        <td>
-            <strong>Target Color CPP
-                : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage, array('precision' => 4)); ?>
-        </td>
-        <td>
-            <strong>Cost Threshold : </strong><?php echo $this->currency((float)$hardwareOptimization->getHardwareOptimizationSetting()->costThreshold); ?>
-        </td>
-        <td><strong>Total
-                Revenue: </strong><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2)) ?>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<!-- End target cost per page table -->
+
 
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 
@@ -113,7 +52,6 @@ var targetCostPerPageMono               = <?php echo $targetBlackCPP; ?>;
 var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp; ?>;
 var targetCostPerPageColor              = <?php echo $targetColorCPP; ?>;
 var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
-var jsonRows                            = <?php echo json_encode($jsonRows); ?>;
 var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
