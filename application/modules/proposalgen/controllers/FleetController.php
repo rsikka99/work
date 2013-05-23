@@ -54,6 +54,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $time        = -microtime(true);
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
         $rmsUpload = null;
@@ -82,9 +83,20 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 if ($form->isValid($values))
                 {
                     $success = $uploadService->processUpload($values);
+
+                    /**
+                     * Log how much time it took
+                     */
+                    $time += microtime(true);
+                    $filename = $uploadService->rmsUpload->fileName;
+                    Tangent_Log::debug("It took {$time} seconds to process the csv upload ({$filename}). ");
+
                     if ($success)
                     {
-                        $this->_flashMessenger->addMessage(array("success" => "Upload was successful."));
+                        $timeElapsed    = number_format($time, 4);
+                        $validDevices   = number_format($uploadService->rmsUpload->validRowCount);
+                        $invalidDevices = number_format($uploadService->rmsUpload->invalidRowCount);
+                        $this->_flashMessenger->addMessage(array("success" => "Processed {$validDevices} valid devices and {$invalidDevices} invalid devices in {$timeElapsed} seconds."));
                         $this->redirector(null, null, null, array("rmsUploadId" => $uploadService->rmsUpload->id));
                     }
                     else
@@ -676,7 +688,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    if(isset($postData['cancel']))
+                    if (isset($postData['cancel']))
                     {
                         $this->redirector("mapping", null, null, array('rmsUploadId' => $rmsUploadId));
                     }
