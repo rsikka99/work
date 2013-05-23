@@ -73,7 +73,7 @@ $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getNumberOfRepairs()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText($this->translate('Average time between printer breaking down and printer being fixed'), 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()) . 'day(s)', 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()) . ' day(s)', 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $cell = $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1);
 $cell->addText($this->translate('Annual downtime resulting from printer breakdowns'), 'bold_text', 'nospacing');
