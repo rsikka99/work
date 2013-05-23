@@ -257,61 +257,6 @@ class Proposalgen_Service_Rms_Upload
                                     $meter->endMeter   = $line->endMeterLife;
                                     $deviceInstanceMeterMapper->insert($meter);
                                 }
-
-                                // Print Black
-                                if ($line->endMeterPrintBlack > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_BLACK;
-                                    $meter->startMeter = $line->startMeterPrintBlack;
-                                    $meter->endMeter   = $line->endMeterPrintBlack;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
-
-                                // Print Color
-                                if ($line->endMeterPrintColor > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_PRINT_COLOR;
-                                    $meter->startMeter = $line->startMeterPrintColor;
-                                    $meter->endMeter   = $line->endMeterPrintColor;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
-
-
-                                // Copy Black
-                                if ($line->endMeterCopyBlack > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_BLACK;
-                                    $meter->startMeter = $line->startMeterCopyBlack;
-                                    $meter->endMeter   = $line->endMeterCopyBlack;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
-
-                                // Copy Color
-                                if ($line->endMeterCopyColor > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COPY_COLOR;
-                                    $meter->startMeter = $line->startMeterCopyColor;
-                                    $meter->endMeter   = $line->endMeterCopyColor;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
-
-                                // Scan Meter
-                                if ($line->endMeterScan > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_SCAN;
-                                    $meter->startMeter = $line->startMeterScan;
-                                    $meter->endMeter   = $line->endMeterScan;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
-
-                                // Fax Meter
-                                if ($line->endMeterFax > 0)
-                                {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_FAX;
-                                    $meter->startMeter = $line->startMeterFax;
-                                    $meter->endMeter   = $line->endMeterFax;
-                                    $deviceInstanceMeterMapper->insert($meter);
-                                }
                             }
 
                             /**
