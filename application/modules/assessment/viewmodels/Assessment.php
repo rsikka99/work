@@ -148,14 +148,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $UniquePurchasedTonerList;
     protected $UniqueDeviceList;
     protected $UniquePurchasedDeviceList;
-    protected $_averageCompatibleOnlyCostPerPage;
-    protected $_averageOemOnlyCostPerPage;
     protected $_numberOfDevicesReportingTonerLevels;
     protected $_numberOfColorCapablePurchasedDevices;
     protected $_maximumMonthlyPurchasedPrintVolume;
-    protected $_purchasedTotalMonthlyCost;
-    protected $_purchasedColorMonthlyCost;
-    protected $_purchasedMonochromeMonthlyCost;
     protected $_optimizedDevices;
     protected $_numberOfDevicesNotReportingTonerLevels;
     protected $_numberOfCopyCapableDevices;
@@ -1073,7 +1068,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->PercentColorDevices))
         {
-            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / count($this->getDevices()->allIncludedDeviceInstances);
+            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount();
         }
 
         return $this->PercentColorDevices;
@@ -1091,7 +1086,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 $totalAge += $deviceInstance->getAge();
             }
-            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices()->allIncludedDeviceInstances);
+            $this->AverageAgeOfDevices = $totalAge / $this->getDevices()->allIncludedDeviceInstances->getCount();
         }
 
         return $this->AverageAgeOfDevices;
@@ -1344,84 +1339,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
-     * Calculates the average cost per page for only toners that are Oem.
-     *
-     * @return Proposalgen_Model_CostPerPage
-     */
-    public function calculateAverageOemOnlyCostPerPage ()
-    {
-        if (!isset($this->_averageOemOnlyCostPerPage))
-        {
-            $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
-            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
-            $costPerPage                              = new Proposalgen_Model_CostPerPage();
-            $costPerPage->monochromeCostPerPage       = 0;
-            $costPerPage->colorCostPerPage            = 0;
-            $numberOfColorDevices                     = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
-                if ($deviceInstance->getMasterDevice()->isColor())
-                {
-                    $numberOfColorDevices++;
-                }
-            }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
-            if ($numberOfDevices > 0)
-            {
-                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
-                if ($numberOfColorDevices > 0)
-                {
-                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfColorDevices;
-                }
-            }
-            $costPerPage->monochromeCostPerPage = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->assessment->getAssessmentSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->assessment->getAssessmentSettings()->assessmentReportMargin);
-            $this->_averageOemOnlyCostPerPage   = $costPerPage;
-        }
-
-        return $this->_averageOemOnlyCostPerPage;
-    }
-
-    /**
-     * Calculates the average cost per page for only toners that are Comp.
-     *
-     * @return Proposalgen_Model_CostPerPage
-     */
-    public function calculateAverageCompatibleOnlyCostPerPage ()
-    {
-        if (!isset($this->_averageCompatibleOnlyCostPerPage))
-        {
-            $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
-            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
-            $costPerPage                              = new Proposalgen_Model_CostPerPage();
-            $numberOfColorDevices                     = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
-                if ($deviceInstance->getMasterDevice()->isColor())
-                {
-                    $numberOfColorDevices++;
-                }
-            }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
-            if ($numberOfDevices > 0)
-            {
-                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
-                if ($numberOfColorDevices > 0)
-                {
-                    $costPerPage->colorCostPerPage = $costPerPage->colorCostPerPage / $numberOfDevices;
-                }
-            }
-            $costPerPage->monochromeCostPerPage      = Tangent_Accounting::applyMargin($costPerPage->monochromeCostPerPage, $this->assessment->getAssessmentSettings()->assessmentReportMargin);
-            $costPerPage->colorCostPerPage           = Tangent_Accounting::applyMargin($costPerPage->colorCostPerPage, $this->assessment->getAssessmentSettings()->assessmentReportMargin);
-            $this->_averageCompatibleOnlyCostPerPage = $costPerPage;
-        }
-
-        return $this->_averageCompatibleOnlyCostPerPage;
-    }
-
-    /**
      * @return float
      */
     public function getAveragePowerUsagePerMonth ()
@@ -1532,10 +1449,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 $cumulativeAge += $deviceInstance->getAge();
             }
+
             if ($cumulativeAge > 0)
             {
                 $averageAge = $cumulativeAge / $this->getDevices()->allIncludedDeviceInstances->getCount();
             }
+
+
             $this->AverageDeviceAge = $averageAge;
         }
 
@@ -3382,65 +3302,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this->UniqueDeviceList;
     }
 
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return float
-     */
-    public function calculatePurchasedTotalMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->_purchasedTotalMonthlyCost))
-        {
-            $total = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $total += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getMasterDevice());
-            }
-            $this->_purchasedTotalMonthlyCost = $total;
-        }
-
-        return $this->_purchasedTotalMonthlyCost;
-    }
-
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return float
-     */
-    public function calculatePurchasedColorMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->_purchasedColorMonthlyCost))
-        {
-            $total = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $total += $deviceInstance->calculateMonthlyColorCost($costPerPageSetting, $deviceInstance->getMasterDevice());
-            }
-            $this->_purchasedColorMonthlyCost = $total;
-        }
-
-        return $this->_purchasedColorMonthlyCost;
-    }
-
-    /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return float
-     */
-    public function calculatePurchasedMonochromeMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
-    {
-        if (!isset($this->_purchasedMonochromeMonthlyCost))
-        {
-            $total = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $total += $deviceInstance->calculateMonthlyMonoCost($costPerPageSetting, $deviceInstance->getMasterDevice());
-            }
-            $this->_purchasedMonochromeMonthlyCost = $total;
-        }
-
-        return $this->_purchasedMonochromeMonthlyCost;
-    }
 
     /**
      * @return float
@@ -3448,22 +3309,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public function calculateTotalMonthlyCost ()
     {
         return ($this->getEstimatedAnnualCostOfLeaseMachines() + $this->getTotalPurchasedAnnualCost()) / 12;
-    }
-
-    /**
-     * @return float
-     */
-    public function calculateEstimatedCompTonerCostAnnually ()
-    {
-        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
-    }
-
-    /**
-     * @return float
-     */
-    public function calculateEstimatedOemTonerCostAnnually ()
-    {
-        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
     }
 
     /**
@@ -3799,95 +3644,5 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public function calculateAveragePagesPerDeviceMonthly ()
     {
         return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
-    }
-
-    /**
-     * Calculates the percent of total volume of purchased devices that are color
-     *
-     * @return float
-     */
-    public function calculatePercentOfTotalVolumePurchasedColorMonthly ()
-    {
-        return ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) * 100;
-    }
-
-    /**
-     * Calculates the total Average Cost For Oem Monochrome Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostOemMonochromeMonthly ()
-    {
-        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Compatible Monochrome Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostCompatibleMonochromeMonthly ()
-    {
-        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Compatible Color Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostOemColorMonthly ()
-    {
-        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Oem Color Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostCompatibleColorMonthly ()
-    {
-        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Oem Combined Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostOemCombinedMonthly ()
-    {
-        return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Compatible Combined Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostCompatibleCombinedMonthly ()
-    {
-        return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
-    }
-
-    /**
-     * Calculates the difference between Oem Total Cost Annually And Compatible
-     *
-     * @return float
-     */
-    public function calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
-    {
-        return $this->calculateEstimatedOemTonerCostAnnually() - $this->calculateEstimatedCompTonerCostAnnually();
-    }
-
-    /**
-     * Calculates half the difference between Oem Total Cost Annually And Compatible
-     *
-     * @return float
-     */
-    public function calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually ()
-    {
-        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 2;
     }
 }
