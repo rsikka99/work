@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8" />
+    <?php echo $this->headTitle($this->App()->title); ?>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <meta name="viewport" content="width=device-width">
+    <meta name="author" content="Tangent MTW">
+
+    <?php echo $this->headLink(); ?>
+    <script src="<?php echo $this->baseUrl("/js/libs/modernizr-2.5.3.min.js"); ?>"></script>
+</head>
+<body>
+<!-- Prompt to upgrade browsers/install chrome frame if IE 6 or lower -->
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
+    <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+<!-- Start of Navbar -->
+<div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <div class="sidebar pull-right">
+                <div class="pull-right">
+                    <?php if (Zend_Auth::getInstance()->hasIdentity()) : ?>
+                    <div class="btn-group pull-right">
+                        <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-cog icon-white"></i> <?php echo $this->Username(); ?> <b class="caret"></b></a>
+                        <?php echo $this->Usermenu(); ?>
+                    </div>
+                    <?php else : ?>
+                    <a class="btn btn-danger" href="<?php echo $this->url(array('module' => 'default', 'controller' => 'auth', 'action' => 'login'));?>"><i class="icon-user icon-white"></i>
+                        Login</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php echo $this->MyNavigation()->menu()->setUlClass('nav')->setMinDepth(0)->setMaxDepth(0)->render(); ?>
+        </div>
+    </div>
+</div>
+<!-- /Navbar -->
+<div class="container-fluid" id="meat">
+    <!-- Sub Navbar -->
+    <?php $subNav = $this->Subnav(); ?>
+    <?php if ($subNav) : ?>
+    <div class="subnav">
+        <?php echo $subNav; ?>
+    </div>
+    <?php endif; ?>
+    <!-- /Sub Navbar -->
+
+
+    <!-- Step by step navigation -->
+    <?php echo $this->placeholder('ProgressionNav'); ?>
+    <!-- /Step by step navigation -->
+    <!-- Report List Navigation -->
+    <?php echo $this->placeholder('extraNavbar'); ?>
+    <!-- /Report List Navigation -->
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- Flash messages -->
+                <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
+                <!-- End Of flash messages -->
+
+
+                <!-- Main content -->
+                <?php echo $this->layout()->content; ?>
+                <!-- End main content -->
+
+            </div>
+        </div>
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
+                <div class="span6" id="footerLinks">
+                    <?php echo $this->Footermenu(); ?>
+                </div>
+            </div>
+        </footer>
+        <!-- /Footer -->
+    </div>
+</div>
+<!-- End of main container -->
+
+
+<?php
+if (APPLICATION_ENV != 'production')
+{
+    echo $this->partial('phpErrorPartial.phtml', array('exceptions' => $this->exceptions, 'request' => $this->request));
+}
+?>
+
+<!-- JavaScript at the bottom for fast page loading -->
+<script type="text/javascript">
+    var TMTW_BASEURL = '<?php echo $this->serverUrl('/'); ?>';
+</script>
+
+<!-- Load jQuery Libraries -->
+<?php echo $this->jQuery()->enable(); ?>
+<script>window.jQuery || document.write('<script src="js/libs/jquery-1.9.1.min.js"><\/script>');</script>
+
+<!-- Scripts concatenated and minified via build script -->
+<?php echo $this->headScript(); ?>
+<!-- /Scripts -->
+
+<?php if ($this->App()->useAnalytics) : ?>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-40085726-1', 'mpstoolbox.com');
+    ga('send', 'pageview');
+
+</script>
+<?php endif; ?>
+
+</body>
+</html>

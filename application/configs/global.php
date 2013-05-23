@@ -92,7 +92,7 @@ return array(
         'log'             => array(
             'stream' => array(
                 'filterName'   => 'Priority',
-                'filerParams'  => array(
+                'filterParams'  => array(
                     'priority' => 4,
                 ),
                 'writerName'   => 'Stream',
