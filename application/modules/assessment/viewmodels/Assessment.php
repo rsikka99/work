@@ -1073,7 +1073,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->PercentColorDevices))
         {
-            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / count($this->getDevices()->allIncludedDeviceInstances);
+            $this->PercentColorDevices = $this->getNumberOfColorCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount();
         }
 
         return $this->PercentColorDevices;
@@ -1091,7 +1091,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 $totalAge += $deviceInstance->getAge();
             }
-            $this->AverageAgeOfDevices = $totalAge / count($this->getDevices()->allIncludedDeviceInstances);
+            $this->AverageAgeOfDevices = $totalAge / $this->getDevices()->allIncludedDeviceInstances->getCount();
         }
 
         return $this->AverageAgeOfDevices;
@@ -1366,7 +1366,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                     $numberOfColorDevices++;
                 }
             }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            $numberOfDevices = $this->getDevices()->purchasedDeviceInstances->getCount();
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
@@ -1404,7 +1404,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                     $numberOfColorDevices++;
                 }
             }
-            $numberOfDevices = count($this->getDevices()->purchasedDeviceInstances);
+            $numberOfDevices = $this->getDevices()->purchasedDeviceInstances->getCount();
             if ($numberOfDevices > 0)
             {
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage / $numberOfDevices;
@@ -1532,10 +1532,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 $cumulativeAge += $deviceInstance->getAge();
             }
+
             if ($cumulativeAge > 0)
             {
                 $averageAge = $cumulativeAge / $this->getDevices()->allIncludedDeviceInstances->getCount();
             }
+
+
             $this->AverageDeviceAge = $averageAge;
         }
 
