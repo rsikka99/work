@@ -11,7 +11,6 @@ $targetColorCPP = (float)$hardwareOptimization->getHardwareOptimizationSetting()
 $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
 $formActions [] = $form->getElement('ResetReplacements');
-//$formActions [] = $form->getElement('Submit');
 $formActions [] = $form->getElement('Analyze');
 
 ?>
@@ -26,7 +25,7 @@ $formActions [] = $form->getElement('Analyze');
     <!-- Begin Optimization Summary table -->
     <div id="optimizationSummary" style="position: relative; min-height: 100px">
         <div id="loadingDiv" style="position: absolute; height: 100%; width: 100%; top: 0; left:0; background-color: rgb(255,255,255);">
-            <div class="AjaxLoadingIcon"></div>
+            <div class="spinner64"></div>
         </div>
         <div id="optimizationTable">
         </div>
@@ -36,11 +35,8 @@ $formActions [] = $form->getElement('Analyze');
 
     </div>
 
-    <table id='replacementDeviceTable' style="width: 100%" class="scroll">
-        <tr>
-            <td></td>
-        </tr>
-    </table>
+    <table id='replacementDeviceTable' style="width: 100%" class="scroll"> </table>
+    <div id="replacementDevicePager"></div>
 
 </form>
 

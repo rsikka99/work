@@ -530,53 +530,76 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $this->view->optmizationViewModel = $this->getOptimizationViewModel();
     }
 
+
     public function deviceListAction ()
     {
-        $form = $this->getDeviceSwapForm($this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances());
+        $jqGridService              = new Tangent_Service_JQGrid();
+        $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
 
-        $costPerPageSetting = $this->getOptimizationViewModel()->getCostPerPageSettingForDealer();
-        $jsonRows           = new stdClass();
-        $jsonRows->total    = 0;
-        $jsonRows->page     = 1;
-        $jsonRows->records  = 0;
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridServiceParameters = array(
+            'sidx' => $this->_getParam('sidx', 'device'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
 
-        /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-        foreach ($this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
+        $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
+
+        // We are not sorting in this function call - default sorting is monthly cost which will be handled by uSort
+        $jqGridService->setRecordCount($hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, null, null, null, true));
+
+        // Validate current page number since we don't want to be out of bounds
+        if ($jqGridService->getCurrentPage() < 1)
         {
-            $replacementDeviceElement = $form->getElement("deviceInstance_{$deviceInstance->id}");
-            // Cpp used to show and threshold cpp
-            $deviceCostPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
-            // Get the manufacturer from the master device
-            $masterDevice     = $deviceInstance->getMasterDevice();
-            $manufacturerName = $masterDevice->getManufacturer()->fullname;
-            // Check to see if there is a monthly color volume
-            $monthlyColorVolume = ($deviceInstance->getPageCounts()->color->getMonthly() > 0) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : 'N/A';
-            $isDeviceColor      = ($deviceInstance->getMasterDevice()->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-            // Device costs
-            $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-            $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id));
-
-            $rowJson          = array(
-                'deviceInstanceId' => $deviceInstance->id,
-                'isColor'          => (int)$isDeviceColor,
-                'device'           => "{$manufacturerName}<br/>{$masterDevice->modelName}",
-                'monoAmpv'         => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
-                'colorAmpv'        => $monthlyColorVolume,
-                'rawMonoCpp'       => $deviceCostPerPage->monochromeCostPerPage,
-                'monoCpp'          => $this->view->currency((float)$deviceCostPerPage->monochromeCostPerPage, array('precision' => 4)),
-                'rawColorCpp'      => ($isDeviceColor) ? $deviceCostPerPage->colorCostPerPage : 0,
-                'colorCpp'         => ($isDeviceColor) ? $this->view->currency($deviceCostPerPage->colorCostPerPage, array('precision' => 4)) : 'N/A',
-                'monthlyCost'      => $this->view->currency($deviceInstanceMonthlyCost, array('precision' => 2)),
-                'action'           => $replacementDeviceElement->renderViewHelper(),
-                'costDelta'        => $this->view->currency($costDelta, array('precision' => 2)),
-                'rawCostDelta'     => $costDelta,
-                'reason'           => $deviceInstance->getReason(),
-            );
-            $jsonRows->rows[] = $rowJson;
+            $jqGridService->setCurrentPage(1);
         }
-        $this->sendJson($jsonRows);
+        else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+        {
+            $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+        }
+
+        // Return a small subset of the results based on the jqGrid parameters
+        $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+
+        if ($startRecord < 0)
+        {
+            $startRecord = 0;
+        }
+
+        // Array of devices
+        $rows = $hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer(), $jqGridService->getRecordsPerPage(), $startRecord);
+
+        /* @var $deviceInstances Proposalgen_Model_DeviceInstance [] */
+        $deviceInstances = $rows['deviceInstances'];
+        $jsonDataRows    = $rows['jsonData'];
+
+        // We only want to pass the devices that are being shown in the pager to form
+        $form = $this->getDeviceSwapForm($deviceInstances);
+
+        // Parse the data
+        foreach ($jsonDataRows as &$row)
+        {
+            $replacementDeviceElement = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
+            $row['action']            = $replacementDeviceElement->renderViewHelper();
+            $row['monoCpp']           = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
+            $row['colorCpp']          = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
+            $row['costDelta']         = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
+            $row['monthlyCost']       = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+        }
+
+        $jqGridService->setRows($jsonDataRows);
+
+        // Send back jqGrid json data
+        $this->sendJson($jqGridService->createPagerResponseArray());
     }
 
+    function sortByMonthlyCost ($a, $b)
+    {
+        return $a['monthlyCost'] - $b['monthlyCost'];
+    }
 
     /**
      * Getter for _deviceSwapForm
