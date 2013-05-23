@@ -58,6 +58,13 @@
                     <visible>0</visible>
                     <class>dropdown</class>
                     <pages>
+                        <logs>
+                            <label>Application Log</label>
+                            <module>admin</module>
+                            <controller>log</controller>
+                            <action>index</action>
+                            <resource>admin__log__index</resource>
+                        </logs>
                         <about>
                             <label>About</label>
                             <module>default</module>
