@@ -533,7 +533,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function deviceListAction ()
     {
-        $jqGridService              = new Tangent_Service_JQGrid();
+        $jqGridService              =  new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
 
         /*
@@ -568,7 +568,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         {
             $startRecord = 0;
         }
-
         // Array of devices
         $rows = $hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer(), $jqGridService->getRecordsPerPage(), $startRecord);
 
@@ -594,11 +593,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         // Send back jqGrid json data
         $this->sendJson($jqGridService->createPagerResponseArray());
-    }
-
-    function sortByMonthlyCost ($a, $b)
-    {
-        return $a['monthlyCost'] - $b['monthlyCost'];
     }
 
     /**

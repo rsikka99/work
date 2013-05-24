@@ -333,6 +333,7 @@ $(function ()
                 beforeSend: function ()
                 {
                     $('#loadingDiv').show();
+                    grid.setCell(rowId, 'costDelta', 'Loading...');
                     ajaxCounter++;
                 },
                 complete  : function ()
