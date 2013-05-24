@@ -121,22 +121,22 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $replacementDevices = $this->getBlackMfpReplacementDevices();
+                        $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
                     }
                     else
                     {
-                        $replacementDevices = $this->getBlackReplacementDevices();
+                        $replacementDevices = $this->getBlackReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
                     }
                 }
                 else
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $replacementDevices = $this->getColorMfpReplacementDevices();
+                        $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
                     }
                     else
                     {
-                        $replacementDevices = $this->getColorReplacementDevices();
+                        $replacementDevices = $this->getColorReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
                     }
                 }
                 $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimizationId);
@@ -176,23 +176,25 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     /**
      * Getter for $blackReplacementDevices
      *
+     * @param $monthlyPageCounts
+     *
      * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getBlackReplacementDevices ()
+    public function getBlackReplacementDevices ($monthlyPageCounts)
     {
-        if (!isset($this->blackReplacementDevices))
+        $deviceArray        = array();
+        $deviceArray [0]    = 'Keep';
+        $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId);
+        foreach ($replacementDevices as $replacementDevice)
         {
-            $deviceArray        = array();
-            $deviceArray [0]    = 'Keep';
-            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId);
-            foreach ($replacementDevices as $replacementDevice)
+            if ($monthlyPageCounts < $replacementDevice->maximumPageCount && $monthlyPageCounts > $replacementDevice->minimumPageCount)
             {
                 $masterDevice                                            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
-
-            $this->blackReplacementDevices = $deviceArray;
         }
+
+        $this->blackReplacementDevices = $deviceArray;
 
         return $this->blackReplacementDevices;
     }
@@ -200,23 +202,26 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     /**
      * Getter for $blackMfpReplacementDevices
      *
+     * @param $monthlyPageCounts
+     *
      * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getBlackMfpReplacementDevices ()
+    public function getBlackMfpReplacementDevices ($monthlyPageCounts)
     {
-        if (!isset($this->blackMfpReplacementDevices))
+        $deviceArray        = array();
+        $deviceArray [0]    = 'Keep';
+        $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
+        foreach ($replacementDevices as $replacementDevice)
         {
-            $deviceArray        = array();
-            $deviceArray [0]    = 'Keep';
-            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
-            foreach ($replacementDevices as $replacementDevice)
+            if ($monthlyPageCounts < $replacementDevice->maximumPageCount && $monthlyPageCounts > $replacementDevice->minimumPageCount)
             {
                 $masterDevice                                            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
             }
-
-            $this->blackMfpReplacementDevices = $deviceArray;
         }
+
+        $this->blackMfpReplacementDevices = $deviceArray;
+
 
         return $this->blackMfpReplacementDevices;
     }
@@ -224,16 +229,18 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     /**
      * Getter for $colorReplacementDevices
      *
+     * @param $monthlyPageCounts
+     *
      * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getColorReplacementDevices ()
+    public function getColorReplacementDevices ($monthlyPageCounts)
     {
-        if (!isset($this->colorReplacementDevices))
+        $deviceArray        = array();
+        $deviceArray [0]    = 'Keep';
+        $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId);
+        foreach ($replacementDevices as $replacementDevice)
         {
-            $deviceArray        = array();
-            $deviceArray [0]    = 'Keep';
-            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId);
-            foreach ($replacementDevices as $replacementDevice)
+            if ($monthlyPageCounts < $replacementDevice->maximumPageCount && $monthlyPageCounts > $replacementDevice->minimumPageCount)
             {
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY)
@@ -241,25 +248,28 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                     $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
-            $this->colorReplacementDevices = $deviceArray;
         }
+        $this->colorReplacementDevices = $deviceArray;
+
 
         return $this->colorReplacementDevices;
     }
 
     /**
-     * Getter for $colorMfpReplacementDevicecs
+     * Getter for $colorMfpReplacementDevices
+     *
+     * @param $monthlyPageCounts
      *
      * @return Proposalgen_Model_DeviceInstance []
      */
-    public function getColorMfpReplacementDevices ()
+    public function getColorMfpReplacementDevices ($monthlyPageCounts)
     {
-        if (!isset($this->colorMfpReplacementDevices))
+        $deviceArray        = array();
+        $deviceArray [0]    = 'Keep';
+        $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
+        foreach ($replacementDevices as $replacementDevice)
         {
-            $deviceArray        = array();
-            $deviceArray [0]    = 'Keep';
-            $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
-            foreach ($replacementDevices as $replacementDevice)
+            if ($monthlyPageCounts < $replacementDevice->maximumPageCount && $monthlyPageCounts > $replacementDevice->minimumPageCount)
             {
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
                 if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isCopier)
@@ -267,9 +277,10 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                     $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }
             }
-
-            $this->colorMfpReplacementDevices = $deviceArray;
         }
+
+        $this->colorMfpReplacementDevices = $deviceArray;
+
 
         return $this->colorMfpReplacementDevices;
     }
