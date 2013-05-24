@@ -95,6 +95,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $useUserData;
 
+    /**
+     * @var string|int
+     */
+    public $rmsDeviceId;
+
+    /**
+     * @var bool
+     */
+    public $isManaged;
+
     /*
      * ********************************************************************************
      * Related Objects
@@ -381,6 +391,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->useUserData = $params->useUserData;
         }
 
+        if (isset($params->isManaged) && !is_null($params->isManaged))
+        {
+            $this->isManaged = $params->isManaged;
+        }
+
+        if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
+        {
+            $this->rmsDeviceId = $params->rmsDeviceId;
+        }
+
     }
 
     /**
@@ -398,6 +418,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "reportsTonerLevels" => $this->reportsTonerLevels,
             "serialNumber"       => $this->serialNumber,
             "useUserData"        => $this->useUserData,
+            "isManaged"          => $this->isManaged,
+            "rmsDeviceId"        => $this->rmsDeviceId,
         );
     }
 
