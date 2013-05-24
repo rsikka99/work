@@ -20,6 +20,7 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
      */
     protected $_columnMapping = array(
         'printermodelid'       => 'rmsModelId',
+        'managed'              => 'isManaged',
         'startdate'            => 'monitorStartDate',
         'enddate'              => 'monitorEndDate',
         'dateadoption'         => 'adoptionDate',

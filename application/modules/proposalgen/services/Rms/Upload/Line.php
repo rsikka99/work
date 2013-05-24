@@ -29,6 +29,15 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
      */
     const DATETIME_TO_MYSQL_DATE_FORMAT = "Y-m-d H:i:s";
 
+    /**
+     * @var bool
+     */
+    public $isManaged;
+
+    /**
+     * @var string|int
+     */
+    public $rmsDeviceId;
 
     /**
      * @var int
@@ -708,6 +717,16 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         if (isset($params->tonerConfigId) && !is_null($params->tonerConfigId))
         {
             $this->tonerConfigId = $params->tonerConfigId;
+        }
+
+        if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
+        {
+            $this->rmsDeviceId = $params->rmsDeviceId;
+        }
+
+        if (isset($params->isManaged) && !is_null($params->isManaged))
+        {
+            $this->isManaged = $params->isManaged;
         }
     }
 
