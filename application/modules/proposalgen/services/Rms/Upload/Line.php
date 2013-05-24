@@ -23,11 +23,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     const MAXIMUM_DEVICE_AGE_YEARS = 5;
 
     /**
-     * The format needed to change a Zend_Date object into a MySQL compatible time
+     * The format needed to change a DateTime object into a MySQL compatible time
      *
      * @var string
      */
-    const ZEND_TO_MYSQL_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    const DATETIME_TO_MYSQL_DATE_FORMAT = "Y-m-d H:i:s";
 
 
     /**
@@ -795,7 +795,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public function isValid ($incomingDateFormat)
     {
         // Settings
-        $minimumDeviceIntroductionDate = new Zend_Date(strtotime("-" . self::MAXIMUM_DEVICE_AGE_YEARS . " years"));
+        $minimumDeviceIntroductionDate = new DateTime("-" . self::MAXIMUM_DEVICE_AGE_YEARS . " years");
 
         // Validate that certain fields are present
         if (empty($this->modelName))
@@ -849,32 +849,27 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             return $checkMetersValidation;
         }
 
-        // Turn all the dates into Zend_Date objects
-        $monitorStartDate = (empty($this->monitorStartDate)) ? null : new Zend_Date($this->monitorStartDate, $incomingDateFormat);
-        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : new Zend_Date($this->monitorEndDate, $incomingDateFormat);
-        $discoveryDate    = (empty($this->discoveryDate)) ? null : new Zend_Date($this->discoveryDate, $incomingDateFormat);
-        $introductionDate = (empty($this->launchDate)) ? null : new Zend_Date($this->launchDate, $incomingDateFormat);
-        $adoptionDate     = (empty($this->adoptionDate)) ? null : new Zend_Date($this->adoptionDate, $incomingDateFormat);
+        // Turn all the dates into objects
+        $monitorStartDate = (empty($this->monitorStartDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->monitorStartDate);
+        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->monitorEndDate);
+        $discoveryDate    = (empty($this->discoveryDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->discoveryDate);
+        $introductionDate = (empty($this->launchDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->launchDate);
+        $adoptionDate     = (empty($this->adoptionDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->adoptionDate);
 
 
         // If the discovery date is after the start date, use the discovery date
-        if ($discoveryDate !== null && $discoveryDate->compare($monitorStartDate) === 1)
+        if ($discoveryDate instanceof DateTime)
         {
-            // Set the monitor start date to the discovery date
-            $monitorStartDate = $discoveryDate;
-
-            // Use Discovery Date
-            $dateMonitoringStarted = new DateTime("@" . $discoveryDate->toString(Zend_Date::TIMESTAMP));
+            $dateDiff = $discoveryDate->diff($monitorStartDate);
+            if ($dateDiff->invert == true)
+            {
+                // Set the monitor start date to the discovery date
+                $monitorStartDate = $discoveryDate;
+            }
         }
-        else
-        {
-            // Use monitor start date
-            $dateMonitoringStarted = new DateTime("@" . $monitorStartDate->toString(Zend_Date::TIMESTAMP));
-        }
-        $dateMonitoringEnded = new DateTime("@" . $monitorEndDate->toString(Zend_Date::TIMESTAMP));
 
         // Figure out how long we've been monitoring this device
-        $monitoringInterval = $dateMonitoringStarted->diff($dateMonitoringEnded);
+        $monitoringInterval = $monitorStartDate->diff($monitorEndDate);
 
         // Monitoring should not be inverted (means start date occurred after end date)
         if ($monitoringInterval->invert || $monitoringInterval->days < self::MINIMUM_MONITOR_INTERVAL_DAYS)
@@ -883,17 +878,17 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         }
 
         // Check to make sure our start date is not more than 5 years old
-        if ($minimumDeviceIntroductionDate->compare($monitorStartDate) == 1)
+        if ($minimumDeviceIntroductionDate->diff($monitorStartDate)->invert == 1)
         {
             return "Start date is greater than " . self::MAXIMUM_DEVICE_AGE_YEARS . " years old.";
         }
 
         // Convert all the dates back to mysql dates
-        $this->monitorStartDate = ($monitorStartDate === null) ? null : $monitorStartDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
-        $this->monitorEndDate   = ($monitorEndDate === null) ? null : $monitorEndDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
-        $this->discoveryDate    = ($discoveryDate === null) ? null : $discoveryDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
-        $this->launchDate       = ($introductionDate === null) ? null : $introductionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
-        $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->toString(self::ZEND_TO_MYSQL_DATE_FORMAT);
+        $this->monitorStartDate = ($monitorStartDate === null) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->monitorEndDate   = ($monitorEndDate === null) ? null : $monitorEndDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->discoveryDate    = ($discoveryDate === null) ? null : $discoveryDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->launchDate       = ($introductionDate === null) ? null : $introductionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
 
 
         /*
