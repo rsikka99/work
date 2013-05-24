@@ -4,6 +4,14 @@
  */
 class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_Controller_Action
 {
+    /**
+     * @var Proposalgen_Form_DeviceSwap
+     */
+    protected $_deviceSwapForm;
+    /**
+     * @var Hardwareoptimization_ViewModel_Devices
+     */
+    protected $_deviceViewModel;
 
     /**
      * This action will redirect us to the latest available step
@@ -96,13 +104,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_OPTIMIZE);
-        $devicesViewModel = new Hardwareoptimization_ViewModel_Devices($this->_hardwareOptimization);
 
-        // Every time we save anything related to a report, we should save it (updates the modification date)
-        $form = new Proposalgen_Form_DeviceSwapChoice($devicesViewModel->purchasedDeviceInstances->getDeviceInstances(), Zend_Auth::getInstance()->getIdentity()->dealerId, $this->_hardwareOptimization->id);
-
-        // Get all devices
-        $devices = $devicesViewModel->purchasedDeviceInstances;
+        // $form = $this->getDeviceSwapForm($this->getDeviceViewModel()->purchasedDeviceInstances->getDeviceInstances());
+        $form = new Hardwareoptimization_Form_OptimizeActions();
 
         if ($this->_request->isPost())
         {
@@ -160,11 +164,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         $this->view->form                 = $form;
-        $this->view->devices              = $devices;
         $this->view->hardwareOptimization = $this->_hardwareOptimization;
-        $this->view->optmizationViewModel = $this->getOptimizationViewModel();
         $this->view->navigationForm       = new Proposalgen_Form_Assessment_Navigation(Proposalgen_Form_Assessment_Navigation::BUTTONS_BACK_NEXT);
-        $this->view->title                = 'Hardware Optimization';
     }
 
     /**
@@ -174,8 +175,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
-        $optimization       = $this->getOptimizationViewModel();
-        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+        $optimization                                           = $this->getOptimizationViewModel();
+        $costPerPageSetting                                     = $optimization->getCostPerPageSettingForDealer();
 
         $instanceId     = $this->_getParam('deviceInstanceId');
         $deviceInstance = null;
@@ -448,5 +449,166 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         return true;
+    }
+
+    public function updateReplacementDeviceAction ()
+    {
+        $deviceInstanceReplacementMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+        $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+
+        if ($deviceInstanceId === false)
+        {
+            $this->sendJsonError("Invalid data passed.");
+        }
+
+        $deviceInstanceId = (int)str_replace("deviceInstance_", "", $deviceInstanceId);
+        $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+
+        // Check if device belongs to rms
+        if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
+        {
+            $this->sendJsonError("You do not have permission to edit this device instance.");
+        }
+
+
+        $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
+        $whereKey            = array($deviceInstanceId, $this->_hardwareOptimization->id);
+
+        if ($replacementDeviceId == 0)
+        {
+            // Delete the row from the database
+            $deviceInstanceReplacementMasterDeviceMapper->delete($whereKey);
+        }
+        else
+        {
+            $deviceInstanceReplacementMasterDevice = $deviceInstanceReplacementMasterDeviceMapper->find($whereKey);
+            if ($deviceInstanceReplacementMasterDevice instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
+            {
+                // Update the device information
+                $deviceInstanceReplacementMasterDevice->masterDeviceId = $replacementDeviceId;
+                $deviceInstanceReplacementMasterDeviceMapper->save($deviceInstanceReplacementMasterDevice);
+            }
+            else
+            {
+                // Insert the device into the table
+                $deviceInstanceReplacementMasterDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                $deviceInstanceReplacementMasterDevice->deviceInstanceId       = $deviceInstanceId;
+                $deviceInstanceReplacementMasterDevice->masterDeviceId         = $replacementDeviceId;
+                $deviceInstanceReplacementMasterDevice->hardwareOptimizationId = $this->_hardwareOptimization->id;
+                $deviceInstanceReplacementMasterDeviceMapper->insert($deviceInstanceReplacementMasterDevice);
+            }
+        }
+
+        // Setup the master device labor and parts cost per page
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+
+        $optimization = $this->getOptimizationViewModel();
+        $costDelta    = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                        $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDeviceId));
+
+
+        // Add calculated amounts to json
+        // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
+        $this->sendJson(array(
+                             "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
+                             "colorCpp"      => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
+                             "totalCost"     => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
+                             "replaceReason" => $deviceInstance->getReason(),
+                             "marginDollar"  => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
+                             "costDelta"     => $this->view->currency($costDelta),
+                             "rawCostDelta"  => (float)$costDelta,
+                             "marginPercent" => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
+                        ));
+    }
+
+    public function summaryTableAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->hardwareoptimization = $this->_hardwareOptimization;
+        $this->view->optmizationViewModel = $this->getOptimizationViewModel();
+    }
+
+
+    public function deviceListAction ()
+    {
+        $jqGridService              =  new Tangent_Service_JQGrid();
+        $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
+
+        /*
+         * Grab the incoming parameters
+         */
+        $jqGridServiceParameters = array(
+            'sidx' => $this->_getParam('sidx', 'device'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10)
+        );
+
+        $jqGridService->parseJQGridPagingRequest($jqGridServiceParameters);
+
+        // We are not sorting in this function call - default sorting is monthly cost which will be handled by uSort
+        $jqGridService->setRecordCount($hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, null, null, null, true));
+
+        // Validate current page number since we don't want to be out of bounds
+        if ($jqGridService->getCurrentPage() < 1)
+        {
+            $jqGridService->setCurrentPage(1);
+        }
+        else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+        {
+            $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+        }
+
+        // Return a small subset of the results based on the jqGrid parameters
+        $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+
+        if ($startRecord < 0)
+        {
+            $startRecord = 0;
+        }
+        // Array of devices
+        $rows = $hardwareoptimizationMapper->fetchAllForHardwareOptimization($this->_hardwareOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer(), $jqGridService->getRecordsPerPage(), $startRecord);
+
+        /* @var $deviceInstances Proposalgen_Model_DeviceInstance [] */
+        $deviceInstances = $rows['deviceInstances'];
+        $jsonDataRows    = $rows['jsonData'];
+
+        // We only want to pass the devices that are being shown in the pager to form
+        $form = $this->getDeviceSwapForm($deviceInstances);
+
+        // Parse the data
+        foreach ($jsonDataRows as &$row)
+        {
+            $replacementDeviceElement = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
+            $row['action']            = $replacementDeviceElement->renderViewHelper();
+            $row['monoCpp']           = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
+            $row['colorCpp']          = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
+            $row['costDelta']         = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
+            $row['monthlyCost']       = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+        }
+
+        $jqGridService->setRows($jsonDataRows);
+
+        // Send back jqGrid json data
+        $this->sendJson($jqGridService->createPagerResponseArray());
+    }
+
+    /**
+     * Getter for _deviceSwapForm
+     *
+     * @param $devices
+     *
+     * @return \Proposalgen_Form_DeviceSwap
+     */
+    public function getDeviceSwapForm ($devices)
+    {
+        if (!isset($this->_deviceSwapForm))
+        {
+            $this->_deviceSwapForm = new Proposalgen_Form_DeviceSwapChoice($devices, $this->_identity->dealerId, $this->_hardwareOptimization->id);
+        }
+
+        return $this->_deviceSwapForm;
     }
 }

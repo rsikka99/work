@@ -240,4 +240,6 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
     {
         return array($object->deviceInstanceId, $object->hardwareOptimizationId);
     }
+
+
 }

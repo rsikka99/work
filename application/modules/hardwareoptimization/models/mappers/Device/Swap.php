@@ -22,6 +22,22 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
      * @var Hardwareoptimization_Model_Device_Swap[]
      */
     protected $_replacementDevices;
+    /**
+     * @var Hardwareoptimization_Model_Device_Swap[]
+     */
+    protected $_blackReplacementDevices;
+    /**
+     * @var Hardwareoptimization_Model_Device_Swap[]
+     */
+    protected $_blackMfpReplacementDevices;
+    /**
+     * @var Hardwareoptimization_Model_Device_Swap[]
+     */
+    protected $_colorReplacementDevices;
+    /**
+     * @var Hardwareoptimization_Model_Device_Swap[]
+     */
+    protected $_colorMfpReplacementDevices;
 
     /**
      * Gets an instance of the mapper
@@ -281,11 +297,11 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             $select->from(array($this->getTableName()), $caseStatement)
-                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-                ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
-                ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
-                ->limit($returnLimit, $offset)
-                ->order($sortOrder);
+            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+            ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+            ->limit($returnLimit, $offset)
+            ->order($sortOrder);
 
             $query = $db->query($select);
 
@@ -314,21 +330,23 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
      */
     public function getBlackReplacementDevices ($dealerId, $allowUpgrades = true)
     {
-        $deviceArray        = array();
-        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
-        foreach ($replacementDevices as $replacementDevice)
+        if (!isset($this->_blackReplacementDevices))
         {
-            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+            $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+            foreach ($replacementDevices as $replacementDevice)
             {
-                $deviceArray [] = $replacementDevice;
-            }
-            else if ($allowUpgrades)
-            {
-                $deviceArray [] = $replacementDevice;
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+                {
+                    $this->_blackReplacementDevices [] = $replacementDevice;
+                }
+                else if ($allowUpgrades)
+                {
+                    $this->_blackReplacementDevices [] = $replacementDevice;
+                }
             }
         }
 
-        return $deviceArray;
+        return $this->_blackReplacementDevices;
     }
 
     /**
@@ -341,21 +359,23 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
      */
     public function getBlackMfpReplacementDevices ($dealerId, $allowUpgrades = true)
     {
-        $deviceArray        = array();
-        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
-        foreach ($replacementDevices as $replacementDevice)
+        if (!isset($this->_blackMfpReplacementDevices))
         {
-            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
+            $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+            foreach ($replacementDevices as $replacementDevice)
             {
-                $deviceArray [] = $replacementDevice;
-            }
-            else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
-            {
-                $deviceArray [] = $replacementDevice;
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
+                {
+                    $this->_blackMfpReplacementDevices [] = $replacementDevice;
+                }
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                {
+                    $this->_blackMfpReplacementDevices [] = $replacementDevice;
+                }
             }
         }
 
-        return $deviceArray;
+        return $this->_blackMfpReplacementDevices;
     }
 
     /**
@@ -368,21 +388,23 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
      */
     public function getColorReplacementDevices ($dealerId, $allowUpgrades = true)
     {
-        $deviceArray        = array();
-        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
-        foreach ($replacementDevices as $replacementDevice)
+        if (!isset($this->_colorReplacementDevices))
         {
-            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+            $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+            foreach ($replacementDevices as $replacementDevice)
             {
-                $deviceArray [] = $replacementDevice;
-            }
-            else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
-            {
-                $deviceArray [] = $replacementDevice;
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+                {
+                    $this->_colorReplacementDevices [] = $replacementDevice;
+                }
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                {
+                    $this->_colorReplacementDevices [] = $replacementDevice;
+                }
             }
         }
 
-        return $deviceArray;
+        return $this->_colorReplacementDevices;
     }
 
     /**
@@ -394,17 +416,19 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
      */
     public function getColorMfpReplacementDevices ($dealerId)
     {
-        $deviceArray        = array();
-        $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
-        foreach ($replacementDevices as $replacementDevice)
+        if (!isset($this->_colorMfpReplacementDevices))
         {
-            if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+            $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
+            foreach ($replacementDevices as $replacementDevice)
             {
-                $deviceArray [] = $replacementDevice;
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                {
+                    $this->_colorMfpReplacementDevices [] = $replacementDevice;
+                }
             }
         }
 
-        return $deviceArray;
+        return $this->_colorMfpReplacementDevices;
     }
 
     /**
@@ -433,9 +457,9 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             $select->from(array($this->getTableName()), $caseStatement)
-                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-                ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
-                ->order($order);
+            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+            ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+            ->order($order);
 
             $query = $db->query($select);
 
