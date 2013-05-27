@@ -10,7 +10,7 @@ class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upl
      *
      * @var string
      */
-    protected $_incomingDateFormat = "m/d/Y h:i:s A";
+    protected $_incomingDateFormat = "m/d/Y H:i:s";
 
     /**
      * Column mapping for CSV -> Upload Row.

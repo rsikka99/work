@@ -17,6 +17,9 @@
         </div>
         <br />
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
+            <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
+            var rmsUploadId = <?php echo $rmsUpload->id; ?>
+            <?php $this->headScript()->captureEnd(); ?>
             <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/excludedRows.js')); ?>
             <table id="excludedTable"></table>
             <div id="excludedPager"></div>
