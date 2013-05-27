@@ -96,6 +96,378 @@
                     <resource>default__auth__forgotpassword</resource>
                     <visible>0</visible>
                 </forgotpassword>
+                <rmsUpload>
+                    <label>Upload</label>
+                    <class>dropdown</class>
+                    <module>quotegen</module>
+                    <controller>quote_reports</controller>
+                    <action>index</action>
+                    <resource>quotegen__quote_reports__index</resource>
+                    <reset_params>0</reset_params>
+                    <visible>0</visible>
+                    <pages>
+                        <uploadFile>
+                            <label>Upload File</label>
+                            <module>proposalgen</module>
+                            <controller>fleet</controller>
+                            <action>index</action>
+                            <resource>proposalgen__fleet__index</resource>
+                        </uploadFile>
+                        <mapping>
+                            <label>Mapping</label>
+                            <module>proposalgen</module>
+                            <controller>fleet</controller>
+                            <action>mapping</action>
+                            <resource>proposalgen__fleet__mapping</resource>
+                            <pages>
+                                <adminMapping>
+                                    <label>Edit Mapping</label>
+                                    <module>proposalgen</module>
+                                    <controller>managedevices</controller>
+                                    <action>managemappingdevices</action>
+                                    <resource>propolsagen__managedevices__managemappingdevices</resource>
+                                </adminMapping>
+                                <userMapping>
+                                    <label>Edit Mapping</label>
+                                    <module>proposalgen</module>
+                                    <controller>fleet</controller>
+                                    <action>edit-unknown-device</action>
+                                    <resource>propolsagen__fleet__edit-unknown-device</resource>
+                                </userMapping>
+                            </pages>
+                        </mapping>
+                        <summary>
+                            <label>Summary</label>
+                            <module>proposalgen</module>
+                            <controller>fleet</controller>
+                            <action>summary</action>
+                            <resource>proposalgen__fleet__summary</resource>
+                        </summary>
+                    </pages>
+                </rmsUpload>
+                <assessment>
+                    <label>Assessment</label>
+                    <module>assessment</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>assessment__index__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <selectUpload>
+                            <label>Select Upload</label>
+                            <module>assessment</module>
+                            <controller>index</controller>
+                            <action>select-upload</action>
+                            <resource>assessment__index__select-upload</resource>
+                        </selectUpload>
+                        <survey>
+                            <label>Survey</label>
+                            <module>assessment</module>
+                            <controller>index</controller>
+                            <action>survey</action>
+                            <resource>assessment__index__survey</resource>
+                        </survey>
+                        <settings>
+                            <label>Settings</label>
+                            <module>assessment</module>
+                            <controller>index</controller>
+                            <action>settings</action>
+                            <resource>assessment__index__settings</resource>
+                        </settings>
+                        <reportIndex>
+                            <label>Report Index</label>
+                            <module>assessment</module>
+                            <controller>report_index</controller>
+                            <action>index</action>
+                            <resource>assessment__report_index__index</resource>
+                        </reportIndex>
+                        <reportAssessment>
+                            <label>Report Assessment</label>
+                            <module>assessment</module>
+                            <controller>report_assessment</controller>
+                            <action>index</action>
+                            <resource>assessment__report_assessment__index</resource>
+                        </reportAssessment>
+                        <reportcostanalysis>
+                            <label>Report Cost Analysis</label>
+                            <module>assessment</module>
+                            <controller>report_costanalysis</controller>
+                            <action>index</action>
+                            <resource>assessment__report_costanalysis__index</resource>
+                        </reportcostanalysis>
+                        <grossmargin>
+                            <label>Report Gross margin</label>
+                            <module>assessment</module>
+                            <controller>report_grossmargin</controller>
+                            <action>index</action>
+                            <resource>assessment__report_grossmargin__index</resource>
+                        </grossmargin>
+                        <toners>
+                            <label>Report JIT SUPPLY AND TONER SKU Report</label>
+                            <module>assessment</module>
+                            <controller>report_toners</controller>
+                            <action>index</action>
+                            <resource>assessment__report_toners__index</resource>
+                        </toners>
+                        <olddevicelist>
+                            <label>Report olddevicelist</label>
+                            <module>assessment</module>
+                            <controller>report_olddevicelist</controller>
+                            <action>index</action>
+                            <resource>assessment__report_olddevicelist__index</resource>
+                        </olddevicelist>
+                        <printingdevicelist>
+                            <label>Report printingdevicelist</label>
+                            <module>assessment</module>
+                            <controller>report_printingdevicelist</controller>
+                            <action>index</action>
+                            <resource>assessment__report_printingdevicelist__index</resource>
+                        </printingdevicelist>
+                        <solution>
+                            <label>Report solution</label>
+                            <module>assessment</module>
+                            <controller>report_solution</controller>
+                            <action>index</action>
+                            <resource>assessment__report_solutioncelist__index</resource>
+                        </solution>
+                    </pages>
+                </assessment>
+                <hardwareoptimization>
+                    <label>Hardware Optimization</label>
+                    <module>hardwareoptimization</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>hardwareoptimization__index__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <select-upload>
+                            <label>Select Upload</label>
+                            <module>hardwareoptimization</module>
+                            <controller>index</controller>
+                            <action>select-upload</action>
+                            <resource>hardwareoptimization__index__select-upload</resource>
+                        </select-upload>
+                        <settings>
+                            <label>Settings</label>
+                            <module>hardwareoptimization</module>
+                            <controller>index</controller>
+                            <action>settings</action>
+                            <resource>hardwareoptimization__index__settings</resource>
+                        </settings>
+                        <optimize>
+                            <label>Optimization</label>
+                            <module>hardwareoptimization</module>
+                            <controller>index</controller>
+                            <action>optimize</action>
+                            <resource>hardwareoptimization__index__optimize</resource>
+                        </optimize>
+                        <reportIndex>
+                            <label>Report index</label>
+                            <module>hardwareoptimization</module>
+                            <controller>report_index</controller>
+                            <action>index</action>
+                            <resource>hardwareoptimization__report_index__index</resource>
+                        </reportIndex>
+                        <customerOptimization>
+                            <label>Customer Optimization</label>
+                            <module>hardwareoptimization</module>
+                            <controller>report_customer_optimization</controller>
+                            <action>index</action>
+                            <resource>hardwareoptimization__report_customer_optimization__index</resource>
+                        </customerOptimization>
+                        <dealerOptimization>
+                            <label>Customer Optimization</label>
+                            <module>hardwareoptimization</module>
+                            <controller>report_dealer_optimization</controller>
+                            <action>index</action>
+                            <resource>hardwareoptimization__report_dealer_optimization__index</resource>
+                        </dealerOptimization>
+                    </pages>
+                </hardwareoptimization>
+                <healthcheck>
+                    <label>Healthcheck</label>
+                    <module>healthcheck</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>healthcheck__index__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <select-upload>
+                            <label>Select Upload</label>
+                            <module>healthcheck</module>
+                            <controller>index</controller>
+                            <action>select-upload</action>
+                            <resource>healthcheck__index__select-upload</resource>
+                        </select-upload>
+                        <settings>
+                            <label>Settings</label>
+                            <module>healthcheck</module>
+                            <controller>index</controller>
+                            <action>settings</action>
+                            <resource>healthcheck__index__settings</resource>
+                        </settings>
+                        <report>
+                            <label>Healthcheck Report</label>
+                            <module>healthcheck</module>
+                            <controller>report_healthcheck</controller>
+                            <action>index</action>
+                            <resource>healthcheck__report_healthcheck__index</resource>
+                        </report>
+                    </pages>
+                </healthcheck>
+                <quotemenu>
+                    <id>quotemenu</id>
+                    <label>Current Quote</label>
+                    <module>quotegen</module>
+                    <controller>quote_devices</controller>
+                    <action>index</action>
+                    <resource>quotegen__quote_devices__index</resource>
+                    <reset_params>0</reset_params>
+                    <visible>0</visible>
+                    <pages>
+                        <builddevice>
+                            <label>Add Hardware</label>
+                            <class>dropdown</class>
+                            <module>quotegen</module>
+                            <controller>quote_devices</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote_devices__index</resource>
+                            <reset_params>0</reset_params>
+                            <pages>
+                                <addDevice>
+                                    <label>Add New Device</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_devices</controller>
+                                    <action>create-new-quote-device</action>
+                                    <resource>quotegen__quote_devices__create-new-quote-device</resource>
+                                    <reset_params>0</reset_params>
+                                </addDevice>
+                                <editDevice>
+                                    <label>Edit Device</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_devices</controller>
+                                    <action>edit-quote-device</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen__quote_devices__edit-quote-device</resource>
+                                    <reset_params>0</reset_params>
+                                    <pages>
+                                        <addOptionsToDevice>
+                                            <label>Add Options</label>
+                                            <module>quotegen</module>
+                                            <controller>quote_devices</controller>
+                                            <action>add-options-to-quote-device</action>
+                                            <visible>0</visible>
+                                            <resource>quotegen__quote_devices__add-options-to-quote-device</resource>
+                                            <reset_params>0</reset_params>
+                                        </addOptionsToDevice>
+                                    </pages>
+                                </editDevice>
+                                <removeDevice>
+                                    <label>Remove Device</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_devices</controller>
+                                    <action>delete-quote-device</action>
+                                    <visible>0</visible>
+                                    <resource>quotegen__quote_devices__delete-quote-device</resource>
+                                    <reset_params>0</reset_params>
+                                </removeDevice>
+                            </pages>
+                        </builddevice>
+                        <groupDevices>
+                            <label>Group Devices</label>
+                            <module>quotegen</module>
+                            <controller>quote_groups</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote_groups__index</resource>
+                            <reset_params>0</reset_params>
+                        </groupDevices>
+                        <managepages>
+                            <label>Pages</label>
+                            <module>quotegen</module>
+                            <controller>quote_pages</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote_pages__index</resource>
+                            <reset_params>0</reset_params>
+                        </managepages>
+                        <profitability>
+                            <label>Hardware Financing</label>
+                            <module>quotegen</module>
+                            <controller>quote_profitability</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote_profitability__index</resource>
+                            <reset_params>0</reset_params>
+                        </profitability>
+                        <viewAndPrintReports>
+                            <label>Reports</label>
+                            <class>dropdown</class>
+                            <module>quotegen</module>
+                            <controller>quote_reports</controller>
+                            <action>index</action>
+                            <resource>quotegen__quote_reports__index</resource>
+                            <reset_params>0</reset_params>
+                            <pages>
+                                <purchaseQuote>
+                                    <label>Purchase Report</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>purchase-quote</action>
+                                    <resource>quotegen__quote_reports__purchase-quote</resource>
+                                    <reset_params>0</reset_params>
+                                </purchaseQuote>
+                                <leaseQuote>
+                                    <label>Lease Report</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>lease-quote</action>
+                                    <resource>quotegen__quote_reports__lease-quote</resource>
+                                    <reset_params>0</reset_params>
+                                </leaseQuote>
+                                <orderList>
+                                    <label>Order List</label>
+                                    <module>quotegen</module>
+                                    <controller>quote_reports</controller>
+                                    <action>order-list</action>
+                                    <resource>quotegen__quote_reports__order-list</resource>
+                                    <reset_params>0</reset_params>
+                                </orderList>
+                            </pages>
+                        </viewAndPrintReports>
+                    </pages>
+                </quotemenu>
+                <clients>
+                    <label>Clients</label>
+                    <module>default</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>default__index__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <viewallclients>
+                            <label>All Clients</label>
+                            <module>default</module>
+                            <controller>index</controller>
+                            <action>view-all-clients</action>
+                            <resource>default__index__view-all-clients</resource>
+                            <visible>0</visible>
+                        </viewallclients>
+                        <createNewClient>
+                            <label>Create Clients</label>
+                            <module>default</module>
+                            <controller>index</controller>
+                            <action>create-client</action>
+                            <resource>default__index__create-client</resource>
+                            <visible>0</visible>
+                        </createNewClient>
+                        <editClient>
+                            <label>Edit Clients</label>
+                            <module>default</module>
+                            <controller>index</controller>
+                            <action>edit-client</action>
+                            <resource>default__index__edit-client</resource>
+                            <visible>0</visible>
+                        </editClient>
+                    </pages>
+                </clients>
             </pages>
         </homemenu>
         <adminmenu>
@@ -384,6 +756,13 @@
                                     <action>managematchups</action>
                                     <resource>proposalgen__admin__managematchups</resource>
                                 </managematchups>
+                                <deviceswaps>
+                                    <label>Device Swaps</label>
+                                    <module>hardwareoptimization</module>
+                                    <controller>deviceswaps</controller>
+                                    <action>index</action>
+                                    <resource>hardwareoptimization__deviceswaps__index</resource>
+                                </deviceswaps>
                             </pages>
                         </managehardware>
                         <managemanufacturers>
