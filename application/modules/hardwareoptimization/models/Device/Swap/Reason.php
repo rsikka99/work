@@ -18,6 +18,11 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
     public $reason;
 
     /**
+     * @var int
+     */
+    public $categoryId;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -41,6 +46,11 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
         {
             $this->reason = $params->reason;
         }
+
+        if (isset($params->categoryId) && !is_null($params->categoryId))
+        {
+            $this->categoryId = $params->categoryId;
+        }
     }
 
     /**
@@ -52,6 +62,7 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
             "masterDeviceId" => $this->id,
             "dealerId"       => $this->dealerId,
             "reason"         => $this->reason,
+            "categoryId"     => $this->categoryId,
         );
     }
 }
