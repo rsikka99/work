@@ -96,6 +96,24 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public $useUserData;
 
     /**
+     * @var float
+     */
+    public $pageCoverageMonochrome;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageCyan;
+    /**
+     * @var float
+     */
+    public $pageCoverageMagenta;
+    /**
+     * @var float
+     */
+    public $pageCoverageYellow;
+
+    /**
      * @var string|int
      */
     public $rmsDeviceId;
@@ -391,6 +409,26 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->useUserData = $params->useUserData;
         }
 
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+
+        if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
+        {
+            $this->pageCoverageCyan = $params->pageCoverageCyan;
+        }
+
+        if (isset($params->pageCoverageMagenta) && !is_null($params->pageCoverageMagenta))
+        {
+            $this->pageCoverageMagenta = $params->pageCoverageMagenta;
+        }
+
+        if (isset($params->pageCoverageYellow) && !is_null($params->pageCoverageYellow))
+        {
+            $this->pageCoverageYellow = $params->pageCoverageYellow;
+        }
+
         if (isset($params->isManaged) && !is_null($params->isManaged))
         {
             $this->isManaged = $params->isManaged;
@@ -400,7 +438,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->rmsDeviceId = $params->rmsDeviceId;
         }
-
     }
 
     /**
@@ -409,15 +446,19 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                 => $this->id,
-            "rmsUploadId"        => $this->rmsUploadId,
-            "rmsUploadRowId"     => $this->rmsUploadRowId,
-            "ipAddress"          => $this->ipAddress,
-            "isExcluded"         => $this->isExcluded,
-            "mpsDiscoveryDate"   => $this->mpsDiscoveryDate,
-            "reportsTonerLevels" => $this->reportsTonerLevels,
-            "serialNumber"       => $this->serialNumber,
-            "useUserData"        => $this->useUserData,
+            "id"                     => $this->id,
+            "rmsUploadId"            => $this->rmsUploadId,
+            "rmsUploadRowId"         => $this->rmsUploadRowId,
+            "ipAddress"              => $this->ipAddress,
+            "isExcluded"             => $this->isExcluded,
+            "mpsDiscoveryDate"       => $this->mpsDiscoveryDate,
+            "reportsTonerLevels"     => $this->reportsTonerLevels,
+            "serialNumber"           => $this->serialNumber,
+            "useUserData"            => $this->useUserData,
+            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
+            "pageCoverageCyan"       => $this->pageCoverageCyan,
+            "pageCoverageMagenta"    => $this->pageCoverageMagenta,
+            "pageCoverageYellow"     => $this->pageCoverageYellow,
             "isManaged"          => $this->isManaged,
             "rmsDeviceId"        => $this->rmsDeviceId,
         );

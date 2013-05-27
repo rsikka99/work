@@ -1288,6 +1288,11 @@ table.summaryReport {
   color: white;
   background-color: red;
 }
+#replacementDeviceTable td.positiveCostDelta {
+  font-weight: normal;
+  color: black;
+  background-color: white;
+}
 #navigationMenu {
   margin-bottom: 0;
 }

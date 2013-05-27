@@ -72,6 +72,10 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'tonerlevel_black'     => 'tonerLevelBlack',
         'tonerlevel_cyan'      => 'tonerLevelCyan',
         'tonerlevel_magenta'   => 'tonerLevelMagenta',
-        'tonerlevel_yellow'    => 'tonerLevelYellow'
+        'tonerlevel_yellow'    => 'tonerLevelYellow',
+        'black coverage'       => 'pageCoverageMonochrome',
+        'cyan coverage'        => 'pageCoverageCyan',
+        'magenta coverage'     => 'pageCoverageMagenta',
+        'yellow coverage'      => 'pageCoverageYellow',
     );
 }

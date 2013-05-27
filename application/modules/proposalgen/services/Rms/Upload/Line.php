@@ -375,6 +375,24 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $tonerConfigId;
 
     /**
+     * @var float
+     */
+    public $pageCoverageMonochrome;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageCyan;
+    /**
+     * @var float
+     */
+    public $pageCoverageMagenta;
+    /**
+     * @var float
+     */
+    public $pageCoverageYellow;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -719,6 +737,31 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->tonerConfigId = $params->tonerConfigId;
         }
 
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+
+        if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
+        {
+            $this->pageCoverageCyan = $params->pageCoverageCyan;
+        }
+
+        if (isset($params->pageCoverageMagenta) && !is_null($params->pageCoverageMagenta))
+        {
+            $this->pageCoverageMagenta = $params->pageCoverageMagenta;
+        }
+
+        if (isset($params->pageCoverageYellow) && !is_null($params->pageCoverageYellow))
+        {
+            $this->pageCoverageYellow = $params->pageCoverageYellow;
+        }
+
+        if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
+        {
+            $this->rmsDeviceId = $params->rmsDeviceId;
+        }
+
         if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
         {
             $this->rmsDeviceId = $params->rmsDeviceId;
@@ -727,6 +770,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         if (isset($params->isManaged) && !is_null($params->isManaged))
         {
             $this->isManaged = $params->isManaged;
+
         }
     }
 
@@ -803,6 +847,10 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "hasCompleteInformation" => $this->hasCompleteInformation,
             "csvLineNumber"          => $this->csvLineNumber,
             "tonerConfigId"          => $this->tonerConfigId,
+            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
+            "pageCoverageCyan"       => $this->pageCoverageCyan,
+            "pageCoverageMagenta"    => $this->pageCoverageMagenta,
+            "pageCoverageYellow"     => $this->pageCoverageYellow,
         );
     }
 
