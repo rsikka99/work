@@ -178,9 +178,10 @@ $(function ()
     });
 
     // Cancel the save process
-    $(document).on("click", "#cancelSave", function ()
+    $(document).on("click", ".cancelSave", function ()
     {
         $("#deviceAdd").modal("hide");
+        $("#reasonAdd").modal("hide");
     });
 
     // Persist the jqGrid row id to the hidden form element inside the model
@@ -259,6 +260,14 @@ $(function ()
         errorMessageElement.hide();
         $('#deviceType').val("");
     })
+
+
+    // Cancel the deletion process
+    $(document).on("click", "#createReasonBtn", function ()
+    {
+        $("#reasonAdd").modal("show");
+    });
+
 });
 
 /**

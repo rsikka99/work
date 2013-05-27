@@ -361,7 +361,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
                 $jsonData['rawMonoCpp']    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
                 $jsonData['rawColorCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
                 $jsonData['rawCostDelta']  = $costDelta;
-                $jsonData['reason']        = $deviceInstance->getReason();
+//                $jsonData['reason']        = $deviceInstance->getReason();
 
                 $returnDevices['jsonData'][] = $jsonData;
             }

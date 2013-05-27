@@ -443,7 +443,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function deviceListAction ()
     {
-        $jqGridService                                          = new Tangent_Service_JQGrid();
+        $jqGridService              =  new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
@@ -492,12 +492,22 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         // Parse the data
         foreach ($jsonDataRows as &$row)
         {
-            $replacementDeviceElement = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
-            $row['action']            = $replacementDeviceElement->renderViewHelper();
-            $row['monoCpp']           = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
-            $row['colorCpp']          = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
-            $row['costDelta']         = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
-            $row['monthlyCost']       = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+            $replacementDeviceElement       = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
+            $replacementDeviceReasonElement = $form->getElement("deviceInstanceReason_{$row['deviceInstanceId']}");
+            $row['action']                  = $replacementDeviceElement->renderViewHelper();
+            $row['monoCpp']                 = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
+            $row['colorCpp']                = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
+            $row['costDelta']               = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
+            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+
+            if ($replacementDeviceReasonElement !== null)
+            {
+                $row['reason'] = $replacementDeviceReasonElement->renderViewHelper();
+            }
+            else
+            {
+                $row['reason'] = '';
+            }
         }
 
         $jqGridService->setRows($jsonDataRows);

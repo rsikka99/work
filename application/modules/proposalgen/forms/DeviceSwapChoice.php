@@ -105,19 +105,42 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 $deviceInstanceReplacementMasterDevice = null;
             }
 
-            $deviceType = 'deviceInstance_';
+            $elementType = 'deviceInstance_';
 
             $replacementDevices[0] = $deviceInstance->getAction();
             // Create an element for each device Device list per manufacturer
-            $deviceElement = $this->createElement('select', $deviceType . $deviceInstance->id, array(
-                                                                                                    'label'   => 'Device: ',
-                                                                                                    'attribs' => array(
-                                                                                                        'style' => 'width: 100%'
-                                                                                                    ),
-                                                                                                    'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
-                                                                                               ));
+            $deviceElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                     'label'   => 'Device: ',
+                                                                                                     'attribs' => array(
+                                                                                                         'style' => 'width: 100%'
+                                                                                                     ),
+                                                                                                     'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+                                                                                                ));
 
             $this->addElement($deviceElement);
+
+            $elementType         = 'deviceInstanceReason_';
+
+            $demoData   = array();
+            $demoData[] = "Device has low page volume.";
+            $demoData[] = "Device doesn't qualify for supply fulfilment.";
+            $demoData[] = "Device print volume exceeds recommended volume.";
+            $demoData[] = "Device has a high cost per page.";
+
+            if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE || $deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+            {
+                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                               'label'   => ': ',
+                                                                                                               'attribs' => array(
+                                                                                                                   'style' => 'width: 100%'
+                                                                                                               ),
+                                                                                                               //                                                                                                               'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+                                                                                                          ));
+
+                $this->addElement($deviceReasonElement);
+                $deviceReasonElement->setMultiOptions($demoData);
+
+            }
 
             /*
              * If the master device device does not exist in our array we need to add it as it is replaced anyways....

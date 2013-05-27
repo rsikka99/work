@@ -29,15 +29,15 @@ $(function ()
         datatype    : 'json',
         colModel    : [
             { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148, frozen: true, sortable: false },
-            { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60,  sortable: false },
-            { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60,  sortable: false },
-            { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60,  sortable: false },
+            { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60, sortable: false },
+            { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60, sortable: false },
+            { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60, sortable: false },
             { label: 'Raw Mono CPP', name: 'rawMonoCpp', index: 'rawMonoCpp', align: 'right', width: 50, hidden: true },
-            { label: 'Color CPP', name: 'colorCpp', index: 'colorCpp', align: 'right', width: 60,  sortable: false },
+            { label: 'Color CPP', name: 'colorCpp', index: 'colorCpp', align: 'right', width: 60, sortable: false },
             { label: 'Raw Color CPP', name: 'rawColorCpp', index: 'rawColorCpp', align: 'right', width: 50, hidden: true },
             { label: 'Monthly Cost', name: 'monthlyCost', index: 'monthlyCost', align: 'right', width: 50, sortable: false },
             { label: 'Action', name: 'action', index: 'action', align: 'right', width: 125, sortable: false },
-            { label: 'Cost Delta', name: 'costDelta', index: 'costDelta', align: 'right', width: 50,  sortable: false },
+            { label: 'Cost Delta', name: 'costDelta', index: 'costDelta', align: 'right', width: 50, sortable: false },
             { label: 'Raw Cost Delta', name: 'rawCostDelta', index: 'costDelta', align: 'right', width: 50, hidden: true },
             { label: 'More Details', name: 'info', index: 'info', align: 'center', width: 50, sortable: false },
             { label: 'ID', name: 'deviceInstanceId', index: 'deviceInstanceId', align: 'left', width: 25, hidden: true},
@@ -317,44 +317,47 @@ $(function ()
         function ()
         {
             var elementId = $(this).attr("id");
-            var replacementDeviceId = $(this).val();
 
-            // Get the jqGrid and the id of the row we changed
-            var grid = jQuery("#replacementDeviceTable");
-            var rowId = $(this).closest('tr').attr('id');
+            if (elementId.search("Reason") == -1)
+            {
+                var replacementDeviceId = $(this).val();
+                // Get the jqGrid and the id of the row we changed
+                var grid = jQuery("#replacementDeviceTable");
+                var rowId = $(this).closest('tr').attr('id');
 
-            $.ajax({
-                url       : TMTW_BASEURL + 'hardwareoptimization/index/update-replacement-device',
-                dataType  : 'json',
-                data      : {
-                    deviceInstanceId   : elementId,
-                    replacementDeviceId: replacementDeviceId
-                },
-                beforeSend: function ()
-                {
-                    $('#loadingDiv').show();
-                    grid.setCell(rowId, 'costDelta', 'Loading...');
-                    ajaxCounter++;
-                },
-                complete  : function ()
-                {
-                    ajaxCounter--;
-                    if (ajaxCounter < 1)
+                $.ajax({
+                    url       : TMTW_BASEURL + 'hardwareoptimization/index/update-replacement-device',
+                    dataType  : 'json',
+                    data      : {
+                        deviceInstanceId   : elementId,
+                        replacementDeviceId: replacementDeviceId
+                    },
+                    beforeSend: function ()
                     {
-                        $('#loadingDiv').hide();
+                        $('#loadingDiv').show();
+                        grid.setCell(rowId, 'costDelta', 'Loading...');
+                        ajaxCounter++;
+                    },
+                    complete  : function ()
+                    {
+                        ajaxCounter--;
+                        if (ajaxCounter < 1)
+                        {
+                            $('#loadingDiv').hide();
+                        }
+                    },
+                    success   : function (data)
+                    {
+                        grid.setCell(rowId, 'reason', data.replaceReason);
+                        grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                        // Update the calculation
+                        $('#monochromeCpp').html(data.monochromeCpp);
+                        $('#colorCpp').html(data.colorCpp);
+                        $('#totalCost').html(data.totalCost);
+                        $('#marginDollar').html(data.marginDollar);
+                        $('#marginPercent').html(data.marginPercent);
                     }
-                },
-                success   : function (data)
-                {
-                    grid.setCell(rowId, 'reason', data.replaceReason);
-                    grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
-                    // Update the calculation
-                    $('#monochromeCpp').html(data.monochromeCpp);
-                    $('#colorCpp').html(data.colorCpp);
-                    $('#totalCost').html(data.totalCost);
-                    $('#marginDollar').html(data.marginDollar);
-                    $('#marginPercent').html(data.marginPercent);
-                }
-            });
+                });
+            }
         });
 });

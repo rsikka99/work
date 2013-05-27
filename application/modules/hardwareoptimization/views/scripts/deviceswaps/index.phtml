@@ -13,7 +13,7 @@
         </div>
         <?php echo $this->form; ?>
         <div style="text-align: center">
-            <button type="button" id="cancelSave" class="btn btn-inverse" style="width: 40%; padding: 4px;">Cancel</button>
+            <button type="button" id="cancelSave" class="btn btn-inverse cancelSave" style="width: 40%; padding: 4px;">Cancel</button>
             <button type="button" id="saveDevice" class="btn btn-success" style="width: 40%; padding: 4px;">Submit</button>
         </div>
         <br /><br />
@@ -46,32 +46,45 @@
     <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
 </div>
 
-<p>The end reason will be the last condition it hits. </p>
+<?php
+$demoData = array();
+$demoData[] = "Device has low page volume.";
+$demoData[] = "Device doesn't qualify for supply fulfilment.";
+$demoData[] = "Device print volume exceeds recommended volume.";
+$demoData[] = "Device has a high cost per page.";
+
+?>
+<button id='createReasonBtn' class="btn btn-success">Reason Create</button>
+<br />
+<br />
+<br />
+<p> Device Swap Reasons </p>
 <table class="table">
     <tr>
-        <th>Logic</th>
-        <th>Explanation</th>
+        <th>Id</th>
+        <th>Reason</th>
     </tr>
-    <tr>
-        <td>Default</td>
-        <td>Okay</td>
-    </tr>
-    <tr>
-        <td>Has a replacement device</td>
-        <td>Current CPP Greater than target CPP</td>
-    </tr>
-    <tr>
-        <td>
-            (Device greater than 10 years <strong>OR</strong> has printed more than 100% of it's recommended page volume.)<br/> <strong>AND</strong> <br/>
-            Monthly combined (mono and color) page counts > 500
-        </td>
-        <td>Device not consistent with MPS program.  AMPV is significant</td>
-    </tr>
-    <tr>
-        <td>
-            Device greater than 10 years <strong>AND</strong> <br/>
-            Monthly combined (mono and color) page counts < 500
-        </td>
-        <td>Device no longer reliable, AMPV not significant</td>
-    </tr>
+    <?php foreach ($demoData as $key => $reason) : ?>
+        <tr>
+            <td><?php echo $key; ?></td>
+            <td><?php echo $reason; ?></td>
+        </tr>
+    <?php endforeach; ?>
 </table>
+
+<div class="modal hide" id="reasonAdd">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h3 style="text-align: center">Create New Reason</h3>
+    </div>
+    <div class="modal-body well" style="height: 375px;">
+        <label>Reason : </label>
+        <input type="input" name="some name" />
+        <br/>
+        <br/>
+        <div style="text-align: center">
+            <button type="button" id="cancelSave" class="btn btn-inverse cancelSave" style="width: 40%; padding: 4px;">Cancel</button>
+            <button type="button" id="saveDevice" class="btn btn-success" style="width: 40%; padding: 4px;">Submit</button>
+        </div>
+    </div>
+</div>
