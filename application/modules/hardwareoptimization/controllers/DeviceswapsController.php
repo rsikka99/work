@@ -161,7 +161,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
             $json = array();
             foreach ($form->getMessages() as $errorElement)
             {
-                foreach($errorElement as $errorName => $elementErrorMessage)
+                foreach ($errorElement as $errorName => $elementErrorMessage)
                 {
                     $json[] = $elementErrorMessage;
                 }
@@ -179,7 +179,6 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
         if ($rowsDeleted > 0)
         {
-
             $json = array("rowsDeleted" => $rowsDeleted);
         }
         else
@@ -189,4 +188,6 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
         $this->sendJson($json);
     }
+
+
 }

@@ -97,6 +97,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'pageCoverageCyan'       => false,
         'pageCoverageMagenta'    => false,
         'pageCoverageYellow'     => false,
+        'isManaged'            => false,
+        'rmsDeviceId'          => false,
     );
 
     /**
@@ -156,9 +158,19 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     public function __construct ()
     {
         $filters            = array(
-            'printermodelid'   => array(
+            'rmsModelId'       => array(
                 'StringTrim',
                 'Digits'
+            ),
+            'isManaged'        => array(
+                'StringTrim',
+                array(
+                    'filter'  => 'Boolean',
+                    'options' => array(
+                        'type' => Zend_Filter_Boolean::ALL
+                    ),
+                ),
+                'Int',
             ),
             'isColor'          => array(
                 'StringTrim',

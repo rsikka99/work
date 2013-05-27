@@ -95,7 +95,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $useUserData;
 
-
     /**
      * @var float
      */
@@ -113,6 +112,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var float
      */
     public $pageCoverageYellow;
+
+    /**
+     * @var string|int
+     */
+    public $rmsDeviceId;
+
+    /**
+     * @var bool
+     */
+    public $isManaged;
 
     /*
      * ********************************************************************************
@@ -419,6 +428,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->pageCoverageYellow = $params->pageCoverageYellow;
         }
+
+        if (isset($params->isManaged) && !is_null($params->isManaged))
+        {
+            $this->isManaged = $params->isManaged;
+        }
+
+        if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
+        {
+            $this->rmsDeviceId = $params->rmsDeviceId;
+        }
     }
 
     /**
@@ -439,7 +458,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
             "pageCoverageCyan"       => $this->pageCoverageCyan,
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
-            "pageCoverageYellow"     => $this->pageCoverageYellow
+            "pageCoverageYellow"     => $this->pageCoverageYellow,
+            "isManaged"          => $this->isManaged,
+            "rmsDeviceId"        => $this->rmsDeviceId,
         );
     }
 

@@ -1,17 +1,10 @@
 <?php
-include ('includes/functions.php');
+include('includes/functions.php');
 /**
  * Script for creating and loading database
  */
 
 // Initialize the application path and autoloading
-defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../../application'));
-
-set_include_path(implode(PATH_SEPARATOR, array (
-        APPLICATION_PATH . '/../../library',
-        get_include_path()
-)));
-
 defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/../..'));
 
 // Define the paths
@@ -21,6 +14,10 @@ defined('PUBLIC_PATH') || define('PUBLIC_PATH', APPLICATION_BASE_PATH . '/public
 defined('ASSETS_PATH') || define('ASSETS_PATH', APPLICATION_BASE_PATH . '/assets');
 defined('MYSQL_FILES_PATH') || define('MYSQL_FILES_PATH', APPLICATION_BASE_PATH . '/scripts/mysql');
 
+set_include_path(implode(PATH_SEPARATOR, array(
+                                              APPLICATION_PATH . '/../../library',
+                                              get_include_path()
+                                         )));
 /**
  * This makes our life easier when dealing with paths. Everything is relative
  * to the application root now.
@@ -30,38 +27,21 @@ chdir(APPLICATION_BASE_PATH);
 // Setup autoloading
 require 'init_autoloader.php';
 
-//
-//ini_set("display_errors", 1);
-//error_reporting(E_ALL);
-
-// Define application environment.
-defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'development'));
-
-// Create application, bootstrap, and run
-$application = new Zend_Application(APPLICATION_ENV, array(
-                                                          'config' => array(
-                                                              APPLICATION_PATH . '/configs/global.ini',
-                                                              APPLICATION_PATH . '/configs/application.ini',
-                                                          )));
-
-
-require_once 'Zend/Loader/Autoloader.php';
-Zend_Loader_Autoloader::getInstance();
-
 // Define some CLI options
-$getopt = new Zend_Console_Getopt(array (
-        'withdata|w' => 'Load database with sample data',
-        'env|e-s' => 'Application environment for which to create database (defaults to development)',
-        'help|h' => 'Help -- usage message'
-));
+$getopt = new Zend_Console_Getopt(array(
+                                       'withdata|w' => 'Load database with sample data',
+                                       'env|e-s'    => 'Application environment for which to create database (defaults to development)',
+                                       'help|h'     => 'Help -- usage message'
+                                  ));
 try
 {
     $getopt->parse();
 }
-catch ( Zend_Console_Getopt_Exception $e )
+catch (Zend_Console_Getopt_Exception $e)
 {
     // Bad options passed: report usage
     echo $e->getUsageMessage();
+
     return false;
 }
 
@@ -69,19 +49,20 @@ catch ( Zend_Console_Getopt_Exception $e )
 if ($getopt->getOption('h'))
 {
     echo $getopt->getUsageMessage();
+
     return true;
 }
 
 // Initialize values based on presence or absence of CLI options
 $withData = $getopt->getOption('w');
-$env = $getopt->getOption('e');
+$env      = $getopt->getOption('e');
 defined('APPLICATION_ENV') || define('APPLICATION_ENV', (null === $env) ? 'development' : $env);
 
 // Initialize Zend_Application
 $application = new Zend_Application(APPLICATION_ENV, array(
                                                           'config' => array(
-                                                              APPLICATION_PATH . '/configs/global.ini',
-                                                              APPLICATION_PATH . '/configs/application.ini',
+                                                              APPLICATION_PATH . '/configs/global.php',
+                                                              APPLICATION_PATH . '/configs/local.php',
                                                           )));
 
 // Initialize and retrieve DB resource
@@ -145,10 +126,11 @@ try
         throw new Exception("Connection is not a mysqli connection!");
     }
 }
-catch ( Exception $e )
+catch (Exception $e)
 {
-    echo 'AN ERROR HAS OCCURED:' . PHP_EOL;
+    echo 'AN ERROR HAS OCCURRED:' . PHP_EOL;
     echo $e->getMessage() . PHP_EOL;
+
     return false;
 }
 

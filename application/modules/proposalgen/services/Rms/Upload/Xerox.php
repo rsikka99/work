@@ -9,7 +9,7 @@ class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Uploa
      *
      * @var string
      */
-    protected $_incomingDateFormat = "MMMM d YYYY";
+    protected $_incomingDateFormat = "F j Y";
 
     /**
      * The number of lines to trim off the top of the csv

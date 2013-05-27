@@ -1,5 +1,8 @@
 $(function ()
 {
+//    var ajaxArray = [];
+    var ajaxCounter = 0;
+
     $("#deviceInstanceInformationModal").hide();
     var getColumnSrcIndexByName = function (grid, columnName)
     {
@@ -22,19 +25,19 @@ $(function ()
     };
 
     $("#replacementDeviceTable").jqGrid({
-        datatype    : 'local',
-        data        : jsonRows,
+        url         : TMTW_BASEURL + 'hardwareoptimization/index/device-list',
+        datatype    : 'json',
         colModel    : [
-            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148 , frozen: true},
-            { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
-            { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
-            { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
+            { label: 'Device', name: 'device', index: 'device', align: 'left', width: 148, frozen: true, sortable: false },
+            { label: 'Mono AMPV', name: 'monoAmpv', index: 'monoAmpv', align: 'right', width: 60,  sortable: false },
+            { label: 'Color AMPV', name: 'colorAmpv', index: 'colorAmpv', align: 'right', width: 60,  sortable: false },
+            { label: 'Mono CPP', name: 'monoCpp', index: 'monoCpp', align: 'right', width: 60,  sortable: false },
             { label: 'Raw Mono CPP', name: 'rawMonoCpp', index: 'rawMonoCpp', align: 'right', width: 50, hidden: true },
-            { label: 'Color CPP', name: 'colorCpp', index: 'colorCpp', align: 'right', width: 60, sorttype: 'int', firstsortorder: 'desc' },
+            { label: 'Color CPP', name: 'colorCpp', index: 'colorCpp', align: 'right', width: 60,  sortable: false },
             { label: 'Raw Color CPP', name: 'rawColorCpp', index: 'rawColorCpp', align: 'right', width: 50, hidden: true },
-            { label: 'Monthly Cost', name: 'monthlyCost', index: 'monthlyCost', align: 'right', width: 50, sorttype: 'int', firstsortorder: 'desc' },
+            { label: 'Monthly Cost', name: 'monthlyCost', index: 'monthlyCost', align: 'right', width: 50, sortable: false },
             { label: 'Action', name: 'action', index: 'action', align: 'right', width: 125, sortable: false },
-            { label: 'Cost Delta', name: 'costDelta', index: 'costDelta', align: 'right', width: 50, sorttype: 'int', firstsortorder: 'desc' },
+            { label: 'Cost Delta', name: 'costDelta', index: 'costDelta', align: 'right', width: 50,  sortable: false },
             { label: 'Raw Cost Delta', name: 'rawCostDelta', index: 'costDelta', align: 'right', width: 50, hidden: true },
             { label: 'More Details', name: 'info', index: 'info', align: 'center', width: 50, sortable: false },
             { label: 'ID', name: 'deviceInstanceId', index: 'deviceInstanceId', align: 'left', width: 25, hidden: true},
@@ -43,20 +46,22 @@ $(function ()
         ],
         height      : 900,
         width       : 940,
-        rowNum      : 1000,
         shrinkToFit : false,
-        sortname    : 'monthlyCost',
-        sortorder   : 'desc',
+        jsonReader  : { repeatitems: false },
         caption     : "Purchased Devices",
-        loadComplete: function ()
+        rowNum      : 25,
+        rowList     : [25, 50, 100],
+        pager       : '#replacementDevicePager',
+        gridComplete: function ()
         {
             var grid = $(this);
             var ids = grid.getDataIDs();
             for (var i = 0; i < ids.length; i++)
             {
-                // Get the data so we can use and manipualte it.
+                // Get the data so we can use and manipulate it.
                 var row = grid.getRowData(ids[i]);
-                row.info = "<button type='button' class='btn btn-inverse btn-mini'><i class='icon-search icon-white'></i></button>";
+                var button = "<button type='button' class='btn btn-inverse btn-mini'><i class='icon-search icon-white'></i></button>";
+                grid.setCell(ids[i], 'info', button);
 
                 if (row.rawMonoCpp > targetCostPerPageMono)
                 {
@@ -83,12 +88,7 @@ $(function ()
                 {
                     grid.setCell(ids[i], 'costDelta', '', 'negativeCostDelta');
                 }
-                // Put our new data back into the grid
-                grid.setRowData(ids[i], row);
-
             }
-
-
         },
         onCellSelect: function (rowid, iCol, cellcontent, e)
         {
@@ -153,16 +153,6 @@ $(function ()
                         $row.append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> ");
                         $table.append($row);
                         $row = $("<tr></tr>");
-
-//                        if (data.deviceInstance.jitSuppliesSupported)
-//                        {
-//                            $row.append("<td>JIT Supplies Capable</td><td>Yes</td>");
-//                        }
-//                        else
-//                        {
-//                            $row.append("<td>JIT Supplies Capable</td><td>No</td>");
-//                        }
-//                        $table.append($row);
 
                         $row = $("<tr></tr>");
                         if (data.deviceInstance.isCopy)
@@ -316,4 +306,55 @@ $(function ()
 
     });
     jQuery("#replacementDeviceTable").jqGrid('setFrozenColumns');
+
+    // Hide the loading div at the beginning
+    $('#optimizationTable').load(TMTW_BASEURL + 'hardwareoptimization/index/summary-table', '', function ()
+    {
+        $('#loadingDiv').hide();
+    });
+
+    $(document).on('change', 'select',
+        function ()
+        {
+            var elementId = $(this).attr("id");
+            var replacementDeviceId = $(this).val();
+
+            // Get the jqGrid and the id of the row we changed
+            var grid = jQuery("#replacementDeviceTable");
+            var rowId = $(this).closest('tr').attr('id');
+
+            $.ajax({
+                url       : TMTW_BASEURL + 'hardwareoptimization/index/update-replacement-device',
+                dataType  : 'json',
+                data      : {
+                    deviceInstanceId   : elementId,
+                    replacementDeviceId: replacementDeviceId
+                },
+                beforeSend: function ()
+                {
+                    $('#loadingDiv').show();
+                    grid.setCell(rowId, 'costDelta', 'Loading...');
+                    ajaxCounter++;
+                },
+                complete  : function ()
+                {
+                    ajaxCounter--;
+                    if (ajaxCounter < 1)
+                    {
+                        $('#loadingDiv').hide();
+                    }
+                },
+                success   : function (data)
+                {
+                    grid.setCell(rowId, 'reason', data.replaceReason);
+                    grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                    // Update the calculation
+                    $('#monochromeCpp').html(data.monochromeCpp);
+                    $('#colorCpp').html(data.colorCpp);
+                    $('#totalCost').html(data.totalCost);
+                    $('#marginDollar').html(data.marginDollar);
+                    $('#marginPercent').html(data.marginPercent);
+                }
+            });
+        });
 });

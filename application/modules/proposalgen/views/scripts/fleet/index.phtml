@@ -1,8 +1,5 @@
 <?php $rmsUpload = $this->rmsUpload; ?>
 <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
-    <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-        var rmsUploadId = <?php echo $rmsUpload->id; ?>
-    <?php $this->headScript()->captureEnd(); ?>
     <div class="well">
         <h1>Upload Complete</h1>
 
@@ -11,17 +8,19 @@
             devices
             imported.</p>
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
-            <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/excludedRows.js')); ?>
             <p>The csv file that was uploaded also contained <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
-            <br />
+        <?php endif; ?>
+        <p><a class="btn" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Click here to upload a new file</a></p>
+
+        <div id="collapseOne" class="collapse">
+            <div class="accordion-inner"><?php echo $this->form; ?></div>
+        </div>
+        <br />
+        <?php if ($rmsUpload->invalidRowCount > 0) : ?>
+            <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/excludedRows.js')); ?>
             <table id="excludedTable"></table>
             <div id="excludedPager"></div>
         <?php endif; ?>
-<!--        <p><a class="btn" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Click here to upload a new file</a></p>-->
-<!---->
-<!--        <div id="collapseOne" class="collapse">-->
-<!--            <div class="accordion-inner">--><?php //echo $this->form; ?><!--</div>-->
-<!--        </div>-->
         <?php echo $this->navigationForm; ?>
     </div>
 
@@ -31,4 +30,3 @@
         <?php echo $this->navigationForm; ?>
     </div>
 <?php endif; ?>
-
