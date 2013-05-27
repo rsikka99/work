@@ -875,6 +875,15 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $introductionDate = (empty($this->launchDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->launchDate);
         $adoptionDate     = (empty($this->adoptionDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->adoptionDate);
 
+        if (!$monitorStartDate)
+        {
+            return "Invalid Monitor Start Date";
+        }
+
+        if (!$monitorEndDate)
+        {
+            return "Invalid Monitor End Date";
+        }
 
         // If the discovery date is after the start date, use the discovery date
         if ($discoveryDate instanceof DateTime)
@@ -886,6 +895,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
                 $monitorStartDate = $discoveryDate;
             }
         }
+
 
         // Figure out how long we've been monitoring this device
         $monitoringInterval = $monitorStartDate->diff($monitorEndDate);
@@ -903,11 +913,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         }
 
         // Convert all the dates back to mysql dates
-        $this->monitorStartDate = ($monitorStartDate === null) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
-        $this->monitorEndDate   = ($monitorEndDate === null) ? null : $monitorEndDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
-        $this->discoveryDate    = ($discoveryDate === null) ? null : $discoveryDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
-        $this->launchDate       = ($introductionDate === null) ? null : $introductionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
-        $this->adoptionDate     = ($adoptionDate === null) ? null : $adoptionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->monitorStartDate = (!$monitorStartDate) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->monitorEndDate   = (!$monitorEndDate) ? null : $monitorEndDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->discoveryDate    = (!$discoveryDate) ? null : $discoveryDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->launchDate       = (!$introductionDate) ? null : $introductionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+        $this->adoptionDate     = (!$adoptionDate) ? null : $adoptionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
 
 
         /*
