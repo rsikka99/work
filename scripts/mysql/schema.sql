@@ -287,6 +287,12 @@ CREATE  TABLE IF NOT EXISTS `device_instances` (
     `reportsTonerLevels` TINYINT(4) NOT NULL DEFAULT 0 ,
     `serialNumber` VARCHAR(255) NOT NULL DEFAULT '' ,
     `useUserData` TINYINT(4) NOT NULL DEFAULT 0 ,
+    `isManaged` TINYINT(4) NULL ,
+    `rmsDeviceId` VARCHAR(255) NULL ,
+    `pageCoverageMonochrome` DOUBLE NULL DEFAULT NULL ,
+    `pageCoverageCyan` DOUBLE NULL DEFAULT NULL ,
+    `pageCoverageMagenta` DOUBLE NULL DEFAULT NULL ,
+    `pageCoverageYellow` DOUBLE NULL DEFAULT NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `device_instances_ibfk_2_idx` (`rmsUploadRowId` ASC) ,
     INDEX `device_instances_ibfk_1_idx` (`rmsUploadId` ASC) ,
@@ -1788,6 +1794,24 @@ CREATE  TABLE IF NOT EXISTS `device_swaps` (
         ON DELETE NO ACTION
         ON UPDATE NO ACTION);
 
+
+-- -----------------------------------------------------
+-- Table `privileges`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `privileges` (
+    `id` INT NOT NULL ,
+    `roleId` INT NOT NULL ,
+    `module` VARCHAR(255) NOT NULL ,
+    `controller` VARCHAR(255) NOT NULL ,
+    `action` VARCHAR(255) NOT NULL ,
+    `isAdmin` TINYINT NOT NULL DEFAULT 0 ,
+    PRIMARY KEY (`id`) ,
+    INDEX `privileges_ibfk_1_idx` (`roleId` ASC) ,
+    CONSTRAINT `privileges_ibfk_1`
+    FOREIGN KEY (`roleId` )
+    REFERENCES `roles` (`id` )
+        ON DELETE CASCADE
+        ON UPDATE CASCADE);
 
 
 
