@@ -123,6 +123,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $isManaged;
 
+    /**
+     * @var int
+     */
+    public $deviceSwapReasonId;
+
     /*
      * ********************************************************************************
      * Related Objects
@@ -438,6 +443,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->rmsDeviceId = $params->rmsDeviceId;
         }
+        if (isset($params->deviceSwapReasonId) && !is_null($params->deviceSwapReasonId))
+        {
+            $this->deviceSwapReasonId = $params->deviceSwapReasonId;
+        }
     }
 
     /**
@@ -459,8 +468,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "pageCoverageCyan"       => $this->pageCoverageCyan,
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
             "pageCoverageYellow"     => $this->pageCoverageYellow,
-            "isManaged"          => $this->isManaged,
-            "rmsDeviceId"        => $this->rmsDeviceId,
+            "isManaged"              => $this->isManaged,
+            "rmsDeviceId"            => $this->rmsDeviceId,
+            "deviceSwapReasonId"     => $this->deviceSwapReasonId,
         );
     }
 
