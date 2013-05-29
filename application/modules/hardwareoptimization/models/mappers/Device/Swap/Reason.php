@@ -8,6 +8,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapp
   * Column Definitions
   */
     public $col_id = 'id';
+    public $col_dealerId = 'dealerId';
 
     /**
      * The default db table class to use
@@ -228,4 +229,60 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapp
     {
         return $object->id;
     }
+
+    public function fetchAllReasonByDealerId ($dealerId)
+    {
+        return $this->fetchAll(array
+            ("{$this->col_dealerId} = ?" => $dealerId)
+        );
+    }
+
+    /**
+     * @param                                      $dealerId
+     * @param                                      $sortOrder
+     * @param null                                 $limit
+     * @param null                                 $offset
+     * @param bool                                 $justCount
+     *
+     * @return array|int
+     */
+    public function fetAllForDealer ($dealerId, $sortOrder, $limit = null, $offset = null, $justCount = false)
+    {
+        $db       = $this->getDbTable()->getAdapter();
+        $dealerId = $db->quote($dealerId, 'INTEGER');
+
+        if ($justCount)
+        {
+            $select = $db->select()->from("{$this->getTableName()}", "COUNT(*)")->where("{$this->col_dealerId} = ?", $dealerId);
+
+            return $db->query($select)->fetchColumn();
+        }
+        else
+        {
+
+            $returnLimit = 10;
+
+            if (!$limit)
+            {
+                $limit  = "25";
+                $offset = ($offset > 0) ? $offset : 0;
+            }
+
+            $deviceSwapReasons = $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId), $sortOrder, $returnLimit, $offset);
+
+            $response = array();
+            foreach ($deviceSwapReasons as $deviceSwapReason)
+            {
+                $row = array();
+                $row['reason'] = $deviceSwapReason->reason;
+                $row['reasonCategoryId'] = $deviceSwapReason->getCategory()->id;
+                $row['reasonCategory'] = $deviceSwapReason->getCategory()->name;
+                $row['id'] = $deviceSwapReason->id;;
+                $response [] = $row;
+            }
+
+            return $response;
+        }
+    }
+
 }
