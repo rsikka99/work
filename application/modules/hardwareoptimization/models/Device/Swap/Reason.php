@@ -18,9 +18,14 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
     public $reason;
 
     /**
+     * @var Hardwareoptimization_Model_Device_Swap_Reason_Category
+     */
+    protected $_category;
+
+    /**
      * @var int
      */
-    public $categoryId;
+    public $deviceSwapReasonCategoryId;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -47,9 +52,9 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
             $this->reason = $params->reason;
         }
 
-        if (isset($params->categoryId) && !is_null($params->categoryId))
+        if (isset($params->deviceSwapReasonCategoryId) && !is_null($params->deviceSwapReasonCategoryId))
         {
-            $this->categoryId = $params->categoryId;
+            $this->deviceSwapReasonCategoryId = $params->deviceSwapReasonCategoryId;
         }
     }
 
@@ -59,10 +64,25 @@ class Hardwareoptimization_Model_Device_Swap_Reason extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "masterDeviceId" => $this->id,
-            "dealerId"       => $this->dealerId,
-            "reason"         => $this->reason,
-            "categoryId"     => $this->categoryId,
+            "id"                         => $this->id,
+            "dealerId"                   => $this->dealerId,
+            "reason"                     => $this->reason,
+            "deviceSwapReasonCategoryId" => $this->deviceSwapReasonCategoryId,
         );
+    }
+
+    /**
+     * Getter for _category
+     *
+     * @return \Hardwareoptimization_Model_Device_Swap_Reason_Category
+     */
+    public function getCategory ()
+    {
+        if (!isset($this->_category))
+        {
+            $this->_category = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Category::getInstance()->find($this->deviceSwapReasonCategoryId);
+        }
+
+        return $this->_category;
     }
 }
