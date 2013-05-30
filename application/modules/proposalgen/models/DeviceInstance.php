@@ -1214,9 +1214,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_replacementMasterDevice))
         {
             $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find(array($this->id, $hardwareOptimizationId));
+            $hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
             if ($deviceInstanceReplacementMasterDevice)
             {
-                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDevice();
+                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($hardwareOptimization->dealerId);
             }
         }
 
