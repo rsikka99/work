@@ -123,23 +123,32 @@ $(function ()
                 hidden  : true
             },
             {
-                name    : 'reasonCategoryId',
-                label   : 'reasonCategoryId',
-                index   : 'reasonCategoryId',
-                sortable: false,
-                hidden  : true
+                name  : 'reasonCategoryId',
+                index : 'reasonCategoryId',
+                hidden: true
+            },
+            {
+                name  : 'rawIsDefault',
+                index : 'rawIsDefault',
+                hidden: true
             },
             {
                 name : 'reason',
                 index: 'reason',
-                width: 402,
+                width: 352,
                 label: 'Reason'
             },
             {
                 name : 'reasonCategory',
                 index: 'reasonCategory',
-                width: 402,
+                width: 352,
                 label: 'Reason Category'
+            },
+            {
+                name : 'isDefault',
+                index: 'isDefault',
+                width: 100,
+                label: 'Is Default'
             },
             {
                 width   : 85,
@@ -243,15 +252,15 @@ $(function ()
     $(document).on("click", ".editSwapReasonAction", function ()
     {
         $("#reasonAddModal").modal("show");
-
         // Get the data from the selected row
         var row_data = getJqGridRow(jQuery("#deviceReasonTable"));
-
         // Set the hidden element in the modal for the id
         $("#deviceSwapReasonId").val(row_data.id);
+
         // Populate the data for the row selected
         $('#reason').val(row_data.reason);
         $('#reasonCategory').val(row_data.reasonCategoryId);
+        $('#isDefault').prop('checked', !!((row_data.rawIsDefault === '1' )));
     });
 
     // Cancel the deletion process
@@ -271,6 +280,7 @@ $(function ()
 
     $(document).on("click", ".deleteSwapReasonAction", function ()
     {
+        $('#device-swap-error-message').hide();
         $("#deleteReasonModal").modal("show");
     });
 
@@ -281,6 +291,7 @@ $(function ()
         $("#deviceSwapReasonId").val('');
         $("#reasonCategory").val(1);
         $("#reason").val('');
+        $("#isDefault").attr('checked', false);
 
         $("#reasonAddModal").modal("show");
     });
@@ -390,6 +401,35 @@ $(function ()
             }
         });
     });
+
+    $(document).on("click", "#deleteSwapBtn", function ()
+    {
+        // Get the jqGrid row that we have selected when we clicked the button
+        var row_data = getJqGridRow(jQuery("#deviceReasonTable"));
+
+        $.ajax({
+            url     : TMTW_BASEURL + "hardwareoptimization/deviceswaps/delete-reason",
+            dataType: 'json',
+            data    : {
+                reasonId: row_data.id
+            },
+            success : function ()
+            {
+                $("#deviceReasonTable").jqGrid().trigger('reloadGrid');
+                $("#deleteReasonModal").modal('hide');
+            },
+            error : function(data)
+            {
+                var json = $.parseJSON(data.responseText);
+                var errorMessageElement = $('#device-swap-error-message');
+                errorMessageElement.html('<ol>');
+                errorMessageElement.append('<li>' + json.error + '</li>');
+                errorMessageElement.append('</ol>');
+                errorMessageElement.show();
+            }
+        });
+    });
+
 
     // When modal hides function is triggered, clear previous messages
     $('.modal').on('hidden', function ()
