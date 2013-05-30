@@ -17,7 +17,7 @@ class Hardwareoptimization_Model_Device_Swap_Reason_Default extends My_Model_Abs
     /**
      * @var int
      */
-    public $deviceSwapId;
+    public $deviceSwapReasonId;
 
 
     /**
@@ -38,9 +38,9 @@ class Hardwareoptimization_Model_Device_Swap_Reason_Default extends My_Model_Abs
         {
             $this->dealerId = $params->dealerId;
         }
-        if (isset($params->deviceSwapId) && !is_null($params->deviceSwapId))
+        if (isset($params->deviceSwapReasonId) && !is_null($params->deviceSwapReasonId))
         {
-            $this->deviceSwapId = $params->deviceSwapId;
+            $this->deviceSwapReasonId = $params->deviceSwapReasonId;
         }
     }
 
@@ -52,7 +52,7 @@ class Hardwareoptimization_Model_Device_Swap_Reason_Default extends My_Model_Abs
         return array(
             "deviceSwapReasonCategoryId" => $this->deviceSwapReasonCategoryId,
             "dealerId"                   => $this->dealerId,
-            "deviceSwapId"               => $this->deviceSwapId,
+            "deviceSwapReasonId"         => $this->deviceSwapReasonId,
         );
     }
 }

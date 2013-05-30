@@ -9,6 +9,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default extends My_Mo
      */
     public $col_deviceSwapReasonCategoryId = 'deviceSwapReasonCategoryId';
     public $col_dealerId = 'dealerId';
+    public $col_deviceSwapReasonId = 'deviceSwapReasonId';
 
     /**
      * The default db table class to use
@@ -230,5 +231,15 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default extends My_Mo
             $object->deviceSwapReasonCategoryId,
             $object->dealerId
         );
+    }
+
+    /**
+     * @param $reasonId
+     *
+     * @return Hardwareoptimization_Model_Device_Swap_Reason_Default
+     */
+    public function findDefaultByReasonId ($reasonId)
+    {
+        return $this->fetch(array("{$this->col_deviceSwapReasonId} = ?" => $reasonId));
     }
 }

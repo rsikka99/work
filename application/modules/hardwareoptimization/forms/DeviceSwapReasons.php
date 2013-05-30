@@ -27,8 +27,11 @@ class Hardwareoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form
                                                                      "label" => "Reason",
                                                                      "class" => "input-xlarge"
                                                                 ));
-
         $this->addElement($reasonElement);
+
+        $this->addElement('checkbox', 'isDefault', array(
+                                                        "label" => "Default Reason"
+                                                   ));
 
         $this->addElement('hidden', 'deviceSwapReasonId');
 

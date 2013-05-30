@@ -9,6 +9,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapp
   */
     public $col_id = 'id';
     public $col_dealerId = 'dealerId';
+    public $col_categoryId = 'deviceSwapReasonCategoryId';
 
     /**
      * The default db table class to use
@@ -273,16 +274,27 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapp
             $response = array();
             foreach ($deviceSwapReasons as $deviceSwapReason)
             {
-                $row = array();
-                $row['reason'] = $deviceSwapReason->reason;
+                $row                     = array();
+                $row['reason']           = $deviceSwapReason->reason;
                 $row['reasonCategoryId'] = $deviceSwapReason->getCategory()->id;
-                $row['reasonCategory'] = $deviceSwapReason->getCategory()->name;
-                $row['id'] = $deviceSwapReason->id;;
-                $response [] = $row;
+                $row['reasonCategory']   = $deviceSwapReason->getCategory()->name;
+                $row['id']               = $deviceSwapReason->id;
+                // Find if this is default
+                $row['isDefault']    = (Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByReasonId($deviceSwapReason->id) instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default) ? "Yes" : "";
+                $row['rawIsDefault'] = ($row['isDefault']) ? 1 : 0;
+                $response[]          = $row;
             }
 
             return $response;
         }
+    }
+
+    public function fetchAllByCategoryId ($categoryId, $dealerId)
+    {
+        return $this->fetchAll(array(
+                                    "{$this->col_categoryId} = ?" => $categoryId,
+                                    "{$this->col_dealerId} = ?"   => $dealerId
+                               ));
     }
 
 }
