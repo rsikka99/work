@@ -179,3 +179,15 @@ INSERT INTO `regions` (`countryId`, `region`) VALUES
 INSERT INTO `device_swap_reason_categories` (`id`, `name`) VALUES
 (1, 'Flagged Devices'),
 (2, 'Device Has Replacement Device');
+
+INSERT INTO `device_swap_reasons` (`id`, `dealerId`, `deviceSwapReasonCategoryId`, `reason`) VALUES
+(1, 1, 1, 'Device not consistent with MPS program.  AMPV is significant.'),
+(2, 1, 2, 'Device has a high cost per page.'),
+(3, 2, 1, 'Device not consistent with MPS program.  AMPV is significant.'),
+(4, 2, 2, 'Device has a high cost per page.');
+
+INSERT INTO device_swap_reason_defaults (`deviceSwapReasonCategoryId`, `dealerId`, `deviceSwapReasonId`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(1, 2, 3),
+(2, 2, 4);
