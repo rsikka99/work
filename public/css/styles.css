@@ -769,6 +769,11 @@ select.ui-pg-selbox {
   margin: 0px;
   line-height: 18px;
 }
+th.ui-th-column div {
+  white-space: normal !important;
+  height: auto !important;
+  padding: 2px;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {
@@ -1287,6 +1292,11 @@ table.summaryReport {
   font-weight: bold;
   color: white;
   background-color: red;
+}
+#replacementDeviceTable td.positiveCostDelta {
+  font-weight: normal;
+  color: black;
+  background-color: white;
 }
 #navigationMenu {
   margin-bottom: 0;

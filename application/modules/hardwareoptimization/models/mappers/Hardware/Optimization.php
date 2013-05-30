@@ -9,6 +9,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
      */
     public $col_id = 'id';
     public $col_clientId = 'clientId';
+    public $col_rmsUploadId = "rmsUploadId";
 
     /**
      * The default db table class to use
@@ -242,6 +243,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
 
     /**
      * Fetches all the hardware optimizations for a client
+     *
      * @param      $clientId
      * @param null $order
      * @param int  $count
@@ -252,5 +254,119 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
     public function fetchAllForClient ($clientId, $order = null, $count = 50, $offset = null)
     {
         return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), $order, $count, $offset);
+    }
+
+    /**
+     * @param int                                  $hardwareOptimizationId
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param int                                  $limit
+     * @param int                                  $offset
+     * @param bool                                 $justCount
+     *
+     * @return array|int
+     */
+    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $limit, $offset = 0, $justCount = false)
+    {
+        $db                     = $this->getDbTable()->getAdapter();
+        $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
+
+        $hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+
+        $deviceInstanceMapper             = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+        $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
+        $masterDeviceMapper               = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+        $manufacturerMapper               = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+
+        if ($justCount)
+        {
+
+            $selectStatement = new Zend_Db_Expr("COUNT(*)");
+            $select          = $db->select();
+            $select->from(array($this->getTableName()), $selectStatement)
+            ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+            ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+            ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+            ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+            ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+            ->where("md.isLeased = ?", 0);
+
+            return $db->query($select)->fetchColumn();
+        }
+        else
+        {
+            if (!$limit)
+            {
+                $limit = 25;
+            }
+
+            $selectStatement = new Zend_Db_Expr("di.*, IF(md.tonerConfigId > 1, 1, 0) AS isColor, CONCAT(m.fullname, '</br>', md.modelName) AS device");
+
+            $db     = Zend_Db_Table::getDefaultAdapter();
+            $select = $db->select();
+            // Get all the devices, we will limit and offset them once they are sorted by cost.
+            $select->from(array($this->getTableName()), $selectStatement)
+            ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+            ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+            ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+            ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+            ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+            ->where("md.isLeased = ?", 0);
+
+            $query = $db->query($select);
+
+            $devices = array();
+            foreach ($query->fetchAll() as $row)
+            {
+                $deviceInstance            = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($row['deviceInstanceId']);
+                $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
+
+                $rowJson               = array(
+                    'deviceInstanceId' => $row['deviceInstanceId'],
+                    'isColor'          => $row['isColor'],
+                    'device'           => $row['device'],
+                    'rawMonthlyCost'   => $deviceInstanceMonthlyCost,
+                );
+                $devices['jsonData'][] = $rowJson;
+            }
+
+            // Sort the collection of devices by monthly cost
+            // Sort by monthly Cost
+            usort($devices['jsonData'], function ($a, $b)
+            {
+                return $b['rawMonthlyCost'] - $a['rawMonthlyCost'];
+            });
+
+            // Limit and offset devices
+            $returnDevices = array();
+            $maximum       = count($devices['jsonData']);
+            for ($i = $offset; $i < $limit + $offset; $i++)
+            {
+                if ($i >= $maximum)
+                {
+                    break;
+                }
+                // We want the two arrays to be in parallel since we need to pass and array of devices to the form to generate the select elements
+                $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($devices['jsonData'][$i]['deviceInstanceId']);
+
+                $returnDevices['deviceInstances'][] = $deviceInstance;
+                $jsonData                           = $devices['jsonData'][$i];
+
+                $pageCount                 = $deviceInstance->getPageCounts();
+                $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
+                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
+                $jsonData['monoAmpv']      = number_format($pageCount->monochrome->getMonthly());
+                $jsonData['colorAmpv']     = number_format($pageCount->color->getMonthly());
+                $jsonData['rawMonoCpp']    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
+                $jsonData['rawColorCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
+                $jsonData['rawCostDelta']  = $costDelta;
+                $jsonData['reason']        = $deviceInstance->getReason();
+
+                $returnDevices['jsonData'][] = $jsonData;
+            }
+
+            return $returnDevices;
+        }
     }
 }

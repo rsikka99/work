@@ -10,7 +10,7 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
      *
      * @var string
      */
-    protected $_incomingDateFormat = "MM/dd/yyyy HH:ii:ss";
+    protected $_incomingDateFormat = "m/d/Y h:i:s A";
 
     /**
      * Column mapping for CSV -> Upload Row.
@@ -20,6 +20,7 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
      */
     protected $_columnMapping = array(
         'printermodelid'       => 'rmsModelId',
+        'managed'              => 'isManaged',
         'startdate'            => 'monitorStartDate',
         'enddate'              => 'monitorEndDate',
         'dateadoption'         => 'adoptionDate',
@@ -71,6 +72,10 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'tonerlevel_black'     => 'tonerLevelBlack',
         'tonerlevel_cyan'      => 'tonerLevelCyan',
         'tonerlevel_magenta'   => 'tonerLevelMagenta',
-        'tonerlevel_yellow'    => 'tonerLevelYellow'
+        'tonerlevel_yellow'    => 'tonerLevelYellow',
+        'black coverage'       => 'pageCoverageMonochrome',
+        'cyan coverage'        => 'pageCoverageCyan',
+        'magenta coverage'     => 'pageCoverageMagenta',
+        'yellow coverage'      => 'pageCoverageYellow',
     );
 }

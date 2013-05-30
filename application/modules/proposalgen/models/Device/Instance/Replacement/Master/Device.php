@@ -29,6 +29,11 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
      */
     protected $_masterDevice;
 
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_reportMasterDevice;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -63,9 +68,9 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
     public function toArray ()
     {
         return array(
-            "deviceInstanceId" => $this->deviceInstanceId,
-            "masterDeviceId"   => $this->masterDeviceId,
-            "hardwareOptimizationId"   => $this->hardwareOptimizationId,
+            "deviceInstanceId"       => $this->deviceInstanceId,
+            "masterDeviceId"         => $this->masterDeviceId,
+            "hardwareOptimizationId" => $this->hardwareOptimizationId,
         );
     }
 
@@ -125,5 +130,15 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
         $this->_masterDevice = $masterDevice;
 
         return $this;
+    }
+
+    public function getMasterDeviceForReports ($dealerId)
+    {
+        if (!isset($this->_reportMasterDevice))
+        {
+            $this->_reportMasterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($this->masterDeviceId, $dealerId);
+        }
+
+        return $this->_reportMasterDevice;
     }
 }
