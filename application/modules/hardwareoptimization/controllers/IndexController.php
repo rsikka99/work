@@ -13,6 +13,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     protected $_deviceViewModel;
 
+
     /**
      * This action will redirect us to the latest available step
      */
@@ -115,19 +116,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             {
                 if ($form->getValue('Submit') || isset($postData["saveAndContinue"]))
                 {
-                    if ($this->_processSaveProfitability($form))
+                    if (isset($postData["saveAndContinue"]))
                     {
-                        if (isset($postData["saveAndContinue"]))
-                        {
-                            $this->updateStepName();
-                            $this->saveHardwareOptimization();
-                            $this->gotoNextNavigationStep($this->_navigation);
-                        }
-                        $this->_flashMessenger->addMessage(array('success' => "Your changes have been saved."));
-                    }
-                    else
-                    {
-                        $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
+                        $this->updateStepName();
+                        $this->saveHardwareOptimization();
+                        $this->gotoNextNavigationStep($this->_navigation);
                     }
                 }
                 else if ($form->getValue('Analyze'))
@@ -169,150 +162,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     }
 
     /**
-     * Returns Json based on id that has been passed via query string
-     */
-    public function getDeviceByDeviceInstanceIdAction ()
-    {
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
-        $optimization                                           = $this->getOptimizationViewModel();
-        $costPerPageSetting                                     = $optimization->getCostPerPageSettingForDealer();
-
-        $instanceId     = $this->_getParam('deviceInstanceId');
-        $deviceInstance = null;
-        $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
-        $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
-
-        $replacementDevice    = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
-        $hasReplacementDevice = ($replacementDevice instanceof Proposalgen_Model_MasterDevice);
-
-        $device = array(
-            "deviceInstance" => array(
-                "deviceName"            => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
-                "ipAddress"             => $deviceInstance->ipAddress,
-                "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
-                "serialNumber"          => $deviceInstance->serialNumber,
-                "lifePageCount"         => number_format($deviceInstance->getLifePageCount()),
-                "monoAmpv"              => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
-                "colorAmpv"             => number_format($deviceInstance->getPageCounts()->color->getMonthly()),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array("precision" => 4)),
-                "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
-                "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
-                "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
-                "isScan"                => (int)$deviceInstance->getMasterDevice()->isScanner,
-                "ppmBlack"              => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
-                "ppmColor"              => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
-            ),
-            "hasReplacement" => (int)$hasReplacementDevice
-        );
-
-
-        if ($hasReplacementDevice)
-        {
-            $device ["replacementDevice"] = array(
-                "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
-                "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
-                "isCopy"                => (int)$replacementDevice->isCopier,
-                "isFax"                 => (int)$replacementDevice->isFax,
-                "isScan"                => (int)$replacementDevice->isScanner,
-                "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
-                "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
-                "reason"                => $deviceInstance->getReason()
-            );
-        }
-
-        $this->sendJson($device);
-    }
-
-    /**
-     * Processes the data returned from the form to apply replacements to a customers fleet.
-     *
-     * @param Proposalgen_Form_DeviceSwapChoice $form
-     *
-     * @return bool
-     */
-    protected function _processSaveProfitability ($form)
-    {
-
-        $optimization                    = $this->getOptimizationViewModel();
-        $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-        $db                              = Zend_Db_Table::getDefaultAdapter();
-        $db->beginTransaction();
-        try
-        {
-            /*
-             * Loop through our devices
-             */
-            foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $masterDeviceId = $form->getValue("deviceInstance_{$deviceInstance->id}");
-
-                // Only bother with posted data
-                if ($masterDeviceId === null)
-                {
-                    continue;
-                }
-
-                $currentReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
-                /*
-                 * We should only save if we have a new master device id and the device isn't supposed to be retired
-                 */
-                if ((int)$masterDeviceId !== 0 && $deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
-                {
-                    if ($currentReplacementMasterDevice && (int)$currentReplacementMasterDevice->id === (int)$masterDeviceId)
-                    {
-                        continue;
-                    }
-                    // Save / update replacement devices
-                    $deviceInstanceReplacement = $deviceInstanceReplacementMapper->find($deviceInstance->id);
-                    if ($deviceInstanceReplacement instanceof Proposalgen_Model_Device_Instance_Replacement_Master_Device)
-                    {
-                        $deviceInstanceReplacement->masterDeviceId = $masterDeviceId;
-                        // Is this necessary ?
-                        $deviceInstanceReplacement->setMasterDevice(null);
-                        $deviceInstanceReplacementMapper->save($deviceInstanceReplacement);
-                        $deviceInstance->setReplacementMasterDevice(null);
-                    }
-                    else
-                    {
-                        $deviceInstanceReplacement                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                        $deviceInstanceReplacement->masterDeviceId         = (int)$masterDeviceId;
-                        $deviceInstanceReplacement->deviceInstanceId       = $deviceInstance->id;
-                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_hardwareOptimization->id;
-                        $deviceInstanceReplacementMapper->insert($deviceInstanceReplacement);
-                    }
-                }
-                else
-                {
-                    if ($currentReplacementMasterDevice)
-                    {
-                        $deviceInstanceReplacement                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
-                        $deviceInstanceReplacement->deviceInstanceId       = $deviceInstance->id;
-                        $deviceInstanceReplacement->hardwareOptimizationId = $this->_hardwareOptimization->id;
-                        $deviceInstanceReplacementMapper->delete($deviceInstanceReplacement);
-                        // Make sure the instance doesn't remember the replacement device
-                        $deviceInstance->setReplacementMasterDevice(null);
-                    }
-                }
-            }
-
-            $db->commit();
-        }
-        catch (Exception $e)
-        {
-            $db->rollBack();
-            Tangent_Log::logException($e);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Finds a suitable replacement for a device instance or returns null if no replacement was found
      *
      * @param Proposalgen_Model_DeviceInstance         $deviceInstance
@@ -331,7 +180,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         foreach ($replacementDevices as $deviceSwap)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $deviceSwap->getMasterDevice());
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId));
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
@@ -356,6 +205,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $optimization                    = $this->getOptimizationViewModel();
         $savingsThreshold                = $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
         try
         {
@@ -451,9 +303,70 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         return true;
     }
 
+    /**
+     * Returns Json based on id that has been passed via query string
+     */
+    public function getDeviceByDeviceInstanceIdAction ()
+    {
+        $optimization       = $this->getOptimizationViewModel();
+        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
+        $instanceId                                             = $this->_getParam('deviceInstanceId');
+        $deviceInstance                                         = null;
+        $deviceInstance                                         = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
+        $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
+
+        $replacementDevice    = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
+        $hasReplacementDevice = ($replacementDevice instanceof Proposalgen_Model_MasterDevice);
+
+        $device = array(
+            "deviceInstance" => array(
+                "deviceName"            => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
+                "ipAddress"             => $deviceInstance->ipAddress,
+                "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
+                "serialNumber"          => $deviceInstance->serialNumber,
+                "lifePageCount"         => number_format($deviceInstance->getLifePageCount()),
+                "monoAmpv"              => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
+                "colorAmpv"             => number_format($deviceInstance->getPageCounts()->color->getMonthly()),
+                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array("precision" => 4)),
+                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array("precision" => 4)),
+                "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
+                "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
+                "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
+                "isScan"                => (int)$deviceInstance->getMasterDevice()->isScanner,
+                "ppmBlack"              => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
+                "ppmColor"              => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
+            ),
+            "hasReplacement" => (int)$hasReplacementDevice
+        );
+
+
+        if ($hasReplacementDevice)
+        {
+            $device ["replacementDevice"] = array(
+                "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
+                "isColor"               => (int)$replacementDevice->isColor(),
+                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->monochromeCostPerPage, array("precision" => 4)),
+                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
+                "isCopy"                => (int)$replacementDevice->isCopier,
+                "isFax"                 => (int)$replacementDevice->isFax,
+                "isScan"                => (int)$replacementDevice->isScanner,
+                "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
+                "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
+                "reason"                => $deviceInstance->getReason()
+            );
+        }
+
+        $this->sendJson($device);
+    }
+
     public function updateReplacementDeviceAction ()
     {
         $deviceInstanceReplacementMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+        // Setup the master device labor and parts cost per page
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
 
@@ -500,13 +413,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             }
         }
 
-        // Setup the master device labor and parts cost per page
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
         $optimization = $this->getOptimizationViewModel();
         $costDelta    = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                        $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDeviceId));
+                        $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId));
 
 
         // Add calculated amounts to json
@@ -533,9 +443,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function deviceListAction ()
     {
-        $jqGridService              =  new Tangent_Service_JQGrid();
-        $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
-
+        $jqGridService                                          = new Tangent_Service_JQGrid();
+        $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
         /*
          * Grab the incoming parameters
          */
