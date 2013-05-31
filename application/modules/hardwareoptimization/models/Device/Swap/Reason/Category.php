@@ -4,6 +4,13 @@
  */
 class Hardwareoptimization_Model_Device_Swap_Reason_Category extends My_Model_Abstract
 {
+    const FLAGGED         = 1;
+    const HAS_REPLACEMENT = 2;
+
+    static $categoryNames = array(
+        self::HAS_REPLACEMENT => "Has replacement device",
+        self::FLAGGED         => "Flagged devices",
+    );
     /**
      * @var int
      */

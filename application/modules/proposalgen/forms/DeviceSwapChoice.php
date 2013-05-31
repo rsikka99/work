@@ -1,8 +1,6 @@
 <?php
 /**
- *
- * @author swilder
- *
+ * Class Proposalgen_Form_DeviceSwapChoice
  */
 class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 {
@@ -10,7 +8,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     const DEVICE_TYPE_MONO_MFP  = 1;
     const DEVICE_TYPE_COLOR     = 2;
     const DEVICE_TYPE_COLOR_MFP = 3;
-
 
     /**
      * @var Proposalgen_Model_DeviceInstance[]
@@ -50,7 +47,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $colorMfpReplacementDevices;
-
 
     /**
      * @param null $devices
@@ -119,27 +115,29 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
             $this->addElement($deviceElement);
 
-            $elementType         = 'deviceInstanceReason_';
+            $elementType = 'deviceInstanceReason_';
 
-            $demoData   = array();
-            $demoData[] = "Device has low page volume.";
-            $demoData[] = "Device doesn't qualify for supply fulfilment.";
-            $demoData[] = "Device print volume exceeds recommended volume.";
-            $demoData[] = "Device has a high cost per page.";
-
-            if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE || $deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+            if ($deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
             {
                 $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
                                                                                                                'label'   => ': ',
                                                                                                                'attribs' => array(
                                                                                                                    'style' => 'width: 100%'
                                                                                                                ),
-                                                                                                               //                                                                                                               'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
                                                                                                           ));
-
                 $this->addElement($deviceReasonElement);
-                $deviceReasonElement->setMultiOptions($demoData);
-
+                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT));
+            }
+            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            {
+                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                               'label'   => ': ',
+                                                                                                               'attribs' => array(
+                                                                                                                   'style' => 'width: 100%'
+                                                                                                               ),
+                                                                                                          ));
+                $this->addElement($deviceReasonElement);
+                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED));
             }
 
             /*
@@ -264,5 +262,32 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
 
         return $this->colorMfpReplacementDevices;
+    }
+
+    /**
+     * Gets all reasons by the dealer id on the form
+     *
+     * @param $categoryId
+     *
+     * @return array
+     */
+    public function getDeviceSwapsByCategory ($categoryId)
+    {
+        $reasonArray = array();
+        // Get the default reason
+        $defaultReason                                    = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($categoryId, $this->_dealerId);
+        $reasonArray [$defaultReason->deviceSwapReasonId] = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($defaultReason->deviceSwapReasonId)->reason;
+
+        foreach (Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllByCategoryId($categoryId, $this->_dealerId) as $reason)
+        {
+            // Add the element to the array as long as it's not the default since that is already added
+            if ($reason->id !== $defaultReason->deviceSwapReasonId)
+            {
+
+                $reasonArray[$reason->id] = $reason->reason;
+            }
+        }
+
+        return $reasonArray;
     }
 }

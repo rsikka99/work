@@ -242,4 +242,15 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default extends My_Mo
     {
         return $this->fetch(array("{$this->col_deviceSwapReasonId} = ?" => $reasonId));
     }
+
+    /**
+     * @param $categoryId
+     * @param $dealerId
+     *
+     * @return \Hardwareoptimization_Model_Device_Swap_Reason_Default
+     */
+    public function findDefaultByDealerId ($categoryId, $dealerId)
+    {
+        return $this->fetch(array("{$this->col_deviceSwapReasonCategoryId} = ?" => $categoryId, "{$this->col_dealerId} = ?" => $dealerId));
+    }
 }
