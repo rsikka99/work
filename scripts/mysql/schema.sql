@@ -1874,6 +1874,34 @@ CREATE  TABLE IF NOT EXISTS `device_swap_reason_defaults` (
         ON UPDATE NO ACTION);
 
 
+-- -----------------------------------------------------
+-- Table `device_instance_device_swap_reasons`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `device_instance_device_swap_reasons` (
+    `hardwareOptimizationId` INT(11) NOT NULL ,
+    `deviceInstanceId` INT(11) NOT NULL ,
+    `deviceSwapReasonId` INT(11) NOT NULL ,
+    PRIMARY KEY (`hardwareOptimizationId`, `deviceInstanceId`) ,
+    INDEX `device_instance_device_swap_reasons_ibkf1_idx` (`hardwareOptimizationId` ASC) ,
+    INDEX `device_instance_device_swap_reasons_ibkf2_idx` (`deviceInstanceId` ASC) ,
+    INDEX `device_instance_device_swap_reasons_ibkf3_idx` (`deviceSwapReasonId` ASC) ,
+    CONSTRAINT `device_instance_device_swap_reasons_ibkf1`
+    FOREIGN KEY (`hardwareOptimizationId` )
+    REFERENCES `hardware_optimizations` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `device_instance_device_swap_reasons_ibkf2`
+    FOREIGN KEY (`deviceInstanceId` )
+    REFERENCES `device_instances` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+    CONSTRAINT `device_instance_device_swap_reasons_ibkf3`
+    FOREIGN KEY (`deviceSwapReasonId` )
+    REFERENCES `device_swap_reasons` (`id` )
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION);
+
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
