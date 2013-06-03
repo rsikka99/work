@@ -295,6 +295,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
             $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_hardwareOptimization->id);
+            if (!$this->_saveDeviceSwapReason(true))
+            {
+                return false;
+            }
         }
         catch (Exception $e)
         {
@@ -447,7 +451,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $jqGridService              =  new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+        $this->_saveDeviceSwapReason();
+
         /*
          * Grab the incoming parameters
          */
@@ -515,6 +520,67 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         // Send back jqGrid json data
         $this->sendJson($jqGridService->createPagerResponseArray());
+    }
+
+    /**
+     * Processes device swaps reason saves.
+     *
+     * @param bool $deleteSwapReasons If this is set, it will reset all the device swap reason for this hardware optimization
+     *
+     * @throws Exception
+     * @return bool
+     */
+    protected function _saveDeviceSwapReason ($deleteSwapReasons = false)
+    {
+        $success                              = true;
+        $deviceInstanceDeviceSwapReasonMapper = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
+        $deviceInstances                      = $this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances();
+        try
+        {
+            if ($deleteSwapReasons)
+            {
+                // Delete all the device instances device swap reasons for this hardware optimization id
+                $deviceInstanceDeviceSwapReasonMapper->deleteAllByHardwareOptimizationId($this->_hardwareOptimization->id);
+            }
+
+            foreach ($deviceInstances as $deviceInstance)
+            {
+                $defaultCategoryId = 0;
+                // Does this device instance qualify as a device swap reason ?
+                if ($deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization) instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $defaultCategoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
+                }
+                else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+                {
+                    $defaultCategoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
+                }
+
+                $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($defaultCategoryId, $this->_identity->dealerId);
+                // If we have found the default reason process save / insert
+                if ($defaultReason instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
+                {
+                    $deviceInstanceDeviceSwapReason                         = new Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason();
+                    $deviceInstanceDeviceSwapReason->hardwareOptimizationId = $this->_hardwareOptimization->id;
+                    $deviceInstanceDeviceSwapReason->deviceInstanceId       = $deviceInstance->id;
+                    $deviceInstanceDeviceSwapReason->deviceSwapReasonId     = $defaultReason->deviceSwapReasonId;
+
+                    // If deleteSwapReasons we know that we don't need to worry about finding and device swap reason, insert them all
+                    // Or if we have a result in the database for this device instance we skip it.
+                    if ($deleteSwapReasons || !$deviceInstanceDeviceSwapReasonMapper->find(array($this->_hardwareOptimization->id, $deviceInstance->id)) instanceof Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason)
+                    {
+                        $deviceInstanceDeviceSwapReasonMapper->insert($deviceInstanceDeviceSwapReason);
+                    }
+                }
+            }
+        }
+        catch (Exception $e)
+        {
+            $success = false;
+            throw new Exception("Passing up the chain.", "", $e);
+        }
+
+        return $success;
     }
 
     /**

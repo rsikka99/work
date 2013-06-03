@@ -283,7 +283,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             // Add the element to the array as long as it's not the default since that is already added
             if ($reason->id !== $defaultReason->deviceSwapReasonId)
             {
-
                 $reasonArray[$reason->id] = $reason->reason;
             }
         }

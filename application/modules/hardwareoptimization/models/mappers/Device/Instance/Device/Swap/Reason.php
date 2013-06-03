@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Hardwareoptimization_Device_Instance_Device_Swap_Reason
+ * Class Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason
  */
-class Hardwareoptimization_Device_Instance_Device_Swap_Reason extends My_Model_Mapper_Abstract
+class Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends My_Model_Mapper_Abstract
 {
     /*
      * Column Definitions
@@ -20,9 +20,9 @@ class Hardwareoptimization_Device_Instance_Device_Swap_Reason extends My_Model_M
     protected $_defaultDbTable = 'Hardwareoptimization_Model_DbTable_Device_Instance_Device_Swap_Reason';
 
     /**
-     * Gets an instance of the mapper   
+     * Gets an instance of the mapper
      *
-     * @return Hardwareoptimization_Device_Instance_Device_Swap_Reason
+     * @return Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason
      */
     public static function getInstance ()
     {
@@ -115,10 +115,10 @@ class Hardwareoptimization_Device_Instance_Device_Swap_Reason extends My_Model_M
     }
 
     /**
-     * Finds a Device Instance Device Swap Reasonbased on it's primaryKey
+     * Finds a Device Instance Device Swap Reason based on it's primaryKey
      *
      * @param $id array
-     *            The id of the Device Instance Device Swap Reasonto find
+     *            The id of the Device Instance Device Swap Reason to find
      *
      * @return Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason
      */
@@ -231,5 +231,21 @@ class Hardwareoptimization_Device_Instance_Device_Swap_Reason extends My_Model_M
             $object->hardwareOptimizationId,
             $object->deviceInstanceId
         );
+    }
+
+    /**
+     * Deletes all the device instance device swap reasons by hardware optimization id
+     *
+     * @param $hardwareOptimizationId
+     *
+     * @return int Number of rows deleted
+     */
+    public function deleteAllByHardwareOptimizationId ($hardwareOptimizationId)
+    {
+        $db           = $this->getDbTable()->getDefaultAdapter();
+        $where        = $db->quoteInto("{$this->col_hardwareOptimizationId} = ?", $hardwareOptimizationId);
+        $rowsAffected = $db->delete($this->getTableName(), $where);
+
+        return $rowsAffected;
     }
 }

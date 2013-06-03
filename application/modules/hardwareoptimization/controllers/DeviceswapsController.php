@@ -312,7 +312,6 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
     {
         $reasonId = $this->_getParam('reasonId');
 
-        $success           = true;
         $swapMapper        = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance();
         $swapDefaultMapper = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance();
         $reason            = $swapMapper->find($reasonId);
