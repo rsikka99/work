@@ -52,6 +52,7 @@ $(function ()
         rowNum      : 25,
         rowList     : [25, 50, 100],
         pager       : '#replacementDevicePager',
+        loadui      : "block",
         gridComplete: function ()
         {
             var grid = $(this);
@@ -303,7 +304,6 @@ $(function ()
                 });
             }
         }
-
     });
     jQuery("#replacementDeviceTable").jqGrid('setFrozenColumns');
 
@@ -318,7 +318,8 @@ $(function ()
         {
             var elementId = $(this).attr("id");
 
-            if (elementId.search("Reason") == -1)
+            // See if it's a reason or it's a device element that has been changed
+            if (elementId.search("deviceInstanceReason") == -1)
             {
                 var replacementDeviceId = $(this).val();
                 // Get the jqGrid and the id of the row we changed
@@ -358,6 +359,10 @@ $(function ()
                         $('#marginPercent').html(data.marginPercent);
                     }
                 });
+            }
+            else
+            {
+
             }
         });
 });
