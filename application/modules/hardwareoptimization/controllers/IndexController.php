@@ -123,6 +123,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         $this->saveHardwareOptimization();
                         $this->gotoNextNavigationStep($this->_navigation);
                     }
+                }
                 else if ($form->getValue('Analyze'))
                 {
                     // Analyze the fleet. If it is successful we need to rebuild our form
@@ -162,8 +163,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     }
 
     /**
-
-    
      * Finds a suitable replacement for a device instance or returns null if no replacement was found
      *
      * @param Proposalgen_Model_DeviceInstance         $deviceInstance
@@ -317,9 +316,9 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $optimization       = $this->getOptimizationViewModel();
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
-        $instanceId                                             = $this->_getParam('deviceInstanceId');
-        $deviceInstance                                         = null;
-        $deviceInstance                                         = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
+        $instanceId     = $this->_getParam('deviceInstanceId');
+        $deviceInstance = null;
+        $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($instanceId);
         $deviceInstance->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
 
         $replacementDevice    = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
@@ -449,7 +448,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function deviceListAction ()
     {
-        $jqGridService              =  new Tangent_Service_JQGrid();
+        $jqGridService                                          = new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         $this->_saveDeviceSwapReason();
