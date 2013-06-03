@@ -270,6 +270,10 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
 
+        $hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+
         $deviceInstanceMapper             = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
         $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
         $masterDeviceMapper               = Proposalgen_Model_Mapper_MasterDevice::getInstance();
