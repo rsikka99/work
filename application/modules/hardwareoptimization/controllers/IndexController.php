@@ -163,6 +163,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     /**
 
+    
      * Finds a suitable replacement for a device instance or returns null if no replacement was found
      *
      * @param Proposalgen_Model_DeviceInstance         $deviceInstance
