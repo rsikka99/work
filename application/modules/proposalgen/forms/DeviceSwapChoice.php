@@ -117,6 +117,8 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
             $elementType = 'deviceInstanceReason_';
 
+            $deviceInstanceDeviceSwapReason = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($this->_hardwareOptimizationId, $deviceInstance->id));
+
             if ($deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
             {
                 $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
@@ -124,6 +126,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                                                                                                                'attribs' => array(
                                                                                                                    'style' => 'width: 100%'
                                                                                                                ),
+                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
                                                                                                           ));
                 $this->addElement($deviceReasonElement);
                 $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT));
@@ -135,6 +138,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                                                                                                                'attribs' => array(
                                                                                                                    'style' => 'width: 100%'
                                                                                                                ),
+                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
                                                                                                           ));
                 $this->addElement($deviceReasonElement);
                 $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED));
