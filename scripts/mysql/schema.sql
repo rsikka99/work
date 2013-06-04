@@ -1898,8 +1898,8 @@ CREATE  TABLE IF NOT EXISTS `device_instance_device_swap_reasons` (
     CONSTRAINT `device_instance_device_swap_reasons_ibkf3`
     FOREIGN KEY (`deviceSwapReasonId` )
     REFERENCES `device_swap_reasons` (`id` )
-        ON DELETE NO ACTION
-        ON UPDATE NO ACTION);
+        ON DELETE CASCADE
+        ON UPDATE CASCADE);
 
 
 
