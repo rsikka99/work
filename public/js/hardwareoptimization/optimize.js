@@ -322,6 +322,7 @@ $(function ()
             if (elementId.search("deviceInstanceReason") == -1)
             {
                 var replacementDeviceId = $(this).val();
+
                 // Get the jqGrid and the id of the row we changed
                 var grid = jQuery("#replacementDeviceTable");
                 var rowId = $(this).closest('tr').attr('id');
@@ -363,6 +364,19 @@ $(function ()
             else
             {
 
+                var replacementReasonId = $(this).val();
+                $.ajax({
+                    url       : TMTW_BASEURL + 'hardwareoptimization/index/update-device-swap-reason',
+                    dataType  : 'json',
+                    data      : {
+                        deviceInstanceId   : elementId,
+                        replacementReasonId: replacementReasonId
+                    },
+                    success   : function (data)
+                    {
+                        
+                    }
+                });
             }
         });
 });
