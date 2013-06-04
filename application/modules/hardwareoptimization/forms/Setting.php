@@ -66,7 +66,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
 
         $this->addElement('text', 'pageCoverageMonochrome', array(
                                            'label'      => 'Page Coverage Monochrome',
-                                           'append'     => '%',
+                                                       'append'     => '%',
                                            'validators' => $coverageValidator
                                       ));
 
@@ -78,17 +78,17 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
 
         $this->addElement('text', 'adminCostPerPage', array(
                                                            'label'      => 'Admin Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
         $this->addElement('text', 'partsCostPerPage', array(
                                                            'label'      => 'Parts Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
         $this->addElement('text', 'laborCostPerPage', array(
                                                            'label'      => 'Labor Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
 
