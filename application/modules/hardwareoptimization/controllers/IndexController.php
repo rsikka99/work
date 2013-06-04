@@ -271,6 +271,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
+            if (!$this->_saveDeviceSwapReason(true))
+            {
+                return false;
+            }
             $db->commit();
         }
         catch (Exception $e)
@@ -295,10 +299,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         {
             $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
             $deviceInstanceReplacementMapper->deleteAllDeviceInstanceReplacementsByHardwareOptimizationId($this->_hardwareOptimization->id);
-            if (!$this->_saveDeviceSwapReason(true))
-            {
-                return false;
-            }
         }
         catch (Exception $e)
         {
@@ -358,7 +358,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "isScan"                => (int)$replacementDevice->isScanner,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
                 "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
-                "reason"                => $deviceInstance->getReason()
+                "reason"                => $deviceInstance->getReason($this->_hardwareOptimization->id)
             );
         }
 
@@ -368,6 +368,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     public function updateReplacementDeviceAction ()
     {
         $deviceInstanceReplacementMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+        $deviceInstanceDeviceSwapReasonMapper        = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
 
         // Setup the master device labor and parts cost per page
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
@@ -388,7 +389,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         {
             $this->sendJsonError("You do not have permission to edit this device instance.");
         }
-
 
         $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
         $whereKey            = array($deviceInstanceId, $this->_hardwareOptimization->id);
@@ -418,11 +418,29 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             }
         }
 
-
         $optimization = $this->getOptimizationViewModel();
         $costDelta    = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
                         $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId));
 
+        $form                        = new Proposalgen_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
+        $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
+
+        // Save the device reason into the table
+        $deviceSwapReasonId             = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization), $this->_identity->dealerId)->deviceSwapReasonId;
+        $deviceInstanceDeviceSwapReason = $deviceInstanceDeviceSwapReasonMapper->find(array($this->_hardwareOptimization->id, $deviceInstanceId));
+        if ($deviceInstanceDeviceSwapReason instanceof Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason)
+        {
+            $deviceInstanceDeviceSwapReason->deviceSwapReasonId = $deviceSwapReasonId;
+            $deviceInstanceDeviceSwapReasonMapper->save($deviceInstanceDeviceSwapReason);
+        }
+        else
+        {
+            $deviceInstanceDeviceSwapReason                         = new Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason();
+            $deviceInstanceDeviceSwapReason->deviceInstanceId       = $deviceInstanceId;
+            $deviceInstanceDeviceSwapReason->deviceSwapReasonId     = $deviceSwapReasonId;
+            $deviceInstanceDeviceSwapReason->hardwareOptimizationId = $this->_hardwareOptimization->id;
+            $deviceInstanceDeviceSwapReasonMapper->insert($deviceInstanceDeviceSwapReason);
+        }
 
         // Add calculated amounts to json
         // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
@@ -430,7 +448,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                              "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
                              "colorCpp"      => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
                              "totalCost"     => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
-                             "replaceReason" => $deviceInstance->getReason(),
+                             "replaceReason" => $deviceInstanceReasonElement->renderViewHelper(),
                              "marginDollar"  => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
                              "costDelta"     => $this->view->currency($costDelta),
                              "rawCostDelta"  => (float)$costDelta,
@@ -450,7 +468,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         $jqGridService                                          = new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         $this->_saveDeviceSwapReason();
 
         /*
@@ -545,18 +562,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
             foreach ($deviceInstances as $deviceInstance)
             {
-                $defaultCategoryId = 0;
-                // Does this device instance qualify as a device swap reason ?
-                if ($deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization) instanceof Proposalgen_Model_MasterDevice)
-                {
-                    $defaultCategoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
-                }
-                else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
-                {
-                    $defaultCategoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
-                }
-
-                $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($defaultCategoryId, $this->_identity->dealerId);
+                $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization->id), $this->_identity->dealerId);
                 // If we have found the default reason process save / insert
                 if ($defaultReason instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
                 {
@@ -576,11 +582,52 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
         catch (Exception $e)
         {
-            $success = false;
             throw new Exception("Passing up the chain.", "", $e);
         }
 
         return $success;
+    }
+
+    public function updateDeviceSwapReasonAction ()
+    {
+        $deviceInstanceDeviceSwapReasonMapper = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
+        $deviceInstanceDeviceSwapReason       = null;
+        $deviceInstanceId                     = $this->_getParam("deviceInstanceId", false);
+
+        if ($deviceInstanceId === false)
+        {
+            $this->sendJsonError("Invalid data passed.");
+        }
+
+        try
+        {
+            $deviceInstanceId = (int)str_replace("deviceInstanceReason_", "", $deviceInstanceId);
+            $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+
+            // Check if device belongs to rms
+            if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
+            {
+                $this->sendJsonError("You do not have permission to edit this device instance.");
+            }
+
+            $deviceInstanceDeviceSwapReason = $deviceInstanceDeviceSwapReasonMapper->find(array($this->_hardwareOptimization->id, $deviceInstance->id));
+
+            if ($deviceInstanceDeviceSwapReason instanceof Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason)
+            {
+                $deviceInstanceDeviceSwapReason->deviceSwapReasonId = $this->_getParam("replacementReasonId");
+                $deviceInstanceDeviceSwapReasonMapper->save($deviceInstanceDeviceSwapReason);
+            }
+            else
+            {
+                $this->sendJsonError("Error finding device reason. Please try again.");
+            }
+        }
+        catch (Exception $e)
+        {
+            $this->sendJsonError("Error saving device reason. Please try again.");
+        }
+
+        $this->sendJson($deviceInstanceDeviceSwapReason);
     }
 
     /**
