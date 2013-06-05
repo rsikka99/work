@@ -186,25 +186,26 @@ class Admin_DealerController extends Tangent_Controller_Action
                         // Save the dealer with the id to the database
                         $dealerId = Admin_Model_Mapper_Dealer::getInstance()->insert($dealer);
 
+                        $newDeviceSwapReasonArray = array();
                         // Copy the systems default reason for the dealers system default reason
                         foreach (Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId(1) as $deviceSwapReason)
                         {
                             $newDeviceSwapReason           = new Hardwareoptimization_Model_Device_Swap_Reason($deviceSwapReason->toArray());
                             $newDeviceSwapReason->dealerId = $dealerId;
                             // Insert thew row into the database
-                            Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->insert($newDeviceSwapReason);
-                        }
+                            $newDeviceSwapReason->id = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->insert($newDeviceSwapReason);
 
-                        foreach (Hardwareoptimization_Model_Device_Swap_Reason_Category::$categoryNames as $key => $category)
-                        {
-                            $defaultReason                                = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($key, 1);
+                            $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($newDeviceSwapReason->deviceSwapReasonCategoryId, 1);
 
-                            $newDefaultReason                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
-                            $newDefaultReason->dealerId                   = $dealerId;
-                            $newDefaultReason->deviceSwapReasonId         = $defaultReason->deviceSwapReasonId;
-                            $newDefaultReason->deviceSwapReasonCategoryId = $defaultReason->deviceSwapReasonCategoryId;
-                            // Insert thew row into the database
-                            Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($newDefaultReason);
+                            if ($defaultReason instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default && $deviceSwapReason->id === $defaultReason->deviceSwapReasonId)
+                            {
+                                $newDefaultReason                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
+                                $newDefaultReason->dealerId                   = $dealerId;
+                                $newDefaultReason->deviceSwapReasonId         = $newDeviceSwapReason->id;
+                                $newDefaultReason->deviceSwapReasonCategoryId = $newDeviceSwapReason->deviceSwapReasonCategoryId;
+
+                                Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($newDefaultReason);
+                            }
                         }
 
                         $db->commit();
