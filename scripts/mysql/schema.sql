@@ -1350,6 +1350,8 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `adminCostPerPage` DOUBLE NULL ,
     `laborCostPerPage` DOUBLE NULL ,
     `partsCostPerPage` DOUBLE NULL ,
+    `pageCoverageMonochrome` DOUBLE NULL ,
+    `pageCoverageColor` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
     INDEX `hardware_optimization_settings_ibfk_1_idx` (`customerPricingConfigId` ASC) ,
     INDEX `hardware_optimization_settings_ibfk_2_idx` (`dealerPricingConfigId` ASC) ,
