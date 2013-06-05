@@ -86,23 +86,25 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
+
         $this->addElement('text', 'adminCostPerPage', array(
                                                            'label'      => 'Admin Cost Per Page',
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
 
-
         $this->addElement('text', 'targetMonochromeCostPerPage', array(
                                                                       'label'      => 'Target Monochrome Cost Per Page',
                                                                       'append'     => '$ / page',
                                                                       'validators' => $cppValidator
                                                                  ));
+
         $this->addElement('text', 'targetColorCostPerPage', array(
                                                                  'label'      => 'Target Color Cost Per Page',
                                                                  'append'     => '$ / page',
                                                                  'validators' => $cppValidator
                                                             ));
+
         $replacementPricingConfig = $this->createElement('select', 'replacementPricingConfigId', array(
                                                                                                       'label' => 'Replacement Toner Preference',
                                                                                                       'class' => 'span3 '
@@ -111,11 +113,6 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                                                  'label' => 'Dealer Toner Preference',
                                                                                                  'class' => 'span3 '
                                                                                             ));
-        $customerPricingConfigId  = $this->createElement('select', 'customerPricingConfigId', array(
-                                                                                                   'label' => 'Customer Toner Preference',
-                                                                                                   'class' => 'span3 '
-                                                                                              ));
-
 
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
@@ -130,7 +127,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         }
 
 
-        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'laborCostPerPage', 'partsCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfigId, $customerPricingConfigId), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'laborCostPerPage', 'partsCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfigId), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
                                          'FieldSize',
@@ -203,13 +200,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         $pricingConfigOptions = array();
 
         $replacementPricingConfig = $this->getElement('replacementPricingConfigId');
-        $customerPricingConfigId  = $this->getElement('dealerPricingConfigId');
-        $dealerPricingConfigId    = $this->getElement('customerPricingConfigId');
+        $dealerPricingConfigId    = $this->getElement('dealerPricingConfigId');
 
         if ($allowDefault)
         {
             $replacementPricingConfig->setMultioptions(array());
-            $customerPricingConfigId->setMultioptions(array());
             $dealerPricingConfigId->setMultioptions(array());
         }
 
@@ -224,14 +219,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                 if ($pricingConfig->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
                 {
                     $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
-
                 }
             }
         }
 
         $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
-        $customerPricingConfigId->addMultiOptions($pricingConfigOptions);
         $dealerPricingConfigId->addMultiOptions($pricingConfigOptions);
     }
-
 }

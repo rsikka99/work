@@ -59,7 +59,6 @@ class Hardwareoptimization_Service_Setting
                 $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $populateSettings["targetColorCostPerPage"] . " / page");
                 $this->_form->getElement("replacementPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['replacementPricingConfigId']]);
                 $this->_form->getElement("dealerPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['dealerPricingConfigId']]);
-                $this->_form->getElement("customerPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['customerPricingConfigId']]);
 
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;

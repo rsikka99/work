@@ -1342,7 +1342,6 @@ CREATE  TABLE IF NOT EXISTS `rms_excluded_rows` (
 CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `id` INT NOT NULL AUTO_INCREMENT ,
     `costThreshold` DOUBLE NULL ,
-    `customerPricingConfigId` INT NULL ,
     `dealerPricingConfigId` INT NULL ,
     `targetColorCostPerPage` DOUBLE NULL ,
     `targetMonochromeCostPerPage` DOUBLE NULL ,
@@ -1353,14 +1352,8 @@ CREATE  TABLE IF NOT EXISTS `hardware_optimization_settings` (
     `pageCoverageMonochrome` DOUBLE NULL ,
     `pageCoverageColor` DOUBLE NULL ,
     PRIMARY KEY (`id`) ,
-    INDEX `hardware_optimization_settings_ibfk_1_idx` (`customerPricingConfigId` ASC) ,
     INDEX `hardware_optimization_settings_ibfk_2_idx` (`dealerPricingConfigId` ASC) ,
     INDEX `hardware_optimization_settings_ibfk_3_idx` (`replacementPricingConfigId` ASC) ,
-    CONSTRAINT `hardware_optimization_settings_ibfk_1`
-    FOREIGN KEY (`customerPricingConfigId` )
-    REFERENCES `pricing_configs` (`id` )
-        ON DELETE SET NULL
-        ON UPDATE CASCADE,
     CONSTRAINT `hardware_optimization_settings_ibfk_2`
     FOREIGN KEY (`dealerPricingConfigId` )
     REFERENCES `pricing_configs` (`id` )
