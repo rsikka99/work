@@ -22,11 +22,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
     /**
      * @var int
      */
-    public $dealerMargin;
-
-    /**
-     * @var int
-     */
     public $dealerPricingConfigId;
 
     /**
@@ -85,11 +80,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             $this->customerPricingConfigId = $params->customerPricingConfigId;
         }
 
-        if (isset($params->dealerMargin) && !is_null($params->dealerMargin))
-        {
-            $this->dealerMargin = $params->dealerMargin;
-        }
-
         if (isset($params->dealerPricingConfigId) && !is_null($params->dealerPricingConfigId))
         {
             $this->dealerPricingConfigId = $params->dealerPricingConfigId;
@@ -136,7 +126,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "id"                          => $this->id,
             "costThreshold"               => $this->costThreshold,
             "customerPricingConfigId"     => $this->customerPricingConfigId,
-            "dealerMargin"                => $this->dealerMargin,
             "dealerPricingConfigId"       => $this->dealerPricingConfigId,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
