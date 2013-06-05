@@ -246,16 +246,6 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
         $this->addElement($element);
         $proposalGroup->elements [] = $element;
-        // Toner preference for the healthcheck
-        $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
-        $pricing_config->setLabel('Toner Preference')
-            ->setAttrib('class', 'span2')
-            ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()
-                ->configName)
-            ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
-
-        $this->addElement($pricing_config);
-        $dealerGroup->elements [] = $pricing_config;
 
         // Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('pageCoverageMonochrome');
@@ -413,11 +403,12 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
             ->setAttrib('class', 'input-mini')
             ->setAttrib('maxlength', 10)
             ->setAttrib('style', 'text-align: right')
+            ->setAttrib('prepend', '$')
             ->setDescription('$')
             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->costToExecuteSuppliesOrder, 2))
             ->setAttrib('inputprepend', '$')
             ->setAttrib('inputappend', ' / order')
-            ->addValidator('greaterThan', true, array(
+            ->addValidator('g   reaterThan', true, array(
                                                      'min' => 0
                                                 ));
         $costToExecuteSuppliesOrder->getValidator('Float')->setMessage('Please enter a number.');
@@ -439,6 +430,17 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
                                                      'min' => 0
                                                 ));
         $numberOfSupplyOrdersPerMonth->getValidator('Float')->setMessage('Please enter a number.');
+
+        // Toner preference for the healthcheck
+        $pricing_config = new Zend_Form_Element_Select('healthcheckPricingConfigId');
+        $pricing_config->setLabel('Toner Preference')
+        ->setAttrib('class', 'span2')
+        ->setAttrib('data-defaultvalue', $this->_defaultSettings->getHealthcheckPricingConfig()
+                ->configName)
+        ->setMultiOptions(Proposalgen_Model_PricingConfig::$ConfigNames);
+
+        $this->addElement($pricing_config);
+        $dealerGroup->elements [] = $pricing_config;
 
         $this->addElement($numberOfSupplyOrdersPerMonth);
         $proposalGroup->elements [] = $numberOfSupplyOrdersPerMonth;

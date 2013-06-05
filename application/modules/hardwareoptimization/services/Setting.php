@@ -52,12 +52,11 @@ class Hardwareoptimization_Service_Setting
             {
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"] . "%");
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"] . "%");
-                $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
-                $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-                $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
-                $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
-                $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
+                $this->_form->getElement("partsCostPerPage")->setDescription("$" . $populateSettings["partsCostPerPage"] . " / page");
+                $this->_form->getElement("adminCostPerPage")->setDescription("$" . $populateSettings["adminCostPerPage"] . " / page");
+                $this->_form->getElement("costThreshold")->setDescription("$" . $populateSettings["costThreshold"]);
+                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $populateSettings["targetMonochromeCostPerPage"] . " / page");
+                $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $populateSettings["targetColorCostPerPage"] . " / page");
                 $this->_form->getElement("replacementPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['replacementPricingConfigId']]);
                 $this->_form->getElement("dealerPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['dealerPricingConfigId']]);
                 $this->_form->getElement("customerPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['customerPricingConfigId']]);
