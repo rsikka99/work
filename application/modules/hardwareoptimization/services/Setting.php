@@ -50,6 +50,8 @@ class Hardwareoptimization_Service_Setting
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
             {
+                $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"] . "%");
+                $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"] . "%");
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);

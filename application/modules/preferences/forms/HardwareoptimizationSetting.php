@@ -45,6 +45,17 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
             'Float'
         );
 
+        $coverageValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min' => 0,
+                    'max' => 100
+                )
+            ),
+            'Float'
+        );
+
 
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
@@ -52,6 +63,17 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                         'append'     => '$',
                                                         'validators' => $costValidator
                                                    ));
+
+        $this->addElement('text', 'pageCoverageMonochrome', array(
+                                                                 'label'      => 'Page Coverage Monochrome',
+                                                                 'append'     => '%',
+                                                                 'validators' => $coverageValidator,
+                                                            ));
+        $this->addElement('text', 'pageCoverageColor', array(
+                                                            'label'      => 'Page Coverage Color',
+                                                            'append'     => '%',
+                                                            'validators' => $coverageValidator,
+                                                       ));
 
         $this->addElement('text', 'partsCostPerPage', array(
                                                            'label'      => 'Parts Cost Per Page',
@@ -108,7 +130,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         }
 
 
-        $this->addDisplayGroup(array('costThreshold', 'laborCostPerPage', 'partsCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfigId, $customerPricingConfigId), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'laborCostPerPage', 'partsCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfigId, $customerPricingConfigId), 'hardwareOptimization', array('legend' => 'Hardware Profitability Settings'));
 
         $this->setElementDecorators(array(
                                          'FieldSize',

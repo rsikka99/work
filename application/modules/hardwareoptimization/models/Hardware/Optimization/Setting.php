@@ -54,6 +54,16 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
      */
     public $partsCostPerPage;
 
+    /**
+     * @var float
+     */
+    public $pageCoverageMonochrome;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageColor;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -115,6 +125,15 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             $this->partsCostPerPage = $params->partsCostPerPage;
         }
 
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
     }
 
     /**
@@ -133,6 +152,8 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "adminCostPerPage"            => $this->adminCostPerPage,
             "laborCostPerPage"            => $this->laborCostPerPage,
             "partsCostPerPage"            => $this->partsCostPerPage,
+            "pageCoverageMonochrome"      => $this->pageCoverageMonochrome,
+            "pageCoverageColor"           => $this->pageCoverageColor,
         );
     }
 
