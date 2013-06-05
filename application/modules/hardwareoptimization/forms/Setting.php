@@ -53,11 +53,6 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                                         'validators' => $costValidator
                                                    ));
 
-        $this->addElement('text', 'dealerMargin', array(
-                                                       'label'      => 'Dealer Margin',
-                                                       'append'     => '$',
-                                                       'validators' => $marginValidator
-                                                  ));
         $this->addElement('text', 'adminCostPerPage', array(
                                                            'label'      => 'Admin Cost Per Page',
                                                            'append'     => '$',
@@ -112,7 +107,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
 
 
-        $this->addDisplayGroup(array('costThreshold', 'dealerMargin', "partsCostPerPage", "laborCostPerPage", "adminCostPerPage", 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
+        $this->addDisplayGroup(array('costThreshold', "partsCostPerPage", "laborCostPerPage", "adminCostPerPage", 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
 
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(
