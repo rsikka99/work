@@ -69,7 +69,7 @@ INSERT INTO `log_types` (`id`, `name`) VALUES
 
 INSERT INTO `manufacturers` (`id`, `fullname`, `displayname`, `isDeleted`) VALUES
 (1, 'Brother', 'Brother', 0),
-    -- Clover renamed to compatible vendor
+-- Clover renamed to compatible vendor
 (3, 'Compatible Vendor 1', 'Comp. Vendor 1', 0),
 (4, 'Dell', 'Dell', 0),
 (5, 'Hewlett-Packard', 'HP', 0),
@@ -175,3 +175,19 @@ INSERT INTO `regions` (`countryId`, `region`) VALUES
 (2, 'WI'),
 (2, 'WV'),
 (2, 'WY');
+
+INSERT INTO `device_swap_reason_categories` (`id`, `name`) VALUES
+(1, 'Flagged Devices'),
+(2, 'Device Has Replacement Device');
+
+INSERT INTO `device_swap_reasons` (`id`, `dealerId`, `deviceSwapReasonCategoryId`, `reason`) VALUES
+(1, 1, 1, 'Device not consistent with MPS program.  AMPV is significant.'),
+(2, 1, 2, 'Device has a high cost per page.'),
+(3, 2, 1, 'Device not consistent with MPS program.  AMPV is significant.'),
+(4, 2, 2, 'Device has a high cost per page.');
+
+INSERT INTO device_swap_reason_defaults (`deviceSwapReasonCategoryId`, `dealerId`, `deviceSwapReasonId`) VALUES
+(1, 1, 1),
+(2, 1, 2),
+(1, 2, 3),
+(2, 2, 4);

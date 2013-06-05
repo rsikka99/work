@@ -35,7 +35,7 @@ $formActions [] = $form->getElement('Analyze');
 
     </div>
 
-    <table id='replacementDeviceTable' style="width: 100%" class="scroll"> </table>
+    <table id='replacementDeviceTable' style="width: 100%" class="scroll"></table>
     <div id="replacementDevicePager"></div>
 
 </form>
@@ -51,7 +51,7 @@ var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
 var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/optimization/deviceListing.js')); ?>
+<?php $this->headScript()->appendFile($this->baseUrl('/js/hardwareoptimization/optimize.js')); ?>
 <div id="deviceInstanceInformationModal">
     <table id="replacementInformationModalTable" style="width: 300px; float: right; border:1px solid black;">
     </table>

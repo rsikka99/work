@@ -65,7 +65,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[4]
-            $this->_graphs [] = $barGraph->getUrl();
+            $this-> _graphs [] = $barGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
@@ -163,7 +163,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $graph->setLegendPosition("t");
             $graph->setLegend(array(
                                    "Keep",
-                                   "Replace",
+                                   "Replaced",
                                    "Flagged",
                                    "Retire",
                               ));

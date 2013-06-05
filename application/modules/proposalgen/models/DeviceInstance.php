@@ -8,7 +8,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * Constants for replacement actions for the solution
      */
     const ACTION_KEEP    = 'Keep';
-    const ACTION_REPLACE = 'Replace';
+    const ACTION_REPLACE = 'Flagged';
     const ACTION_RETIRE  = 'Retire';
 
     /**
@@ -122,6 +122,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var bool
      */
     public $isManaged;
+
+    /**
+     * @var int
+     */
+    public $deviceSwapReasonId;
 
     /*
      * ********************************************************************************
@@ -438,6 +443,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->rmsDeviceId = $params->rmsDeviceId;
         }
+        if (isset($params->deviceSwapReasonId) && !is_null($params->deviceSwapReasonId))
+        {
+            $this->deviceSwapReasonId = $params->deviceSwapReasonId;
+        }
     }
 
     /**
@@ -459,8 +468,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "pageCoverageCyan"       => $this->pageCoverageCyan,
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
             "pageCoverageYellow"     => $this->pageCoverageYellow,
-            "isManaged"          => $this->isManaged,
-            "rmsDeviceId"        => $this->rmsDeviceId,
+            "isManaged"              => $this->isManaged,
+            "rmsDeviceId"            => $this->rmsDeviceId,
+            "deviceSwapReasonId"     => $this->deviceSwapReasonId,
         );
     }
 
@@ -1214,7 +1224,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_replacementMasterDevice))
         {
             $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find(array($this->id, $hardwareOptimizationId));
-            $hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+            $hardwareOptimization                  = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
             if ($deviceInstanceReplacementMasterDevice)
             {
                 $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($hardwareOptimization->dealerId);
@@ -1286,86 +1296,69 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Getter for $_reason
      *
-     * @return string
-     */
-    public function getReason ()
-    {
-        if (!isset($this->_reason))
-        {
-            $this->_reason = "Okay.";
-
-            if ($this->getReplacementMasterDevice())
-            {
-                $this->_reason = "Current CPP greater than target CPP.";
-            }
-            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
-            {
-                $this->_reason = "Device not consistent with MPS program.  AMPV is significant.";
-            }
-            if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
-            {
-                $this->_reason = "Device no longer reliable, AMPV not significant.";
-            }
-        }
-
-        return $this->_reason;
-    }
-
-    /**
-     * Gets the reason for the customer replacement
+     * @param $hardwareoptimizationId
      *
      * @return string
      */
-    public function getCustomerReason ()
+    public function getReason ($hardwareoptimizationId)
     {
-        if (!isset($this->_customerReason))
+        if (!isset($this->_reason))
         {
-            $replacementDevice          = $this->getReplacementMasterDevice();
-            $deviceInstanceMasterDevice = $this->getMasterDevice();
-            // $newFeatures is used to store all of the new features of the new device
-            $newFeatures = array();
-
-            $this->_customerReason = "";
-
-            if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_MasterDevice)
-            {
-                if (!$deviceInstanceMasterDevice->reportsTonerLevels && $replacementDevice->reportsTonerLevels)
-                {
-                    $newFeatures [] = "JIT compatibility";
-                }
-                if (!$deviceInstanceMasterDevice->isCopier && $replacementDevice->isCopier || !$deviceInstanceMasterDevice->isScanner && $replacementDevice->isScanner)
-                {
-                    $newFeatures [] = "copying / scanning";
-                }
-                if (!$deviceInstanceMasterDevice->isDuplex && $replacementDevice->isDuplex)
-                {
-                    $newFeatures [] = "duplex capabilities";
-                }
-                if (!$deviceInstanceMasterDevice->isColor() && $replacementDevice->isColor())
-                {
-                    $newFeatures [] = "color compatibility";
-                }
-
-                if (empty($newFeatures))
-                {
-                    $this->_customerReason = "Device has a high cost per page.";
-                }
-                else
-                {
-                    $this->_customerReason = "Replacement device adds " . implode(", ", $newFeatures) . ". ";
-
-                    $deviceAgeDifference = $deviceInstanceMasterDevice->getAge() - $replacementDevice->getAge();
-                    if ($deviceAgeDifference > 5)
-                    {
-                        $this->_customerReason .= "Device was at least 5+ years old.  Replaced with a newer device to lessen breakdowns.";
-                    }
-
-                }
-            }
+            $deviceSwapReasonId = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($hardwareoptimizationId, $this->id))->deviceSwapReasonId;
+            $this->_reason      = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($deviceSwapReasonId);
         }
 
+        return $this->_reason->reason;
+    }
 
-        return $this->_customerReason;
+    /**
+     * Gets this device instance's page counts
+     *
+     * @return Proposalgen_Model_PageCounts
+     */
+    public function getPageCounts ()
+    {
+        if (!isset($this->_pageCounts))
+        {
+            $pageCounts = new Proposalgen_Model_PageCounts();
+            $meters     = $this->getMeters();
+
+            // Black page counts
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
+            {
+                $pageCounts->monochrome->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->calculateAverageDailyPageVolume());
+            }
+
+            // Color page counts
+            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
+            {
+                $pageCounts->color->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->calculateAverageDailyPageVolume());
+            }
+
+            $this->_pageCounts = $pageCounts;
+        }
+
+        return $this->_pageCounts;
+    }
+
+    /**
+     * @param $hardwareOptimizationId
+     *
+     * @return int
+     */
+    public function getDefaultDeviceSwapReasonCategoryId ($hardwareOptimizationId)
+    {
+        $categoryId = 0;
+        if ($this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId))
+        {
+            $categoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
+        }
+        else if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+        {
+            $categoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
+        }
+
+        return $categoryId;
     }
 
     /*****************************************************
@@ -1542,35 +1535,5 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $hardwareOptimizationId)
     {
         return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
-    }
-
-    /**
-     * Gets this device instance's page counts
-     *
-     * @return Proposalgen_Model_PageCounts
-     */
-    public function getPageCounts ()
-    {
-        if (!isset($this->_pageCounts))
-        {
-            $pageCounts = new Proposalgen_Model_PageCounts();
-            $meters     = $this->getMeters();
-
-            // Black page counts
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
-            {
-                $pageCounts->monochrome->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->calculateAverageDailyPageVolume());
-            }
-
-            // Color page counts
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
-            {
-                $pageCounts->color->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->calculateAverageDailyPageVolume());
-            }
-
-            $this->_pageCounts = $pageCounts;
-        }
-
-        return $this->_pageCounts;
     }
 }
