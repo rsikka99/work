@@ -111,11 +111,6 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                                                                                  'label' => 'Dealer Toner Preference',
                                                                                                  'class' => 'span3 '
                                                                                             ));
-        $customerPricingConfig    = $this->createElement('select', 'customerPricingConfigId', array(
-                                                                                                   'label' => 'Customer Toner Preference',
-                                                                                                   'class' => 'span3 '
-                                                                                              ));
-
 
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
@@ -130,7 +125,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
 
 
-        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig), 'hardwareOptimization');
 
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(
@@ -164,7 +159,6 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
         $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
         $dealerPricingConfig->addMultiOptions($pricingConfigOptions);
-        $customerPricingConfig->addMultiOptions($pricingConfigOptions);
 
         Hardwareoptimization_Form_Hardware_Optimization_Navigation::addFormActionsToForm(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_ALL, $this);
     }
