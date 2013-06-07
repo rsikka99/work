@@ -181,7 +181,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         foreach ($replacementDevices as $deviceSwap)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId));
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId, $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage,$this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage));
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
