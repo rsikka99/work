@@ -175,6 +175,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     protected function _findReplacement (Proposalgen_Model_DeviceInstance $deviceInstance, $replacementDevices, Proposalgen_Model_CostPerPageSetting $costPerPageSetting, Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting, $costSavingsThreshold)
     {
+        if($deviceInstance->id == 1621)
+        {
+            $breakHere = "";
+        }
+
         $suggestedDevice           = null;
         $greatestSavings           = 0;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
