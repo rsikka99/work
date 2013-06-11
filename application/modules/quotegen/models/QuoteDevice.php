@@ -599,7 +599,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             }
             else
             {
-                throw new Exception("Cannot calculate color cost per page because device attributes was not found.");
+                throw new Exception("Cannot calculate color cost per page because device attributes were not found.");
             }
         }
 
@@ -657,7 +657,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             }
             else
             {
-                throw new Exception("Cannot calculate mono cost per page because device attributes was not found.");
+                throw new Exception("Cannot calculate mono cost per page because device attributes were not found.");
             }
 
             return $costPerPageMonochrome;
