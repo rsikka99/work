@@ -659,8 +659,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             {
                 throw new Exception("Cannot calculate mono cost per page because device attributes were not found.");
             }
-
-            return $costPerPageMonochrome;
         }
+        return (float)$costPerPageMonochrome;
     }
 }
