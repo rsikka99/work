@@ -19,17 +19,18 @@ Version 1.4.0
 [ADDED]   page coverage settings for hardware optimization
 [ADDED]   single sign-on access for all components
 [ADDED]   support for management of other users part of your organization
+[ADDED]   the forgot password system
 [ADDED]   the health check report
-[ADDED]   the Forgot Password system
 [CHANGED] assessments, hardware optimization, hardware quotes and health checks
 [CHANGED] hardware optimization to use ajax for a better ux
+[CHANGED] how toner pricing imports handle finding a toner
 [CHANGED] more settings now have the ability to handle 0 as a value
 [CHANGED] order of settings fields to be more uniform
 [CHANGED] service cost per page to a combination of parts and labor
 [CHANGED] user names to be email addresses
+[FIXED]   bugs with report generation
 [FIXED]   issues with update pricing
 [FIXED]   issue where service cost was sometimes not being applied to hardware optimization replacements
-[FIXED]   bugs with report generation
 [FIXED]   replacement devices did not have service cost per page
 [FIXED]   titles inside customer facing hardware optimization report to be less ambiguous
 [REMOVED] customer pricing config for hardware optimization
