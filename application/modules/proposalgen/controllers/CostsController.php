@@ -518,6 +518,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     else
                                     {
                                         $toner_id    = $devices [$key] [0];
+                                        $toner_sku   = $devices [$key] [$key_sku];
                                         $columns [0] = "Toner ID";
                                         $columns [1] = "Manufacturer";
                                         $columns [2] = "Part Type";
@@ -529,13 +530,13 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         $columns [8] = "New Price";
 
                                         $table = new Proposalgen_Model_DbTable_Toner();
-                                        $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
+                                        $where = $table->getAdapter()->quoteInto('sku = ?', $toner_sku, 'INTEGER');
                                         $toner = $table->fetchRow($where);
 
-                                        if (count($toner->toArray()) > 0)
+                                        if ($toner && count($toner->toArray()) > 0)
                                         {
                                             // save into array
-                                            $final_devices [0] = $toner_id;
+                                            $final_devices [0] = $toner->id;
                                             $final_devices [1] = $devices [$key] [$key_manufacturer];
                                             $final_devices [2] = $devices [$key] [$key_part_type];
                                             $final_devices [3] = $devices [$key] [$key_sku];
@@ -721,7 +722,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         );
 
                                         $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
-                                        if (count($toner->toArray()) > 0)
+                                        if ($toner && count($toner->toArray()) > 0)
                                         {
 
                                             $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($importTonerId, $dealerId));
