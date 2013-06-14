@@ -65,7 +65,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[4]
-            $this->_graphs [] = $barGraph->getUrl();
+            $this-> _graphs [] = $barGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
@@ -163,7 +163,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $graph->setLegendPosition("t");
             $graph->setLegend(array(
                                    "Keep",
-                                   "Replace",
+                                   "Replaced",
                                    "Flagged",
                                    "Retire",
                               ));
@@ -293,7 +293,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $highest = (count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()) > count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances())) ? count($this->_optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()) : count($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
             $barGraph = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle('Leased / purchased devices ');
+            $barGraph->setTitle('Device Overview');
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
@@ -310,7 +310,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->setLegend(array(
                                       "Leased",
                                       "Purchased",
-                                      "Optimized"
+                                      "Optimized Purchased"
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -331,7 +331,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addDataSet(array($this->deviceCategories["current"]["color"] / $purchaseDeviceCount));
             $barGraph->addColors(array("EF6B18"));
             $barGraph->setDataRange(0, 1);
-            $barGraph->setBarScale(40, 10);
+            $barGraph->setBarScale(43, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -350,8 +350,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- Categories of technology features
              */
-            $barGraph = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle("Technology Features");
+            $barGraph = new gchart\gBarChart(215, 300);
+            $barGraph->setTitle("Technology Features (optimized)");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["copy"] / $purchaseDeviceCount));
             $barGraph->addColors(array("E21736"));
@@ -360,7 +360,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addDataSet(array($this->deviceCategories["optimized"]["color"] / $purchaseDeviceCount));
             $barGraph->addColors(array("EF6B18"));
             $barGraph->setDataRange(0, 1);
-            $barGraph->setBarScale(40, 10);
+            $barGraph->setBarScale(43, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
                                       "0194D2"
@@ -520,11 +520,6 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             // Graph13
             $this->_graphs [] = $barGraph->getUrl();
 
-
-            /**
-             * -- Color Capable Devices Graph
-             */
-            // Graph14
             /**
              * -- Color Capable Devices Graph
              */
@@ -566,7 +561,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
 
             $notColorPercentage = 100 - $colorPercentage;
             $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
-            $colorCapableGraph->setTitle("Color-Capable Printing Devices");
+            $colorCapableGraph->setTitle("Color-Capable Printing Devices Optimized");
             $colorCapableGraph->addDataSet(array(
                                                 $colorPercentage,
                                                 $notColorPercentage

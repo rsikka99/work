@@ -17,16 +17,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
     /**
      * @var int
      */
-    public $customerPricingConfigId;
-
-    /**
-     * @var int
-     */
-    public $dealerMargin;
-
-    /**
-     * @var int
-     */
     public $dealerPricingConfigId;
 
     /**
@@ -59,6 +49,16 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
      */
     public $partsCostPerPage;
 
+    /**
+     * @var float
+     */
+    public $pageCoverageMonochrome;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageColor;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -78,16 +78,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
         if (isset($params->costThreshold) && !is_null($params->costThreshold))
         {
             $this->costThreshold = $params->costThreshold;
-        }
-
-        if (isset($params->customerPricingConfigId) && !is_null($params->customerPricingConfigId))
-        {
-            $this->customerPricingConfigId = $params->customerPricingConfigId;
-        }
-
-        if (isset($params->dealerMargin) && !is_null($params->dealerMargin))
-        {
-            $this->dealerMargin = $params->dealerMargin;
         }
 
         if (isset($params->dealerPricingConfigId) && !is_null($params->dealerPricingConfigId))
@@ -125,6 +115,15 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             $this->partsCostPerPage = $params->partsCostPerPage;
         }
 
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
     }
 
     /**
@@ -135,8 +134,6 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
         return array(
             "id"                          => $this->id,
             "costThreshold"               => $this->costThreshold,
-            "customerPricingConfigId"     => $this->customerPricingConfigId,
-            "dealerMargin"                => $this->dealerMargin,
             "dealerPricingConfigId"       => $this->dealerPricingConfigId,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
@@ -144,6 +141,8 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "adminCostPerPage"            => $this->adminCostPerPage,
             "laborCostPerPage"            => $this->laborCostPerPage,
             "partsCostPerPage"            => $this->partsCostPerPage,
+            "pageCoverageMonochrome"      => $this->pageCoverageMonochrome,
+            "pageCoverageColor"           => $this->pageCoverageColor,
         );
     }
 

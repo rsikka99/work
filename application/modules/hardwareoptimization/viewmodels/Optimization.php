@@ -96,9 +96,13 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_costPerPageSettingForDealer = new Proposalgen_Model_CostPerPageSetting();
 
-            $reportSettings                                           = $this->_optimization->getHardwareOptimizationSetting();
-            $this->_costPerPageSettingForDealer->adminCostPerPage     = $reportSettings->adminCostPerPage;
-            $this->_costPerPageSettingForDealer->pricingConfiguration = $reportSettings->getPricingConfig($reportSettings->dealerPricingConfigId);
+            $reportSettings                                             = $this->_optimization->getHardwareOptimizationSetting();
+            $this->_costPerPageSettingForDealer->adminCostPerPage       = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $reportSettings->pageCoverageMonochrome;
+            $this->_costPerPageSettingForDealer->pageCoverageColor      = $reportSettings->pageCoverageColor;
+            $this->_costPerPageSettingForDealer->laborCostPerPage       = $reportSettings->laborCostPerPage;
+            $this->_costPerPageSettingForDealer->partsCostPerPage       = $reportSettings->partsCostPerPage;
+            $this->_costPerPageSettingForDealer->pricingConfiguration   = $reportSettings->getPricingConfig($reportSettings->dealerPricingConfigId);
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -117,6 +121,10 @@ class Hardwareoptimization_ViewModel_Optimization
 
             $reportSettings                                                 = $this->_optimization->getHardwareOptimizationSetting();
             $this->_costPerPageSettingForReplacements->adminCostPerPage     = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome     = $reportSettings->pageCoverageMonochrome;
+            $this->_costPerPageSettingForReplacements->pageCoverageColor          = $reportSettings->pageCoverageColor;
+            $this->_costPerPageSettingForReplacements->laborCostPerPage           = $reportSettings->laborCostPerPage;
+            $this->_costPerPageSettingForReplacements->partsCostPerPage           = $reportSettings->partsCostPerPage;
             $this->_costPerPageSettingForReplacements->pricingConfiguration = $reportSettings->getPricingConfig($reportSettings->replacementPricingConfigId);
         }
 

@@ -45,6 +45,17 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
             'Float'
         );
 
+        $coverageValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min' => 0,
+                    'max' => 100
+                )
+            ),
+            'Float'
+        );
+
 
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
@@ -53,24 +64,31 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                                         'validators' => $costValidator
                                                    ));
 
-        $this->addElement('text', 'dealerMargin', array(
-                                                       'label'      => 'Dealer Margin',
-                                                       'append'     => '$',
-                                                       'validators' => $marginValidator
-                                                  ));
+        $this->addElement('text', 'pageCoverageMonochrome', array(
+                                           'label'      => 'Page Coverage Monochrome',
+                                                       'append'     => '%',
+                                           'validators' => $coverageValidator
+                                      ));
+
+        $this->addElement('text', 'pageCoverageColor', array(
+                                           'label'      => 'Page Coverage Color',
+                                           'append'     => '%',
+                                           'validators' => $coverageValidator
+                                      ));
+
         $this->addElement('text', 'adminCostPerPage', array(
                                                            'label'      => 'Admin Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
         $this->addElement('text', 'partsCostPerPage', array(
                                                            'label'      => 'Parts Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
         $this->addElement('text', 'laborCostPerPage', array(
                                                            'label'      => 'Labor Cost Per Page',
-                                                           'append'     => '$',
+                                                           'append'     => '$ / page',
                                                            'validators' => $cppValidator,
                                                       ));
 
@@ -93,11 +111,6 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                                                                                  'label' => 'Dealer Toner Preference',
                                                                                                  'class' => 'span3 '
                                                                                             ));
-        $customerPricingConfig    = $this->createElement('select', 'customerPricingConfigId', array(
-                                                                                                   'label' => 'Customer Toner Preference',
-                                                                                                   'class' => 'span3 '
-                                                                                              ));
-
 
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
@@ -112,7 +125,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
 
 
-        $this->addDisplayGroup(array('costThreshold', 'dealerMargin', "partsCostPerPage", "laborCostPerPage", "adminCostPerPage", 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig, $customerPricingConfig), 'hardwareOptimization');
+        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementPricingConfig, $dealerPricingConfig), 'hardwareOptimization');
 
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(
@@ -146,7 +159,6 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         }
         $replacementPricingConfig->addMultiOptions($pricingConfigOptions);
         $dealerPricingConfig->addMultiOptions($pricingConfigOptions);
-        $customerPricingConfig->addMultiOptions($pricingConfigOptions);
 
         Hardwareoptimization_Form_Hardware_Optimization_Navigation::addFormActionsToForm(Hardwareoptimization_Form_Hardware_Optimization_Navigation::BUTTONS_ALL, $this);
     }

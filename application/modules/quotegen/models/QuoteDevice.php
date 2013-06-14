@@ -550,12 +550,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * The appropirate cost per page based on toner preference choice
      *
+     * @throws Exception
      * @return number the cost per page for color
      */
     public function calculateColorCostPerPage ()
     {
         $getCompCostPerPage = false;
         $costPerPageColor   = 0;
+
 
         // Get the pricing config
         switch ($this->getQuote()->pricingConfigId)
@@ -591,8 +593,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if ($costPerPageColor > 0)
         {
             $deviceAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
-
-            $costPerPageColor += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
+            if ($deviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+            {
+                $costPerPageColor += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
+            }
+            else
+            {
+                throw new Exception("Cannot calculate color cost per page because device attributes were not found.");
+            }
         }
 
         return (float)$costPerPageColor;
@@ -601,6 +609,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * The appropirate cost per page based on toner preference choice
      *
+     * @throws Exception
      * @return number the cost per page for monochrome
      */
     public function calculateMonochromeCostPerPage ()
@@ -642,9 +651,15 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         if ($costPerPageMonochrome > 0)
         {
             $deviceAttributes = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($this->getDevice()->masterDeviceId, $this->getDevice()->dealerId));
-            $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
+            if ($deviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+            {
+                $costPerPageMonochrome += $this->getQuote()->adminCostPerPage + $deviceAttributes->laborCostPerPage + $deviceAttributes->partsCostPerPage;
+            }
+            else
+            {
+                throw new Exception("Cannot calculate mono cost per page because device attributes were not found.");
+            }
         }
-
-        return $costPerPageMonochrome;
+        return (float)$costPerPageMonochrome;
     }
 }

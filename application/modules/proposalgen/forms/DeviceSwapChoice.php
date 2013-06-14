@@ -1,8 +1,6 @@
 <?php
 /**
- *
- * @author swilder
- *
+ * Class Proposalgen_Form_DeviceSwapChoice
  */
 class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 {
@@ -10,7 +8,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     const DEVICE_TYPE_MONO_MFP  = 1;
     const DEVICE_TYPE_COLOR     = 2;
     const DEVICE_TYPE_COLOR_MFP = 3;
-
 
     /**
      * @var Proposalgen_Model_DeviceInstance[]
@@ -50,7 +47,6 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      * @var Proposalgen_Model_DeviceInstance[]
      */
     protected $colorMfpReplacementDevices;
-
 
     /**
      * @param null $devices
@@ -105,19 +101,48 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 $deviceInstanceReplacementMasterDevice = null;
             }
 
-            $deviceType = 'deviceInstance_';
+            $elementType = 'deviceInstance_';
 
             $replacementDevices[0] = $deviceInstance->getAction();
             // Create an element for each device Device list per manufacturer
-            $deviceElement = $this->createElement('select', $deviceType . $deviceInstance->id, array(
-                                                                                                    'label'   => 'Device: ',
-                                                                                                    'attribs' => array(
-                                                                                                        'style' => 'width: 100%'
-                                                                                                    ),
-                                                                                                    'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
-                                                                                               ));
+            $deviceElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                     'label'   => 'Device: ',
+                                                                                                     'attribs' => array(
+                                                                                                         'style' => 'width: 100%'
+                                                                                                     ),
+                                                                                                     'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+                                                                                                ));
 
             $this->addElement($deviceElement);
+
+            $elementType = 'deviceInstanceReason_';
+
+            $deviceInstanceDeviceSwapReason = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($this->_hardwareOptimizationId, $deviceInstance->id));
+
+            if ($deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
+            {
+                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                               'label'   => ': ',
+                                                                                                               'attribs' => array(
+                                                                                                                   'style' => 'width: 100%'
+                                                                                                               ),
+                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
+                                                                                                          ));
+                $this->addElement($deviceReasonElement);
+                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT));
+            }
+            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            {
+                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
+                                                                                                               'label'   => ': ',
+                                                                                                               'attribs' => array(
+                                                                                                                   'style' => 'width: 100%'
+                                                                                                               ),
+                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
+                                                                                                          ));
+                $this->addElement($deviceReasonElement);
+                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED));
+            }
 
             /*
              * If the master device device does not exist in our array we need to add it as it is replaced anyways....
@@ -241,5 +266,31 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
 
         return $this->colorMfpReplacementDevices;
+    }
+
+    /**
+     * Gets all reasons by the dealer id on the form
+     *
+     * @param $categoryId
+     *
+     * @return array
+     */
+    public function getDeviceSwapsByCategory ($categoryId)
+    {
+        $reasonArray = array();
+        // Get the default reason
+        $defaultReason                                    = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($categoryId, $this->_dealerId);
+        $reasonArray [$defaultReason->deviceSwapReasonId] = Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($defaultReason->deviceSwapReasonId)->reason;
+
+        foreach (Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllByCategoryId($categoryId, $this->_dealerId) as $reason)
+        {
+            // Add the element to the array as long as it's not the default since that is already added
+            if ($reason->id !== $defaultReason->deviceSwapReasonId)
+            {
+                $reasonArray[$reason->id] = $reason->reason;
+            }
+        }
+
+        return $reasonArray;
     }
 }
