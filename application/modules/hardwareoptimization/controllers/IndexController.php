@@ -181,7 +181,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         foreach ($replacementDevices as $deviceSwap)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId, $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage,$this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage));
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId, $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage, $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage));
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
@@ -367,15 +367,18 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function updateReplacementDeviceAction ()
     {
+        // Setup the required mappers
         $deviceInstanceReplacementMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
         $deviceInstanceDeviceSwapReasonMapper        = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
+        $optimization                                = $this->getOptimizationViewModel();
+        $deviceInstanceReasonElement                 = null;
 
         // Setup the master device labor and parts cost per page
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
+        // Get and see if we have a device instance id passed, if not send a json error
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
-
         if ($deviceInstanceId === false)
         {
             $this->sendJsonError("Invalid data passed.");
@@ -391,12 +394,13 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
-        $whereKey            = array($deviceInstanceId, $this->_hardwareOptimization->id);
+        $whereKey = array($deviceInstanceId, $this->_hardwareOptimization->id);
 
         if ($replacementDeviceId == 0)
         {
             // Delete the row from the database
             $deviceInstanceReplacementMasterDeviceMapper->delete($whereKey);
+            $costDelta = 0;
         }
         else
         {
@@ -416,18 +420,17 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $deviceInstanceReplacementMasterDevice->hardwareOptimizationId = $this->_hardwareOptimization->id;
                 $deviceInstanceReplacementMasterDeviceMapper->insert($deviceInstanceReplacementMasterDevice);
             }
+            $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
+                         $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId));
+
+            $form                        = new Proposalgen_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
+            $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
         }
-
-        $optimization = $this->getOptimizationViewModel();
-        $costDelta    = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                        $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId));
-
-        $form                        = new Proposalgen_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
-        $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
 
         // Save the device reason into the table
         $deviceSwapReasonId             = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization), $this->_identity->dealerId)->deviceSwapReasonId;
         $deviceInstanceDeviceSwapReason = $deviceInstanceDeviceSwapReasonMapper->find(array($this->_hardwareOptimization->id, $deviceInstanceId));
+
         if ($deviceInstanceDeviceSwapReason instanceof Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason)
         {
             $deviceInstanceDeviceSwapReason->deviceSwapReasonId = $deviceSwapReasonId;
@@ -448,7 +451,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                              "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
                              "colorCpp"      => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
                              "totalCost"     => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
-                             "replaceReason" => $deviceInstanceReasonElement->renderViewHelper(),
+                             "replaceReason" => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
                              "marginDollar"  => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
                              "costDelta"     => $this->view->currency($costDelta),
                              "rawCostDelta"  => (float)$costDelta,
@@ -466,8 +469,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function deviceListAction ()
     {
-        $jqGridService                                          = new Tangent_Service_JQGrid();
-        $hardwareoptimizationMapper                             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
+        $jqGridService              = new Tangent_Service_JQGrid();
+        $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
         $this->_saveDeviceSwapReason();
 
         /*

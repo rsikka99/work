@@ -29,6 +29,7 @@ Version 1.4.0
 [CHANGED] service cost per page to a combination of parts and labor
 [CHANGED] user names to be email addresses
 [FIXED]   bugs with report generation
+[FIXED]   issue with cost delta not showing up when switching hardware optimization device back to keep
 [FIXED]   issues with update pricing
 [FIXED]   issue where service cost was sometimes not being applied to hardware optimization replacements
 [FIXED]   replacement devices did not have service cost per page
