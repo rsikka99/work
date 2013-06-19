@@ -156,12 +156,7 @@ class Hardwareoptimization_Service_Setting
             {
                 $validData ['dealerPricingConfigId'] = $defaultValues['dealerPricingConfigId'];
             }
-            if ((int)$validData ['customerPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                $validData ['customerPricingConfigId'] = $defaultValues['customerPricingConfigId'];
-            }
-
-
+   
             $validData = array_merge($defaultValues, $validData);
 
             $hardwareOptimizationSetting = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
