@@ -4,6 +4,9 @@ This file contains information on what has changed in each version of the
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
 
+Version 1.4.1
+-------------
+[FIXED]   issue with hardware optimization settings not saving correctly
 
 Version 1.4.0
 -------------
