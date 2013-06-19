@@ -1,3 +1,3 @@
 ALTER TABLE `hardware_optimization_settings`
-ADD COLUMN pageCoverageMonochrome DOUBLE,
-ADD COLUMN pageCoverageColor DOUBLE;
+ADD COLUMN pageCoverageMonochrome DOUBLE NULL,
+ADD COLUMN pageCoverageColor DOUBLE NULL;
