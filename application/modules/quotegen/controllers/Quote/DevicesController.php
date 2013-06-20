@@ -61,40 +61,14 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         // Save to the database
                         try
                         {
-
-                            $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
-                            $userSetting  = Preferences_Model_Mapper_User_Setting::getInstance()->find($this->_userId);
-                            $quoteSetting->applyOverride($userSetting->getQuoteSettings());
-
-                            $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
-                            // Create Quote Device
-                            $quoteDevice = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $device);
-
-                            // Setup some defaults that don't get synced
-                            $quoteDevice->quoteId       = $this->_quoteId;
-                            $quoteDevice->margin        = $quoteSetting->deviceMargin;
-                            $quoteDevice->packageCost   = $quoteDevice->calculatePackageCost();
-                            $quoteDevice->packageMarkup = 0;
-                            $quoteDevice->residual      = 0;
-                            $quoteDevice->cost          = $device->cost;
-                            // Save our device
-                            $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
-
-                            // Add to default group
-                            Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId);
-
-                            // Create Link to Device
-                            $quoteDeviceConfiguration                 = new Quotegen_Model_QuoteDeviceConfiguration();
-                            $quoteDeviceConfiguration->masterDeviceId = $masterDeviceId;
-                            $quoteDeviceConfiguration->quoteDeviceId  = $quoteDeviceId;
-                            Quotegen_Model_Mapper_QuoteDeviceConfiguration::getInstance()->insert($quoteDeviceConfiguration);
+                            $quoteDevice = $this->getDeviceQuoteService()->addDeviceToQuote($masterDeviceId);
 
                             // Update the quote
                             $this->saveQuote();
 
                             $this->_flashMessenger->addMessage(array('success' => "Device was added to your quote successfully. Please make any modifications that you wish now."));
 
-                            $this->redirector('edit-quote-device', null, null, array('id' => $quoteDeviceId, 'quoteId' => $this->_quoteId));
+                            $this->redirector('edit-quote-device', null, null, array('id' => $quoteDevice->id, 'quoteId' => $this->_quoteId));
                         }
                         catch (Exception $e)
                         {
@@ -131,13 +105,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $this->requireQuote();
 
         // Get the quote device (Also does validation)
-        $quoteDevice    = $this->getQuoteDevice('id');
+        $quoteDevice = $this->getQuoteDevice('id');
+
         Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->deleteAllOptionsForQuoteDevice($quoteDevice->id);
-
-        // Delete grouped devices as well.
-        //$qouteGroupDevicesDelete = Quotegen_Model_Mapper_
-
-
         Quotegen_Model_Mapper_QuoteDevice::getInstance()->delete($quoteDevice);
 
         // Update the quote
@@ -159,12 +129,9 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
     {
         // Require that we have a quote object in the database to use this page
         $this->requireQuote();
-
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
-
-//        $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($quoteDevice->id,Zend_Auth::getInstance()->getIdentity()->dealerId);
-        $device = $quoteDevice->getDevice();
+        $device      = $quoteDevice->getDevice();
         // If the device doesn't exist, we send them back to the normal page
         if (!$device)
         {
@@ -347,10 +314,10 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         foreach ($values ['options'] as $optionId)
                         {
 
-                            $quoteDeviceOption   = $this->syncOption($quoteDeviceOption, $deviceOptionMapper->find(array(
-                                                                                                                        $masterDeviceId,
-                                                                                                                        $optionId
-                                                                                                                   )));
+                            $quoteDeviceOption   = $this->getDeviceQuoteService()->syncOption($quoteDeviceOption, $deviceOptionMapper->find(array(
+                                                                                                                                                 $masterDeviceId,
+                                                                                                                                                 $optionId
+                                                                                                                                            )));
                             $quoteDeviceOptionId = $quoteDeviceOptionMapper->insert($quoteDeviceOption);
 
                             $quoteDeviceConfigurationOption->optionId = $optionId;
@@ -468,7 +435,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
 
-        if ($this->performSyncOnQuoteDevice($quoteDevice))
+        if ($this->getDeviceQuoteService()->performSyncOnQuoteDevice($quoteDevice))
         {
             // Update the quote
             $this->saveQuote();
@@ -495,7 +462,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ($this->_quote->getQuoteDevices() as $quoteDevice)
         {
-            if ($this->performSyncOnQuoteDevice($quoteDevice))
+            if ($this->getDeviceQuoteService()->performSyncOnQuoteDevice($quoteDevice))
             {
                 $devicesSynced++;
             }

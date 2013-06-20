@@ -241,5 +241,41 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         return array($object->deviceInstanceId, $object->hardwareOptimizationId);
     }
 
+    /**
+     * Returns an array of unique master device for the hardware optimization.
+     *
+     * @param $hardwareOptimizationId
+     *
+     * @return array
+     */
+    public function fetchUniqueReplacementDeviceInstancesForHardwareOptimization ($hardwareOptimizationId)
+    {
+        $db                     = $this->getDbTable()->getDefaultAdapter();
+        $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
 
+        $select = $db->select()
+                  ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
+                  ->where("{$this->col_hardwareOptimizationId} = ?", $hardwareOptimizationId);
+
+        $masterDeviceIds = array();
+        foreach ($db->query($select)->fetchAll() as $row)
+        {
+            $masterDeviceIds [] = $row[$this->col_masterDeviceId];
+        }
+
+        return $masterDeviceIds;
+    }
+
+    /**
+     * Takes in a hardware optimization id, and a master device id, and returns the count of found devices
+     *
+     * @param $masterDeviceId         int
+     * @param $hardwareoptimizationId int
+     *
+     * @return int The count of master devices in this table for a specific hardware optimization id
+     */
+    public function countReplacementDevicesById ($hardwareoptimizationId, $masterDeviceId)
+    {
+        return $this->count(array("{$this->col_hardwareOptimizationId} = ?" => $hardwareoptimizationId, "{$this->col_masterDeviceId} = ?" => $masterDeviceId));
+    }
 }
