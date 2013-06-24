@@ -64,7 +64,7 @@ class Quotegen_Service_QuoteDevice
         $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
 
         // Add to default group
-        Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->_quote->id, (int)$quoteDeviceId, $this->getMasterDeviceQuantity($masterDeviceId));
+        Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->getQuote()->id, (int)$quoteDeviceId, $this->getMasterDeviceQuantity($masterDeviceId));
 
         // Create Link to Device
         $quoteDeviceConfiguration                 = new Quotegen_Model_QuoteDeviceConfiguration();
@@ -152,7 +152,7 @@ class Quotegen_Service_QuoteDevice
             // If an id is passed then we want a new quote device
             $quoteDevice = new Quotegen_Model_QuoteDevice();
 
-            $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($object, $this->_quote->getClient()->dealerId));
+            $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($object, $this->getQuote()->getClient()->dealerId));
         }
 
         if (!$device instanceof Quotegen_Model_Device)
