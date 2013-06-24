@@ -4,7 +4,7 @@ This file contains information on what has changed in each version of the
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
 
-feature-quoteHardwareOptimization
+Version 1.4.2
 ---------------------------------
 [ADDED]   the ability to export replacement devices to a quote
 
