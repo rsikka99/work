@@ -416,6 +416,62 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     }
 
     /**
+     * Creates everything needed for a quote
+     *
+     * @param $quoteType
+     * @param $clientId
+     * @param $userId
+     *
+     * @return $this
+     */
+    public function createNewQuote ($quoteType, $clientId, $userId)
+    {
+        // Get the system and user defaults and apply overrides for user settings
+        $quoteSetting = Quotegen_Model_Mapper_QuoteSetting::getInstance()->fetchSystemQuoteSetting();
+        $user         = Application_Model_Mapper_User::getInstance()->find($userId);
+        $quoteSetting->applyOverride($user->getUserSettings()->getQuoteSettings());
+
+        // Update current quote object and save new quote items to database
+        $this->populate($quoteSetting->toArray());
+        $this->quoteType               = $quoteType;
+        $this->clientId                = $clientId;
+        $this->dateCreated             = date('Y-m-d H:i:s');
+        $this->dateModified            = date('Y-m-d H:i:s');
+        $this->quoteDate               = date('Y-m-d H:i:s');
+        $this->userId                  = $userId;
+        $this->colorPageMargin         = $quoteSetting->pageMargin;
+        $this->monochromePageMargin    = $quoteSetting->pageMargin;
+        $this->colorOverageMargin      = $quoteSetting->pageMargin;
+        $this->monochromeOverageMargin = $quoteSetting->pageMargin;
+        $this->id                      = Quotegen_Model_Mapper_Quote::getInstance()->insert($this);
+
+        // Add a default group
+        $quoteDeviceGroup            = new Quotegen_Model_QuoteDeviceGroup();
+        $quoteDeviceGroup->name      = 'Default Group (Ungrouped)';
+        $quoteDeviceGroup->isDefault = 1;
+        $quoteDeviceGroup->setGroupPages(0);
+        $quoteDeviceGroup->quoteId = $this->id;
+        Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
+
+        // If this is a leased quote, select the first leasing schema term
+        if ($this->isLeased())
+        {
+            // FIXME: Use quote settings?
+            $leasingSchemaTerms = Quotegen_Model_Mapper_LeasingSchemaTerm::getInstance()->fetchAll();
+            if (count($leasingSchemaTerms) > 0)
+            {
+
+                $quoteLeaseTerm                      = new Quotegen_Model_QuoteLeaseTerm();
+                $quoteLeaseTerm->quoteId             = $this->id;
+                $quoteLeaseTerm->leasingSchemaTermId = $leasingSchemaTerms [0]->id;
+                Quotegen_Model_Mapper_QuoteLeaseTerm::getInstance()->insert($quoteLeaseTerm);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * ****************************************************************************************************************************************
      * QUOTE CALCULATIONS
      * ****************************************************************************************************************************************

@@ -4,6 +4,10 @@ This file contains information on what has changed in each version of the
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
 
+Version 1.4.2
+---------------------------------
+[ADDED]   the ability to export replacement devices to a quote
+
 Version 1.4.1
 -------------
 [FIXED]   issue with hardware optimization settings not saving correctly
@@ -19,7 +23,6 @@ Version 1.4.0
 [ADDED]   dealer support for reports
 [ADDED]   device swaps for hardware optimization
 [ADDED]   integration with hardware optimization
-[ADDED]   page coverage settings for hardware optimization
 [ADDED]   single sign-on access for all components
 [ADDED]   support for management of other users part of your organization
 [ADDED]   the forgot password system
@@ -32,6 +35,7 @@ Version 1.4.0
 [CHANGED] service cost per page to a combination of parts and labor
 [CHANGED] user names to be email addresses
 [FIXED]   bugs with report generation
+[FIXED]   issue with cost delta not showing up when switching hardware optimization device back to keep
 [FIXED]   issues with update pricing
 [FIXED]   issue where service cost was sometimes not being applied to hardware optimization replacements
 [FIXED]   replacement devices did not have service cost per page

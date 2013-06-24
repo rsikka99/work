@@ -369,6 +369,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         return ((int)$this->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY);
     }
 
+
     /**
      * ****************************************************************************************************************************************
      * DEVICE CALCULATIONS
@@ -660,6 +661,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
                 throw new Exception("Cannot calculate mono cost per page because device attributes were not found.");
             }
         }
+
         return (float)$costPerPageMonochrome;
     }
 }

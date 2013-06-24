@@ -38,6 +38,9 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
      */
     protected $_userId;
 
+    /** @var  Quotegen_Service_QuoteDevice */
+    protected $_quoteDeviceService;
+
     /**
      * Last initialization step, called from the constructor.
      * Initializes all varabiables for the controller actions to use.
@@ -47,32 +50,32 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 
         // Add the ability to have a docx context
         $this->_helper->contextSwitch()
-            ->addContext('docx', array(
-                                      'suffix'    => 'docx',
-                                      'callbacks' => array(
-                                          'init' => array(
-                                              $this,
-                                              'initDocxContext'
-                                          ),
-                                          'post' => array(
-                                              $this,
-                                              'postDocxContext'
-                                          )
+        ->addContext('docx', array(
+                                  'suffix'    => 'docx',
+                                  'callbacks' => array(
+                                      'init' => array(
+                                          $this,
+                                          'initDocxContext'
+                                      ),
+                                      'post' => array(
+                                          $this,
+                                          'postDocxContext'
                                       )
-                                 ))
-            ->addContext('xlsx', array(
-                                      'suffix'    => 'xlsx',
-                                      'callbacks' => array(
-                                          'init' => array(
-                                              $this,
-                                              'initXlsxContext'
-                                          ),
-                                          'post' => array(
-                                              $this,
-                                              'postXlsxContext'
-                                          )
+                                  )
+                             ))
+        ->addContext('xlsx', array(
+                                  'suffix'    => 'xlsx',
+                                  'callbacks' => array(
+                                      'init' => array(
+                                          $this,
+                                          'initXlsxContext'
+                                      ),
+                                      'post' => array(
+                                          $this,
+                                          'postXlsxContext'
                                       )
-                                 ));
+                                  )
+                             ));
 
         $this->_userId       = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
@@ -179,155 +182,12 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     }
 
     /**
-     * Syncs a device configuration into a quote device for a quote.
-     * If a device does not exist for the current quote it will create it for you.
-     *
-     * @param $quoteDevice Quotegen_Model_QuoteDevice
-     *                     The quote device to sync
-     * @param $syncOptions boolean
-     *                     If set to true, it will sync the quote options associated with the quote device
-     *
-     * @return boolean Returns true if the sync was successful. If it was false, chances are it is because there is no
-     *         link between the quote device and a device in the system.
-     */
-    protected function performSyncOnQuoteDevice (Quotegen_Model_QuoteDevice $quoteDevice, $syncOptions = true)
-    {
-        $device = $quoteDevice->getDevice();
-
-        // If we don't have a link back to the master then we return false.
-        if (!$device)
-        {
-            return false;
-        }
-
-        // Sync the device and save
-        $quoteDevice = $this->syncDevice($quoteDevice, $device);
-
-        // Sync our options
-        if ($syncOptions)
-        {
-            /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-            foreach ($quoteDevice->getQuoteDeviceOptions() as $quoteDeviceOption)
-            {
-                // Only sync options that still have a link back to the master
-                $deviceOption = $quoteDeviceOption->getDeviceOption();
-                if ($deviceOption)
-                {
-                    $quoteDeviceOption = $this->syncOption($quoteDeviceOption, $deviceOption);
-                    Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->save($quoteDeviceOption);
-                }
-            }
-        }
-
-        $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
-
-        Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
-
-        return true;
-    }
-
-    /**
      * @param Quotegen_Model_QuoteDevice $quoteDevice
      */
     protected function recalculateQuoteDevice (Quotegen_Model_QuoteDevice &$quoteDevice)
     {
         // Recalculate the package cost
         $quoteDevice->packageCost = $quoteDevice->calculatePackageCost();
-    }
-
-    /**
-     * Syncs a quote device with a device
-     *
-     * @param $quoteDevice Quotegen_Model_QuoteDevice
-     *                     The quote device that will be updated
-     * @param $device      Quotegen_Model_Device
-     *                     The device that we will use to update the quote device
-     *
-     * @return Quotegen_Model_QuoteDevice The updated quote device
-     */
-    protected function syncDevice (Quotegen_Model_QuoteDevice $quoteDevice, Quotegen_Model_Device $device)
-    {
-        $masterDevice               = $device->getMasterDevice();
-        $quoteDevice->name          = $masterDevice->getFullDeviceName();
-        $quoteDevice->oemSku        = $device->oemSku;
-        $quoteDevice->dealerSku     = $device->dealerSku;
-        $quoteDevice->tonerConfigId = $masterDevice->tonerConfigId;
-        $quoteDevice->cost          = $device->cost;
-
-        // Sync Cost Per Page
-        $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);
-
-        return $quoteDevice;
-    }
-
-    /**
-     * Syncs a quote device's cost per page to be up to date with the latest master device cost per page
-     *
-     * @param Quotegen_Model_QuoteDevice     $quoteDevice
-     * @param Proposalgen_Model_MasterDevice $masterDevice
-     *
-     * @return Quotegen_Model_QuoteDevice
-     */
-    public function syncCostPerPageForDevice (Quotegen_Model_QuoteDevice $quoteDevice, Proposalgen_Model_MasterDevice $masterDevice)
-    {
-        if (stripos($masterDevice->modelName, '6010') !== false)
-        {
-            $test = 0;
-        }
-        $OEMpricingConfig  = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
-        $COMPpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
-
-        $oemCostPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting();
-        $oemCostPerPageSetting->adminCostPerPage       = 0;
-        $oemCostPerPageSetting->laborCostPerPage       = 0;
-        $oemCostPerPageSetting->partsCostPerPage       = 0;
-        $oemCostPerPageSetting->pageCoverageMonochrome = ($this->_quote->pageCoverageMonochrome) ? $this->_quote->pageCoverageMonochrome : 6;
-        $oemCostPerPageSetting->pageCoverageColor      = ($this->_quote->pageCoverageColor) ? $this->_quote->pageCoverageColor : 24;
-        $oemCostPerPageSetting->pricingConfiguration   = $OEMpricingConfig;
-
-        $compCostPerPageSetting                       = clone $oemCostPerPageSetting;
-        $compCostPerPageSetting->pricingConfiguration = $COMPpricingConfig;
-
-
-        // Calculate the cost per page
-        $oemCostPerPage  = $masterDevice->calculateCostPerPage($oemCostPerPageSetting);
-        $compCostPerPage = $masterDevice->calculateCostPerPage($compCostPerPageSetting);
-
-        // Set our mono cost per page
-        $quoteDevice->oemCostPerPageMonochrome  = $oemCostPerPage->monochromeCostPerPage;
-        $quoteDevice->compCostPerPageMonochrome = $compCostPerPage->monochromeCostPerPage;
-
-        // Only set our color if the device is color
-        $quoteDevice->oemCostPerPageColor  = 0;
-        $quoteDevice->compCostPerPageColor = 0;
-        if ($masterDevice->isColor())
-        {
-            $quoteDevice->oemCostPerPageColor  = $oemCostPerPage->colorCostPerPage;
-            $quoteDevice->compCostPerPageColor = $compCostPerPage->colorCostPerPage;
-        }
-
-        return $quoteDevice;
-    }
-
-    /**
-     * Syncs a quote device option with an option
-     *
-     * @param Quotegen_Model_QuoteDeviceOption $quoteDeviceOption The quote device option that will be updated
-     * @param Quotegen_Model_DeviceOption      $deviceOption      The option to update the quote device option with
-     *
-     * @return Quotegen_Model_QuoteDeviceOption The updated quote device option
-     */
-    protected function syncOption (Quotegen_Model_QuoteDeviceOption $quoteDeviceOption, Quotegen_Model_DeviceOption $deviceOption)
-    {
-        // Copy the option
-        $quoteDeviceOption->oemSku           = $deviceOption->getOption()->oemSku;
-        $quoteDeviceOption->dealerSku        = $deviceOption->getOption()->dealerSku;
-        $quoteDeviceOption->name             = $deviceOption->getOption()->name;
-        $quoteDeviceOption->description      = $deviceOption->getOption()->description;
-        $quoteDeviceOption->cost             = $deviceOption->getOption()->cost;
-        $quoteDeviceOption->includedQuantity = $deviceOption->includedQuantity;
-
-        return $quoteDeviceOption;
     }
 
     /**
@@ -373,6 +233,19 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error getting the quote you previously selected. Please try selecting a quote again and contact the system administrator if the issue persists.'));
             $this->redirector('index', 'index');
         }
+    }
+
+    /*
+     *  Gets a fully qualified quote device server
+     */
+    public function getDeviceQuoteService ()
+    {
+        if (!isset($this->_quoteDeviceService))
+        {
+            $this->_quoteDeviceService = new Quotegen_Service_QuoteDevice($this->_userId, $this->_quoteId);
+        }
+
+        return $this->_quoteDeviceService;
     }
 
     /**
@@ -436,7 +309,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             }
 
             // Get a new device and sync the device properties
-            $quoteDevice                = $this->syncDevice(new Quotegen_Model_QuoteDevice(), $favoriteDevice->getDevice());
+            $quoteDevice = new Quotegen_Model_QuoteDevice();
+            $quoteDevice->syncDevice($favoriteDevice->getDevice());
             $quoteDevice->quoteId       = $this->_quote->id;
             $quoteDevice->margin        = $defaultMargin;
             $quoteDevice->residual      = 0;

@@ -59,14 +59,15 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
      *
      * @param int $quoteId
      * @param int $deviceId
+     * @param int $quantity
      *
      * @return mixed
      */
-    public function insertDeviceInDefaultGroup ($quoteId, $deviceId)
+    public function insertDeviceInDefaultGroup ($quoteId, $deviceId, $quantity = 1)
     {
         $deviceGroup                          = new Quotegen_Model_QuoteDeviceGroupDevice();
         $deviceGroup->quoteDeviceId           = $deviceId;
-        $deviceGroup->quantity                = 1;
+        $deviceGroup->quantity                = $quantity;
         $deviceGroup->monochromePagesQuantity = 0;
         $deviceGroup->colorPagesQuantity      = 0;
         $deviceGroup->quoteDeviceGroupId      = 1;

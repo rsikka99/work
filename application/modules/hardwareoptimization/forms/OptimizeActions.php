@@ -29,7 +29,7 @@ class Hardwareoptimization_Form_OptimizeActions extends Twitter_Bootstrap_Form
                                                                                   'icon'       => 'refresh',
                                                                                   'whiteIcon'  => true,
                                                                                   'ignore'     => false,
-                                                                                  'title'      => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta thershold settings.",
+                                                                                  'title'      => "Removes any replacement devices previously saved. Then determines the optimal devices based on target monochrome/color CPP and cost delta threshold settings.",
                                                                              ));
         $resetReplacementsButton = $this->createElement('button', 'ResetReplacements', array(
                                                                                             'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_WARNING,
