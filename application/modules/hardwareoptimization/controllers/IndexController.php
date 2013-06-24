@@ -585,7 +585,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
         catch (Exception $e)
         {
-            throw new Exception("Passing up the chain.", "", $e);
+            throw new Exception("Passing up the chain.", 0, $e);
         }
 
         return $success;
