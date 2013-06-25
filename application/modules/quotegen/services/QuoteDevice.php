@@ -94,7 +94,7 @@ class Quotegen_Service_QuoteDevice
         }
         else
         {
-            $count = self::DEFAULT_QUANTITY_GROUND_DEFAULT;
+            $count = self::DEFAULT_QUANTITY_DEFAULT_GROUP;
         }
 
         return $count;
