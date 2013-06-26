@@ -7,6 +7,8 @@ just used as a way to help describe the changes as we progress versions.
 Version 1.4.2
 ---------------------------------
 [ADDED]   the ability to export replacement devices to a quote
+[FIXED]   issue where the quote menu would not show up
+[FIXED]   issue where pages were taken into account when calculating the monthly lease price
 
 Version 1.4.1
 -------------

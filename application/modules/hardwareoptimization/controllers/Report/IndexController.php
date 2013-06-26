@@ -38,7 +38,7 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
                     Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->insert($hardwareOptimizationQuote);
                     // Get the replacement master devices
                     $masterDeviceIds    = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->fetchUniqueReplacementDeviceInstancesForHardwareOptimization($this->_hardwareOptimization->id);
-                    $quoteDeviceService = new Quotegen_Service_QuoteDevice($userId, $quoteId);
+                    $quoteDeviceService = new  Quotegen_Service_QuoteDevice($userId, $quoteId);
                     foreach ($masterDeviceIds as $masterDeviceId)
                     {
                         $quoteDeviceService->addDeviceToQuote($masterDeviceId);

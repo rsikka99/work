@@ -238,7 +238,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     /*
      *  Gets a fully qualified quote device server
      */
-    public function getDeviceQuoteService ()
+    public function getQuoteDeviceService ()
     {
         if (!isset($this->_quoteDeviceService))
         {
