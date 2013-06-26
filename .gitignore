@@ -45,3 +45,4 @@ public/downloads/*.docx
 data/uploads/*
 public/cache/*
 public/downloads/*
+phinx.yml

@@ -27,6 +27,7 @@
         "webino/zf1"         : "dev-master",
         "lrobert/phpword"    : "dev-master",
         "phpexcel/phpexcel"  : "dev-master",
-        "gChartPhp/gChartPhp": "dev-master"
+        "gChartPhp/gChartPhp": "dev-master",
+        "robmorgan/phinx"    : "*"
     }
 }
