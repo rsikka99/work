@@ -61,7 +61,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         // Save to the database
                         try
                         {
-                            $quoteDevice = $this->getDeviceQuoteService()->addDeviceToQuote($masterDeviceId);
+                            $quoteDevice = $this->getQuoteDeviceService()->addDeviceToQuote($masterDeviceId);
 
                             // Update the quote
                             $this->saveQuote();
@@ -314,7 +314,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                         foreach ($values ['options'] as $optionId)
                         {
 
-                            $quoteDeviceOption   = $this->getDeviceQuoteService()->syncOption($quoteDeviceOption, $deviceOptionMapper->find(array(
+                            $quoteDeviceOption   = $this->getQuoteDeviceService()->syncOption($quoteDeviceOption, $deviceOptionMapper->find(array(
                                                                                                                                                  $masterDeviceId,
                                                                                                                                                  $optionId
                                                                                                                                             )));
@@ -435,7 +435,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         // Get the quote device (Also does validation)
         $quoteDevice = $this->getQuoteDevice('id');
 
-        if ($this->getDeviceQuoteService()->performSyncOnQuoteDevice($quoteDevice))
+        if ($this->getQuoteDeviceService()->performSyncOnQuoteDevice($quoteDevice))
         {
             // Update the quote
             $this->saveQuote();
@@ -462,7 +462,7 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ($this->_quote->getQuoteDevices() as $quoteDevice)
         {
-            if ($this->getDeviceQuoteService()->performSyncOnQuoteDevice($quoteDevice))
+            if ($this->getQuoteDeviceService()->performSyncOnQuoteDevice($quoteDevice))
             {
                 $devicesSynced++;
             }

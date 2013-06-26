@@ -64,6 +64,8 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         }
                     }
 
+                    $quoteDeviceService = $this->getQuoteDeviceService();
+
                     // Here we need to check to see if page coverage has changed.
                     $quotePageCoverageMono  = (float)$this->_quote->pageCoverageMonochrome;
                     $quotePageCoverageColor = (float)$this->_quote->pageCoverageColor;
@@ -88,7 +90,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                 $masterDevice = $device->getMasterDevice();
                                 if ($masterDevice)
                                 {
-                                    $quoteDevice = $this->syncCostPerPageForDevice($quoteDevice, $masterDevice);
+                                    $quoteDevice = $quoteDeviceService->syncDevice($quoteDevice);
                                     Quotegen_Model_Mapper_QuoteDevice::getInstance()->save($quoteDevice);
                                 }
                             }
