@@ -515,7 +515,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
 
         foreach ($this->getQuoteDeviceGroups() as $quoteDeviceGroup)
         {
-            $leaseValue += $quoteDeviceGroup->calculateLeaseValue();
+            $leaseValue += $quoteDeviceGroup->calculateHardwareLeaseValue();
         }
 
         return $leaseValue;
