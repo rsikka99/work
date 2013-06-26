@@ -185,8 +185,8 @@ class Quotegen_Service_QuoteDevice
      */
     protected function syncCostPerPageForDevice (Quotegen_Model_QuoteDevice $quoteDevice, Proposalgen_Model_MasterDevice $masterDevice)
     {
-        $OEMpricingConfig  = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
-        $COMPpricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
+        $oemPricingConfiguration  = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
+        $compatiblePricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
 
         $oemCostPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting();
         $oemCostPerPageSetting->adminCostPerPage       = 0;
@@ -194,9 +194,9 @@ class Quotegen_Service_QuoteDevice
         $oemCostPerPageSetting->partsCostPerPage       = 0;
         $oemCostPerPageSetting->pageCoverageMonochrome = ($this->getQuote()->pageCoverageMonochrome) ? $this->getQuote()->pageCoverageMonochrome : self::DEFAULT_PAGE_COVERAGE_MONOCHROME;
         $oemCostPerPageSetting->pageCoverageColor      = ($this->getQuote()->pageCoverageColor) ? $this->getQuote()->pageCoverageColor : self::DEFAULT_PAGE_COVERAGE_COLOR;
-        $oemCostPerPageSetting->pricingConfiguration   = $OEMpricingConfig;
+        $oemCostPerPageSetting->pricingConfiguration   = $oemPricingConfiguration;
         $compCostPerPageSetting                        = clone $oemCostPerPageSetting;
-        $compCostPerPageSetting->pricingConfiguration  = $COMPpricingConfig;
+        $compCostPerPageSetting->pricingConfiguration  = $compatiblePricingConfiguration;
 
         // Calculate the cost per page
         $oemCostPerPage  = $masterDevice->calculateCostPerPage($oemCostPerPageSetting);
