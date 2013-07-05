@@ -9,12 +9,9 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
     public function dealerAction ()
     {
         // Initialize and get the form
-        $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-
-        $settings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();
-
-        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($settings);
-        $form                     = $healthcheckSettingFormService->getForm();
+        $dealer                        = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($dealer->getDealerSettings()->getHealthcheckSettings());
+        $form                          = $healthcheckSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -43,7 +40,7 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
     {
         // Initialize and get the form
         $HealthcheckSettingFormService = new Preferences_Service_HealthcheckSetting();
-        $form                     = $HealthcheckSettingFormService->getForm();
+        $form                          = $HealthcheckSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -70,11 +67,9 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();
-
         // User
-        $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $combinedUserSettings = $user->getUserSettings()->getHealthcheckSettings()->toArray();
-        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($combinedUserSettings);
+        $user                          = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($user->getUserSettings()->getHealthcheckSettings());
 
         $form = $healthcheckSettingFormService->getFormWithDefaults($combinedDealerSettings);
 

@@ -39,11 +39,18 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     public $pageCoverageColor = 20;
 
     /**
-     * The pricing configuration (determines which toners are used)
+     * The toner preferences
      *
-     * @var Proposalgen_Model_PricingConfig
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public $pricingConfiguration;
+    public $monochromeTonerRankSet;
+
+    /**
+     * The toner preferences
+     *
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public $colorTonerRankSet;
 
 
     /**
@@ -54,9 +61,14 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         parent::__construct($options);
 
         // If we haven't passed in a pricing configuration through the constructor, lets set it to OEM by default
-        if (!isset($this->pricingConfiguration))
+        if (!isset($this->monochromeTonerRankSet))
         {
-            $this->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
+            $this->monochromeTonerRankSet = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+        }
+
+        if (!isset($this->colorTonerRankSet))
+        {
+            $this->colorTonerRankSet = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
         }
     }
 
@@ -85,9 +97,14 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
             $this->pageCoverageColor = $params->pageCoverageColor;
         }
 
-        if (isset($params->pricingConfiguration) && !is_null($params->pricingConfiguration))
+        if (isset($params->monochromeTonerRankSet) && !is_null($params->monochromeTonerRankSet))
         {
-            $this->pricingConfiguration = $params->pricingConfiguration;
+            $this->monochromeTonerRankSet = $params->monochromeTonerRankSet;
+        }
+
+        if (isset($params->colorTonerRankSet) && !is_null($params->colorTonerRankSet))
+        {
+            $this->colorTonerRankSet = $params->colorTonerRankSet;
         }
 
     }
@@ -99,11 +116,12 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     {
         return array(
             "adminCostPerPage"       => $this->adminCostPerPage,
-            "partsCostPerPage"     => $this->partsCostPerPage,
-            "laborCostPerPage"     => $this->laborCostPerPage,
+            "partsCostPerPage"       => $this->partsCostPerPage,
+            "laborCostPerPage"       => $this->laborCostPerPage,
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
             "pageCoverageColor"      => $this->pageCoverageColor,
-            "pricingConfiguration"   => $this->pricingConfiguration,
+            "monochromeTonerRankSet" => $this->monochromeTonerRankSet,
+            "colorTonerRankSet"      => $this->colorTonerRankSet,
         );
     }
 
@@ -114,6 +132,9 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      */
     public function createCacheKey ()
     {
-        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->pricingConfiguration->pricingConfigId}";
+        $monochromeRankSetId = (isset($this->monochromeTonerRankSet) && $this->monochromeTonerRankSet->id > 0) ? $this->monochromeTonerRankSet->id : 0;
+        $colorRankSetId      = (isset($this->colorTonerRankSet) && $this->colorTonerRankSet->id > 0) ? $this->colorTonerRankSet->id : 0;
+
+        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$monochromeRankSetId}_{$colorRankSetId}";
     }
 }

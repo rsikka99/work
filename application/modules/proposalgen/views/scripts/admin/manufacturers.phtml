@@ -28,9 +28,8 @@
 		        },
 		        url: '<?php echo $this->baseUrl("/proposalgen/admin/manufacturerdetails"); ?>?manufacturerid='+manufacturerid,
 		        success: function(data) {
-		            var obj = jQuery.parseJSON(data);
-		            $("#manufacturer_name").val(obj.manufacturer_name);
-                    $("#manufacturer_displayname").val(obj.manufacturer_displayname);
+		            $("#manufacturer_name").val(data.manufacturer_name);
+                    $("#manufacturer_displayname").val(data.manufacturer_displayname);
 		        },
 		        error: function() {
 		            //Display an error if the selected user can not

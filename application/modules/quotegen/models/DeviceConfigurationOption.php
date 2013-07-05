@@ -97,4 +97,48 @@ class Quotegen_Model_DeviceConfigurationOption extends My_Model_Abstract
 
         return $this;
     }
+
+    /**
+     * Inserts or saves the object to the database.
+     *
+     * @param null|array $data
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function saveObject ($data = null)
+    {
+        $successful = false;
+        if (is_array($data))
+        {
+            $this->populate($data);
+        }
+
+        if (!isset($this->deviceConfigurationId) || !isset($this->optionId))
+        {
+            throw new Exception("Option missing required data. Please try again.");
+        }
+
+        $deviceConfigurationOptionMapper = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance();
+
+        $deviceConfigurationOption = $deviceConfigurationOptionMapper->fetch($deviceConfigurationOptionMapper->getWhereId(array($this->deviceConfigurationId,$this->optionId)));
+        try
+        {
+            if ($deviceConfigurationOption instanceof Quotegen_Model_DeviceConfigurationOption)
+            {
+                $deviceConfigurationOptionMapper->save($this);
+            }
+            else
+            {
+                $deviceConfigurationOptionMapper->insert($this);
+            }
+            $successful = true;
+        }
+        catch (Exception $e)
+        {
+
+        }
+
+        return $successful;
+    }
 }

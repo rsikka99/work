@@ -93,6 +93,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->registerHelper(new My_View_Helper_Navigation_Menu(), 'menu');
 
         // Setup default styles
+
         $view->headLink()->prependStylesheet($view->theme("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
@@ -103,7 +104,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/select2/select2.min.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-switch.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-modalmanager.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-modal.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap.min.js"));
+
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/jquery.jqGrid.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/jqgrid/i18n/grid.locale-en.js"));
     }

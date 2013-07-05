@@ -17,13 +17,6 @@ class Assessment_Service_Assessment_Settings
      *
      * @var Assessment_Model_Assessment_Setting
      */
-    protected $_systemSettings;
-
-    /**
-     * The system assessment settings
-     *
-     * @var Assessment_Model_Assessment_Setting
-     */
     protected $_dealerSettings;
 
     /**
@@ -48,6 +41,13 @@ class Assessment_Service_Assessment_Settings
     protected $_defaultSettings;
 
     /**
+     * The settings used to populate the values in the form
+     *
+     * @var Assessment_Model_Assessment_Setting
+     */
+    protected $_populateSettings;
+
+    /**
      * The assessment
      *
      * @var Assessment_Model_Assessment
@@ -64,14 +64,16 @@ class Assessment_Service_Assessment_Settings
         $user                      = Application_Model_Mapper_User::getInstance()->find($userId);
         $dealer                    = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
         $this->_assessment         = Assessment_Model_Mapper_Assessment::getInstance()->find($assessmentId);
-        $this->_systemSettings     = Assessment_Model_Mapper_Assessment_Setting::getInstance()->fetchSystemAssessmentSetting();
         $this->_dealerSettings     = $dealer->getDealerSettings()->getAssessmentSettings();
         $this->_userSettings       = $user->getUserSettings()->getAssessmentSettings();
         $this->_assessmentSettings = $this->_assessment->getAssessmentSettings();
 
+        $this->_populateSettings = clone $this->_dealerSettings;
+        $this->_populateSettings->populate($this->_userSettings->toArray());
+        $this->_populateSettings->populate($this->_assessmentSettings->toArray());
+
         // Calculate the default settings
         $this->_defaultSettings = new Assessment_Model_Assessment_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
-        $this->_defaultSettings->populate($this->_userSettings->toArray());
     }
 
     /**
@@ -85,8 +87,7 @@ class Assessment_Service_Assessment_Settings
         {
             $this->_form = new Assessment_Form_Assessment_Settings($this->_defaultSettings);
 
-            // Populate with initial data?
-            $this->_form->populate(array_merge($this->_userSettings->toArray(), $this->_assessmentSettings->toArray()));
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $this->_populateSettings->getTonerRankSets()));
             $reportDate = date('m/d/Y', strtotime($this->_assessment->reportDate));
 
             $this->_form->populate(array(
@@ -150,22 +151,57 @@ class Assessment_Service_Assessment_Settings
                     unset($validData [$key]);
                 }
             }
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['assessmentPricingConfigId']);
-            }
-            if ((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['grossMarginPricingConfigId']);
-            }
 
             // Save the id as it will get erased
             $assessmentSettingsId = $this->_assessmentSettings->id;
 
+            $rankingSetMapper = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+            // If we have selected toners, we have to save the to the table
+            if (isset($validData['customerColorRankSetArray']))
+            {
+                $this->_assessmentSettings->customerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_assessmentSettings->customerColorRankSetId, $validData['customerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_assessmentSettings->customerColorRankSetId);
+            }
+
+            if (isset($validData['customerMonochromeRankSetArray']))
+            {
+                $this->_assessmentSettings->customerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_assessmentSettings->customerMonochromeRankSetId, $validData['customerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_assessmentSettings->customerMonochromeRankSetId);
+            }
+
+            if (isset($validData['dealerColorRankSetArray']))
+            {
+                $this->_assessmentSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_assessmentSettings->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_assessmentSettings->dealerColorRankSetId);
+            }
+
+            if (isset($validData['dealerMonochromeRankSetArray']))
+            {
+                $this->_assessmentSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_assessmentSettings->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_assessmentSettings->dealerMonochromeRankSetId);
+            }
+
+            // Override the setting so the id doesn't get overwritten when we populate
+            $this->_defaultSettings->customerMonochromeRankSetId = $this->_assessmentSettings->customerMonochromeRankSetId;
+            $this->_defaultSettings->customerColorRankSetId      = $this->_assessmentSettings->customerColorRankSetId;
+            $this->_defaultSettings->dealerMonochromeRankSetId   = $this->_assessmentSettings->dealerMonochromeRankSetId;
+            $this->_defaultSettings->dealerColorRankSetId        = $this->_assessmentSettings->dealerColorRankSetId;
+
             $this->_assessmentSettings->populate($this->_defaultSettings->toArray());
             $this->_assessmentSettings->populate($validData);
-
             // Restore the ID
             $this->_assessmentSettings->id = $assessmentSettingsId;
 
@@ -178,4 +214,6 @@ class Assessment_Service_Assessment_Settings
 
         return false;
     }
+
+
 }

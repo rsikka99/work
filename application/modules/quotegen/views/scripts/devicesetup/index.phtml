@@ -1,4 +1,13 @@
-<?php $this->headScript()->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js')); ?>
+<?php
+$this->headScript()
+->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/deviceattributes.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
+->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'));
+?>
 <div class="clearfix">
     <div class="page-header">
         <h1>Hardware Quote Devices -
@@ -6,12 +15,6 @@
         </h1>
     </div>
     <div class="well">
-        <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_CREATE)) : ?>
-            <a class="btn btn-success btn-small pull-right create-button"
-               href="<?php echo $this->url(array('action' => 'create')) ?>"> <i
-                    class="icon-white icon-plus-sign"></i> Create new
-            </a>
-        <?php endif; ?>
         <form id="editMasterDeviceForm" class="form-inline" onsubmit="javascript: updateGrid('search');return false">
             <div id="filter_container">
                 <div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
@@ -23,11 +26,18 @@
                     </select>
                     <label for="txtCriteria" style="padding: 0px 0px 0px 10px;">For</label>
                     <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-                    <label for="chkCanSell" style="padding: 0px 0px 0px 10px;">Only Can Sell</label>
-                    <input type="checkbox" name="chkCanSell" id="chkCanSell" />
                     <input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: updateGrid('search');" />
                     <input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: updateGrid('clear');" />
+                    </br>
+                    <span>Show only:</span>
+                    <label for="chkCanSell" style="padding: 5px 0px 0px 10px;">Can Sell</label>
+                    <input type="checkbox" name="chkCanSell" id="chkCanSell" style="margin-bottom:5px" />
+                    <label for="chkUnapproved" style="padding: 5px 0px 0px 10px;">Unapproved</label>
+                    <input type="checkbox" name="chkUnapproved" id="chkUnapproved" style="margin-bottom:5px" />
                 </div>
+                    <a class="btn btn-success btn-small pull-right" onclick="javascript: showMasterDeviceManagementModal(0,0,true);">
+                        <i class="icon-white icon-plus-sign"></i> Create new
+                    </a>
             </div>
             <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
         </form>
@@ -35,4 +45,17 @@
         <div id="devicesGridPager"></div>
     </div>
 </div>
+<?php
+/**
+ * This is the modal that is created when you want to create or edit a master device
+ */
 
+?>
+<div class="modal hide masterDeviceModal" id="manageMasterDeviceModal">
+    <div class="modal-body" style="max-height:700px">
+        <div id="masterDeviceManagement">
+        </div>
+    </div>
+</div>
+
+<input type="hidden" id="isAdmin" value="<?php echo $this->isAdmin; ?>" />

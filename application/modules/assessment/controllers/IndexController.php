@@ -152,7 +152,6 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
         $assessment                = $this->getAssessment();
         $assessmentSettingsService = new Assessment_Service_Assessment_Settings($assessment->id, $this->_identity->id, $this->_identity->dealerId);
 
-
         if ($this->getRequest()->isPost())
         {
             $db = Zend_Db_Table::getDefaultAdapter();

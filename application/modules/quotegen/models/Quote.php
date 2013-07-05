@@ -105,21 +105,9 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public $adminCostPerPage;
 
     /**
-     * @var int
-     */
-    public $pricingConfigId;
-
-    /**
      * @var string
      */
     public $quoteType;
-
-    /**
-     * A pricing config object
-     *
-     * @var Proposalgen_Model_PricingConfig
-     */
-    protected $_pricingConfig;
 
     /**
      * The leasing schema term for the quote
@@ -135,6 +123,25 @@ class Quotegen_Model_Quote extends My_Model_Abstract
      */
     protected $_quoteDevices;
 
+    /**
+     * @var int
+     */
+    public $dealerMonochromeRankSetId;
+
+    /**
+     * @var int
+     */
+    public $dealerColorRankSetId;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerMonochromeRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerColorRankSet;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -221,16 +228,20 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
 
-        if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
-        {
-            $this->pricingConfigId = $params->pricingConfigId;
-        }
-
         if (isset($params->quoteType) && !is_null($params->quoteType))
         {
             $this->quoteType = $params->quoteType;
         }
 
+        if (isset($params->dealerMonochromeRankSetId) && !is_null($params->dealerMonochromeRankSetId))
+        {
+            $this->dealerMonochromeRankSetId = $params->dealerMonochromeRankSetId;
+        }
+
+        if (isset($params->dealerColorRankSetId) && !is_null($params->dealerColorRankSetId))
+        {
+            $this->dealerColorRankSetId = $params->dealerColorRankSetId;
+        }
     }
 
     /**
@@ -239,25 +250,85 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                      => $this->id,
-            "clientId"                => $this->clientId,
-            "dateCreated"             => $this->dateCreated,
-            "dateModified"            => $this->dateModified,
-            "quoteDate"               => $this->quoteDate,
-            "clientDisplayName"       => $this->clientDisplayName,
-            "leaseTerm"               => $this->leaseTerm,
-            "leaseRate"               => $this->leaseRate,
-            "pageCoverageMonochrome"  => $this->pageCoverageMonochrome,
-            "pageCoverageColor"       => $this->pageCoverageColor,
-            "monochromePageMargin"    => $this->monochromePageMargin,
-            "colorPageMargin"         => $this->colorPageMargin,
-            "monochromeOverageMargin" => $this->monochromeOverageMargin,
-            "colorOverageMargin"      => $this->colorOverageMargin,
-            "adminCostPerPage"        => $this->adminCostPerPage,
-            "pricingConfigId"         => $this->pricingConfigId,
-            "quoteType"               => $this->quoteType,
+            "id"                        => $this->id,
+            "clientId"                  => $this->clientId,
+            "dateCreated"               => $this->dateCreated,
+            "dateModified"              => $this->dateModified,
+            "quoteDate"                 => $this->quoteDate,
+            "clientDisplayName"         => $this->clientDisplayName,
+            "leaseTerm"                 => $this->leaseTerm,
+            "leaseRate"                 => $this->leaseRate,
+            "pageCoverageMonochrome"    => $this->pageCoverageMonochrome,
+            "pageCoverageColor"         => $this->pageCoverageColor,
+            "monochromePageMargin"      => $this->monochromePageMargin,
+            "colorPageMargin"           => $this->colorPageMargin,
+            "monochromeOverageMargin"   => $this->monochromeOverageMargin,
+            "colorOverageMargin"        => $this->colorOverageMargin,
+            "adminCostPerPage"          => $this->adminCostPerPage,
+            "quoteType"                 => $this->quoteType,
+            "dealerMonochromeRankSetId" => $this->dealerMonochromeRankSetId,
+            "dealerColorRankSetId"      => $this->dealerColorRankSetId,
         );
     }
+
+    /**
+     * @return array
+     */
+    public function getTonerRankSets ()
+    {
+        return array(
+            "dealerMonochromeRankSetArray" => $this->getDealerMonochromeRankSet()->getRanksAsArray(),
+            "dealerColorRankSetArray"      => $this->getDealerColorRankSet()->getRanksAsArray(),
+        );
+    }
+
+
+    /**
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public function getDealerMonochromeRankSet ()
+    {
+        if (!isset($this->_dealerMonochromeRankSet))
+        {
+            if ($this->dealerMonochromeRankSetId > 0)
+            {
+                $this->_dealerMonochromeRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerMonochromeRankSetId);
+            }
+            else
+            {
+                $this->_dealerMonochromeRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerMonochromeRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerMonochromeRankSet);
+                // Update ourselves
+                Quotegen_Model_Mapper_Quote::getInstance()->save($this);
+            }
+        }
+
+        return $this->_dealerMonochromeRankSet;
+    }
+
+    /**
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public function getDealerColorRankSet ()
+    {
+        if (!isset($this->_dealerColorRankSet))
+        {
+            if ($this->dealerColorRankSetId > 0)
+            {
+                $this->_dealerColorRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerColorRankSetId);
+            }
+            else
+            {
+                $this->_dealerColorRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerColorRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerColorRankSet);
+                // Update ourselves
+                Quotegen_Model_Mapper_Quote::getInstance()->save($this);
+            }
+        }
+
+        return $this->_dealerColorRankSet;
+    }
+
 
     /**
      * Gets the client for the report
@@ -319,36 +390,6 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public function setQuoteDeviceGroups ($_quoteDeviceGroups)
     {
         $this->_quoteDeviceGroups = $_quoteDeviceGroups;
-
-        return $this;
-    }
-
-    /**
-     * Gets the pricing config object
-     *
-     * @return Proposalgen_Model_PricingConfig The pricing config object.
-     */
-    public function getPricingConfig ()
-    {
-        if (!isset($this->_pricingConfig))
-        {
-            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->pricingConfigId);
-        }
-
-        return $this->_pricingConfig;
-    }
-
-    /**
-     * Sets the pricing config object
-     *
-     * @param $_pricingConfig Proposalgen_Model_PricingConfig
-     *                        The new pricing config.
-     *
-     * @return $this
-     */
-    public function setPricingConfig ($_pricingConfig)
-    {
-        $this->_pricingConfig = $_pricingConfig;
 
         return $this;
     }

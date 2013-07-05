@@ -52,7 +52,7 @@ class Admin_TonerController extends Tangent_Controller_Action
         $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($tonerId);
         if (count($deviceToners) < 1)
         {
-            $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getPartType()->typeName} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
+            $message = "Are you sure you want to delete toner SKU {$toner->sku} ({$toner->getManufacturer()->displayname} {$toner->getTonerColor()->tonerColorName} {$toner->yield})?";
             $form    = new Application_Form_Delete($message);
 
             $request = $this->getRequest();

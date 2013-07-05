@@ -8,7 +8,7 @@ class Preferences_Service_QuoteSetting
     /**
      * Default report settings and survey settings combined into an array
      *
-     * @var Quotegen_Model_QuoteSetting|array|null
+     * @var Quotegen_Model_QuoteSetting|null
      */
     protected $_defaultSettings;
 
@@ -30,7 +30,7 @@ class Preferences_Service_QuoteSetting
     /**
      * Default settings should be an array of settings that are being used
      *
-     * @param $defaultSettings array
+     * @param $defaultSettings Quotegen_Model_QuoteSetting
      */
     public function __construct ($defaultSettings = null)
     {
@@ -53,17 +53,16 @@ class Preferences_Service_QuoteSetting
             $populateSettings = $dealerQuoteSetting->toArray();
 
             // User form will populate the description with defaults
-            if (is_array($this->_defaultSettings))
+            if (is_array($this->_defaultSettings->toArray()))
             {
                 $this->_form->getElement('pageCoverageMonochrome')->setDescription($populateSettings['pageCoverageMonochrome']);
                 $this->_form->getElement('pageCoverageColor')->setDescription($populateSettings['pageCoverageColor']);
                 $this->_form->getElement('deviceMargin')->setDescription($populateSettings['deviceMargin']);
                 $this->_form->getElement('pageMargin')->setDescription($populateSettings['pageMargin']);
                 $this->_form->getElement('adminCostPerPage')->setDescription($populateSettings['adminCostPerPage']);
-                $this->_form->getElement('pricingConfigId')->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['pricingConfigId']]);
 
                 // Re-load the settings into report settings
-                $populateSettings = $this->_defaultSettings;
+                $populateSettings = $this->_defaultSettings->toArray();
             }
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
@@ -84,14 +83,16 @@ class Preferences_Service_QuoteSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form      = new Preferences_Form_QuoteSetting();
-            $populateSettings = $this->_systemQuoteSetting->toArray();
+            $this->_form = new Preferences_Form_QuoteSetting();
             if ($this->_defaultSettings)
             {
                 // Get the user settings for population
-                $this->_systemQuoteSetting->populate($this->_defaultSettings);
-                // Re-load the settings into report settings
-                $populateSettings = $this->_systemQuoteSetting->toArray();
+                $this->_systemQuoteSetting->populate($this->_defaultSettings->toArray());
+                $this->_form->populate($this->_defaultSettings->getTonerRankSets());
+            }
+            else
+            {
+                $this->_form->populate($this->_systemQuoteSetting->getTonerRankSets());
             }
 
             // Get the current class of the element and adds default settings
@@ -101,7 +102,7 @@ class Preferences_Service_QuoteSetting
                 $element->setAttrib('class', "{$currentClass} defaultSettings ");
             }
 
-            $this->_form->populate($populateSettings);
+            $this->_form->populate($this->_systemQuoteSetting->toArray());
         }
 
         return $this->_form;
@@ -163,18 +164,32 @@ class Preferences_Service_QuoteSetting
                 }
             }
 
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['pricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            $quoteSetting     = new Quotegen_Model_QuoteSetting();
+            $rankingSetMapper = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+            if (isset($validData['dealerColorRankSetArray']))
             {
-                unset($validData ['pricingConfigId']);
+                $quoteSetting->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings->dealerColorRankSetId);
             }
 
-            $quoteSetting = new Quotegen_Model_QuoteSetting();
+            if (isset($validData['dealerMonochromeRankSetArray']))
+            {
+                $quoteSetting->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings->dealerMonochromeRankSetId);
+            }
+
             $quoteSetting->populate($validData);
 
             if ($this->_defaultSettings)
             {
-                $quoteSetting->id = $this->_defaultSettings['id'];
+                $quoteSetting->id = $this->_defaultSettings->id;
             }
             else
             {

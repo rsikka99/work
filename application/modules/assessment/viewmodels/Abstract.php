@@ -84,7 +84,8 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
             $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->pricingConfiguration   = $assessmentSettings->getAssessmentPricingConfig();
+            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $assessmentSettings->getCustomerMonochromeRankSet();
+            $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $assessmentSettings->getCustomerColorRankSet();
         }
 
         return $this->_costPerPageSettingForCustomer;
@@ -105,7 +106,8 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForDealer->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
             $this->_costPerPageSettingForDealer->pageCoverageColor      = $assessmentSettings->actualPageCoverageColor;
             $this->_costPerPageSettingForDealer->pageCoverageMonochrome = $assessmentSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForDealer->pricingConfiguration   = $assessmentSettings->getGrossMarginPricingConfig();
+            $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $assessmentSettings->getDealerMonochromeRankSet();
+            $this->_costPerPageSettingForDealer->colorTonerRankSet      = $assessmentSettings->getDealerColorRankSet();
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -127,7 +129,7 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForReplacements->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
             $this->_costPerPageSettingForReplacements->pageCoverageColor      = $assessmentSettings->actualPageCoverageColor;
             $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $assessmentSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForReplacements->pricingConfiguration   = $assessmentSettings->getReplacementPricingConfig();
+            $this->_costPerPageSettingForReplacements->monochromeTonerRankSet = $assessmentSettings->getReplacementPricingConfig();
         }
 
         return $this->_costPerPageSettingForReplacements;

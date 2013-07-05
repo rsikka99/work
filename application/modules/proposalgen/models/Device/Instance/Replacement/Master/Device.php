@@ -132,11 +132,11 @@ class Proposalgen_Model_Device_Instance_Replacement_Master_Device extends My_Mod
         return $this;
     }
 
-    public function getMasterDeviceForReports ($dealerId)
+    public function getMasterDeviceForReports ($dealerId, $defaultLaborCostPerPage, $defaultPartsCostPerPage)
     {
         if (!isset($this->_reportMasterDevice))
         {
-            $this->_reportMasterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($this->masterDeviceId, $dealerId);
+            $this->_reportMasterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($this->masterDeviceId, $dealerId, $defaultLaborCostPerPage, $defaultPartsCostPerPage);
         }
 
         return $this->_reportMasterDevice;

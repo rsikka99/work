@@ -102,7 +102,8 @@ class Hardwareoptimization_ViewModel_Optimization
             $this->_costPerPageSettingForDealer->pageCoverageColor      = $reportSettings->pageCoverageColor;
             $this->_costPerPageSettingForDealer->laborCostPerPage       = $reportSettings->laborCostPerPage;
             $this->_costPerPageSettingForDealer->partsCostPerPage       = $reportSettings->partsCostPerPage;
-            $this->_costPerPageSettingForDealer->pricingConfiguration   = $reportSettings->getPricingConfig($reportSettings->dealerPricingConfigId);
+            $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $reportSettings->getDealerMonochromeRankSet();
+            $this->_costPerPageSettingForDealer->colorTonerRankSet      = $reportSettings->getDealerColorRankSet();
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -119,13 +120,14 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_costPerPageSettingForReplacements = new Proposalgen_Model_CostPerPageSetting();
 
-            $reportSettings                                                 = $this->_optimization->getHardwareOptimizationSetting();
-            $this->_costPerPageSettingForReplacements->adminCostPerPage     = $reportSettings->adminCostPerPage;
-            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome     = $reportSettings->pageCoverageMonochrome;
-            $this->_costPerPageSettingForReplacements->pageCoverageColor          = $reportSettings->pageCoverageColor;
-            $this->_costPerPageSettingForReplacements->laborCostPerPage           = $reportSettings->laborCostPerPage;
-            $this->_costPerPageSettingForReplacements->partsCostPerPage           = $reportSettings->partsCostPerPage;
-            $this->_costPerPageSettingForReplacements->pricingConfiguration = $reportSettings->getPricingConfig($reportSettings->replacementPricingConfigId);
+            $reportSettings                                                   = $this->_optimization->getHardwareOptimizationSetting();
+            $this->_costPerPageSettingForReplacements->adminCostPerPage       = $reportSettings->adminCostPerPage;
+            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $reportSettings->pageCoverageMonochrome;
+            $this->_costPerPageSettingForReplacements->pageCoverageColor      = $reportSettings->pageCoverageColor;
+            $this->_costPerPageSettingForReplacements->laborCostPerPage       = $reportSettings->laborCostPerPage;
+            $this->_costPerPageSettingForReplacements->partsCostPerPage       = $reportSettings->partsCostPerPage;
+            $this->_costPerPageSettingForReplacements->monochromeTonerRankSet = $reportSettings->getReplacementMonochromeRankSet();
+            $this->_costPerPageSettingForReplacements->colorTonerRankSet      = $reportSettings->getReplacementColorRankSet();
         }
 
         return $this->_costPerPageSettingForReplacements;

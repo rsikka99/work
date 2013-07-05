@@ -41,72 +41,69 @@
         <?php endif; ?>
     </div>
 <?php endif; ?>
-<h3>Device Management</h3>
-<div class="row">
+<?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)
+          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)
+          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)
+          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)
+) : ?>
+    <h3>Device Management</h3>
+    <div class="row">
+        <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "devicesetup", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                    All Devices<br /><br /> </a>
+            </div>
+        <?php endif; ?>
 
-    <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "devicesetup", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                All Devices<br /><br /> </a>
-        </div>
-    <?php endif; ?>
+        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "costs", "module" => "proposalgen")); ?>"><i class="icon-upload-alt icon-4x"></i><br /><br />
+                    Bulk Hardware / <br />Pricing Updates <br /> </a>
+            </div>
+        <?php endif; ?>
 
-    <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_CONFIGURATION_INDEX)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "configuration", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                Hardware Quote <br /> Configurations</a>
-        </div>
-    <?php endif; ?>
+        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                    Solution Replacement <br /> Devices <br /> </a>
+            </div>
+        <?php endif; ?>
 
-    <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_OPTION_WILDCARD)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "option", "module" => "quotegen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                Hardware Quote <br /> Device Options</a>
-        </div>
-    <?php endif; ?>
+        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                    Manage Device <br /> Swaps <br /> </a>
+            </div>
+        <?php endif; ?>
+    </div>
 
-    <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "costs", "module" => "proposalgen")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                Bulk Pricing Updates<br /> <br /> </a>
-        </div>
-    <?php endif; ?>
-
-    <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                Solution Replacement <br /> Devices <br /> </a>
-        </div>
-    <?php endif; ?>
-
-    <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                Manage Device <br /> Swaps <br /> </a>
-        </div>
-    <?php endif; ?>
-</div>
-<h3>Account Management</h3>
-<div class="row">
-    <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
-                Clients<br /><br /></a>
-        </div>
-    <?php endif; ?>
-    <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                Lease Rates<br /><br /></a>
-        </div>
-    <?php endif; ?>
-    <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
-        <div class="span2">
-            <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
-                Users<br /><br /></a>
-        </div>
-    <?php endif; ?>
-</div>
+<?php endif; ?>
+<?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)
+          || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)
+          || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)
+) : ?>
+    <h3>Account Management</h3>
+    <div class="row">
+        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "client", "module" => "dealermanagement")); ?>"><i class="icon-star icon-4x"></i><br /><br />
+                    Clients<br /><br /></a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "dealermanagement")); ?>"><i class="icon-money icon-4x"></i><br /><br />
+                    Lease Rates<br /><br /></a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
+                    Users<br /><br /></a>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
 <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_USER)) : ?>
     <h3>My Settings</h3>
     <div class="row">

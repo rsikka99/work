@@ -162,15 +162,6 @@ $(document).ready(function ()
                 editoptions: {size: 20, maxlength: 30}
             },
             {
-                width      : 50,
-                name       : 'part_type_id',
-                index      : 'partTypeId',
-                label      : 'Type',
-                editable   : true,
-                sortable : true,
-                editoptions: {size: 20, maxlength: 30}
-            },
-            {
                 width      : 60,
                 name       : 'toner_color_name',
                 index      : 'toner_color_name',
@@ -301,7 +292,7 @@ $(document).ready(function ()
                 var min = 4;
                 var max = 2;
                 var output = '';
-                device_list = document.getElementById("toners_list").rows[i + 1].cells[14].innerHTML;
+                device_list = document.getElementById("toners_list").rows[i + 1].cells[13].innerHTML;
                 var pieces = device_list.split("; ");
                 output += '<div id="outer_' + ids[i] + '" style="text-align: left; width: 200px;">';
                 for (var j = 0; j < pieces.length; j++)
@@ -459,7 +450,14 @@ function setupManufacturerList(url)
         dataType   : "json",
         success    : function (data)
         {
-            var obj = jQuery.parseJSON(data);
+            var obj = data;
+            if (typeof(data) == 'string')
+            {
+                obj = jQuery.parseJSON(data);
+            }
+            else
+
+
             var options = '';
             for (var i = 0; i < data.rows.length; i++)
             {

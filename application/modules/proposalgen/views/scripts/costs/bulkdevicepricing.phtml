@@ -19,9 +19,11 @@
 	var repop_array = '<?php echo $this->repop_array; ?>';
 	var repop_page = '<?php echo $this->repop_page; ?>';
 <?php $this->headScript()->captureEnd() ?>
+
 <?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/admin/bulkdevicepricing.js')); ?>
+<?php $this->headTitle('Bulk Hardware/Pricing Updates'); ?>
 <div class="page-header">
-    <h1>Update Pricing</h1>
+    <h1>Bulk Hardware/Pricing Updates</h1>
 </div>
 
 <form name="bulk" id="bulk" action="" method="post">

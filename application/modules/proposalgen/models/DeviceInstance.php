@@ -1227,7 +1227,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $hardwareOptimization                  = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
             if ($deviceInstanceReplacementMasterDevice)
             {
-                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($hardwareOptimization->dealerId);
+                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($hardwareOptimization->dealerId, $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage, $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage);
             }
         }
 

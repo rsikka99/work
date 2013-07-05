@@ -247,21 +247,24 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                                                              ));
         $this->addElement($adminCostPerPage);
 
+        $tonerRankSets = $this->_quote->getTonerRankSets();
+        $dealerMonochromeVendor = $this->createElement('multiselect', 'dealerMonochromeRankSetArray',
+            array(
+                 'class' => 'tonerMultiselect',
+                 'value' => $tonerRankSets['dealerMonochromeRankSetArray'],
+            ));
+        $dealerColorVendor      = $this->createElement('multiselect', 'dealerColorRankSetArray',
+            array(
+                 'class' => 'tonerMultiselect',
+                 'value' => $tonerRankSets['dealerColorRankSetArray'],
+            ));
 
-        // pricingConfigId : Quotegen_Model_Quote->pricingConfigId
-        // pricingConfigId is used to determine the users prefernce for toners when it comes to calculating a devices CPP
-        $pricingConfigDropdown = $this->createElement('select', 'pricingConfigId', array(
-                                                                                        'label'    => 'Toner Preference:',
-                                                                                        'value'    => $this->_quote->pricingConfigId,
-                                                                                        'required' => true
-                                                                                   ));
+        $this->addElement($dealerMonochromeVendor);
+        $this->addElement($dealerColorVendor);
 
-        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
-        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
-        {
-            $pricingConfigDropdown->addMultiOption($pricingConfig->pricingConfigId, $pricingConfig->configName);
-        }
-        $this->addElement($pricingConfigDropdown);
+        $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
+        $dealerMonochromeVendor->setMultiOptions($tonerVendors);
+        $dealerColorVendor->setMultiOptions($tonerVendors);
     }
 
     public function loadDefaultDecorators ()

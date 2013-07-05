@@ -32,21 +32,29 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public $pageMargin;
 
     /**
-     * @var int
-     */
-    public $pricingConfigId;
-
-    /**
      * @var float
      */
     public $adminCostPerPage;
 
     /**
-     * A pricing config object
-     *
-     * @var Proposalgen_Model_PricingConfig
+     * @var int
      */
-    protected $_pricingConfig;
+    public $dealerMonochromeRankSetId;
+
+    /**
+     * @var int
+     */
+    public $dealerColorRankSetId;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerMonochromeRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerColorRankSet;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -83,16 +91,20 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
             $this->pageMargin = $params->pageMargin;
         }
 
-        if (isset($params->pricingConfigId) && !is_null($params->pricingConfigId))
-        {
-            $this->pricingConfigId = $params->pricingConfigId;
-        }
-
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
         }
 
+        if (isset($params->dealerMonochromeRankSetId) && !is_null($params->dealerMonochromeRankSetId))
+        {
+            $this->dealerMonochromeRankSetId = $params->dealerMonochromeRankSetId;
+        }
+
+        if (isset($params->dealerColorRankSetId) && !is_null($params->dealerColorRankSetId))
+        {
+            $this->dealerColorRankSetId = $params->dealerColorRankSetId;
+        }
     }
 
     /**
@@ -136,14 +148,6 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
         {
             $this->adminCostPerPage = $settings->adminCostPerPage;
         }
-
-        if (isset($settings->pricingConfigId) && !is_null($settings->pricingConfigId))
-        {
-            if ($settings->pricingConfigId !== Proposalgen_Model_PricingConfig::NONE)
-            {
-                $this->pricingConfigId = $settings->pricingConfigId;
-            }
-        }
     }
 
     /**
@@ -152,43 +156,71 @@ class Quotegen_Model_QuoteSetting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                     => $this->id,
-            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageColor"      => $this->pageCoverageColor,
-            "deviceMargin"           => $this->deviceMargin,
-            "pageMargin"             => $this->pageMargin,
-            "pricingConfigId"        => $this->pricingConfigId,
-            "adminCostPerPage"       => $this->adminCostPerPage,
+            "id"                        => $this->id,
+            "pageCoverageMonochrome"    => $this->pageCoverageMonochrome,
+            "pageCoverageColor"         => $this->pageCoverageColor,
+            "deviceMargin"              => $this->deviceMargin,
+            "pageMargin"                => $this->pageMargin,
+            "adminCostPerPage"          => $this->adminCostPerPage,
+            "dealerMonochromeRankSetId" => $this->dealerMonochromeRankSetId,
+            "dealerColorRankSetId"      => $this->dealerColorRankSetId,
         );
     }
 
     /**
-     * Gets the pricing config object
-     *
-     * @return Proposalgen_Model_PricingConfig The pricing config object.
+     * @return array
      */
-    public function getPricingConfig ()
+    public function getTonerRankSets ()
     {
-        if (!isset($this->_pricingConfig))
-        {
-            $this->_pricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->pricingConfigId);
-        }
-
-        return $this->_pricingConfig;
+        return array(
+            "dealerColorRankSetArray"      => $this->getdealerColorRankSet()->getRanksAsArray(),
+            "dealerMonochromeRankSetArray" => $this->getdealerMonochromeRankSet()->getRanksAsArray(),
+        );
     }
 
     /**
-     * Sets the pricing config object
-     *
-     * @param Proposalgen_Model_PricingConfig $_pricingConfig
-     *            The new pricing config.
-     *
-     * @return $this
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public function setPricingConfig ($_pricingConfig)
+    public function getDealerMonochromeRankSet ()
     {
-        $this->_pricingConfig = $_pricingConfig;
+        if (!isset($this->_dealerMonochromeRankSet))
+        {
+            if ($this->dealerMonochromeRankSetId > 0)
+            {
+                $this->_dealerMonochromeRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerMonochromeRankSetId);
+            }
+            else
+            {
+                $this->_dealerMonochromeRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerMonochromeRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerMonochromeRankSet);
+                // Update ourselves
+                Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($this);
+            }
+        }
 
-        return $this;
+        return $this->_dealerMonochromeRankSet;
+    }
+
+    /**
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public function getDealerColorRankSet ()
+    {
+        if (!isset($this->_dealerColorRankSet))
+        {
+            if ($this->dealerColorRankSetId > 0)
+            {
+                $this->_dealerColorRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerColorRankSetId);
+            }
+            else
+            {
+                $this->_dealerColorRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerColorRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerColorRankSet);
+                // Update ourselves
+                Quotegen_Model_Mapper_QuoteSetting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_dealerColorRankSet;
     }
 }

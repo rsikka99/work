@@ -70,12 +70,13 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_SETTINGS);
 
-        $user                        = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
-        $hardwareOptimizationService = new Hardwareoptimization_Service_Setting($this->_hardwareOptimization->getHardwareOptimizationSetting()->toArray());
+        $user = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
 
-        $defaultHardwareOptimizationSettings = $user->getDealer()->getDealerSettings()->getHardwareOptimizationSettings();
+        $defaultHardwareOptimizationSettings = clone $user->getDealer()->getDealerSettings()->getHardwareOptimizationSettings();
         $defaultHardwareOptimizationSettings->populate($user->getUserSettings()->getHardwareOptimizationSettings()->toArray());
-        $form = $hardwareOptimizationService->getFormWithDefaults($defaultHardwareOptimizationSettings->toArray());
+        $hardwareOptimizationService = new Hardwareoptimization_Service_Setting($this->_hardwareOptimization->getHardwareOptimizationSetting(), $defaultHardwareOptimizationSettings);
+
+        $form = $hardwareOptimizationService->getFormWithDefaults();
 
         if ($this->getRequest()->isPost())
         {
@@ -313,8 +314,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
+
         $optimization       = $this->getOptimizationViewModel();
         $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+        $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
 
         $instanceId     = $this->_getParam('deviceInstanceId');
         $deviceInstance = null;
@@ -351,8 +356,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
                 "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
+                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->monochromeCostPerPage, array("precision" => 4)),
+                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "isScan"                => (int)$replacementDevice->isScanner,
@@ -394,7 +399,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         }
 
         $replacementDeviceId = (int)$this->_getParam("replacementDeviceId");
-        $whereKey = array($deviceInstanceId, $this->_hardwareOptimization->id);
+        $whereKey            = array($deviceInstanceId, $this->_hardwareOptimization->id);
 
         if ($replacementDeviceId == 0)
         {
@@ -421,7 +426,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $deviceInstanceReplacementMasterDeviceMapper->insert($deviceInstanceReplacementMasterDevice);
             }
             $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                         $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId));
+                         $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($replacementDeviceId, $this->_identity->dealerId, $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage, $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage));
 
             $form                        = new Proposalgen_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_hardwareOptimization->id);
             $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);

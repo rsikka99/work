@@ -181,8 +181,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $healthcheckSettings = $this->healthcheck->getHealthcheckSettings();
 
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
-        $pricingConfig                              = new Proposalgen_Model_PricingConfig();
-        $pricingConfig->pricingConfigId             = Proposalgen_Model_PricingConfig::OEM;
 
         Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly());
 //        $this->_pageCount = new Proposalgen_Model_PageCounts();
@@ -905,7 +903,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_averageOemOnlyCostPerPage))
         {
             $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
-            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
+            $oemRankSet = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+            $costPerPageSetting->monochromeTonerRankSet = $oemRankSet;
+            $costPerPageSetting->colorTonerRankSet = $oemRankSet;
+
             $costPerPage                              = new Proposalgen_Model_CostPerPage();
             $costPerPage->monochromeCostPerPage       = 0;
             $costPerPage->colorCostPerPage            = 0;
@@ -945,7 +946,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_averageCompatibleOnlyCostPerPage))
         {
             $costPerPageSetting                       = clone $this->getCostPerPageSettingForCustomer();
-            $costPerPageSetting->pricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
             $costPerPage                              = new Proposalgen_Model_CostPerPage();
             $numberOfColorDevices                     = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)

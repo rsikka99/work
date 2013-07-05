@@ -407,7 +407,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                         // default column keys
                         $key_manufacturer  = null;
-                        $key_part_type     = null;
                         $key_sku           = null;
                         $key_color         = null;
                         $key_yield         = null;
@@ -432,10 +431,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             else if (strtolower($value) == "manufacturer")
                             {
                                 $key_manufacturer = $array_key;
-                            }
-                            else if (strtolower($value) == "type")
-                            {
-                                $key_part_type = $array_key;
                             }
                             else if (strtolower($value) == "sku")
                             {
@@ -521,16 +516,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                         $toner_sku   = $devices [$key] [$key_sku];
                                         $columns [0] = "Toner ID";
                                         $columns [1] = "Manufacturer";
-                                        $columns [2] = "Part Type";
-                                        $columns [3] = "SKU";
-                                        $columns [4] = "Color";
-                                        $columns [5] = "Yield";
-                                        $columns [6] = "System Price";
-                                        $columns [7] = "Dealer Sku";
-                                        $columns [8] = "New Price";
+                                        $columns [2] = "SKU";
+                                        $columns [3] = "Color";
+                                        $columns [4] = "Yield";
+                                        $columns [5] = "System Price";
+                                        $columns [6] = "Dealer Sku";
+                                        $columns [7] = "New Price";
 
                                         $table = new Proposalgen_Model_DbTable_Toner();
-                                        $where = $table->getAdapter()->quoteInto('sku = ?', $toner_sku, 'INTEGER');
+                                        $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
                                         $toner = $table->fetchRow($where);
 
                                         if ($toner && count($toner->toArray()) > 0)
@@ -538,13 +532,12 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                             // save into array
                                             $final_devices [0] = $toner->id;
                                             $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                            $final_devices [2] = $devices [$key] [$key_part_type];
-                                            $final_devices [3] = $devices [$key] [$key_sku];
-                                            $final_devices [4] = $devices [$key] [$key_color];
-                                            $final_devices [5] = $devices [$key] [$key_yield];
-                                            $final_devices [6] = $devices [$key] [$key_system_cost];
-                                            $final_devices [7] = $devices [$key] [$key_dealer_sku];
-                                            $final_devices [8] = $devices [$key] [$key_new_price];
+                                            $final_devices [2] = $devices [$key] [$key_sku];
+                                            $final_devices [3] = $devices [$key] [$key_color];
+                                            $final_devices [4] = $devices [$key] [$key_yield];
+                                            $final_devices [5] = $devices [$key] [$key_system_cost];
+                                            $final_devices [6] = $devices [$key] [$key_dealer_sku];
+                                            $final_devices [7] = $devices [$key] [$key_new_price];
                                         }
                                     }
 
@@ -694,14 +687,12 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                             }
                                             else
                                             {
-
                                                 if ($importLaborCpp > 0 || $importPartsCpp > 0)
                                                 {
                                                     $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
                                                     $masterDeviceAttribute->populate($dataArray);
                                                     Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
                                                 }
-
                                             }
                                         }
                                     }
@@ -794,6 +785,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             {
 
                                 $db->rollback();
+
                                 $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                             }
                         }
@@ -886,7 +878,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $fieldTitles = array(
                     'Toner ID',
                     'Manufacturer',
-                    'Type',
                     'SKU',
                     'Color',
                     'Yield',
@@ -916,9 +907,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     'tc' => 'toner_colors'
                                ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
                     ->joinLeft(array(
-                                    'pt' => 'part_types'
-                               ), 'pt.id = t.partTypeId', 'name AS part_type')
-                    ->joinLeft(array(
                                     'dta' => 'dealer_toner_attributes'
                                ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
                     ->where("t.id > 0")
@@ -935,7 +923,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     $fieldList [] = array(
                         $value ['toners_id'],
                         $value ['fullname'],
-                        $value ['part_type'],
                         $value ['sku'],
                         $value ['toner_color'],
                         $value ['yield'],

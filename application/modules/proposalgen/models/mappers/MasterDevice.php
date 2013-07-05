@@ -289,8 +289,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql);
+                     ->getAdapter()
+                     ->fetchAll($sql);
 
         $entries = array();
         foreach ($resultSet as $row)
@@ -329,7 +329,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      * @return number|array Returns an array, or if justCount is true then it will count how many rows are
      *         available
      */
-    public function getCanSellMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $canSell = false, $justCount = false)
+    public function getCanSellMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $canSell = false, $approved = false, $justCount = false)
     {
         $db                     = Zend_Db_Table::getDefaultAdapter();
         $masterDevicesTableName = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
@@ -349,6 +349,10 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         else if (strcasecmp($filterByColumn, 'dealerSku') === 0 && $filterValue !== '')
         {
             $whereClause ["dealerSku LIKE ?"] = "%{$filterValue}%";
+        }
+        if ($approved)
+        {
+            $whereClause ["isSystemDevice = ?"] = "0";
         }
 
         if ($justCount)
@@ -371,7 +375,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         {
             $masterDeviceColumns = array(
                 'id',
-                'modelName'
+                'modelName',
             );
             $deviceColumns       = array(
                 'oemSku',
@@ -388,14 +392,14 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         if ($canSell)
         {
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
-                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
-                ->join($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
+                            ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
+                            ->join($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
         else
         {
             $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns)
-                ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
-                ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
+                            ->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns)
+                            ->joinLeft($deviceTableName, "{$masterDevicesTableName}.`id` = {$deviceTableName}.`masterDeviceId`" . ' && ' . $deviceTableName . '.dealerId = ' . Zend_Auth::getInstance()->getIdentity()->dealerId, $deviceColumns);
         }
         // Apply our where clause
         foreach ($whereClause as $cond => $value)
@@ -408,7 +412,6 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
             $offset = ($offset > 0) ? $offset : null;
             $zendDbSelect->limit($limit, $offset);
         }
-        // TODO: Process a where clause here
 
         // If we're just counting we only need to return the count
         if ($justCount)
@@ -488,10 +491,10 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $db     = Zend_Db_Table::getDefaultAdapter();
         $select = $db->select();
         $select->from(array("md" => $this->getTableName()), array('modelName', 'id'))
-            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$this->col_manufacturerId}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName})")))
-            ->where("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName}) LIKE ? AND m.isDeleted = 0")
-            ->limit($returnLimit)
-            ->order($sortOrder);
+        ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$this->col_manufacturerId}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName})")))
+        ->where("concat({$manufacturerMapper->col_fullName},' ', {$this->col_modelName}) LIKE ? AND m.isDeleted = 0")
+        ->limit($returnLimit)
+        ->order($sortOrder);
 
         /*
          * Filter by manufacturer id if provided
@@ -523,20 +526,20 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $defaultLaborCostPerPage = $db->quote($defaultLaborCostPerPage, 'FLOAT');
         $dealerId                = $db->quote($dealerId, 'INT');
         $select                  = $db->select()
-            ->from(array('pmd' => 'master_devices'), array(
-                                                          'pmd.*',
-                                                     ))
-            ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
-                                                                                                                                                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
-                                                                                                                                                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
-                                                                                                                                                "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
-                                                                                                                                                "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                                                                                                                                                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                                                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
-                                                                                                                                                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                                                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
-                                                                                                                                           ))
-            ->where("pmd.id = ? ", $masterDeviceId);
+                                   ->from(array('pmd' => 'master_devices'), array(
+                                                                                 'pmd.*',
+                                                                            ))
+                                   ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
+                                                                                                                                                                       "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
+                                                                                                                                                                       "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
+                                                                                                                                                                       "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
+                                                                                                                                                                       "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
+                                                                                                                                                                       "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                                                                       "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
+                                                                                                                                                                       "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
+                                                                                                                                                                       "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
+                                                                                                                                                                  ))
+                                   ->where("pmd.id = ? ", $masterDeviceId);
 
         $stmt = $db->query($select);
 

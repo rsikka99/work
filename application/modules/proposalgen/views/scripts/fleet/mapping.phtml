@@ -1,7 +1,13 @@
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
-var canEditMasterDevices = <?php echo ($this->IsAllowed('proposalgen__managedevices__managemappingdevices')) ? 'true' : 'false'; ?>;
+var canEditMasterDevices = <?php echo ($this->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
 var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
-<?php $this->headScript()->captureEnd(); ?>
+<?php $this->headScript()->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/deviceattributes.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
+      ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'))->captureEnd(); ?>
 
 <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/deviceMapping.js')); ?>
 <div class="well">
@@ -12,11 +18,17 @@ var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
     <form id="addUnknownDeviceForm" action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
         <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
     </form>
-    <form id="addMasterDeviceForm" action="<?php echo $this->url(array("controller" => "managedevices", "action" => "managemappingdevices")); ?>" method="POST">
+    <form id="addMasterDeviceForm" method="POST">
         <input type="hidden" name="deviceInstanceIds" id="masterDeviceDeviceInstanceIds" />
     </form>
     <table id="mappingGrid"></table>
     <div id="mappingGridPager"></div>
 
+    <div class="modal hide masterDeviceModal" id="manageMasterDeviceModal">
+        <div class="modal-body" style="max-height:700px">
+            <div id="masterDeviceManagement">
+            </div>
+        </div>
+    </div>
     <?php echo $this->navigationForm; ?>
 </div>

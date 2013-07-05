@@ -53,7 +53,7 @@ class Preferences_Service_ReportSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Preferences_Form_ReportSetting();
+            $this->_form = new Preferences_Form_ReportSetting($this->_defaultSettings['id']);
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings))
@@ -73,8 +73,6 @@ class Preferences_Service_ReportSetting
                 $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
                 $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
                 $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
-                $this->_form->getElement("assessmentPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['assessmentPricingConfigId']]);
-                $this->_form->getElement("grossMarginPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['grossMarginPricingConfigId']]);
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;
             }
@@ -97,7 +95,7 @@ class Preferences_Service_ReportSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form      = new Preferences_Form_ReportSetting();
+            $this->_form      = new Preferences_Form_ReportSetting($this->_defaultSettings['id']);
             $populateSettings = array_merge($this->_systemReportSettings->toArray(), $this->_systemSurveySettings->toArray());
             if ($this->_defaultSettings)
             {
@@ -115,7 +113,7 @@ class Preferences_Service_ReportSetting
                 $element->setAttrib('class', "{$currentClass} defaultSettings ");
             }
 
-            $this->_form->populate($populateSettings);
+            $this->_form->populate(array_merge($populateSettings, $this->_systemReportSettings->getTonerRankSets()));
         }
 
         return $this->_form;
@@ -177,22 +175,45 @@ class Preferences_Service_ReportSetting
                 }
             }
 
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['assessmentPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['assessmentPricingConfigId']);
-            }
-            if ((int)$validData ['grossMarginPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['grossMarginPricingConfigId']);
-            }
-            if ((int)$validData ['replacementPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['replacementPricingConfigId']);
-            }
-
             $assessmentSetting = new Assessment_Model_Assessment_Setting();
             $surveySetting     = new Proposalgen_Model_Survey_Setting();
+            $rankingSetMapper  = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+            if (isset($validData['customerColorRankSetArray']))
+            {
+                $assessmentSetting->customerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings["customerColorRankSetId"], $validData['customerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings["customerColorRankSetId"]);
+            }
+
+            if (isset($validData['customerMonochromeRankSetArray']))
+            {
+                $assessmentSetting->customerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings["customerMonochromeRankSetId"], $validData['customerMonochromeRankSetArray']); //                $this->_form->getElement("customerMonochromeVendor")->setAttrib('data-ranking-id', $assessmentSetting->customerMonochromeRankSetId);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings["customerMonochromeRankSetId"]);
+            }
+
+            if (isset($validData['dealerColorRankSetArray']))
+            {
+                $assessmentSetting->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings["dealerColorRankSetId"], $validData['dealerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings["dealerColorRankSetId"]);
+            }
+
+            if (isset($validData['dealerMonochromeRankSetArray']))
+            {
+                $assessmentSetting->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings["dealerMonochromeRankSetId"], $validData['dealerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings["dealerMonochromeRankSetId"]);
+            }
 
             $assessmentSetting->populate($validData);
             $surveySetting->populate($validData);
@@ -211,9 +232,12 @@ class Preferences_Service_ReportSetting
             Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($assessmentSetting);
             Proposalgen_Model_Mapper_Survey_Setting::getInstance()->save($surveySetting);
 
+
             return true;
         }
 
         return false;
     }
+
+
 }

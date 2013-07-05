@@ -16,7 +16,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
-
+        $this->isAdmin       = $this->view->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $this->view->isAdmin = $this->isAdmin;
     }
 
     /**
@@ -34,6 +35,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             'rows' => $this->_getParam('rows', 10),
         );
         $canSell          = ($this->_getParam('canSell', false) === "true");
+        $unapproved         = ($this->_getParam('unapproved', false) === "true");
 
         if ($canSell)
         {
@@ -73,7 +75,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
 
-            $jqGrid->setRecordCount($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, null, null, $canSell, true));
+            $jqGrid->setRecordCount($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, null, null, $canSell, $unapproved, true));
 
             if ($jqGrid->getCurrentPage() < 1)
             {
@@ -85,7 +87,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 $startRecord = ($jqGrid->getCurrentPage() * $jqGrid->getRecordsPerPage()) - $jqGrid->getRecordsPerPage();
             }
 
-            $jqGrid->setRows($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord, $canSell));
+            $jqGrid->setRows($masterDeviceMapper->getCanSellMasterDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord, $canSell, $unapproved));
 
         }
         $this->sendJson($jqGrid->createPagerResponseArray());
@@ -706,10 +708,10 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         );
 
                         $safeToDelete     = true;
-                        $tonersByPartType = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
+                        $tonersByManufacturer = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($masterDeviceId);
 
                         // Count the toners
-                        foreach ($tonersByPartType as $tonersByColor)
+                        foreach ($tonersByManufacturer as $tonersByColor)
                         {
                             foreach ($tonersByColor as $tonerColorId => $toners)
                             {

@@ -192,7 +192,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     /**
      * Gets the hardware optimization settings
      *
-     * @return Hardwareoptimization_Model_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
     public function getHardwareOptimizationSettings ()
     {

@@ -134,31 +134,36 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         try
         {
             $fieldList_Values = "";
-            /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
+            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $tonerConfig               = $device->getMasterDevice()->tonerConfigId;
-                $dealerCostPerPageSettings = $assessmentViewModel->getCostPerPageSettingForDealer();
                 $blackToner                = null;
                 $colorToner                = null;
 
-                switch ($tonerConfig)
+                $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+
+                foreach ($toners as $toner)
                 {
-                    case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $dealerCostPerPageSettings);
-                        break;
-                    case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                        $colorToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $dealerCostPerPageSettings);
-                        break;
-                    case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $dealerCostPerPageSettings);
-                        $colorToner = $blackToner;
-                        break;
-                    default :
-                        $blackToner = $device->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                        break;
+                    switch ($toner->tonerColorId)
+                    {
+                        case Proposalgen_Model_TonerColor::BLACK:
+                            $blackToner = $toner;
+                            break;
+                        case Proposalgen_Model_TonerColor::CYAN:
+                        case Proposalgen_Model_TonerColor::MAGENTA:
+                        case Proposalgen_Model_TonerColor::YELLOW:
+                            $colorToner = $toner;
+                            break;
+                        case Proposalgen_Model_TonerColor::THREE_COLOR:
+                            $colorToner = $toner;
+                            break;
+                        case Proposalgen_Model_TonerColor::FOUR_COLOR:
+                            $blackToner = $toner;
+                            $colorToner = $toner;
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 // Black Toner
@@ -178,18 +183,18 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
-                $fieldList [] = str_ireplace("hewlett-packard", "HP", $device->getDeviceName()) . " (" . $device->ipAddress . " - " . $device->serialNumber . ")";
-                $fieldList [] = number_format($device->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
+                $fieldList [] = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . " (" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")";
+                $fieldList [] = number_format($deviceInstance->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
+                $fieldList [] = number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
 
-                $fieldList [] = "$" . number_format($device->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
-                $fieldList [] = $isColor ? number_format($device->getPageCounts()->color->getMonthly(), 0, '.', '') : "-";
+                $fieldList [] = "$" . number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
+                $fieldList [] = $isColor ? number_format($deviceInstance->getPageCounts()->color->getMonthly(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($device->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
-                $fieldList [] = $isColor ? "$" . number_format($device->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
 

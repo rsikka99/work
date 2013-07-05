@@ -12,6 +12,16 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
     /**
      * @var int
      */
+    public $userId;
+
+    /**
+     * @var int
+     */
+    public $isSystemDevice;
+
+    /**
+     * @var int
+     */
     public $masterDeviceId;
 
 
@@ -30,6 +40,16 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
             $this->tonerId = $params->tonerId;
         }
 
+        if (isset($params->userId) && !is_null($params->userId))
+        {
+            $this->userId = $params->userId;
+        }
+
+        if (isset($params->isSystemDevice) && !is_null($params->isSystemDevice))
+        {
+            $this->isSystemDevice = $params->isSystemDevice;
+        }
+
         if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
         {
             $this->masterDeviceId = $params->masterDeviceId;
@@ -44,7 +64,9 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
     {
         return array(
             "tonerId"        => $this->tonerId,
+            "userId"         => $this->userId,
             "masterDeviceId" => $this->masterDeviceId,
+            "isSystemDevice" => $this->isSystemDevice,
         );
     }
 }

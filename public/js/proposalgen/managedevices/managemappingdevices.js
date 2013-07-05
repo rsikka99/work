@@ -135,7 +135,6 @@ $(document).ready(function ()
             {width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}, sortable: false},
             {width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}, sortable: false},
             {width: 120, name: 'manufacturer_id', index: 'toner_manufacturer', sortable: false},
-            {width: 120, name: 'part_type_id', index: 'part_type_id', sortable: false},
             {width: 100, name: 'toner_color_id', index: 'toner_color_id', sortable: false},
             {width: 60, name: 'toner_yield', index: 'toner_yield', align: 'right', sortable: false},
             {width: 80, name: 'toner_price', index: 'toner_price', align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}, sortable: false},
@@ -205,7 +204,6 @@ $(document).ready(function ()
             {tag: 0, width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
             {tag: 1, width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
             {tag: 2, width: 120, name: 'manufacturer_id', index: 'toner_manufacturer', edittype: 'select', editable: true, editoptions: {value: manufacturerList}},
-            {tag: 3, width: 120, name: 'part_type_id', index: 'part_type_id', edittype: 'select', editable: true, editoptions: {value: partTypeList}},
             {tag: 4, width: 100, name: 'toner_color_id', index: 'tonerColorId', edittype: 'select', editable: true, editoptions: {value: colorList}},
             {tag: 5, width: 60, name: 'toner_yield', index: 'yield', editable: true, editoptions: {size: 10, maxlength: 5}, align: 'right', sorttype: 'int'},
             {tag: 6, width: 80, name: 'toner_price', index: 'toner_price', editable: true, editoptions: {size: 10, maxlength: 8}, align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}, sorttype: 'int'},
@@ -359,7 +357,6 @@ $(document).ready(function ()
             {width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
             {width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
             {width: 120, name: 'manufacturer_id', index: 'manufacturer_id'},
-            {width: 120, name: 'part_type_id', index: 'part_type_id'},
             {width: 100, name: 'toner_color_id', index: 'toner_color_id'},
             {width: 60, name: 'toner_yield', index: 'toner_yield', align: 'right'},
             {width: 80, name: 'toner_price', index: 'toner_price', align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}},
@@ -962,7 +959,6 @@ function do_add(id)
     var isvalid = true;
     var toner_id = id;
     var toner_sku = $("#toner_sku").val();
-    var part_type_id = $("#part_type_id").val();
     var manufacturer_id = $("#new_manufacturer_id").val();
     var toner_color_id = $("#toner_color_id").val();
     var toner_yield = $("#toner_yield").val();
@@ -1124,7 +1120,6 @@ function update_available(action)
         {width: 30, name: 'toner_id', index: 'toner_id', sorttype: 'int', hidden: true, editable: true, editoptions: {readonly: true, size: 12}},
         {width: 60, name: 'toner_sku', index: 'toner_sku', editable: true, editoptions: {size: 12, maxlength: 30}},
         {width: 120, name: 'manufacturer_id', index: 'manufacturer_id', edittype: 'select', editable: true, editoptions: {value: manufacturerList}},
-        {width: 120, name: 'part_type_id', index: 'part_type_id', edittype: 'select', editable: true, editoptions: {value: partTypeList}},
         {width: 100, name: 'toner_color_id', index: 'toner_color_id', edittype: 'select', editable: true, editoptions: {value: colorList}},
         {width: 60, name: 'toner_yield', index: 'toner_yield', editable: true, editoptions: {size: 10, maxlength: 4}, align: 'right'},
         {width: 80, name: 'toner_price', index: 'toner_price', editable: true, editoptions: {size: 10, maxlength: 8}, align: 'right', formatter: 'currency', formatoptions: {prefix: "$", thousandsSeparator: ","}},

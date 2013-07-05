@@ -122,14 +122,44 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
     public $kilowattsPerHour;
 
     /**
-     * The id of the assessment pricing configuration
-     *
      * @var int
      */
-    public $assessmentPricingConfigId;
+    public $dealerMonochromeRankSetId;
 
-    public $replacementPricingConfigId;
+    /**
+     * @var int
+     */
+    public $customerMonochromeRankSetId;
 
+    /**
+     * @var int
+     */
+    public $customerColorRankSetId;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_customerColorRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_customerMonochromeRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerColorRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_dealerMonochromeRankSet;
+
+    /**
+     * @var int
+     */
+    public $dealerColorRankSetId;
     /**
      * @var float
      */
@@ -142,33 +172,25 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
      */
     public $grossMarginPricingConfigId;
 
+    /**
+     * @var float
+     */
     public $targetMonochromeCostPerPage;
+
+    /**
+     * @var float
+     */
     public $targetColorCostPerPage;
-    protected $_assessmentPricingConfig;
-
-    /**
-     * The gross margin pricing configuration
-     *
-     * @var Proposalgen_Model_PricingConfig
-     */
-    protected $_grossMarginPricingConfig;
-
-    /**
-     * Pricing config used for designated which tones to use for replacement devices
-     *
-     * @var Proposalgen_Model_PricingConfig
-     */
-    protected $_replacementPricingConfig;
 
     /**
      * Overrides all the settings.
      * Null values will be excluded.
      *
-     * @param array|Proposalgen_Model_Assessment_Setting $settings These can be either a Proposalgen_Model_Report_Setting or an array of settings
+     * @param array|Assessment_Model_Assessment_Setting $settings These can be either a Assessment_Model_Report_Setting or an array of settings
      */
     public function ApplyOverride ($settings)
     {
-        if ($settings instanceof Proposalgen_Model_Assessment_Setting)
+        if ($settings instanceof Assessment_Model_Assessment_Setting)
         {
             $settings = $settings->toArray();
         }
@@ -245,14 +267,6 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
         {
             $this->kilowattsPerHour = $params->kilowattsPerHour;
         }
-        if (isset($params->assessmentPricingConfigId) && !is_null($params->assessmentPricingConfigId))
-        {
-            $this->assessmentPricingConfigId = $params->assessmentPricingConfigId;
-        }
-        if (isset($params->grossMarginPricingConfigId) && !is_null($params->grossMarginPricingConfigId))
-        {
-            $this->grossMarginPricingConfigId = $params->grossMarginPricingConfigId;
-        }
         if (isset($params->targetMonochromeCostPerPage) && !is_null($params->targetMonochromeCostPerPage))
         {
             $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
@@ -265,9 +279,21 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
         {
             $this->costThreshold = $params->costThreshold;
         }
-        if (isset($params->replacementPricingConfigId) && !is_null($params->replacementPricingConfigId))
+        if (isset($params->customerColorRankSetId) && !is_null($params->customerColorRankSetId))
         {
-            $this->replacementPricingConfigId = $params->replacementPricingConfigId;
+            $this->customerColorRankSetId = $params->customerColorRankSetId;
+        }
+        if (isset($params->customerMonochromeRankSetId) && !is_null($params->customerMonochromeRankSetId))
+        {
+            $this->customerMonochromeRankSetId = $params->customerMonochromeRankSetId;
+        }
+        if (isset($params->dealerColorRankSetId) && !is_null($params->dealerColorRankSetId))
+        {
+            $this->dealerColorRankSetId = $params->dealerColorRankSetId;
+        }
+        if (isset($params->dealerMonochromeRankSetId) && !is_null($params->dealerMonochromeRankSetId))
+        {
+            $this->dealerMonochromeRankSetId = $params->dealerMonochromeRankSetId;
         }
     }
 
@@ -292,85 +318,119 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
             "mpsBwCostPerPage"            => $this->mpsBwCostPerPage,
             "mpsColorCostPerPage"         => $this->mpsColorCostPerPage,
             "kilowattsPerHour"            => $this->kilowattsPerHour,
-            "assessmentPricingConfigId"   => $this->assessmentPricingConfigId,
-            "grossMarginPricingConfigId"  => $this->grossMarginPricingConfigId,
             "costThreshold"               => $this->costThreshold,
             "targetMonochromeCostPerPage" => $this->targetMonochromeCostPerPage,
             "targetColorCostPerPage"      => $this->targetColorCostPerPage,
-            "replacementPricingConfigId"  => $this->replacementPricingConfigId,
+            "customerColorRankSetId"      => $this->customerColorRankSetId,
+            "customerMonochromeRankSetId" => $this->customerMonochromeRankSetId,
+            "dealerColorRankSetId"        => $this->dealerColorRankSetId,
+            "dealerMonochromeRankSetId"   => $this->dealerMonochromeRankSetId,
+
         );
     }
 
     /**
-     * Gets the assessment pricing configuration object
-     *
-     * @return Proposalgen_Model_PricingConfig
+     * @return array
      */
-    public function getAssessmentPricingConfig ()
+    public function getTonerRankSets ()
     {
-        if (!isset($this->_assessmentPricingConfig))
+        return array(
+            "customerColorRankSetArray"      => $this->getCustomerColorRankSet()->getRanksAsArray(),
+            "customerMonochromeRankSetArray" => $this->getCustomerMonochromeRankSet()->getRanksAsArray(),
+            "dealerMonochromeRankSetArray"   => $this->getDealerMonochromeRankSet()->getRanksAsArray(),
+            "dealerColorRankSetArray"        => $this->getDealerColorRankSet()->getRanksAsArray(),
+        );
+    }
+
+
+    /**
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public function getCustomerColorRankSet ()
+    {
+        if (!isset($this->_customerColorRankSet))
         {
-            $this->_assessmentPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->assessmentPricingConfigId);
+            if ($this->customerColorRankSetId > 0)
+            {
+                $this->_customerColorRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->customerColorRankSetId);
+            }
+            else
+            {
+                $this->_customerColorRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->customerColorRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_customerColorRankSet);
+                // Update ourselves
+                Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($this);
+            }
         }
 
-        return $this->_assessmentPricingConfig;
+        return $this->_customerColorRankSet;
     }
 
+
     /**
-     * @return Proposalgen_Model_PricingConfig
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public function getReplacementPricingConfig ()
+    public function getCustomerMonochromeRankSet ()
     {
-        if (!isset($this->_replacementPricingConfig))
+        if (!isset($this->_customerMonochromeRankSet))
         {
-            $this->_replacementPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->replacementPricingConfigId);
+            if ($this->customerMonochromeRankSetId > 0)
+            {
+                $this->_customerMonochromeRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->customerMonochromeRankSetId);
+            }
+            else
+            {
+                $this->_customerMonochromeRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->customerMonochromeRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_customerMonochromeRankSet);
+                Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($this);
+            }
         }
 
-        return $this->_replacementPricingConfig;
+        return $this->_customerMonochromeRankSet;
     }
 
-    /**
-     * Sets the assessment pricing configuration object
-     *
-     * @param $AssessmentPricingConfig Proposalgen_Model_PricingConfig
-     *                                 The pricing configuration to set
-     *
-     * @return \Proposalgen_Model_Assessment_Setting
-     */
-    public function setAssessmentPricingConfig ($AssessmentPricingConfig)
-    {
-        $this->_assessmentPricingConfig = $AssessmentPricingConfig;
-
-        return $this;
-    }
 
     /**
-     * Gets the gross margin pricing configuration object
-     *
-     * @return Proposalgen_Model_PricingConfig
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public function getGrossMarginPricingConfig ()
+    public function getDealerMonochromeRankSet ()
     {
-        if (!isset($this->_grossMarginPricingConfig))
+        if (!isset($this->_dealerMonochromeRankSet))
         {
-            $this->_grossMarginPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->grossMarginPricingConfigId);
+            if ($this->dealerMonochromeRankSetId > 0)
+            {
+                $this->_dealerMonochromeRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerMonochromeRankSetId);
+            }
+            else
+            {
+                $this->_dealerMonochromeRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerMonochromeRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerMonochromeRankSet);
+                Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($this);
+            }
         }
 
-        return $this->_grossMarginPricingConfig;
+        return $this->_dealerMonochromeRankSet;
     }
 
     /**
-     * Sets the gross margin pricing configuration object
-     *
-     * @param $GrossMarginPricingConfig Proposalgen_Model_PricingConfig
-     *                                  The pricing configuration to set
-     *
-     * @return \Proposalgen_Model_Assessment_Setting
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public function setGrossMarginPricingConfig ($GrossMarginPricingConfig)
+    public function getDealerColorRankSet ()
     {
-        $this->_grossMarginPricingConfig = $GrossMarginPricingConfig;
+        if (!isset($this->_dealerColorRankSet))
+        {
+            if ($this->dealerColorRankSetId > 0)
+            {
+                $this->_dealerColorRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->dealerColorRankSetId);
+            }
+            else
+            {
+                $this->_dealerColorRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->dealerColorRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_dealerColorRankSet);
+                Assessment_Model_Mapper_Assessment_Setting::getInstance()->save($this);
+            }
+        }
 
-        return $this;
+        return $this->_dealerColorRankSet;
     }
 }

@@ -6,6 +6,11 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
 {
     protected $_defaultDbTableClassName = "Proposalgen_Model_DbTable_DeviceToner";
     static $_instance;
+    /*
+ * Column Definitions
+ */
+    public $col_tonerId = 'toner_id';
+    public $col_masterDeviceId = 'master_device_id';
 
     /**
      * @return Proposalgen_Model_Mapper_DeviceToner
@@ -73,7 +78,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
      *
      * @param $masterDeviceId
      *
-     * @return Proposalgen_Model_Toner[]
+     * @return Proposalgen_Model_DeviceToner[]
      */
     public function getDeviceToners ($masterDeviceId)
     {
@@ -102,5 +107,61 @@ class Proposalgen_Model_Mapper_DeviceToner extends Tangent_Model_Mapper_Abstract
     public function fetchDeviceTonersByTonerId ($tonerId)
     {
         return $this->fetchAll(array('toner_id = ?' => $tonerId));
+    }
+
+    /**
+     * Finds a Device Toner based on it's primaryKey
+     *
+     * @param $id int[]
+     *            The id of the Device TOner to find
+     *
+     * @return Proposalgen_Model_DeviceToner
+     */
+    public function find ($id)
+    {
+        // Assuming we don't have a cached object, lets go get it.
+        $result = $this->getDbTable()->find($id[0], $id[1]);
+        if (0 == count($result))
+        {
+            return false;
+        }
+        $row    = $result->current();
+        $object = new Proposalgen_Model_DeviceToner($row->toArray());
+
+        // Save the object into the cache
+
+        return $object;
+    }
+
+    /**
+     * Deletes rows from the database.
+     *
+     * @param $object mixed
+     *                This can either be an instance of Proposalgen_Model_DeviceToner or the
+     *                primary key to delete
+     *
+     * @return mixed The number of rows deleted
+     */
+    public function delete ($object)
+    {
+        if ($object instanceof Proposalgen_Model_DeviceToner)
+        {
+            $whereClause = array(
+                "{$this->col_tonerId} = ?" => $object->tonerId,
+                "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
+
+            );
+        }
+        else
+        {
+            $whereClause = array(
+                "{$this->col_tonerId} = ?" => $object[0],
+                "{$this->col_masterDeviceId} = ?" => $object[1],
+            );
+        }
+
+        $rowsAffected = $this->getDbTable()->delete($whereClause);
+
+        return $rowsAffected;
     }
 }

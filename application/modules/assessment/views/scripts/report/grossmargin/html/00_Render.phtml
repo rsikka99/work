@@ -89,10 +89,8 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 <br />
 
 <div class="center">
-    <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected preference of
-        <strong><?php echo $assessmentViewModel->assessment->getAssessmentSettings()->getGrossMarginPricingConfig()->getNiceConfigName(); ?></strong>. <br />
-        For these devices the
-        system has selected the best available alternative.</em>
+    <em class="center">Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference.<br />
+        For these devices the system has selected the best available alternative based on your preference.</em>
     <br /><br />
 </div>
 
@@ -125,26 +123,32 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
         $completeColorToners       = $deviceInstance->getMasterDevice()->getHasValidColorGrossMarginToners($assessmentViewModel->getCostPerPageSettingForDealer());
         $blackToner                = null;
         $colorToner                = null;
-        switch ($tonerConfig)
+        $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+
+        foreach ($toners as $toner)
         {
-            case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::CYAN, $dealerCostPerPageSettings);
-                break;
-            case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                $colorToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::THREE_COLOR, $dealerCostPerPageSettings);
-                break;
-            case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::FOUR_COLOR, $dealerCostPerPageSettings);
-                $colorToner = $blackToner;
-                break;
-            case Proposalgen_Model_TonerConfig::BLACK_ONLY:
-                $blackToner = $deviceInstance->getMasterDevice()->getCheapestToner(Proposalgen_Model_TonerColor::BLACK, $dealerCostPerPageSettings);
-                break;
-            default:
-                break;
+            switch ($toner->tonerColorId)
+            {
+                case Proposalgen_Model_TonerColor::BLACK:
+                    $blackToner = $toner;
+                    break;
+                case Proposalgen_Model_TonerColor::CYAN:
+                case Proposalgen_Model_TonerColor::MAGENTA:
+                case Proposalgen_Model_TonerColor::YELLOW:
+                    $colorToner = $toner;
+                    break;
+                case Proposalgen_Model_TonerColor::THREE_COLOR:
+                    $colorToner = $toner;
+                    break;
+                case Proposalgen_Model_TonerColor::FOUR_COLOR:
+                    $blackToner = $toner;
+                    $colorToner = $toner;
+                    break;
+                default:
+                    break;
+            }
         }
+
         // Black Toner
         $blackCost  = "$" . number_format($blackToner->calculatedCost, 2);
         $blackYield = number_format($blackToner->yield);
@@ -154,7 +158,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
         $colorStyle = "style='text-align: center;'";
         $colorYield = "-";
         $isColor    = false;
-        if ($colorToner)
+        if ($colorToner instanceof Proposalgen_Model_Toner)
         {
             $colorCost  = "$" . number_format($colorToner->cost, 2);
             $colorYield = number_format($colorToner->yield);

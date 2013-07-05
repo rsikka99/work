@@ -5,6 +5,24 @@
 class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     public $allowsNull = false;
+    /**
+     * @var Assessment_Model_Assessment_Setting
+     */
+    protected $_reportSetting;
+    /**
+     * @var int
+     */
+    protected $_reportSettingId;
+
+    /**
+     * @param int  $reportSettingId
+     * @param null $options
+     */
+    public function __construct ($reportSettingId, $options = null)
+    {
+        $this->_reportSettingId = $reportSettingId;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
@@ -110,10 +128,8 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                            'append'     => '/ KWh',
                                                            'validators' => $costValidator
                                                       ));
-        $assessmentPricingConfig = $this->createElement('select', 'assessmentPricingConfigId', array(
-                                                                                                    'label' => 'Toner Preference',
-                                                                                                    'class' => 'span3 '
-                                                                                               ));
+
+
         // Gross margin elements
         $this->addElement('text', 'actualPageCoverageMono', array(
                                                                  'label'      => 'Page Coverage Monochrome',
@@ -140,12 +156,24 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
-        $grossMarginPricingConfig = $this->createElement('select', 'grossMarginPricingConfigId', array(
-                                                                                                      'label' => 'Toner Preference',
-                                                                                                      'class' => 'span3 '
-                                                                                                 ));
 
+        $customerMonochromeVendor = $this->createElement('multiselect', 'customerMonochromeRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
+        $customerColorVendor = $this->createElement('multiselect', 'customerColorRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
 
+        $dealerMonochromeVendor = $this->createElement('multiselect', 'dealerMonochromeRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
+        $dealerColorVendor = $this->createElement('multiselect', 'dealerColorRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
 
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
@@ -168,10 +196,11 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'mpsBwCostPerPage',
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
-                                     $assessmentPricingConfig,
+                                     $customerMonochromeVendor,
+                                     $customerColorVendor,
                                ), 'assessment', array('legend' => 'Assessment Settings',));
-        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $grossMarginPricingConfig), 'grossMargin', array('legend' => 'Gross Margin Settings'));
 
+        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $dealerMonochromeVendor, $dealerColorVendor), 'grossMargin', array('legend' => 'Gross Margin Settings'));
         $this->setElementDecorators(array(
                                          'FieldSize',
                                          'ViewHelper',
@@ -184,6 +213,8 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                          array('Label', array('tag' => 'td')),
                                          array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
                                     ));
+
+        $this->tonerSelectElementsDisplayGroups(2);
 
         // Form Buttons
         $submitButton = $this->createElement('submit', 'submit', array(
@@ -206,15 +237,12 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               'Fieldset'
                                          ));
 
-        $pricingConfigOptions = array();
-        // Add multi options to toner preferences.
-        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
-        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
-        {
-            $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
-        }
-        $assessmentPricingConfig->addMultiOptions($pricingConfigOptions);
-        $grossMarginPricingConfig->addMultiOptions($pricingConfigOptions);
+        $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
+
+        $customerColorVendor->setMultiOptions($tonerVendors);
+        $customerMonochromeVendor->setMultiOptions($tonerVendors);
+        $dealerMonochromeVendor->setMultiOptions($tonerVendors);
+        $dealerColorVendor->setMultiOptions($tonerVendors);
     }
 
     /**
@@ -229,10 +257,73 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'
                                          ));
+        $this->tonerSelectElementsDisplayGroups(3);
     }
 
     /**
-     * Allows the form to allow null vlaues
+     *
+     * @param $colSpan int the number of columns to span the toner vendors element
+     */
+    public function tonerSelectElementsDisplayGroups ($colSpan)
+    {
+
+        $this->getElement("dealerMonochromeRankSetArray")->setDecorators(array(
+                                                                        'FieldSize',
+                                                                        'ViewHelper',
+                                                                        'Addon',
+                                                                        array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                        'ElementErrors',
+                                                                        array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                        array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                        array('AddRowData', array('header'    => 'Monochrome Toner Preference',
+                                                                                                  "trClass"   => "control-group",
+                                                                                                  "tdAttr"    => "colspan={$colSpan}",
+                                                                                                  "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                   ));
+
+        $this->getElement("dealerColorRankSetArray")->setDecorators(array(
+                                                                   'FieldSize',
+                                                                   'ViewHelper',
+                                                                   'Addon',
+                                                                   array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                   'ElementErrors',
+                                                                   array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                   array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                   array('AddRowData', array('header'    => 'Color Toner Preference',
+                                                                                             "trClass"   => "control-group",
+                                                                                             "tdAttr"    => "colspan={$colSpan}",
+                                                                                             "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                              ));
+        $this->getElement("customerMonochromeRankSetArray")->setDecorators(array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                          'ElementErrors',
+                                                                          array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                          array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                          array('AddRowData', array('header'    => 'Monochrome Toner Preference',
+                                                                                                    "trClass"   => "control-group",
+                                                                                                    "tdAttr"    => "colspan={$colSpan}",
+                                                                                                    "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                     ));
+        $this->getElement("customerColorRankSetArray")->setDecorators(array(
+                                                                     'FieldSize',
+                                                                     'ViewHelper',
+                                                                     'Addon',
+                                                                     array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                     'ElementErrors',
+                                                                     array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                     array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                     array('AddRowData', array('header'    => 'Color Toner Preference',
+                                                                                               "trClass"   => "control-group",
+                                                                                               "tdAttr"    => "colspan={$colSpan}",
+                                                                                               "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                ));
+    }
+
+    /**
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {
@@ -242,5 +333,18 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
             $element->setRequired(false);
         }
         $this->allowsNull = true;
+    }
+
+    /**
+     * @return Assessment_Model_Assessment_Setting
+     */
+    protected function getReportSetting ()
+    {
+        if (!isset($this->_reportSetting))
+        {
+            $this->_reportSetting = Assessment_Model_Mapper_Assessment_Setting::getInstance()->find($this->_reportSettingId);
+        }
+
+        return $this->_reportSetting;
     }
 }

@@ -309,13 +309,13 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
                     $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"oem{$tonerColorName}TonerSku"}, $rmsUploadRow->{"oem{$tonerColorName}TonerYield"}, $rmsUploadRow->{"oem{$tonerColorName}TonerCost"}, $tonerColorId);
                     if ($toner !== false)
                     {
-                        $toners[Proposalgen_Model_PartType::OEM][$tonerColorId][] = $toner;
+                        $toners[$masterDevice->manufacturerId][$tonerColorId][] = $toner;
                     }
 
                     $toner = $this->createTonerFromRmsUploadRow($rmsUploadRow->{"comp{$tonerColorName}TonerSku"}, $rmsUploadRow->{"comp{$tonerColorName}TonerYield"}, $rmsUploadRow->{"comp{$tonerColorName}TonerCost"}, $tonerColorId);
                     if ($toner !== false)
                     {
-                        $toners[Proposalgen_Model_PartType::COMP][$tonerColorId][] = $toner;
+                        $toners[0][$tonerColorId][] = $toner;
                     }
                 }
                 $masterDevice->setToners($toners);
@@ -333,11 +333,10 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      * @param int    $tonerYield
      * @param float  $tonerCost
      * @param int    $tonerColor
-     * @param int    $partType
      *
      * @return Proposalgen_Model_Toner|bool Returns false when the data is invalid for a toner
      */
-    public function createTonerFromRmsUploadRow ($tonerSku, $tonerYield, $tonerCost, $tonerColor, $partType = Proposalgen_Model_PartType::OEM)
+    public function createTonerFromRmsUploadRow ($tonerSku, $tonerYield, $tonerCost, $tonerColor)
     {
         $toner = false;
         if (strlen($tonerSku) > 0 && $tonerYield > 0 && $tonerCost > 0)
@@ -347,7 +346,6 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
             $toner->yield        = $tonerYield;
             $toner->cost         = $tonerCost;
             $toner->tonerColorId = $tonerColor;
-            $toner->partTypeId   = $partType;
         }
 
 

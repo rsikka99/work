@@ -36,6 +36,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var int
      */
+    public $userId;
+
+    /**
+     * @var int
+     */
+    public $isSystemDevice;
+
+    /**
+     * @var int
+     */
     public $manufacturerId;
 
     /**
@@ -184,6 +194,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public $adminCostPerPage;
     protected $_costPerPage;
+    protected $_cachedCheapestTonerVendorSet;
     protected $_usingIncompleteBlackTonerData;
     protected $_usingIncompleteColorTonerData;
     protected $_maximumMonthlyPageVolume;
@@ -261,10 +272,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             }
             else
             {
-                $requiredToners = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
-                foreach ($requiredToners as $tonerColor)
+                $toners = $this->getCheapestTonerSetByVendor($costPerPageSetting);
+                foreach ($toners as $toner)
                 {
-                    $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
                     if ($toner instanceof Proposalgen_Model_Toner)
                     {
                         if ($toner->yield < $smallestYield || is_null($smallestYield))
@@ -293,6 +303,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (isset($params->id) && !is_null($params->id))
         {
             $this->id = $params->id;
+        }
+
+        if (isset($params->userId) && !is_null($params->userId))
+        {
+            $this->userId = $params->userId;
+        }
+
+        if (isset($params->isSystemDevice) && !is_null($params->isSystemDevice))
+        {
+            $this->isSystemDevice = $params->isSystemDevice;
         }
 
         if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
@@ -441,6 +461,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         return array(
             "id"                  => $this->id,
+            "userId"              => $this->userId,
             "manufacturerId"      => $this->manufacturerId,
             "modelName"           => $this->modelName,
             "tonerConfigId"       => $this->tonerConfigId,
@@ -449,6 +470,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isScanner"           => $this->isScanner,
             "isDuplex"            => $this->isDuplex,
             "isReplacementDevice" => $this->isReplacementDevice,
+            "isSystemDevice"      => $this->isSystemDevice,
             "wattsPowerNormal"    => $this->wattsPowerNormal,
             "wattsPowerIdle"      => $this->wattsPowerIdle,
             "launchDate"          => $this->launchDate,
@@ -464,102 +486,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         );
     }
 
-    /**
-     * Gets the cheapest toner from a group of the same color.
-     * Can specify a preferred part type to get.
-     * Will return a default toner value if it does not find an appropriate toner
-     *
-     * @param int                                  $tonerColor (Constant value in Proposalgen_Model_TonerColor)
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return Proposalgen_Model_Toner
-     */
-    public function getCheapestToner ($tonerColor, $costPerPageSetting)
-    {
-        $preferredPartType = null;
-        if (isset($costPerPageSetting->pricingConfiguration))
-        {
-            if ($tonerColor == Proposalgen_Model_TonerColor::BLACK)
-            {
-                $preferredPartType = $costPerPageSetting->pricingConfiguration->getMonoTonerPartType();
-            }
-            else
-            {
-                $preferredPartType = $costPerPageSetting->pricingConfiguration->getColorTonerPartType();
-            }
-        }
-        $cheapestToner     = null;
-        $cheapestTonerRank = null;
-        $tonersByPartType  = $this->getToners(); // Grab this devices toners
-
-        // If we have a preferred part type and the device has toners of that type
-        if (isset($preferredPartType) &&
-            is_array($tonersByPartType) &&
-            array_key_exists($preferredPartType->partTypeId, $tonersByPartType) &&
-            is_array($tonersByPartType [$preferredPartType->partTypeId]) &&
-            array_key_exists($tonerColor, $tonersByPartType [$preferredPartType->partTypeId])
-        )
-        {
-            // Figure out which is the cheapest black toner
-            /* @var $toner Proposalgen_Model_Toner */
-            foreach ($tonersByPartType [$preferredPartType->partTypeId] [$tonerColor] as $toner)
-            {
-                $currentTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                if ($cheapestToner instanceof Proposalgen_Model_Toner)
-                {
-                    // Compare Toner Ranks to figure out which is the cheapest
-                    if ($currentTonerRank < $cheapestTonerRank)
-                    {
-                        $cheapestToner     = $toner;
-                        $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                    }
-                }
-                else
-                {
-                    $cheapestToner     = $toner;
-                    $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                }
-            }
-        }
-        else
-        {
-            // Since we don't have a preferred toner type, check all the toners of $tonerColor
-            /* @var $tonersByColor Proposalgen_Model_Toner[] */
-            foreach ($tonersByPartType as $tonersByColor)
-            {
-                if (array_key_exists($tonerColor, $tonersByColor))
-                {
-                    /* @var $toner Proposalgen_Model_Toner */
-                    foreach ($tonersByColor [$tonerColor] as $toner)
-                    {
-                        $currentTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                        // Compare Toner Ranks to figure out which is the cheapest
-                        if ($cheapestToner instanceof Proposalgen_Model_Toner)
-                        {
-                            if ($currentTonerRank < $cheapestTonerRank)
-                            {
-                                $cheapestToner     = $toner;
-                                $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                            }
-                        }
-                        else
-                        {
-                            $cheapestToner     = $toner;
-                            $cheapestTonerRank = $toner->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage + $toner->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
-                        }
-                    }
-                }
-            }
-        }
-
-        // If we don't have a toner, return false.
-        if (!isset($cheapestToner))
-        {
-            return false;
-        }
-
-        return $cheapestToner;
-    }
 
     /**
      * @param stdClass $CostPerPage
@@ -707,23 +633,26 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_hasValidMonoGrossMarginToners))
         {
-            $usesAllValidToners = true;
-            $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
-            foreach ($requiredToners as $tonerColor)
-            {
-                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
+            $usesAllValidToners      = true;
+            $toners                  = $this->getCheapestTonerSetByVendor($costPerPageSetting);
+            $oemRank                 = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $oemRank->manufacturerId = $this->manufacturerId;
 
-                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != $costPerPageSetting->pricingConfiguration->monoTonerPartTypeId)
+            $preferredMonochromeVendors   = $costPerPageSetting->monochromeTonerRankSet->getRankings();
+            $preferredMonochromeVendors[] = $oemRank;
+            foreach ($toners as $toner)
+            {
+                switch ($toner->tonerColorId)
                 {
-                    $usesAllValidToners = false;
-                    break;
-                }
-                else if ($toner->partTypeId != $costPerPageSetting->pricingConfiguration->colorTonerPartTypeId)
-                {
-                    //$usesAllValidToners = false;
-                    //break;
+                    case Proposalgen_Model_TonerColor::BLACK:
+                        if ($toner->manufacturerId != $preferredMonochromeVendors[0]->manufacturerId)
+                        {
+                            $usesAllValidToners = false;
+                        }
+                        break;
                 }
             }
+
 
             $this->_hasValidMonoGrossMarginToners = $usesAllValidToners;
         }
@@ -752,21 +681,27 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_hasValidColorGrossMarginToners))
         {
-            $usesAllValidToners = true;
-            $requiredToners     = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($this->tonerConfigId);
-            foreach ($requiredToners as $tonerColor)
+            $usesAllValidToners           = true;
+            $toners                       = $this->getCheapestTonerSetByVendor($costPerPageSetting);
+            $oemRank                      = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $oemRank->manufacturerId      = $this->manufacturerId;
+            $preferredMonochromeVendors   = $costPerPageSetting->colorTonerRankSet->getRankings();
+            $preferredMonochromeVendors[] = $oemRank;
+            $preferredColorVendors        = $costPerPageSetting->colorTonerRankSet->getRankings();
+            $preferredColorVendors[]      = $oemRank;
+            foreach ($toners as $toner)
             {
-                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
-
-                if ($tonerColor == Proposalgen_Model_TonerColor::BLACK && $toner->partTypeId != $costPerPageSetting->pricingConfiguration->monoTonerPartTypeId)
+                switch ($toner->tonerColorId)
                 {
-                    //$usesAllValidToners = false;
-                    //break;
-                }
-                else if ($toner->partTypeId != $costPerPageSetting->pricingConfiguration->colorTonerPartTypeId)
-                {
-                    $usesAllValidToners = false;
-                    break;
+                    case Proposalgen_Model_TonerColor::CYAN:
+                    case Proposalgen_Model_TonerColor::MAGENTA:
+                    case Proposalgen_Model_TonerColor::YELLOW:
+                    case Proposalgen_Model_TonerColor::THREE_COLOR:
+                        if ($toner->manufacturerId != $preferredColorVendors[0]->manufacturerId)
+                        {
+                            $usesAllValidToners = false;
+                        }
+                        break;
                 }
             }
 
@@ -797,15 +732,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_tonersForAssessment))
         {
-            $toners = array();
-            foreach ($this->getRequiredTonerColors() as $tonerColor)
-            {
-                $toner = $this->getCheapestToner($tonerColor, $costPerPageSetting);
-                if ($toner instanceof Proposalgen_Model_Toner)
-                {
-                    $toners [$tonerColor] = $toner;
-                }
-            }
+            $toners = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $this->_tonersForAssessment = $toners;
         }
 
@@ -821,11 +748,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_tonersForGrossMargin))
         {
-            $toners = array();
-            foreach ($this->getRequiredTonerColors() as $tonerColor)
-            {
-                $toners [$tonerColor] = $this->getCheapestToner($tonerColor, $costPerPageSetting);
-            }
+            $toners = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $this->_tonersForGrossMargin = $toners;
         }
 
@@ -926,7 +849,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $costPerPage->colorCostPerPage      = 0;
 
             /* @var $toner Proposalgen_Model_Toner */
-            foreach ($this->getCheapestTonerSet($costPerPageSetting) as $toner)
+            foreach ($this->getCheapestTonerSetByVendor($costPerPageSetting) as $toner)
             {
                 if ($toner)
                 {
@@ -942,34 +865,31 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         return $this->_cachedCostPerPage [$cacheKey];
     }
 
+
     /**
-     * Gets the cheapest tonerset for a pricing configuration
+     * Gets a list of toners for the toner vendor id passed
      *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting The cost per page settings to use
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getCheapestTonerSet (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function getCheapestTonerSetByVendor ($costPerPageSetting)
     {
-        // Make sure our array is initialized
-        if (!isset($this->_cachedCheapestTonerSets))
+        if (!isset($this->_cachedCheapestTonerVendorSet))
         {
-            $this->_cachedCheapestTonerSets = array();
+            $this->_cachedCheapestTonerVendorSet = array();
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
-        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
+
+        if (!array_key_exists($cacheKey, $this->_cachedCheapestTonerVendorSet))
         {
-            $tonerColors = $this->getRequiredTonerColors();
-            $toners      = array();
-            foreach ($tonerColors as $tonerColor)
-            {
-                $toners [] = $this->getCheapestToner($tonerColor, $costPerPageSetting);
-            }
-            $this->_cachedCheapestTonerSets [$cacheKey] = $toners;
+            $monochromeManufacturerPreference               = implode(',', $costPerPageSetting->monochromeTonerRankSet->getRanksAsArray());
+            $colorManufacturerPreference                    = implode(',', $costPerPageSetting->colorTonerRankSet->getRanksAsArray());
+            $this->_cachedCheapestTonerVendorSet[$cacheKey] = Proposalgen_Model_Mapper_Toner::getInstance()->getCheapestTonersForDevice($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference);
         }
 
-        return $this->_cachedCheapestTonerSets [$cacheKey];
+        return $this->_cachedCheapestTonerVendorSet[$cacheKey];
     }
 
     /**
@@ -1027,7 +947,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             // Get the time difference in seconds
             $launchDate          = time() - strtotime($this->launchDate);
             $correctedLaunchDate = ($launchDate > 31556926) ? ($launchDate - 31556926) : $launchDate;
-            $this->_age           = floor($correctedLaunchDate / 31556926);
+            $this->_age          = floor($correctedLaunchDate / 31556926);
             if ($this->_age == 0)
             {
                 $this->_age = 1;

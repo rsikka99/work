@@ -83,7 +83,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         }
 
         // Define our field titles
-        $fieldTitlesLvl1 = array('', '', '', 'OEM', '', '', '', '', '', '', '', '', '', '', '', 'COMPATIBLE',
+        $fieldTitlesLvl1 = array('', '', '', 'Customer Preferred', '', '', '', '', '', '', '', '', '', '', '', 'Dealer Preferred',
                                  '', '', '', '', '', '', '', '', '', '', '', '', '');
 
         $fieldTitlesLvl2 = array('Device Name', 'IP Address', 'Serial Number', 'Black SKU', 'Black Cost', 'Cyan SKU',
@@ -95,41 +95,43 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         try
         {
             $fieldList_Values = "";
-            /* @var $device Proposalgen_Model_DeviceInstance() */
-            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+            /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
+            $customerCostPerPageSetting = $assessmentViewModel->getCostPerPageSettingForCustomer();
+            $dealerCostPerPageSetting   = $assessmentViewModel->getCostPerPageSettingForDealer();
+            foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $toners    = $device->getMasterDevice()->getToners();
-                $oemToners = $toners[Proposalgen_Model_PartType::OEM];
+                $oemToners        = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($customerCostPerPageSetting);
+                $compatibleToners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($dealerCostPerPageSetting);
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
-                $fieldList [] = $device->getDeviceName();
-                $fieldList [] = $device->ipAddress;
-                $fieldList [] = $device->serialNumber;
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? $oemToners[Proposalgen_Model_TonerColor::BLACK][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? $oemToners[Proposalgen_Model_TonerColor::BLACK][0]->cost : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? $oemToners[Proposalgen_Model_TonerColor::CYAN][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? $oemToners[Proposalgen_Model_TonerColor::CYAN][0]->cost : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $oemToners[Proposalgen_Model_TonerColor::MAGENTA][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $oemToners[Proposalgen_Model_TonerColor::MAGENTA][0]->cost : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? $oemToners[Proposalgen_Model_TonerColor::YELLOW][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? $oemToners[Proposalgen_Model_TonerColor::YELLOW][0]->cost : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR][0]->cost : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR][0]->sku : "";
-                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::BLACK])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::BLACK][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::BLACK])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::BLACK][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::CYAN])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::CYAN][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::CYAN])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::CYAN][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::MAGENTA])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::MAGENTA][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::MAGENTA])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::MAGENTA][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::YELLOW])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::YELLOW][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::YELLOW])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::YELLOW][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::THREE_COLOR])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::THREE_COLOR][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::THREE_COLOR])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::THREE_COLOR][0]->cost : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::FOUR_COLOR][0]->sku : "";
-                $fieldList [] = (isset($toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $toners[Proposalgen_Model_PartType::COMP][Proposalgen_Model_TonerColor::FOUR_COLOR][0]->cost : "";
+                $fieldList [] = $deviceInstance->getDeviceName();
+                $fieldList [] = $deviceInstance->ipAddress;
+                $fieldList [] = $deviceInstance->serialNumber;
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? $oemToners[Proposalgen_Model_TonerColor::BLACK]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::BLACK])) ? $oemToners[Proposalgen_Model_TonerColor::BLACK]->cost : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? $oemToners[Proposalgen_Model_TonerColor::CYAN]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::CYAN])) ? $oemToners[Proposalgen_Model_TonerColor::CYAN]->cost : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $oemToners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $oemToners[Proposalgen_Model_TonerColor::MAGENTA]->cost : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? $oemToners[Proposalgen_Model_TonerColor::YELLOW]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::YELLOW])) ? $oemToners[Proposalgen_Model_TonerColor::YELLOW]->cost : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "";
+                $fieldList [] = (isset($oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $oemToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $compatibleToners[Proposalgen_Model_TonerColor::BLACK]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $compatibleToners[Proposalgen_Model_TonerColor::BLACK]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $compatibleToners[Proposalgen_Model_TonerColor::CYAN]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $compatibleToners[Proposalgen_Model_TonerColor::CYAN]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "";
+                $fieldList [] = (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost : "";
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
 
@@ -139,14 +141,14 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
             $excluded_values = "";
             try
             {
-                foreach ($assessmentViewModel->getExcludedDevices() as $device)
+                foreach ($assessmentViewModel->getExcludedDevices() as $deviceInstance)
                 {
                     $row    = array();
-                    $row [] = $device->getDeviceName();
-                    $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown IP";
-                    $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
+                    $row [] = $deviceInstance->getDeviceName();
+                    $row [] = ($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown IP";
+                    $row [] = (strlen($deviceInstance->serialNumber) > 0) ? $deviceInstance->serialNumber : "Unknown";
 
-                    $row [] = $device->_exclusionReason;
+                    $row [] = $deviceInstance->_exclusionReason;
                     $excluded_values .= implode(",", $row) . "\n";
                 } // end Purchased Devices foreach
             }
