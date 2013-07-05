@@ -684,7 +684,7 @@ class Proposalgen_Service_ManageMasterDevices
     {
         if (!isset($this->_availableTonersForm))
         {
-            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners();
+            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null,$this->_isAllowed);
         }
 
         return $this->_availableTonersForm;

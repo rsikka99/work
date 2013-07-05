@@ -365,7 +365,7 @@ if ($this->hardwareConfigurations)
 </div>
 </div>
 <div style="text-align: center">
-    <?php if ($this->isAdmin && $this->masterDevice != null && $this->masterDevice->isSystemDevice == 0)
+    <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof Proposalgen_Model_MasterDevice && $this->masterDevice->isSystemDevice == 0)
     {
         ?>
         <input type="button" class="btn btn-success" value="Save and Approve" id="btnSaveAndApprove" />
