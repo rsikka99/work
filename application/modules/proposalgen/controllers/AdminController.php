@@ -89,13 +89,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 // get toners for device
                 $select = $db->select()
-                    ->from(array(
-                                't' => 'toners'
-                           ))
-                    ->join(array(
-                                'td' => 'device_toners'
-                           ), 't.id = td.toner_id')
-                    ->where('td.master_device_id = ?', $deviceID);
+                          ->from(array(
+                                      't' => 'toners'
+                                 ))
+                          ->join(array(
+                                      'td' => 'device_toners'
+                                 ), 't.id = td.toner_id')
+                          ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
 
                 $result      = $stmt->fetchAll();
@@ -110,16 +110,16 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
 
                 $select      = $db->select()
-                    ->from(array(
-                                'md' => 'master_devices'
-                           ))
-                    ->joinLeft(array(
-                                    'm' => 'manufacturers'
-                               ), 'm.id = md.manufacturerId')
-                    ->joinLeft(array(
-                                    'rd' => 'replacement_devices'
-                               ), 'rd.masterDeviceId = md.id')
-                    ->where('md.id = ?', $deviceID);
+                               ->from(array(
+                                           'md' => 'master_devices'
+                                      ))
+                               ->joinLeft(array(
+                                               'm' => 'manufacturers'
+                                          ), 'm.id = md.manufacturerId')
+                               ->joinLeft(array(
+                                               'rd' => 'replacement_devices'
+                                          ), 'rd.masterDeviceId = md.id')
+                               ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
                 $launch_date = new Zend_Date($row [0] ['launchDate'], "yyyy/mm/dd HH:ii:ss");
@@ -266,36 +266,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         $formData = array();
                     }
                     break;
-
-                case "type" :
-                    $select = $db->select();
-                    $select->from(array(
-                                       'pt' => 'part_types'
-                                  ));
-                    $select->order('name');
-                    $stmt   = $db->query($select);
-                    $result = $stmt->fetchAll();
-                    $count  = count($result);
-
-                    if ($count > 0)
-                    {
-                        $i = 0;
-                        foreach ($result as $row)
-                        {
-                            $formData->rows [$i] ['id']   = $row ['id'];
-                            $formData->rows [$i] ['cell'] = array(
-                                $row ['id'],
-                                $row ['name']
-                            );
-                            $i++;
-                        }
-                    }
-                    else
-                    {
-                        // empty form values
-                        $formData = array();
-                    }
-                    break;
             }
         }
         catch (Exception $e)
@@ -347,7 +317,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $row ['id'],
                     $row ['sku'],
                     $row ['manufacturer_name'],
-                    Proposalgen_Model_PartType::$PartTypeNames[$row ['partTypeId']],
+                    'Remove Part Types!',
                     Proposalgen_Model_TonerColor::$ColorNames[$row['tonerColorId']],
                     $row ['yield'],
                     $row ['cost'],
@@ -405,17 +375,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         }
                         else
                         {
-                            if ($filter == "type_name")
+                            if ($filter == "toner_color_name")
                             {
-                                $filter = "pt.name";
+                                $filter = 'tc.name';
                             }
-                            else
-                            {
-                                if ($filter == "toner_color_name")
-                                {
-                                    $filter = 'tc.name';
-                                }
-                            }
+
                         }
                     }
                     $where = ' AND ' . $filter . ' LIKE("%' . $criteria . '%")';
@@ -461,9 +425,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                    't' => 'toners'
                               ));
                 $select->joinLeft(array(
-                                       'pt' => 'part_types'
-                                  ), 'pt.id = t.partTypeId');
-                $select->joinLeft(array(
                                        'tc' => 'toner_colors'
                                   ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
@@ -494,11 +455,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                    't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
-                                       'pt' => 'part_types'
-                                  ), 'pt.id = t.partTypeId', array(
-                                                                  'name AS type_name'
-                                                             ));
-                $select->joinLeft(array(
                                        'tc' => 'toner_colors'
                                   ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
@@ -517,19 +473,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $formData->records = $count;
                     foreach ($result as $row)
                     {
-                        // Always uppercase OEM, but just captialize everything else
-                        $type_name = ucwords(strtolower($row ['type_name']));
-                        if ($type_name == "Oem")
-                        {
-                            $type_name = "OEM";
-                        }
-
                         $formData->rows [$i] ['id']   = $row ['toners_id'];
                         $formData->rows [$i] ['cell'] = array(
                             $row ['toners_id'],
                             $row ['sku'],
                             ucwords(strtolower($row ['fullname'])),
-                            $type_name,
                             ucwords(strtolower($row ['name'])),
                             $row ['yield'],
                             $row ['cost'],
@@ -612,215 +560,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($formData);
     }
 
-    public function addtonerAction ()
-    {
-
-        // grab all variables from $_POST
-        $toner_id         = $this->_getParam('toner_id', false);
-        $toner_sku        = $this->_getParam('toner_sku', false);
-        $part_type_id     = $this->_getParam('part_type_id', false);
-        $manufacturer_id  = $this->_getParam('manufacturer_id', false);
-        $toner_color_id   = $this->_getParam('toner_color_id', false);
-        $toner_yield      = $this->_getParam('toner_yield', false);
-        $toner_price      = $this->_getParam('toner_price', false);
-        $master_device_id = $this->_getParam('master_device_id', false);
-
-        // echo "SKU=".$toner_sku."<br />Type=".$part_type_id."<br
-        // />Man=".$manufacturer_id."<br />Color=".$toner_color_id."<br
-        // />Yield=".$toner_yield."<br />Price=".$toner_price."<br />"; die;
-
-
-        // validate
-        $message = '';
-        if ($toner_id == 0 && (empty($toner_sku) || empty($part_type_id) || empty($manufacturer_id) || empty($toner_color_id) || empty($toner_yield) || empty($toner_price)))
-        {
-            $message = "You must complete all fields before adding a new part. Please try again.";
-        }
-
-        if (empty($message))
-        {
-            $db                = Zend_Db_Table::getDefaultAdapter();
-            $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-
-            $db->beginTransaction();
-            try
-            {
-                if ($toner_id > 0)
-                {
-                    $device_tonerData = array(
-                        'toner_id'         => $toner_id,
-                        'master_device_id' => $master_device_id
-                    );
-                    // make sure device_toner does not exist
-                    $where  = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-                    $result = $device_tonerTable->fetchRow($where);
-
-                    if (count($result->toArray()) == 0)
-                    {
-                        $device_tonerTable->insert($device_tonerData);
-                        $message = "The toner has been added.";
-                    }
-                    else
-                    {
-                        $message = "This toner is already a part for the device.";
-                    }
-                }
-                else
-                {
-                    $tonerTable = new Proposalgen_Model_DbTable_Toner();
-                    $tonerData  = array(
-                        'toner_sku'       => $toner_sku,
-                        'part_type_id'    => $part_type_id,
-                        'manufacturer_id' => $manufacturer_id,
-                        'tonerColorId'    => $toner_color_id,
-                        'toner_yield'     => $toner_yield,
-                        'toner_price'     => $toner_price
-                    );
-
-                    // make sure toner does not exist
-                    $where  = $tonerTable->getAdapter()->quoteInto('(toner_SKU = "' . $toner_sku . '") OR (manufacturer_id = ' . $manufacturer_id . ' AND tonerColorId = ' . $toner_color_id . ' AND toner_yield = ' . $toner_yield . ')', null);
-                    $toners = $tonerTable->fetchRow($where);
-
-                    if (count($toners->toArray()) > 0)
-                    {
-                        $toner_id = $toners ['toner_id'];
-                    }
-                    else
-                    {
-                        $toner_id = $tonerTable->insert($tonerData);
-                    }
-
-                    // update device_toner
-                    $device_tonerData = array(
-                        'toner_id'         => $toner_id,
-                        'master_device_id' => $master_device_id
-                    );
-                    $device_tonerTable->insert($device_tonerData);
-                    $message = "The toner has been added.";
-                }
-
-                $db->commit();
-            }
-            catch (Exception $e)
-            {
-                $db->rollback();
-                $message = "An error has occurred and the toner was not saved.";
-            }
-        }
-
-        $this->sendJson(array("message" => $message));
-    }
-
-    /**
-     */
-    public function edittonerAction ()
-    {
-        // Disable the default layout
-        $db = Zend_Db_Table::getDefaultAdapter();
-
-        $tonerTable        = new Proposalgen_Model_DbTable_Toner();
-        $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-
-        // grab all variables from $_POST
-        $id              = $this->_getParam('id', null);
-        $toner_id        = $this->_getParam('toner_id', null);
-        $toner_sku       = $this->_getParam('toner_SKU', null);
-        $part_type_id    = $this->_getParam('part_type_id', null);
-        $manufacturer_id = $this->_getParam('manufacturer_name', null);
-        $toner_color_id  = $this->_getParam('toner_color_name', null);
-        $toner_yield     = $this->_getParam('toner_yield', null);
-        $toner_price     = $this->_getParam('toner_price', null);
-        $operation       = $this->_getParam('oper', null);
-
-
-        $message = '';
-
-        if ($operation == "del")
-        {
-            // check to see if toner is being used
-            $where   = $device_tonerTable->getAdapter()->quoteinto("id = ?", $id, "INTEGER");
-            $devices = $device_tonerTable->fetchAll($where);
-
-            if (count($devices) > 0)
-            {
-                $message = "We are unable to delete toner as it's already assigned to a printer.";
-            }
-            else
-            {
-                $where = $tonerTable->getAdapter()->quoteInto("id = ?", $id, "INTEGER");
-                $tonerTable->delete($where);
-                $message = "The toner has been deleted.";
-            }
-        }
-        else
-        {
-            if ((empty($toner_sku) || empty($part_type_id) || empty($manufacturer_id) || empty($toner_color_id) || empty($toner_yield) || empty($toner_price)))
-            {
-                $message = "All fields must have a valid value before saving. Please try again.";
-            }
-            else if (!is_numeric($toner_yield))
-            {
-                $message = "Toner Yield is not a valid number. Please try again.";
-            }
-            else if (!is_numeric($toner_price))
-            {
-                $message = "Toner Price is not a valid number. Please try again.";
-            }
-            else if (!($toner_price > 0))
-            {
-                $message = "Toner Price must be greater than 0. Please try again.";
-            }
-
-            if (empty($message))
-            {
-                $db->beginTransaction();
-                try
-                {
-                    $tonerTable = new Proposalgen_Model_DbTable_Toner();
-                    $tonerData  = array(
-                        'sku'            => $toner_sku,
-                        'partTypeId'     => $part_type_id,
-                        'manufacturerId' => $manufacturer_id,
-                        'tonerColorId'   => $toner_color_id,
-                        'yield'          => $toner_yield,
-                        'cost'           => $toner_price
-                    );
-
-                    if ($toner_id > 0)
-                    {
-                        $where = $tonerTable->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
-                        $tonerTable->update($tonerData, $where);
-                        $message = "The toner has been updated.";
-                    }
-                    else
-                    {
-                        // make sure toner does not exist
-                        $where  = $tonerTable->getAdapter()->quoteInto('(sku = "' . $toner_sku . '")', null);
-                        $toners = $tonerTable->fetchRow($where);
-
-                        if ($toners != null)
-                        {
-                            $message = "The toner already exists.";
-                        }
-                        else
-                        {
-                            $tonerTable->insert($tonerData);
-
-                            $message = "The toner has been added.";
-                        }
-                    }
-                    $db->commit();
-                }
-                catch (Exception $e)
-                {
-                    $db->rollback();
-                    $message = "An error has occurred and the toner was not updated.";
-                }
-            }
-        }
-
-        $this->sendJson(array("message" => $message));
-    }
 
     public function replacetonerAction ()
     {
@@ -935,6 +674,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $where      = $tonerTable->getAdapter()->quoteInto('id = ?', $replace_id, 'INTEGER');
             $tonerTable->delete($where);
 
+            // Update the toner vendor manufacturer
+            Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
+
             $db->commit();
         }
         catch (Exception $e)
@@ -944,114 +686,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
 
         $this->sendJson(array("message" => $message));
-    }
-
-    public function removetonerAction ()
-    {
-        $db      = Zend_Db_Table::getDefaultAdapter();
-        $message = array();
-
-        $toner_id         = $this->_getParam('toner_id', false);
-        $master_device_id = $this->_getParam('master_device_id', false);
-
-        $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-
-        $db->beginTransaction();
-        try
-        {
-            if ($toner_id > 0 && $master_device_id > 0)
-            {
-                $where = $device_tonerTable->getAdapter()->quoteInto('master_device_id = ' . $master_device_id . ' AND toner_id = ?', $toner_id, 'INTEGER');
-                $device_tonerTable->delete($where);
-            }
-            $db->commit();
-        }
-        catch (Exception $e)
-        {
-
-            $db->rollback();
-            $message [] = "An error has occurred and the toner was not removed.";
-
-        }
-
-        $this->sendJson(array("message" => $message));
-    }
-
-    public function searchtonersAction ()
-    {
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $formData = new stdClass();
-
-        $field = $this->_getParam('search_field', false);
-        $value = $this->_getParam('search_value', false);
-
-        // build where
-        $where = "";
-        if (!empty($field))
-        {
-            $where .= $field . ' = "' . $value . '"';
-        }
-
-        try
-        {
-            // select toners for device
-            $select = $db->select()
-                ->from(array(
-                            't' => 'toner'
-                       ))
-                ->join(array(
-                            'pt' => 'part_type'
-                       ), 'pt.part_type_id = t.partTypeId')
-                ->join(array(
-                            'tc' => 'toner_color'
-                       ), 'tc.toner_color_id = t.tonerColorId')
-                ->join(array(
-                            'm' => 'manufacturer'
-                       ), 'm.manufacturer_id = t.manufacturerId');
-            if (!empty($where))
-            {
-                $select->where($where);
-            }
-            $select->order(array(
-                                'm.manufacturer_name',
-                                't.tonerColorId',
-                                'toner_yield'
-                           ));
-            $stmt   = $db->query($select);
-            $result = $stmt->fetchAll();
-
-            if (count($result) > 0)
-            {
-                $i = 0;
-                foreach ($result as $row)
-                {
-                    $formData->rows [$i] ['id']   = $row ['toner_id'];
-                    $formData->rows [$i] ['cell'] = array(
-                        $row ['toner_id'],
-                        $row ['toner_SKU'],
-                        $row ['type_name'],
-                        $row ['manufacturer_name'],
-                        $row ['toner_color_name'],
-                        $row ['toner_yield'],
-                        "$" . money_format('%i', ($row ['toner_price']))
-                    );
-                    $i++;
-                }
-            }
-            else
-            {
-                $formData = array();
-            }
-        }
-        catch (Exception $e)
-        {
-            // critical exception
-            Throw new exception("Critical Error: Unable to find toners.", 0, $e);
-        } // end catch
-
-
-        // encode user data to return to the client:
-        $this->sendJson($formData);
     }
 
     /**
@@ -1310,7 +944,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     {
         $manufacturerId    = $this->_getParam('manufacturerid', false);
         $manufacturerTable = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturer      = $manufacturerTable->fetchRow(array('id = ?' . $manufacturerId));
+        $manufacturer      = $manufacturerTable->fetchRow(array('id = ?' => $manufacturerId));
 
         try
         {
@@ -1443,11 +1077,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $filter = "tm.fullname";
             }
-
-            else if ($filter == "type_name")
-            {
-                $filter = "pt.name";
-            }
             else if ($filter == "toner_sku" || $filter == "toner_SKU")
             {
                 $filter = "t.sku";
@@ -1513,41 +1142,36 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             // get count
             $select = $db->select()
-                ->from(array(
-                            't' => 'toners'
-                       ), $toner_fields_list)
-                ->joinLeft(array(
-                                'dt' => 'device_toners'
-                           ), 'dt.toner_id = t.id', array(
-                                                         'master_device_id'
-                                                    ))
-                ->joinLeft(array(
-                                'tm' => 'manufacturers'
-                           ), 'tm.id = t.manufacturerId', array(
-                                                               'tm.fullname AS toner_manufacturer'
+                      ->from(array(
+                                  't' => 'toners'
+                             ), $toner_fields_list)
+                      ->joinLeft(array(
+                                      'dt' => 'device_toners'
+                                 ), 'dt.toner_id = t.id', array(
+                                                               'master_device_id'
                                                           ))
-                ->joinLeft(array(
-                                'md' => 'master_devices'
-                           ), 'md.id = dt.master_device_id')
-                ->joinLeft(array(
-                                'mdm' => 'manufacturers'
-                           ), 'mdm.id = md.manufacturerId', array(
-                                                                 'mdm.fullname AS manufacturer_name'
-                                                            ))
-                ->joinLeft(array(
-                                'tc' => 'toner_colors'
-                           ), 'tc.id = t.tonerColorId', array(
-                                                             'name AS toner_color_name'
-                                                        ))
-                ->joinLeft(array(
-                                'pt' => 'part_types'
-                           ), 'pt.id = t.partTypeId', array(
-                                                           'pt.name AS type_name'
-                                                      ))
-                ->joinLeft(array(
-                                'dta' => 'dealer_toner_attributes'
-                           ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
-                ->where('t.id > 0' . $where);
+                      ->joinLeft(array(
+                                      'tm' => 'manufacturers'
+                                 ), 'tm.id = t.manufacturerId', array(
+                                                                     'tm.fullname AS toner_manufacturer'
+                                                                ))
+                      ->joinLeft(array(
+                                      'md' => 'master_devices'
+                                 ), 'md.id = dt.master_device_id')
+                      ->joinLeft(array(
+                                      'mdm' => 'manufacturers'
+                                 ), 'mdm.id = md.manufacturerId', array(
+                                                                       'mdm.fullname AS manufacturer_name'
+                                                                  ))
+                      ->joinLeft(array(
+                                      'tc' => 'toner_colors'
+                                 ), 'tc.id = t.tonerColorId', array(
+                                                                   'name AS toner_color_name'
+                                                              ))
+                      ->joinLeft(array(
+                                      'dta' => 'dealer_toner_attributes'
+                                 ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                      ->where('t.id > 0' . $where);
 
             if ($where_compatible)
             {
@@ -1588,19 +1212,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $i = 0;
                 foreach ($result as $row)
                 {
-                    // Always uppercase OEM, but just captialize everything else
-                    $type_name = ucwords(strtolower($row ['type_name']));
-                    if ($type_name == "Oem")
-                    {
-                        $type_name = "OEM";
-                    }
-
                     $formData->rows [$i] ['id'] = $row ['toner_id'];
                     $formData->rows [$i]        = array(
                         "toner_id"           => $row ['toner_id'],
                         "toner_SKU"          => $row ['toner_SKU'],
                         "manufacturer_name"  => ucwords(strtolower($row ['toner_manufacturer'])),
-                        "part_type_id"       => $type_name,
                         "toner_color_name"   => ucwords(strtolower($row ['toner_color_name'])),
                         "toner_yield"        => $row ['toner_yield'],
                         "toner_price"        => $row ['toner_price'],
@@ -1675,6 +1291,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     /**
      * This action handles mapping rms models to master devices.
      * If masterDeviceId is set to -1 it will delete the matchup
+     * This is used in @see \Proposalgen_AdminController::managematchupsAction()
      */
     public function setMappedToAction ()
     {
@@ -2127,11 +1744,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             if ($device_id > 0)
             {
                 $select = $db->select()
-                    ->from(array(
-                                'rd' => 'replacement_devices'
-                           ))
-                    ->where('masterDeviceId = ?', $device_id, 'INTEGER')
-                    ->where('dealerId =  ?', $this->dealerId);
+                          ->from(array(
+                                      'rd' => 'replacement_devices'
+                                 ))
+                          ->where('masterDeviceId = ?', $device_id, 'INTEGER')
+                          ->where('dealerId =  ?', $this->dealerId);
                 $stmt   = $db->query($select);
                 $row    = $stmt->fetchAll();
 

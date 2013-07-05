@@ -126,7 +126,6 @@ $(function ()
                     tr.append($('<td></td>').html('N/A'));
                     tr.append($('<td></td>').html('N/A'));
                     tr.append($('<td></td>').html('N/A'));
-                    tr.append($('<td></td>').html('N/A'));
                     tr.append($('<td></td>').html(data.masterDevice.leasedTonerYield));
                     tr.append($('<td></td>').html('N/A'));
                     tonerTBody.append(tr);
@@ -138,7 +137,6 @@ $(function ()
                         var tr = $('<tr></tr>');
                         tr.append($('<td></td>').html(toner.sku));
                         tr.append($('<td></td>').html(toner.manufacturer.fullname));
-                        tr.append($('<td></td>').html(toner.partTypeName));
                         tr.append($('<td></td>').html(toner.tonerColorName));
                         tr.append($('<td></td>').html(toner.yield));
                         tr.append($('<td></td>').html(toner.cost));

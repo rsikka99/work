@@ -105,7 +105,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
             "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,
             "healthcheckSettingId"          => $this->healthcheckSettingId,
             "surveySettingId"               => $this->surveySettingId,
-            "quoteSettingId"               => $this->quoteSettingId,
+            "quoteSettingId"                => $this->quoteSettingId,
         );
     }
 
@@ -131,6 +131,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
             }
         }
+
         return $this->_assessmentSetting;
     }
 
@@ -189,7 +190,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     /**
      * Gets the hardware optimization settings
      *
-     * @return Hardwareoptimization_Model_Hardware_Optimization
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
     public function getHardwareOptimizationSettings ()
     {

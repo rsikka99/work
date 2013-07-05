@@ -11,10 +11,9 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
-        $settings = $dealer->getDealerSettings()->getHardwareOptimizationSettings()->toArray();
-
+        $settings                               = $dealer->getDealerSettings()->getHardwareOptimizationSettings();
         $hardwareoptimizationSettingFormService = new Preferences_Service_HardwareoptimizationSetting($settings);
-        $form                     = $hardwareoptimizationSettingFormService->getForm();
+        $form                                   = $hardwareoptimizationSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -43,7 +42,7 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
     {
         // Initialize and get the form
         $HardwareoptimizationSettingFormService = new Preferences_Service_HardwareoptimizationSetting();
-        $form                     = $HardwareoptimizationSettingFormService->getForm();
+        $form                                   = $HardwareoptimizationSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -72,9 +71,8 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
         $combinedDealerSettings = $dealer->getDealerSettings()->getHardwareoptimizationSettings()->toArray();
 
         // User
-        $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $combinedUserSettings = $user->getUserSettings()->getHardwareOptimizationSettings()->toArray();
-        $HardwareoptimizationSettingFormService = new Preferences_Service_HardwareoptimizationSetting($combinedUserSettings);
+        $user                                   = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $HardwareoptimizationSettingFormService = new Preferences_Service_HardwareoptimizationSetting($user->getUserSettings()->getHardwareOptimizationSettings());
 
         $form = $HardwareoptimizationSettingFormService->getFormWithDefaults($combinedDealerSettings);
 

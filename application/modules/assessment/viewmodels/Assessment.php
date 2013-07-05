@@ -309,7 +309,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->ExcludedDevices))
         {
-            $this->ExcludedDevices = array_merge($this->getDevices()->unmappedDeviceInstances->getDeviceInstances(), $this->getDevices()->excludedDeviceInstances->getDeviceInstances());
+            $unmappedDevices = $this->getDevices()->unmappedDeviceInstances->getDeviceInstances();
+            foreach ($unmappedDevices as $deviceInstance)
+            {
+                $deviceInstance->_exclusionReason = "Not Mapped";
+            }
+
+            $excludedDevices = $this->getDevices()->excludedDeviceInstances->getDeviceInstances();
+            foreach ($excludedDevices as $deviceInstance)
+            {
+                $deviceInstance->_exclusionReason = "Manually Excluded";
+            }
+
+            $this->ExcludedDevices = array_merge($unmappedDevices, $excludedDevices);
         }
 
         return $this->ExcludedDevices;

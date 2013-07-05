@@ -13,6 +13,16 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     public $id;
 
     /**
+     * @var int
+     */
+    public $userId;
+
+    /**
+     * @var int
+     */
+    public $isSystemDevice;
+
+    /**
      * @var string
      */
     public $sku;
@@ -26,11 +36,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
      * @var int
      */
     public $yield;
-
-    /**
-     * @var int
-     */
-    public $partTypeId;
 
     /**
      * @var int
@@ -51,11 +56,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
      * @var string
      */
     public $dealerSku;
-
-    /**
-     * @var Proposalgen_Model_PartType
-     */
-    protected $_partType;
 
     /**
      * @var Proposalgen_Model_Manufacturer
@@ -82,6 +82,16 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             $this->id = $params->id;
         }
 
+        if (isset($params->userId) && !is_null($params->userId))
+        {
+            $this->userId = $params->userId;
+        }
+
+        if (isset($params->isSystemDevice) && !is_null($params->isSystemDevice))
+        {
+            $this->isSystemDevice = $params->isSystemDevice;
+        }
+
         if (isset($params->sku) && !is_null($params->sku))
         {
             $this->sku = $params->sku;
@@ -95,11 +105,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
         if (isset($params->yield) && !is_null($params->yield))
         {
             $this->yield = $params->yield;
-        }
-
-        if (isset($params->partTypeId) && !is_null($params->partTypeId))
-        {
-            $this->partTypeId = $params->partTypeId;
         }
 
         if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
@@ -131,44 +136,16 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     {
         return array(
             "id"             => $this->id,
+            "userId"         => $this->userId,
+            "isSystemDevice" => $this->isSystemDevice,
             "sku"            => $this->sku,
             "cost"           => $this->cost,
             "yield"          => $this->yield,
-            "partTypeId"     => $this->partTypeId,
             "manufacturerId" => $this->manufacturerId,
             "tonerColorId"   => $this->tonerColorId,
         );
     }
 
-    /**
-     * Gets the part type
-     *
-     * @return Proposalgen_Model_PartType
-     */
-    public function getPartType ()
-    {
-        if (!isset($this->_partType))
-        {
-            $partTypeMapper  = Proposalgen_Model_Mapper_PartType::getInstance();
-            $this->_partType = $partTypeMapper->find($this->partTypeId);
-        }
-
-        return $this->_partType;
-    }
-
-    /**
-     * Sets the part type
-     *
-     * @param Proposalgen_Model_PartType $PartType
-     *
-     * @return \Proposalgen_Model_Toner
-     */
-    public function setPartType ($PartType)
-    {
-        $this->_partType = $PartType;
-
-        return $this;
-    }
 
     /**
      * @return Proposalgen_Model_Manufacturer

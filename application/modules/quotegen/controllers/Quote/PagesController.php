@@ -29,7 +29,6 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                 // Go through each device and add total pages.
                 if ($form->isValid($values))
                 {
-
                     $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
                     foreach ($this->_quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
                     {
@@ -72,13 +71,34 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     $quoteAdminCostPerPage  = (float)$this->_quote->adminCostPerPage;
                     $quotePricingConfigId   = (float)$this->_quote->pricingConfigId;
 
+                    // This updates the values of the settings on the page
                     $this->_quote->populate($values);
+
+                    // Save the toner ranks
+                    $rankingSetMapper                        = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+                    if (isset($values['dealerMonochromeRankSetArray']))
+                    {
+                        $this->_quote->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_quote->dealerMonochromeRankSetId, $values['dealerMonochromeRankSetArray']);
+                    }
+                    else
+                    {
+                        Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerMonochromeRankSetId);
+                    }
+
+                    if (isset($values['dealerColorRankSetArray']))
+                    {
+                        $this->_quote->dealerColorRankSetId      = $rankingSetMapper->saveRankingSets($this->_quote->dealerColorRankSetId, $values['dealerColorRankSetArray']);
+                    }
+                    else
+                    {
+                        Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerColorRankSetId);
+                    }
 
                     // If we have a difference in page coverage we need to recalculate cpp rates for devices
                     if ($quotePageCoverageMono !== (float)$this->_quote->pageCoverageMonochrome
                         || $quotePageCoverageColor !== (float)$this->_quote->pageCoverageColor
                         || $quoteAdminCostPerPage !== (float)$this->_quote->adminCostPerPage
-                        || $quotePricingConfigId !== (float)$this->_quote->pricingConfigId
                     )
                     {
                         /* @var $quoteDevice Quotegen_Model_QuoteDevice */

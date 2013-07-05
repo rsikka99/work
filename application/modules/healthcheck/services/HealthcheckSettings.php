@@ -17,13 +17,6 @@ class Healthcheck_Service_HealthcheckSettings
      *
      * @var Healthcheck_Model_Healthcheck_Setting
      */
-    protected $_systemSettings;
-
-    /**
-     * The system Healthcheck settings
-     *
-     * @var Healthcheck_Model_Healthcheck_Setting
-     */
     protected $_dealerSettings;
 
     /**
@@ -41,7 +34,14 @@ class Healthcheck_Service_HealthcheckSettings
     protected $_healthcheckSettings;
 
     /**
-     * The default settings (uses overrides)
+     * Settings that are used to populate the form.
+     *
+     * @var Healthcheck_Model_Healthcheck_Setting
+     */
+    protected $_populateSettings;
+
+    /**
+     * The settings that are used to display the default values (good engrish)
      *
      * @var Healthcheck_Model_Healthcheck_Setting
      */
@@ -64,14 +64,16 @@ class Healthcheck_Service_HealthcheckSettings
         $user                       = Application_Model_Mapper_User::getInstance()->find($userId);
         $dealer                     = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
         $this->_healthcheck         = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($healthcheckId);
-        $this->_systemSettings      = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->fetchSystemHealthcheckSetting();
         $this->_dealerSettings      = $dealer->getDealerSettings()->getHealthcheckSettings();
         $this->_userSettings        = $user->getUserSettings()->getHealthcheckSettings();
         $this->_healthcheckSettings = $this->_healthcheck->getHealthcheckSettings();
 
-        // Calculate the default settings
+        $this->_populateSettings = clone $this->_dealerSettings;
+        $this->_populateSettings->populate($this->_userSettings->toArray());
+        $this->_populateSettings->populate($this->_healthcheckSettings->toArray());
+
+        // Override the default settings
         $this->_defaultSettings = new Healthcheck_Model_Healthcheck_Setting(array_merge($this->_userSettings->toArray(), $this->_dealerSettings->toArray()));
-        $this->_defaultSettings->populate($this->_userSettings->toArray());
     }
 
     /**
@@ -84,7 +86,7 @@ class Healthcheck_Service_HealthcheckSettings
         if (!isset($this->_form))
         {
             $this->_form = new Healthcheck_Form_Healthcheck_Settings($this->_defaultSettings);
-            $this->_form->populate($this->_healthcheckSettings->toArray());
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $this->_populateSettings->getTonerRankSets()));
             $reportDate = date('m/d/Y', strtotime($this->_healthcheck->reportDate));
             $this->_form->populate(array(
                                         'reportDate' => $reportDate
@@ -146,26 +148,47 @@ class Healthcheck_Service_HealthcheckSettings
                     unset($validData [$key]);
                 }
             }
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['healthcheckPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                unset($validData ['healthcheckPricingConfigId']);
-            }
 
             // Save the id as it will get erased
-            $HealthcheckSettingsId = $this->_healthcheckSettings->id;
-            $healthcheckSettings = new Healthcheck_Model_Healthcheck_Setting();
-            $healthcheckSettings->populate(array_merge($this->_defaultSettings->toArray(), $validData));
-            $healthcheckSettings->id    = $HealthcheckSettingsId;
-            $this->_healthcheckSettings = $healthcheckSettings;
-//            $this->_HealthcheckSettings->populate($validData);
+            $healthcheckSettingsId = $this->_healthcheckSettings->id;
 
+            $rankingSetMapper = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+            // If we have selected toners, we have to save the to the table
+            if (isset($validData['customerColorRankSetArray']))
+            {
+                $this->_healthcheckSettings->customerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_healthcheckSettings->customerColorRankSetId, $validData['customerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_healthcheckSettings->customerColorRankSetId);
+            }
+
+            if (isset($validData['customerMonochromeRankSetArray']))
+            {
+                $this->_healthcheckSettings->customerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_healthcheckSettings->customerMonochromeRankSetId, $validData['customerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_healthcheckSettings->customerMonochromeRankSetId);
+            }
+
+
+            // Override the setting so the id doesn't get overwritten when we populate
+            $this->_defaultSettings->customerMonochromeRankSetId = $this->_healthcheckSettings->customerMonochromeRankSetId;
+            $this->_defaultSettings->customerColorRankSetId      = $this->_healthcheckSettings->customerColorRankSetId;
+
+            $this->_healthcheckSettings->populate($this->_defaultSettings->toArray());
+            $this->_healthcheckSettings->populate($validData);
+            // Restore the Id
+            $this->_healthcheckSettings->id = $healthcheckSettingsId;
+
+            // Populate before the other values are set since these fields are a calculated field.
             $this->getForm()->populate($this->_healthcheckSettings->toArray());
             $this->_healthcheckSettings->costOfLabor    = ($this->_healthcheckSettings->costOfLabor != null) ? $this->_healthcheckSettings->costOfLabor : new Zend_Db_Expr('NULL');
             $this->_healthcheckSettings->hoursSpentOnIt = ($this->_healthcheckSettings->hoursSpentOnIt != null) ? $this->_healthcheckSettings->hoursSpentOnIt : new Zend_Db_Expr('NULL');
 
             Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($this->_healthcheckSettings);
-
 
             return true;
         }

@@ -281,9 +281,9 @@ $masterDeviceFields = array(
 <hr>
 <!-- ---------------------------------------------------------------------------------------------- -->
 <div class="span-24">
-    <?php foreach($this->device->MasterDevice->Toners as $partType => $tonersByPartType) :?>
-    <h3><?php echo Proposalgen_Model_PartType::$PartTypeNames[$partType]; ?> Toners</h3>
-    <?php foreach($tonersByPartType as $tonerColor => $tonersByColor) :?>
+    <?php foreach($this->device->MasterDevice->Toners as $manufacturerId => $tonersByManufacturer) :?>
+    <h3>Manufacturer #<?php echo $manufacturerId; ?>  Toners</h3>
+    <?php foreach($tonersByManufacturer as $tonerColor => $tonersByColor) :?>
     <table class='tonerTable'>
     	<caption class="loud"><strong>Color: <?php echo Proposalgen_Model_TonerColor::$ColorNames[$tonerColor]; ?></strong></caption>
     	<thead>

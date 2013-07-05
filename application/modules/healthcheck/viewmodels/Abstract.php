@@ -86,7 +86,8 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->adminCostPerPage       = $healthcheckSettings->adminCostPerPage;
             $this->_costPerPageSettingForCustomer->pageCoverageColor      = $this->getPageCoverageColor();
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
-            $this->_costPerPageSettingForCustomer->pricingConfiguration   = $healthcheckSettings->getHealthcheckPricingConfig();
+            $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $healthcheckSettings->getCustomerMonochromeRankSet();
+            $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $healthcheckSettings->getCustomerColorRankSet();
         }
 
         return $this->_costPerPageSettingForCustomer;

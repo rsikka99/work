@@ -29,12 +29,12 @@ class Preferences_Service_HealthcheckSetting
 
     /**
      *
-     * @param $defaultSettings array
+     * @param $defaultSettings Healthcheck_Model_Healthcheck_Setting
      */
     public function __construct ($defaultSettings = null)
     {
         $this->_systemHealthcheckSettings = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->find(1);
-        $this->_defaultSettings      = $defaultSettings;
+        $this->_defaultSettings           = $defaultSettings;
     }
 
     /**
@@ -48,10 +48,10 @@ class Preferences_Service_HealthcheckSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form      = new Preferences_Form_HealthcheckSetting();
+            $this->_form = new Preferences_Form_HealthcheckSetting();
 
             // User form will populate the description with defaults
-            if (is_array($this->_defaultSettings))
+            if (is_array($this->_defaultSettings->toArray()))
             {
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
@@ -71,9 +71,8 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("costOfLabor")->setDescription(($populateSettings["costOfLabor"] ? $populateSettings["costOfLabor"] : "$200 per printer"));
                 $this->_form->getElement("costToExecuteSuppliesOrder")->setDescription($populateSettings["costToExecuteSuppliesOrder"]);
                 $this->_form->getElement("numberOfSupplyOrdersPerMonth")->setDescription($populateSettings["numberOfSupplyOrdersPerMonth"]);
-                $this->_form->getElement("healthcheckPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['healthcheckPricingConfigId']]);
                 // Re-load the settings into Healthcheck settings
-                $populateSettings = $this->_defaultSettings;
+                $populateSettings = $this->_defaultSettings->toArray();
             }
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
@@ -94,14 +93,17 @@ class Preferences_Service_HealthcheckSetting
     {
         if (!isset($this->_form))
         {
-            $this->_form      = new Preferences_Form_HealthcheckSetting();
-            $populateSettings = $this->_systemHealthcheckSettings->toArray();
+            $this->_form = new Preferences_Form_HealthcheckSetting();
+
             if ($this->_defaultSettings)
             {
-                // Get the user settings for population
+                // Override the system settings with anything that the dealer has saved ($this->_defaultSettings).
                 $this->_systemHealthcheckSettings->populate($this->_defaultSettings);
-                // Re-load the settings into Healthcheck settings
-                $populateSettings = $this->_systemHealthcheckSettings->toArray();
+                $this->_form->populate($this->_defaultSettings->getTonerRankSets());
+            }
+            else
+            {
+                $this->_form->populate($this->_systemHealthcheckSettings->getTonerRankSets());
             }
 
             // Get the current class of the element and adds default settings
@@ -111,7 +113,7 @@ class Preferences_Service_HealthcheckSetting
                 $element->setAttrib('class', "{$currentClass} defaultSettings ");
             }
 
-            $this->_form->populate($populateSettings);
+            $this->_form->populate($this->_systemHealthcheckSettings->toArray());
         }
 
         return $this->_form;
@@ -132,11 +134,11 @@ class Preferences_Service_HealthcheckSetting
 
         if ($form->isValid($data))
         {
-            if($this->_form->allowsNull)
+            if ($this->_form->allowsNull)
             {
-                foreach($data as $key => $value)
+                foreach ($data as $key => $value)
                 {
-                    if($value === "")
+                    if ($value === "")
                     {
                         $data [$key] = new Zend_Db_Expr("NULL");
                     }
@@ -173,26 +175,39 @@ class Preferences_Service_HealthcheckSetting
                 }
             }
 
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['healthcheckPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            $healthcheckSetting = new Healthcheck_Model_Healthcheck_Setting();
+            $rankingSetMapper   = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+
+            if (isset($validData['customerColorRankSetArray']))
             {
-                unset($validData ['healthcheckPricingConfigId']);
-            }
-
-            $HealthcheckSetting = new Healthcheck_Model_Healthcheck_Setting();
-
-            $HealthcheckSetting->populate($validData);
-
-            if ($this->_defaultSettings)
-            {
-                $HealthcheckSetting->id = $this->_defaultSettings['id'];
+                $healthcheckSetting->customerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings->customerColorRankSetId, $validData['customerColorRankSetArray']);
             }
             else
             {
-                $HealthcheckSetting->id = $this->_systemHealthcheckSettings->id;
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings->customerColorRankSetId);
             }
 
-            Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($HealthcheckSetting);
+            if (isset($validData['customerMonochromeRankSetArray']))
+            {
+                $healthcheckSetting->customerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_defaultSettings->customerMonochromeRankSetId, $validData['customerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_defaultSettings->customerMonochromeRankSetId);
+            }
+
+            $healthcheckSetting->populate($validData);
+
+            if ($this->_defaultSettings)
+            {
+                $healthcheckSetting->id = $this->_defaultSettings->id;
+            }
+            else
+            {
+                $healthcheckSetting->id = $this->_systemHealthcheckSettings->id;
+            }
+
+            Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($healthcheckSetting);
 
             return true;
         }

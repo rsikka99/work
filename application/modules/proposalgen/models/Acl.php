@@ -7,6 +7,8 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
     const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS            = "proposalgen__admin__devicetoners";
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT        = "proposalgen__admin__devicetonercount";
+    const RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER            = "proposalgen__admin__replacetoner";
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS         = "proposalgen__admin__filterlistitems";
     const RESOURCE_PROPOSALGEN_ADMIN_INDEX                   = "proposalgen__admin__index";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS          = "proposalgen__admin__managematchups";
@@ -37,10 +39,11 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO           = "proposalgen__fleet__set-mapped-to";
     const RESOURCE_PROPOSALGEN_FLEET_SUMMARY               = "proposalgen__fleet__summary";
 
-    const RESOURCE_PROPOSALGEN_INDEX_INDEX           = "proposalgen__index__index";
-    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD = "proposalgen__manufacturer__%";
-    const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD = "proposalgen__optimization__%";
-    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD       = "proposalgen__survey__%";
+    const RESOURCE_PROPOSALGEN_INDEX_INDEX            = "proposalgen__index__index";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD  = "proposalgen__manufacturer__%";
+    const RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD = "proposalgen__managedevices__%";
+    const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD  = "proposalgen__optimization__%";
+    const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD        = "proposalgen__survey__%";
 
     const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = "proposalgen__report_grossmargin__%";
@@ -75,6 +78,8 @@ class Proposalgen_Model_Acl
     {
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_INDEX);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS);
@@ -107,6 +112,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD);
 
@@ -143,6 +149,8 @@ class Proposalgen_Model_Acl
         /**
          * Assessment User
          */
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
@@ -158,6 +166,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);

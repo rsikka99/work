@@ -159,7 +159,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     /**
      * Finds a deviceConfigurationOption based on it's primaryKey
      *
-     * @param $id int
+     * @param $id int []
      *            The id of the deviceConfigurationOption to find
      *
      * @return Quotegen_Model_DeviceConfigurationOption
@@ -254,7 +254,7 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     /**
      * Gets a where clause for filtering by id
      *
-     * @param int $id
+     * @param int[] $id
      *
      * @return array
      */

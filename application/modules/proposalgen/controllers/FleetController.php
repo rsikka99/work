@@ -887,9 +887,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
 
-                        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByPartType)
+                        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByManufacturer)
                         {
-                            foreach ($tonersByPartType as $tonersByColor)
+                            foreach ($tonersByManufacturer as $tonersByColor)
                             {
                                 /* @var $toner Proposalgen_Model_Toner */
                                 foreach ($tonersByColor as $toner)
@@ -898,7 +898,6 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                     $tonerArray['cost']                       = $this->view->currency((float)$tonerArray['cost']);
                                     $tonerArray['yield']                      = number_format($tonerArray['yield']);
                                     $tonerArray['manufacturer']               = ($toner->getManufacturer()) ? $toner->getManufacturer()->toArray() : "Unknown";
-                                    $tonerArray['partTypeName']               = Proposalgen_Model_PartType::$PartTypeNames[$toner->partTypeId];
                                     $tonerArray['tonerColorName']             = Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId];
                                     $jsonResponse["masterDevice"]["toners"][] = $tonerArray;
 

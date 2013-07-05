@@ -135,7 +135,6 @@ else
                         <tr>
                             <th>SKU</th>
                             <th>Manufacturer</th>
-                            <th>Type</th>
                             <th>Color</th>
                             <th>Yield</th>
                             <th>Cost</th>
@@ -147,7 +146,6 @@ else
                             <tr>
                                 <td><?php echo $toner->sku; ?></td>
                                 <td><?php echo $toner->getManufacturer()->displayname; ?></td>
-                                <td><?php echo $toner->getPartType()->typeName ?></td>
                                 <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
                                 <td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
                                 <td style="text-align: right;"><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></td>

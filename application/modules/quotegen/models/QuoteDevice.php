@@ -38,12 +38,12 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * @var int
      */
-    public $oemCostPerPageMonochrome;
+    public $costPerPageMonochrome;
 
     /**
      * @var int
      */
-    public $oemCostPerPageColor;
+    public $costPerPageColor;
 
     /**
      * @var int
@@ -148,24 +148,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->dealerSku = $params->dealerSku;
         }
 
-        if (isset($params->oemCostPerPageMonochrome) && !is_null($params->oemCostPerPageMonochrome))
+        if (isset($params->costPerPageMonochrome) && !is_null($params->costPerPageMonochrome))
         {
-            $this->oemCostPerPageMonochrome = $params->oemCostPerPageMonochrome;
+            $this->costPerPageMonochrome = $params->costPerPageMonochrome;
         }
 
-        if (isset($params->oemCostPerPageColor) && !is_null($params->oemCostPerPageColor))
+        if (isset($params->costPerPageColor) && !is_null($params->costPerPageColor))
         {
-            $this->oemCostPerPageColor = $params->oemCostPerPageColor;
-        }
-
-        if (isset($params->compCostPerPageMonochrome) && !is_null($params->compCostPerPageMonochrome))
-        {
-            $this->compCostPerPageMonochrome = $params->compCostPerPageMonochrome;
-        }
-
-        if (isset($params->compCostPerPageColor) && !is_null($params->compCostPerPageColor))
-        {
-            $this->compCostPerPageColor = $params->compCostPerPageColor;
+            $this->costPerPageColor = $params->costPerPageColor;
         }
 
         if (isset($params->cost) && !is_null($params->cost))
@@ -207,10 +197,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             "name"                      => $this->name,
             "oemSku"                    => $this->oemSku,
             "dealerSku"                 => $this->dealerSku,
-            "oemCostPerPageMonochrome"  => $this->oemCostPerPageMonochrome,
-            "oemCostPerPageColor"       => $this->oemCostPerPageColor,
-            "compCostPerPageMonochrome" => $this->compCostPerPageMonochrome,
-            "compCostPerPageColor"      => $this->compCostPerPageColor,
+            "costPerPageMonochrome"     => $this->costPerPageMonochrome,
+            "costPerPageColor"          => $this->costPerPageColor,
             "cost"                      => $this->cost,
             "residual"                  => $this->residual,
             "packageCost"               => $this->packageCost,
@@ -491,7 +479,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calcualtes the monthly lease price for all instances of this configuration in the quote
+     * Calculates the monthly lease price for all instances of this configuration in the quote
      *
      * @return number
      */
@@ -511,7 +499,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Calcualtes the lease value for a single instance of this configuration
+     * Calculates the lease value for a single instance of this configuration
      *
      * @return number
      */
@@ -549,43 +537,15 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * ****************************************************************************************************************************************
      */
     /**
-     * The appropirate cost per page based on toner preference choice
+     * The appropriate cost per page based on toner preference choice
      *
      * @throws Exception
      * @return number the cost per page for color
      */
     public function calculateColorCostPerPage ()
     {
-        $getCompCostPerPage = false;
-        $costPerPageColor   = 0;
 
-
-        // Get the pricing config
-        switch ($this->getQuote()->pricingConfigId)
-        {
-            case Proposalgen_Model_PricingConfig::COMP :
-            case Proposalgen_Model_PricingConfig::OEMMONO_COMPCOLOR :
-                $getCompCostPerPage = true;
-                break;
-        }
-
-        // If we want to get comp prices then get them
-        if ($getCompCostPerPage)
-        {
-            $costPerPageColor = $this->compCostPerPageColor;
-        }
-
-        // If not they are set to oem
-        if ($costPerPageColor <= 0.0)
-        {
-            $costPerPageColor = $this->oemCostPerPageColor;
-        }
-
-        /*
-         * Adjust for coverage (Disabled since it's not working)
-         */
-        //$costPerPageColor = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageColor, $this->getQuote()->getPageCoverageColor(), $this->getTonerConfigId());
-
+        $costPerPageColor = $this->costPerPageColor;
 
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
@@ -608,43 +568,14 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * The appropirate cost per page based on toner preference choice
+     * The appropriate cost per page based on toner preference choice
      *
      * @throws Exception
      * @return number the cost per page for monochrome
      */
     public function calculateMonochromeCostPerPage ()
     {
-        $getCompCostPerPage    = false;
-        $costPerPageMonochrome = 0;
-
-        // Figure out which pricing configuration the quote is set for
-        switch ($this->getQuote()->pricingConfigId)
-        {
-            case Proposalgen_Model_PricingConfig::COMP :
-            case Proposalgen_Model_PricingConfig::COMPMONO_OEMCOLOR :
-                $getCompCostPerPage = true;
-                break;
-        }
-
-        // If we want to get comp prices then get them
-        if ($getCompCostPerPage)
-        {
-            $costPerPageMonochrome = $this->compCostPerPageMonochrome;
-        }
-
-        // If not they are set to oem
-        if ($costPerPageMonochrome <= 0.0)
-        {
-            $costPerPageMonochrome = $this->oemCostPerPageMonochrome;
-        }
-
-        /*
-         * Adjust for coverage (Disabled since it's not working)
-         */
-        //$costPerPageMonochrome = Tangent_PrinterMath::adjustDeviceCostPerPage($costPerPageMonochrome, $this->getQuote()->getPageCoverageMonochrome(), $this->getTonerConfigId());
-
-
+        $costPerPageMonochrome = $this->costPerPageMonochrome;
         /*
          * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
          * the problem instead of it being masked by service and admin cpp.

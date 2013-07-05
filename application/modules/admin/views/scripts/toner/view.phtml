@@ -6,7 +6,6 @@
     <dl class="dl-horizontal">
         <dt>SKU:</dt><dd><?php echo $toner->sku; ?></dd>
         <dt>Manufacturer:</dt><dd><?php echo $toner->getManufacturer()->displayname; ?></dd>
-        <dt>Part Type:</dt><dd><?php echo $toner->getPartType()->typeName; ?></dd>
         <dt>Color:</dt><dd style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></dd>
         <dt>Yield:</dt><dd><?php echo number_format($toner->yield, 0, '', ','); ?></dd>
         <dt>Price:</dt><dd><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></dd>

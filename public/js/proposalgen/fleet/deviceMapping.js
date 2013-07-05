@@ -37,6 +37,16 @@ $(function ()
                     align   : 'center'
                 },
                 {
+                    width   : 50,
+                    name    : 'isSystemDevice',
+                    index   : 'isSystemDevice',
+                    label   : 'Is System Device',
+                    hidden  : true,
+                    title   : false,
+                    sortable: false,
+                    align   : 'center'
+                },
+                {
                     width   : 10,
                     name    : 'rmsModelId',
                     index   : 'rmsModelId',
@@ -51,6 +61,15 @@ $(function ()
                     index   : 'rmsProviderId',
                     hidden  : true,
                     label   : 'RMS Provider',
+                    title   : false,
+                    sortable: false
+                },
+                {
+                    width   : 10,
+                    name    : 'rmsUploadRowId',
+                    index   : 'rmsUploadRowId',
+                    hidden  : true,
+                    label   : 'RMS Upload Row Id',
                     title   : false,
                     sortable: false
                 },
@@ -170,7 +189,6 @@ $(function ()
                     row.manufacturer = row.manufacturer.replace('"', '&quot;');
 
                     row.deviceName = row.manufacturer + ' ' + row.modelName;
-
                     // This is what toggles the 'master printer
                     // name' field between the auto complete text
                     // box and the 'Click to Remove' text
@@ -178,7 +196,7 @@ $(function ()
                     {
                         // Display message instead of drop down
                         row.mapToMasterDevice = 'New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
-                        row.action = '<input style="width:75px;" title="Edit Printer" class="addEditUnknownDeviceButton btn btn-small btn-warning" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" />';
+                        row.action = '<input style="width:75px;" title="Edit Printer" class="addEditUnknownDeviceButton btn btn-small btn-warning" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"  />';
 
                     }
                     else
@@ -197,26 +215,36 @@ $(function ()
 
                         row.mapToMasterDevice = master_device_dropdown;
 
+                        // Are we an actual Administrator?
                         if (canEditMasterDevices)
                         {
+                            // Is the device mapped?
                             if (row.isMapped == 1)
                             {
-                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"/>';
+                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
                             }
                             else
                             {
-                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
+                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
                             }
                         }
+                        // Not an administrator
                         else
                         {
-                            if (row.isMapped == 1)
+                            // Is the device not a system device and is it mapped?
+                            if (row.isSystemDevice == 0 && row.isMapped == 1)
                             {
-                                row.action = 'Mapped';
+                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
                             }
+                            // Is it just mapped?
+                            else if (row.isMapped == 1)
+                            {
+                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + $('#isAdmin').val() + '\', \'' + row.deviceInstanceIds + '\');" />';
+                            }
+                            // Mot mapped
                             else
                             {
-                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" />';
+                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
                             }
                         }
 
@@ -326,21 +354,12 @@ $(function ()
     );
 
     /**
-     * Adding/Editing of the unknown device
-     */
-    $(document).on("click", ".addEditUnknownDeviceButton", function ()
-    {
-        $("#unknownDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
-        $("#addUnknownDeviceForm").submit();
-    });
-
-    /**
      * System admin actions
      */
     $(document).on("click", ".addEditMasterDevice", function ()
     {
         $("#masterDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
-        $("#addMasterDeviceForm").submit();
+//        $("#addMasterDeviceForm").submit();
     });
 
     /**
@@ -386,3 +405,16 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
         }
     });
 }
+var deviceInstanceIdList = [];
+function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInstanceIds)
+{
+    deviceInstanceIdList = deviceInstanceIds;
+    $("#masterDeviceModal").modal('show');
+    showMasterDeviceManagementModal(masterDeviceId, rmsUploadRowId, isAdmin);
+}
+
+$("#masterDeviceManagement").bind("saveSuccess", function (e, masterDeviceId)
+{
+    $("#manageMasterDeviceModal").modal("hide");
+    set_mapped(deviceInstanceIdList, masterDeviceId);
+});

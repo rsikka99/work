@@ -37,7 +37,7 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
 
         $costValidator = array(
             array(
-                'validator' => 'greaterThan',
+                'validator' => 'GreaterThan',
                 'options'   => array(
                     'min' => 0
                 )
@@ -59,10 +59,10 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
 
         // Survey Elements
         $this->addElement('text', 'pageCoverageMonochrome', array(
-                                                           'label'      => 'Page Coverage Monochrome',
-                                                           'append'     => '%',
-                                                           'validators' => $coverageValidator
-                                                      ));
+                                                                 'label'      => 'Page Coverage Monochrome',
+                                                                 'append'     => '%',
+                                                                 'validators' => $coverageValidator
+                                                            ));
         $this->addElement('text', 'pageCoverageColor', array(
                                                             'label'      => 'Page Coverage Color',
                                                             'append'     => '%',
@@ -70,10 +70,10 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                        ));
         // Health Check Elements
         $this->addElement('text', 'healthcheckMargin', array(
-                                                                 'label'      => 'Pricing Margin',
-                                                                 'append'     => '%',
-                                                                 'validators' => $marginValidator
-                                                            ));
+                                                            'label'      => 'Pricing Margin',
+                                                            'append'     => '%',
+                                                            'validators' => $marginValidator
+                                                       ));
         $this->addElement('text', 'monthlyLeasePayment', array(
                                                               'label'      => 'Monthly Lease Payment',
                                                               'append'     => '$ / device',
@@ -126,39 +126,43 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'averageItHourlyRate', array(
-                                                           'label'      => 'Estimated Average It Hourly Rate',
-                                                           'append' => '$ / hour',
-                                                           'validators' => $costValidator
-                                                      ));
+                                                              'label'      => 'Estimated Average It Hourly Rate',
+                                                              'append'     => '$ / hour',
+                                                              'validators' => $costValidator
+                                                         ));
         $hoursSpentOnIt = $this->createElement('text', 'hoursSpentOnIt', array(
-                                                           'label'      => 'Estimated Hours Spent On It',
-                                                           'append'     => 'hours',
-                                                           'validators' => $costValidator
-                                                      ));
+                                                                              'label'      => 'Estimated Hours Spent On It',
+                                                                              'append'     => 'hours',
+                                                                              'validators' => $costValidator
+                                                                         ));
         $hoursSpentOnIt->setRequired(false);
         $hoursSpentOnIt->setAttrib('class', 'span2 ');
         $annualCostOfLabor = $this->createElement('text', 'costOfLabor', array(
-                                                           'label'      => 'Annual Cost Of Labor',
-                                                           'append'     => '$ / fleet',
-                                                           'validators' => $costValidator
-                                                      ));
+                                                                              'label'      => 'Annual Cost Of Labor',
+                                                                              'append'     => '$ / fleet',
+                                                                              'validators' => $costValidator
+                                                                         ));
         $annualCostOfLabor->setAttrib('class', 'span2 ');
         $this->addElement('text', 'costToExecuteSuppliesOrder', array(
-                                                           'label'      => 'Estimated Cost To Execute Supplies Order',
-                                                           'append'     => '$ / order',
-                                                           'validators' => $costValidator
-                                                      ));
+                                                                     'label'      => 'Estimated Cost To Execute Supplies Order',
+                                                                     'append'     => '$ / order',
+                                                                     'validators' => $costValidator
+                                                                ));
         $this->addElement('text', 'numberOfSupplyOrdersPerMonth', array(
-                                                           'label'      => 'Estimated Supply Orders Per Month',
-                                                           'append'     => '/ month',
-                                                           'validators' => $costValidator
-                                                      ));
-        $healthcehckPricingConfig = $this->createElement('select', 'healthcheckPricingConfigId', array(
-                                                                                                    'label' => 'Toner Preference',
-                                                                                                    'class' => 'span3 '
-                                                                                               ));
+                                                                       'label'      => 'Estimated Supply Orders Per Month',
+                                                                       'append'     => '/ month',
+                                                                       'validators' => $costValidator
+                                                                  ));
+        $customerMonochromeVendor = $this->createElement('multiselect', 'customerMonochromeRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
+        $customerColorVendor      = $this->createElement('multiselect', 'customerColorRankSetArray',
+            array(
+                 "class" => "tonerMultiselect",
+            ));
 
-$this->allowNullValues();
+        $this->allowNullValues();
         // Set a span 2 to all elements that do not have a class
         /* @var $element Zend_Form_Element_Text */
         foreach ($this->getElements() as $element)
@@ -181,7 +185,6 @@ $this->allowNullValues();
                                      'mpsBwCostPerPage',
                                      'mpsColorCostPerPage',
                                      'kilowattsPerHour',
-                                     $healthcehckPricingConfig,
                                      'adminCostPerPage',
                                      'laborCostPerPage',
                                      'partsCostPerPage',
@@ -190,6 +193,8 @@ $this->allowNullValues();
                                      $annualCostOfLabor,
                                      'costToExecuteSuppliesOrder',
                                      'numberOfSupplyOrdersPerMonth',
+                                     $customerMonochromeVendor,
+                                     $customerColorVendor,
                                ), 'assessment', array('legend' => 'Health Check Settings',));
 
         $this->setElementDecorators(array(
@@ -226,14 +231,11 @@ $this->allowNullValues();
                                               'Fieldset'
                                          ));
 
-        $pricingConfigOptions = array();
-        // Add multi options to toner preferences.
-        /* @var $pricingConfig Proposalgen_Model_PricingConfig */
-        foreach (Proposalgen_Model_Mapper_PricingConfig::getInstance()->fetchAll() as $pricingConfig)
-        {
-            $pricingConfigOptions [$pricingConfig->pricingConfigId] = $pricingConfig->configName;
-        }
-        $healthcehckPricingConfig->addMultiOptions($pricingConfigOptions);
+        $tonerVendorManufacturers = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
+        $customerMonochromeVendor->addMultiOptions($tonerVendorManufacturers);
+        $customerColorVendor->addMultiOptions($tonerVendorManufacturers);
+
+        $this->tonerSelectElementsDisplayGroups(2);
     }
 
     /**
@@ -248,10 +250,43 @@ $this->allowNullValues();
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'
                                          ));
+
+        $this->tonerSelectElementsDisplayGroups(3);
+    }
+
+    public function tonerSelectElementsDisplayGroups ($colSpan)
+    {
+
+        $this->getElement("customerMonochromeRankSetArray")->setDecorators(array(
+                                                                                'FieldSize',
+                                                                                'ViewHelper',
+                                                                                'Addon',
+                                                                                array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                                'ElementErrors',
+                                                                                array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                                array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                                array('AddRowData', array('header'    => "Monochrome Toner Preference",
+                                                                                                          "trClass"   => "control-group",
+                                                                                                          "tdAttr"    => "colspan={$colSpan}",
+                                                                                                          "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                           ));
+        $this->getElement("customerColorRankSetArray")->setDecorators(array(
+                                                                           'FieldSize',
+                                                                           'ViewHelper',
+                                                                           'Addon',
+                                                                           array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                           'ElementErrors',
+                                                                           array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                           array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+                                                                           array('AddRowData', array("header"    => "Color Toner Preference",
+                                                                                                     "trClass"   => "control-group",
+                                                                                                     "tdAttr"    => "colspan={$colSpan}",
+                                                                                                     "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                      ));
     }
 
     /**
-     * Allows the form to allow null vlaues
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {

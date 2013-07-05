@@ -97,7 +97,6 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
                     <thead>
                     <tr>
                         <th style="width: 50px;">Color</th>
-                        <th style="width: 50px;">Type</th>
                         <th style="width: 40px;">Yield</th>
                         <th style="width: 60px;">Price</th>
                         <th style="width: 60px;">Black CPP</th>
@@ -108,7 +107,6 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
                     <?php foreach ($deviceInstance->getMasterDevice()->getTonersForAssessment($assessmentViewModel->getCostPerPageSettingForCustomer()) as $tonerColor => $toner) : ?>
                         <tr>
                             <td><?php echo Proposalgen_Model_TonerColor::$ColorNames[$tonerColor]; ?></td>
-                            <td><?php echo $toner->getPartType()->typeName; ?></td>
                             <td class="debugNumber"><?php echo number_format($toner->yield); ?></td>
                             <td class="debugNumber"><?php echo $this->currency((float)$toner->cost); ?></td>
                             <td class="debugNumber"><?php echo $this->currency((float)$toner->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, array("precision" => 4)); ?></td>

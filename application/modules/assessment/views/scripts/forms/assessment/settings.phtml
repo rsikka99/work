@@ -1,6 +1,7 @@
 <?php
 /* @var $form Proposalgen_Form_Settings_Report */
 $form = $this->element;
+$tonerVendorElements = array('dealerMonochromeRankSetArray' => 'Monochrome Toner Preference', 'dealerColorRankSetArray' => 'Color Toner Preference', 'customerMonochromeRankSetArray' => 'Monochrome Toner Preference', 'customerColorRankSetArray' => 'Color Toner Preference');
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
 
@@ -14,34 +15,49 @@ $form = $this->element;
                     <th style="width: 150px; text-align: right;">Value</th>
                     <th style="width: 75px;"></th>
                 </tr>
+                <?php /* @var $element Zend_Form_Element_Text */ ?>
                 <?php foreach ($group->elements as $element) :
-                    $inputPrepend = (strlen($element->getAttrib('inputprepend')) > 0) ? $element->getAttrib('inputprepend') : false;
-                    $inputAppend  = (strlen($element->getAttrib('inputappend')) > 0) ? $element->getAttrib('inputappend') : false;
-                    ?>
-                    <tr style="height: 50px;">
-                        <td  style="padding-left: 20px;"><?php echo $element->getLabel(); ?></td>
-                        <td><?php echo ($inputPrepend) ? : ""; ?><?php echo $element->getAttrib('data-defaultvalue'); ?><?php echo ($inputAppend) ? : ""; ?></td>
-                        <td style="text-align: right;"><?php echo ($inputPrepend) ? : ""; ?><?php
-                            if ($element instanceof ZendX_JQuery_Form_Element_UiWidget)
-                            {
-                                // Well this work around isn't so great, but it's necessary.
-                                echo $element->renderUiWidgetElement();
-                            }
-                            else
-                            {
-                                echo $element->renderViewHelper();
+                    // We want to render the multi selects differently
+                    if (!array_key_exists($element->getName(), $tonerVendorElements)) :
+                        $inputPrepend = (strlen($element->getAttrib('inputprepend')) > 0) ? $element->getAttrib('inputprepend') : false;
+                        $inputAppend  = (strlen($element->getAttrib('inputappend')) > 0) ? $element->getAttrib('inputappend') : false;
+                        ?>
+                        <tr style="height: 50px;">
+                            <td style="padding-left: 20px;"><?php echo $element->getLabel(); ?></td>
+                            <td><?php echo ($inputPrepend) ? : ""; ?><?php echo $element->getAttrib('data-defaultvalue'); ?><?php echo ($inputAppend) ? : ""; ?></td>
+                            <td style="text-align: right;"><?php echo ($inputPrepend) ? : ""; ?><?php
+                                if ($element instanceof ZendX_JQuery_Form_Element_UiWidget)
+                                {
+                                    // Well this work around isn't so great, but it's necessary.
+                                    echo $element->renderUiWidgetElement();
+                                }
+                                else
+                                {
+                                    echo $element->renderViewHelper();
 
-                            }
-                            ?></td>
-                        <td style="padding-left: 5px;"><?php echo ($inputAppend) ? : ""; ?></td>
-                    </tr>
-                    <?php if ($element->hasErrors()) : ?>
-                    <tr>
-                        <td colspan="4" style="text-align: right;">
-                            <div class="control-group error"><?php echo $element->renderErrors(); ?></div>
-                        </td>
-                    </tr>
-                <?php endif; ?>
+                                }
+                                ?></td>
+                            <td style="padding-left: 5px;"><?php echo ($inputAppend) ? : ""; ?></td>
+                        </tr>
+                        <?php if ($element->hasErrors()) : ?>
+                        <tr>
+                            <td colspan="4" style="text-align: right;">
+                                <div class="control-group error"><?php echo $element->renderErrors(); ?></div>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td style="padding-left: 20px; height: 50px;">
+                                <?php echo $tonerVendorElements[$element->getName()] ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan='3' style="padding-left: 20px">
+                                <?php echo $element->renderViewHelper(); ?>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
                 <?php endforeach; ?>
             </table>
         <?php endforeach; ?>

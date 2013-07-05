@@ -6,11 +6,16 @@
 class Hardwareoptimization_Service_Setting
 {
     /**
-     * Default report settings and survey settings combined into an array
      *
-     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting|array|null
+     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting|null
      */
-    protected $_defaultSettings;
+    protected $_hardwareOptimizationSettings;
+
+    /**
+     *
+     * @var Hardwareoptimization_Model_Hardware_Optimization_Setting|null
+     */
+    protected $_populateSettings;
 
     /**
      * Gets the report setting form.
@@ -26,79 +31,42 @@ class Hardwareoptimization_Service_Setting
 
     /**
      *
-     * @param $defaultSettings array
+     * @param $defaultSettings  Hardwareoptimization_Model_Hardware_Optimization_Setting
+     * @param $populateSettings Hardwareoptimization_Model_Hardware_Optimization_Setting
      */
-    public function __construct ($defaultSettings = null)
+    public function __construct ($defaultSettings, $populateSettings)
     {
-        $this->_systemSettings  = Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->find(1);
-        $this->_defaultSettings = $defaultSettings;
+        $this->_hardwareOptimizationSettingss = $defaultSettings;
+        $this->_populateSettings              = $populateSettings;
     }
 
     /**
      * Gets the report setting form with default values populated
      *
-     * @param $populateSettings array
      *
      * @return Hardwareoptimization_Form_Setting
      */
-    public function getFormWithDefaults ($populateSettings)
+    // populate setting should be dealer user hardware optimization settings overwritten
+    public function getFormWithDefaults ()
     {
         if (!isset($this->_form))
         {
             $this->_form = new Hardwareoptimization_Form_Setting();
 
             // User form will populate the description with defaults
-            if (is_array($this->_defaultSettings))
-            {
-                $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"] . "%");
-                $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"] . "%");
-                $this->_form->getElement("partsCostPerPage")->setDescription("$" . $populateSettings["partsCostPerPage"] . " / page");
-                $this->_form->getElement("laborCostPerPage")->setDescription("$" . $populateSettings["laborCostPerPage"] . " / page");
-                $this->_form->getElement("adminCostPerPage")->setDescription("$" . $populateSettings["adminCostPerPage"] . " / page");
-                $this->_form->getElement("costThreshold")->setDescription("$" . $populateSettings["costThreshold"]);
-                $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $populateSettings["targetMonochromeCostPerPage"] . " / page");
-                $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $populateSettings["targetColorCostPerPage"] . " / page");
-                $this->_form->getElement("replacementPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['replacementPricingConfigId']]);
-                $this->_form->getElement("dealerPricingConfigId")->setDescription(Proposalgen_Model_PricingConfig::$ConfigNames[$populateSettings['dealerPricingConfigId']]);
+            $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
+            $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
+            $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
+            $this->_form->getElement("laborCostPerPage")->setDescription("$" . $this->_populateSettings->laborCostPerPage . " / page");
+            $this->_form->getElement("adminCostPerPage")->setDescription("$" . $this->_populateSettings->adminCostPerPage . " / page");
+            $this->_form->getElement("costThreshold")->setDescription("$" . $this->_populateSettings->costThreshold);
+            $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->targetMonochromeCostPerPage . " / page");
+            $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $this->_populateSettings->targetColorCostPerPage . " / page");
 
-                // Re-load the settings into report settings
-                $populateSettings = $this->_defaultSettings;
-            }
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
-
-            $this->_form->populate($populateSettings);
-        }
-
-        return $this->_form;
-    }
-
-    /**
-     * Gets the report setting form
-     *
-     * @return Hardwareoptimization_Form_Setting
-     */
-    public function getForm ()
-    {
-        if (!isset($this->_form))
-        {
-            $this->_form = new Hardwareoptimization_Form_Setting();
-
-            if ($this->_defaultSettings)
-            {
-                // Get the user settings for population
-                $this->_systemSettings->populate($this->_defaultSettings);
-            }
-
-            // Get the current class of the element and adds default settings
-            foreach ($this->_form->getElements() as $element)
-            {
-                $currentClass = $element->getAttrib('class');
-                $element->setAttrib('class', "{$currentClass} defaultSettings ");
-            }
-
-            $this->_form->populate($this->_systemSettings->toArray());
+            $this->_form->populate(array_merge($this->_hardwareOptimizationSettingss->toArray(), $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettingss->getTonerRankSets()));
         }
 
         return $this->_form;
@@ -115,7 +83,7 @@ class Hardwareoptimization_Service_Setting
     protected function validateAndFilterData ($data)
     {
         $validData = false;
-        $form      = $this->getForm();
+        $form      = $this->getFormWithDefaults();
 
         if ($form->isValid($data))
         {
@@ -146,34 +114,57 @@ class Hardwareoptimization_Service_Setting
                     unset($validData [$key]);
                 }
             }
+            $this->_hardwareOptimizationSettings = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
+            $rankingSetMapper                    = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
 
-            // Check the valid data to see if toner preferences drop downs have been set.
-            if ((int)$validData ['replacementPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
+            if (isset($validData['replacementColorRankSetArray']))
             {
-                $validData ['replacementPricingConfigId'] = $defaultValues['replacementPricingConfigId'];
-            }
-            if ((int)$validData ['dealerPricingConfigId'] === Proposalgen_Model_PricingConfig::NONE)
-            {
-                $validData ['dealerPricingConfigId'] = $defaultValues['dealerPricingConfigId'];
-            }
-   
-            $validData = array_merge($defaultValues, $validData);
-
-            $hardwareOptimizationSetting = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
-            $hardwareOptimizationSetting->populate($validData);
-
-            if ($this->_defaultSettings)
-            {
-                $hardwareOptimizationSetting->id = $this->_defaultSettings['id'];
+                $this->_hardwareOptimizationSettings->replacementColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->replacementColorRankSetId, $validData['replacementColorRankSetArray']);
             }
             else
             {
-                $hardwareOptimizationSetting = $this->_systemSettings->id;
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->replacementColorRankSetId);
             }
 
-            Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($hardwareOptimizationSetting);
+            if (isset($validData['replacementMonochromeRankSetArray']))
+            {
+                $this->_hardwareOptimizationSettings->replacementMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->replacementMonochromeRankSetId, $validData['replacementMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->replacementMonochromeRankSetId);
+            }
 
-            $this->_form->populate($hardwareOptimizationSetting->toArray());
+            if (isset($validData['dealerColorRankSetArray']))
+            {
+                $this->_hardwareOptimizationSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->dealerColorRankSetId);
+            }
+
+            if (isset($validData['dealerMonochromeRankSetArray']))
+            {
+                $this->_hardwareOptimizationSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
+            }
+            else
+            {
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->dealerMonochromeRankSetId);
+            }
+
+            $this->_populateSettings->replacementMonochromeRankSetId = $this->_hardwareOptimizationSettings->replacementMonochromeRankSetId;
+            $this->_populateSettings->replacementColorRankSetId      = $this->_hardwareOptimizationSettings->replacementColorRankSetId;
+            $this->_populateSettings->dealerMonochromeRankSetId      = $this->_hardwareOptimizationSettings->dealerMonochromeRankSetId;
+            $this->_populateSettings->dealerColorRankSetId           = $this->_hardwareOptimizationSettings->dealerColorRankSetId;
+
+            $this->_hardwareOptimizationSettings->populate($this->_populateSettings->toArray());
+            $this->_hardwareOptimizationSettings->populate($validData);
+            $this->_hardwareOptimizationSettings->id = $this->_hardwareOptimizationSettingss->id;
+
+            Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($this->_hardwareOptimizationSettings);
+
+            $this->_form->populate($this->_hardwareOptimizationSettings->toArray());
 
             return true;
         }

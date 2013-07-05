@@ -67,14 +67,21 @@ $(function ()
             height      : 'auto',
             rowNum      : 15,
             mType       : "GET",
-            postData: {
-                canSell: function() {
+            postData    : {
+                canSell       : function ()
+                {
                     return document.getElementById('chkCanSell').checked; // or other method which read the value
                 },
-                criteriaFilter: function() {
+                unapproved      : function ()
+                {
+                    return document.getElementById('chkUnapproved').checked; // or other method which read the value
+                },
+                criteriaFilter: function ()
+                {
                     return $("#criteria_filter").val(); // or other method which read the value
                 },
-                criteria: function() {
+                criteria      : function ()
+                {
                     return $("#txtCriteria").val(); // or other method which read the value
                 }
             },
@@ -89,37 +96,45 @@ $(function ()
                 {
                     var row = grid.getRowData(ids[i]);
                     row.modelName = row.displayname + ' ' + row.modelName;
-                    if(row.oemSku != "")
+                    if (row.oemSku != "")
                     {
-                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:60px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" /></a>';
-                        row.action +=  '<a href= "/quotegen/devicesetup/delete/id/' + row.id + '"><input style="width:60px;" title="Delete Printer" class="btn btn-mini btn-danger" type="button" value="Delete" /></a>';
+                        row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + 'true' + '\');" />';
                     }
                     else
                     {
-                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" /></a>';
+                        row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + 'true' + '\');" />';
+//                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(\' + row.id + \');" /></a>';
                     }
-                        grid.setRowData(ids[i], row);
+                    grid.setRowData(ids[i], row);
                 }
             }
         })
 
 
 });
-//$(document).on("click", ".editMasterDevice", function ()
-//{
-//    $("#masterDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
-//    $("#addMasterDeviceForm").submit();
-//});
-function updateGrid($type){
-    if($type === "search"){
+function updateGrid($type)
+{
+    if ($type === "search")
+    {
         $("#devicesGrid").trigger("reloadGrid");
-    }else
+    }
+    else
     {
         clearFilters();
     }
 };
-function clearFilters(){
+function clearFilters()
+{
     $("#chkCanSell").removeAttr("checked");
+    $("#chkUnapproved").removeAttr("checked");
     $("#txtCriteria").val("");
     updateGrid('search');
 }
+$("#masterDeviceManagement").bind("saveSuccess", function (e, myName, myValue)
+{
+    $("#devicesGrid").trigger("reloadGrid");
+});
+$("#masterDeviceManagement").bind("approveSuccess", function (e, masterDeviceId)
+{
+    $("#manageMasterDeviceModal").modal("hide");
+});

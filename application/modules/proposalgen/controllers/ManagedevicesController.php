@@ -10,10 +10,19 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
     protected $MPSProgramName;
     protected $ApplicationName;
 
+    /**
+     * @var bool
+     */
+    protected $_isAdmin;
+
+    /**
+     * @var stdClass
+     */
+    protected $_identity;
+
     function init ()
     {
-        $this->view->title = 'Manage Printers and Toners';
-        $this->config      = Zend_Registry::get('config');
+        $this->config = Zend_Registry::get('config');
         $this->initView();
         $this->view->app            = $this->config->app;
         $this->view->user           = Zend_Auth::getInstance()->getIdentity();
@@ -22,1391 +31,884 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $this->MPSProgramName       = $this->config->app->MPSProgramName;
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
+        $this->_identity            = Zend_Auth::getInstance()->getIdentity();
+        $this->_isAdmin             = $this->view->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);;
+        $this->view->isAdmin = $this->isAdmin;
     }
 
-    public function indexAction ()
+    /**
+     * Gets a  list of all the assigned toners for a specific Master Device
+     */
+    public function assignedTonerListAction ()
     {
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $tonerList      = $this->_getParam('tonersList', false);
+        $firstLoad      = $this->_getParam('firstLoad', false);
+        $jsonArray      = array();
+        $jqGridService  = new Tangent_Service_JQGrid();
+
+        /**
+         * If we passed a list of toners, it means those are all the toners assigned to a device.
+         * Otherwise we'll fetch the toners that are assigned to the device already.
+         */
+        if ($tonerList)
+        {
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList);
+        }
+        else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
+        {
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId);
+        }
+
+        if ($jqGridService->sortingIsValid())
+        {
+            $jqGridService->setRecordCount(count($toners));
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
+            {
+                $jqGridService->setCurrentPage(1);
+            }
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+            {
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+
+            if ($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
+
+            $sortOrder = array();
+
+            if ($jqGridService->hasGrouping())
+            {
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
+            }
+
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+
+
+            $jqGridService->setRows($toners);
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+
+        $json = json_encode($jsonArray);
+        $this->sendJson($json);
     }
 
-    public function managedevicesAction ()
+    /**
+     * Gets a list of all the available toners for a specific master device
+     */
+    public function availableTonersListAction ()
     {
-        $db = Zend_Db_Table::getDefaultAdapter();
+        $masterDeviceId     = $this->_getParam('masterDeviceId', false);
+        $tonerColorConfigId = $this->_getParam('tonerColorConfigId', false);
+        $tonerColorId       = $this->_getParam('tonerColorId', false);
+        $manufacturerId     = $this->_getParam('manufacturerId', false);
+        $filter             = $this->_getParam('filter', false);
+        $criteria           = $this->_getParam('criteria', false);
+        $jsonArray          = array();
+        $jqGridService      = new Tangent_Service_JQGrid();
+        $tonerMapper        = Proposalgen_Model_Mapper_Toner::getInstance();
+        $jqGridParameters   = array(
+            'sidx' => $this->_getParam('sidx', 'id'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
 
-        // add device form
-        $form = new Proposalgen_Form_Device(null, "edit");
-        $form->removeElement('serial_number');
-        $form->removeElement('override_price');
-        $form->removeElement('save_device');
-        $form->removeElement('delete_device');
-        $form->removeElement('back_button');
-
-        // Fill manufacturer drop down
-        $list = "";
-        // $isPrintModelSet is used to see if data has been saved successfully.
-        $isPrintModelSet = false;
-
-        $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
-        $currElement                   = $form->getElement('manufacturer_id');
-        $this->view->manufacturer_list = $manufacturers;
-
-        // add link to the manage manufacturer page
-        $currElement->setDescription('<a id="edit_man_link" href="javascript: do_action(\'manufacturer\');">Add New Manufacturer</a>');
-        $currElement->addMultiOption('0', 'Select Manufacturer');
-        foreach ($manufacturers as $row)
+        if ($jqGridService->sortingIsValid())
         {
-            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
-            if (empty($list) == false)
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+            if ($tonerColorConfigId)
             {
-                $list .= ";";
-            }
-            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['fullname']));
-        }
-        $this->view->manufacturers = $list;
-
-        // fill toner_config dropdown
-        $toner_configTable = new Proposalgen_Model_DbTable_TonerConfig();
-        $toner_configs     = $toner_configTable->fetchAll(null, 'name');
-        $currElement       = $form->getElement('toner_config_id');
-        $currElement->addMultiOption('', 'Select Toner Config');
-        foreach ($toner_configs as $row)
-        {
-            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['name'])));
-        }
-
-        // return part_type list
-        $list           = "";
-        $part_typeTable = new Proposalgen_Model_DbTable_PartType();
-        $part_types     = $part_typeTable->fetchAll();
-        foreach ($part_types as $row)
-        {
-            $part_type = ucwords(strtolower($row ['name']));
-            if ($part_type == "Oem")
-            {
-                $part_type = "OEM";
-            }
-
-            if (empty($list) == false)
-            {
-                $list .= ";";
-            }
-            $list .= $row ['id'] . ":" . $part_type;
-        }
-        $this->view->partTypeList = $list;
-
-        // return color list
-        $list             = "";
-        $toner_colorTable = new Proposalgen_Model_DbTable_TonerColor();
-        $toner_colors     = $toner_colorTable->fetchAll();
-        foreach ($toner_colors as $row)
-        {
-            if (empty($list) == false)
-            {
-                $list .= ";";
-            }
-            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['name']));
-        }
-        $this->view->tonerColorList = $list;
-
-        $this->view->blackOnlyList     = "1:Black";
-        $this->view->seperateColorList = "1:Black;2:Cyan;3:Magenta;4:Yellow";
-        $this->view->threeColorList    = "5:3 Color";
-        $this->view->fourColorList     = "6:4 Color";
-
-        // check if this page has been posted to
-        if ($this->_request->isPost())
-        {
-            $repop_form = 0;
-            $postData   = $this->_request->getPost();
-            // conditional requirements
-            $form->set_validation($postData);
-            // get form mode
-            $form_mode = $postData ['form_mode'];
-            $date      = date('Y-m-d H:i:s');
-
-            // validate fields
-            if ($postData ["manufacturer_id"] == 0)
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'You must select a manufacturer.'
-                                                   ));
-                $repop_form = 1;
-            }
-            else if ($form_mode == "edit" && $postData ["printer_model"] == 0)
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'You must select a printer model.'
-                                                   ));
-                $repop_form = 1;
-            }
-            else if ($form_mode == "add" && trim($postData ["new_printer"]) == "")
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'You must enter a printer model name.'
-                                                   ));
-                $repop_form = 1;
-            }
-            else if ($postData ["toner_config_id"] == 0)
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'Toner Config not selected. Please try again.'
-                                                   ));
-                $repop_form = 1;
-            }
-            else if ($postData ["watts_power_normal"] < 1)
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'Power Consumption Normal must be greater then zero.'
-                                                   ));
-                $repop_form = 1;
-            }
-            else if ($postData ["watts_power_idle"] < 1)
-            {
-                $this->_flashMessenger->addMessage(array(
-                                                        'error' => 'Power Consumption Idle must be greater then zero.'
-                                                   ));
-                $repop_form = 1;
+                $jqGridService->setRecordCount(count($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorConfigId($tonerColorConfigId, null, 10000, 0, $manufacturerId, $filter, $criteria, $masterDeviceId)));
             }
             else
             {
-                if ($postData ['save_flag'] == "save")
-                {
-                    // update the selected device
-                    $db->beginTransaction();
-                    try
-                    {
-                        $master_device_id = 0;
-                        if ($form_mode == "edit")
-                        {
-                            $master_device_id = $postData ['printer_model'];
-                        }
-                        $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-
-                        // validate toners against toner_config
-                        $has_toner    = false;
-                        $has_black    = false;
-                        $has_yellow   = false;
-                        $has_magenta  = false;
-                        $has_cyan     = false;
-                        $has_3color   = false;
-                        $has_4color   = false;
-                        $toners_valid = false;
-
-                        $toner_config_id = $postData ['toner_config_id'];
-                        $toner_array     = explode(",", $postData ["toner_array"]);
-                        foreach ($toner_array as $key)
-                        {
-                            $toner_id = str_replace("'", "", $key);
-                            if ($toner_id > 0)
-                            {
-                                // get color and type from $key
-                                $select   = $db->select()
-                                    ->from(array(
-                                                't' => 'toners'
-                                           ))
-                                    ->join(array(
-                                                'tc' => 'toner_colors'
-                                           ), 'tc.id = t.tonerColorId', array(
-                                                                             'name AS toner_color_name'
-                                                                        ))
-                                    ->join(array(
-                                                'pt' => 'part_types'
-                                           ), 'pt.id = t.partTypeId', array(
-                                                                           'name AS type_name'
-                                                                      ))->where('t.id = ?', $toner_id);
-                                $stmt     = $db->query($select);
-                                $curToner = $stmt->fetchAll();
-
-                                if (count($curToner) > 0)
-                                {
-
-                                    $has_toner = true;
-                                    $curColor  = strtolower($curToner [0] ['toner_color_name']);
-                                    if ($curColor == "black")
-                                    {
-                                        $has_black = true;
-                                    }
-                                    else if ($curColor == "yellow")
-                                    {
-                                        $has_yellow = true;
-                                    }
-                                    else if ($curColor == "magenta")
-                                    {
-                                        $has_magenta = true;
-                                    }
-                                    else if ($curColor == "cyan")
-                                    {
-                                        $has_cyan = true;
-                                    }
-                                    else if ($curColor == "3 color")
-                                    {
-                                        $has_3color = true;
-                                    }
-                                    else if ($curColor == "4 color")
-                                    {
-                                        $has_4color = true;
-                                    }
-                                }
-                            }
-                        }
-                        $toner_errors       = "";
-                        $toner_error_colors = "";
-                        if ($has_toner)
-                        {
-                            // Has toners, validate to make sure they match the device
-                            switch ($toner_config_id)
-                            {
-                                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
-                                    // BLACK ONLY
-                                    if ($has_3color || $has_4color || $has_cyan || $has_magenta || $has_yellow)
-                                    {
-                                        $repop_form   = 1;
-                                        $toners_valid = false;
-                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black Toners are allowed.";
-                                    }
-                                    else if ($has_black)
-                                    {
-                                        $toners_valid = true;
-                                    }
-                                    else
-                                    {
-                                        $repop_form   = 1;
-                                        $toner_errors = "Error: Missing a Black Toner. Please add one and try again.";
-                                    }
-                                    break;
-                                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-                                    // 3 COLOR - SEPARATED
-                                    if ($has_3color || $has_4color)
-                                    {
-                                        $repop_form   = 1;
-                                        $toners_valid = false;
-                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black, Yellow, Magenta and Cyan Toners are allowed.";
-                                    }
-                                    else if ($has_black)
-                                    {
-                                        if ($has_yellow)
-                                        {
-                                            if ($has_magenta)
-                                            {
-                                                if ($has_cyan)
-                                                {
-                                                    $toners_valid = true;
-                                                }
-                                                else
-                                                {
-                                                    $toner_error_colors = "Cyan";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                $toner_error_colors = "Magenta";
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $toner_error_colors = "Yellow";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $toner_error_colors = "Black";
-                                    }
-
-                                    if ($toner_error_colors != '')
-                                    {
-                                        $repop_form   = 1;
-                                        $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
-                                    }
-                                    break;
-                                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-                                    // 3 COLOR - COMBINED
-                                    if ($has_4color || $has_cyan || $has_magenta || $has_yellow)
-                                    {
-                                        $repop_form   = 1;
-                                        $toners_valid = false;
-                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 3 Color and Black Toners are allowed.";
-                                    }
-                                    else if ($has_black)
-                                    {
-                                        if ($has_3color)
-                                        {
-                                            $toners_valid = true;
-                                        }
-                                        else
-                                        {
-                                            $toner_error_colors = "3 Color";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        $toner_error_colors = "Black";
-                                    }
-
-                                    if ($toner_error_colors != '')
-                                    {
-                                        $repop_form   = 1;
-                                        $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
-                                    }
-                                    break;
-                                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-                                    // 4 COLOR - COMBINED
-                                    if ($has_3color || $has_black || $has_cyan || $has_magenta || $has_yellow)
-                                    {
-                                        $repop_form   = 1;
-                                        $toners_valid = false;
-                                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 4 Color Toners are allowed.";
-                                    }
-                                    else if ($has_4color)
-                                    {
-                                        $toners_valid = true;
-                                    }
-                                    else
-                                    {
-                                        $repop_form   = 1;
-                                        $toner_errors = "Error: Missing a 4 Color Toner. Please add one and try again.";
-                                    }
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            // if leased, then toners not required
-                            if ($postData ["is_leased"])
-                            {
-                                $toners_valid = true;
-                            }
-                            else
-                            {
-                                $toners_valid = false;
-                                $toner_errors = "Error: You must add required toners before saving this device.";
-                            }
-                        }
-
-                        if ($toners_valid == true)
-                        {
-                            $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-                            $launch_date       = new Zend_Date($postData ["launch_date"]);
-
-                            // save master device
-                            $master_deviceData = array(
-                                'launchDate'         => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
-                                'tonerConfigId'      => $toner_config_id,
-                                'isCopier'           => $postData ["is_copier"],
-                                'isScanner'          => $postData ["is_scanner"],
-                                'reportsTonerLevels' => $postData ["reportsTonerLevels"],
-                                'isFax'              => $postData ["is_fax"],
-                                'isDuplex'           => $postData ["is_duplex"],
-                                'wattsPowerNormal'   => $postData ["watts_power_normal"],
-                                'wattsPowerIdle'     => $postData ["watts_power_idle"],
-                                'ppmBlack'           => ($postData ["ppm_black"] > 0) ? $postData ["ppm_black"] : null,
-                                'ppmColor'           => ($postData ["ppm_color"] > 0) ? $postData ["ppm_color"] : null,
-                                'dutyCycle'          => ($postData ["duty_cycle"] > 0) ? $postData ["duty_cycle"] : null,
-                                'isLeased'           => $postData ["is_leased"],
-                                'leasedTonerYield'   => ($postData ["is_leased"] ? $postData ["leased_toner_yield"] : null),
-                                'partsCostPerPage'   => ($postData["partsCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["partsCostPerPage"],
-                                'laborCostPerPage'   => ($postData["laborCostPerPage"] === "") ? new Zend_Db_Expr('NULL') : $postData["laborCostPerPage"],
-                            );
-
-                            if ($master_device_id > 0)
-                            {
-                                // get printer_model
-                                $where         = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                $master_device = $master_deviceTable->fetchRow($where);
-                                $printer_model = $master_device ['modelName'];
-
-                                // edit device
-                                $master_deviceTable->update($master_deviceData, $where);
-
-                                // remove all device_toners for master
-                                // device
-
-                                $where = $device_tonerTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                $device_tonerTable->delete($where);
-
-                                // save new toners
-                                if ($has_toner)
-                                {
-                                    foreach ($toner_array as $key)
-                                    {
-                                        $toner_id = str_replace("'", "", $key);
-                                        if ($toner_id > 0)
-                                        {
-                                            $device_tonerData = array(
-                                                'toner_id'         => $toner_id,
-                                                'master_device_id' => $master_device_id
-                                            );
-
-                                            $device_tonerTable->insert($device_tonerData);
-                                        }
-                                    }
-                                }
-
-                                $repop_form                = 1;
-                                $this->view->printer_model = $master_device_id;
-                                $this->_flashMessenger->addMessage(array(
-                                                                        'success' => 'Device "' . $printer_model . '" has been updated.'
-                                                                   ));
-                                $isPrintModelSet = true;
-
-                                // set selected printer model to new printer model
-                                $this->view->printer_model = $master_device_id;
-                            }
-                            else
-                            {
-                                // How does it get meters when it saves it get printer_model
-                                $manufacturer_id = $postData ['manufacturer_id'];
-                                if ($manufacturer_id > 0)
-                                {
-                                    // Add creation_date to array.
-                                    $master_deviceData ["manufacturerId"] = $manufacturer_id;
-                                    $master_deviceData ["modelName"]      = $postData ["new_printer"];
-                                    $master_deviceData ["dateCreated"]    = $date;
-                                    // Check for master device flagged as deleted.
-                                    $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $postData ["new_printer"]);
-                                    $master_device_flagged = $master_deviceTable->fetchRow($where);
-
-                                    if (count($master_device_flagged->toArray()) > 0)
-                                    {
-                                        $master_device_id = $master_device_flagged ['id'];
-//                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                        $this->_flashMessenger->addMessage(array(
-                                                                                'error' => "The printer you're trying to add already exists."
-                                                                           ));
-
-                                    }
-                                    else
-                                    {
-                                        // Create a new master device, and populate and insert.
-                                        $masterDevice = new Proposalgen_Model_MasterDevice();
-                                        $masterDevice->populate($master_deviceData);
-                                        // Get the current date for the devices date created.
-                                        $masterDevice->dateCreated = $date;
-                                        $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
-
-                                        $this->_flashMessenger->addMessage(array(
-                                                                                'success' => 'Printer "' . $postData ["new_printer"] . '" has been saved.'
-                                                                           ));
-                                        if ($has_toner)
-                                        {
-                                            // For each toner attempt to see if current configuration exists. If not, add an entry in the deviceToner table
-                                            foreach ($toner_array as $key)
-                                            {
-                                                $toner_id = str_replace("'", "", $key);
-                                                if ($toner_id > 0)
-                                                {
-                                                    $device_tonerData = array(
-                                                        'toner_id'         => $toner_id,
-                                                        'master_device_id' => $master_device_id
-                                                    );
-                                                    $where            = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-                                                    $device_toners    = $device_tonerTable->fetchRow($where);
-
-                                                    if (count($device_toners->toArray()) == 0)
-                                                    {
-                                                        $device_tonerTable->insert($device_tonerData);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        // Save the printer model to the view so it shows the recently
-                                        // saved printer on the page after reload.
-                                        $this->view->printer_model = $master_device_id;
-                                        $isPrintModelSet           = true;
-                                        $form_mode                 = 'edit';
-                                    }
-                                    $repop_form                = 1;
-                                    $this->view->printer_model = $master_device_id;
-                                }
-                                else
-                                {
-                                    $this->_flashMessenger->addMessage(array(
-                                                                            'error' => 'Error: No manufacturer has been selected.'
-                                                                       ));
-                                }
-                            }
-                            $db->commit();
-                        }
-                        else
-                        {
-                            // invalid toners - return message
-                            $db->rollback();
-                            $repop_form                = 1;
-                            $this->view->printer_model = $postData ['printer_model'];
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'error' => $toner_errors
-                                                               ));
-                        }
-                    }
-                    catch (Zend_Db_Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_flashMessenger->addMessage(array(
-                                                                'error' => 'Database Error: "' . $postData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
-                                                           ));
-                        Throw new exception("Critical Device Update Error.", 0, $e);
-                    }
-                    catch (Exception $e)
-                    {
-                        // CRITICAL UPDATE EXCEPTION
-                        $db->rollback();
-                        Throw new exception("Critical Device Update Error.", 0, $e);
-                    } // end catch
-                }
-                else if ($postData ['save_flag'] == 'delete')
-                {
-                    // always attempt to repop after delete
-                    $repop_form = 1;
-
-                    $db->beginTransaction();
-                    try
-                    {
-                        $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                        $master_device_id   = $postData ['printer_model'];
-                        $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                        $master_device      = $master_deviceTable->fetchRow($where);
-
-                        if (count($master_device->toArray()) > 0)
-                        {
-
-                            $printer_model = $master_device ['modelName'];
-                            // NEED TO CHECK IF REPLACEMENT DEVICE
-                            $replacement_devicesTable = new Proposalgen_Model_DbTable_ReplacementDevice();
-                            $where                    = $replacement_devicesTable->getAdapter()->quoteInto('masterDeviceId = ?', $master_device_id, 'INTEGER');
-                            $replacement_devices      = $replacement_devicesTable->fetchAll($where);
-
-                            if (count($replacement_devices) > 0)
-                            {
-                                $db->rollback();
-                                $this->_flashMessenger->addMessage(array(
-                                                                        'warning' => "This printer is currently configured as a replacement printer. Please remove it as a replacement printer and try again."
-                                                                   ));
-                            }
-                            else
-                            {
-                                // Set reports modified flag
-                                $reportTableMapper = Assessment_Model_Mapper_Assessment::getInstance();
-                                $reportTableMapper->setDevicesModifiedFlagOnAssessments($master_device_id);
-
-                                // DELETE MASTER DEVICE
-                                $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-                                $where              = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                $master_deviceTable->delete($where);
-
-                                // Delete the master device attribute data
-                                $deviceAttributes                 = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                $deviceAttributes->dealerId       = Zend_Auth::getInstance()->getIdentity()->dealerId;
-                                $deviceAttributes->masterDeviceId = $master_device_id;
-                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($deviceAttributes);
-//
-
-                                $db->commit();
-                                $form_mode                 = 'delete';
-                                $this->view->printer_model = 0;
-                                $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "Printer " . $printer_model . " has been deleted."
-                                                                   ));
-                            }
-                        }
-                        else
-                        {
-                            $db->rollback();
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'error' => "No printer was selected. Please select a printer and try again."
-                                                               ));
-                        }
-                    }
-                    catch (Exception $e)
-                    {
-                        $db->rollback();
-                        $this->_flashMessenger->addMessage(array(
-                                                                'error' => "There was an error and the printer was not deleted."
-                                                           ));
-                        echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                        var_dump($e);
-                        die();
-                    }
-                }
+                $jqGridService->setRecordCount(count($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId($tonerColorId, null, 10000, 0, $manufacturerId, $filter, $criteria, $masterDeviceId)));
             }
-            // add failed, repop form with entered values
-            $this->view->form_mode = $form_mode;
-            if ($repop_form == 1)
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
             {
-                $this->view->repop = true;
-                $form->getElement('hdnID')->setValue($postData ['hdnID']);
-                $form->getElement('hdnItem')->setValue($postData ['hdnItem']);
-                $form->getElement('devices_pf_id')->setValue($postData ['devices_pf_id']);
-                $form->getElement('unknown_device_instance_id')->setValue($postData ['unknown_device_instance_id']);
-                $form->getElement('save_flag')->setValue($postData ['save_flag']);
-                $form->getElement('toner_array')->setValue($postData ['toner_array']);
-                $form->getElement('form_mode')->setValue($form_mode);
-                $form->getElement('manufacturer_id')->setValue($postData ['manufacturer_id']);
-
-                if (isset($postData ['printer_model']))
-                {
-                    $form->getElement('printer_model')->setValue($postData ['printer_model']);
-                    // If we didn't successfully update the database, get the printer model from the form.
-                    // If we successfully update the database, this is already set.
-                    if (!$isPrintModelSet)
-                    {
-                        $this->view->printer_model = $postData ['printer_model'];
-                    }
-                }
-                $form->getElement('new_printer')->setValue($postData ['new_printer']);
-                $form->getElement('launch_date')->setValue($postData ['launch_date']);
-                $form->getElement('toner_config_id')->setValue($postData ['toner_config_id']);
-                $form->getElement('is_copier')->setAttrib('checked', $postData ['is_copier']);
-                $form->getElement('is_scanner')->setAttrib('checked', $postData ['is_scanner']);
-                $form->getElement('reportsTonerLevels')->setAttrib('checked', $postData ['reportsTonerLevels']);
-                $form->getElement('is_fax')->setAttrib('checked', $postData ['is_fax']);
-                $form->getElement('is_duplex')->setAttrib('checked', $postData ['is_duplex']);
-                $form->getElement('watts_power_normal')->setValue($postData ['watts_power_normal']);
-                $form->getElement('watts_power_idle')->setValue($postData ['watts_power_idle']);
-                $form->getElement('is_leased')->setAttrib('checked', $postData ['is_leased']);
-                $form->getElement('leased_toner_yield')->setValue($postData ['leased_toner_yield']);
-                $form->getElement('ppm_black')->setValue($postData ['ppm_black']);
-                $form->getElement('ppm_color')->setValue($postData ['ppm_color']);
-                $form->getElement('duty_cycle')->setValue($postData ['duty_cycle']);
-                $form->getElement('partsCostPerPage')->setValue($postData ['partsCostPerPage']);
-                $form->getElement('laborCostPerPage')->setValue($postData ['laborCostPerPage']);
+                $jqGridService->setCurrentPage(1);
             }
-        }
-        $this->view->deviceform = $form;
-    }
-
-    public function managemappingdevicesAction ()
-    {
-        $rmsUploadId       = $this->_getParam('rmsUploadId', false);
-        $deviceInstanceIds = $this->_getParam('deviceInstanceIds', false);
-        $rmsUpload         = null;
-        if ($rmsUploadId > 0)
-        {
-            $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
-        }
-
-        if (!$rmsUpload instanceof Proposalgen_Model_Rms_Upload)
-        {
-            $this->_flashMessenger->addMessage(array(
-                                                    'error' => 'Error: You must select an upload.'
-                                               ));
-            $this->redirector('index', 'index', 'index');
-        }
-
-        if ($deviceInstanceIds === false)
-        {
-            $this->_flashMessenger->addMessage(array(
-                                                    'error' => 'Error: You must select a device to edit or create in order to access this page.'
-                                               ));
-            $this->redirector('mapping', 'fleet', null, array('rmsUploadId' => $rmsUpload->id));
-        }
-
-        $this->view->rmsUpload = $rmsUpload;
-
-        $this->view->headScript()->appendFile($this->view->baseUrl('/js/libs/jqgrid/plugins/grid.celledit.js'), 'text/javascript');
-        $db = Zend_Db_Table::getDefaultAdapter();
-
-
-        // add device form
-        $form = new Proposalgen_Form_Device(null, "edit");
-        $form->removeElement('serial_number');
-        $form->removeElement('override_price');
-        $form->removeElement('save_device');
-        $form->removeElement('delete_device');
-        $form->removeElement('back_button');
-
-        // fill manufacturer dropdown
-        $list = "";
-        // $isPrintModelSet is used to see if data has been saved successfully.
-        $isPrintModelSet = false;
-
-        $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
-        $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = 0', 'fullName');
-        $currElement                   = $form->getElement('manufacturer_id');
-        $this->view->manufacturer_list = $manufacturers;
-
-        // add link to the manage manufacturer page
-        $currElement->setDescription('<a id="edit_man_link" href="javascript: do_action(\'manufacturer\');">Add New Manufacturer</a>');
-        $currElement->addMultiOption('0', 'Select Manufacturer');
-        foreach ($manufacturers as $row)
-        {
-            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
-            if (empty($list) == false)
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
             {
-                $list .= ";";
-            }
-            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['fullname']));
-        }
-        $this->view->manufacturers = $list;
-
-        // fill toner_config dropdown
-        $toner_configTable = new Proposalgen_Model_DbTable_TonerConfig();
-        $toner_configs     = $toner_configTable->fetchAll(null, 'name');
-        $currElement       = $form->getElement('toner_config_id');
-        $currElement->addMultiOption('', 'Select Toner Config');
-        foreach ($toner_configs as $row)
-        {
-            $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['name'])));
-        }
-
-        // return part_type list
-        $list           = "";
-        $part_typeTable = new Proposalgen_Model_DbTable_PartType();
-        $part_types     = $part_typeTable->fetchAll();
-        foreach ($part_types as $row)
-        {
-            $part_type = ucwords(strtolower($row ['name']));
-            if ($part_type == "Oem")
-            {
-                $part_type = "OEM";
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
             }
 
-            if (empty($list) == false)
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+
+            if ($startRecord < 0)
             {
-                $list .= ";";
+                $startRecord = 0;
             }
-            $list .= $row ['id'] . ":" . $part_type;
-        }
-        $this->view->partTypeList = $list;
 
-        // return color list
-        $list             = "";
-        $toner_colorTable = new Proposalgen_Model_DbTable_TonerColor();
-        $toner_colors     = $toner_colorTable->fetchAll();
-        foreach ($toner_colors as $row)
-        {
-            if (empty($list) == false)
+            $sortOrder = array();
+
+            if ($jqGridService->hasGrouping())
             {
-                $list .= ";";
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
             }
-            $list .= $row ['id'] . ":" . ucwords(strtolower($row ['name']));
-        }
-        $this->view->tonerColorList = $list;
 
-        $this->view->blackOnlyList     = "1:Black";
-        $this->view->seperateColorList = "1:Black;2:Cyan;3:Magenta;4:Yellow";
-        $this->view->threeColorList    = "5:3 Color";
-        $this->view->fourColorList     = "6:4 Color";
-
-        // check if this page has been posted to
-        if ($this->_request->isPost())
-        {
-            $repop_form = 0;
-            $formData   = $this->_request->getPost();
-            if (!isset($formData['hdnID']))
+            if ($jqGridService->hasColumns())
             {
-                $repop_form = 1;
-                $form_mode  = 'edit';
-                $form->getElement('deviceInstanceId')->setValue($deviceInstanceIds);
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+            if ($tonerColorConfigId)
+            {
+                $jqGridService->setRows($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorConfigId($tonerColorConfigId, $sortOrder, $jqGridService->getRecordsPerPage(), $startRecord, $manufacturerId, $filter, $criteria, $masterDeviceId));
             }
             else
             {
-                // conditional requirements
-                $form->set_validation($formData);
-                // get form mode
-                $form_mode = $formData ['form_mode'];
-                $date      = date('Y-m-d H:i:s');
-                // validate fields
-                if ($formData ["manufacturer_id"] == 0)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'You must select a manufacturer.'
-                                                       ));
-                    $repop_form = 1;
-                }
-                else if ($form_mode == "edit" && $formData ["printer_model"] == 0)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'You must select a printer model.'
-                                                       ));
-                    $repop_form = 1;
-                }
-                else if ($form_mode == "add" && trim($formData ["new_printer"]) == "")
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'You must enter a printer model name.'
-                                                       ));
-                    $repop_form = 1;
-                }
-                else if ($formData ["toner_config_id"] == 0)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'Toner Config not selected. Please try again.'
-                                                       ));
-                    $repop_form = 1;
-                }
-                else if ($formData ["watts_power_normal"] < 1)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'Power Consumption Normal must be greater then zero.'
-                                                       ));
-                    $repop_form = 1;
-                }
-                else if ($formData ["watts_power_idle"] < 1)
-                {
-                    $this->_flashMessenger->addMessage(array(
-                                                            'error' => 'Power Consumption Idle must be greater then zero.'
-                                                       ));
-                    $repop_form = 1;
+                $jqGridService->setRows($tonerMapper->fetchTonersWithMachineCompatibilityUsingColorId($tonerColorId, $sortOrder, $jqGridService->getRecordsPerPage(), $startRecord, $manufacturerId, $filter, $criteria, $masterDeviceId));
 
-                }
-                else
-                {
-                    if ($formData ['save_flag'] == "save")
-                    {
-                        // update the selected device
-                        $db->beginTransaction();
-                        try
-                        {
-                            $master_device_id = 0;
-                            if ($form_mode == "edit")
-                            {
-                                $master_device_id = $formData ['printer_model'];
-                            }
-                            $master_deviceTable = new Proposalgen_Model_DbTable_MasterDevice();
-
-                            // validate toners against toner_config
-                            $has_toner    = false;
-                            $has_black    = false;
-                            $has_yellow   = false;
-                            $has_magenta  = false;
-                            $has_cyan     = false;
-                            $has_3color   = false;
-                            $has_4color   = false;
-                            $toners_valid = false;
-
-                            $toner_config_id = $formData ['toner_config_id'];
-                            $toner_array     = explode(",", $formData ["toner_array"]);
-                            foreach ($toner_array as $key)
-                            {
-                                $toner_id = str_replace("'", "", $key);
-                                if ($toner_id > 0)
-                                {
-                                    // get color and type from $key
-                                    $select   = $db->select()
-                                        ->from(array(
-                                                    't' => 'toners'
-                                               ))
-                                        ->join(array(
-                                                    'tc' => 'toner_colors'
-                                               ), 'tc.id = t.tonerColorId', array(
-                                                                                 'name AS toner_color_name'
-                                                                            ))
-                                        ->join(array(
-                                                    'pt' => 'part_types'
-                                               ), 'pt.id = t.partTypeId', array(
-                                                                               'name AS type_name'
-                                                                          ))->where('t.id = ?', $toner_id);
-                                    $stmt     = $db->query($select);
-                                    $curToner = $stmt->fetchAll();
-
-                                    if (count($curToner) > 0)
-                                    {
-
-                                        $has_toner = true;
-                                        $curColor  = strtolower($curToner [0] ['toner_color_name']);
-                                        if ($curColor == "black")
-                                        {
-                                            $has_black = true;
-                                        }
-                                        else if ($curColor == "yellow")
-                                        {
-                                            $has_yellow = true;
-                                        }
-                                        else if ($curColor == "magenta")
-                                        {
-                                            $has_magenta = true;
-                                        }
-                                        else if ($curColor == "cyan")
-                                        {
-                                            $has_cyan = true;
-                                        }
-                                        else if ($curColor == "3 color")
-                                        {
-                                            $has_3color = true;
-                                        }
-                                        else if ($curColor == "4 color")
-                                        {
-                                            $has_4color = true;
-                                        }
-                                    }
-                                }
-                            }
-                            $toner_errors       = "";
-                            $toner_error_colors = "";
-                            if ($has_toner)
-                            {
-                                // Has toners, validate to make sure they match the device
-                                switch ($toner_config_id)
-                                {
-                                    case Proposalgen_Model_TonerConfig::BLACK_ONLY:
-                                        // BLACK ONLY
-                                        if ($has_3color || $has_4color || $has_cyan || $has_magenta || $has_yellow)
-                                        {
-                                            $repop_form   = 1;
-                                            $toners_valid = false;
-                                            $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black Toners are allowed.";
-                                        }
-                                        else if ($has_black)
-                                        {
-                                            $toners_valid = true;
-                                        }
-                                        else
-                                        {
-                                            $repop_form   = 1;
-                                            $toner_errors = "Error: Missing a Black Toner. Please add one and try again.";
-                                        }
-                                        break;
-                                    case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-                                        // 3 COLOR - SEPARATED
-                                        if ($has_3color || $has_4color)
-                                        {
-                                            $repop_form   = 1;
-                                            $toners_valid = false;
-                                            $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black, Yellow, Magenta and Cyan Toners are allowed.";
-                                        }
-                                        else if ($has_black)
-                                        {
-                                            if ($has_yellow)
-                                            {
-                                                if ($has_magenta)
-                                                {
-                                                    if ($has_cyan)
-                                                    {
-                                                        $toners_valid = true;
-                                                    }
-                                                    else
-                                                    {
-                                                        $toner_error_colors = "Cyan";
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $toner_error_colors = "Magenta";
-                                                }
-                                            }
-                                            else
-                                            {
-                                                $toner_error_colors = "Yellow";
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $toner_error_colors = "Black";
-                                        }
-
-                                        if ($toner_error_colors != '')
-                                        {
-                                            $repop_form   = 1;
-                                            $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
-                                        }
-                                        break;
-                                    case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-                                        // 3 COLOR - COMBINED
-                                        if ($has_4color || $has_cyan || $has_magenta || $has_yellow)
-                                        {
-                                            $repop_form   = 1;
-                                            $toners_valid = false;
-                                            $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 3 Color and Black Toners are allowed.";
-                                        }
-                                        else if ($has_black)
-                                        {
-                                            if ($has_3color)
-                                            {
-                                                $toners_valid = true;
-                                            }
-                                            else
-                                            {
-                                                $toner_error_colors = "3 Color";
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $toner_error_colors = "Black";
-                                        }
-
-                                        if ($toner_error_colors != '')
-                                        {
-                                            $repop_form   = 1;
-                                            $toner_errors = "Error: Missing a " . $toner_error_colors . " Toner. Please add one and try again.";
-                                        }
-                                        break;
-                                    case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-                                        // 4 COLOR - COMBINED
-                                        if ($has_3color || $has_black || $has_cyan || $has_magenta || $has_yellow)
-                                        {
-                                            $repop_form   = 1;
-                                            $toners_valid = false;
-                                            $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 4 Color Toners are allowed.";
-                                        }
-                                        else if ($has_4color)
-                                        {
-                                            $toners_valid = true;
-                                        }
-                                        else
-                                        {
-                                            $repop_form   = 1;
-                                            $toner_errors = "Error: Missing a 4 Color Toner. Please add one and try again.";
-                                        }
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                // if leased, then toners not required
-                                if ($formData ["is_leased"])
-                                {
-                                    $toners_valid = true;
-                                }
-                                else
-                                {
-                                    $toners_valid = false;
-                                    $toner_errors = "Error: You must add required toners before saving this device.";
-                                }
-                            }
-
-                            if ($toners_valid == true)
-                            {
-                                $device_tonerTable = new Proposalgen_Model_DbTable_DeviceToner();
-                                $launch_date       = new Zend_Date($formData ["launch_date"]);
-
-                                // save master device
-                                $master_deviceData = array(
-                                    'launchDate'         => $launch_date->toString('yyyy-MM-dd HH:mm:ss'),
-                                    'tonerConfigId'      => $toner_config_id,
-                                    'isCopier'           => $formData ["is_copier"],
-                                    'isScanner'          => $formData ["is_scanner"],
-                                    'reportsTonerLevels' => $formData ["reportsTonerLevels"],
-                                    'isFax'              => $formData ["is_fax"],
-                                    'isDuplex'           => $formData ["is_duplex"],
-                                    'wattsPowerNormal'   => $formData ["watts_power_normal"],
-                                    'wattsPowerIdle'     => $formData ["watts_power_idle"],
-                                    'ppmBlack'           => ($formData ["ppm_black"] > 0) ? $formData ["ppm_black"] : null,
-                                    'ppmColor'           => ($formData ["ppm_color"] > 0) ? $formData ["ppm_color"] : null,
-                                    'dutyCycle'          => ($formData ["duty_cycle"] > 0) ? $formData ["duty_cycle"] : null,
-                                    'isLeased'           => $formData ["is_leased"],
-                                    'leasedTonerYield'   => ($formData ["is_leased"] ? $formData ["leased_toner_yield"] : null),
-                                    'partsCostPerPage'   => $formData ["partsCostPerPage"],
-                                    'laborCostPerPage'   => $formData ["partsCostPerPage"]
-                                );
-                                if ($master_device_id > 0)
-                                {
-                                    // get printer_model
-                                    $where         = $master_deviceTable->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                    $master_device = $master_deviceTable->fetchRow($where);
-                                    $printer_model = $master_device ['modelName'];
-
-                                    // edit device
-                                    $master_deviceTable->update($master_deviceData, $where);
-
-                                    // remove all device_toners for master
-                                    // device
-
-                                    $where = $device_tonerTable->getAdapter()->quoteInto('master_device_id = ?', $master_device_id, 'INTEGER');
-                                    $device_tonerTable->delete($where);
-
-                                    // save new toners
-                                    if ($has_toner)
-                                    {
-                                        foreach ($toner_array as $key)
-                                        {
-                                            $toner_id = str_replace("'", "", $key);
-                                            if ($toner_id > 0)
-                                            {
-                                                $device_tonerData = array(
-                                                    'toner_id'         => $toner_id,
-                                                    'master_device_id' => $master_device_id
-                                                );
-
-                                                $device_tonerTable->insert($device_tonerData);
-                                            }
-                                        }
-                                    }
-
-                                    $repop_form                = 1;
-                                    $this->view->printer_model = $master_device_id;
-                                    $this->_flashMessenger->addMessage(array(
-                                                                            'success' => 'Device "' . $printer_model . '" has been updated.'
-                                                                       ));
-                                    $isPrintModelSet = true;
-
-                                    // set selected printer model to new printer model
-                                    $this->view->printer_model = $master_device_id;
-                                }
-                                else
-                                {
-                                    // How does it get meters when it saves it get printer_model
-                                    $manufacturer_id = $formData ['manufacturer_id'];
-                                    if ($manufacturer_id > 0)
-                                    {
-                                        // Add creation_date to array.
-                                        $master_deviceData ["manufacturerId"] = $manufacturer_id;
-                                        $master_deviceData ["modelName"]      = $formData ["new_printer"];
-                                        $master_deviceData ["dateCreated"]    = $date;
-                                        // Check for master device flagged as deleted.
-                                        $where                 = $master_deviceTable->getAdapter()->quoteInto('manufacturerId = ' . $manufacturer_id . ' AND modelName = ?', $formData ["new_printer"]);
-                                        $master_device_flagged = $master_deviceTable->fetchRow($where);
-
-                                        if (count($master_device_flagged->toArray()) > 0)
-                                        {
-                                            $master_device_id = $master_device_flagged ['id'];
-//                                        $where               = $master_deviceTable->getAdapter()->quoteInto('master_device_id = ?' . $master_device_id, 'INTEGER');
-                                            $this->_flashMessenger->addMessage(array(
-                                                                                    'error' => "The printer you're trying to add already exists."
-                                                                               ));
-
-                                        }
-                                        else
-                                        {
-                                            // Create a new master device, and populate and insert.
-                                            $masterDevice = new Proposalgen_Model_MasterDevice();
-                                            $masterDevice->populate($master_deviceData);
-                                            // Get the current date for the devices date created.
-                                            $masterDevice->dateCreated = $date;
-                                            $master_device_id          = Proposalgen_Model_Mapper_MasterDevice::getInstance()->insert($masterDevice);
-
-                                            if ($has_toner)
-                                            {
-                                                // For each toner attempt to see if current configuration exists. If not, add an entry in the deviceToner table
-                                                foreach ($toner_array as $key)
-                                                {
-                                                    $toner_id = str_replace("'", "", $key);
-                                                    if ($toner_id > 0)
-                                                    {
-                                                        $device_tonerData = array(
-                                                            'toner_id'         => $toner_id,
-                                                            'master_device_id' => $master_device_id
-                                                        );
-                                                        $where            = $device_tonerTable->getAdapter()->quoteInto('toner_id = ' . $toner_id . ' AND master_device_id = ?', $master_device_id, 'INTEGER');
-                                                        $device_toners    = $device_tonerTable->fetchRow($where);
-
-                                                        if (count($device_toners->toArray()) == 0)
-                                                        {
-                                                            $device_tonerTable->insert($device_tonerData);
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            // If we have device instance id's, insert them here.
-                                            if ($formData['deviceInstanceId'])
-                                            {
-                                                // Explode the id's into an array
-                                                $deviceSplitIds = explode(',', $formData['deviceInstanceId']);
-
-                                                $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceSplitIds[0]);
-
-                                                // If we have a model id then we can add a matchup for it
-                                                if ($deviceInstance->getRmsUploadRow()->rmsModelId)
-                                                {
-                                                    $rmsMasterMatchUp = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->find(array($deviceInstance->getRmsUploadRow()->rmsProviderId, $deviceInstance->getRmsUploadRow()->rmsModelId));
-                                                    if (!$rmsMasterMatchUp instanceof Proposalgen_Model_Rms_Master_Matchup)
-                                                    {
-                                                        /**
-                                                         * We only add a matchup if it did not exist before.
-                                                         */
-                                                        $rmsMasterMatchUp                 = new Proposalgen_Model_Rms_Master_Matchup();
-                                                        $rmsMasterMatchUp->rmsProviderId  = $deviceInstance->getRmsUploadRow()->rmsProviderId;
-                                                        $rmsMasterMatchUp->rmsModelId     = $deviceInstance->getRmsUploadRow()->rmsModelId;
-                                                        $rmsMasterMatchUp->masterDeviceId = $master_device_id;
-                                                        Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->insert($rmsMasterMatchUp);
-                                                    }
-                                                }
-
-
-                                                foreach ($deviceSplitIds as $deviceInstanceId)
-                                                {
-                                                    $deviceInstance                               = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
-                                                    $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
-                                                    $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
-                                                    $deviceInstanceMasterDevice->masterDeviceId   = $master_device_id;
-                                                    Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->insert($deviceInstanceMasterDevice);
-                                                }
-                                            }
-
-
-                                        }
-                                        $repop_form                = 1;
-                                        $this->view->printer_model = $master_device_id;
-                                    }
-                                    else
-                                    {
-                                        $this->_flashMessenger->addMessage(array(
-                                                                                'error' => 'Error: No manufacturer has been selected.'
-                                                                           ));
-                                    }
-                                }
-                                $db->commit();
-                                $this->redirector('mapping', 'fleet', null, array('rmsUploadId' => $rmsUpload->id));
-                            }
-                            else
-                            {
-                                // invalid toners - return message
-                                $db->rollback();
-                                $repop_form                = 1;
-                                $this->view->printer_model = $formData ['printer_model'];
-                                $this->_flashMessenger->addMessage(array(
-                                                                        'error' => $toner_errors
-                                                                   ));
-                            }
-                        }
-                        catch (Zend_Db_Exception $e)
-                        {
-                            $db->rollback();
-                            $this->_flashMessenger->addMessage(array(
-                                                                    'error' => 'Database Error: "' . $formData ["new_printer"] . '" could not be saved. Make sure the printer does not already exist.'
-                                                               ));
-                            Throw new exception("Critical Device Update Error.", 0, $e);
-                        }
-                        catch (Exception $e)
-                        {
-                            // CRITICAL UPDATE EXCEPTION
-                            $db->rollback();
-                            Throw new exception("Critical Device Update Error.", 0, $e);
-                        } // end catch
-                    }
-                }
             }
-            /**
-             *  If the form mode is re-populate trigger the loading of the form based on action desired
-             */
-            if ($repop_form == 1)
-            {
-                $this->view->repop = true;
-                if ($deviceInstanceIds)
-                {
-                    /**
-                     * If there are device instance that have been passed
-                     */
-                    $deviceInstanceSplit = explode(',', $deviceInstanceIds);
-                    $deviceInstance      = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceSplit[0]);
-                    if ($deviceInstance->getIsMappedToMasterDevice())
-                    {
-                        /**
-                         *  Editing a master device
-                         */
-                        $deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find($deviceInstanceSplit[0]);
-                        /* @var $masterDevice Proposalgen_Model_MasterDevice */
-                        $masterDevice                      = $deviceInstanceMasterDevice->getMasterDevice();
-                        $deviceData                        = array();
-                        $deviceData ['manufacturer_id']    = $masterDevice->getManufacturer()->id;
-                        $deviceData ['masterDeviceId']     = $masterDevice->id;
-                        $deviceData ['launch_date']        = $masterDevice->launchDate;
-                        $deviceData ['toner_config_id']    = $masterDevice->tonerConfigId;
-                        $deviceData ['is_copier']          = $masterDevice->isCopier;
-                        $deviceData ['is_scanner']         = $masterDevice->isScanner;
-                        $deviceData ['reportsTonerLevels'] = $masterDevice->reportsTonerLevels;
-                        $deviceData ['is_fax']             = $masterDevice->isFax;
-                        $deviceData ['is_duplex']          = $masterDevice->isDuplex;
-                        $deviceData ['watts_power_normal'] = $masterDevice->wattsPowerNormal;
-                        $deviceData ['watts_power_idle']   = $masterDevice->wattsPowerIdle;
-                        $deviceData ['is_leased']          = $masterDevice->isLeased;
-                        $deviceData ['leased_toner_yield'] = $masterDevice->leasedTonerYield;
-                        $deviceData ['ppm_black']          = $masterDevice->ppmBlack;
-                        $deviceData ['ppm_color']          = $masterDevice->ppmColor;
-                        $deviceData ['duty_cycle']         = $masterDevice->dutyCycle;
-                        $deviceData ['partsCostPerPage']   = $masterDevice->partsCostPerPage;
-                        $deviceData ['laborCostPerPage']   = $masterDevice->laborCostPerPage;
 
-                        $this->view->printer_model = $deviceData ['masterDeviceId'];
-                        $this->view->adminEdit     = true;
-                        $form_mode                 = 'edit';
+            // Send back jqGrid json data
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+
+        $json = json_encode($jsonArray);
+        $this->sendJson($json);
+    }
+
+    /**
+     * Gets all the options available to a quote device
+     */
+    public function optionListAction ()
+    {
+        $jsonArray        = array();
+        $jqGridService    = new Tangent_Service_JQGrid();
+        $optionMapper     = Quotegen_Model_Mapper_Option::getInstance();
+        $masterDeviceId   = $this->_getParam('masterDeviceId', false);
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'oemSku'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
+        $sortColumns      = array(
+            'oemSku',
+            'dealerSku',
+            'name',
+            'option',
+            'cost',
+            'description',
+        );
+        $jqGridService->setValidSortColumns($sortColumns);
+        if ($jqGridService->sortingIsValid())
+        {
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+            $searchCriteria = $this->_getParam('criteriaFilter', null);
+            $searchValue    = $this->_getParam('criteria', null);
+
+            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+                                                                      'haystack' => $sortColumns
+                                                                 ));
+
+            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
+            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            {
+                $searchCriteria = null;
+                $searchValue    = null;
+            }
+            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $this->_identity->dealerId, null, $jqGridService->getSortDirection(), $searchCriteria, $searchValue, 1000, 0);
+            $jqGridService->setRecordCount(count($options));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
+            {
+                $jqGridService->setCurrentPage(1);
+            }
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+            {
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+            if ($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
+
+            $sortOrder = array();
+            if ($jqGridService->hasGrouping())
+            {
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
+            }
+
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+            $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $this->_identity->dealerId, $sortOrder, null, $searchCriteria, $searchValue, $jqGridService->getRecordsPerPage(), $startRecord);
+            $jqGridService->setRows($options);
+            // Send back jqGrid json data
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                                 'error' => 'Sorting parameters are invalid'
+                            ));
+        }
+
+        $json = json_encode($jsonArray);
+        $this->sendJson($json);
+    }
+
+    /**
+     * Assigns or unassigns an option when on the available options page
+     */
+    public function assignAvailableOptionAction ()
+    {
+        $json = "Failed to assign or unassign option";
+        if ($this->_request->isPost())
+        {
+            $optionId       = $this->_request->getParam('optionId', false);
+            $masterDeviceId = $this->_request->getParam('masterDeviceId', false);
+            if ($optionId && $masterDeviceId)
+            {
+                $device = Quotegen_Model_Mapper_Device::getInstance()->find(array($masterDeviceId, $this->_identity->dealerId));
+                if ($device)
+                {
+                    $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
+                    $deviceOption       = $deviceOptionMapper->find(array($masterDeviceId, $optionId));
+                    if ($deviceOption)
+                    {
+                        $deviceOptionMapper->delete($deviceOption);
+                        $json = "Successfully unassigned option";
                     }
                     else
                     {
-                        /**
-                         * Create a new master device
-                         */
-                        $rmsRow                            = $deviceInstance->getRmsUploadRow();
-                        $deviceData ['manufacturer_id']    = $rmsRow->manufacturerId;
-                        $deviceData ['launch_date']        = $rmsRow->launchDate;
-                        $deviceData ['toner_config_id']    = $rmsRow->tonerConfigId;
-                        $deviceData ['is_copier']          = $rmsRow->isCopier;
-                        $deviceData ['is_scanner']         = $rmsRow->isScanner;
-                        $deviceData ['reportsTonerLevels'] = $deviceInstance->reportsTonerLevels;
-                        $deviceData ['is_fax']             = $rmsRow->isFax;
-                        $deviceData ['is_duplex']          = $rmsRow->isDuplex;
-                        $deviceData ['watts_power_normal'] = $rmsRow->wattsPowerNormal;
-                        $deviceData ['watts_power_idle']   = $rmsRow->wattsPowerIdle;
-                        $deviceData ['is_leased']          = $rmsRow->isLeased;
-                        $deviceData ['leased_toner_yield'] = $rmsRow->leasedTonerYield;
-                        $deviceData ['ppm_black']          = $rmsRow->ppmBlack;
-                        $deviceData ['ppm_color']          = $rmsRow->ppmColor;
-                        $deviceData ['duty_cycle']         = $rmsRow->dutyCycle;
-                        $deviceData ['partsCostPerPage']   = $rmsRow->partsCostPerPage;
-                        $deviceData ['laborCostPerPage']   = $rmsRow->laborCostPerPage;
-                        $form->getElement('new_printer')->setValue($rmsRow->modelName);
-                        $form_mode = 'add';
+                        $deviceOption                   = new Quotegen_Model_DeviceOption();
+                        $deviceOption->masterDeviceId   = $masterDeviceId;
+                        $deviceOption->dealerId         = $this->_identity->dealerId;
+                        $deviceOption->optionId         = $optionId;
+                        $deviceOption->includedQuantity = 0;
+                        $deviceOptionMapper->insert($deviceOption);
+                        $json = "Successfully assigned option";
                     }
-
-
-                    $form->getElement('form_mode')->setValue($form_mode);
-                    $form->getElement('manufacturer_id')->setValue($deviceData ['manufacturer_id']);
-                    $form->getElement('launch_date')->setValue($deviceData ['launch_date']);
-                    $form->getElement('toner_config_id')->setValue($deviceData ['toner_config_id']);
-                    $form->getElement('is_copier')->setAttrib('checked', $deviceData ['is_copier']);
-                    $form->getElement('is_scanner')->setAttrib('checked', $deviceData ['is_scanner']);
-                    $form->getElement('reportsTonerLevels')->setAttrib('checked', $deviceData ['reportsTonerLevels']);
-                    $form->getElement('is_fax')->setAttrib('checked', $deviceData ['is_fax']);
-                    $form->getElement('is_duplex')->setAttrib('checked', $deviceData ['is_duplex']);
-                    $form->getElement('watts_power_normal')->setValue($deviceData ['watts_power_normal']);
-                    $form->getElement('watts_power_idle')->setValue($deviceData ['watts_power_idle']);
-                    $form->getElement('is_leased')->setAttrib('checked', $deviceData ['is_leased']);
-                    $form->getElement('leased_toner_yield')->setValue($deviceData ['leased_toner_yield']);
-                    $form->getElement('ppm_black')->setValue($deviceData ['ppm_black']);
-                    $form->getElement('ppm_color')->setValue($deviceData ['ppm_color']);
-                    $form->getElement('duty_cycle')->setValue($deviceData ['duty_cycle']);
-                    $form->getElement('partsCostPerPage')->setValue($deviceData ['partsCostPerPage']);
-                    $form->getElement('laborCostPerPage')->setValue($deviceData ['laborCostPerPage']);
-
-                }
-                else
-                {
-                    /**
-                     *  If validation fails, this will catch it and persist the data to next form load
-                     */
-                    $form->getElement('hdnID')->setValue($formData ['hdnID']);
-                    $form->getElement('hdnItem')->setValue($formData ['hdnItem']);
-                    $form->getElement('devices_pf_id')->setValue($formData ['devices_pf_id']);
-                    $form->getElement('unknown_device_instance_id')->setValue($formData ['unknown_device_instance_id']);
-                    $form->getElement('deviceInstanceId')->setValue($formData['deviceInstanceId']);
-                    $form->getElement('save_flag')->setValue($formData ['save_flag']);
-                    $form->getElement('toner_array')->setValue($formData ['toner_array']);
-                    $form->getElement('form_mode')->setValue($formData ['form_mode']);
-                    $form->getElement('form_mode')->setValue($form_mode);
-                    $form->getElement('manufacturer_id')->setValue($formData ['manufacturer_id']);
-
-                    if (isset($formData ['printer_model']))
-                    {
-                        $form->getElement('printer_model')->setValue($formData ['printer_model']);
-                        // If we didn't successfully update the database, get the printer model from the form.
-                        // If we successfully update the database, this is already set.
-                        if (!$isPrintModelSet)
-                        {
-                            $this->view->printer_model = $formData ['printer_model'];
-                        }
-                    }
-                    $form->getElement('new_printer')->setValue($formData ['new_printer']);
-                    $form->getElement('launch_date')->setValue($formData ['launch_date']);
-                    $form->getElement('toner_config_id')->setValue($formData ['toner_config_id']);
-                    $form->getElement('is_copier')->setAttrib('checked', $formData ['is_copier']);
-                    $form->getElement('is_scanner')->setAttrib('checked', $formData ['is_scanner']);
-                    $form->getElement('reportsTonerLevels')->setAttrib('checked', $formData ['reportsTonerLevels']);
-                    $form->getElement('is_fax')->setAttrib('checked', $formData ['is_fax']);
-                    $form->getElement('is_duplex')->setAttrib('checked', $formData ['is_duplex']);
-                    $form->getElement('watts_power_normal')->setValue($formData ['watts_power_normal']);
-                    $form->getElement('watts_power_idle')->setValue($formData ['watts_power_idle']);
-
-                    $form->getElement('is_leased')->setAttrib('checked', $formData ['is_leased']);
-                    $form->getElement('leased_toner_yield')->setValue($formData ['leased_toner_yield']);
-
-                    $form->getElement('ppm_black')->setValue($formData ['ppm_black']);
-                    $form->getElement('ppm_color')->setValue($formData ['ppm_color']);
-                    $form->getElement('duty_cycle')->setValue($formData ['duty_cycle']);
-                    $form->getElement('partsCostPerPage')->setValue($formData ['partsCostPerPage']);
-                    $form->getElement('laborCostPerPage')->setValue($formData ['laborCostPerPage']);
                 }
             }
         }
-        $this->view->form_mode  = $form_mode;
-        $this->view->deviceform = $form;
+        $this->sendJson($json);
+
+    }
+
+    /**
+     * creates the service, tells it which forms we want to use and displays them
+     */
+    public function managemasterdevicesAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $rmsUploadRowId = $this->_getParam('rmsUploadRowId', false);
+
+        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+        $isAllowed    = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+
+        $service = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, ($rmsUploadRowId > 0 ? true : $isAllowed));
+
+        if ($rmsUploadRowId > 0)
+        {
+            $rmsUploadRow = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance()->find($rmsUploadRowId);
+
+            if ($rmsUploadRow instanceof Proposalgen_Model_Rms_Upload_Row)
+            {
+                $service->populate($rmsUploadRow->toArray());
+
+                $this->view->modelName      = $rmsUploadRow->modelName;
+                $this->view->manufacturerId = $rmsUploadRow->manufacturerId;
+            }
+        }
+        else if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+        {
+            $this->view->modelName      = $masterDevice->modelName;
+            $this->view->manufacturerId = $masterDevice->manufacturerId;
+        }
+
+        $forms = $service->getForms(true, true, true, true, true, true);
+
+        // If we wanted to use custom data we would need to set the views modelName and manufacturerId to the custom data values
+        foreach ($forms as $formName => $form)
+        {
+            $this->view->$formName = $form;
+        }
+
+        $this->view->isAllowed     = $isAllowed;
+        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
+        $this->view->masterDevice  = $masterDevice;
+    }
+
+    /**
+     * Validates all the main forms and saves them
+     * Returns json, A list of errors if the forms did not validate, Or a success message if they did
+     */
+    public function updateMasterDeviceAction ()
+    {
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $modelName      = $this->_getParam('modelName', false);
+        $manufacturerId = $this->_getParam('manufacturerId', false);
+        $approve        = ($this->_getParam('approve', false) === 'true' ? true : false);
+
+        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+        //Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
+        $isAllowed    = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+        // If we are creating we need admin privileges, if we are editing a device that is not a system device(PENDING), we have full access, if neither of those are true, use our acl privilege
+        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed);
+
+        $forms                      = array();
+        $suppliesErrors             = array();
+        $modelAndManufacturerErrors = array();
+        $formData                   = null;
+        $formErrors                 = null;
+        $tonersList                 = null;
+
+        if ($this->_request->isPost())
+        {
+            // Validate model name and manufacturer
+            if ($manufacturerId <= 0)
+            {
+                $modelAndManufacturerErrors['modelAndManufacturer']['errorMessages']['manufacturerId'] = "Please select a valid manufacturer";
+            }
+
+            if ($modelName == false)
+            {
+                $modelAndManufacturerErrors['modelAndManufacturer']['errorMessages']['modelName'] = "Please enter a model name";
+            }
+
+            $formData = $this->_request->getPost();
+
+            foreach ($formData as $key => $form)
+            {
+                parse_str($formData[$key], $formData[$key]);
+            }
+
+
+            if (count($formData['suppliesAndService']) > 0)
+            {
+                if (count($formData['hardwareQuote'] > 0))
+                {
+                    $manageMasterDeviceService->isQuoteDevice = ($formData['hardwareQuote']['isSelling'] == '1' ? true : false);
+                }
+
+                $forms['suppliesAndService'] = $manageMasterDeviceService->getSuppliesAndServicesForm();
+                $tonersList                  = $formData['suppliesAndService']['tonersList'];
+
+                if ($formData['deviceAttributes']['launchDate'] != '')
+                {
+                    $launch_date                                = new Zend_Date($formData['deviceAttributes']['launchDate']);
+                    $formData['deviceAttributes']['launchDate'] = $launch_date->toString('yyyy-MM-dd HH:mm:ss');
+                }
+
+                $errorMessages = $manageMasterDeviceService->validateToners($tonersList, $formData['suppliesAndService']['tonerConfigId'], $formData['suppliesAndService']['isLeased']);
+
+                if ($errorMessages != null)
+                {
+                    $suppliesErrors['suppliesAndService']['errorMessages']['assignedTonersMistakes'] = $errorMessages;
+                }
+            }
+
+            if (count($formData['deviceAttributes']) > 0)
+            {
+                $forms['deviceAttributes'] = new Proposalgen_Form_DeviceAttributes(null, $isAllowed);
+            }
+
+            if (count($formData['hardwareOptimization']) > 0)
+            {
+                $forms['hardwareOptimization'] = new Proposalgen_Form_HardwareOptimization();
+            }
+
+            if (count($formData['hardwareQuote']) > 0)
+            {
+                $forms['hardwareQuote'] = new Proposalgen_Form_HardwareQuote();
+            }
+
+            $formErrors = array();
+
+            foreach ($forms as $formName => $form)
+            {
+                $json = $manageMasterDeviceService->validateData($form, $formData[$formName], $formName);
+
+                if ($json != null)
+                {
+                    $formErrors[$formName] = $json;
+                }
+            }
+        }
+
+        if ($formErrors || count($suppliesErrors) > 0 || count($modelAndManufacturerErrors) > 0)
+        {
+            $this->sendJsonError(array_merge($formErrors, $suppliesErrors, $modelAndManufacturerErrors));
+        }
+        else
+        {
+            if (count($formData['suppliesAndService']) > 0)
+            {
+                if (!$manageMasterDeviceService->saveSuppliesAndDeviceAttributes(array_merge($formData['suppliesAndService'], $formData['deviceAttributes'], array("manufacturerId" => $manufacturerId, "modelName" => $modelName)), $tonersList, $this->_isAdmin, $approve))
+                {
+                    $this->sendJsonError("Failed to save Supplies & Service and Device Attributes");
+                }
+            }
+
+            if (count($formData['hardwareOptimization']) > 0)
+            {
+                if (!$manageMasterDeviceService->saveHardwareOptimization(array_merge($formData['hardwareOptimization'], array('isSelling' => $formData['hardwareQuote']['isSelling']))))
+                {
+                    $this->sendJsonError("Failed to save Hardware Optimization");
+                }
+            }
+
+            if (count($formData['hardwareQuote']) > 0)
+            {
+                if (!$manageMasterDeviceService->saveHardwareQuote($formData['hardwareQuote']))
+                {
+                    $this->sendJsonError("Failed to save Hardware Quote");
+                }
+            }
+
+            $this->sendJson(array("masterDeviceId" => $manageMasterDeviceService->masterDeviceId, "message" => "Successfully updated master device"));
+        }
+    }
+
+    /**
+     * One Function to rule them all,
+     * One Function to validate them,
+     * One Function to update them all,
+     * and in the modals bind them
+     *
+     * Sauron handles the create and edit jqgrid buttons
+     * It validates the forms
+     * Returns errors if they exist
+     * And calls the update functions
+     */
+    public function sauronAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+
+        if ($this->_request->isPost())
+        {
+            $formData                  = $this->_request->getPost();
+            $masterDeviceId            = $this->_getParam('masterDeviceId', false);
+            $formName                  = $this->_getParam('formName', false);
+            $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId);
+
+            //Each array needs to be parsed
+            foreach ($formData as $key => $form)
+            {
+                parse_str($formData[$key], $formData[$key]);
+            }
+
+            $form = null;
+
+            if ($formName == 'availableOptionsForm')
+            {
+                $form = $manageMasterDeviceService->getAvailableOptionsForm();
+            }
+            else if ($formName == 'hardwareConfigurationsForm')
+            {
+                $form = new Proposalgen_Form_HardwareConfigurations(0, $masterDeviceId);
+            }
+            else if ($formName == 'availableTonersForm')
+            {
+                $form = $manageMasterDeviceService->getAvailableTonersForm();
+            }
+
+            $formErrors = array();
+            $errorArray = $manageMasterDeviceService->validateData($form, $formData['form'], $formName);
+
+            if ($errorArray != null)
+            {
+                $formErrors[$formName] = $errorArray;
+            }
+
+            if ($formErrors)
+            {
+                $this->sendJsonError($formErrors);
+            }
+            else
+            {
+                if ($formName == 'availableOptionsForm')
+                {
+                    if ($manageMasterDeviceService->updateAvailableOptionsForm($formData['form']))
+                    {
+                        $this->sendJson("Successfully updated available options");
+                    }
+                    else
+                    {
+                        $this->sendJsonError("Failed to update available options form");
+                    }
+                }
+                else if ($formName == 'hardwareConfigurationsForm')
+                {
+                    if ($manageMasterDeviceService->updateHardwareConfigurationsForm($formData['form']))
+                    {
+                        $this->sendJson("Successfully updated hardware configurations");
+                    }
+                    else
+                    {
+                        $this->sendJsonError("Failed to update hardware configurations form");
+                    }
+                }
+                else if ($formName == 'availableTonersForm')
+                {
+                    if ($manageMasterDeviceService->updateAvailableTonersForm($this->_isAdmin, $formData['form'], 0))
+                    {
+                        $this->sendJson("Successfully updated available toners form");
+                    }
+                    else
+                    {
+                        $this->sendJsonError("Failed to update available toners form");
+                    }
+                }
+            }
+        }
+        $this->sendJsonError("Failed to save, no form found for the form data");
+    }
+
+    /**
+     * Handles the delete button in jqGrid
+     */
+    public function deleteAction ()
+    {
+        $formName = $this->_getParam('formName', false);
+        $tonerId  = $this->_getParam('id', false);
+
+        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices(0, $this->_identity->dealerId);
+
+        if ($formName == 'availableOptions')
+        {
+            if ($manageMasterDeviceService->updateAvailableOptionsForm(false, $tonerId))
+            {
+                $this->sendJson("Successfully deleted option");
+            }
+            else
+            {
+                $this->sendJsonError("Failed to delete option");
+            }
+        }
+        else if ($formName == 'hardwareConfigurations')
+        {
+            if ($manageMasterDeviceService->updateHardwareConfigurationsForm(false, $tonerId))
+            {
+                $this->sendJson("Successfully deleted hardware configuration");
+            }
+            else
+            {
+                $this->sendJsonError("Failed to delete hardware configuration");
+            }
+        }
+        else if ($formName == 'availableToners')
+        {
+            if ($manageMasterDeviceService->updateAvailableTonersForm($this->_isAdmin, false, $tonerId))
+            {
+                $this->sendJson("Successfully deleted toner");
+            }
+            else
+            {
+                $this->sendJsonError("Failed to delete toner");
+            }
+        }
+
+        $this->sendJsonError("Failed to delete, no forms matched the data sent");
+    }
+
+    /**
+     * Gets all the options available to a device
+     */
+    public function hardwareConfigurationListAction ()
+    {
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $searchCriteria = $this->_getParam('criteriaFilter', null);
+        $searchValue    = $this->_getParam('criteria', null);
+
+        $configurationMapper = Quotegen_Model_Mapper_DeviceConfiguration::getInstance();
+
+        $jqGridService = new Tangent_Service_JQGrid();
+
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'modelName'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
+
+        $sortColumns = array(
+            'id',
+            'name',
+            'description'
+        );
+
+        $jqGridService->setValidSortColumns($sortColumns);
+
+        if ($jqGridService->sortingIsValid())
+        {
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+
+            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+                                                                      'haystack' => $sortColumns
+
+                                                                 ));
+
+            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
+            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            {
+                $searchCriteria = null;
+                $searchValue    = null;
+            }
+
+            $jqGridService->setRecordCount(count($configurationMapper->fetchAllDeviceConfigurationByDeviceId($masterDeviceId)));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
+            {
+                $jqGridService->setCurrentPage(1);
+            }
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+            {
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+            }
+
+            $sortOrder = array();
+
+            if ($jqGridService->hasGrouping())
+            {
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
+            }
+
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+
+            $jqGridService->setRows($configurationMapper->fetchAllDeviceConfigurationByDeviceId($masterDeviceId));
+
+            // Send back jqGrid json data
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->sendJsonError('Sorting parameters are invalid.');
+        }
+    }
+
+    /**
+     * Reloads the Hardware Configurations Form
+     */
+    public function reloadHardwareConfigurationsFormAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $id             = $this->_getParam('id', false);
+
+        $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
+        $form                = new Proposalgen_Form_HardwareConfigurations($id, $masterDeviceId);
+
+        if ($deviceConfiguration instanceof Quotegen_Model_DeviceConfiguration)
+        {
+            $data                                      = $deviceConfiguration->toArray();
+            $data['hardwareConfigurationsname']        = $data['name'];
+            $data['hardwareConfigurationsdescription'] = $data['description'];
+            $form->populate($data);
+        }
+
+        $this->view->hardwareConfigurationsForm = $form;
+    }
+
+    /**
+     * Assigns a toner to a master device
+     */
+    public function assignTonerAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $tonerId        = $this->_getParam('tonerId', false);
+
+        if ($tonerId && $masterDeviceId)
+        {
+            $deviceToner                 = new Proposalgen_Model_DeviceToner();
+            $deviceToner->masterDeviceId = $masterDeviceId;
+            $deviceToner->tonerId        = $tonerId;
+
+            try
+            {
+                Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
+            }
+            catch (Exception $e)
+            {
+                Tangent_Log::logException($e);
+
+                $this->sendJsonError("Failed to save device toner");
+            }
+
+            $this->sendJson(array("Successfully assigned toner"));
+        }
+        else
+        {
+            $this->sendJsonError("Cannot assign toner, missing required id.");
+        }
+    }
+
+    /**
+     * Removes the specified toner from a master device
+     */
+    public function removeTonerAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        $tonerId        = $this->_getParam('tonerId', false);
+
+        if ($tonerId && $masterDeviceId)
+        {
+            $deviceToner                 = new Proposalgen_Model_DeviceToner();
+            $deviceToner->masterDeviceId = $masterDeviceId;
+            $deviceToner->tonerId        = $tonerId;
+
+            try
+            {
+                Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete($deviceToner);
+            }
+            catch (Exception $e)
+            {
+                Tangent_Log::logException($e);
+
+                $this->sendJsonError("Failed to delete device toner");
+            }
+
+            $this->sendJson(array("Successfully removed toner"));
+        }
+        else
+        {
+            $this->sendJsonError("Cannot remove toner, missing required id.");
+        }
+    }
+
+    /**
+     *  Gets a list of all the master devices and their toners that will be affected by the toner deletion
+     */
+    public function affectedReplacementTonersListAction ()
+    {
+        $tonerId        = $this->_getParam('tonerId', false);
+        $searchCriteria = $this->_getParam('criteriaFilter', null);
+        $searchValue    = $this->_getParam('criteria', null);
+
+        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
+
+        $jqGridService = new Tangent_Service_JQGrid();
+
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'yield'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
+
+        $sortColumns = array(
+            'id',
+            'name',
+            'description'
+        );
+
+        $jqGridService->setValidSortColumns($sortColumns);
+
+        if ($jqGridService->sortingIsValid())
+        {
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+
+            $filterCriteriaValidator = new Zend_Validate_InArray(array(
+                                                                      'haystack' => $sortColumns
+                                                                 ));
+
+            // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
+            if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
+            {
+                $searchCriteria = null;
+                $searchValue    = null;
+            }
+            $jqGridService->setRecordCount(count($tonerMapper->fetchListOfAffectedToners($tonerId, null, 1000)));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
+            {
+                $jqGridService->setCurrentPage(1);
+            }
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+            {
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+            }
+
+            $sortOrder = array();
+
+            if ($jqGridService->hasGrouping())
+            {
+                $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
+            }
+
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+
+            $jqGridService->setRows($tonerMapper->fetchListOfAffectedToners($tonerId, null, 1000, 0)); // We want to show EVERYTHING, every time
+
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->sendJsonError('Sorting parameters are invalid');
+        }
+    }
+
+    /**
+     * JSON ACTION: Handles searching for a manufacturer by name
+     */
+    public function searchForManufacturerAction ()
+    {
+        $searchTerm = $this->getParam('manufacturerName', false);
+        $results    = array();
+
+        if ($searchTerm !== false)
+        {
+            foreach (Proposalgen_Model_Mapper_Manufacturer::getInstance()->searchByName($searchTerm) as $manufacturer)
+            {
+                $results[] = array(
+                    "id"   => $manufacturer->id,
+                    "text" => $manufacturer->fullname
+                );
+            }
+        }
+
+        $this->sendJson($results);
     }
 }

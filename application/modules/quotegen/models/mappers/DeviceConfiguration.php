@@ -256,6 +256,33 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         $deviceConfigurations = array();
         $resultSet            = $this->getDbTable()->fetchAll(array(
+                                                                   'masterDeviceId = ?' => $masterDeviceId,
+                                                                   'dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId
+                                                              ));
+
+        foreach ($resultSet as $row)
+        {
+            $object = new Quotegen_Model_DeviceConfiguration($row->toArray());
+
+            // Save the item into cahce
+            $this->saveItemToCache($object);
+            $deviceConfigurations [] = $object;
+        }
+
+        return $deviceConfigurations;
+    }
+
+    /**
+     * Fetches all deviceConfigurations by masterDeviceId
+     *
+     * @param int $masterDeviceId
+     *
+     * @return Quotegen_Model_DeviceConfiguration[]
+     */
+    public function fetchAllDeviceConfigurationByDeviceIdAndDealerId ($masterDeviceId)
+    {
+        $deviceConfigurations = array();
+        $resultSet            = $this->getDbTable()->fetchAll(array(
                                                                    'masterDeviceId = ?' => $masterDeviceId
                                                               ));
 

@@ -176,6 +176,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
             $justCountSql   = "
 SELECT COUNT(*) FROM (
 SELECT
+    rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
     rms_upload_rows.manufacturer,
@@ -186,6 +187,7 @@ SELECT
     device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname mappedManufacturer,
     master_devices.modelName AS mappedModelName,
+    master_devices.isSystemDevice,
     COUNT(*) AS deviceCount,
     GROUP_CONCAT(device_instances.id) AS deviceInstanceIds
 FROM device_instances
@@ -245,6 +247,7 @@ ORDER BY deviceCount DESC
             }
 
             $sql = "SELECT
+    rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
     rms_upload_rows.manufacturer,
@@ -255,6 +258,7 @@ ORDER BY deviceCount DESC
     device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
     manufacturers.displayname                                      AS mappedManufacturer,
     master_devices.modelName                                  AS mappedModelName,
+    master_devices.isSystemDevice AS isSystemDevice,
     COUNT(*)                                                       AS deviceCount,
     GROUP_CONCAT(device_instances.id)                         AS deviceInstanceIds
 FROM device_instances

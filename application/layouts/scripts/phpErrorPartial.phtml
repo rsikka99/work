@@ -7,10 +7,10 @@ $hasPHPErrors = (count($errors) > 0);
 
 if ($hasExceptions || $hasPHPErrors) :
     $this->headScript()->captureStart(); ?>
-    $(document).ready(function() { $('#errorModal').modal(); });
+    $(document).ready(function() { $('#errorModal').modal({width: 960}); });
     <?php $this->headScript()->captureEnd(); ?>
     <a href="#errorModal" data-toggle="modal" class="btn btn-danger" style="position: fixed; bottom: 0; left: 0;">Errors Occured! Click to view.</a>
-    <div class="modal" id="errorModal" style="width: 940px; margin-left: -470px;">
+    <div class="modal container" id="errorModal">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">&times;</button>
             <h3>Errors Occured!</h3>
@@ -60,9 +60,15 @@ if ($hasExceptions || $hasPHPErrors) :
                                             <h3>Exception #<?php echo $exceptionCount + 1; ?>:</h3>
 
                                             <div class="well">
-                                                <pre><b>Message:</b> <?php echo $exceptions[$exceptionCount]->getMessage(); ?></pre>
+                                                <pre style="overflow: auto;  word-wrap: normal; white-space: pre;"><b>Message:</b> <?php echo $exceptions[$exceptionCount]->getMessage(); ?></pre>
                                                 <h3>Stack trace:</h3>
-                                                <pre><?php echo $exceptions[$exceptionCount]->getTraceAsString(); ?></pre>
+                                                <pre style="overflow: auto;  word-wrap: normal; white-space: pre;"><?php
+                                                    $stackTrace = $exceptions[$exceptionCount]->getTraceAsString();
+                                                    $stackTrace = preg_replace("/" . str_replace("/", "\/", APPLICATION_BASE_PATH) . "/", "", $stackTrace);
+                                                    $stackTrace = preg_replace("/(#\d+\s*)(?!\/vendor|\/public)(\/.+)(\/[a-zA-Z]*\.php\(\d+\))/", "$1$2<strong style='font-size: 1.2em'>$3</strong>", $stackTrace);
+                                                    echo $stackTrace;
+
+                                                    ?></pre>
                                             </div>
                                         </div>
                                     <?php endfor; ?>

@@ -10,7 +10,7 @@ class Preferences_QuoteController extends Tangent_Controller_Action
     {
         $quoteService = new Preferences_Service_QuoteSetting();
         $form         = $quoteService->getForm();
-        $request = $this->getRequest();
+        $request      = $this->getRequest();
         if ($request->isPost())
         {
             $values  = $request->getPost();
@@ -36,11 +36,9 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         $combinedDealerSettings = $dealer->getDealerSettings()->getQuoteSettings();
 
         // User
-        $user                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $combinedUserSettings = $user->getUserSettings()->getQuoteSettings()->toArray();
-        $quoteSettingFormService = new Preferences_Service_QuoteSetting($combinedUserSettings);
-
-        $form = $quoteSettingFormService->getFormWithDefaults($combinedDealerSettings);
+        $user                    = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
+        $quoteSettingFormService = new Preferences_Service_QuoteSetting($user->getUserSettings()->getQuoteSettings());
+        $form                    = $quoteSettingFormService->getFormWithDefaults($combinedDealerSettings);
 
         $request = $this->getRequest();
 
@@ -67,10 +65,9 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
-        $settings = $dealer->getDealerSettings()->getQuoteSettings()->toArray();
 
-        $quoteSettingFormService = new Preferences_Service_QuoteSetting($settings);
-        $form                     = $quoteSettingFormService->getForm();
+        $quoteSettingFormService = new Preferences_Service_QuoteSetting($dealer->getDealerSettings()->getQuoteSettings());
+        $form                    = $quoteSettingFormService->getForm();
 
         $request = $this->getRequest();
 

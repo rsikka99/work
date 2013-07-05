@@ -487,147 +487,51 @@
                     <order>999991</order>
                     <class>dropdown</class>
                     <pages>
-                        <quotegenmanagement>
-                            <label>Hardware Quote Devices</label>
-                            <module>hardwarelibrary</module>
-                            <controller>quotegen_index</controller>
+                        <viewalldevices>
+                            <label>All Devices</label>
+                            <module>quotegen</module>
+                            <controller>devicesetup</controller>
                             <action>index</action>
-                            <class>dropdown subdropdown</class>
-                            <resource>hardwarelibrary__quote_index__index</resource>
+                            <resource>quotegen__devicesetup__index</resource>
+                        </viewalldevices>
+                        <updatepricing>
+                            <label>Bulk Hardware/Pricing Updates</label>
+                            <module>proposalgen</module>
+                            <controller>costs</controller>
+                            <action>bulkdevicepricing</action>
+                            <resource>proposalgen__costs__bulkdevicepricing</resource>
                             <pages>
-                                <viewalldevices>
-                                    <label>All Devices</label>
-                                    <module>quotegen</module>
-                                    <controller>devicesetup</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__devicesetup__index</resource>
-                                </viewalldevices>
-                                <globalconfigurations>
-                                    <label>Device Configurations</label>
-                                    <module>quotegen</module>
-                                    <controller>configuration</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__configuration__index</resource>
-                                    <pages>
-                                        <create>
-                                            <label>Create Configuration</label>
-                                            <module>quotegen</module>
-                                            <controller>configuration</controller>
-                                            <action>create</action>
-                                            <visible>0</visible>
-                                            <resource>quotegen__configuration__create</resource>
-                                        </create>
-                                        <edit>
-                                            <label>Edit Configuration</label>
-                                            <module>quotegen</module>
-                                            <controller>configuration</controller>
-                                            <action>edit</action>
-                                            <visible>0</visible>
-                                            <resource>quotegen__configuration__edit</resource>
-                                        </edit>
-                                        <delete>
-                                            <label>Delete Configuration</label>
-                                            <module>quotegen</module>
-                                            <controller>configuration</controller>
-                                            <action>delete</action>
-                                            <visible>0</visible>
-                                            <resource>quotegen__configuration__delete</resource>
-                                        </delete>
-                                    </pages>
-                                </globalconfigurations>
-                                <options>
-                                    <label>Option Library</label>
-                                    <class>dropdown</class>
-                                    <module>quotegen</module>
-                                    <controller>option</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__option__index</resource>
-                                    <pages>
-                                        <viewall>
-                                            <label>All Options</label>
-                                            <module>quotegen</module>
-                                            <controller>option</controller>
-                                            <action>index</action>
-                                            <resource>quotegen__option__index</resource>
-                                            <visible>0</visible>
-                                        </viewall>
-                                        <addnew>
-                                            <label>New Option</label>
-                                            <module>quotegen</module>
-                                            <controller>option</controller>
-                                            <action>create</action>
-                                            <resource>quotegen__option__create</resource>
-                                            <visible>0</visible>
-                                        </addnew>
-                                        <view>
-                                            <label>View</label>
-                                            <module>quotegen</module>
-                                            <controller>option</controller>
-                                            <action>view</action>
-                                            <resource>quotegen__option__view</resource>
-                                            <visible>0</visible>
-                                        </view>
-                                        <edit>
-                                            <label>Edit</label>
-                                            <module>quotegen</module>
-                                            <controller>option</controller>
-                                            <action>edit</action>
-                                            <resource>quotegen__option__edit</resource>
-                                            <visible>0</visible>
-                                        </edit>
-                                        <delete>
-                                            <label>Delete</label>
-                                            <module>quotegen</module>
-                                            <controller>option</controller>
-                                            <action>delete</action>
-                                            <resource>quotegen__option__delete</resource>
-                                            <visible>0</visible>
-                                        </delete>
-                                    </pages>
-                                </options>
-                                <optioncategories>
-                                    <label>Option Categories</label>
-                                    <module>quotegen</module>
-                                    <controller>category</controller>
-                                    <action>index</action>
-                                    <resource>quotegen__category__index</resource>
-                                    <pages>
-                                        <create>
-                                            <label>Create</label>
-                                            <module>quotegen</module>
-                                            <controller>category</controller>
-                                            <action>create</action>
-                                            <resource>quotegen__category__create</resource>
-                                            <visible>0</visible>
-                                        </create>
-                                        <view>
-                                            <label>View</label>
-                                            <module>quotegen</module>
-                                            <controller>category</controller>
-                                            <action>view</action>
-                                            <resource>quotegen__category__view</resource>
-                                            <visible>0</visible>
-                                        </view>
-                                        <edit>
-                                            <label>Edit</label>
-                                            <module>quotegen</module>
-                                            <controller>category</controller>
-                                            <action>edit</action>
-                                            <resource>quotegen__category__edit</resource>
-                                            <visible>0</visible>
-                                        </edit>
-                                        <delete>
-                                            <label>Delete</label>
-                                            <module>quotegen</module>
-                                            <controller>category</controller>
-                                            <action>delete</action>
-                                            <resource>quotegen__category__delete</resource>
-                                            <visible>0</visible>
-                                        </delete>
-                                    </pages>
-                                </optioncategories>
+                                <bulkfilepricing>
+                                    <label>Import and Export Pricing</label>
+                                    <module>proposalgen</module>
+                                    <controller>costs</controller>
+                                    <action>bulkfilepricing</action>
+                                    <resource>proposalgen__costs__bulkfilepricing</resource>
+                                    <visible>0</visible>
+                                </bulkfilepricing>
                             </pages>
-                        </quotegenmanagement>
+                        </updatepricing>
+                        <deviceswaps>
+                            <label>Device Swaps</label>
+                            <module>hardwareoptimization</module>
+                            <controller>deviceswaps</controller>
+                            <action>index</action>
+                            <resource>hardwareoptimization__deviceswaps__index</resource>
+                        </deviceswaps>
+                        <managematchups>
+                            <label>Manage Printer Matchups</label>
+                            <module>proposalgen</module>
+                            <controller>admin</controller>
+                            <action>managematchups</action>
+                            <resource>proposalgen__admin__managematchups</resource>
+                        </managematchups>
+                        <managereplacements>
+                            <label>Manage Replacement Printers</label>
+                            <module>proposalgen</module>
+                            <controller>admin</controller>
+                            <action>managereplacements</action>
+                            <resource>proposalgen__admin__managereplacements</resource>
+                        </managereplacements>
                         <manufacturers>
                             <label>Manufacturers</label>
                             <module>proposalgen</module>
@@ -669,109 +573,6 @@
                                 </update>
                             </pages>
                         </manufacturers>
-                        <managehardware>
-                            <label>Manage Hardware</label>
-                            <class>dropdown subdropdown</class>
-                            <module>proposalgen</module>
-                            <controller>admin</controller>
-                            <action>index</action>
-                            <resource>proposalgen__admin__index</resource>
-                            <pages>
-                                <manageprinterandtoner>
-                                    <label>Manage Master Printer And Toner Properties</label>
-                                    <module>proposalgen</module>
-                                    <controller>managedevices</controller>
-                                    <action>managedevices</action>
-                                    <resource>proposalgen__managedevices__managedevices</resource>
-                                </manageprinterandtoner>
-                                <tonermanagement>
-                                    <label>Manage Toners</label>
-                                    <module>admin</module>
-                                    <controller>toner</controller>
-                                    <action>index</action>
-                                    <resource>admin__toner__index</resource>
-                                    <pages>
-                                        <create>
-                                            <label>Create New</label>
-                                            <module>admin</module>
-                                            <controller>toner</controller>
-                                            <action>create</action>
-                                            <resource>admin__toner__create</resource>
-                                            <visible>0</visible>
-                                        </create>
-                                        <view>
-                                            <label>View</label>
-                                            <module>admin</module>
-                                            <controller>toner</controller>
-                                            <action>view</action>
-                                            <resource>admin__toner__view</resource>
-                                            <visible>0</visible>
-                                        </view>
-                                        <edit>
-                                            <label>Edit</label>
-                                            <module>admin</module>
-                                            <controller>toner</controller>
-                                            <action>edit</action>
-                                            <resource>admin__toner__edit</resource>
-                                            <visible>0</visible>
-                                        </edit>
-                                        <delete>
-                                            <label>Delete</label>
-                                            <module>admin</module>
-                                            <controller>toner</controller>
-                                            <action>delete</action>
-                                            <resource>admin__toner__delete</resource>
-                                            <visible>0</visible>
-                                        </delete>
-                                    </pages>
-                                </tonermanagement>
-                                <updatepricing>
-                                    <label>Update Pricing</label>
-                                    <module>proposalgen</module>
-                                    <controller>costs</controller>
-                                    <action>bulkdevicepricing</action>
-                                    <resource>proposalgen__costs__bulkdevicepricing</resource>
-                                    <pages>
-                                        <bulkfilepricing>
-                                            <label>Import and Export Pricing</label>
-                                            <module>proposalgen</module>
-                                            <controller>costs</controller>
-                                            <action>bulkfilepricing</action>
-                                            <resource>proposalgen__costs__bulkfilepricing</resource>
-                                            <visible>0</visible>
-                                        </bulkfilepricing>
-                                    </pages>
-                                </updatepricing>
-                                <managereplacements>
-                                    <label>Manage Replacement Printers</label>
-                                    <module>proposalgen</module>
-                                    <controller>admin</controller>
-                                    <action>managereplacements</action>
-                                    <resource>proposalgen__admin__managereplacements</resource>
-                                </managereplacements>
-                                <managematchups>
-                                    <label>Manage Printer Matchups</label>
-                                    <module>proposalgen</module>
-                                    <controller>admin</controller>
-                                    <action>managematchups</action>
-                                    <resource>proposalgen__admin__managematchups</resource>
-                                </managematchups>
-                                <deviceswaps>
-                                    <label>Device Swaps</label>
-                                    <module>hardwareoptimization</module>
-                                    <controller>deviceswaps</controller>
-                                    <action>index</action>
-                                    <resource>hardwareoptimization__deviceswaps__index</resource>
-                                </deviceswaps>
-                            </pages>
-                        </managehardware>
-                        <managemanufacturers>
-                            <label>Old - Manage Manufacturers</label>
-                            <module>proposalgen</module>
-                            <controller>admin</controller>
-                            <action>manufacturers</action>
-                            <resource>proposalgen__admin__manufacturers</resource>
-                        </managemanufacturers>
                         <viewall>
                             <label>View All Devices</label>
                             <module>quotegen</module>

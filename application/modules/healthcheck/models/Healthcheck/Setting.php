@@ -27,20 +27,6 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $pageCoverageColor;
 
     /**
-     * The actual monochrome page coverage as a whole number
-     *
-     * @var int
-     */
-    public $actualPageCoverageMono;
-
-    /**
-     * The actual color page coverage as a whole number
-     *
-     * @var int
-     */
-    public $actualPageCoverageColor;
-
-    /**
      * The labor cost per page
      *
      * @var int
@@ -150,21 +136,24 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $numberOfSupplyOrdersPerMonth;
 
     /**
-     * The id of the assessment pricing configuration
-     *
      * @var int
      */
-    public $healthcheckPricingConfigId;
-
-    protected $_healthcheckPricingConfig;
-
+    public $customerMonochromeRankSetId;
 
     /**
-     * Pricing config used for designated which tones to use for replacement devices
-     *
-     * @var Proposalgen_Model_PricingConfig
+     * @var int
      */
-    protected $_replacementPricingConfig;
+    public $customerColorRankSetId;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_customerMonochromeRankSet;
+
+    /**
+     * @var Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    protected $_customerColorRankSet;
 
     /**
      * Overrides all the settings.
@@ -202,14 +191,6 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
         {
             $this->pageCoverageColor = $params->pageCoverageColor;
-        }
-        if (isset($params->actualPageCoverageMono) && !is_null($params->actualPageCoverageMono))
-        {
-            $this->actualPageCoverageMono = $params->actualPageCoverageMono;
-        }
-        if (isset($params->actualPageCoverageColor) && !is_null($params->actualPageCoverageColor))
-        {
-            $this->actualPageCoverageColor = $params->actualPageCoverageColor;
         }
         if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
         {
@@ -255,10 +236,6 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->kilowattsPerHour = $params->kilowattsPerHour;
         }
-        if (isset($params->healthcheckPricingConfigId) && !is_null($params->healthcheckPricingConfigId))
-        {
-            $this->healthcheckPricingConfigId = $params->healthcheckPricingConfigId;
-        }
         if (isset($params->averageItHourlyRate) && !is_null($params->averageItHourlyRate))
         {
             $this->averageItHourlyRate = $params->averageItHourlyRate;
@@ -279,6 +256,14 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->numberOfSupplyOrdersPerMonth = $params->numberOfSupplyOrdersPerMonth;
         }
+        if (isset($params->customerMonochromeRankSetId) && !is_null($params->customerMonochromeRankSetId))
+        {
+            $this->customerMonochromeRankSetId = $params->customerMonochromeRankSetId;
+        }
+        if (isset($params->customerColorRankSetId) && !is_null($params->customerColorRankSetId))
+        {
+            $this->customerColorRankSetId = $params->customerColorRankSetId;
+        }
     }
 
     /**
@@ -290,8 +275,6 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "id"                           => $this->id,
             "pageCoverageMonochrome"       => $this->pageCoverageMonochrome,
             "pageCoverageColor"            => $this->pageCoverageColor,
-            "actualPageCoverageMono"       => $this->actualPageCoverageMono,
-            "actualPageCoverageColor"      => $this->actualPageCoverageColor,
             "laborCostPerPage"             => $this->laborCostPerPage,
             "partsCostPerPage"             => $this->partsCostPerPage,
             "adminCostPerPage"             => $this->adminCostPerPage,
@@ -303,43 +286,72 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "mpsBwCostPerPage"             => $this->mpsBwCostPerPage,
             "mpsColorCostPerPage"          => $this->mpsColorCostPerPage,
             "kilowattsPerHour"             => $this->kilowattsPerHour,
-            "healthcheckPricingConfigId"   => $this->healthcheckPricingConfigId,
             "averageItHourlyRate"          => $this->averageItHourlyRate,
             "hoursSpentOnIt"               => $this->hoursSpentOnIt,
             "costOfLabor"                  => $this->costOfLabor,
             "costToExecuteSuppliesOrder"   => $this->costToExecuteSuppliesOrder,
             "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
+            "customerMonochromeRankSetId"  => $this->customerMonochromeRankSetId,
+            "customerColorRankSetId"       => $this->customerColorRankSetId,
         );
     }
 
     /**
-     * Gets the healthcheck pricing configuration object
-     *
-     * @return Proposalgen_Model_PricingConfig
+     * @return array
      */
-    public function getHealthcheckPricingConfig ()
+    public function getTonerRankSets ()
     {
-        if (!isset($this->_healthcheckPricingConfig))
-        {
-            $this->_healthcheckPricingConfig = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find($this->healthcheckPricingConfigId);
-        }
-
-        return $this->_healthcheckPricingConfig;
+        return array(
+            "customerColorRankSetArray"      => $this->getCustomerColorRankSet()->getRanksAsArray(),
+            "customerMonochromeRankSetArray" => $this->getCustomerMonochromeRankSet()->getRanksAsArray(),
+        );
     }
 
+    /**
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
+     */
+    public function getCustomerColorRankSet ()
+    {
+        if (!isset($this->_customerColorRankSet))
+        {
+            if ($this->customerColorRankSetId > 0)
+            {
+                $this->_customerColorRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->customerColorRankSetId);
+            }
+            else
+            {
+                $this->_customerColorRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->customerColorRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_customerColorRankSet);
+
+                // Update ourselves
+                Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_customerColorRankSet;
+    }
 
     /**
-     * Sets the healthcheck pricing configuration object
-     *
-     * @param $HealthcheckPricingConfig Proposalgen_Model_PricingConfig
-     *                                  The pricing configuration to set
-     *
-     * @return $this
+     * @return Proposalgen_Model_Toner_Vendor_Ranking_Set
      */
-    public function setHealthcheckPricingConfig ($HealthcheckPricingConfig)
+    public function getCustomerMonochromeRankSet ()
     {
-        $this->_healthcheckPricingConfig = $HealthcheckPricingConfig;
+        if (!isset($this->_customerMonochromeRankSet))
+        {
+            if ($this->customerMonochromeRankSetId > 0)
+            {
+                $this->_customerMonochromeRankSet = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->find($this->customerMonochromeRankSetId);
+            }
+            else
+            {
+                $this->_customerMonochromeRankSet  = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+                $this->customerMonochromeRankSetId = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance()->insert($this->_customerMonochromeRankSet);
 
-        return $this;
+                // Update ourselves
+                Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_customerMonochromeRankSet;
     }
 }

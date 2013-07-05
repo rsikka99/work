@@ -185,34 +185,27 @@ class Quotegen_Service_QuoteDevice
      */
     protected function syncCostPerPageForDevice (Quotegen_Model_QuoteDevice $quoteDevice, Proposalgen_Model_MasterDevice $masterDevice)
     {
-        $oemPricingConfiguration  = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::OEM);
-        $compatiblePricingConfiguration = Proposalgen_Model_Mapper_PricingConfig::getInstance()->find(Proposalgen_Model_PricingConfig::COMP);
-
         $oemCostPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting();
         $oemCostPerPageSetting->adminCostPerPage       = 0;
         $oemCostPerPageSetting->laborCostPerPage       = 0;
         $oemCostPerPageSetting->partsCostPerPage       = 0;
         $oemCostPerPageSetting->pageCoverageMonochrome = ($this->getQuote()->pageCoverageMonochrome) ? $this->getQuote()->pageCoverageMonochrome : self::DEFAULT_PAGE_COVERAGE_MONOCHROME;
         $oemCostPerPageSetting->pageCoverageColor      = ($this->getQuote()->pageCoverageColor) ? $this->getQuote()->pageCoverageColor : self::DEFAULT_PAGE_COVERAGE_COLOR;
-        $oemCostPerPageSetting->pricingConfiguration   = $oemPricingConfiguration;
-        $compCostPerPageSetting                        = clone $oemCostPerPageSetting;
-        $compCostPerPageSetting->pricingConfiguration  = $compatiblePricingConfiguration;
+        $oemCostPerPageSetting->monochromeTonerRankSet = $this->getQuote()->getDealerMonochromeRankSet();
+        $oemCostPerPageSetting->colorTonerRankSet      = $this->getQuote()->getDealerColorRankSet();
 
         // Calculate the cost per page
-        $oemCostPerPage  = $masterDevice->calculateCostPerPage($oemCostPerPageSetting);
-        $compCostPerPage = $masterDevice->calculateCostPerPage($compCostPerPageSetting);
+        $costPerPage = $masterDevice->calculateCostPerPage($oemCostPerPageSetting);
 
         // Set our mono cost per page
-        $quoteDevice->oemCostPerPageMonochrome  = $oemCostPerPage->monochromeCostPerPage;
-        $quoteDevice->compCostPerPageMonochrome = $compCostPerPage->monochromeCostPerPage;
+        $quoteDevice->costPerPageMonochrome = $costPerPage->monochromeCostPerPage;
 
         // Only set our color if the device is color
-        $quoteDevice->oemCostPerPageColor  = 0;
-        $quoteDevice->compCostPerPageColor = 0;
+        $quoteDevice->costPerPageColor = 0;
+
         if ($masterDevice->isColor())
         {
-            $quoteDevice->oemCostPerPageColor  = $oemCostPerPage->colorCostPerPage;
-            $quoteDevice->compCostPerPageColor = $compCostPerPage->colorCostPerPage;
+            $quoteDevice->costPerPageColor = $costPerPage->colorCostPerPage;
         }
 
         return $quoteDevice;

@@ -459,5 +459,35 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
 
         return $options;
     }
+
+    public function fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId,$sortColumn = null, $sortDirection = null, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null)
+    {
+        $dbTable                          = $this->getDbTable();
+        $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
+        $columns = array('id','name','description','dealerSku','oemSku','cost','CASE WHEN NOT ISNULL(do.masterDeviceId) THEN 1 ELSE 0 END AS assigned');
+
+        $select = $dbTable->select()->from(array("o" => $this->getTableName()),$columns)
+            ->joinLeft(array("do" => $deviceOptionMapper->getTableName()),"do.{$deviceOptionMapper->col_optionId} = o.{$this->col_id} AND do.{$deviceOptionMapper->col_masterDeviceId} = {$masterDeviceId}",array())
+        ->where("o.{$this->col_dealerId} = {$dealerId}");
+        if ($limit > 0)
+        {
+            $offset = ($offset > 0) ? $offset : null;
+            $select->limit($limit, $offset);
+        }
+        if($filterByColumn && $filterValue)
+        {
+
+            if($filterByColumn == "option")
+            {
+                $filterByColumn = "name";
+            }
+            $select->where("{$filterByColumn} LIKE '%{$filterValue}%'");
+        }
+        $select->order($sortColumn);
+        $query = $dbTable->getAdapter()->query($select);
+
+        $results = $query->fetchAll();
+        return $results;
+    }
 }
 

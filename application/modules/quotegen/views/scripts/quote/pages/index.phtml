@@ -1,4 +1,5 @@
-<?php 
+<?php $this->headScript()->appendFile($this->baseUrl('js/preferences/tonerVendors.js')); ?>
+<?php
 	$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
 	$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 ?>
