@@ -33,7 +33,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $this->ApplicationName      = $this->config->app->ApplicationName;
         $this->_identity            = Zend_Auth::getInstance()->getIdentity();
         $this->_isAdmin             = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);;
-        $this->view->isAdmin                     = $this->_isAdmin;
+        $this->view->isAdmin = $this->_isAdmin;
     }
 
     /**
@@ -363,9 +363,9 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $this->view->$formName = $form;
         }
 
-        $this->view->isAllowed     = $isAllowed;
-        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
-        $this->view->masterDevice  = $masterDevice;
+        $this->view->isAllowed                   = $isAllowed;
+        $this->view->manufacturers               = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
+        $this->view->masterDevice                = $masterDevice;
         $this->view->isMasterDeviceAdministrator = $this->_isAdmin;
     }
 

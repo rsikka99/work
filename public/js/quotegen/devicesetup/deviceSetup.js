@@ -43,6 +43,14 @@ $(function ()
                     sortable: false
                 },
                 {
+                    width : 150,
+                    name  : 'isSystemDevice',
+                    index : 'isSystemDevice',
+                    hidden: true,
+                    label : 'isSystemDevice',
+                    title : false
+                },
+                {
                     width   : 100,
                     name    : 'displayname',
                     index   : 'displayname',
@@ -72,7 +80,7 @@ $(function ()
                 {
                     return document.getElementById('chkCanSell').checked; // or other method which read the value
                 },
-                unapproved      : function ()
+                unapproved    : function ()
                 {
                     return document.getElementById('chkUnapproved').checked; // or other method which read the value
                 },
@@ -96,15 +104,12 @@ $(function ()
                 {
                     var row = grid.getRowData(ids[i]);
                     row.modelName = row.displayname + ' ' + row.modelName;
-                    if (row.oemSku != "")
+                    var canEdit = 'false';
+                    if (row.isSystemDevice == 0 || canEditMasterDevice)
                     {
-                        row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + 'true' + '\');" />';
+                        canEdit = 'true';
                     }
-                    else
-                    {
-                        row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + 'true' + '\');" />';
-//                        row.action = '<a href= "/quotegen/devicesetup/edit/id/' + row.id + '"><input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(\' + row.id + \');" /></a>';
-                    }
+                    row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />';
                     grid.setRowData(ids[i], row);
                 }
             }

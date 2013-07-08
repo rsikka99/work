@@ -43,6 +43,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 'modelName',
                 'oemSku',
                 'dealerSku',
+                'isSystemDevice'
             );
         }
         else

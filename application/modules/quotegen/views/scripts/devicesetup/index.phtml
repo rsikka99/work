@@ -7,6 +7,10 @@ $this->headScript()
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'));
+
+$this->headScript()->captureStart('append', 'text/javascript'); ?>
+var canEditMasterDevice = <?php echo ($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false');
+$this->headScript()->captureEnd();
 ?>
 <div class="clearfix">
     <div class="page-header">
