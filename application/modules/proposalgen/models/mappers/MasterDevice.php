@@ -376,6 +376,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
             $masterDeviceColumns = array(
                 'id',
                 'modelName',
+                'isSystemDevice'
             );
             $deviceColumns       = array(
                 'oemSku',

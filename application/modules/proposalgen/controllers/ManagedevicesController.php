@@ -32,8 +32,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
         $this->_identity            = Zend_Auth::getInstance()->getIdentity();
-        $this->_isAdmin             = $this->view->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);;
-        $this->view->isAdmin = $this->isAdmin;
+        $this->_isAdmin             = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);;
+        $this->view->isAdmin = $this->_isAdmin;
     }
 
     /**
@@ -363,9 +363,10 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $this->view->$formName = $form;
         }
 
-        $this->view->isAllowed     = $isAllowed;
-        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
-        $this->view->masterDevice  = $masterDevice;
+        $this->view->isAllowed                   = $isAllowed;
+        $this->view->manufacturers               = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
+        $this->view->masterDevice                = $masterDevice;
+        $this->view->isMasterDeviceAdministrator = $this->_isAdmin;
     }
 
     /**
@@ -381,7 +382,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
         //Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
-        $isAllowed    = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+        $isAllowed = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
         // If we are creating we need admin privileges, if we are editing a device that is not a system device(PENDING), we have full access, if neither of those are true, use our acl privilege
         $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed);
 

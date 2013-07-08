@@ -5,11 +5,21 @@
  */
 class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
 {
+    protected $_isAllowed;
+
+    /**
+     * @param null $options
+     * @param bool $isAllowed
+     */
+    public function __construct ($options = null, $isAllowed = false)
+    {
+        $this->_isAllowed = $isAllowed;
+        parent::__construct($options);
+    }
 
     public function init ()
     {
         $this->setMethod('post');
-        $allowed = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         $manufacturerList = array();
         foreach (Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers() as $manufacturer)
         {
@@ -18,7 +28,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
         $availableTonersManufacturer = $this->createElement('select', 'availableTonersmanufacturerId', array(
                                                                                                           'label' => 'Manufacturer',
                                                                                                      ));
-        if(!$allowed)
+        if(!$this->_isAllowed)
         {
             $availableTonersManufacturer->setAttrib('disabled','disabled');
         }
@@ -40,7 +50,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                           'class' => 'span2',
                                                           'multiOptions' => $colors
                                                     ));
-        if(!$allowed)
+        if(!$this->_isAllowed)
         {
             $availableTonersColorIdElement->setAttrib('disabled','disabled');
         }
@@ -77,7 +87,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                        255
                                                                    )
                                                               ));
-        if(!$allowed)
+        if(!$this->_isAllowed)
         {
             $availableTonersSystemSkuElement->setAttrib('readonly','true');
         }
@@ -100,7 +110,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                    255
                                                                )
                                                           ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
-        if(!$allowed)
+        if(!$this->_isAllowed)
         {
             $availableTonersYieldElement->setAttrib('readonly','true');
         }
@@ -143,7 +153,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                         255
                                                                     )
                                                                ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
-        if(!$allowed)
+        if(!$this->_isAllowed)
         {
             $availableTonersSystemCostElement->setAttrib('readonly','true');
         }

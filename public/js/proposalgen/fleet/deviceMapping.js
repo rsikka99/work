@@ -215,37 +215,20 @@ $(function ()
 
                         row.mapToMasterDevice = master_device_dropdown;
 
-                        // Are we an actual Administrator?
-                        if (canEditMasterDevices)
+                        var hasAccess = 'false';
+                        
+                        // Should we have access?
+                        if (canEditMasterDevices || row.isSystemDevice == 0 || row.isMapped == 0)
                         {
-                            // Is the device mapped?
-                            if (row.isMapped == 1)
-                            {
-                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
-                            }
-                            else
-                            {
-                                row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
-                            }
+                            hasAccess = 'true';
                         }
-                        // Not an administrator
+                        if (row.isMapped == 1)
+                        {
+                            row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + hasAccess + '\', \'' + row.deviceInstanceIds + '\');" />';
+                        }
                         else
                         {
-                            // Is the device not a system device and is it mapped?
-                            if (row.isSystemDevice == 0 && row.isMapped == 1)
-                            {
-                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
-                            }
-                            // Is it just mapped?
-                            else if (row.isMapped == 1)
-                            {
-                                row.action = '<input title="Edit Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + $('#isAdmin').val() + '\', \'' + row.deviceInstanceIds + '\');" />';
-                            }
-                            // Mot mapped
-                            else
-                            {
-                                row.action = '<input title="Create New Device" type="button" class="addEditUnknownDeviceButton btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + 'true' + '\', \'' + row.deviceInstanceIds + '\');" />';
-                            }
+                            row.action = '<input title="Create New Device" type="button" id="deviceAction" class="addEditMasterDevice btn btn-small btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + hasAccess + '\', \'' + row.deviceInstanceIds + '\');" />';
                         }
 
 
