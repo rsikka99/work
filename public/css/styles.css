@@ -1376,6 +1376,9 @@ label.label-phone-number-country {
 .reportSettingsForm .headerRow td:last-child {
   text-align: right;
 }
+.center-form-actions {
+  text-align: center;
+}
 /* Fix jqGrid for bootstrap */
 tr.ui-search-toolbar select {
   margin: 0px !important;

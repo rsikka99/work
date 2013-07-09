@@ -963,11 +963,25 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                      $this,
                                      "ascendingSortDevicesByUsage"
                                 ));
-            // returning only the first 2
-            $deviceArray            = array(
-                $deviceArray [0],
-                $deviceArray [1]
-            );
+            $numberOfDevices = count($deviceArray);
+            if ($numberOfDevices > 1)
+            {
+                $deviceArray = array(
+                    $deviceArray [0],
+                    $deviceArray [1]
+                );
+            }
+            else if ($numberOfDevices > 0)
+            {
+                $deviceArray = array(
+                    $deviceArray [0]
+                );
+            }
+            else
+            {
+                $deviceArray = array();
+            }
+
             $this->LeastUsedDevices = $deviceArray;
         }
 
@@ -1062,11 +1076,25 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                      $this,
                                      "descendingSortDevicesByUsage"
                                 ));
-            // returning only the first 2
-            $deviceArray           = array(
-                $deviceArray [0],
-                $deviceArray [1]
-            );
+
+            $numberOfDevices = count($deviceArray);
+            if ($numberOfDevices > 1)
+            {
+                $deviceArray = array(
+                    $deviceArray [0],
+                    $deviceArray [1]
+                );
+            }
+            else if ($numberOfDevices > 0)
+            {
+                $deviceArray = array(
+                    $deviceArray [0]
+                );
+            }
+            else
+            {
+                $deviceArray = array();
+            }
             $this->MostUsedDevices = $deviceArray;
         }
 
