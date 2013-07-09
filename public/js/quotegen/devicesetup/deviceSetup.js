@@ -109,7 +109,7 @@ $(function ()
                     {
                         canEdit = 'true';
                     }
-                    row.action = '<input style="width:120px;" title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />';
+                    row.action = '<input title="Edit Printer" class="btn btn-mini btn-warning btn-block" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />';
                     grid.setRowData(ids[i], row);
                 }
             }

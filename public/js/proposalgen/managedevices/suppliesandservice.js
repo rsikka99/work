@@ -343,7 +343,7 @@ function loadSuppliesAndService()
      */
     $('#availableToners').jqGrid(
         {
-            url         : TMTW_BASEURL + 'proposalgen/managedevices/available-toners-list?masterDeviceId=' + masterDeviceId + "&manufacturerId=" + $("#availableTonersSelectManufacturer").val() + "&tonersList=" + tonersList.join(",") + "&tonerColorConfigId=" + $("#tonerConfigId").val() + "&filter=" + $("#availableTonersFilter").val() + "&criteria=" + $("#availableTonersCriteria").value,
+            url         : TMTW_BASEURL + 'proposalgen/managedevices/available-toners-list',
             datatype    : 'json',
             colModel    : [
                 {
@@ -453,17 +453,36 @@ function loadSuppliesAndService()
                 repeatitems: false
             },
             postData    : {
-                criteria      : function ()
-                {
-                    return $('#availableTonersCriteria').val();
-                },
-                filter        : function ()
+                filter            : function ()
                 {
                     return $("#availableTonersFilter").val();
                 },
-                manufacturerId: function ()
+                criteria          : function ()
+                {
+                    if ($("#availableTonersFilter").val() === 'tonerColorId')
+                    {
+                        return $('#availableTonersCriteriaList').val();
+                    }
+                    else
+                    {
+                        return $('#availableTonersCriteria').val();
+                    }
+                },
+                manufacturerId    : function ()
                 {
                     return $("#availableTonersSelectManufacturer").val();
+                },
+                tonerColorConfigId: function ()
+                {
+                    return $("#tonerConfigId").val();
+                },
+                tonersList        : function ()
+                {
+                    return tonersList.join(",");
+                },
+                masterDeviceId    : function ()
+                {
+                    return masterDeviceId;
                 }
             },
             height      : 'auto',
@@ -1146,6 +1165,22 @@ function loadSuppliesAndService()
             leasedTonerControlGroupElement.setAttribute("style", "display:none");
         }
     });
+    var availableTonersFilter = $("#availableTonersFilter");
+    var availableTonersCriteria = $("#availableTonersCriteria");
+    var availableTonersCriteriaList = $("#availableTonersCriteriaList");
+    availableTonersFilter.change(function ()
+    {
+        if(availableTonersFilter.val() == 'tonerColorId')
+        {
+            availableTonersCriteriaList.css({"display":'initial'});
+            availableTonersCriteria.css({"display":'none'});
+        }
+        else
+        {
+            availableTonersCriteriaList.css({"display":'none'});
+            availableTonersCriteria.css({"display":'initial'});
+        }
+    });
 }
 /**
  * Adds a toner to tonersList
@@ -1314,8 +1349,11 @@ $(document).on("click", "#availableTonersSearch", function ()
 
 $(document).on("click", "#availableTonersReset", function ()
 {
+    var availableTonersCriteria = $("#availableTonersCriteria");
     $("#availableTonersFilter").val('dealerSku');
-    $("#availableTonersCriteria").val('');
+    availableTonersCriteria.val('');
+    $("#availableTonersCriteriaList").css({"display":'none'});
+    availableTonersCriteria.css({"display":'initial'});
     reloadTonersGrids();
 });
 

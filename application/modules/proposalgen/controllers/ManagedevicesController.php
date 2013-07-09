@@ -365,6 +365,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         $this->view->isAllowed                   = $isAllowed;
         $this->view->manufacturers               = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers();
+        $this->view->tonerColors                 = Proposalgen_Model_Mapper_TonerColor::getInstance()->fetchAll();
         $this->view->masterDevice                = $masterDevice;
         $this->view->isMasterDeviceAdministrator = $this->_isAdmin;
     }
