@@ -3386,7 +3386,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         $maximumNumberOfSupplyTypes = 0;
         $minimumNumberOfSupplyTypes = 0;
-        $score                      = 0;
+        $score                      = 1;
 
         $hasMonoDevices               = false;
         $hasColorDevices              = false;
@@ -3431,7 +3431,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
         if ($minimumNumberOfSupplyTypes > 0 && $maximumNumberOfSupplyTypes > 0 && $currentNumberOfSupplyTypes > 0)
         {
-            $score = ($currentNumberOfSupplyTypes - $minimumNumberOfSupplyTypes) / ($maximumNumberOfSupplyTypes - $minimumNumberOfSupplyTypes);
+            $trueMax = $maximumNumberOfSupplyTypes - $minimumNumberOfSupplyTypes;
+            if ($trueMax > 0)
+            {
+                $score = ($currentNumberOfSupplyTypes - $minimumNumberOfSupplyTypes) / ($maximumNumberOfSupplyTypes - $minimumNumberOfSupplyTypes);
+            }
         }
 
         return $score * 100;
