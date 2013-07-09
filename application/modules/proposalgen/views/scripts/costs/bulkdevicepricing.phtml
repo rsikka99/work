@@ -66,7 +66,7 @@
 			<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
     				<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>
     				<span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 0px 0px 0px;"></select></span>
-			<input type="button" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+			<input type="button" name="btnSearch" id="btnSearch" value="Search" class="btn btn-info" />
 			<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
 		</div>
 	</div>
@@ -109,7 +109,7 @@
 			<br/>
 			
 			<div class="submitBar">	
-				<input type="button" name="btnUpdate" id="btnUpdate" value="Update" onclick="javascript: do_update();" class="btn btn-primary" />
+				<input type="button" name="btnUpdate" id="btnUpdate" value="Save" onclick="javascript: do_update();" class="btn btn-primary" />
 				<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl("/admin")?>';" class="btn" />
 			</div>
 		</div>

@@ -23,16 +23,23 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $success = $reportSettingFormService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 
@@ -52,16 +59,23 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $success = $reportSettingFormService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 
@@ -91,16 +105,23 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $reportSettingFormService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $success = $reportSettingFormService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report settings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 

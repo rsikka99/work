@@ -136,13 +136,22 @@ if ($this->suppliesAndService)
                             <option value="tonerColorId">Color</option>
                         </select>
                         <input type="text" id="availableTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
+                        <select id="availableTonersCriteriaList" name="availableTonersCriteriaList" class="input-medium" style="display:none;" >
+                            <?php
+                            foreach ($this->tonerColors as $tonerColor)
+                            {
+                              ?><option value="<?php echo $tonerColor->tonerColorId; ?>"><?php echo $tonerColor->tonerColorName; ?></option>
+                            <?php
+                            }
+                            ?>
+                        </select>
                         <input id="availableTonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
                         <input id="availableTonersReset" type="button" value="Reset" class="btn btn-mini btn-inverse" />
                     </div>
                     <table id="availableToners"></table>
                     <div id="availableToners_Pager"></div>
                     <div style="text-align: center">
-                        <input type="button" class="btn btn-primary" value="Close" data-dismiss='modal' " />
+                        <input type="button" class="btn" value="Close" data-dismiss='modal' " />
                     </div>
                 </div>
             </div>
@@ -160,7 +169,7 @@ if ($this->suppliesAndService)
                     </form>
                     <div style="text-align: center">
                         <input type="button" class="btn btn-primary" value="Save" id="availableTonerseFormBtn" onclick="javascript: createOrEdit('availableTonersForm');" />
-                        <input type="button" class="btn btn-primary" value="Cancel" data-dismiss='modal' " />
+                        <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
                 </div>
             </div>
@@ -206,7 +215,7 @@ if ($this->suppliesAndService)
 
                     <div style="text-align: center">
                         <input type="button" class="btn btn-primary" value="Save" id="replacementTonersFormBtn" onclick="javascript: replaceToner();" />
-                        <input type="button" class="btn btn-primary" value="Cancel" data-dismiss='modal' " />
+                        <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
                     <input type="hidden" id="replacementTonersTotalCount" />
                     <input type="hidden" id="replacementTonersDeviceCount" />
@@ -299,7 +308,7 @@ if ($this->availableOptions)
                     </form>
                     <div style="text-align: center">
                         <input type="button" class="btn btn-primary" value="Save" id="availableOptionsFormBtn" onclick="javascript: createOrEdit('availableOptionsForm');" />
-                        <input type="button" class="btn btn-primary" value="Cancel" data-dismiss='modal' " />
+                        <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
                 </div>
             </div>
@@ -329,7 +338,7 @@ if ($this->hardwareConfigurations)
                     </form>
                     <div style="text-align: center">
                         <input type="button" class="btn btn-primary" value="Save" id="hardwareConfigurationFormBtn" onclick="javascript: createOrEdit('hardwareConfigurationsForm');" />
-                        <input type="button" class="btn btn-primary" value="Cancel" data-dismiss='modal' " />
+                        <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
                 </div>
             </div>
@@ -365,7 +374,7 @@ if ($this->hardwareConfigurations)
 </div>
 </div>
 <div style="text-align: center">
-    <?php if ($this->isAdmin && $this->masterDevice != null && $this->masterDevice->isSystemDevice == 0)
+    <?php if ($this->isMasterDeviceAdministrator && $this->masterDevice instanceof Proposalgen_Model_MasterDevice && $this->masterDevice->isSystemDevice == 0)
     {
         ?>
         <input type="button" class="btn btn-success" value="Save and Approve" id="btnSaveAndApprove" />
@@ -373,6 +382,6 @@ if ($this->hardwareConfigurations)
     }
     ?>
     <br />
-    <input type="button" class="btn btn-primary" value="Save Changes" id="btnSaveChanges" />
-    <input type="button" class="btn btn-primary" value="Close" data-dismiss='modal'" />
+    <input type="button" class="btn btn-primary" value="Save" id="btnSaveChanges" />
+    <input type="button" class="btn" value="Close" data-dismiss='modal'" />
 </div>

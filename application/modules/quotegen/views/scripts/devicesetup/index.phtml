@@ -7,6 +7,10 @@ $this->headScript()
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/availableoptions.js'))
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwarequote.js'))
 ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'));
+
+$this->headScript()->captureStart('append', 'text/javascript'); ?>
+var canEditMasterDevice = <?php echo ($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false');
+$this->headScript()->captureEnd();
 ?>
 <div class="clearfix">
     <div class="page-header">
@@ -26,8 +30,8 @@ $this->headScript()
                     </select>
                     <label for="txtCriteria" style="padding: 0px 0px 0px 10px;">For</label>
                     <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-                    <input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: updateGrid('search');" />
-                    <input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: updateGrid('clear');" />
+                    <input type="button" name="btnSearch" class='btn btn-info' id="btnSearch" value="Search" onclick="javascript: updateGrid('search');" />
+                    <input type="button" name="btnClearSearch" id="btnClearSearch" class='btn' value="Clear" onclick="javascript: updateGrid('clear');" />
                     </br>
                     <span>Show only:</span>
                     <label for="chkCanSell" style="padding: 5px 0px 0px 10px;">Can Sell</label>

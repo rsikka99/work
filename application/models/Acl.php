@@ -12,6 +12,7 @@ class Application_Model_Acl extends Zend_Acl
     const ROLE_SYSTEM_ADMIN                       = "1";
     const ROLE_COMPANY_ADMINISTRATOR              = "2";
     const ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR = "3";
+    const ROLE_MASTER_DEVICE_ADMINISTRATOR        = "4";
 
     /**
      * Resource parameters
@@ -74,6 +75,7 @@ class Application_Model_Acl extends Zend_Acl
         $this->addRole(self::ROLE_SYSTEM_ADMIN);
         $this->addRole(self::ROLE_COMPANY_ADMINISTRATOR);
         $this->addRole(self::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR);
+        $this->addRole(self::ROLE_MASTER_DEVICE_ADMINISTRATOR);
     }
 
     /**

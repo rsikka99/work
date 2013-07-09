@@ -7,10 +7,11 @@ class My_Form_Decorator_WrapElementsTag extends Zend_Form_Decorator_Abstract
         $element     = $this->getOption('elementName');
         $tagPosition = $this->getOption('position');
         $className   = $this->getOption('className');
+        $attr        = $this->getOption('attribute');
 
-         if ($tagPosition == "open")
+        if ($tagPosition == "open")
         {
-            $output    = "<{$element} class=\"{$className}\" >";
+            $output    = "<{$element} {$attr} class=\"{$className}\" >";
             $placement = 'PREPEND';
         }
         elseif ($tagPosition == "close")

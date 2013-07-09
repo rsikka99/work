@@ -11,13 +11,13 @@ var masterDeviceId = 0;
 var isAdmin = false;
 function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAdministrator)
 {
-    if (isAdministrator == 'undefined')
+    if (isAdministrator == 'undefined' || isAdministrator == 'false')
     {
         isAdmin = false;
     }
     else
     {
-        isAdmin = isAdministrator;
+        isAdmin = true;
     }
 
     masterDeviceId = newMasterDeviceId;

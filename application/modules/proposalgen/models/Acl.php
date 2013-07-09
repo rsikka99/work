@@ -20,6 +20,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER  = "proposalgen__admin__savereplacementprinter";
     const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE         = "proposalgen__admin__search-for-device";
     const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST              = "proposalgen__admin__tonerslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE          = "proposalgen__admin__saveandapprove";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING   = "proposalgen__costs__bulkfilepricing";
@@ -90,6 +91,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING);
@@ -196,6 +198,12 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+
+        /**
+         * Master Device Administrator
+         */
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+
         /**
          * System Admin
          */
