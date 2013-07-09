@@ -11,6 +11,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     public $col_rmsUploadId = 'rmsUploadId';
     public $col_rmsUploadRowId = 'rmsUploadRowId';
     public $col_useUserData = 'useUserData';
+    public $col_isExcluded = 'isExcluded';
 
     /**
      * The default db table class to use
@@ -274,7 +275,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      * @return number|Proposalgen_Model_DeviceInstance[] Returns an array, or if justCount is true then it will count how many rows are
      *           available
      */
-    public function fetchDevicesInstancesForMapping ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function fetchDevicesInstancesForMapping ($rmsUploadId, $sortColumn = 'id', $sortDirection = 'ASC', $limit = null, $offset = null, $justCount = false)
     {
         /*
          * Setup our where clause
@@ -311,16 +312,17 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     }
 
     /**
-     * @param      $rmsUploadId
-     * @param      $sortColumn
-     * @param      $sortDirection
-     * @param null $limit
-     * @param null $offset
-     * @param bool $justCount
+     * @param        $rmsUploadId
+     * @param string $sortColumn
+     * @param string $sortDirection
+     * @param null   $limit
+     * @param null   $offset
+     * @param bool   $justCount
+     * @param bool   $onlyIncluded
      *
      * @return Proposalgen_Model_DeviceInstance[]|int
      */
-    public function getMappedDeviceInstances ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
+    public function getMappedDeviceInstances ($rmsUploadId, $sortColumn = 'id', $sortDirection = 'ASC', $limit = null, $offset = null, $justCount = false, $onlyIncluded = false)
     {
         $dbTable                          = $this->getDbTable();
         $deviceInstanceTableName          = $this->getTableName();
@@ -339,13 +341,17 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         }
 
         $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
-            ->distinct(true)
-            ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
-            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
-            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
-            ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
-            ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
+                  ->distinct(true)
+                  ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
+                  ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
+                  ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
+                  ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
+                  ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
+        if ($onlyIncluded)
+        {
+            $select->where("di.{$this->col_isExcluded} = 0");
+        }
 
         // If we're just counting we only need to return the count
         if ($justCount)

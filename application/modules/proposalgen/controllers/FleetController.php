@@ -783,26 +783,35 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
                     if ($rmsUpload)
                     {
-                        if ($rmsUpload->id == $rmsUploadId)
+                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        if ($includedDeviceInstanceCount > 2 || $isExcluded === false)
                         {
-                            $db = Zend_Db_Table_Abstract::getDefaultAdapter();
-                            $db->beginTransaction();
-                            try
+                            if ($rmsUpload->id == $rmsUploadId)
                             {
-                                $deviceInstance->isExcluded = $isExcluded;
-                                $deviceInstanceMapper->save($deviceInstance);
-                                $db->commit();
+                                $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                                $db->beginTransaction();
+                                try
+                                {
+                                    $deviceInstance->isExcluded = $isExcluded;
+                                    $deviceInstanceMapper->save($deviceInstance);
+                                    $db->commit();
+                                }
+                                catch (Exception $e)
+                                {
+                                    $db->rollBack();
+                                    Tangent_Log::logException($e);
+                                    $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . Tangent_Log::getUniqueId();
+                                }
                             }
-                            catch (Exception $e)
+                            else
                             {
-                                $db->rollBack();
-                                Tangent_Log::logException($e);
-                                $errorMessage = "The system encountered an error while trying to exclude the device. Reference #" . Tangent_Log::getUniqueId();
+                                $errorMessage = "You can only exclude device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
                             }
                         }
                         else
                         {
-                            $errorMessage = "You can only exclude device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
+                            $errorMessage = "You must include at least 2 devices in your report.";
+
                         }
                     }
                     else
@@ -822,6 +831,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($errorMessage !== false)
             {
+                $this->getResponse()->setHttpResponseCode(500);
                 $this->sendJson(array("error" => true, "message" => $errorMessage));
             }
 
@@ -836,6 +846,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         }
         else
         {
+            $this->getResponse()->setHttpResponseCode(500);
             $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
         }
     }
