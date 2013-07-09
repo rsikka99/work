@@ -34,17 +34,6 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
             'Float'
         );
 
-        $marginValidator = array(
-            array(
-                'validator' => 'Between',
-                'options'   => array(
-                    'min' => -100,
-                    'max' => 100
-                )
-            ),
-            'Float'
-        );
-
         $coverageValidator = array(
             array(
                 'validator' => 'Between',
@@ -105,7 +94,6 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                  'validators' => $cppValidator
                                                             ));
 
-
         $replacementMonochromeVendor = $this->createElement('multiselect', 'replacementMonochromeRankSetArray',
             array(
                  "class" => "tonerMultiselect",
@@ -151,19 +139,6 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                          array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
                                     ));
 
-        // Form Buttons
-        $submitButton = $this->createElement('submit', 'submit', array(
-                                                                      'label' => 'Submit',
-
-                                                                 ));
-        $submitButton->setDecorators(array(
-                                          'FieldSize',
-                                          'ViewHelper',
-                                          'Addon',
-                                          'ElementErrors',
-                                     ));
-        $this->addElement($submitButton);
-
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
                                               array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
@@ -172,6 +147,36 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                               'Fieldset'
                                          ));
 
+        // Form Buttons
+        $submitButton = $this->createElement('submit', 'save', array(
+                                                                      'label'      => 'Submit',
+                                                                      'class'      => 'btn-primary',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
+                                                                 ));
+
+        $cancelButton = $this->createElement('submit', 'cancel', array(
+                                                                      'label'      => 'Cancel',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
+                                                                 ));
+
+        $this->addDisplayGroup(array($submitButton, $cancelButton), 'buttonGroup');
+
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
+
         $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
         $replacementMonochromeVendor->setMultiOptions($tonerVendors);
         $replacementColorVendor->setMultiOptions($tonerVendors);
@@ -179,6 +184,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
         $dealerColorVendor->setMultiOptions($tonerVendors);
 
         $this->tonerSelectElementsDisplayGroups(2);
+
     }
 
     /**
@@ -193,12 +199,25 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'
                                          ));
+
+
         $this->tonerSelectElementsDisplayGroups(3);
+
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
+
     }
 
+    /**
+     * Sets the decorators for the toner rank set multi select
+     *
+     * @param $colSpan
+     */
     public function tonerSelectElementsDisplayGroups ($colSpan)
     {
-
         $this->getElement("dealerMonochromeRankSetArray")->setDecorators(array(
                                                                               'FieldSize',
                                                                               'ViewHelper',
@@ -252,6 +271,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                                                         "placement" => Zend_Form_Decorator_Abstract::PREPEND))
                                                                          ));
     }
+
 
     /**
      * Allows the form to allow null vlaues

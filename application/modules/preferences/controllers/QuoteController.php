@@ -13,16 +13,23 @@ class Preferences_QuoteController extends Tangent_Controller_Action
         $request      = $this->getRequest();
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $quoteService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                $success = $quoteService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Report settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving report savings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 
@@ -44,16 +51,23 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $quoteSettingFormService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
+                $success = $quoteSettingFormService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 
@@ -73,16 +87,23 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
         if ($request->isPost())
         {
-            $values  = $request->getPost();
-            $success = $quoteSettingFormService->update($values);
-
-            if ($success)
+            $values = $request->getPost();
+            if (isset($values["save"]))
             {
-                $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
+                $success = $quoteSettingFormService->update($values);
+
+                if ($success)
+                {
+                    $this->_flashMessenger->addMessage(array('success' => 'Quote settings updated successfully'));
+                }
+                else
+                {
+                    $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
+                }
             }
             else
             {
-                $this->_flashMessenger->addMessage(array('danger' => 'Error saving quote settings. Please correct the highlighted errors blow.'));
+                $this->redirector('index', 'index', 'admin');
             }
         }
 

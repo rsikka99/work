@@ -217,18 +217,28 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
         $this->tonerSelectElementsDisplayGroups(2);
 
         // Form Buttons
-        $submitButton = $this->createElement('submit', 'submit', array(
-                                                                      'label' => 'Submit',
-
+        $submitButton = $this->createElement('submit', 'save', array(
+                                                                      'label'      => 'Submit',
+                                                                      'class'      => 'btn-primary',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
                                                                  ));
-        $submitButton->setDecorators(array(
-                                          'FieldSize',
-                                          'ViewHelper',
-                                          'Addon',
-                                          'ElementErrors',
-                                     ));
-        $this->addElement($submitButton);
 
+        $cancelButton = $this->createElement('submit', 'cancel', array(
+                                                                      'label'      => 'Cancel',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
+                                                                 ));
+
+        $this->addDisplayGroup(array($submitButton, $cancelButton), 'buttonGroup');
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
                                               array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
@@ -236,6 +246,13 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'
                                          ));
+
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
+
 
         $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
 
@@ -258,6 +275,11 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                               'Fieldset'
                                          ));
         $this->tonerSelectElementsDisplayGroups(3);
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
     }
 
     /**

@@ -40,11 +40,12 @@ var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json'
 					</select>
 					<label for="txtCriteria" style="padding: 0px 0px 0px 10px;">for</label>
 					<input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-					<input type="button" name="btnSearch" id="btnSearch" value="Search" onclick="javascript: update_grid('search');" />
-					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" onclick="javascript: update_grid('clear');" />
-				</div>
-			</div>
-			
+					<input type="button" name="btnSearch" id="btnSearch" value="Search" class='btn btn-info' onclick="javascript: update_grid('search');" />
+					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class='btn' onclick="javascript: update_grid('clear');" />
+                </div>
+            </div>
+            <br/>
+
 			<div id="grid_container" class="margined">
 				<table id="grid_list"></table>
 				<div id="grid_pager"></div>
@@ -54,7 +55,7 @@ var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json'
 			<div class="submitBar">
 				<div id="submitBtns">
 					<div class="backbtn">
-						<input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript: do_action('done');" />
+						<input type="button" name="btnDone" id="btnDone" value="Back" class='btn btn-inverse' onClick="javascript: do_action('done');">
 					</div>
 				</div>
 			</div>

@@ -211,17 +211,28 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                     ));
 
         // Form Buttons
-        $submitButton = $this->createElement('submit', 'submit', array(
-                                                                      'label' => 'Submit',
-
+        $submitButton = $this->createElement('submit', 'save', array(
+                                                                      'label'      => 'Submit',
+                                                                      'class'      => 'btn-primary',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
                                                                  ));
-        $submitButton->setDecorators(array(
-                                          'FieldSize',
-                                          'ViewHelper',
-                                          'Addon',
-                                          'ElementErrors',
-                                     ));
-        $this->addElement($submitButton);
+
+        $cancelButton = $this->createElement('submit', 'cancel', array(
+                                                                      'label'      => 'Cancel',
+                                                                      'decorators' => array(
+                                                                          'FieldSize',
+                                                                          'ViewHelper',
+                                                                          'Addon',
+                                                                          'ElementErrors'
+                                                                      )
+                                                                 ));
+
+        $this->addDisplayGroup(array($submitButton, $cancelButton), 'buttonGroup');
 
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
@@ -230,6 +241,13 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'
                                          ));
+
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
+
 
         $tonerVendorManufacturers = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
         $customerMonochromeVendor->addMultiOptions($tonerVendorManufacturers);
@@ -252,6 +270,11 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                          ));
 
         $this->tonerSelectElementsDisplayGroups(3);
+        $this->getDisplayGroup('buttonGroup')->setDecorators(array(
+                                                                  'FormElements',
+                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+                                                                  'Fieldset'
+                                                             ));
     }
 
     public function tonerSelectElementsDisplayGroups ($colSpan)
