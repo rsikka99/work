@@ -218,7 +218,7 @@ $(function ()
                         var hasAccess = 'false';
 
                         // Should we have access?
-                        if (canEditMasterDevices || row.isSystemDevice == 0 || row.isMapped == 0)
+                        if (isSaveAndApproveAdmin || row.isSystemDevice == 0 || row.isMapped == 0)
                         {
                             hasAccess = 'true';
                         }

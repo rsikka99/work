@@ -32,7 +32,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $this->view->MPSProgramName = $this->config->app->MPSProgramName;
         $this->ApplicationName      = $this->config->app->ApplicationName;
         $this->_identity            = Zend_Auth::getInstance()->getIdentity();
-        $this->_isAdmin             = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);;
+        $this->_isAdmin             = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $this->view->isAdmin = $this->_isAdmin;
     }
 
@@ -335,7 +335,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
         $isAllowed    = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
 
-        $service = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, ($rmsUploadRowId > 0 ? true : $isAllowed));
+        $service = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, ($rmsUploadRowId > 0 ? true : $isAllowed), $this->_isAdmin);
 
         if ($rmsUploadRowId > 0)
         {
@@ -384,8 +384,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
         //Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
         $isAllowed = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
-        // If we are creating we need admin privileges, if we are editing a device that is not a system device(PENDING), we have full access, if neither of those are true, use our acl privilege
-        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed);
+        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
 
         $forms                      = array();
         $suppliesErrors             = array();
@@ -475,7 +474,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         {
             if (count($formData['suppliesAndService']) > 0)
             {
-                if (!$manageMasterDeviceService->saveSuppliesAndDeviceAttributes(array_merge($formData['suppliesAndService'], $formData['deviceAttributes'], array("manufacturerId" => $manufacturerId, "modelName" => $modelName)), $tonersList, $this->_isAdmin, $approve))
+                if (!$manageMasterDeviceService->saveSuppliesAndDeviceAttributes(array_merge($formData['suppliesAndService'], $formData['deviceAttributes'], array("manufacturerId" => $manufacturerId, "modelName" => $modelName)), $tonersList, $approve))
                 {
                     $this->sendJsonError("Failed to save Supplies & Service and Device Attributes");
                 }
@@ -521,7 +520,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $formData                  = $this->_request->getPost();
             $masterDeviceId            = $this->_getParam('masterDeviceId', false);
             $formName                  = $this->_getParam('formName', false);
-            $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId);
+            $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $this->_isAdmin);
 
             //Each array needs to be parsed
             foreach ($formData as $key => $form)
@@ -582,7 +581,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 else if ($formName == 'availableTonersForm')
                 {
-                    if ($manageMasterDeviceService->updateAvailableTonersForm($this->_isAdmin, $formData['form'], 0))
+                    if ($manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0))
                     {
                         $this->sendJson("Successfully updated available toners form");
                     }
@@ -604,7 +603,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $formName = $this->_getParam('formName', false);
         $tonerId  = $this->_getParam('id', false);
 
-        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices(0, $this->_identity->dealerId);
+        $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices(0, $this->_identity->dealerId, $this->_isAdmin);
 
         if ($formName == 'availableOptions')
         {
@@ -630,7 +629,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         }
         else if ($formName == 'availableToners')
         {
-            if ($manageMasterDeviceService->updateAvailableTonersForm($this->_isAdmin, false, $tonerId))
+            if ($manageMasterDeviceService->updateAvailableTonersForm(false, $tonerId))
             {
                 $this->sendJson("Successfully deleted toner");
             }

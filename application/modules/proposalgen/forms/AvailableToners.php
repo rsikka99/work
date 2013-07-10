@@ -25,35 +25,38 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
         {
             $manufacturerList [$manufacturer->id] = $manufacturer->displayname;
         }
+
         $availableTonersManufacturer = $this->createElement('select', 'availableTonersmanufacturerId', array(
-                                                                                                          'label' => 'Manufacturer',
-                                                                                                     ));
-        if(!$this->_isAllowed)
+                                                                                                            'label' => 'Manufacturer',
+                                                                                                       ));
+        if (!$this->_isAllowed)
         {
-            $availableTonersManufacturer->setAttrib('disabled','disabled');
+            $availableTonersManufacturer->setAttrib('disabled', 'disabled');
         }
+
         $this->addElement($availableTonersManufacturer);
         $availableTonersManufacturer->addMultiOptions($manufacturerList);
 
         /*
          * Color
         */
-        $colors = array ();
+        $colors = array();
         /* @var $color Proposalgen_Model_TonerColor */
-        foreach ( Proposalgen_Model_Mapper_TonerColor::getInstance()->fetchAll() as $color )
+        foreach (Proposalgen_Model_Mapper_TonerColor::getInstance()->fetchAll() as $color)
         {
             $colors [$color->tonerColorId] = $color->tonerColorName;
         }
 
-        $availableTonersColorIdElement = $this->createElement('select', 'availableTonerstonerColorId', array (
-                                                          'label' => 'Color:',
-                                                          'class' => 'span2',
-                                                          'multiOptions' => $colors
-                                                    ));
-        if(!$this->_isAllowed)
+        $availableTonersColorIdElement = $this->createElement('select', 'availableTonerstonerColorId', array(
+                                                                                                            'label'        => 'Color:',
+                                                                                                            'class'        => 'span2',
+                                                                                                            'multiOptions' => $colors
+                                                                                                       ));
+        if (!$this->_isAllowed)
         {
-            $availableTonersColorIdElement->setAttrib('disabled','disabled');
+            $availableTonersColorIdElement->setAttrib('disabled', 'disabled');
         }
+
         $this->addElement($availableTonersColorIdElement);
 
         $this->addElement('text', 'availableTonersdealerSku', array(
@@ -73,92 +76,92 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                               ));
 
         $availableTonersSystemSkuElement = $this->createElement('text', 'availableTonerssystemSku', array(
-                                                                   'label'     => 'MFG. Part #',
-                                                                   'class'     => 'span3',
-                                                                   'required'  => true,
-                                                                   'maxlength' => 255,
-                                                                   'filters'   => array(
-                                                                       'StringTrim',
-                                                                       'StripTags'
-                                                                   ),
-                                                                   'validator' => 'StringLength',
-                                                                   'options'   => array(
-                                                                       1,
-                                                                       255
-                                                                   )
-                                                              ));
-        if(!$this->_isAllowed)
+                                                                                                         'label'     => 'MFG. Part #',
+                                                                                                         'class'     => 'span3',
+                                                                                                         'required'  => true,
+                                                                                                         'maxlength' => 255,
+                                                                                                         'filters'   => array(
+                                                                                                             'StringTrim',
+                                                                                                             'StripTags'
+                                                                                                         ),
+                                                                                                         'validator' => 'StringLength',
+                                                                                                         'options'   => array(
+                                                                                                             1,
+                                                                                                             255
+                                                                                                         )
+                                                                                                    ));
+        if (!$this->_isAllowed)
         {
-            $availableTonersSystemSkuElement->setAttrib('readonly','true');
+            $availableTonersSystemSkuElement->setAttrib('readonly', 'true');
         }
+
         $this->addElement($availableTonersSystemSkuElement);
-
-
-
         $availableTonersYieldElement = $this->createElement('text', 'availableTonersyield', array(
-                                                               'label'     => 'Yield',
-                                                               'class'     => 'span3',
-                                                               'required'  => true,
-                                                               'maxlength' => 255,
-                                                               'filters'   => array(
-                                                                   'StringTrim',
-                                                                   'StripTags'
-                                                               ),
-                                                               'validator' => 'StringLength',
-                                                               'options'   => array(
-                                                                   1,
-                                                                   255
-                                                               )
-                                                          ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
-        if(!$this->_isAllowed)
+                                                                                                 'label'     => 'Yield',
+                                                                                                 'class'     => 'span3',
+                                                                                                 'required'  => true,
+                                                                                                 'maxlength' => 255,
+                                                                                                 'filters'   => array(
+                                                                                                     'StringTrim',
+                                                                                                     'StripTags'
+                                                                                                 ),
+                                                                                                 'validator' => 'StringLength',
+                                                                                                 'options'   => array(
+                                                                                                     1,
+                                                                                                     255
+                                                                                                 )
+                                                                                            ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+        if (!$this->_isAllowed)
         {
-            $availableTonersYieldElement->setAttrib('readonly','true');
+            $availableTonersYieldElement->setAttrib('readonly', 'true');
         }
+
         $this->addElement($availableTonersYieldElement);
 
         $availableTonersDealerCostELement = $this->createElement('text', 'availableTonersdealerCost', array(
-                                                                    'label'     => 'Cost',
-                                                                    'class'     => 'span3',
-                                                                    'required'  => false,
-                                                                    'maxlength' => 255,
-                                                                    'filters'   => array(
-                                                                        'StringTrim',
-                                                                        'StripTags'
-                                                                    ),
-                                                                    'validators' => array(
-                                                                        array(
-                                                                            'validator' => 'greaterThan',
-                                                                            'options'   => array(
-                                                                                'min' => 0
-                                                                            )
-                                                                        ),
-                                                                        'Float'
-                                                                    )
-                                                               ));
+                                                                                                           'label'      => 'Cost',
+                                                                                                           'class'      => 'span3',
+                                                                                                           'required'   => false,
+                                                                                                           'maxlength'  => 255,
+                                                                                                           'filters'    => array(
+                                                                                                               'StringTrim',
+                                                                                                               'StripTags'
+                                                                                                           ),
+                                                                                                           'validators' => array(
+                                                                                                               array(
+                                                                                                                   'validator' => 'greaterThan',
+                                                                                                                   'options'   => array(
+                                                                                                                       'min' => 0
+                                                                                                                   )
+                                                                                                               ),
+                                                                                                               'Float'
+                                                                                                           )
+                                                                                                      ));
         $availableTonersDealerCostELement->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
         $this->addElement($availableTonersDealerCostELement);
 
+
         $availableTonersSystemCostElement = $this->createElement('text', 'availableTonerssystemCost', array(
-                                                                    'label'     => 'System Cost',
-                                                                    'class'     => 'span3',
-                                                                    'required'  => true,
-                                                                    'maxlength' => 255,
-                                                                    'filters'   => array(
-                                                                        'StringTrim',
-                                                                        'StripTags'
-                                                                    ),
-                                                                    'validator' => 'StringLength',
-                                                                    'options'   => array(
-                                                                        1,
-                                                                        255
-                                                                    )
-                                                               ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
-        if(!$this->_isAllowed)
+                                                                                                           'label'     => "System Cost",
+                                                                                                           'class'     => 'span3',
+                                                                                                           'required'  => true,
+                                                                                                           'maxlength' => 255,
+                                                                                                           'filters'   => array(
+                                                                                                               'StringTrim',
+                                                                                                               'StripTags'
+                                                                                                           ),
+                                                                                                           'validator' => 'StringLength',
+                                                                                                           'options'   => array(
+                                                                                                               1,
+                                                                                                               255
+                                                                                                           )
+                                                                                                      ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
+        if (!$this->_isAllowed)
         {
-            $availableTonersSystemCostElement->setAttrib('readonly','true');
+            $availableTonersSystemCostElement->setAttrib('readonly', 'true');
         }
+
         $this->addElement($availableTonersSystemCostElement);
         $this->addElement('hidden', 'availableTonersid', array());
-
     }
 }

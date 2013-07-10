@@ -25,6 +25,7 @@ class Proposalgen_Service_ManageMasterDevices
     protected $_availableTonersForm;
     protected $_dealerId;
     protected $_isAllowed;
+    protected $_isAdmin;
     public $isQuoteDevice = false;
 
 
@@ -32,12 +33,14 @@ class Proposalgen_Service_ManageMasterDevices
      * @param int  $masterDeviceId The id of the Master Device
      * @param int  $dealerId
      * @param bool $isAllowed
+     * @param bool $isAdmin
      */
-    public function __construct ($masterDeviceId, $dealerId, $isAllowed = false)
+    public function __construct ($masterDeviceId, $dealerId, $isAllowed = false, $isAdmin = false)
     {
         $this->masterDeviceId = $masterDeviceId;
         $this->_dealerId      = $dealerId;
         $this->_isAllowed     = $isAllowed;
+        $this->_isAdmin       = $isAdmin;
     }
 
     /**
@@ -337,13 +340,11 @@ class Proposalgen_Service_ManageMasterDevices
      *
      * @param bool $tonersList
      *
-     * @param bool $isAdmin
-     *
      * @param bool $approved
      *
      * @return bool|string
      */
-    public function saveSuppliesAndDeviceAttributes ($validatedData, $tonersList = false, $isAdmin = false, $approved = false)
+    public function saveSuppliesAndDeviceAttributes ($validatedData, $tonersList = false, $approved = false)
     {
         $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
         $masterDevice       = $masterDeviceMapper->find($this->masterDeviceId);
@@ -371,7 +372,7 @@ class Proposalgen_Service_ManageMasterDevices
 
                 if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-                    if ($isAdmin && $approved)
+                    if ($this->_isAdmin && $approved)
                     {
                         $validatedData['isSystemDevice'] = 1;
                     }
@@ -380,7 +381,7 @@ class Proposalgen_Service_ManageMasterDevices
                 }
                 else
                 {
-                    if ($isAdmin)
+                    if ($this->_isAdmin)
                     {
                         $validatedData['isSystemDevice'] = 1;
                     }
@@ -678,13 +679,15 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Available Toners Form
      *
+     * @param bool $creating
+     *
      * @return Proposalgen_Form_AvailableToners
      */
-    public function getAvailableTonersForm ()
+    public function getAvailableTonersForm ($creating = false)
     {
         if (!isset($this->_availableTonersForm))
         {
-            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null,$this->_isAllowed);
+            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null, $this->_isAllowed, $creating);
         }
 
         return $this->_availableTonersForm;
@@ -695,11 +698,10 @@ class Proposalgen_Service_ManageMasterDevices
      *
      * @param array|bool $data
      * @param bool       $deleteTonerId
-     * @param bool       $isAdmin
      *
      * @return bool
      */
-    public function updateAvailableTonersForm ($isAdmin, $data = false, $deleteTonerId = false)
+    public function updateAvailableTonersForm ($data = false, $deleteTonerId = false)
     {
         $dealerTonerAttributesMapper = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance();
         $tonerMapper                 = Proposalgen_Model_Mapper_Toner::getInstance();
@@ -720,15 +722,26 @@ class Proposalgen_Service_ManageMasterDevices
             if ($deleteTonerId == 0)
             {
                 // If we are adding a new toner
-                if ($validData['id'] == '' && $isAdmin)
+                if ($validData['id'] == '')
                 {
                     $toner = new Proposalgen_Model_Toner();
                     $toner->populate($validData);
-                    $toner->sku            = $validData['systemSku'];
-                    $toner->cost           = $validData['systemCost'];
-                    $toner->tonerColorId   = $validData['tonerColorId'];
-                    $toner->isSystemDevice = 1;
-                    $toner->userId         = Zend_Auth::getInstance()->getIdentity()->id;
+                    $toner->sku = $validData['systemSku'];
+                    if ($this->_isAdmin)
+                    {
+                        $toner->cost           = $validData['systemCost'];
+                        $toner->isSystemDevice = 1;
+                    }
+                    else
+                    {
+                        // We need to apply a random 5 to 10% margin to the system cost they add to our system
+                        // Their dealer cost gets set to the cost they chose
+                        $validData['dealerCost'] = $validData['systemCost'];
+                        $toner->cost             = round(Tangent_Accounting::applyMargin($validData['systemCost'], rand(5, 10)));
+                        $toner->isSystemDevice   = 0;
+                    }
+                    $toner->tonerColorId = $validData['tonerColorId'];
+                    $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;
 
                     $validData['id'] = $tonerMapper->insert($toner);
                 }
@@ -736,7 +749,7 @@ class Proposalgen_Service_ManageMasterDevices
                 else if ($validData['id'] > 0)
                 {
                     // If we have admin privileges save to the toners table
-                    if ($isAdmin)
+                    if ($this->_isAdmin)
                     {
                         $toner                 = new Proposalgen_Model_Toner();
                         $toner->id             = $validData['id'];
@@ -783,8 +796,12 @@ class Proposalgen_Service_ManageMasterDevices
             // We are deleting
             else
             {
-                Proposalgen_Model_Mapper_Toner::getInstance()->delete($deleteTonerId);
-                Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->updateTonerVendorByManufacturerId(Proposalgen_Model_Mapper_Toner::getInstance()->find($deleteTonerId)->manufacturerId);
+                $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($deleteTonerId);
+                if($toner instanceof Proposalgen_Model_Toner)
+                {
+                    Proposalgen_Model_Mapper_Toner::getInstance()->delete($deleteTonerId);
+                    Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
+                }
             }
 
             $db->commit();
