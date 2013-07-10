@@ -36,8 +36,14 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
         $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
+        $reportGroup                 = new stdClass();
+        $reportGroup->elements       = array();
+        $reportGroup->title          = "Report Settings";
+        $this->_formElementGroups [] = $reportGroup;
+
         $proposalGroup               = new stdClass();
         $proposalGroup->elements     = array();
+        $proposalGroup->title        = "Health Check Settings";
         $this->_formElementGroups [] = $proposalGroup;
 
         //*****************************************************************
@@ -61,9 +67,19 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
                                       'StringTrim',
                                       'StripTags'
                                  ));
-
         $this->addElement($report_date);
-        $proposalGroup->elements [] = $report_date;
+        $reportGroup->elements [] = $report_date;
+
+        $report_name = new Zend_Form_Element_Text('name');
+        $report_name->setLabel('Report Name')
+        ->setAttrib('class', 'span2')
+        ->setAttrib('data-defaultvalue', "healthCheck" . date('Ymd'));
+        $report_name->addFilters(array(
+                                      'StringTrim',
+                                      'StripTags'
+                                 ));
+        $this->addElement($report_name);
+        $reportGroup->elements [] = $report_name;
 
         //*****************************************************************
         // PROPOSAL SETTING FIELDS

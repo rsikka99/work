@@ -6,6 +6,7 @@ just used as a way to help describe the changes as we progress versions.
 
 Upcoming Changes
 -------------
+[ADDED]   Added the ability to add names to the reports
 [CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
 [FIXED]   The ability to save user profiles
 

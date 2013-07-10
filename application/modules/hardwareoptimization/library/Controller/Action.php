@@ -202,6 +202,7 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
                 $this->_hardwareOptimization               = new Hardwareoptimization_Model_Hardware_Optimization();
                 $this->_hardwareOptimization->dateCreated  = date('Y-m-d H:i:s');
                 $this->_hardwareOptimization->lastModified = date('Y-m-d H:i:s');
+                $this->_hardwareOptimization->name         = "hardwareOptimization" . date('Ymd');
                 $this->_hardwareOptimization->dealerId     = $this->_identity->dealerId;
                 $this->_hardwareOptimization->clientId     = $this->_mpsSession->selectedClientId;
             }

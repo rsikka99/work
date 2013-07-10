@@ -110,6 +110,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     public $quoteType;
 
     /**
+     * @var string
+     */
+    public $name;
+
+    /**
      * The leasing schema term for the quote
      *
      * @var Quotegen_Model_LeasingSchemaTerm
@@ -242,6 +247,11 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         {
             $this->dealerColorRankSetId = $params->dealerColorRankSetId;
         }
+
+        if (isset($params->name) && !is_null($params->name))
+        {
+            $this->name = $params->name;
+        }
     }
 
     /**
@@ -268,6 +278,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
             "quoteType"                 => $this->quoteType,
             "dealerMonochromeRankSetId" => $this->dealerMonochromeRankSetId,
             "dealerColorRankSetId"      => $this->dealerColorRankSetId,
+            "name"                      => $this->name,
         );
     }
 
@@ -479,6 +490,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $this->dateCreated             = date('Y-m-d H:i:s');
         $this->dateModified            = date('Y-m-d H:i:s');
         $this->quoteDate               = date('Y-m-d H:i:s');
+        $this->name                    = $quoteType . "Quote" . date('Ymd');
         $this->userId                  = $userId;
         $this->colorPageMargin         = $quoteSetting->pageMargin;
         $this->monochromePageMargin    = $quoteSetting->pageMargin;
@@ -510,6 +522,14 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         }
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function isExport ()
+    {
+        return count(Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->fetchByQuoteId($this->id));
     }
 
     /**
