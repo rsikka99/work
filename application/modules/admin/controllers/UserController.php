@@ -92,7 +92,7 @@ class Admin_UserController extends Tangent_Controller_Action
                                     }
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
+                                                                        'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
                                                                    ));
 
                                 // Reset the form after everything is saved successfully
@@ -404,7 +404,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         }
 
                         $this->_flashMessenger->addMessage(array(
-                                                            'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
+                                                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
                                                            ));
                     }
                     else
@@ -465,18 +465,17 @@ class Admin_UserController extends Tangent_Controller_Action
                     if ($form->isValid($values))
                     {
                         // Update the user information
-                        $user->populate($values);
-                        $userMapper->save($user, $userId);
                         $usersByEmail = Application_Model_Mapper_User::getInstance()->fetchUserByEmail($values['email']);
-                        if ($usersByEmail === false)
+                        if ($user->email == $values['email'] || $usersByEmail === false)
                         {
-
-
                             // Update storage
                             $identity            = Zend_Auth::getInstance()->getIdentity();
                             $identity->firstname = $values ['firstname'];
                             $identity->lastname  = $values ['lastname'];
                             $identity->email     = $values ['email'];
+
+                            $user->populate($values);
+                            $userMapper->save($user, $userId);
 
                             $this->_flashMessenger->addMessage(array(
                                                                     'success' => "Your profile has been updated successfully."

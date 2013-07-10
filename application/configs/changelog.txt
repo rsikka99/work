@@ -4,7 +4,10 @@ This file contains information on what has changed in each version of the
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
 
-MPSTOOLS-136 - Changed look and feel of form / buttons to be more uniform across the appication.
+Upcoming Changes
+-------------
+[CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
+[FIXED]   The ability to save user profiles
 
 Version 1.4.3
 ----------------------
