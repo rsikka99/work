@@ -149,15 +149,15 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
 
         // Form Buttons
         $submitButton = $this->createElement('submit', 'save', array(
-                                                                      'label'      => 'Submit',
-                                                                      'class'      => 'btn-primary',
-                                                                      'decorators' => array(
-                                                                          'FieldSize',
-                                                                          'ViewHelper',
-                                                                          'Addon',
-                                                                          'ElementErrors'
-                                                                      )
-                                                                 ));
+                                                                    'label'      => 'Submit',
+                                                                    'class'      => 'btn-primary',
+                                                                    'decorators' => array(
+                                                                        'FieldSize',
+                                                                        'ViewHelper',
+                                                                        'Addon',
+                                                                        'ElementErrors'
+                                                                    )
+                                                               ));
 
         $cancelButton = $this->createElement('submit', 'cancel', array(
                                                                       'label'      => 'Cancel',
@@ -182,7 +182,6 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                                                   array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
                                                                   'Fieldset'
                                                              ));
-
 
 
         $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
@@ -234,7 +233,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                                                          'Addon',
                                                                          array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
                                                                          'ElementErrors',
-                                                                         array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+                                                                         array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan, 'class')),
                                                                          array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
                                                                          array('AddRowData', array("header"    => "Color Toner Preference",
                                                                                                    "trClass"   => "control-group",
