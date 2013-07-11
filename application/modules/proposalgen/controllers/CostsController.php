@@ -807,14 +807,16 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             }
             $this->view->hdnRole = $formData ['hdnRole'];
         }
+
+        $this->view->tonerManufacturers = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAll();
     }
 
     public function exportpricingAction ()
     {
         $this->_helper->layout->disableLayout();
-        $db = Zend_Db_Table::getDefaultAdapter();
-        //$company = $this->_getParam('company', $this->dealer_company_id);
-        $pricing = $this->_getParam('pricing', 'printer');
+        $db             = Zend_Db_Table::getDefaultAdapter();
+        $manufacturerId = $this->_getParam('manufacturerId', false);
+        $pricing        = $this->_getParam('pricing', 'printer');
 
 
         // filename for CSV file
@@ -836,28 +838,28 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 );
 
                 $select = $db->select()
-                    ->from(array(
-                                'md' => 'master_devices'
-                           ), array(
-                                   'id AS master_id',
-                                   'modelName',
-                              ))
-                    ->joinLeft(array(
-                                    'm' => 'manufacturers'
-                               ), 'm.id = md.manufacturerId', array(
-                                                                   'fullname'
-                                                              ))
-                    ->joinLeft(array(
-                                    'dmda' => 'dealer_master_device_attributes'
-                               ), 'dmda.masterDeviceId = md.id',
+                          ->from(array(
+                                      'md' => 'master_devices'
+                                 ), array(
+                                         'id AS master_id',
+                                         'modelName',
+                                    ))
+                          ->joinLeft(array(
+                                          'm' => 'manufacturers'
+                                     ), 'm.id = md.manufacturerId', array(
+                                                                         'fullname'
+                                                                    ))
+                          ->joinLeft(array(
+                                          'dmda' => 'dealer_master_device_attributes'
+                                     ), 'dmda.masterDeviceId = md.id',
                         array(
                              'laborCostPerPage',
                              'partsCostPerPage',
                         ))
-                    ->order(array(
-                                 'm.fullname',
-                                 'md.modelName',
-                            ));
+                          ->order(array(
+                                       'm.fullname',
+                                       'md.modelName',
+                                  ));
                 $stmt   = $db->query($select);
                 $result = $stmt->fetchAll();
                 foreach ($result as $value)
@@ -888,32 +890,38 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $dealerId    = $this->_dealerId;
                 // Get Count
                 $select = $db->select()
-                    ->from(array(
-                                't' => 'toners'), array(
-                                                       'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
-                                                  )
-                    )
-                    ->joinLeft(array(
-                                    'dt' => 'device_toners'
-                               ), 'dt.toner_id = t.id', array(
-                                                             'master_device_id'
-                                                        ))
-                    ->joinLeft(array(
-                                    'tm' => 'manufacturers'
-                               ), 'tm.id = t.manufacturerId', array(
-                                                                   'fullname'
+                          ->from(array(
+                                      't' => 'toners'), array(
+                                                             'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
+                                                        )
+                              )
+                          ->joinLeft(array(
+                                          'dt' => 'device_toners'
+                                     ), 'dt.toner_id = t.id', array(
+                                                                   'master_device_id'
                                                               ))
-                    ->joinLeft(array(
-                                    'tc' => 'toner_colors'
-                               ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                    ->joinLeft(array(
-                                    'dta' => 'dealer_toner_attributes'
-                               ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
-                    ->where("t.id > 0")
-                    ->group('t.id')
-                    ->order(array(
-                                 'tm.fullname'
-                            ));
+                          ->joinLeft(array(
+                                          'tm' => 'manufacturers'
+                                     ), 'tm.id = t.manufacturerId', array(
+                                                                         'fullname'
+                                                                    ))
+                          ->joinLeft(array(
+                                          'tc' => 'toner_colors'
+                                     ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
+                          ->joinLeft(array(
+                                          'dta' => 'dealer_toner_attributes'
+                                     ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
+                          ->where("t.id > 0")
+                          ->group('t.id')
+                          ->order(array(
+                                       'tm.fullname'
+                                  ));
+
+                if ($manufacturerId > 0)
+                {
+                    $select->where("manufacturerId = ?", $manufacturerId);
+                }
+
                 $stmt   = $db->query($select);
                 $result = $stmt->fetchAll();
 
