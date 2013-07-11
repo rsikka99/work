@@ -55,6 +55,11 @@ class Assessment_Model_Assessment extends My_Model_Abstract
     public $devicesModified;
 
     /**
+     * @var string
+     */
+    public $name;
+
+    /**
      * @var int
      */
     public $assessmentSettingId;
@@ -147,6 +152,10 @@ class Assessment_Model_Assessment extends My_Model_Abstract
             $this->assessmentSettingId = $params->assessmentSettingId;
         }
 
+        if (isset($params->name) && !is_null($params->name))
+        {
+            $this->name = $params->name;
+        }
     }
 
     /**
@@ -166,6 +175,7 @@ class Assessment_Model_Assessment extends My_Model_Abstract
             "reportDate"          => $this->reportDate,
             "devicesModified"     => $this->devicesModified,
             "assessmentSettingId" => $this->assessmentSettingId,
+            "name"                => $this->name,
         );
     }
 

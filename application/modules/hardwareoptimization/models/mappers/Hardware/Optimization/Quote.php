@@ -226,4 +226,33 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote extends My_M
     {
         return $object->quoteId;
     }
+
+    /**
+     * @param $quoteId
+     *
+     * @return Hardwareoptimization_Model_Hardware_Optimization_Quote[]
+     */
+    public function fetchByQuoteId ($quoteId)
+    {
+        return $this->fetchAll(array("{$this->col_quoteId} = ?" => $quoteId));
+    }
+
+    /**
+     * @param $quoteId
+     *
+     * @return bool|Hardwareoptimization_Model_Hardware_Optimization
+     */
+    public function fetchHardwareOptimizationByQuoteId ($quoteId)
+    {
+        $hardwareOptimizationQuote = $this->fetch(array("{$this->col_quoteId} = ?" => $quoteId));
+
+        if ($hardwareOptimizationQuote  instanceof Hardwareoptimization_Model_Hardware_Optimization_Quote)
+        {
+            return Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationQuote->hardwareOptimizationId);
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

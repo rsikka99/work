@@ -8,16 +8,16 @@
  */
 
 var masterDeviceId = 0;
-var isAdmin = false;
-function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAdministrator)
+var isAllowed = false;
+function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAllowedToEdit)
 {
-    if (isAdministrator == 'undefined' || isAdministrator == 'false')
+    if (isAllowedToEdit == 'undefined' || isAllowedToEdit == 'false')
     {
-        isAdmin = false;
+        isAllowed = false;
     }
     else
     {
-        isAdmin = true;
+        isAllowed = true;
     }
 
     masterDeviceId = newMasterDeviceId;

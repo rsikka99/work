@@ -224,6 +224,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
                 $this->_healthcheck->lastModified = date('Y-m-d H:i:s');
                 $this->_healthcheck->reportDate   = date('Y-m-d H:i:s');
                 $this->_healthcheck->dealerId     = $this->_identity->dealerId;
+                $this->_healthcheck->name         = "healthCheck" . date('Ymd');
                 $this->_healthcheck->clientId     = $this->_mpsSession->selectedClientId;
             }
         }

@@ -33,7 +33,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
      */
     public function __construct (Assessment_Model_Assessment_Setting $defaultSettings, $options = null)
     {
-        $this->_reportSetting = $defaultSettings->id;
+        $this->_reportSetting   = $defaultSettings->id;
         $this->_defaultSettings = $defaultSettings;
         parent::__construct($options);
     }
@@ -52,6 +52,11 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $currencyValidator->setMessage("Please enter a valid dollar amount.");
         $datetimeValidator = new My_Validate_DateTime('/\d{2}\/\d{2}\/\d{4}/');
 
+        $generalGroup               = new stdClass();
+        $generalGroup->title        = "Report Settings";
+        $generalGroup->elements     = array();
+        $this->_formElementGroups[] = $generalGroup;
+
         $customerGroup               = new stdClass();
         $customerGroup->title        = "Customer Facing Settings";
         $customerGroup->elements     = array();
@@ -65,8 +70,6 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         //*****************************************************************
         // GENERAL SETTING FIELDS
         //*****************************************************************
-
-
         $minYear     = (int)date('Y') - 2;
         $maxYear     = $minYear + 4;
         $report_date = new ZendX_JQuery_Form_Element_DatePicker('reportDate');
@@ -88,13 +91,24 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $this->addElement($report_date);
 
-        $customerGroup->elements [] = $report_date;
+        $generalGroup->elements [] = $report_date;
+
+        $report_name = new Zend_Form_Element_Text('name');
+        $report_name->setLabel('Report Name')
+        ->setAttrib('data-defaultvalue', "assessment" . date('Ymd'))
+        ->setAttrib('class', 'span2')
+        ->setAttrib('style', 'text-align: right');
+        $report_name->addFilters(array(
+                                      'StringTrim',
+                                      'StripTags'
+                                 ));
+
+        $this->addElement($report_name);
+        $generalGroup->elements [] = $report_name;
 
         //*****************************************************************
         // PROPOSAL SETTING FIELDS
         //*****************************************************************
-
-
         // Page Pricing Margin
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin')

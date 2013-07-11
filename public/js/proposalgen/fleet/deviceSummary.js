@@ -183,31 +183,43 @@ $(function ()
      */
     $(document).on("click", ".toggleDeviceInstanceExcludedButton", function (eventObject)
     {
-        // TODO Code Toggle Device Instance Exclusion
-        if ($(this).is(':checked'))
-        {
-            $.ajax({
-                url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-excluded-flag',
-                dataType: 'json',
-                data    : {
-                    rmsUploadId     : rmsUploadId,
-                    deviceInstanceId: $(this).data("device-instance-id"),
-                    isExcluded      : true
+        var checkbox = $(this);
+        $.ajax({
+            url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-excluded-flag',
+            dataType: 'json',
+            data    : {
+                rmsUploadId     : rmsUploadId,
+                deviceInstanceId: checkbox.data("device-instance-id"),
+                isExcluded      : (checkbox.is(':checked')) ? true : false
+            },
+            error   : function (jqXHR)
+            {
+                var data = $.parseJSON(jqXHR.responseText);
+                if (checkbox.is(':checked'))
+                {
+                    checkbox.removeAttr('checked');
                 }
-            });
-        }
-        else
-        {
-            $.ajax({
-                url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-excluded-flag',
-                dataType: 'json',
-                data    : {
-                    rmsUploadId     : rmsUploadId,
-                    deviceInstanceId: $(this).data("device-instance-id"),
-                    isExcluded      : false
+                else
+                {
+                    checkbox.attr('checked', 'checked');
                 }
-            });
-        }
+                var popup = $('#excludeDeviceErrorModal');
+                if (popup.length < 1)
+                {
+                    popup = $("<div class='modal' id='excludeDeviceErrorModal'><div class='modal-header'>Error Excluding Device<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button></div><div class='modal-body'></div><div class='modal-footer'><button type='button' data-dismiss='modal' class='btn btn-primary'>OK</button></div></div>");
+                    $('body').append(popup);
+                }
+               
+                popup.find('.modal-body').html(data.message);
+
+                popup.modal({
+                    hidden : function () {
+                        $('body').remove(popup);
+                    }
+                });
+            }
+
+        });
     });
 
 });

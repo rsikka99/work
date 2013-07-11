@@ -57,6 +57,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         );
 
 
+        $this->addElement('text', 'name', array('label' => 'Report Name'));
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
                                                         'label'      => 'Cost Threshold',
@@ -127,13 +128,13 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
             $class = $element->getAttrib('class');
             if (!$class)
             {
-                $element->setAttrib('class', 'span2 ');
+                $element->setAttrib('class', 'span2');
             }
             $element->setRequired(true);
         }
 
 
-        $this->addDisplayGroup(array('pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'hardwareOptimization');
+        $this->addDisplayGroup(array('name', 'pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'hardwareOptimization');
 
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(

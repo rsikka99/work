@@ -74,7 +74,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         $defaultHardwareOptimizationSettings = clone $user->getDealer()->getDealerSettings()->getHardwareOptimizationSettings();
         $defaultHardwareOptimizationSettings->populate($user->getUserSettings()->getHardwareOptimizationSettings()->toArray());
-        $hardwareOptimizationService = new Hardwareoptimization_Service_Setting($this->_hardwareOptimization->getHardwareOptimizationSetting(), $defaultHardwareOptimizationSettings);
+        $hardwareOptimizationService = new Hardwareoptimization_Service_Setting($this->_hardwareOptimization->getHardwareOptimizationSetting(), $defaultHardwareOptimizationSettings, $this->_hardwareOptimization->id);
 
         $form = $hardwareOptimizationService->getFormWithDefaults();
 

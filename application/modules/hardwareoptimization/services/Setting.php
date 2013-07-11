@@ -30,12 +30,19 @@ class Hardwareoptimization_Service_Setting
     protected $_systemSettings;
 
     /**
-     *
-     * @param $defaultSettings  Hardwareoptimization_Model_Hardware_Optimization_Setting
-     * @param $populateSettings Hardwareoptimization_Model_Hardware_Optimization_Setting
+     * @var Hardwareoptimization_Model_Hardware_Optimization
      */
-    public function __construct ($defaultSettings, $populateSettings)
+    protected $_hardwareOptimization;
+
+    /**
+     *
+     * @param $defaultSettings        Hardwareoptimization_Model_Hardware_Optimization_Setting
+     * @param $populateSettings       Hardwareoptimization_Model_Hardware_Optimization_Setting
+     * @param $hardwareOptimizationId int
+     */
+    public function __construct ($defaultSettings, $populateSettings, $hardwareOptimizationId)
     {
+        $this->_hardwareOptimization          = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
         $this->_hardwareOptimizationSettingss = $defaultSettings;
         $this->_populateSettings              = $populateSettings;
     }
@@ -54,6 +61,7 @@ class Hardwareoptimization_Service_Setting
             $this->_form = new Hardwareoptimization_Form_Setting();
 
             // User form will populate the description with defaults
+            $this->_form->getElement("name")->setDescription("hardwareOptimization" . date('Ymd'));
             $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
             $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
             $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
@@ -67,6 +75,7 @@ class Hardwareoptimization_Service_Setting
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
             $this->_form->populate(array_merge($this->_hardwareOptimizationSettingss->toArray(), $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettingss->getTonerRankSets()));
+            $this->_form->populate(array('name' => $this->_hardwareOptimization->name));
         }
 
         return $this->_form;
@@ -114,6 +123,11 @@ class Hardwareoptimization_Service_Setting
                     unset($validData [$key]);
                 }
             }
+
+            // Save the report name
+            $this->_hardwareOptimization->name = (isset($validData['name'])) ? $validData['name'] : "hardwareOptimization" . date('Ymd');
+            Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($this->_hardwareOptimization);
+
             $this->_hardwareOptimizationSettings = new Hardwareoptimization_Model_Hardware_Optimization_Setting();
             $rankingSetMapper                    = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
 
@@ -165,6 +179,7 @@ class Hardwareoptimization_Service_Setting
             Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($this->_hardwareOptimizationSettings);
 
             $this->_form->populate($this->_hardwareOptimizationSettings->toArray());
+            $this->_form->populate(array('name' => $this->_hardwareOptimization->name));
 
             return true;
         }

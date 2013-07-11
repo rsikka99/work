@@ -173,7 +173,7 @@ $(function ()
             pager       : '#mappingGridPager',
             gridComplete: function ()
             {
-
+                $("#loadingDiv").modal("hide");
                 // Get the grid object (cache in variable)
                 var grid = $(this);
                 var ids = grid.getDataIDs();
@@ -218,7 +218,7 @@ $(function ()
                         var hasAccess = 'false';
 
                         // Should we have access?
-                        if (canEditMasterDevices || row.isSystemDevice == 0 || row.isMapped == 0)
+                        if (isSaveAndApproveAdmin || row.isSystemDevice == 0 || row.isMapped == 0)
                         {
                             hasAccess = 'true';
                         }
@@ -387,7 +387,8 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
             $("#mappingGrid").trigger("reloadGrid");
         }
     });
-}
+};
+
 var deviceInstanceIdList = [];
 function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInstanceIds)
 {
@@ -398,6 +399,8 @@ function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInsta
 
 $("#masterDeviceManagement").bind("saveSuccess", function (e, masterDeviceId)
 {
-    $("#manageMasterDeviceModal").modal("hide");
+    var loadingDiv = $("#loadingDiv");
+    loadingDiv.show();
+    loadingDiv.modal();
     set_mapped(deviceInstanceIdList, masterDeviceId);
 });

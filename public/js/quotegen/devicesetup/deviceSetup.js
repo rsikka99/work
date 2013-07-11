@@ -105,7 +105,7 @@ $(function ()
                     var row = grid.getRowData(ids[i]);
                     row.modelName = row.displayname + ' ' + row.modelName;
                     var canEdit = 'false';
-                    if (row.isSystemDevice == 0 || canEditMasterDevice)
+                    if (row.isSystemDevice == 0 || isSaveAndApproveAdmin)
                     {
                         canEdit = 'true';
                     }

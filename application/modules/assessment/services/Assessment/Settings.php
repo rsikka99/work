@@ -85,13 +85,15 @@ class Assessment_Service_Assessment_Settings
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Assessment_Form_Assessment_Settings($this->_defaultSettings);
+            $this->_form = new Assessment_Form_Assessment_Settings($this->_defaultSettings, $this->_assessment->id);
 
             $this->_form->populate(array_merge($this->_populateSettings->toArray(), $this->_populateSettings->getTonerRankSets()));
             $reportDate = date('m/d/Y', strtotime($this->_assessment->reportDate));
+            $reportName = $this->_assessment->name;
 
             $this->_form->populate(array(
-                                        'reportDate' => $reportDate
+                                        'reportDate' => $reportDate,
+                                        'name'       => $reportName,
                                    ));
 
             $this->_form->setDecorators(array(
@@ -142,7 +144,7 @@ class Assessment_Service_Assessment_Settings
         {
             $reportDate                    = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
             $this->_assessment->reportDate = $reportDate;
-            Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
+
 
             foreach ($validData as $key => $value)
             {
@@ -151,6 +153,9 @@ class Assessment_Service_Assessment_Settings
                     unset($validData [$key]);
                 }
             }
+
+            $this->_assessment->name = (isset($validData['name'])) ? $validData['name'] : "assessment" . date('Ymd');
+            Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
 
             // Save the id as it will get erased
             $assessmentSettingsId = $this->_assessmentSettings->id;

@@ -4,7 +4,12 @@ This file contains information on what has changed in each version of the
 software. The information may not be entirely complete or accurate and is 
 just used as a way to help describe the changes as we progress versions.
 
-MPSTOOLS-136 - Changed look and feel of form / buttons to be more uniform across the appication.
+Upcoming Changes
+-------------
+[ADDED]   Added the ability to add names to the reports
+[CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
+[CHANGED] Mapping no longer closes modal after saving.
+[FIXED]   The ability to save user profiles
 
 Version 1.4.3
 ----------------------

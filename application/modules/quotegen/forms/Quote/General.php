@@ -37,21 +37,26 @@ class Quotegen_Form_Quote_General extends Twitter_Bootstrap_Form_Vertical
         $maxYear   = $minYear + 4;
         $quoteDate = $this->createElement('DateTimePicker', 'quoteDate');
         $quoteDate->setLabel('Quote Date:')
-            ->setJQueryParam('dateFormat', 'yy-mm-dd')
-            ->setJqueryParam('timeFormat', 'hh:mm')
-            ->setJQueryParam('changeYear', 'true')
-            ->setJqueryParam('changeMonth', 'true')
-            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-            ->setDescription('Quote Date (yyyy-mm-dd hh:mm)')
-            ->addValidator(new My_Validate_DateTime())
-            ->setRequired(false);
+        ->setJQueryParam('dateFormat', 'yy-mm-dd')
+        ->setJqueryParam('timeFormat', 'hh:mm')
+        ->setJQueryParam('changeYear', 'true')
+        ->setJqueryParam('changeMonth', 'true')
+        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+        ->addValidator(new My_Validate_DateTime())
+        ->setRequired(false);
         $quoteDate->addFilters(array(
                                     'StringTrim',
                                     'StripTags'
                                ));
-
-        $quoteDate->setRequired(true);
         $this->addElement($quoteDate);
+
+        $quoteName = $this->createElement('text', 'name');
+        $quoteName->setLabel('Quote Name')->setValue($this->getQuote()->name);
+        $quoteName->addFilters(array(
+                                    'StringTrim',
+                                    'StripTags'
+                               ));
+        $this->addElement($quoteName);
 
         $this->addElement('button', 'submit', array(
                                                    'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS,

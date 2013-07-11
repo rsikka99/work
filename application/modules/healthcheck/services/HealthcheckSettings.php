@@ -89,7 +89,8 @@ class Healthcheck_Service_HealthcheckSettings
             $this->_form->populate(array_merge($this->_populateSettings->toArray(), $this->_populateSettings->getTonerRankSets()));
             $reportDate = date('m/d/Y', strtotime($this->_healthcheck->reportDate));
             $this->_form->populate(array(
-                                        'reportDate' => $reportDate
+                                        'reportDate' => $reportDate,
+                                        'name'       => $this->_healthcheck->name,
                                    ));
             $this->_form->setDecorators(array(
                                              array(
@@ -139,7 +140,6 @@ class Healthcheck_Service_HealthcheckSettings
         {
             $reportDate                     = date('Y-m-d h:i:s', strtotime($validData ['reportDate']));
             $this->_healthcheck->reportDate = $reportDate;
-            Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
 
             foreach ($validData as $key => $value)
             {
@@ -148,6 +148,9 @@ class Healthcheck_Service_HealthcheckSettings
                     unset($validData [$key]);
                 }
             }
+
+            $this->_healthcheck->name = (isset($validData['name'])) ? $validData['name'] : "healthCheck" . date('Ymd');
+            Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
 
             // Save the id as it will get erased
             $healthcheckSettingsId = $this->_healthcheckSettings->id;
@@ -185,6 +188,9 @@ class Healthcheck_Service_HealthcheckSettings
 
             // Populate before the other values are set since these fields are a calculated field.
             $this->getForm()->populate($this->_healthcheckSettings->toArray());
+            $this->getForm()->populate(array(
+                                            'name' => $this->_healthcheck->name
+                                       ));
             $this->_healthcheckSettings->costOfLabor    = ($this->_healthcheckSettings->costOfLabor != null) ? $this->_healthcheckSettings->costOfLabor : new Zend_Db_Expr('NULL');
             $this->_healthcheckSettings->hoursSpentOnIt = ($this->_healthcheckSettings->hoursSpentOnIt != null) ? $this->_healthcheckSettings->hoursSpentOnIt : new Zend_Db_Expr('NULL');
 

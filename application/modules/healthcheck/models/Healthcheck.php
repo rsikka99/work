@@ -54,6 +54,11 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
      */
     public $devicesModified;
 
+    /**
+     * @var  string
+     */
+    public $name;
+
     // Non database fields
     /**
      * @var Healthcheck_Model_Healthcheck_Setting
@@ -130,6 +135,10 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
             $this->devicesModified = $params->devicesModified;
         }
 
+        if (isset($params->name) && !is_null($params->name))
+        {
+            $this->name = $params->name;
+        }
     }
 
     /**
@@ -148,6 +157,7 @@ class Healthcheck_Model_Healthcheck extends My_Model_Abstract
             "lastModified"         => $this->lastModified,
             "reportDate"           => $this->reportDate,
             "devicesModified"      => $this->devicesModified,
+            "name"                 => $this->name,
         );
     }
 
