@@ -1353,7 +1353,7 @@ label.label-phone-number-country {
 }
 .reportSettingsForm td {
   height: 50px;
-  padding-left: 120px;
+  width: 120px;
 }
 .reportSettingsForm .description {
   width: 100px;
@@ -1954,6 +1954,6 @@ table.summaryReport {
   margin-bottom: 0;
 }
 select.tonerMultiselect {
-  width: 550px;
+  width: 600px;
   height: 100px;
 }

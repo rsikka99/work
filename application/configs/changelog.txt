@@ -10,6 +10,7 @@ Upcoming Changes
 [CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
 [CHANGED] Mapping no longer closes modal after saving.
 [FIXED]   The ability to save user profiles
+[FIXED]   Quote settings form multiselect width bug
 
 Version 1.4.3
 ----------------------
