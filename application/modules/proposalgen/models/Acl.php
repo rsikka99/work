@@ -46,6 +46,11 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD  = "proposalgen__optimization__%";
     const RESOURCE_PROPOSALGEN_SURVEY_WILDCARD        = "proposalgen__survey__%";
 
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT                     = "proposalgen__manufacturer__edit";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE                   = "proposalgen__manufacturer__create";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE                   = "proposalgen__manufacturer__delete";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX                    = "proposalgen__manufacturer__index";
+    const RESOURCE_PROPOSALGEN_MANUFACTURER_VIEW                     = "proposalgen__manufacturer__view";
     const RESOURCE_PROPOSALGEN_REPORT_INDEX                          = "proposalgen__report_index__index";
     const RESOURCE_PROPOSALGEN_REPORT_GROSSMARGIN_WILDCARD           = "proposalgen__report_grossmargin__%";
     const RESOURCE_PROPOSALGEN_REPORT_HEALTHCHECK_WILDCARD           = "proposalgen__report_healthcheck__%";
@@ -114,6 +119,11 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_MANUFACTURER_VIEW);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD);
@@ -169,6 +179,9 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANUFACTURER_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANUFACTURER_VIEW, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_COSTANALYSIS_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
