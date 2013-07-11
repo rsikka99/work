@@ -216,6 +216,8 @@ class Proposalgen_Model_Acl
          * Master Device Administrator
          */
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
+
 
         /**
          * System Admin
