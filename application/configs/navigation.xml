@@ -538,6 +538,7 @@
                             <controller>manufacturer</controller>
                             <action>index</action>
                             <resource>proposalgen__manufacturer__index</resource>
+                            <visible>1</visible>
                             <pages>
                                 <view>
                                     <label>View</label>

@@ -7,6 +7,8 @@ just used as a way to help describe the changes as we progress versions.
 Upcoming Changes
 -------------
 [ADDED]   Added the ability to add names to the reports
+[ADDED]   Added the ability for users to create manufacturers.
+[ADDED]   Added the ability for Master Device Administrators to edit manufacturers.
 [CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
 [CHANGED] Mapping no longer closes modal after saving.
 [FIXED]   The ability to save user profiles
