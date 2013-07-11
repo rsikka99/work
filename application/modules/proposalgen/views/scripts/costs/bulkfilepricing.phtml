@@ -138,9 +138,9 @@ document.location.href = '<?php echo $this->baseUrl('/proposalgen/admin/bulkfile
                 <span style='padding: 0 10px;'>
                     <select id="manufacturerId" onchange="do_action('export_toner')">
                         <option value='0'> Export toner by manufacturer</option>
-                        <?php /* @var $tonerManufacturer Proposalgen_Model_TonerVendorManufacturer */ ?>
-                        <?php foreach ($this->tonerManufacturers as $tonerManufacturer) : ?>
-                            <option value='<?php echo $tonerManufacturer->manufacturerId ?>'> <?php echo $tonerManufacturer->getManufacturerName() ?></option>
+                        <?php /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+                        <?php foreach ($this->manufacturers as $manufacturer) : ?>
+                            <option value='<?php echo $manufacturer->id ?>'> <?php echo $manufacturer->fullname ?></option>
                         <?php endforeach; ?>
                     </select>
                 </span>

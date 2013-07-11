@@ -808,7 +808,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             $this->view->hdnRole = $formData ['hdnRole'];
         }
 
-        $this->view->tonerManufacturers = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAll();
+        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
     }
 
     public function exportpricingAction ()
