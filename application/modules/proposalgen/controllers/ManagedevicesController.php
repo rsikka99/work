@@ -33,7 +33,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $this->ApplicationName      = $this->config->app->ApplicationName;
         $this->_identity            = Zend_Auth::getInstance()->getIdentity();
         $this->_isAdmin             = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
-        $this->view->isAdmin = $this->_isAdmin;
+        $this->view->isAdmin        = $this->_isAdmin;
     }
 
     /**
@@ -383,7 +383,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
         //Are they allowed to modify data? If they are creating yes, if its not a system device then yes, otherwise use their admin privilege
-        $isAllowed = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+        $isAllowed                 = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
         $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
 
         $forms                      = array();
@@ -430,7 +430,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                     $formData['deviceAttributes']['launchDate'] = $launch_date->toString('yyyy-MM-dd HH:mm:ss');
                 }
 
-                $errorMessages = $manageMasterDeviceService->validateToners($tonersList, $formData['suppliesAndService']['tonerConfigId'], $formData['suppliesAndService']['isLeased']);
+                $errorMessages = $manageMasterDeviceService->validateToners($tonersList, $formData['suppliesAndService']['tonerConfigId'], $manufacturerId, $formData['suppliesAndService']['isLeased']);
 
                 if ($errorMessages != null)
                 {
