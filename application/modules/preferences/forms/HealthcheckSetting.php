@@ -291,7 +291,11 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                                                 array('AddRowData', array('header'    => "Monochrome Toner Preference",
                                                                                                           "trClass"   => "control-group",
                                                                                                           "tdAttr"    => "colspan={$colSpan}",
-                                                                                                          "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                          "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                                array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                         "tdClass"   => "short-row",
+                                                                                                                                         "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                         "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                            ));
         $this->getElement("customerColorRankSetArray")->setDecorators(array(
                                                                            'FieldSize',
@@ -304,7 +308,11 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                                                            array('AddRowData', array("header"    => "Color Toner Preference",
                                                                                                      "trClass"   => "control-group",
                                                                                                      "tdAttr"    => "colspan={$colSpan}",
-                                                                                                     "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                     "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                           array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                    "tdClass"   => "short-row",
+                                                                                                                                    "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                    "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                       ));
     }
 
