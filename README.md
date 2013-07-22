@@ -1,6 +1,6 @@
-# PrintIQ MPS #
+# MPS Toolbox #
 
-PrintIQ MPS is a suite of tools to help in the managed print industry. 
+MPS Toolbox is a suite of tools to help in the managed print industry.
 
 
 ## Installation ##
