@@ -23,11 +23,19 @@
         }
     ],
     "require"     : {
-        "php"                : ">5.4.0",
-        "webino/zf1"         : "dev-master",
-        "lrobert/phpword"    : "dev-master",
-        "phpexcel/phpexcel"  : "dev-master",
-        "gChartPhp/gChartPhp": "dev-master",
-        "robmorgan/phinx"    : "*"
+        "php"                         : ">5.4.0",
+        "zendframework/zendframework1": "1.12.x",
+        "lrobert/phpword"             : "dev-master",
+        "phpexcel/phpexcel"           : "dev-master",
+        "gChartPhp/gChartPhp"         : "dev-master",
+        "robmorgan/phinx"             : "*"
+    },
+    "scripts"     : {
+        "post-install-cmd": [
+            "bash deincludeZend.sh"
+        ],
+        "post-update-cmd" : [
+            "bash deincludeZend.sh"
+        ]
     }
 }
