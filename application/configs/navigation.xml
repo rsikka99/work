@@ -785,6 +785,14 @@
                                     <resource>dealermanagement__leasingschema__resetschema</resource>
                                     <visible>0</visible>
                                 </resetschema>
+                                <import>
+                                    <label>Import Leasing Rate</label>
+                                    <module>dealermanagement</module>
+                                    <controller>leasingschema</controller>
+                                    <action>import</action>
+                                    <resource>dealermanagement__leasingschema__import</resource>
+                                    <visible>0</visible>
+                                </import>
                             </pages>
                         </leasing>
                         <UserManagement>
@@ -884,111 +892,6 @@
                                 </deleteclient>
                             </pages>
                         </clients>
-                        <leasing>
-                            <label>Leasing Rates</label>
-                            <module>admin</module>
-                            <controller>leasingschema</controller>
-                            <action>index</action>
-                            <resource>admin__leasingschema__index</resource>
-                            <pages>
-                                <viewschema>
-                                    <label>View Provider</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>index</action>
-                                    <resource>admin__leasingschema__index</resource>
-                                    <visible>0</visible>
-                                </viewschema>
-                                <view>
-                                    <label>View</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>view</action>
-                                    <resource>admin__leasingschema__view</resource>
-                                    <visible>0</visible>
-                                </view>
-                                <create>
-                                    <label>Create</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>create</action>
-                                    <resource>admin__leasingschema__create</resource>
-                                    <visible>0</visible>
-                                </create>
-                                <edit>
-                                    <label>Edit</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>edit</action>
-                                    <resource>admin__leasingschema__edit</resource>
-                                    <visible>0</visible>
-                                </edit>
-                                <delete>
-                                    <label>Delete</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>delete</action>
-                                    <resource>admin__leasingschema__delete</resource>
-                                    <visible>0</visible>
-                                </delete>
-                                <addterm>
-                                    <label>Add Term</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>addterm</action>
-                                    <resource>admin__leasingschema__addterm</resource>
-                                    <visible>0</visible>
-                                </addterm>
-                                <editterm>
-                                    <label>Edit Term</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>editterm</action>
-                                    <resource>admin__leasingschema__editterm</resource>
-                                    <visible>0</visible>
-                                </editterm>
-                                <delterm>
-                                    <label>Delete Term</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>deleteterm</action>
-                                    <resource>admin__leasingschema__deleteterm</resource>
-                                    <visible>0</visible>
-                                </delterm>
-                                <addrange>
-                                    <label>Add Range</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>addrange</action>
-                                    <resource>admin__leasingschema__addrange</resource>
-                                    <visible>0</visible>
-                                </addrange>
-                                <editrange>
-                                    <label>Edit Range</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>editrange</action>
-                                    <resource>admin__leasingschema__editrange</resource>
-                                    <visible>0</visible>
-                                </editrange>
-                                <delrange>
-                                    <label>Delete Range</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>deleterange</action>
-                                    <resource>admin__leasingschema__deleterange</resource>
-                                    <visible>0</visible>
-                                </delrange>
-                                <resetschema>
-                                    <label>Clear Provider</label>
-                                    <module>admin</module>
-                                    <controller>leasingschema</controller>
-                                    <action>resetschema</action>
-                                    <resource>admin__leasingschema__resetschema</resource>
-                                    <visible>0</visible>
-                                </resetschema>
-                            </pages>
-                        </leasing>
                         <UserManagement>
                             <label>Users</label>
                             <module>admin</module>

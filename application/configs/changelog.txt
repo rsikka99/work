@@ -6,6 +6,7 @@ just used as a way to help describe the changes as we progress versions.
 
 Upcoming Changes
 -------------
+[ADDED]   Added the ability to import leasing rates
 [ADDED]   Added the ability to add names to the reports
 [ADDED]   explanation of how dealer / system overrides work for labor and parts cost per page
 [ADDED]   Added the ability for users to create manufacturers.

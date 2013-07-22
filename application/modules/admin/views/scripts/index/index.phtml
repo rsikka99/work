@@ -19,13 +19,6 @@
             </div>
         <?php endif; ?>
 
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_LEASINGSCHEMA_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "leasingschema", "module" => "admin")); ?>"><i class="icon-money icon-4x"></i><br /><br />
-                    System Lease Rate Management</a>
-            </div>
-        <?php endif; ?>
-
         <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_INDEX)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "admin")); ?>"><i class="icon-group icon-4x"></i><br /><br />
