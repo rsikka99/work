@@ -401,6 +401,6 @@ $("#masterDeviceManagement").bind("saveSuccess", function (e, masterDeviceId)
 {
     var loadingDiv = $("#loadingDiv");
     loadingDiv.show();
-    loadingDiv.modal();
+    loadingDiv.modal({width:"150px"});
     set_mapped(deviceInstanceIdList, masterDeviceId);
 });

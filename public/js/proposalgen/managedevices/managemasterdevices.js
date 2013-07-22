@@ -372,3 +372,6 @@ function saveChanges(approve)
         }
     });
 }
+window.onresize = function(event) {
+    setupModalPosition("manageMasterDeviceModal", ($(this).width()));
+}
