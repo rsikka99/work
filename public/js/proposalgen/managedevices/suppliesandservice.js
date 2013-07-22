@@ -1147,7 +1147,9 @@ function loadSuppliesAndService()
     {
         reloadTonersGrids();
     });
+
     var replaceTonersSelectManufacturer = $("#replacementTonersSelectManufacturer");
+
     /**
      * Available Toners Manufacturer search
      */
@@ -1184,10 +1186,12 @@ function loadSuppliesAndService()
     });
     var leasedTonerYield = document.getElementById("leasedTonerYield");
     var leasedTonerControlGroupElement = leasedTonerYield.parentNode.parentNode;
+
     if (!document.getElementById("isLeased").checked)
     {
         leasedTonerControlGroupElement.setAttribute("style", "display:none");
     }
+
     $("#isLeased").on("change", function ()
     {
         if (document.getElementById("isLeased").checked)
@@ -1199,9 +1203,11 @@ function loadSuppliesAndService()
             leasedTonerControlGroupElement.setAttribute("style", "display:none");
         }
     });
+
     var availableTonersFilter = $("#availableTonersFilter");
     var availableTonersCriteria = $("#availableTonersCriteria");
     var availableTonersCriteriaList = $("#availableTonersCriteriaList");
+
     availableTonersFilter.change(function ()
     {
         if (availableTonersFilter.val() == 'tonerColorId')
