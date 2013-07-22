@@ -94,6 +94,7 @@ if ($this->suppliesAndService)
             <form id="suppliesAndService" class="form-horizontal form-center-actions">
                 <?php echo $this->suppliesAndService; ?>
             </form>
+            <small> ** Dealer parts and labor CPP overrides the system parts and labor CPP. If there are no parts and labor set for a device the respective report settings will be used. </small>
         </div>
 
 
@@ -136,11 +137,12 @@ if ($this->suppliesAndService)
                             <option value="tonerColorId">Color</option>
                         </select>
                         <input type="text" id="availableTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
-                        <select id="availableTonersCriteriaList" name="availableTonersCriteriaList" class="input-medium" style="display:none;" >
+                        <select id="availableTonersCriteriaList" name="availableTonersCriteriaList" class="input-medium" style="display:none;">
                             <?php
                             foreach ($this->tonerColors as $tonerColor)
                             {
-                              ?><option value="<?php echo $tonerColor->tonerColorId; ?>"><?php echo $tonerColor->tonerColorName; ?></option>
+                                ?>
+                                <option value="<?php echo $tonerColor->tonerColorId; ?>"><?php echo $tonerColor->tonerColorName; ?></option>
                             <?php
                             }
                             ?>
@@ -347,9 +349,9 @@ if ($this->hardwareConfigurations)
             <div class="modal-body">
                 <div class="span6">
                     <div class="text-center">
-                    <form id="deleteForm" class="form-horizontal form-center-actions">
-                        <?php echo $this->delete; ?>
-                    </form>
+                        <form id="deleteForm" class="form-horizontal form-center-actions">
+                            <?php echo $this->delete; ?>
+                        </form>
                     </div>
                 </div>
             </div>
