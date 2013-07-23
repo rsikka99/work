@@ -2,7 +2,6 @@
 
 class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
 {
-    
     protected $_form;
 
     public function setUp ()
@@ -27,19 +26,19 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
      */
     public function goodData ()
     {
-        return array (
-                array (
-                        'lrobert', 
-                        'somepassword' 
-                ), 
-                array (
-                        'jsadler', 
-                        'O1as94_adsf#@' 
-                ), 
-                array (
-                        'someuser44', 
-                        '75647564' 
-                ) 
+        return array(
+            array(
+                'lrobert@tangentmtw.com',
+                'somepassword'
+            ),
+            array(
+                'swilder@tangentmtw.com',
+                'O1as94_adsf#@'
+            ),
+            array(
+                'someuser44@example.com',
+                '75647564'
+            )
         );
     }
 
@@ -48,9 +47,9 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidData ($username, $password)
     {
-        $data = array (
-                'username' => $username, 
-                'password' => $password 
+        $data = array(
+            'email'    => $username,
+            'password' => $password
         );
         $this->assertTrue($this->_form->isValid($data), "Login form did not accept good data. {$username} {$password}");
     }
@@ -60,35 +59,39 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
      */
     public function badData ()
     {
-        return array (
-                array (
-                        '', 
-                        '' 
-                ), 
-                array (
-                        'lrobert', 
-                        '' 
-                ), 
-                array (
-                        '', 
-                        'somepassword' 
-                ), 
-                array (
-                        "lrobert'; DROP TABLE users; --", 
-                        'somepassword' 
-                ), 
-                array (
-                        'asdf!@#$%^&*(*', 
-                        'œ6©É' 
-                ), 
-                array (
-                        'goodusername', 
-                        'œ6©É' 
-                ), 
-                array (
-                        'asdf!@#$%^&*(*', 
-                        'goodpassword' 
-                ) 
+        return array(
+            array(
+                '',
+                ''
+            ),
+            array(
+                'lrobert',
+                ''
+            ),
+            array(
+                '',
+                'somepassword'
+            ),
+            array(
+                "lrobert'; DROP TABLE users; --",
+                'somepassword'
+            ),
+            array(
+                'asdf!@#$%^&*(*',
+                'ï¿½6ï¿½ï¿½'
+            ),
+            array(
+                'goodusername',
+                'ï¿½6ï¿½ï¿½'
+            ),
+            array(
+                'asdf!@#$%^&*(*',
+                'goodpassword'
+            ),
+            array(
+                'lrobert',
+                'goodpassword'
+            )
         );
     }
 
@@ -97,9 +100,9 @@ class Default_Form_LoginFormTest extends PHPUnit_Framework_TestCase
      */
     public function testFormRejectsBadData ($username, $password)
     {
-        $data = array (
-                'username' => $username, 
-                'password' => $password 
+        $data = array(
+            'username' => $username,
+            'password' => $password
         );
         $this->assertFalse($this->_form->isValid($data), "Login form accepted bad data! {$username} {$password}");
     }

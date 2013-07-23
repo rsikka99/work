@@ -1,8 +1,10 @@
 <phpunit bootstrap="./TestHelper.php" colors="true">
-	<testsuite name="Application Test Suite">
-		<directory>./tests/library</directory>
-		<directory>../library/Tangent/Tests</directory>
-	</testsuite>
+	<!--<testsuite name="Tangent Library Test Suite">-->
+		<!--<directory>../library/Tangent/Tests</directory>-->
+	<!--</testsuite>-->
+    <testsuite name="Application Test Suite">
+        <directory>./</directory>
+    </testsuite>
 	<filter>
 		<whitelist>
 			<directory suffix=".php">../application/</directory>
