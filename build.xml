@@ -1,0 +1,6 @@
+<project>
+    <target name="configure">
+        <copy file="application/configs/local.php.dist.testing" tofile="application/configs/local.php" />
+        <copy file="phinx.yml.dist.testing" tofile="phinx.yml" />
+    </target>
+</project>
