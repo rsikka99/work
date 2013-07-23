@@ -23,8 +23,8 @@ environments:
     testing:
         adapter: mysql
         host: localhost
-        name: mpstoolbox_testing
-        user: mpstoolbox_testing
-        pass: 'mpstoolbox_testing'
+        name: mpstoolbox_test
+        user: mpstoolbox_test
+        pass: 'mpstoolbox_test'
         port: 3306
                  

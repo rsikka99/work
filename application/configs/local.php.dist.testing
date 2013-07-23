@@ -20,9 +20,9 @@ return array(
         'db'              => array(
             'params' => array(
                 'host'     => '127.0.0.1',
-                'username' => 'mpstoolbox_testing',
-                'password' => 'mpstoolbox_testing',
-                'dbname'   => 'mpstoolbox_testing',
+                'username' => 'mpstoolbox_test',
+                'password' => 'mpstoolbox_test',
+                'dbname'   => 'mpstoolbox_test',
             ),
         ),
         'frontController' => array(
