@@ -517,10 +517,15 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $formData                  = $this->_request->getPost();
-            $masterDeviceId            = $this->_getParam('masterDeviceId', false);
-            $formName                  = $this->_getParam('formName', false);
-            $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $this->_isAdmin);
+            $formData       = $this->_request->getPost();
+            $masterDeviceId = $this->_getParam('masterDeviceId', false);
+            $formName       = $this->_getParam('formName', false);
+
+            $masterDevice   = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+            $isAllowed      = ((!$masterDevice instanceof Proposalgen_Model_MasterDevice || !$masterDevice->isSystemDevice || $this->_isAdmin) ? true : false);
+
+
+            $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
 
             //Each array needs to be parsed
             foreach ($formData as $key => $form)

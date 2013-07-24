@@ -745,6 +745,10 @@ class Proposalgen_Service_ManageMasterDevices
             // If we are not deleting a toner
             if ($deleteTonerId == 0)
             {
+                if ($validData['dealerCost'] == '')
+                {
+                    $validData['dealerCost'] = new Zend_Db_Expr("NULL");
+                }
                 // If we are adding a new toner
                 if ($validData['id'] == '')
                 {
@@ -772,8 +776,8 @@ class Proposalgen_Service_ManageMasterDevices
                 // We are editing a toner
                 else if ($validData['id'] > 0)
                 {
-                    // If we have admin privileges save to the toners table
-                    if ($this->_isAdmin)
+                    // If we have are allowed to save to the toners table
+                    if ($this->_isAllowed)
                     {
                         $toner                 = new Proposalgen_Model_Toner();
                         $toner->id             = $validData['id'];

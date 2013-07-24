@@ -142,18 +142,22 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
 
 
         $availableTonersSystemCostElement = $this->createElement('text', 'availableTonerssystemCost', array(
-                                                                                                           'label'     => "System Cost",
-                                                                                                           'class'     => 'span3',
-                                                                                                           'required'  => true,
-                                                                                                           'maxlength' => 255,
-                                                                                                           'filters'   => array(
+                                                                                                           'label'      => "System Cost",
+                                                                                                           'class'      => 'span3',
+                                                                                                           'required'   => true,
+                                                                                                           'maxlength'  => 255,
+                                                                                                           'filters'    => array(
                                                                                                                'StringTrim',
                                                                                                                'StripTags'
                                                                                                            ),
-                                                                                                           'validator' => 'StringLength',
-                                                                                                           'options'   => array(
-                                                                                                               1,
-                                                                                                               255
+                                                                                                           'validators' => array(
+                                                                                                               array(
+                                                                                                                   'validator' => 'greaterThan',
+                                                                                                                   'options'   => array(
+                                                                                                                       'min' => 0
+                                                                                                                   )
+                                                                                                               ),
+                                                                                                               'Float'
                                                                                                            )
                                                                                                       ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
         if (!$this->_isAllowed)
