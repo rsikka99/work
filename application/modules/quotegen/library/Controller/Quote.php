@@ -309,8 +309,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             }
 
             // Get a new device and sync the device properties
-            $quoteDevice = new Quotegen_Model_QuoteDevice();
-            $quoteDevice->syncDevice($favoriteDevice->getDevice());
+            $quoteDeviceService = new Quotegen_Service_QuoteDevice($this->_userId,$this->_quote->id);
+            $quoteDevice = $quoteDeviceService->syncDevice($favoriteDevice->getDevice()->masterDeviceId);
             $quoteDevice->quoteId       = $this->_quote->id;
             $quoteDevice->margin        = $defaultMargin;
             $quoteDevice->residual      = 0;
@@ -340,7 +340,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
                                                                                         ));
 
                 // Insert quote device option
-                $quoteDeviceOption                = $this->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption                = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+
                 $quoteDeviceOption->quoteDeviceId = $quoteDeviceId;
                 $quoteDeviceOption->quantity      = $option->quantity;
                 $quoteDeviceOptionId              = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
