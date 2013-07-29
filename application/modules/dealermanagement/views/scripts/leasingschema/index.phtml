@@ -4,6 +4,7 @@
 <div class="clearfix">
     <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
         <i class="icon-white icon-plus-sign"></i> Create new</a>
+    <a class="btn btn-warning pull-right btn-small" href="<?php echo $this->url(array('action' => 'import')) ?>">Import from file</a>
 </div>
 <?php if (isset($this->leasingSchemas) && count($this->leasingSchemas) > 0) : ?>
     <table class="table table-striped table-condensed table-bordered">

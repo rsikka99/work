@@ -14,6 +14,7 @@
 <?php if ( $leasingSchema ) : ?>
     <div class="clearfix">
         <div class="pull-right">
+            <a class="btn btn-warning" href="<?php echo $this->url(array('action' => 'import')) ?>">Import from file</a>
 			<a class="btn btn-inverse" title="Clear Schema" href="<?php echo $this->url( array ( 'action' => 'resetschema') ); ?>">
 				<i class="icon-exclamation-sign icon-white"></i> Clear Schema
 			</a>

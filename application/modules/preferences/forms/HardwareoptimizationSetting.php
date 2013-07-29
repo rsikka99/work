@@ -149,15 +149,15 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
 
         // Form Buttons
         $submitButton = $this->createElement('submit', 'save', array(
-                                                                      'label'      => 'Submit',
-                                                                      'class'      => 'btn-primary',
-                                                                      'decorators' => array(
-                                                                          'FieldSize',
-                                                                          'ViewHelper',
-                                                                          'Addon',
-                                                                          'ElementErrors'
-                                                                      )
-                                                                 ));
+                                                                    'label'      => 'Submit',
+                                                                    'class'      => 'btn-primary',
+                                                                    'decorators' => array(
+                                                                        'FieldSize',
+                                                                        'ViewHelper',
+                                                                        'Addon',
+                                                                        'ElementErrors'
+                                                                    )
+                                                               ));
 
         $cancelButton = $this->createElement('submit', 'cancel', array(
                                                                       'label'      => 'Cancel',
@@ -229,7 +229,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                               array('AddRowData', array('header'    => 'Dealer Monochrome Toner Preference',
                                                                                                         "trClass"   => "control-group",
                                                                                                         "tdAttr"    => "colspan={$colSpan}",
-                                                                                                        "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                        "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                              array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                       "tdClass"   => "short-row",
+                                                                                                                                       "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                       "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                          ));
         $this->getElement("dealerColorRankSetArray")->setDecorators(array(
                                                                          'FieldSize',
@@ -242,7 +246,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                          array('AddRowData', array("header"    => "Dealer Color Toner Preference",
                                                                                                    "trClass"   => "control-group",
                                                                                                    "tdAttr"    => "colspan={$colSpan}",
-                                                                                                   "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                   "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                         array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                  "tdClass"   => "short-row",
+                                                                                                                                  "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                  "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                     ));
         $this->getElement("replacementMonochromeRankSetArray")->setDecorators(array(
                                                                                    'FieldSize',
@@ -255,7 +263,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                                    array('AddRowData', array("header"    => "Replacement Monochrome Toner Preference",
                                                                                                              "trClass"   => "control-group",
                                                                                                              "tdAttr"    => "colspan={$colSpan}",
-                                                                                                             "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                             "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                                   array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                            "tdClass"   => "short-row",
+                                                                                                                                            "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                            "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                               ));
         $this->getElement("replacementColorRankSetArray")->setDecorators(array(
                                                                               'FieldSize',
@@ -268,7 +280,11 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
                                                                               array('AddRowData', array("header"    => "Replacement Color Toner Preference",
                                                                                                         "trClass"   => "control-group",
                                                                                                         "tdAttr"    => "colspan={$colSpan}",
-                                                                                                        "placement" => Zend_Form_Decorator_Abstract::PREPEND))
+                                                                                                        "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+                                                                              array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                                                                                       "tdClass"   => "short-row",
+                                                                                                                                       "tdAttr"    => "colspan={$colSpan}",
+                                                                                                                                       "placement" => Zend_Form_Decorator_Abstract::APPEND))
                                                                          ));
     }
 

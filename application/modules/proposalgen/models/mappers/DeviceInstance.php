@@ -4,6 +4,8 @@
  */
 class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
 {
+    const MAX_DEVICE_INSTANCES = 1200;
+
     /*
      * Column Definitions
      */
@@ -254,7 +256,7 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
      */
     public function fetchAllForRmsUpload ($reportId)
     {
-        return $this->fetchAll(array("{$this->col_rmsUploadId} = ?" => $reportId), null, 1000);
+        return $this->fetchAll(array("{$this->col_rmsUploadId} = ?" => $reportId), null, Proposalgen_Model_Mapper_DeviceInstance::MAX_DEVICE_INSTANCES);
     }
 
     /**

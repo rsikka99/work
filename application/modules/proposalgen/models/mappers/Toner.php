@@ -252,7 +252,7 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
                 /* @var $deviceToner Proposalgen_Model_DeviceToner */
                 foreach ($deviceToners as $deviceToner)
                 {
-                    $toner                                                                                 = $this->find($deviceToner->tonerId);
+                    $toner                                                     = $this->find($deviceToner->tonerId);
                     $toners [$toner->manufacturerId] [$toner->tonerColorId] [] = $toner;
                 }
             }
@@ -452,29 +452,29 @@ FROM toners
             {
                 $sql .= " AND manufacturers.id = {$manufacturerId}";
             }
-            if($filter == "tonerColorId")
+            if ($filter == "tonerColorId")
             {
-                if(strtolower($criteria) == "black")
+                if (strtolower($criteria) == "black")
                 {
                     $criteria = "1";
                 }
-                else if(strtolower($criteria) == "cyan")
+                else if (strtolower($criteria) == "cyan")
                 {
                     $criteria = "2";
                 }
-                else if(strtolower($criteria) == "magenta")
+                else if (strtolower($criteria) == "magenta")
                 {
                     $criteria = "3";
                 }
-                else if(strtolower($criteria) == "yellow")
+                else if (strtolower($criteria) == "yellow")
                 {
                     $criteria = "4";
                 }
-                else if(strtolower($criteria) == "3 color")
+                else if (strtolower($criteria) == "3 color")
                 {
                     $criteria = "5";
                 }
-                else if(strtolower($criteria) == "4 color")
+                else if (strtolower($criteria) == "4 color")
                 {
                     $criteria = "6";
                 }
@@ -585,6 +585,7 @@ FROM toners
         $sql = "SELECT
             toners.id                          AS id,
             manufacturers.fullname             AS manufacturer,
+            toners.manufacturerId              AS manufacturerId,
             toners.sku                         AS systemSku,
             dealer_toner_attributes.dealerSku  AS dealerSku,
             toners.cost                        AS systemCost,

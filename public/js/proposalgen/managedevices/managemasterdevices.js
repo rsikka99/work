@@ -331,6 +331,9 @@ function saveChanges(approve)
         error   : function (xhr)
         {
             clearErrors();
+
+            // We need to destroy the launchDate datepicker
+            $("#launchDate").datepicker("destroy");
             var data = $.parseJSON(xhr.responseText);
             var errorMessage;
             var element;
@@ -367,8 +370,13 @@ function saveChanges(approve)
                     parent.innerHTML = parent.innerHTML + "<span class='help-inline'>" + errorMessage + "</span>";
                 });
             });
-
+            
+            // We need to recreate the datepicker when we have an error!
+            $("#launchDate").datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
             displayAlert("danger", "Please fix the errors before continuing");
         }
     });
+}
+window.onresize = function(event) {
+    setupModalPosition("manageMasterDeviceModal", ($(this).width()));
 }

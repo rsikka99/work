@@ -1,24 +1,10 @@
-Change Log for MPS Tools
------------------------
-This file contains information on what has changed in each version of the 
-software. The information may not be entirely complete or accurate and is 
-just used as a way to help describe the changes as we progress versions.
-
-Upcoming Changes
--------------
-[ADDED]   Added the ability to add names to the reports
-[CHANGED] Changed look and feel of form / buttons to be more uniform across the appication.
-[CHANGED] Mapping no longer closes modal after saving.
-[FIXED]   The ability to save user profiles
-
 Version 1.4.3
-----------------------
+-------------
 [FIXED]   issue cost delta would not include parts and labor cost per page (display only)
 [REMOVED] part types from toners. Toner vendors are now used instead.
 
-
 Version 1.4.2
----------------------------------
+-------------
 [ADDED]   the ability to export replacement devices to a quote
 [FIXED]   issue where the quote menu would not show up
 [FIXED]   issue where pages were taken into account when calculating the monthly lease price
@@ -29,7 +15,6 @@ Version 1.4.1
 
 Version 1.4.0
 -------------
-
 [ADDED]   a new settings management interface
 [ADDED]   a new look and feel
 [ADDED]   ability to handle managed and un-managed devices from an upload

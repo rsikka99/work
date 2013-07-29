@@ -1,25 +1,32 @@
 <?php
+defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/..'));
 
-// Define our environment
-defined('BASE_PATH') || define('BASE_PATH', realpath(dirname(__FILE__) . '/../'));
-defined('APPLICATION_PATH') || define('APPLICATION_PATH', BASE_PATH . '/application');
+// Define the paths
+defined('APPLICATION_PATH') || define('APPLICATION_PATH', APPLICATION_BASE_PATH . '/application');
+defined('DATA_PATH') || define('DATA_PATH', APPLICATION_BASE_PATH . '/data');
+defined('PUBLIC_PATH') || define('PUBLIC_PATH', APPLICATION_BASE_PATH . '/public');
+defined('ASSETS_PATH') || define('ASSETS_PATH', APPLICATION_BASE_PATH . '/assets');
 
-defined('DATA_PATH') || define('DATA_PATH', BASE_PATH . '/data');
-defined('TEST_PATH') || define('TEST_PATH', BASE_PATH . '/tests');
+/**
+ * This makes our life easier when dealing with paths. Everything is relative
+ * to the application root now.
+ */
+chdir(APPLICATION_BASE_PATH);
 
-// Define application environment
-defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
+// Setup autoloading
+require 'init_autoloader.php';
 
-// Ensure library/ is on include_path
-set_include_path(implode(PATH_SEPARATOR, array (
-        realpath(BASE_PATH . '/library'), 
-        get_include_path() 
-)));
+//
+ini_set("display_errors", 1);
+error_reporting(E_ALL);
 
-error_reporting(E_ALL | E_STRICT);
+// Define application environment.
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-//require_once 'Zend/Loader/Autoloader.php';
-//Zend_Loader_Autoloader::getInstance();
-require_once 'Zend/Application.php';
-$application = new Zend_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
+// Create application, bootstrap, and run
+$application = new Zend_Application('production', array(
+                                                       'config' => array(
+                                                           APPLICATION_PATH . '/configs/global.php',
+                                                           APPLICATION_PATH . '/configs/local.php',
+                                                       )));
 $application->bootstrap();

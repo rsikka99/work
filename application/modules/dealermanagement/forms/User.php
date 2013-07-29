@@ -114,7 +114,6 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
 
             $this->addElement('multiCheckbox', 'userRoles', array(
                                                                               'label'        => 'User Roles:',
-                                                                              'required'     => true,
                                                                               'multiOptions' => $roleMultiOptions,
                                                                          ));
         }

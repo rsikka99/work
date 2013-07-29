@@ -59,13 +59,10 @@ class Default_Form_Login extends Twitter_Bootstrap_Form_Horizontal
         /*
          * Forgot password action
          */
-        if ($this->getView()->IsAllowed(Default_Model_Acl::RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD, Application_Model_Acl::PRIVILEGE_VIEW))
-        {
-            $formActions[] = $this->createElement('submit', 'forgotPassword', array(
-                                                                                   'label'  => 'Forgot Password',
-                                                                                   'ignore' => true,
-                                                                              ));
-        }
+        $formActions[] = $this->createElement('submit', 'forgotPassword', array(
+                                                                               'label'  => 'Forgot Password',
+                                                                               'ignore' => true,
+                                                                          ));
 
         $this->addDisplayGroup($formActions, 'actions', array(
                                                              'disableLoadDefaultDecorators' => true,

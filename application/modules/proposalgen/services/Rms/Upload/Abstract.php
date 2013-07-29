@@ -247,7 +247,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      *
      * @return bool|string
      */
-    public function processCsvFile ($filename, $maxLineCount = 1000)
+    public function processCsvFile ($filename, $maxLineCount = Proposalgen_Model_Mapper_DeviceInstance::MAX_DEVICE_INSTANCES)
     {
         if (file_exists($filename))
         {

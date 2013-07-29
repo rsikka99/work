@@ -9,6 +9,11 @@ class Proposalgen_Model_TonerVendorManufacturer extends My_Model_Abstract
      */
     public $manufacturerId;
 
+    /**
+     * @var string
+     */
+    protected $_manufacturerName;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -35,6 +40,19 @@ class Proposalgen_Model_TonerVendorManufacturer extends My_Model_Abstract
         return array(
             "manufacturerId" => $this->manufacturerId,
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getManufacturerName ()
+    {
+        if (!isset($this->_manufacturerName))
+        {
+            $this->_manufacturerName = Proposalgen_Model_Mapper_Manufacturer::getInstance()->find($this->manufacturerId)->fullname;
+        }
+
+        return $this->_manufacturerName;
     }
 
 }

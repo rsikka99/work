@@ -12,12 +12,13 @@ class Quotegen_Model_CategoryTest extends PHPUnit_Framework_TestCase
     public function testCanPopulate ()
     {
         $category = new Quotegen_Model_Category();
-        $data = array(
-                	'id' => 1,
-                	'name' =>  'Finisher',
-                	'description' => 'A fine finisher'
-                );
-        
+        $data     = array(
+            'id'          => 1,
+            'dealerId'    => 1,
+            'name'        => 'Finisher',
+            'description' => 'A fine finisher'
+        );
+
         $category->populate($data);
         $this->assertSame($data, $category->toArray());
     }
