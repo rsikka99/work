@@ -1,0 +1,10 @@
+[ADDED]   Added the ability to import leasing rates
+[ADDED]   Added the ability to add names to the reports
+[ADDED]   explanation of how dealer / system overrides work for labor and parts cost per page
+[ADDED]   Added the ability for users to create manufacturers.
+[ADDED]   Added the ability for Master Device Administrators to edit manufacturers.
+[ADDED]   Added the ability to filter toner exports by manufacturer
+[CHANGED] Changed look and feel of form / buttons to be more uniform across the application
+[CHANGED] Mapping no longer closes modal after saving.
+[FIXED]   The ability to save user profiles
+[FIXED]   Quote settings form multi select width bug
