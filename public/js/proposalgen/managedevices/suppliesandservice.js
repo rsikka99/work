@@ -24,6 +24,13 @@ function loadSuppliesAndService()
                     hidden: true
                 },
                 {
+                    width : 30,
+                    name  : 'isSystemDevice',
+                    index : 'isSystemDevice',
+                    label : 'isSystemDevice',
+                    hidden: true
+                },
+                {
                     width : 40,
                     name  : 'tonerColorId',
                     index : 'tonerColorId',
@@ -234,35 +241,39 @@ function loadSuppliesAndService()
     var assignedTonersjQuery = jQuery("#assignedToners");
     assignedTonersjQuery.navGrid('#assignedToners_toppager', {edit: false, add: false, del: false, search: false, refresh: false});
     //Create New
-    if (isAllowed)
-    {
-        assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
-            caption      : "Create New",
-            buttonicon   : "ui-icon-plus",
-            onClickButton: function ()
+    assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
+        caption      : "Create New",
+        buttonicon   : "ui-icon-plus",
+        onClickButton: function ()
+        {
+            clearForm("availableTonersForm");
+            $('#availableTonersTitle').html("Add New Toner");
+            var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
+            var systemCostLabel = $("label[for='availableTonerssystemCost']");
+
+            $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
+
+            if (!isSaveAndApproveAdmin)
             {
-                clearForm("availableTonersForm");
-                $('#availableTonersTitle').html("Add New Toner");
-                var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
-                var systemCostLabel = $("label[for='availableTonerssystemCost']");
+                availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
+                systemCostLabel.text("Cost");
+            }
+            else
+            {
+                document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
+                systemCostLabel.text("System Cost");
+            }
 
-                if (!isSaveAndApproveAdmin)
-                {
-                    availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
-                    systemCostLabel.text("Cost");
-                }
-                else
-                {
-                    document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
-                    systemCostLabel.text("System Cost");
-                }
+            document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
+            document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
+            document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
+            document.getElementById("availableTonersyield").removeAttribute("readonly");
+            document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
 
-                $('#availableTonersModal').modal('show');
-            },
-            position     : "last"
-        })
-    }
-    ;
+            $('#availableTonersModal').modal('show');
+        },
+        position     : "last"
+    });
 
     //Edit
     assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
@@ -282,6 +293,39 @@ function loadSuppliesAndService()
                 document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
                 var systemCostLabel = $("label[for='availableTonerssystemCost']");
                 systemCostLabel.text("System Cost");
+
+                if (data['isSystemDevice'] == 0 && isSaveAndApproveAdmin)
+                {
+                    document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
+                    document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
+                    document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
+                    document.getElementById("availableTonersyield").removeAttribute("readonly");
+                    document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:block');
+                }
+                else
+                {
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none')
+                }
+
+                // If it is not a system device or we are an admin
+                if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
+                {
+                    document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
+                    document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
+                    document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
+                    document.getElementById("availableTonersyield").removeAttribute("readonly");
+                    document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
+                }
+                else
+                {
+                    document.getElementById("availableTonersmanufacturerId").setAttribute("disabled", "disabled");
+                    document.getElementById("availableTonerstonerColorId").setAttribute("disabled", "disabled");
+                    document.getElementById("availableTonerssystemSku").setAttribute("readonly", "readonly");
+                    document.getElementById("availableTonersyield").setAttribute("readonly", "readonly");
+                    document.getElementById("availableTonerssystemCost").setAttribute("readonly", "readonly");
+                }
+
                 $('#availableTonersModal').modal('show');
             }
             else
@@ -293,16 +337,18 @@ function loadSuppliesAndService()
     });
 
     //Delete
-    if (isAllowed)
-    {
-        assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
-            caption      : "Delete",
-            buttonicon   : "ui-icon-trash",
-            onClickButton: function ()
-            {
-                var selectedRow = jQuery("#assignedToners").jqGrid('getGridParam', 'selrow');
+    assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
+        caption      : "Delete",
+        buttonicon   : "ui-icon-trash",
+        onClickButton: function ()
+        {
+            var selectedRow = jQuery("#assignedToners").jqGrid('getGridParam', 'selrow');
 
-                if (selectedRow)
+            if (selectedRow)
+            {
+                var data = $("#assignedToners").jqGrid('getRowData', selectedRow);
+                // If it is not a system device or we are an admin
+                if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
                 {
                     $.ajax({
                         url     : TMTW_BASEURL + "proposalgen/admin/devicetonercount?tonerid=" + selectedRow,
@@ -312,7 +358,6 @@ function loadSuppliesAndService()
                         {
                             // Store the tonerId and colorId of the toner we are deleting
                             $('#deleteId').val(selectedRow);
-                            var data = $("#assignedToners").jqGrid('getRowData', selectedRow);
                             $('#deleteColorId').val(data.tonerColorId);
 
                             // If we do not need to replace anything!
@@ -348,12 +393,17 @@ function loadSuppliesAndService()
                 }
                 else
                 {
-                    $("#alertMessageModal").modal().show()
+                    $("#alertCannotDelete").modal().show();
                 }
-            },
-            position     : "last"
-        });
-    }
+            }
+            else
+            {
+                $("#alertMessageModal").modal().show()
+            }
+        },
+        position     : "last"
+    });
+
 
     /**
      * Available Toners Grid
@@ -368,6 +418,13 @@ function loadSuppliesAndService()
                     name  : 'id',
                     index : 'id',
                     label : 'Id',
+                    hidden: true
+                },
+                {
+                    width : 30,
+                    name  : 'isSystemDevice',
+                    index : 'isSystemDevice',
+                    label : 'isSystemDevice',
                     hidden: true
                 },
                 {
@@ -607,41 +664,49 @@ function loadSuppliesAndService()
             }
         }
     );
+
     // Hide the top paging!
     $('#availableToners_toppager_center').hide();
     //Add to the top pager the create, edit and delete buttons
     var availableToners = jQuery("#availableToners");
     availableToners
-        .navGrid('#availableToners_toppager', {edit: false, add: false, del: false, search: false, refresh: false})
+        .navGrid('#availableToners_toppager', {edit: false, add: false, del: false, search: false, refresh: false});
+
     //Create New
-    if (isAllowed)
-    {
-        availableToners.navButtonAdd('#availableToners_toppager', {
-            caption      : "Create New",
-            buttonicon   : "ui-icon-plus",
-            onClickButton: function ()
+    availableToners.navButtonAdd('#availableToners_toppager', {
+        caption      : "Create New",
+        buttonicon   : "ui-icon-plus",
+        onClickButton: function ()
+        {
+            clearForm("availableTonersForm");
+            $('#availableTonersTitle').html("Add New Toner");
+            var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
+            var systemCostLabel = $("label[for='availableTonerssystemCost']");
+
+            $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
+
+            if (!isSaveAndApproveAdmin)
             {
-                clearForm("availableTonersForm");
-                $('#availableTonersTitle').html("Add New Toner");
-                var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
-                var systemCostLabel = $("label[for='availableTonerssystemCost']");
+                availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
+                systemCostLabel.text("Cost");
+            }
+            else
+            {
+                document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
+                systemCostLabel.text("System Cost");
+            }
 
-                if (!isSaveAndApproveAdmin)
-                {
-                    availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
-                    systemCostLabel.text("Cost");
-                }
-                else
-                {
-                    document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
-                    systemCostLabel.text("System Cost");
-                }
+            document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
+            document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
+            document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
+            document.getElementById("availableTonersyield").removeAttribute("readonly");
+            document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
 
-                $('#availableTonersModal').modal('show');
-            },
-            position     : "last"
-        });
-    }
+            $('#availableTonersModal').modal('show');
+        },
+        position     : "last"
+    });
+
     //Edit
     availableToners.navButtonAdd('#availableToners_toppager', {
         caption      : "Edit",
@@ -660,6 +725,34 @@ function loadSuppliesAndService()
                 document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
                 var systemCostLabel = $("label[for='availableTonerssystemCost']");
                 systemCostLabel.text("System Cost");
+
+                if (data['isSystemDevice'] == 0 && isSaveAndApproveAdmin)
+                {
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:block');
+                }
+                else
+                {
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
+                }
+
+                // If it is not a system device or we are an admin
+                if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
+                {
+                    document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
+                    document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
+                    document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
+                    document.getElementById("availableTonersyield").removeAttribute("readonly");
+                    document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
+                }
+                else
+                {
+                    document.getElementById("availableTonersmanufacturerId").setAttribute("disabled", "disabled");
+                    document.getElementById("availableTonerstonerColorId").setAttribute("disabled", "disabled");
+                    document.getElementById("availableTonerssystemSku").setAttribute("readonly", "readonly");
+                    document.getElementById("availableTonersyield").setAttribute("readonly", "readonly");
+                    document.getElementById("availableTonerssystemCost").setAttribute("readonly", "readonly");
+                }
+
                 $('#availableTonersModal').modal('show');
             }
             else
@@ -669,17 +762,23 @@ function loadSuppliesAndService()
         },
         position     : "last"
     });
-    if (isAllowed)
-    {
-        //Delete
-        availableToners.navButtonAdd('#availableToners_toppager', {
-            caption      : "Delete",
-            buttonicon   : "ui-icon-trash",
-            onClickButton: function ()
+
+    //Delete
+    availableToners.navButtonAdd('#availableToners_toppager', {
+        caption      : "Delete",
+        buttonicon   : "ui-icon-trash",
+        onClickButton: function ()
+        {
+            var selectedRow = jQuery("#availableToners").jqGrid('getGridParam', 'selrow');
+            if (selectedRow)
             {
-                var selectedRow = jQuery("#availableToners").jqGrid('getGridParam', 'selrow');
-                if (selectedRow)
+                var data = $("#availableToners").jqGrid('getRowData', selectedRow);
+
+                // If it is not a system device or we are an admin
+                if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
                 {
+
+
                     $.ajax({
                         url     : TMTW_BASEURL + "proposalgen/admin/devicetonercount?tonerid=" + selectedRow,
                         type    : "post",
@@ -688,12 +787,11 @@ function loadSuppliesAndService()
                         {
                             // Store the tonerId and colorId of the toner we are deleting
                             $('#deleteId').val(selectedRow);
-                            var data = $("#availableToners").jqGrid('getRowData', selectedRow);
+
                             $('#deleteColorId').val(data.tonerColorId);
                             // If we do not need to replace anything!
                             if (result.total_count <= 0)
                             {
-
                                 $('#deleteFormName').val('availableToners');
                                 $('#deleteModal').modal('show');
                             }
@@ -703,6 +801,7 @@ function loadSuppliesAndService()
                                 $("#replacementTonersDeviceCount").val(result.device_count);
                                 // We need to replace stuff =(
                                 $("#affectedDevicesText").html("The " + result.total_count + " devices shown below will be affected by the deletion");
+
                                 if (result.device_count > 0)
                                 {
                                     $("#selectReplacementText").html("Select Required Replacement Toner");
@@ -711,12 +810,14 @@ function loadSuppliesAndService()
                                 {
                                     $("#selectReplacementText").html("Select Optional Replacement Toner");
                                 }
+
                                 $("#affectedReplacementToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/affected-replacement-toners-list?masterDeviceId=' + masterDeviceId + "&tonerId=" + selectedRow});
                                 $("#replacementToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/available-toners-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",") + "&tonerColorId=" + $("#deleteColorId").val()});
 
                                 reloadReplacementTonersGrids();
                                 showReplacementTonersModal();
                             }
+
 
                         },
                         error   : function ()
@@ -727,12 +828,17 @@ function loadSuppliesAndService()
                 }
                 else
                 {
-                    $("#alertMessageModal").modal().show()
+                    $("#alertCannotDelete").modal().show();
                 }
-            },
-            position     : "last"
-        });
-    }
+            }
+            else
+            {
+                $("#alertMessageModal").modal().show()
+            }
+        },
+        position     : "last"
+    });
+
 
     /**
      * Affected Toners Grid
@@ -1110,7 +1216,7 @@ function loadSuppliesAndService()
             }
         }
     );
-    // Hide the top paging!
+// Hide the top paging!
     $('#replacementToners_toppager_center').hide();
     var availableTonersSelectManufacturer = $("#availableTonersSelectManufacturer");
     /**
@@ -1156,7 +1262,8 @@ function loadSuppliesAndService()
     replaceTonersSelectManufacturer.select2({
         placeholder       : "Search for manufacturer",
         minimumInputLength: 1,
-        ajax              : { // instead of writing the function to execute the request we use Select2's convenient helper
+        ajax              : {
+            // instead of writing the function to execute the request we use Select2's convenient helper
             url     : TMTW_BASEURL + 'proposalgen/managedevices/search-for-manufacturer',
             dataType: 'json',
             data    : function (term, page)
@@ -1167,7 +1274,8 @@ function loadSuppliesAndService()
                 };
             },
             results : function (data, page)
-            { // parse the results into the format expected by Select2.
+            {
+                // parse the results into the format expected by Select2.
                 // since we are using custom formatting functions we do not need to alter remote JSON data
                 return {results: data};
             }
@@ -1213,6 +1321,11 @@ function loadSuppliesAndService()
         if (availableTonersFilter.val() == 'tonerColorId')
         {
             availableTonersCriteriaList.css({"display": 'initial'});
+            availableTonersCriteria.css({"display": 'none'});
+        }
+        else if (availableTonersFilter.val() == 'isSystemDevice')
+        {
+            availableTonersCriteriaList.css({"display": 'none'});
             availableTonersCriteria.css({"display": 'none'});
         }
         else
@@ -1414,3 +1527,9 @@ $(document).on("click", "#replacementTonersReset", function ()
     reloadReplacementTonersGrids();
 });
 
+function tonerSaveAndApprove()
+{
+    document.getElementById('availableTonerssaveAndApproveHdn').value = 1;
+    createOrEdit('availableTonersForm');
+    document.getElementById('availableTonerssaveAndApproveHdn').value = 0;
+}

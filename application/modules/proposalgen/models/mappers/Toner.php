@@ -349,6 +349,7 @@ WHERE `device_toners`.`master_device_id` = ?';
         $sql      = "SELECT
     DISTINCT
     toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
     manufacturers.id                    AS manufacturerId,
     manufacturers.fullname              AS manufacturer,
     toners.sku                          AS systemSku,
@@ -399,6 +400,7 @@ FROM toners
         $sql      = "SELECT
 DISTINCTROW
     toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
     manufacturers.id                    AS manufacturerId,
     manufacturers.fullname              AS manufacturer,
     toners.sku                          AS systemSku,
@@ -438,7 +440,9 @@ FROM toners
             {
                 $tonerColors[] = Proposalgen_Model_TonerColor::FOUR_COLOR;
             }
+
             $colorWhere = " WHERE toners.{$this->col_tonerColorId} IN (";
+
             for ($colorCounter = 0; $colorCounter < count($tonerColors); $colorCounter++)
             {
                 if ($colorCounter != 0)
@@ -447,11 +451,14 @@ FROM toners
                 }
                 $colorWhere .= $tonerColors[$colorCounter];
             }
+
             $sql .= $colorWhere . ")";
+
             if ($manufacturerId)
             {
                 $sql .= " AND manufacturers.id = {$manufacturerId}";
             }
+
             if ($filter == "tonerColorId")
             {
                 if (strtolower($criteria) == "black")
@@ -480,11 +487,16 @@ FROM toners
                 }
             }
 
-            if ($filter && $criteria)
+            if ($filter == "isSystemDevice")
+            {
+                $filter   = "toners.isSystemDevice";
+                $criteria = "0";
+                $sql .= " AND {$filter} = {$criteria}";
+            }
+            else if ($filter && $criteria)
             {
                 $sql .= " AND {$filter} LIKE '%{$criteria}%'";
             }
-
         }
 
         if ($order)
@@ -523,7 +535,8 @@ FROM toners
         $db       = $this->getDbTable()->getAdapter();
         $sql      = "SELECT
     DISTINCT
-    toners.id                        AS id,
+    toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
     manufacturers.id                    AS manufacturerId,
     manufacturers.fullname              AS manufacturer,
     toners.sku                          AS systemSku,
@@ -551,7 +564,10 @@ FROM toners
         {
             $sql .= " AND manufacturers.id = {$manufacturerId}";
         }
-
+        if ($filter == "isSystemDevice")
+        {
+            $criteria = "0";
+        }
         if ($filter && $criteria)
         {
             $sql .= " AND {$filter} LIKE '%{$criteria}%'";
@@ -584,6 +600,7 @@ FROM toners
 
         $sql = "SELECT
             toners.id                          AS id,
+            toners.isSystemDevice              AS isSystemDevice,
             manufacturers.fullname             AS manufacturer,
             toners.manufacturerId              AS manufacturerId,
             toners.sku                         AS systemSku,

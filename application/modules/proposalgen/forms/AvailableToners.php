@@ -5,15 +5,16 @@
  */
 class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
 {
-    protected $_isAllowed;
+    protected $_isAdmin;
 
     /**
      * @param null $options
-     * @param bool $isAllowed
+     * @param bool $isAdmin
+     *
      */
-    public function __construct ($options = null, $isAllowed = false)
+    public function __construct ($options = null, $isAdmin = false)
     {
-        $this->_isAllowed = $isAllowed;
+        $this->_isAdmin = $isAdmin;
         parent::__construct($options);
     }
 
@@ -29,10 +30,6 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
         $availableTonersManufacturer = $this->createElement('select', 'availableTonersmanufacturerId', array(
                                                                                                             'label' => 'Manufacturer',
                                                                                                        ));
-        if (!$this->_isAllowed)
-        {
-            $availableTonersManufacturer->setAttrib('disabled', 'disabled');
-        }
 
         $this->addElement($availableTonersManufacturer);
         $availableTonersManufacturer->addMultiOptions($manufacturerList);
@@ -52,10 +49,6 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                                                             'class'        => 'span2',
                                                                                                             'multiOptions' => $colors
                                                                                                        ));
-        if (!$this->_isAllowed)
-        {
-            $availableTonersColorIdElement->setAttrib('disabled', 'disabled');
-        }
 
         $this->addElement($availableTonersColorIdElement);
 
@@ -90,10 +83,6 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                                                              255
                                                                                                          )
                                                                                                     ));
-        if (!$this->_isAllowed)
-        {
-            $availableTonersSystemSkuElement->setAttrib('readonly', 'true');
-        }
 
         $this->addElement($availableTonersSystemSkuElement);
         $availableTonersYieldElement = $this->createElement('text', 'availableTonersyield', array(
@@ -111,10 +100,6 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                                                      255
                                                                                                  )
                                                                                             ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
-        if (!$this->_isAllowed)
-        {
-            $availableTonersYieldElement->setAttrib('readonly', 'true');
-        }
 
         $this->addElement($availableTonersYieldElement);
 
@@ -160,12 +145,29 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
                                                                                                                'Float'
                                                                                                            )
                                                                                                       ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');;
-        if (!$this->_isAllowed)
-        {
-            $availableTonersSystemCostElement->setAttrib('readonly', 'true');
-        }
 
         $this->addElement($availableTonersSystemCostElement);
+
+            $saveAndApproveHdnElement = $this->createElement('hidden', 'availableTonerssaveAndApproveHdn', array('value' => 0));
+            $this->addElement($saveAndApproveHdnElement);
+
+            $saveAndApproveElement = $this->createElement('button', 'availableTonerssaveAndApprove', array(
+                                                                                                          'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_SUCCESS,
+                                                                                                          'label'      => 'Save and Approve',
+                                                                                                          'style'      => 'padding-left:20px',
+                                                                                                          'onclick' => "javascript: tonerSaveAndApprove();"
+                                                                                                     ));
+            $saveAndApproveElement->setDecorators(array(
+                                                       'FieldSize',
+                                                       'ViewHelper',
+                                                       'Addon',
+                                                       'ElementErrors',
+                                                       array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls', 'style' => 'padding-left:10px')),
+                                                       'Wrapper',
+                                                       array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group', 'style' => 'display:none')),
+                                                  ));
+            $this->addElement($saveAndApproveElement);
+
         $this->addElement('hidden', 'availableTonersid', array());
     }
 }

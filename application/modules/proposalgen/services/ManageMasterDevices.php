@@ -711,7 +711,7 @@ class Proposalgen_Service_ManageMasterDevices
     {
         if (!isset($this->_availableTonersForm))
         {
-            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null, $this->_isAllowed, $creating);
+            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null, $this->_isAdmin);
         }
 
         return $this->_availableTonersForm;
@@ -776,18 +776,24 @@ class Proposalgen_Service_ManageMasterDevices
                 // We are editing a toner
                 else if ($validData['id'] > 0)
                 {
-                    // If we have are allowed to save to the toners table
-                    if ($this->_isAllowed)
-                    {
-                        $toner                 = new Proposalgen_Model_Toner();
-                        $toner->id             = $validData['id'];
-                        $toner->sku            = $validData['systemSku'];
-                        $toner->cost           = $validData['systemCost'];
-                        $toner->yield          = $validData['yield'];
-                        $toner->tonerColorId   = $validData['tonerColorId'];
-                        $toner->manufacturerId = $validData['manufacturerId'];
+                    $toner = $tonerMapper->find($validData['id']);
 
-                        $tonerMapper->save($toner);
+                    if ($toner)
+                    {
+                        if ($this->_isAdmin || $toner->isSystemDevice == 0)
+                        {
+                            if ($validData['saveAndApproveHdn'] == 1 && $this->_isAdmin)
+                            {
+                                $toner->isSystemDevice = 1;
+                            }
+
+                            $toner->sku            = $validData['systemSku'];
+                            $toner->cost           = $validData['systemCost'];
+                            $toner->yield          = $validData['yield'];
+                            $toner->tonerColorId   = $validData['tonerColorId'];
+                            $toner->manufacturerId = $validData['manufacturerId'];
+                            $tonerMapper->save($toner);
+                        }
                     }
                 }
 
