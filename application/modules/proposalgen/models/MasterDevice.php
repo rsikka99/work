@@ -194,6 +194,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      */
     public $adminCostPerPage;
     protected $_costPerPage;
+    protected $_cachedCostPerPage;
     protected $_cachedCheapestTonerVendorSet;
     protected $_usingIncompleteBlackTonerData;
     protected $_usingIncompleteColorTonerData;
@@ -732,7 +733,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_tonersForAssessment))
         {
-            $toners = $this->getCheapestTonerSetByVendor($costPerPageSetting);
+            $toners                     = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $this->_tonersForAssessment = $toners;
         }
 
@@ -748,7 +749,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     {
         if (!isset($this->_tonersForGrossMargin))
         {
-            $toners = $this->getCheapestTonerSetByVendor($costPerPageSetting);
+            $toners                      = $this->getCheapestTonerSetByVendor($costPerPageSetting);
             $this->_tonersForGrossMargin = $toners;
         }
 
@@ -890,6 +891,21 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         }
 
         return $this->_cachedCheapestTonerVendorSet[$cacheKey];
+    }
+
+    /**
+     * Gets a list of toners for the toner vendor id passed
+     *
+     * @param $vendorId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getCheapestTonerSetByVendorId ($vendorId)
+    {
+        $monochromeManufacturerPreference = $vendorId;
+        $colorManufacturerPreference      = $vendorId;
+
+        return Proposalgen_Model_Mapper_Toner::getInstance()->getCheapestTonersForDevice($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference);
     }
 
     /**

@@ -202,6 +202,13 @@
                             <action>index</action>
                             <resource>assessment__report_grossmargin__index</resource>
                         </grossmargin>
+                        <tonervendorgrossmargin>
+                            <label>Toner Vendor Gross margin</label>
+                            <module>assessment</module>
+                            <controller>report_tonervendorgrossmargin</controller>
+                            <action>index</action>
+                            <resource>assessment__report_tonervendorgrossmargin__index</resource>
+                        </tonervendorgrossmargin>
                         <toners>
                             <label>Report JIT SUPPLY AND TONER SKU Report</label>
                             <module>assessment</module>

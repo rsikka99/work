@@ -10,6 +10,11 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
     public $id;
 
     /**
+     * @var int
+     */
+    public $overrideManufacturer = null;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -37,7 +42,14 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
 
     public function getRanksAsArray ()
     {
-        return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
+        if($this->overrideManufacturer == null)
+        {
+            return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
+        }
+        else
+        {
+            return array($this->overrideManufacturer);
+        }
     }
 
     /**
@@ -45,6 +57,17 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
      */
     public function getRankings ()
     {
-        return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetId($this->id);
+        if($this->overrideManufacturer == null)
+        {
+            return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetId($this->id);
+        }
+        else
+        {
+            $vendorRankings = array();
+            $rank = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $rank->manufacturerId = $this->overrideManufacturer;
+            $vendorRankings[] = $rank;
+            return $vendorRankings;
+        }
     }
 }

@@ -247,11 +247,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var float
      */
-    protected $_monthlyBlackAndWhiteCost;
-
-    /**
-     * @var float
-     */
     protected $_grossMarginMonthlyColorCost;
 
     /**
@@ -299,6 +294,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_ReplacementDevice
      */
     protected $_replacementDevice;
+
+    /**
+     * @var Proposalgen_Model_CostPerPage
+     */
+    protected $_cachedCostPerPage;
+
+    /**
+     * @var Proposalgen_Model_CostPerPage
+     */
+    protected $_cachedMonthlyBlackAndWhiteCost;
 
     /**
      * @var string
@@ -974,26 +979,33 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @param $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float
      */
     public function getMonthlyBlackAndWhiteCost ($costPerPageSetting)
     {
-        if (!isset($this->_monthlyBlackAndWhiteCost))
+        // Make sure our array is initialized
+        if (!isset($this->_cachedMonthlyBlackAndWhiteCost))
         {
-            $this->_monthlyBlackAndWhiteCost = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->monochrome->getMonthly());
+            $this->_cachedMonthlyBlackAndWhiteCost = array();
         }
 
-        return $this->_monthlyBlackAndWhiteCost;
+        $cacheKey = $costPerPageSetting->createCacheKey();
+        if (!array_key_exists($cacheKey, $this->_cachedMonthlyBlackAndWhiteCost))
+        {
+            $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->monochrome->getMonthly());
+        }
+
+        return $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey];;
     }
 
     /**
      * Calculates the cost of the device on a monthly basis to compare with
      * replacement devices
      *
-     * @param $costPerPageSetting
-     * @param $margin
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param                                      $margin
      *
      * @return float
      */
@@ -1013,8 +1025,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Takes the monthly rate and multiplies it by 12
      *
-     * @param $costPerPageSetting
-     * @param $margin
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param                                      $margin
      *
      * @return float
      */
@@ -1024,10 +1036,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @param $monthlyTotalCost
+     * @param                                      $monthlyTotalCost
      *
-     * @param $costPerPageSetting
-     * @param $margin
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param                                      $margin
      *
      * @return float
      */

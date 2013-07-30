@@ -88,7 +88,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $AverageDeviceAge;
     protected $PercentageOfDevicesReportingPower;
     protected $NumberOfDevicesReportingPower;
-    protected $GrossMarginTotalMonthlyCost;
     protected $GrossMarginTotalMonthlyRevenue;
     protected $DevicesReportingPowerThreshold;
     protected $NumberOfRepairs;
@@ -157,6 +156,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $_includedDevicesSortedAscendingByAge;
     protected $_includedDevicesSortedDescendingByAge;
     protected $_pageCounts;
+    protected $_cachedGrossMarginTotalMonthlyCost;
 
     public $highCostPurchasedDevices;
 
@@ -1614,11 +1614,22 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
 
     /**
+     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return stdClass
      */
-    public function getGrossMarginTotalMonthlyCost ()
+    public function getGrossMarginTotalMonthlyCost ($costPerPageSetting = null)
     {
-        if (!isset($this->GrossMarginTotalMonthlyCost))
+        $costPerPageSetting = ($costPerPageSetting == null ? $this->getCostPerPageSettingForDealer() : $costPerPageSetting);
+
+        if (!isset($this->_cachedGrossMarginTotalMonthlyCost))
+        {
+            $this->_cachedGrossMarginTotalMonthlyCost = array();
+        }
+
+        $cacheKey = $costPerPageSetting->createCacheKey();
+
+        if (!array_key_exists($cacheKey, $this->_cachedGrossMarginTotalMonthlyCost))
         {
             $totalCost                = new stdClass();
             $totalCost->BlackAndWhite = 0;
@@ -1627,14 +1638,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 // Total cost += monochrome cost
-                $totalCost->BlackAndWhite += $device->calculateMonthlyMonoCost($this->getCostPerPageSettingForDealer());
-                $totalCost->Color += $device->calculateMonthlyColorCost($this->getCostPerPageSettingForDealer());
+                $totalCost->BlackAndWhite += $device->calculateMonthlyMonoCost(($costPerPageSetting == null ? $this->getCostPerPageSettingForDealer() : $costPerPageSetting));
+                $totalCost->Color += $device->calculateMonthlyColorCost(($costPerPageSetting == null ? $this->getCostPerPageSettingForDealer() : $costPerPageSetting));
             }
-            $totalCost->Combined               = $totalCost->BlackAndWhite + $totalCost->Color;
-            $this->GrossMarginTotalMonthlyCost = $totalCost;
+            $totalCost->Combined                                  = $totalCost->BlackAndWhite + $totalCost->Color;
+            $this->_cachedGrossMarginTotalMonthlyCost [$cacheKey] = $totalCost;
         }
 
-        return $this->GrossMarginTotalMonthlyCost;
+        return $this->_cachedGrossMarginTotalMonthlyCost [$cacheKey];
     }
 
     /**
@@ -3178,20 +3189,22 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return float
      */
-    public function getGrossMarginMonthlyProfit ()
+    public function getGrossMarginMonthlyProfit ($costPerPageSetting = null)
     {
         if (!isset($this->GrossMarginMonthlyProfit))
         {
-            $this->GrossMarginMonthlyProfit = $this->getGrossMarginTotalMonthlyRevenue()->Combined - $this->getGrossMarginTotalMonthlyCost()->Combined;
+            $this->GrossMarginMonthlyProfit = $this->getGrossMarginTotalMonthlyRevenue()->Combined - $this->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined;
         }
 
         return $this->GrossMarginMonthlyProfit;
     }
 
     /**
+     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
-    public function getGrossMarginOverallMargin ()
+    public function getGrossMarginOverallMargin ($costPerPageSetting = null)
     {
         if (!isset($this->GrossMarginOverallMargin))
         {
@@ -3202,9 +3215,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
+     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return stdClass
      */
-    public function getGrossMarginWeightedCPP ()
+    public function getGrossMarginWeightedCPP ($costPerPageSetting = null)
     {
         if (!isset($this->GrossMarginWeightedCPP))
         {
@@ -3213,7 +3228,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $this->GrossMarginWeightedCPP->Color         = 0;
             if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly() > 0)
             {
-                $this->GrossMarginWeightedCPP->BlackAndWhite = $this->getGrossMarginTotalMonthlyCost()->BlackAndWhite / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+                $this->GrossMarginWeightedCPP->BlackAndWhite = $this->getGrossMarginTotalMonthlyCost($costPerPageSetting)->BlackAndWhite / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
             }
             if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0)
             {
@@ -3225,26 +3240,30 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     }
 
     /**
+     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
-    public function getGrossMarginBlackAndWhiteMargin ()
+    public function getGrossMarginBlackAndWhiteMargin ($costPerPageSetting = null)
     {
         if (!isset($this->GrossMarginBlackAndWhiteMargin))
         {
-            $this->GrossMarginBlackAndWhiteMargin = ($this->getMPSBlackAndWhiteCPP() - $this->getGrossMarginWeightedCPP()->BlackAndWhite) / $this->getMPSBlackAndWhiteCPP() * 100;
+            $this->GrossMarginBlackAndWhiteMargin = ($this->getMPSBlackAndWhiteCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite) / $this->getMPSBlackAndWhiteCPP() * 100;
         }
 
         return $this->GrossMarginBlackAndWhiteMargin;
     }
 
     /**
+     * @param null|Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return float
      */
-    public function getGrossMarginColorMargin ()
+    public function getGrossMarginColorMargin ($costPerPageSetting = null)
     {
         if (!isset($this->GrossMarginColorMargin))
         {
-            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP()->Color) / $this->getMPSColorCPP() * 100;;
+            $this->GrossMarginColorMargin = ($this->getMPSColorCPP() - $this->getGrossMarginWeightedCPP($costPerPageSetting)->Color) / $this->getMPSColorCPP() * 100;;
         }
 
         return $this->GrossMarginColorMargin;
