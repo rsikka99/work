@@ -278,6 +278,13 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking extends My_Model_Mapper_Abst
      */
     public function fetchAllByRankingSetId ($rankId)
     {
-        return $this->fetchAll(array("{$this->col_tonerVendorRankingSetId} = ?" => $rankId), "{$this->col_rank} ASC");
+        $selectedRanks = array();
+
+        if ($rankId !== null)
+        {
+            $selectedRanks = $this->fetchAll(array("{$this->col_tonerVendorRankingSetId} = ?" => $rankId), "{$this->col_rank} ASC");
+        }
+
+        return $selectedRanks;
     }
 }

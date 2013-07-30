@@ -1,10 +1,13 @@
-[ADDED]   Added the ability to import leasing rates
-[ADDED]   Added the ability to add names to the reports
+[ADDED]   the ability for users that are not administrators to create, edit and delete toners that are not system toners.
+[ADDED]   the ability for Master Device Administrators to approve toners.
+[ADDED]   a new report, Toner Vendor Gross Margin
+[ADDED]   the ability to import leasing rates
+[ADDED]   the ability to add names to the reports
 [ADDED]   explanation of how dealer / system overrides work for labor and parts cost per page
-[ADDED]   Added the ability for users to create manufacturers.
-[ADDED]   Added the ability for Master Device Administrators to edit manufacturers.
-[ADDED]   Added the ability to filter toner exports by manufacturer
-[CHANGED] Changed look and feel of form / buttons to be more uniform across the application
+[ADDED]   the ability for users to create manufacturers.
+[ADDED]   the ability for Master Device Administrators to edit manufacturers.
+[ADDED]   the ability to filter toner exports by manufacturer
+[CHANGED] look and feel of form / buttons to be more uniform across the application
 [CHANGED] Mapping no longer closes modal after saving.
 [FIXED]   The ability to save user profiles
 [FIXED]   Quote settings form multi select width bug

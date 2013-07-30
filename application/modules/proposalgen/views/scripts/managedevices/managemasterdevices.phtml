@@ -94,7 +94,7 @@ if ($this->suppliesAndService)
             <form id="suppliesAndService" class="form-horizontal form-center-actions">
                 <?php echo $this->suppliesAndService; ?>
             </form>
-            <small> ** Dealer parts and labor CPP overrides the system parts and labor CPP. If there are no parts and labor set for a device the respective report settings will be used. </small>
+            <small> ** Dealer parts and labor CPP overrides the system parts and labor CPP. If there are no parts and labor set for a device the respective report settings will be used.</small>
         </div>
 
 
@@ -135,6 +135,7 @@ if ($this->suppliesAndService)
                             <option value="dealerSku">Your SKU</option>
                             <option value="sku">MFG. Part #</option>
                             <option value="tonerColorId">Color</option>
+                            <option value="isSystemDevice">Unapproved</option>
                         </select>
                         <input type="text" id="availableTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
                         <select id="availableTonersCriteriaList" name="availableTonersCriteriaList" class="input-medium" style="display:none;">
@@ -165,14 +166,12 @@ if ($this->suppliesAndService)
                 <h3 style="text-align: center"><span id="availableTonersTitle"></span></h3>
             </div>
             <div class="modal-body">
-                <div class="span6 form-horizontal">
-                    <form id="availableTonersForm" class="form-horizontal form-center-actions">
-                        <?php echo $this->availableTonersForm; ?>
-                    </form>
-                    <div style="text-align: center">
-                        <input type="button" class="btn btn-primary" value="Save" id="availableTonerseFormBtn" onclick="javascript: createOrEdit('availableTonersForm');" />
-                        <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
-                    </div>
+                <form id="availableTonersForm" class="form-horizontal form-center-actions">
+                    <?php echo $this->availableTonersForm; ?>
+                </form>
+                <div style="text-align: center;padding-bottom:10px">
+                    <input type="button" class="btn btn-primary" value="Save" id="availableTonersFormBtn" onclick="javascript: createOrEdit('availableTonersForm');" />
+                    <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                 </div>
             </div>
         </div>
@@ -304,11 +303,11 @@ if ($this->availableOptions)
                 <h3 style="text-align: center"><span id="availableOptionsTitle"></span></h3>
             </div>
             <div class="modal-body">
-                <div class="span6 form-horizontal">
+                <div class="form-horizontal">
                     <form id="availableOptionsForm" class="form-horizontal form-center-actions">
                         <?php echo $this->availableOptionsForm; ?>
                     </form>
-                    <div style="text-align: center">
+                    <div style="text-align: center;padding-bottom: 10px">
                         <input type="button" class="btn btn-primary" value="Save" id="availableOptionsFormBtn" onclick="javascript: createOrEdit('availableOptionsForm');" />
                         <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
@@ -335,10 +334,10 @@ if ($this->hardwareConfigurations)
                 <h3 style="text-align: center"><span id="hardwareConfigurationsTitle"></span></h3>
             </div>
             <div class="modal-body">
-                <div class="span6 form-horizontal">
+                <div class="form-horizontal">
                     <form id="hardwareConfigurationsForm" class="form-horizontal form-center-actions">
                     </form>
-                    <div style="text-align: center">
+                    <div style="text-align: center;padding-bottom: 10px">
                         <input type="button" class="btn btn-primary" value="Save" id="hardwareConfigurationFormBtn" onclick="javascript: createOrEdit('hardwareConfigurationsForm');" />
                         <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
                     </div>
@@ -347,12 +346,10 @@ if ($this->hardwareConfigurations)
         </div>
         <div class="modal hide" id="deleteModal">
             <div class="modal-body">
-                <div class="span6">
-                    <div class="text-center">
-                        <form id="deleteForm" class="form-horizontal form-center-actions">
-                            <?php echo $this->delete; ?>
-                        </form>
-                    </div>
+                <div class="text-center">
+                    <form id="deleteForm" class="form-horizontal form-center-actions">
+                        <?php echo $this->delete; ?>
+                    </form>
                 </div>
             </div>
         </div>
@@ -366,7 +363,20 @@ if ($this->hardwareConfigurations)
         <h4 style="text-align: center">Please select a row</h4>
     </div>
     <div class="modal-body">
-        <div class="span6 form-horizontal">
+        <div class="form-horizontal">
+            <div style="text-align:center">
+                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" style="margin-bottom: 4px" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hide" id="alertCannotDelete">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h4 style="text-align: center">You do not have permission to delete this toner.</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
             <div style="text-align:center">
                 <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" style="margin-bottom: 4px" />
             </div>

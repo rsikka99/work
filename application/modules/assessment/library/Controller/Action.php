@@ -111,6 +111,11 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_grossmargin/index')
             ),
+            "TonerVendorGrossMargin"          => array(
+                "pagetitle" => "Toner Vendor Gross Margin",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/assessment/report_tonervendorgrossmargin/index')
+            ),
             "JITSupplyAndTonerSku" => array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,

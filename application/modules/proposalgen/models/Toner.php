@@ -229,7 +229,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
             $monochromeCostPerPage = 0;
             $colorCostPerPage      = 0;
 
-            switch ($this->getTonerColor()->tonerColorId)
+            switch ($this->tonerColorId)
             {
                 case Proposalgen_Model_TonerColor::BLACK :
                     $monochromeCostPerPage = $this->calculatedCost / ($this->yield * (self::MANUFACTURER_ASSUMED_COVERAGE / $monochromeCoverage));

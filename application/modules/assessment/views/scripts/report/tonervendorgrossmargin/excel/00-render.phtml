@@ -1,0 +1,314 @@
+<?php
+
+$filename = 'TonerVendorGrossmargin.xlsx';
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+
+$savePath   = $savePath . $filename;
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
+
+$headerFill = array(
+    'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+    'color' => array(
+        'rgb' => 'D8D8D8'
+    )
+);
+
+$highestMarginFill = array(
+    'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+    'color' => array(
+        'rgb' => 'C3FFA6'
+    )
+);
+
+$notPreferenceFill = array(
+    'type'  => PHPExcel_Style_Fill::FILL_SOLID,
+    'color' => array(
+        'rgb' => 'F6FF8F'
+    )
+);
+
+$styleHeader = array(
+    'fill' => $headerFill,
+    'font' => array(
+        'bold' => true,
+        'size' => '16'
+    )
+);
+
+$styleSubHeader = array(
+    'fill' => $headerFill,
+    'font' => array(
+        'bold' => true,
+        'size' => '14'
+    )
+);
+
+$styleHighestMargin = array(
+    'fill' => $highestMarginFill,
+);
+
+$styleNotPreference = array(
+    'fill' => $notPreferenceFill,
+);
+
+$styleNotification = array(
+    'fill' => $notPreferenceFill,
+    'font' => array(
+        'italic' => true,
+        'size'   => '11',
+    )
+);
+
+// Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
+/* @var $objPHPExcel PHPExcel */
+$objPHPExcel = $this->phpexcel;
+
+// Ojbects in memory are held in php memory as serializeds objects, reduces memory footpirnt with little performance hit
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+/**
+ * Start of the summary Page
+ */
+
+$sheetCounter = 0;
+
+$activeSheet = $objPHPExcel->getActiveSheet();
+$activeSheet->setTitle("Summary");
+// Start building the document
+$activeSheet->setCellValue('A1', 'Toner Vendor Gross Margin Report');
+$activeSheet->mergeCells('A1:E1');
+// Centre the title
+$activeSheet->getStyle("A1:E1:")
+->getAlignment()
+->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
+$activeSheet->getRowDimension('1')->setRowHeight(25);
+
+$activeSheet->setCellValue('A2', "Summary");
+$activeSheet->mergeCells('A2:E2');
+// Centre the sub title
+$activeSheet->getStyle("A2:E2:")
+->getAlignment()
+->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+$activeSheet->getStyle('A2:E2')->applyFromArray($styleSubHeader);
+$activeSheet->getRowDimension('1')->setRowHeight(25);
+
+$vendorConfigurationNames = implode(', ', $this->highestNames);
+// Replace last occurrence of a comma to an and
+if (strrpos($vendorConfigurationNames, ',') > 0)
+{
+    $vendorConfigurationNames = substr_replace($vendorConfigurationNames, ' and ', strrpos($vendorConfigurationNames, ','), 1);
+}
+
+
+$summaryText = "There are " . (count($this->vendorSeperatedData) - 2) . " toner vendors in the system. Out of the " . count($this->vendorSeperatedData) . " toner preferences, " . $vendorConfigurationNames .
+               " has the highest overall gross margin at " . $this->highestMargin . ".";
+
+$activeSheet->setCellValue('A4', $summaryText);
+$activeSheet->mergeCells('A4:L4');
+$activeSheet->setCellValue('A6', "Toner Preference");
+$activeSheet->setCellValue('B6', "Overall Gross Margin");
+
+foreach ($this->vendorSeperatedData as $vendorData)
+{
+    $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
+    $vendorName          = $vendorData['pageTitle'];
+    $isHighest           = in_array($vendorName, $this->highestNames);
+
+    $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
+    $vendorName          = $vendorData['pageTitle'];
+    $currentRow          = $activeSheet->getHighestRow() + 1;
+    $activeSheet->setCellValue("A{$currentRow}", $vendorName);
+    $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin);
+    if ($isHighest)
+    {
+        $activeSheet->getStyle("A{$currentRow}:B{$currentRow}")->applyFromArray($styleHighestMargin);
+    }
+}
+
+// Set the column widths
+$activeSheet->getColumnDimension('A')->setWidth(45);
+$activeSheet->getColumnDimension('B')->setWidth(20);
+$activeSheet->getColumnDimension('C')->setWidth(12);
+$activeSheet->getColumnDimension('D')->setWidth(18);
+$activeSheet->getColumnDimension('E')->setWidth(12);
+
+/**
+ * End of summary page
+ */
+
+
+foreach ($this->vendorSeperatedData as $vendorData)
+{
+    $sheetCounter++;
+    $sheet = $objPHPExcel->createSheet(null, $sheetCounter);
+    $objPHPExcel->setActiveSheetIndex($sheetCounter);
+
+    $activeSheet = $objPHPExcel->getActiveSheet();
+    $activeSheet->setTitle($vendorData['pageTitle']);
+    // Start building the document
+    $activeSheet->setCellValue('A1', 'Toner Vendor Gross Margin Report');
+    $activeSheet->mergeCells('A1:E1');
+    // Centre the title
+    $activeSheet->getStyle("A1:E1:")
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
+    $activeSheet->getRowDimension('1')->setRowHeight(25);
+
+    $activeSheet->setCellValue('A2', $vendorData['pageTitle']);
+    $activeSheet->mergeCells('A2:E2');
+    // Centre the sub title
+    $activeSheet->getStyle("A2:E2:")
+    ->getAlignment()
+    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle('A2:E2')->applyFromArray($styleSubHeader);
+    $activeSheet->getRowDimension('1')->setRowHeight(25);
+
+    $activeSheet->setCellValue('A3', 'AMPV = Average Monthly Page Volume');
+    $activeSheet->mergeCells('A3:E3');
+
+    $currentRow = $activeSheet->getHighestRow() + 2;
+    $startRow   = $currentRow;
+
+    // Display the left side of the statistics group
+    foreach ($vendorData['statisticsGroup']['left'] as $key => $value)
+    {
+        $activeSheet->setCellValue("A{$currentRow}", $key);
+        $activeSheet->setCellValue("B{$currentRow}", $value);
+        $activeSheet->getStyle("B{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $currentRow = $activeSheet->getHighestRow() + 1;
+    }
+
+    $currentRow = $startRow;
+    // Display the right side of the statistics group
+    foreach ($vendorData['statisticsGroup']['right'] as $key => $value)
+    {
+        $activeSheet->setCellValue("D{$currentRow}", $key);
+        $activeSheet->setCellValue("E{$currentRow}", $value);
+        $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $currentRow += 1;
+    }
+
+    $currentRow = $activeSheet->getHighestRow() + 2;
+    $activeSheet->setCellValue("A{$currentRow}", "Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference.");
+    $activeSheet->getStyle("A{$currentRow}:G{$currentRow}")->applyFromArray($styleNotification);
+    $currentRow = $activeSheet->getHighestRow() + 1;
+    $activeSheet->setCellValue("A{$currentRow}", "For these devices the system has selected the best available alternative based on the current toner preference.");
+    $activeSheet->getStyle("A{$currentRow}:G{$currentRow}")->applyFromArray($styleNotification);
+    $currentRow = $activeSheet->getHighestRow() + 2;
+
+    // Display all levels of titles
+    foreach ($vendorData['fieldTitles'] as $key => $value)
+    {
+        foreach ($value as $columnNumber => $title)
+        {
+            $activeSheet->setCellValueByColumnAndRow($columnNumber, $currentRow, $title);
+        }
+        $currentRow = $activeSheet->getHighestRow() + 1;
+    }
+    $activeSheet->mergeCells('E14:I14');
+    $activeSheet->mergeCells('J14:N14');
+    $activeSheet->getStyle("E14")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle("J14")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    // Display all the data on each device
+    foreach ($vendorData['fieldLists'] as $key => $fields)
+    {
+        $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $fields[0]['manufacturer']);
+        $activeSheet->setCellValueByColumnAndRow(1, $currentRow, $fields[0]['name']);
+        $activeSheet->setCellValueByColumnAndRow(2, $currentRow, $fields[0]['ipAddress']);
+        $activeSheet->setCellValueByColumnAndRow(3, $currentRow, $fields[0]['serialNumber']);
+        $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $fields[1]);
+        $activeSheet->setCellValueByColumnAndRow(5, $currentRow, $fields[2]);
+        $activeSheet->setCellValueByColumnAndRow(6, $currentRow, $fields[3]);
+        $activeSheet->setCellValueByColumnAndRow(7, $currentRow, $fields[4]);
+        $activeSheet->setCellValueByColumnAndRow(8, $currentRow, $fields[5]);
+        $activeSheet->setCellValueByColumnAndRow(9, $currentRow, $fields[6]);
+        $activeSheet->setCellValueByColumnAndRow(10, $currentRow, $fields[7]);
+        $activeSheet->setCellValueByColumnAndRow(11, $currentRow, $fields[8]);
+        $activeSheet->setCellValueByColumnAndRow(12, $currentRow, $fields[9]);
+        $activeSheet->setCellValueByColumnAndRow(13, $currentRow, $fields[10]);
+
+        $activeSheet->getStyleByColumnAndRow(3, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+        $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //Black AMPV
+        $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->setFormatCode('$#,##0.00'); //Black Toner Cost
+        $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $activeSheet->getStyleByColumnAndRow(6, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //Black Toner Yield
+        $activeSheet->getStyleByColumnAndRow(7, $currentRow)->getNumberFormat()->setFormatCode('$0.0000'); //Black CPP
+        $activeSheet->getStyleByColumnAndRow(7, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $activeSheet->getStyleByColumnAndRow(8, $currentRow)->getNumberFormat()->setFormatCode('$0.00'); //Black Total Printing Cost
+        $activeSheet->getStyleByColumnAndRow(8, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        $activeSheet->getStyleByColumnAndRow(9, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //Color AMPV
+        $activeSheet->getStyleByColumnAndRow(10, $currentRow)->getNumberFormat()->setFormatCode('$#,##0.00'); //Color Toner Cost
+        $activeSheet->getStyleByColumnAndRow(10, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $activeSheet->getStyleByColumnAndRow(11, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //Color Toner Yield
+        $activeSheet->getStyleByColumnAndRow(12, $currentRow)->getNumberFormat()->setFormatCode('$0.0000'); //Color Toner CPP
+        $activeSheet->getStyleByColumnAndRow(12, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+        $activeSheet->getStyleByColumnAndRow(13, $currentRow)->getNumberFormat()->setFormatCode('$0.00'); //Color Total printing Cost
+        $activeSheet->getStyleByColumnAndRow(13, $currentRow)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+
+        if (!$fields['completeMono'])
+        {
+            $activeSheet->getStyle("E{$currentRow}:I{$currentRow}")->applyFromArray($styleNotPreference);
+        }
+
+        if (!$fields['completeColor'])
+        {
+            $activeSheet->getStyle("J{$currentRow}:N{$currentRow}")->applyFromArray($styleNotPreference);
+        }
+
+        $currentRow = $activeSheet->getHighestRow() + 1;
+    }
+
+    $currentRow       = $activeSheet->getHighestRow() + 1;
+    $totalRowLocation = $currentRow;
+    // Display the totals
+    $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $vendorData['fieldTotals'][0]);
+    $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $vendorData['fieldTotals'][4]);
+    $activeSheet->setCellValueByColumnAndRow(8, $currentRow, $vendorData['fieldTotals'][8]);
+    $activeSheet->setCellValueByColumnAndRow(9, $currentRow, $vendorData['fieldTotals'][9]);
+    $activeSheet->setCellValueByColumnAndRow(13, $currentRow, $vendorData['fieldTotals'][13]);
+    $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //BLACK AMPV
+    $activeSheet->getStyleByColumnAndRow(8, $currentRow)->getNumberFormat()->setFormatCode('$0.00'); //Black Total printing Cost
+    $activeSheet->getStyleByColumnAndRow(9, $currentRow)->getNumberFormat()->setFormatCode('###,##0'); //Color AMPV
+    $activeSheet->getStyleByColumnAndRow(13, $currentRow)->getNumberFormat()->setFormatCode('$0.00'); //Color Total printing Cost
+
+    $activeSheet->getStyleByColumnAndRow(0, $totalRowLocation)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+
+    // Set the column widths
+    $activeSheet->getColumnDimension('A')->setWidth(35);
+    $activeSheet->getColumnDimension('B')->setWidth(25);
+    $activeSheet->getColumnDimension('C')->setWidth(12);
+    $activeSheet->getColumnDimension('D')->setWidth(18);
+    $activeSheet->getColumnDimension('E')->setWidth(12);
+    $activeSheet->getColumnDimension('F')->setWidth(18);
+    $activeSheet->getColumnDimension('G')->setWidth(12);
+    $activeSheet->getColumnDimension('H')->setWidth(12);
+    $activeSheet->getColumnDimension('I')->setWidth(18);
+    $activeSheet->getColumnDimension('J')->setWidth(12);
+    $activeSheet->getColumnDimension('K')->setWidth(18);
+    $activeSheet->getColumnDimension('L')->setWidth(18);
+    $activeSheet->getColumnDimension('M')->setWidth(18);
+    $activeSheet->getColumnDimension('N')->setWidth(18);
+}
+
+// Default to the first page
+$objPHPExcel->setActiveSheetIndex(0);
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+$objWriter->save($savePath);
+
+//Clear the workbook from php's memory
+$objPHPExcel->disconnectWorksheets();
+
+echo $this->baseUrl($linkToFile);
