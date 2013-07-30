@@ -89,15 +89,6 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
 
         if ($costPerPage instanceof Proposalgen_Model_CostPerPage)
         {
-            if ($costPerPage->monochromeCostPerPage != $expectedCostPerPageMonochrome || $costPerPage->colorCostPerPage != $expectedCostPerPageColor)
-            {
-                echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                var_dump($expectedCostPerPageMonochrome);
-                var_dump($expectedCostPerPageColor);
-                var_dump($costPerPage);
-                die();
-            }
-
             if ($costPerPage->monochromeCostPerPage != $expectedCostPerPageMonochrome)
             {
                 $this->fail("Toner monochrome CPP incorrect!");
