@@ -33,12 +33,17 @@
     "require-dev" : {
         "phpunit/phpunit": "3.7.x"
     },
+    "autoload"    : {
+        "psr-0": {
+            "Tangent\\": "library/"
+        }
+    },
     "scripts"     : {
-        "post-install-cmd": [
-            "bash deincludeZend.sh"
+        "post-package-install": [
+            "Tangent\\ComposerFunctions::postPackageInstall"
         ],
-        "post-update-cmd" : [
-            "bash deincludeZend.sh"
+        "post-package-update" : [
+            "Tangent\\ComposerFunctions::postPackageUpdate"
         ]
     }
 }
