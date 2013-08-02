@@ -917,11 +917,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         }
 
         // Turn all the dates into objects
-        $monitorStartDate = (empty($this->monitorStartDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->monitorStartDate);
-        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->monitorEndDate);
-        $discoveryDate    = (empty($this->discoveryDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->discoveryDate);
-        $introductionDate = (empty($this->launchDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->launchDate);
-        $adoptionDate     = (empty($this->adoptionDate)) ? null : DateTime::createFromFormat($incomingDateFormat, $this->adoptionDate);
+        $monitorStartDate = (empty($this->monitorStartDate)) ? null : $this->_getDateTime($incomingDateFormat, $this->monitorStartDate);
+        $monitorEndDate   = (empty($this->monitorEndDate)) ? null : $this->_getDateTime($incomingDateFormat, $this->monitorEndDate);
+        $discoveryDate    = (empty($this->discoveryDate)) ? null : $this->_getDateTime($incomingDateFormat, $this->discoveryDate);
+        $introductionDate = (empty($this->launchDate)) ? null : $this->_getDateTime($incomingDateFormat, $this->launchDate);
+        $adoptionDate     = (empty($this->adoptionDate)) ? null : $this->_getDateTime($incomingDateFormat, $this->adoptionDate);
 
         if (!$monitorStartDate)
         {
@@ -959,6 +959,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         {
             return "Start date is greater than " . self::MAXIMUM_DEVICE_AGE_YEARS . " years old.";
         }
+
 
         // Convert all the dates back to mysql dates
         $this->monitorStartDate = (!$monitorStartDate) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
@@ -1000,6 +1001,35 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         }
 
         return true;
+    }
+
+    /**
+     * Attempts to get a datetime from an incoming string
+     *
+     * @param $formats
+     * @param $dateTimeString
+     *
+     * @return \DateTime|null
+     */
+    protected function _getDateTime ($formats, $dateTimeString)
+    {
+        $date = null;
+        // Convert to array if it's not already
+        if (!is_array($formats))
+        {
+            $formats = array($formats);
+        }
+
+        foreach ($formats as $format)
+        {
+            $date = DateTime::createFromFormat($format, $dateTimeString);
+            if ($date)
+            {
+                break;
+            }
+        }
+
+        return $date;
     }
 
     /**

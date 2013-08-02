@@ -10,7 +10,10 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
      *
      * @var string
      */
-    protected $_incomingDateFormat = "m/d/Y h:i:s A";
+    protected $_incomingDateFormat = array(
+        "m/d/Y h:i:s A",
+        "m/d/Y G:i",
+    );
 
     /**
      * Column mapping for CSV -> Upload Row.
