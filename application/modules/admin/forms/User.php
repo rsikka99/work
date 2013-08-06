@@ -124,7 +124,6 @@ class Admin_Form_User extends EasyBib_Form
         {
             $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
             $userRoles->setLabel("User Roles:");
-            $userRoles->setRequired(true);
 
             foreach ($this->_roles as $role)
             {
@@ -135,6 +134,7 @@ class Admin_Form_User extends EasyBib_Form
             }
             $this->addElement($userRoles);
         }
+
         $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         if ($isAdmin && $this->_dealerManagement == false)
         {
@@ -182,14 +182,14 @@ class Admin_Form_User extends EasyBib_Form
             $maxYear     = $minYear + 4;
             $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
             $frozenUntil->setLabel('Frozen Until:')
-                ->setJQueryParam('dateFormat', 'yy-mm-dd')
-                ->setJqueryParam('timeFormat', 'hh:mm')
-                ->setJQueryParam('changeYear', 'true')
-                ->setJqueryParam('changeMonth', 'true')
-                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-                ->setDescription('yyyy-mm-dd hh:mm')
-                ->addValidator($datetimeValidator)
-                ->setRequired(false);
+            ->setJQueryParam('dateFormat', 'yy-mm-dd')
+            ->setJqueryParam('timeFormat', 'hh:mm')
+            ->setJQueryParam('changeYear', 'true')
+            ->setJqueryParam('changeMonth', 'true')
+            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+            ->setDescription('yyyy-mm-dd hh:mm')
+            ->addValidator($datetimeValidator)
+            ->setRequired(false);
             $frozenUntil->addFilters(array(
                                           'StringTrim',
                                           'StripTags'

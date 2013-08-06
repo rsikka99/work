@@ -166,6 +166,11 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                     $user->password = $user->cryptPassword($filteredData['password']);
                 }
 
+                if (!isset($filteredData['userRoles']))
+                {
+                    $filteredData['userRoles'] = array();
+                }
+
                 $userMapper->save($user);
 
                 $userRoles = $user->getUserRoles();
