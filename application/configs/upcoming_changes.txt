@@ -8,6 +8,7 @@
 [ADDED]   the ability for Master Device Administrators to edit manufacturers.
 [ADDED]   the ability to filter toner exports by manufacturer
 [CHANGED] look and feel of form / buttons to be more uniform across the application
-[CHANGED] Mapping no longer closes modal after saving.
-[FIXED]   The ability to save user profiles
-[FIXED]   Quote settings form multi select width bug
+[CHANGED] mapping no longer closes modal after saving.
+[CHANGED] toners now are assigned automatically after creating them on the assigned toners page.
+[FIXED]   the ability to save user profiles
+[FIXED]   quote settings form multi select width bug

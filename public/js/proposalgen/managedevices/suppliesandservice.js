@@ -240,6 +240,7 @@ function loadSuppliesAndService()
 
     var assignedTonersjQuery = jQuery("#assignedToners");
     assignedTonersjQuery.navGrid('#assignedToners_toppager', {edit: false, add: false, del: false, search: false, refresh: false});
+
     //Create New
     assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
         caption      : "Create New",
@@ -252,7 +253,7 @@ function loadSuppliesAndService()
             var systemCostLabel = $("label[for='availableTonerssystemCost']");
 
             $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
-
+            $("#availableTonersFormBtn").attr('onClick', "javascript: createOrEdit('availableTonersForm',true);");
             if (!isSaveAndApproveAdmin)
             {
                 availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
@@ -683,6 +684,7 @@ function loadSuppliesAndService()
             var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
             var systemCostLabel = $("label[for='availableTonerssystemCost']");
 
+            $("#availableTonersFormBtn").attr('onClick', "javascript: createOrEdit('availableTonersForm',false);");
             $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
 
             if (!isSaveAndApproveAdmin)
@@ -1334,6 +1336,11 @@ function loadSuppliesAndService()
             availableTonersCriteria.css({"display": 'initial'});
         }
     });
+
+    $("#availableTonersForm").bind("createTonerSuccess", function (e, masterDeviceId)
+    {
+        assignToner(masterDeviceId);
+    });
 }
 /**
  * Adds a toner to tonersList
@@ -1345,6 +1352,7 @@ function assignToner(tonerId)
     tonersList.push(tonerId);
     jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
     reloadTonersGrids();
+
 }
 /**
  * Removes a toner from tonersList
@@ -1530,6 +1538,6 @@ $(document).on("click", "#replacementTonersReset", function ()
 function tonerSaveAndApprove()
 {
     document.getElementById('availableTonerssaveAndApproveHdn').value = 1;
-    createOrEdit('availableTonersForm');
+    createOrEdit('availableTonersForm', false);
     document.getElementById('availableTonerssaveAndApproveHdn').value = 0;
 }

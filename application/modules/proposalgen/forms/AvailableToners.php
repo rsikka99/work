@@ -24,7 +24,7 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
         $manufacturerList = array();
         foreach (Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAllAvailableManufacturers() as $manufacturer)
         {
-            $manufacturerList [$manufacturer->id] = $manufacturer->displayname;
+            $manufacturerList [$manufacturer->id] = $manufacturer->fullname;
         }
 
         $availableTonersManufacturer = $this->createElement('select', 'availableTonersmanufacturerId', array(
@@ -46,7 +46,6 @@ class Proposalgen_Form_AvailableToners extends Twitter_Bootstrap_Form_Horizontal
 
         $availableTonersColorIdElement = $this->createElement('select', 'availableTonerstonerColorId', array(
                                                                                                             'label'        => 'Color:',
-                                                                                                            'class'        => 'span2',
                                                                                                             'multiOptions' => $colors
                                                                                                        ));
 

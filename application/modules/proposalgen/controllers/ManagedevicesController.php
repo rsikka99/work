@@ -587,9 +587,10 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 else if ($formName == 'availableTonersForm')
                 {
-                    if ($manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0))
+                    $id = $manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0);
+                    if ($id > 0)
                     {
-                        $this->sendJson("Successfully updated available toners form");
+                        $this->sendJson(array("Message" => "Successfully updated available toners form", "id" => $id));
                     }
                     else
                     {

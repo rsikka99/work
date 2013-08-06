@@ -723,13 +723,14 @@ class Proposalgen_Service_ManageMasterDevices
      * @param array|bool $data
      * @param bool       $deleteTonerId
      *
-     * @return bool
+     * @return int
      */
     public function updateAvailableTonersForm ($data = false, $deleteTonerId = false)
     {
         $dealerTonerAttributesMapper = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance();
         $tonerMapper                 = Proposalgen_Model_Mapper_Toner::getInstance();
         $validData                   = array();
+        $toner                       = null;
 
         // We need to remove the prefix on the formValues
         foreach ($data as $key => $value)
@@ -739,7 +740,6 @@ class Proposalgen_Service_ManageMasterDevices
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->beginTransaction();
-
         try
         {
             // If we are not deleting a toner
@@ -772,6 +772,7 @@ class Proposalgen_Service_ManageMasterDevices
                     $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;
 
                     $validData['id'] = $tonerMapper->insert($toner);
+                    $toner->id       = (int)$validData['id'];
                 }
                 // We are editing a toner
                 else if ($validData['id'] > 0)
@@ -839,8 +840,13 @@ class Proposalgen_Service_ManageMasterDevices
             }
 
             $db->commit();
+            $id = 0;
+            if ($toner instanceof Proposalgen_Model_Toner)
+            {
+                $id = $toner->id;
+            }
 
-            return true;
+            return $id;
         }
         catch (Exception $e)
         {
@@ -849,8 +855,6 @@ class Proposalgen_Service_ManageMasterDevices
 
             return false;
         }
-
-        return true;
     }
 
     /**
