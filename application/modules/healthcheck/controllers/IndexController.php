@@ -72,13 +72,12 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
         {
             $values = $this->getRequest()->getPost();
 
-            if (isset($values ['cancel']))
+            if (isset($values ['goBack']))
             {
                 $this->gotoPreviousNavigationStep($this->_navigation);
             }
             else
             {
-
                 if ($healthcheckSettingsService->update($values))
                 {
                     $this->updateHealthcheckStepName();
