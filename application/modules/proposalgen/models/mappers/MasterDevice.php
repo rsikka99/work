@@ -498,16 +498,16 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
             $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id`", $dealerMasterDeviceColumns);
         }
 
-        //          Apply the limit/offset
+        // Apply the limit/offset
         $zendDbSelect->limit($limit, $offset);
 
-        //          Apply our where clause
+        // Apply our where clause
         foreach ($whereClause as $cond => $value)
         {
             $zendDbSelect->where($cond, $value);
         }
 
-        //          If we're just counting we only need to return the count
+        // If we're just counting we only need to return the count
         if ($justCount)
         {
             $zendDbStatement = $db->query($zendDbSelect);
