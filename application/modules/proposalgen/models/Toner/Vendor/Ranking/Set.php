@@ -10,9 +10,14 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
     public $id;
 
     /**
-     * @var int
+     * @var Proposalgen_Model_DbTable_Toner_Vendor_Ranking[]
      */
-    public $overrideManufacturer = null;
+    protected $_rankings;
+
+    /**
+     * @var array|Proposalgen_Model_Toner_Vendor_Ranking[]
+     */
+    protected $_ranksAsArray;
 
     /**
      * @param array $params An array of data to populate the model with
@@ -40,16 +45,17 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
         );
     }
 
+    /**
+     * @return array|Proposalgen_Model_Toner_Vendor_Ranking[]
+     */
     public function getRanksAsArray ()
     {
-        if($this->overrideManufacturer == null)
+        if (!isset($this->_ranksAsArray))
         {
-            return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
+            $this->_ranksAsArray = Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetIdAsArray($this->id);
         }
-        else
-        {
-            return array($this->overrideManufacturer);
-        }
+
+        return $this->_ranksAsArray;
     }
 
     /**
@@ -57,17 +63,20 @@ class Proposalgen_Model_Toner_Vendor_Ranking_Set extends My_Model_Abstract
      */
     public function getRankings ()
     {
-        if($this->overrideManufacturer == null)
+        if (!isset($this->_rankings))
         {
-            return Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetId($this->id);
+            $this->_rankings = Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->fetchAllByRankingSetId($this->id);
         }
-        else
-        {
-            $vendorRankings = array();
-            $rank = new Proposalgen_Model_Toner_Vendor_Ranking();
-            $rank->manufacturerId = $this->overrideManufacturer;
-            $vendorRankings[] = $rank;
-            return $vendorRankings;
-        }
+
+        return $this->_rankings;
+    }
+
+    /**
+     * @param $rankings Proposalgen_Model_Toner_Vendor_Ranking
+     */
+    public function setRankings ($rankings)
+    {
+        $this->_ranksAsArray = array($rankings->manufacturerId);
+        $this->_rankings     = array($rankings);
     }
 }

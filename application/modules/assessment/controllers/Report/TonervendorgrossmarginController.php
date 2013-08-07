@@ -184,7 +184,9 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         if ($tonerVendorId > 0)
         {
             $tonerRankSet                               = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
-            $tonerRankSet->overrideManufacturer         = $tonerVendorId;
+            $ranking = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $ranking->manufacturerId = $tonerVendorId;
+            $tonerRankSet->setRankings($ranking);
             $costPerPageSetting                         = $assessmentViewModel->getCostPerPageSettingForDealer();
             $costPerPageSetting->monochromeTonerRankSet = $tonerRankSet;
             $costPerPageSetting->colorTonerRankSet      = $tonerRankSet;
@@ -194,6 +196,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         {
             $costPerPageSetting = $assessmentViewModel->getCostPerPageSettingForDealer();
         }
+        // OEM
         else
         {
             $tonerRankSet                               = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
