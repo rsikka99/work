@@ -285,7 +285,7 @@ $(document).ready(function ()
                 var cur_price = document.getElementById("toners_list").rows[i + 1].cells[7].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
                 hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
                 new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:60px' onkeypress='javascript: return numbersonly(this, event);' />";
-                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px' onkeypress='javascript: return numbersonly(this, event);' />";
+                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px';' />";
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_dealer_sku: new_dealer_sku_element});
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_toner_price: hidden_price_element + new_price_element});
 

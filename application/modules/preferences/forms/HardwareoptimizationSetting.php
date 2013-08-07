@@ -194,7 +194,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
     {
         $this->setDisplayGroupDecorators(array(
                                               'FormElements',
-                                              array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
+                                              array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'class' => array('property', 'default', 'value'), 'placement' => 'prepend')),
                                               array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                               array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
                                               'Fieldset'

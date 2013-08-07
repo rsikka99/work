@@ -1348,18 +1348,26 @@ label.label-phone-number-country {
   margin-right: 20px;
   float: left;
 }
-.reportSettingsForm input {
-  text-align: right;
-}
 .reportSettingsForm td {
   height: 50px;
-  width: 120px;
 }
 .reportSettingsForm .description {
-  width: 100px;
-  margin-right: 50px;
+  text-align: left;
 }
-.reportSettingsForm td:nth-child(1) {
+th.property {
+  padding-left: 20px;
+  width: 350px;
+}
+th.default {
+  width: 310px;
+}
+.reportSettingsForm .controls {
+  text-align: right;
+}
+.reportSettingsForm td:first-child {
+  padding-left: 20px;
+}
+.reportSettingsForm td:nth-child(1) input {
   width: 250px;
   padding-left: 15px;
 }
@@ -1373,14 +1381,21 @@ label.label-phone-number-country {
 .reportSettingsForm .headerRow {
   font-weight: bold;
 }
-.reportSettingsForm .headerRow td:last-child {
-  text-align: right;
+.reportSettingsForm .headerRow .property,
+.reportSettingsForm .headerRow .default {
+  text-align: left;
 }
-.center-form-actions {
-  text-align: center;
+.reportSettingsForm .headerRow .value {
+  text-align: right;
 }
 .reportSettingsForm .short-row {
   height: 15px;
+}
+.reportSettingsForm table {
+  width: 100%;
+}
+.center-form-actions {
+  text-align: center;
 }
 /* Fix jqGrid for bootstrap */
 tr.ui-search-toolbar select {

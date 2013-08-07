@@ -61,7 +61,7 @@
 			<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
 			<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
 				<option value="manufacturerId" <?php if($this->search_filter == 'manufacturerId') { echo "selected"; } ?>>Manufacturer</option>
-				<option value="modelName" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model</option>
+				<option value="modelName" <?php if($this->search_filter == 'printer_model') { echo "selected"; } ?>>Printer Model"</option>"
 			</select>
 			<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
     				<span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> /></span>

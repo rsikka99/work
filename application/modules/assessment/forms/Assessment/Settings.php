@@ -117,7 +117,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                                                       'min' => 0,
                                                       'max' => 99
                                                  )))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('%')
@@ -134,7 +134,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -153,7 +153,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -172,7 +172,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -191,7 +191,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -210,7 +210,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel('MPS Monochrome Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -229,7 +229,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel('MPS Color Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('page', 'page')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
@@ -250,7 +250,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -289,7 +289,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->addValidator('greaterThan', true, array(
                                                  'min' => 0
                                             ))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('%')
@@ -307,7 +307,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->addValidator('greaterThan', true, array(
                                                  'min' => 0
                                             ))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setAttrib('id', 'actualPageCoverageColor')
@@ -322,7 +322,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -341,7 +341,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
         $labor_cost->setLabel('Labor Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -360,7 +360,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
         $parts_cost->setLabel('Parts Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
