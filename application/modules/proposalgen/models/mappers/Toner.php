@@ -608,13 +608,21 @@ FROM toners
             toners.cost                        AS systemCost,
             dealer_toner_attributes.cost       AS dealerCost,
             toners.yield,
-            toners.tonerColorId
+            toners.tonerColorId,
+            IF(dt1.master_device_id IN ({$tonerIdList}),'1','0') AS is_added,
+    (SELECT
+    GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
+     FROM device_toners AS dt2
+         LEFT JOIN master_devices ON master_devices.id = dt2.master_device_id
+         LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
+     WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM `toners`
+    LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId}
-WHERE `toners`.`id` IN ({$tonerIdList});";
-//WHERE `toners`.`id` IN ({$tonerIdList});";
+WHERE `toners`.`id` IN ({$tonerIdList})
+                GROUP BY id;";
 
         $query = $db->query($sql);
 

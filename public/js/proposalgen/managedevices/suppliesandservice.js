@@ -199,7 +199,7 @@ function loadSuppliesAndService()
                     }
 
                     /**
-                     * Not sure what this max variable is actually used for.
+                     * This is the number of Devices to list before the view all toggle takes into effect
                      * @type {number}
                      */
                     var max = 1;
@@ -219,18 +219,21 @@ function loadSuppliesAndService()
                         {
                             deviceListCollapsibleContainer += '<div id="assignedToners_inner_' + ids[i] + '" style="display: none;">';
                         }
+
                         deviceListCollapsibleContainer += device + '<br />';
-                        if (j > max && j == compatibleDevices.length - 1)
-                        {
-                            deviceListCollapsibleContainer += '</div>';
-                            deviceListCollapsibleContainer += '<a id="assignedToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'assignedToners\',' + ids[i] + ');">View All...</a>';
-                        }
+                    }
+
+                    if (compatibleDevices.length > max)
+                    {
+                        deviceListCollapsibleContainer += '</div>';
+                        deviceListCollapsibleContainer += '<a id="assignedToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'assignedToners\',' + ids[i] + ');">View All...</a>';
                     }
 
                     currentRow.device_list = deviceListCollapsibleContainer;
                     currentRow.tonerColorIdModified = "<div style='text-align: center;padding-top:5px;'><img src=" + image + " width='24' /><br/>" + label + "</div>";
 
                     grid.setRowData(currentRowId, currentRow);
+
                 }
             }
         });
@@ -631,7 +634,7 @@ function loadSuppliesAndService()
                             break;
                     }
                     /**
-                     * Not sure what this max variable is actually used for.
+                     * This is the number of Devices to list before the view all toggle takes into effect
                      * @type {number}
                      */
                     var max = 1;
@@ -651,13 +654,16 @@ function loadSuppliesAndService()
                         {
                             deviceListCollapsibleContainer += '<div id="availableToners_inner_' + ids[i] + '" style="display: none;">';
                         }
+
                         deviceListCollapsibleContainer += device + '<br />';
-                        if (j > max && j == compatibleDevices.length - 1)
-                        {
-                            deviceListCollapsibleContainer += '</div>';
-                            deviceListCollapsibleContainer += '<a id="availableToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'availableToners\',' + ids[i] + ');">View All...</a>';
-                        }
                     }
+
+                    if (compatibleDevices.length > max)
+                    {
+                        deviceListCollapsibleContainer += '</div>';
+                        deviceListCollapsibleContainer += '<a id="availableToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'availableToners\',' + ids[i] + ');">View All...</a>';
+                    }
+
                     currentRow.device_list = deviceListCollapsibleContainer;
                     currentRow.tonerColorIdModified = "<div style='text-align: center;padding-top:5px;'><img src=" + image + " width='24' /><br/>" + label + "</div>";
                     grid.setRowData(currentRowId, currentRow);
