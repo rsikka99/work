@@ -52,39 +52,45 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
         {
             $postData = $this->getRequest()->getPost();
 
-            $db = Zend_Db_table::getDefaultAdapter();
-            try
+            if (!isset($postData ['cancel']))
             {
-                $dealer           = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
-                $currentUserCount = count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($dealer->id));
-                $maxLicenses      = $dealer->userLicenses;
-                if ($currentUserCount < $maxLicenses)
+                $db = Zend_Db_table::getDefaultAdapter();
+                try
                 {
-                    $db->beginTransaction();
-                    if ($userService->create($postData))
+                    $dealer           = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
+                    $currentUserCount = count(Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($dealer->id));
+                    $maxLicenses      = $dealer->userLicenses;
+                    if ($currentUserCount < $maxLicenses)
                     {
-                        $this->_flashMessenger->addMessage(array('success' => 'User created.'));
-                        $db->commit();
-                        $this->redirector('index');
+                        $db->beginTransaction();
+                        if ($userService->create($postData))
+                        {
+                            $this->_flashMessenger->addMessage(array('success' => 'User created.'));
+                            $db->commit();
+                        }
+                        else
+                        {
+                            foreach ($userService->getErrors() as $message)
+                            {
+                                $this->_flashMessenger->addMessage(array('danger' => $message));
+                            }
+                            $db->rollBack();
+                        }
                     }
                     else
                     {
-                        foreach ($userService->getErrors() as $message)
-                        {
-                            $this->_flashMessenger->addMessage(array('danger' => $message));
-                        }
-                        $db->rollBack();
+                        $this->_flashMessenger->addMessage(array('danger' => 'Allocated user licenses exceed.'));
                     }
                 }
-                else
+                catch (Exception $e)
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'Allocated user licenses exceed.'));
+                    $db->rollBack();
+                    Tangent_Log::logException($e);
                 }
             }
-            catch (Exception $e)
+            else
             {
-                $db->rollBack();
-                Tangent_Log::logException($e);
+                $this->redirector('index');
             }
         }
 
@@ -185,6 +191,10 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                     Tangent_Log::logException($e);
                 }
             }
+            else
+            {
+                $this->redirector('index');
+            }
         }
 
         $this->view->form = $form;
@@ -242,30 +252,36 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
         if ($this->getRequest()->isPost())
         {
             $postData = $this->getRequest()->getPost();
-
-            $db = Zend_Db_table::getDefaultAdapter();
-            try
+            if (!isset($postData ['cancel']))
             {
-                $db->beginTransaction();
+                $db = Zend_Db_table::getDefaultAdapter();
+                try
+                {
+                    $db->beginTransaction();
 
-                if ($userService->update($postData, $userId))
-                {
-                    $this->_flashMessenger->addMessage(array('success' => 'User saved.'));
-                    $db->commit();
-                }
-                else
-                {
-                    foreach ($userService->getErrors() as $message)
+                    if ($userService->update($postData, $userId))
                     {
-                        $this->_flashMessenger->addMessage(array('danger' => $message));
+                        $this->_flashMessenger->addMessage(array('success' => 'User saved.'));
+                        $db->commit();
                     }
+                    else
+                    {
+                        foreach ($userService->getErrors() as $message)
+                        {
+                            $this->_flashMessenger->addMessage(array('danger' => $message));
+                        }
+                        $db->rollBack();
+                    }
+                }
+                catch (Exception $e)
+                {
                     $db->rollBack();
+                    Tangent_Log::logException($e);
                 }
             }
-            catch (Exception $e)
+            else
             {
-                $db->rollBack();
-                Tangent_Log::logException($e);
+                $this->redirector('index');
             }
         }
 

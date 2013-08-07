@@ -113,9 +113,9 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
             }
 
             $this->addElement('multiCheckbox', 'userRoles', array(
-                                                                              'label'        => 'User Roles:',
-                                                                              'multiOptions' => $roleMultiOptions,
-                                                                         ));
+                                                                 'label'        => 'User Roles:',
+                                                                 'multiOptions' => $roleMultiOptions,
+                                                            ));
         }
 
         // No need to edit this when creating a user
@@ -137,18 +137,18 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
             /* @var $frozenUntil My_Form_Element_DateTimePicker */
             $frozenUntil = $this->createElement('DateTimePicker', 'frozenUntil');
             $frozenUntil->setJQueryParam('dateFormat', 'yy-mm-dd')
-                ->setJqueryParam('timeFormat', 'hh:mm')
-                ->setJQueryParam('changeYear', 'true')
-                ->setJqueryParam('changeMonth', 'true')
-                ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-                ->setLabel('Frozen Until:')
-                ->addValidator($datetimeValidator)
-                ->setRequired(false)
-                ->setDescription('yyyy-mm-dd hh:mm')
-                ->addFilters(array(
-                                  'StringTrim',
-                                  'StripTags'
-                             ));
+            ->setJqueryParam('timeFormat', 'hh:mm')
+            ->setJQueryParam('changeYear', 'true')
+            ->setJqueryParam('changeMonth', 'true')
+            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+            ->setLabel('Frozen Until:')
+            ->addValidator($datetimeValidator)
+            ->setRequired(false)
+            ->setDescription('yyyy-mm-dd hh:mm')
+            ->addFilters(array(
+                              'StringTrim',
+                              'StripTags'
+                         ));
 
             $this->addElement($frozenUntil);
 
@@ -222,11 +222,27 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                                                                        'label' => 'Require Password Change On Next Login:'
                                                                   ));
 
+        //setup cancel button
+        $submit = $this->createElement('submit', 'cancel', array(
+                                                                'ignore' => true,
+                                                                'label'  => 'Cancel'
+                                                           ));
+        //setup submit button
+        $cancel = $this->createElement('submit', 'submit', array(
+                                                                'ignore'     => true,
+                                                                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+                                                                'label'      => 'Save'
+                                                           ));
 
-        // Add the submit button
-        $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+        $this->addDisplayGroup(array(
+                                    $cancel,
+                                    $submit
+                               ), 'actions', array(
+                                                  'disableLoadDefaultDecorators' => true,
+                                                  'decorators'                   => array(
+                                                      'Actions'
+                                                  ),
+                                                  'class'                        => 'form-actions-center'
+                                             ));
     }
 }

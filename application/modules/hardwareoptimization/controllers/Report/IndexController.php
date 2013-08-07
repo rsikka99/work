@@ -46,6 +46,10 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
 
                     $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $quoteId));
                 }
+                else
+                {
+                    $this->gotoPreviousNavigationStep($this->_navigation);
+                }
             }
             catch (Exception $e)
             {

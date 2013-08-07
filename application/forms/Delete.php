@@ -3,17 +3,16 @@
 /**
  * Class Application_Form_Delete
  */
-class Application_Form_Delete extends EasyBib_Form
+class Application_Form_Delete extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_formQuestion;
 
     /**
      * Creates a deletion form
      *
-     * @param string       $message The message to present to the users
-     * @param null|array   $options
+     * @param string     $message The message to present to the users
+     * @param null|array $options
      *
-     * @see EasyBib_Form::__construct()
      */
     public function __construct ($message = "Are you sure you want to delete?", $options = null)
     {
@@ -32,18 +31,28 @@ class Application_Form_Delete extends EasyBib_Form
 
         $this->addElement($note);
 
-        // Add the submit button
-        $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Delete'
-                                              ));
+        //setup cancel button
+        $submit = $this->createElement('submit', 'cancel', array(
+                                                                'ignore' => true,
+                                                                'label'  => 'Cancel'
+                                                           ));
+        //setup submit button
+        $cancel = $this->createElement('submit', 'submit', array(
+                                                                'ignore'     => true,
+                                                                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+                                                                'label'      => 'Delete'
+                                                           ));
 
-        // Add the cancel button
-        $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+        $this->addDisplayGroup(array(
+                                    $submit,
+                                    $cancel
+                               ), 'actions', array(
+                                                  'disableLoadDefaultDecorators' => true,
+                                                  'decorators'                   => array(
+                                                      'Actions'
+                                                  ),
+                                                  'class'                        => 'form-actions-center'
+                                             ));
 
-        EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

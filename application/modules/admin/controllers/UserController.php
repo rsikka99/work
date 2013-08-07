@@ -103,6 +103,9 @@ class Admin_UserController extends Tangent_Controller_Action
 
                                 // Reset the form after everything is saved successfully
                                 $form->reset();
+
+                                // Select the same dealer so we can keep creating users easier
+                                $form->populate(array('dealerId' => $values['dealerId']));
                             }
                             $db->commit();
                         }
@@ -151,6 +154,10 @@ class Admin_UserController extends Tangent_Controller_Action
                                                        ));
                     $form->populate($request->getPost());
                 }
+            }
+            else
+            {
+                $this->redirector('index');
             }
         }
 
