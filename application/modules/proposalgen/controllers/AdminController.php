@@ -979,39 +979,33 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     public function masterdeviceslistAction ()
     {
         $response = new stdClass();
+
         // Criteria is the values that the client wants to search by
         $criteria = $this->_getParam('criteria', false);
+
         // Filter is what column the client wants to do a search by
         $filter = $this->_getParam('filter', false);
+
         // Order in which the columns are sorted
         $sortOrder = $this->_getParam('sord', 'asc');
+
         // Index in which the columns should be sorted
         $sortIndex = $this->_getParam('sidx', 'id');
+
         // Rows that are passed
         $limit = $this->_getParam('rows');
+
         // Page that the JQGrid is currently on
         $page = $this->_getParam('page');
 
-
+        // Start is offset for MySQL query
         $start = $limit * $page - $limit;
+
         try
         {
             // Based on the filter allow the mappers to return the appropriate device
-            if ($filter === 'manufacturerId' && $criteria != '')
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria, "{$sortIndex} {$sortOrder}", 100, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria));
-            }
-            else if ($filter === 'modelName')
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria));
-            }
-            else
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null));
-            }
+            $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, $start, false);
+            $count         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, 0, true);
             // Set the total pages that we have
             if ($count > 0)
             {

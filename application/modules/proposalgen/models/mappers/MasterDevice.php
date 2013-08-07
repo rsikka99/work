@@ -431,6 +431,127 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     }
 
     /**
+     * @param      $sortColumn
+     * @param      $sortDirection
+     * @param null $filterByColumn
+     * @param null $filterValue
+     * @param null $limit
+     * @param null $offset
+     * @param bool $justCount
+     *
+     * @return Proposalgen_Model_MasterDevice[]
+     */
+    public function fetchAllMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $justCount = false)
+    {
+        $db                          = Zend_Db_Table::getDefaultAdapter();
+        $masterDevicesTableName      = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
+        $manufacturerTableName       = Proposalgen_Model_Mapper_Manufacturer::getInstance()->getTableName();
+        $dealerMasterDeviceTableName = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->getTableName();
+
+        $whereClause = array();
+        if (strcasecmp($filterByColumn, 'modelName') === 0 && $filterValue !== '')
+        {
+            $whereClause ["CONCAT({$manufacturerTableName}.fullname, \" \", {$masterDevicesTableName}.modelName) LIKE ?"] = "%{$filterValue}%";
+        }
+        elseif (strcasecmp($filterByColumn, 'manufacturerId') === 0 && $filterValue > 0)
+        {
+            $whereClause ["{$manufacturerTableName}.id = ?"] = "$filterValue";
+        }
+
+        if ($justCount)
+        {
+            $masterDeviceColumns       = array('count' => 'COUNT(*)');
+            $manufacturerColumns       = null;
+            $dealerMasterDeviceColumns = null;
+        }
+        else
+        {
+            $masterDeviceColumns       = array(
+                'id',
+                'manufacturerId',
+                'modelName'
+            );
+            $manufacturerColumns       = array(
+                'fullname',
+                'displayname'
+            );
+            $dealerMasterDeviceColumns = array(
+                'laborCostPerPage',
+                'partsCostPerPage'
+            );
+        }
+
+        /*
+         * Here we create our select statement
+         */
+
+        $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns);
+
+        if (!$justCount)
+        {
+            $zendDbSelect->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns);
+            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id`", $dealerMasterDeviceColumns);
+        }
+        else if ($filterByColumn)
+        {
+            $zendDbSelect->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns);
+            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id`", $dealerMasterDeviceColumns);
+        }
+
+        //          Apply the limit/offset
+        $zendDbSelect->limit($limit, $offset);
+
+        //          Apply our where clause
+        foreach ($whereClause as $cond => $value)
+        {
+            $zendDbSelect->where($cond, $value);
+        }
+
+        //          If we're just counting we only need to return the count
+        if ($justCount)
+        {
+            $zendDbStatement = $db->query($zendDbSelect);
+
+            return $zendDbStatement->fetchColumn();
+        }
+        else
+        {
+            if ($sortColumn == 'printer_model')
+            {
+                $sortColumn = 'modelName';
+                $zendDbSelect->order("{$masterDevicesTableName}.{$sortColumn} {$sortDirection}");
+            }
+            if ($sortColumn == 'manufacturerId')
+            {
+                $sortColumn = 'fullname';
+                $zendDbSelect->order("{$manufacturerTableName}.{$sortColumn} {$sortDirection}");
+            }
+            if ($sortColumn == 'labor_cost_per_page_dealer')
+            {
+                $sortColumn = 'laborCostPerPage';
+                $zendDbSelect->order("{$dealerMasterDeviceTableName}.{$sortColumn} {$sortDirection}");
+            }
+            if ($sortColumn == 'parts_cost_per_page_dealer')
+            {
+                $sortColumn = 'partsCostPerPage';
+                $zendDbSelect->order("{$dealerMasterDeviceTableName}.{$sortColumn} {$sortDirection}");
+            }
+
+            $zendDbStatement     = $db->query($zendDbSelect);
+            $masterDeviceResults = $zendDbStatement->fetchAll();
+            $masterDevices       = array();
+            foreach ($masterDeviceResults as $masterDeviceResult)
+            {
+                $object = new Proposalgen_Model_MasterDevice($masterDeviceResult);
+                $this->saveItemToCache($object);
+                $masterDevices[] = $object;
+            }
+
+            return $masterDevices;
+        }
+    }
+
+    /**
      * @param Proposalgen_Model_MasterDevice $object
      *
      * @return int
