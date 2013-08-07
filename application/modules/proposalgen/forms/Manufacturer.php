@@ -24,62 +24,62 @@ class Proposalgen_Form_Manufacturer extends EasyBib_Form
          * Use .form-horizontal to have same experience as with Bootstrap v1!
          */
         $this->setAttrib('class', 'form-horizontal');
-        
+
         $this->addElement('text', 'fullname', array (
-                'label' => 'Full Name:', 
+                'label' => 'Full Name:',
                 'required' => true,
                 'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
+                        'StringTrim',
+                        'StripTags'
+                ),
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'StringLength',
                                 'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
+                                        1,
+                                        255
+                                )
+                        )
+                )
         ));
-        
+
         $this->addElement('text', 'displayname', array (
-                'label' => 'Display Name:', 
+                'label' => 'Display Name:',
                 'required' => false,
                 'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
+                        'StringTrim',
+                        'StripTags'
+                ),
                 'validators' => array (
                         array (
-                                'validator' => 'StringLength', 
+                                'validator' => 'StringLength',
                                 'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
+                                        1,
+                                        255
+                                )
+                        )
+                )
         ));
-        
+
         $this->addElement('checkbox', 'isDeleted', array (
-                'label' => 'Deleted', 
+                'label' => 'Deleted',
                 'filters' => array (
-                        'Boolean' 
-                ) 
+                        'Boolean'
+                )
         ));
-        
+
         // Add the submit button
         $this->addElement('submit', 'submit', array (
                 'ignore' => true,
-                'label' => 'Save' 
+                'label' => 'Save'
         ));
-        
+
         // Add the cancel button
         $this->addElement('submit', 'cancel', array (
                 'ignore' => true,
-                'label' => 'Cancel' 
+                'label' => 'Cancel'
         ));
-        
+
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
 }

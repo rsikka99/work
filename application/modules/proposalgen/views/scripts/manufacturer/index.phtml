@@ -13,8 +13,10 @@
             <th style="width: 30px;">ID</th>
             <th>Full Name</th>
             <th>Display Name</th>
-            <th style="width: 80px;">Is Deleted</th>
-            <th style="width: 80px;">Action</th>
+            <?php if($this->canEdit) : ?>
+                <th style="width: 80px;">Is Deleted</th>
+                <th style="width: 80px;">Action</th>
+            <?php endif; ?>
         </tr>
     </thead>
     <tbody>
@@ -24,14 +26,16 @@
             <td><?php echo $manufacturer->id; ?></td>
             <td><?php echo $manufacturer->fullname; ?></td>
             <td><?php echo $manufacturer->displayname; ?></td>
-            <td><?php echo ($manufacturer->isDeleted) ? "Deleted" : ""; ?></td>
-            <td>
-            <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT)) { ?>
-                <div class="btn-group">
-                    <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->id)); ?>"><i class="icon-pencil"></i></a>
-                </div>
-                <?php } ?>
-            </td>
+            <?php if($this->canEdit) : ?>
+                <td><?php echo ($manufacturer->isDeleted) ? "Deleted" : ""; ?></td>
+                <td>
+                <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT)) { ?>
+                    <div class="btn-group">
+                        <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $manufacturer->id)); ?>"><i class="icon-pencil"></i></a>
+                    </div>
+                    <?php } ?>
+                </td>
+            <?php endif; ?>
         </tr>
         <?php endforeach; ?>
     </tbody>

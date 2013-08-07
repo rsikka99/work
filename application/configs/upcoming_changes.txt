@@ -8,6 +8,7 @@
 [ADDED]   the ability for Master Device Administrators to edit manufacturers.
 [ADDED]   the ability to filter toner exports by manufacturer
 [CHANGED] look and feel of form / buttons to be more uniform across the application
+[CHANGED} look and feel of manufacturers edit / create forms
 [CHANGED] mapping no longer closes modal after saving.
 [CHANGED] toners now are assigned automatically after creating them on the assigned toners page.
 [FIXED]   exclusion of devices for hardware optimization not working.
