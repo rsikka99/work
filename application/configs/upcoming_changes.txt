@@ -10,6 +10,7 @@
 [CHANGED] look and feel of form / buttons to be more uniform across the application
 [CHANGED] mapping no longer closes modal after saving.
 [CHANGED] toners now are assigned automatically after creating them on the assigned toners page.
+[FIXED]   exclusion of devices for hardware optimization not working.
 [FIXED]   machine compatibility from not showing when assigning toners that were not yet saved.
 [FIXED]   quote device groups not being saved
 [FIXED]   quote settings form multi select width bug

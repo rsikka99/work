@@ -312,7 +312,8 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
             ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
             ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
             ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-            ->where("md.isLeased = ?", 0);
+            ->where("md.isLeased = ?", 0)
+            ->where("di.isExcluded = ?", 0);
 
             $query = $db->query($select);
 
