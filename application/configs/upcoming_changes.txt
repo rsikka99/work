@@ -1,3 +1,5 @@
+[ADDED]   a new bulk file imports into the system.
+[ADDED]   a new interface for import and export files.
 [ADDED]   a new report, Toner Vendor Gross Margin
 [ADDED]   explanation of how dealer / system overrides work for labor and parts cost per page
 [ADDED]   the ability for users that are not administrators to create, edit and delete toners that are not system toners.

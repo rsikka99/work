@@ -1,0 +1,67 @@
+<?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/cost/importExport.js')); ?>
+<br />
+<div class="tabbable">
+    <ul class="nav nav-tabs">
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'bulk-file-device-pricing', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Device Price"> Device Price </a>
+        </li>
+        <?php if ($this->canApprove) : ?>
+            <li>
+                <a href="<?php echo $this->url(array('action' => 'bulk-file-device-features', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Device Features"> Device Features </a>
+            </li>
+        <?php endif; ?>
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-pricing', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Toner Pricing"> Toner Pricing</a>
+        </li>
+        <li class="active"><a href="#" title="Toner Matchup"> Toner Matchup </a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="deviceFeaturesTabPane">
+            <h3> Toner Pricing Matchup Import & Export </h3>
+
+            <p> Toner pricing will allow you to add update new toners to our system. </p>
+
+            <form id="tonerMatchupForm" action="" method="post" enctype="multipart/form-data">
+
+                <div id="upload_container" class="well">
+                    <div>Choose a <span style="color: red">.CSV</span> file to upload:
+                        <input type="file" name="uploadedfile" id="uploadedfile" accept="application/csv, text/csv" size="60" class="upload_file" /></div>
+                </div>
+
+                <a href="#" id="importLink" onclick="do_action('import')" class="btn btn-primary"><i class="icon-upload"></i> Import</a>
+                <a href="#" id="exportLink" onclick="do_action('export')" data-type="matchup" class="btn btn-primary"><i class="icon-download"></i> Export</a>
+            </form>
+        </div>
+    </div>
+</div>
+<br />
+<input type="button" name="btnUpload" value="Back" onclick="do_action('cancel');" class="btn btn-inverse" />
+
+<br />
+<br />
+<?php if ($this->errorMessages != null): ?>
+    <div class="well">
+        <table class="table">
+            <tr>
+                <th> Line Number</th>
+                <th> Error Type</th>
+                <th> Error Message</th>
+            </tr>
+            <?php foreach ($this->errorMessages as $lineNumber => $error) : ?>
+                <?php foreach ($error as $errorType => $fieldErrors): ?>
+                    <?php foreach ($fieldErrors as $fieldName => $errorMessages): ?>
+                        <?php foreach ($errorMessages as $key => $errorMessage): ?>
+                            <tr>
+                                <td><?php echo $lineNumber ?></td>
+                                <td><?php echo $errorType ?></td>
+                                <td><?php echo $fieldName . ' ' . $errorMessage ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </table>
+    </div>
+<?php endif; ?>
+
+

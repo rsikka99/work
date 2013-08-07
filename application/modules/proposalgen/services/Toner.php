@@ -41,4 +41,16 @@ class Proposalgen_Service_Toner
 
         return $oemTonerArray;
     }
+
+    /**
+     * Takes in a toner cost and applies a 5 - 10 % margin on the cost.
+     *
+     * @param float $cost
+     *
+     * @return float The new cost of the toner
+     */
+    public static function obfuscateTonerCost ($cost)
+    {
+        return round(Tangent_Accounting::applyMargin($cost, rand(5, 10)));
+    }
 }

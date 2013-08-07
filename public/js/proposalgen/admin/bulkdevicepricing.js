@@ -658,7 +658,7 @@ function do_action(action)
     if (action == 'file')
     {
         document.getElementById("hdnMode").action = "pricing";
-        document.getElementById("bulk").action = "bulkfilepricing";
+        document.getElementById("bulk").action = "bulk-file-device-pricing";
         document.getElementById("bulk").submit();
     }
 }

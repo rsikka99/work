@@ -676,4 +676,122 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         return $object;
     }
+
+    /**
+     * Gets the required data required for exporting printer pricing
+     *
+     * @param $manufacturerId int
+     * @param $dealerId       int
+     *
+     * @return array
+     */
+    public function getPrinterPricingForExport ($manufacturerId, $dealerId)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+
+        $select = $db->select()
+                  ->from(array(
+                              'md' => 'master_devices'
+                         ), array(
+                                 'id AS master_id',
+                                 'modelName',
+                            ))
+                  ->joinLeft(array(
+                                  'm' => 'manufacturers'
+                             ), 'm.id = md.manufacturerId', array(
+                                                                 'fullname'
+                                                            ))
+                  ->joinLeft(array(
+                                  'dmda' => 'dealer_master_device_attributes'
+                             ), "dmda.masterDeviceId = md.id AND dmda.dealerId = {$dealerId}",
+                array(
+                     'laborCostPerPage',
+                     'partsCostPerPage',
+                ))
+                  ->order(array(
+                               'm.fullname',
+                               'md.modelName',
+                          ));
+
+        if ($manufacturerId > 0)
+        {
+            $select->where("manufacturerId = ?", $manufacturerId);
+        }
+
+        $stmt      = $db->query($select);
+        $result    = $stmt->fetchAll();
+        $fieldList = array();
+
+        foreach ($result as $value)
+        {
+            $fieldList [] = array(
+                $value ['master_id'],
+                $value ['fullname'],
+                $value ['modelName'],
+                $value ['laborCostPerPage'],
+                $value ['partsCostPerPage'],
+            );
+        }
+
+        return $fieldList;
+    }
+
+    /**
+     * Gets a list of all master devices inside the system and their features.
+     *
+     * @return array
+     */
+    public function getPrinterFeaturesForExport ()
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+
+        $select    = $db->select()
+                     ->from(array(
+                                 'md' => 'master_devices'
+                            ), array(
+                                    'id AS master_id',
+                                    'modelName',
+                                    'isDuplex',
+                                    'isCopier',
+                                    'reportsTonerLevels',
+                                    'ppmBlack',
+                                    'ppmColor',
+                                    'dutyCycle',
+                                    'wattsPowerNormal',
+                                    'wattsPowerIdle',
+                               ))
+                     ->joinLeft(array(
+                                     'm' => 'manufacturers'
+                                ), 'm.id = md.manufacturerId', array(
+                                                                    'fullname'
+                                                               ))
+                     ->order(array(
+                                  'm.fullname',
+                                  'md.modelName',
+                             ));
+        $stmt      = $db->query($select);
+        $result    = $stmt->fetchAll();
+        $fieldList = array();
+
+        foreach ($result as $value)
+        {
+            $fieldList [] = array(
+                $value ['master_id'],
+                $value ['fullname'],
+                $value ['modelName'],
+                $value ['isDuplex'],
+                $value ['isCopier'],
+                $value ['reportsTonerLevels'],
+                $value ['ppmBlack'],
+                $value ['ppmColor'],
+                $value ['dutyCycle'],
+                $value ['wattsPowerNormal'],
+                $value ['wattsPowerIdle']
+            );
+        }
+
+        return $fieldList;
+    }
 }

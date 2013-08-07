@@ -765,8 +765,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         if ($tonerId && $masterDeviceId)
         {
             $deviceToner                 = new Proposalgen_Model_DeviceToner();
-            $deviceToner->masterDeviceId = $masterDeviceId;
-            $deviceToner->tonerId        = $tonerId;
+            $deviceToner->master_device_id = $masterDeviceId;
+            $deviceToner->toner_id        = $tonerId;
 
             try
             {
@@ -800,8 +800,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         if ($tonerId && $masterDeviceId)
         {
             $deviceToner                 = new Proposalgen_Model_DeviceToner();
-            $deviceToner->masterDeviceId = $masterDeviceId;
-            $deviceToner->tonerId        = $tonerId;
+            $deviceToner->master_device_id = $masterDeviceId;
+            $deviceToner->toner_id        = $tonerId;
 
             try
             {

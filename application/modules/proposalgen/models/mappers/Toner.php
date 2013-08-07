@@ -4,6 +4,7 @@
  */
 class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
 {
+
     /**
      * The default db table class to use
      *
@@ -18,6 +19,7 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_manufacturerId = 'manufacturerId';
     public $col_tonerColorId = 'tonerColorId';
+    public $col_sku = 'sku';
 
     /**
      * Gets an instance of the mapper
@@ -244,15 +246,13 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         $toners = array();
         try
         {
-            $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll(array(
-                                                                                               "master_device_id = ?" => $masterDeviceId
-                                                                                          ));
+            $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
             if ($deviceToners)
             {
                 /* @var $deviceToner Proposalgen_Model_DeviceToner */
                 foreach ($deviceToners as $deviceToner)
                 {
-                    $toner                                                     = $this->find($deviceToner->tonerId);
+                    $toner                                                     = $this->find($deviceToner->toner_id);
                     $toners [$toner->manufacturerId] [$toner->tonerColorId] [] = $toner;
                 }
             }
@@ -726,5 +726,82 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         }
 
         return $toners;
+    }
+
+    /**
+     * Finds an instance of a Proposalgen_Model_Toner by it's sku
+     *
+     * @param $sku
+     *
+     * @return \Proposalgen_Model_Toner
+     */
+    public function fetchBySku ($sku)
+    {
+        return $this->fetch(array("{$this->col_sku} = ?" => "{$sku}"));
+    }
+
+    /**
+     * Exports the toner pricing for the dealership
+     *
+     * @param $manufacturerId
+     * @param $dealerId
+     *
+     * @return array
+     */
+    public function getTonerPricingForExport ($manufacturerId, $dealerId)
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+
+        $select = $db->select()
+                  ->from(array(
+                              't' => 'toners'), array(
+                                                     'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
+                                                )
+                      )
+                  ->joinLeft(array(
+                                  'dt' => 'device_toners'
+                             ), 'dt.toner_id = t.id', array(
+                                                           'master_device_id'
+                                                      ))
+                  ->joinLeft(array(
+                                  'tm' => 'manufacturers'
+                             ), 'tm.id = t.manufacturerId', array(
+                                                                 'fullname'
+                                                            ))
+                  ->joinLeft(array(
+                                  'tc' => 'toner_colors'
+                             ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
+                  ->joinLeft(array('dta' => 'dealer_toner_attributes'), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
+                  ->where("t.id > 0")
+                  ->group('t.id')
+                  ->order(array(
+                               'tm.fullname'
+                          ));
+
+        if ($manufacturerId > 0)
+        {
+            $select->where("manufacturerId = ?", $manufacturerId);
+        }
+
+        $stmt   = $db->query($select);
+        $result = $stmt->fetchAll();
+
+        $fieldList = array();
+        foreach ($result as $value)
+        {
+            $fieldList [] = array(
+                $value ['toners_id'],
+                $value ['fullname'],
+                $value ['sku'],
+                $value ['toner_color'],
+                $value ['yield'],
+                $value ['systemCost'],
+                $value ['dealerSku'],
+                $value ['cost'],
+            );
+        }
+
+        return $fieldList;
     }
 }

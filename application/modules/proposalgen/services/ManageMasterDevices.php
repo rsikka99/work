@@ -468,8 +468,8 @@ class Proposalgen_Service_ManageMasterDevices
                     if ($alreadyExists == false)
                     {
                         $deviceToner                 = new Proposalgen_Model_DeviceToner();
-                        $deviceToner->masterDeviceId = $this->masterDeviceId;
-                        $deviceToner->tonerId        = $tonerId;
+                        $deviceToner->master_device_id = $this->masterDeviceId;
+                        $deviceToner->toner_id        = $tonerId;
                         $deviceTonersMapper          = Proposalgen_Model_Mapper_DeviceToner::getInstance();
                         $deviceTonersMapper->save($deviceToner);
                     }
@@ -765,8 +765,8 @@ class Proposalgen_Service_ManageMasterDevices
                         // We need to apply a random 5 to 10% margin to the system cost they add to our system
                         // Their dealer cost gets set to the cost they chose
                         $validData['dealerCost'] = $validData['systemCost'];
-                        $toner->cost             = round(Tangent_Accounting::applyMargin($validData['systemCost'], rand(5, 10)));
-                        $toner->isSystemDevice   = 0;
+                        $toner->cost             = Tangent_Accounting::obfuscateTonerCost($validData['systemCost']);
+                        $toner->isSystemDevice = 0;
                     }
                     $toner->tonerColorId = $validData['tonerColorId'];
                     $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;

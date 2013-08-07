@@ -7,7 +7,7 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
     /**
      * @var int
      */
-    public $tonerId;
+    public $toner_id;
 
     /**
      * @var int
@@ -22,7 +22,7 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
     /**
      * @var int
      */
-    public $masterDeviceId;
+    public $master_device_id;
 
 
     /**
@@ -35,9 +35,9 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (isset($params->tonerId) && !is_null($params->tonerId))
+        if (isset($params->toner_id) && !is_null($params->toner_id))
         {
-            $this->tonerId = $params->tonerId;
+            $this->toner_id = $params->toner_id;
         }
 
         if (isset($params->userId) && !is_null($params->userId))
@@ -50,9 +50,9 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
             $this->isSystemDevice = $params->isSystemDevice;
         }
 
-        if (isset($params->masterDeviceId) && !is_null($params->masterDeviceId))
+        if (isset($params->master_device_id) && !is_null($params->master_device_id))
         {
-            $this->masterDeviceId = $params->masterDeviceId;
+            $this->master_device_id = $params->master_device_id;
         }
 
     }
@@ -63,10 +63,10 @@ class Proposalgen_Model_DeviceToner extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "tonerId"        => $this->tonerId,
-            "userId"         => $this->userId,
-            "masterDeviceId" => $this->masterDeviceId,
-            "isSystemDevice" => $this->isSystemDevice,
+            "toner_id"         => $this->toner_id,
+            "userId"           => $this->userId,
+            "master_device_id" => $this->master_device_id,
+            "isSystemDevice"   => $this->isSystemDevice,
         );
     }
 }

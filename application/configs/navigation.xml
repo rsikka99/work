@@ -509,13 +509,37 @@
                             <resource>proposalgen__costs__bulkdevicepricing</resource>
                             <pages>
                                 <bulkfilepricing>
-                                    <label>Import and Export Pricing</label>
+                                    <label>Bulk File Device Pricing</label>
                                     <module>proposalgen</module>
                                     <controller>costs</controller>
-                                    <action>bulkfilepricing</action>
-                                    <resource>proposalgen__costs__bulkfilepricing</resource>
+                                    <action>bulk-file-device-pricing</action>
+                                    <resource>proposalgen__costs__bulk-file-device-pricing</resource>
                                     <visible>0</visible>
                                 </bulkfilepricing>
+                                <bulkfiledevicefeatures>
+                                    <label>Bulk File Device Features</label>
+                                    <module>proposalgen</module>
+                                    <controller>costs</controller>
+                                    <action>bulk-file-device-features</action>
+                                    <resource>proposalgen__costs__bulk-file-device-features</resource>
+                                    <visible>0</visible>
+                                </bulkfiledevicefeatures>
+                                <bulkfiletonerpricing>
+                                    <label>Bulk File Toner Pricing</label>
+                                    <module>proposalgen</module>
+                                    <controller>costs</controller>
+                                    <action>bulk-file-toner-pricing</action>
+                                    <resource>proposalgen__costs__bulk-file-toner-pricing</resource>
+                                    <visible>0</visible>
+                                </bulkfiletonerpricing>
+                                <bulkfiletonermatchup>
+                                    <label>Bulk File Toner Matchup</label>
+                                    <module>proposalgen</module>
+                                    <controller>costs</controller>
+                                    <action>bulk-file-toner-matchup</action>
+                                    <resource>proposalgen__costs__bulk-file-toner-matchup</resource>
+                                    <visible>0</visible>
+                                </bulkfiletonermatchup>
                             </pages>
                         </updatepricing>
                         <deviceswaps>

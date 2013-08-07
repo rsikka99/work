@@ -1397,6 +1397,9 @@ th.default {
 .center-form-actions {
   text-align: center;
 }
+.manufacturerMultiSelect {
+  width: 200px;
+}
 /* Fix jqGrid for bootstrap */
 tr.ui-search-toolbar select {
   margin: 0px !important;
@@ -1974,4 +1977,11 @@ table.summaryReport {
 select.tonerMultiselect {
   width: 600px;
   height: 100px;
+}
+.importInformation {
+  padding: 0 10px;
+}
+p .importantInformation {
+  font-weight: bold;
+  color: red;
 }

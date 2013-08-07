@@ -61,9 +61,9 @@ class Proposalgen_Model_Dealer_Toner_Attribute extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "tonerId" => $this->tonerId,
-            "dealerId" => $this->dealerId,
-            "cost" => $this->cost,
+            "tonerId"   => $this->tonerId,
+            "dealerId"  => $this->dealerId,
+            "cost"      => $this->cost,
             "dealerSku" => $this->dealerSku,
         );
     }

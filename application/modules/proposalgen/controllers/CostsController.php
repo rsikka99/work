@@ -342,603 +342,451 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         }
     }
 
-    public function bulkfilepricingAction ()
+    public function bulkFileDeviceFeaturesAction ()
     {
         Zend_Session::start();
-        $this->view->title = "Import & Export Pricing";
-        $db                = Zend_Db_Table::getDefaultAdapter();
-        $dealerId          = $this->_dealerId;
+        $db                    = Zend_Db_Table::getDefaultAdapter();
+        $errorMessages         = array();
+        $canApprove            = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $deviceFeaturesService = new Proposalgen_Service_Import_Device_Features();
 
         if ($this->_request->isPost())
         {
-            $formData = $this->_request->getPost();
-
-            // FIXME: What does this do??!?!?
-            $this->view->company_filter = 1;
-
-            /**
-             * hdnRole is used when logged in as a dealer to differentiate between if the dealer is on "update company pricing" or "update my pricing"
-             */
-            if (isset($formData ['hdnMode']))
+            if (!is_array($deviceFeaturesService->getValidFile($this->_config)) && $canApprove)
             {
-                // ************************************************************/
-                // * Initial Page Load
-                // ************************************************************/
+                $db->beginTransaction();
+                try
+                {
+                    if ($deviceFeaturesService->validatedHeaders())
+                    {
+                        $lineCounter = 2;
+                        while (($value = fgetcsv($deviceFeaturesService->importFile)) !== false)
+                        {
+                            $value     = array_combine($deviceFeaturesService->importHeaders, $value);
+                            $validData = $deviceFeaturesService->processValidation($value);
+
+                            if (!isset($validData['error']))
+                            {
+                                $dataArray = array(
+                                    'isDuplex'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_DUPLEX],
+                                    'isCopier'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_SCAN],
+                                    'reportsTonerLevels' => $validData[$deviceFeaturesService::DEVICE_FEATURES_REPORTS_TONER_LEVELS],
+                                    'ppmBlack'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_PPM_MONOCHROME],
+                                    'ppmColor'           => $validData[$deviceFeaturesService::DEVICE_FEATURES_PPM_COLOR],
+                                    'dutyCycle'          => $validData[$deviceFeaturesService::DEVICE_FEATURES_DUTY_CYCLE],
+                                    'wattsPowerNormal'   => $validData[$deviceFeaturesService::DEVICE_FEATURES_OPERATING_WATTAGE],
+                                    'wattsPowerIdle'     => $validData[$deviceFeaturesService::DEVICE_FEATURES_IDLE_WATTAGE],
+                                );
+
+                                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($validData['Master Printer ID']);
+
+                                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                                {
+                                    if ($this->_compareData($dataArray, $masterDevice))
+                                    {
+                                        Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $errorMessages [$lineCounter] = $validData['error'];
+                            }
+                            $lineCounter++;
+                        }
+                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $db->commit();
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                    }
+                }
+                catch (Exception $e)
+                {
+                    $db->rollback();
+                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                }
+                $deviceFeaturesService->closeFiles();
             }
             else
             {
+                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+            }
+        }
+        $this->view->canApprove    = $canApprove;
+        $this->view->errorMessages = $errorMessages;
+    }
 
-                // ************************************************************/
-                // * Upload File
-                // ************************************************************/
-                $upload = new Zend_File_Transfer_Adapter_Http();
-                $upload->setDestination($this->_config->app->uploadPath);
+    public function bulkFileTonerPricingAction ()
+    {
+        Zend_Session::start();
+        $db                  = Zend_Db_Table::getDefaultAdapter();
+        $errorMessages       = array();
+        $canApprove          = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $tonerPricingService = new Proposalgen_Service_Import_Toner_Pricing();
 
-                // Limit the extensions to csv files
-                $upload->addValidator('Extension', false, 'csv');
-                $upload->getValidator('Extension')->setMessage('<span class="warning">*</span> File "' . basename($_FILES ['uploadedfile'] ['name']) . '" has an <em>invalid</em> extension. A <span style="color: red;">.csv</span> is required.');
-
-                // Limit the amount of files to maximum 1
-                $upload->addValidator('Count', false, 1);
-                $upload->getValidator('Count')->setMessage('<span class="warning">*</span> You are only allowed to upload 1 file at a time.');
-
-                // Limit the size of all files to be uploaded to maximum 4MB and
-                // mimimum 100B
-                $upload->addValidator('FilesSize', false, array(
-                                                               'min' => '100B',
-                                                               'max' => '4MB'
-                                                          ));
-
-                $upload->getValidator('FilesSize')->setMessage('<span class="warning">*</span> File size must be between 100B and 4MB.');
-                if ($upload->receive())
+        if ($this->_request->isPost())
+        {
+            if (!is_array($tonerPricingService->getValidFile($this->_config)))
+            {
+                $db->beginTransaction();
+                try
                 {
-                    $is_valid      = true;
-                    $columns       = array();
-                    $final_devices = array();
-                    $finalDevices  = array();
-
-                    $db->beginTransaction();
-                    try
+                    if ($tonerPricingService->validatedHeaders())
                     {
-                        $lines = file($upload->getFileName(), FILE_IGNORE_NEW_LINES);
-
-                        // grab the first row of items(the column headers)
-                        $headers = str_getcsv(strtolower($lines [0]));
-
-                        // default column keys
-                        $key_manufacturer  = null;
-                        $key_sku           = null;
-                        $key_color         = null;
-                        $key_yield         = null;
-                        $key_new_price     = null;
-                        $key_printer_model = null;
-                        $key_dealer_sku    = null;
-                        $key_parts_cpp     = null;
-                        $key_labor_cpp     = null;
-                        $key_system_cost   = null;
-
-                        $import_type = false;
-                        /**
-                         * Finds where each column is located inside the CSV
-                         */
-                        $array_key = 0;
-                        foreach ($headers as $value)
+                        $lineCounter = 2;
+                        while (($value = fgetcsv($tonerPricingService->importFile)) !== false)
                         {
-                            if (strtolower($value) == "toner id")
-                            {
-                                $import_type = "toner";
-                            }
-                            else if (strtolower($value) == "manufacturer")
-                            {
-                                $key_manufacturer = $array_key;
-                            }
-                            else if (strtolower($value) == "sku")
-                            {
-                                $key_sku = $array_key;
-                            }
-                            else if (strtolower($value) == "color")
-                            {
-                                $key_color = $array_key;
-                            }
-                            else if (strtolower($value) == "yield")
-                            {
-                                $key_yield = $array_key;
-                            }
-                            else if (strtolower($value) == "dealer price")
-                            {
-                                $key_new_price = $array_key;
-                            }
-                            else if (strtolower($value) == "master printer id")
-                            {
-                                $import_type = "printer";
-                            }
-                            else if (strtolower($value) == "printer model")
-                            {
-                                $key_printer_model = $array_key;
-                            }
-                            else if (strtolower($value) == "dealer sku")
-                            {
-                                $key_dealer_sku = $array_key;
-                            }
-                            else if (strtolower($value) == "labor cpp")
-                            {
-                                $key_labor_cpp = $array_key;
-                            }
-                            else if (strtolower($value) == "parts cpp")
-                            {
-                                $key_parts_cpp = $array_key;
-                            }
-                            else if (strtolower($value) == "system price")
-                            {
-                                $key_system_cost = $array_key;
-                            }
-                            $array_key += 1;
-                        }
+                            $value     = array_combine($tonerPricingService->importHeaders, $value);
+                            $validData = $tonerPricingService->processValidation($value);
 
-                        if ($is_valid)
-                        {
-                            // create an associative array of the csv information
-                            foreach ($lines as $key => $value)
+                            if (!isset($validData['error']))
                             {
-                                if ($key > 0)
-                                {
-                                    $devices [$key] = str_getcsv($value);
-
-                                    // get current pricing
-                                    if ($import_type == "printer")
-                                    {
-                                        $master_device_id = $devices [$key] [0];
-                                        $columns [0]      = "Master Printer ID";
-                                        $columns [1]      = "Manufacturer";
-                                        $columns [2]      = "Printer Model";
-                                        $columns [3]      = "Labor CPP";
-                                        $columns [4]      = "Parts CPP";
-
-
-                                        $table   = new Proposalgen_Model_DbTable_MasterDevice();
-                                        $where   = $table->getAdapter()->quoteInto('id = ?', $master_device_id, 'INTEGER');
-                                        $printer = $table->fetchRow($where);
-
-                                        if (count($printer->toArray()) > 0)
-                                        {
-                                            // save into array
-                                            $final_devices [0] = $master_device_id;
-                                            $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                            $final_devices [2] = $devices [$key] [$key_printer_model];
-                                            $final_devices [3] = $devices [$key] [$key_labor_cpp];
-                                            $final_devices [4] = $devices [$key] [$key_parts_cpp];
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        $toner_id    = $devices [$key] [0];
-                                        $toner_sku   = $devices [$key] [$key_sku];
-                                        $columns [0] = "Toner ID";
-                                        $columns [1] = "Manufacturer";
-                                        $columns [2] = "SKU";
-                                        $columns [3] = "Color";
-                                        $columns [4] = "Yield";
-                                        $columns [5] = "System Price";
-                                        $columns [6] = "Dealer Sku";
-                                        $columns [7] = "New Price";
-
-                                        $table = new Proposalgen_Model_DbTable_Toner();
-                                        $where = $table->getAdapter()->quoteInto('id = ?', $toner_id, 'INTEGER');
-                                        $toner = $table->fetchRow($where);
-
-                                        if ($toner && count($toner->toArray()) > 0)
-                                        {
-                                            // save into array
-                                            $final_devices [0] = $toner->id;
-                                            $final_devices [1] = $devices [$key] [$key_manufacturer];
-                                            $final_devices [2] = $devices [$key] [$key_sku];
-                                            $final_devices [3] = $devices [$key] [$key_color];
-                                            $final_devices [4] = $devices [$key] [$key_yield];
-                                            $final_devices [5] = $devices [$key] [$key_system_cost];
-                                            $final_devices [6] = $devices [$key] [$key_dealer_sku];
-                                            $final_devices [7] = $devices [$key] [$key_new_price];
-                                        }
-                                    }
-
-                                    // combine the column headers and the device
-                                    // data into one associative array
-                                    $devices [$key] = $final_devices;
-                                    if ($devices [$key])
-                                    {
-                                        $finalDevices [] = array_combine($columns, $devices [$key]);
-                                    }
-                                }
-                            }
-
-                            $results = $finalDevices;
-                            $db->beginTransaction();
-                            try
-                            {
-                                // detect file type (printers or toners)
-                                $import_type = "printer";
-
-                                foreach ($columns as $value)
-                                {
-                                    if (strtolower($value) == "toner id")
-                                    {
-                                        $import_type = "toner";
-                                        break;
-                                    }
-                                }
-
-                                // Loop through the file and save.
-                                $inputFilter = new Zend_Filter_Input(array(
-                                                                          'cost'             => array(
-                                                                              'StringTrim',
-                                                                          ),
-                                                                          'laborCostPerPage' => array(
-                                                                              'StringTrim',
-                                                                          ),
-                                                                          'partsCostPerPage' => array(
-                                                                              'StringTrim',
-                                                                          ),
-                                                                     ), array(
-                                                                             'cost'             => array(
-                                                                                 'Float',
-                                                                                 array(
-                                                                                     'name'    => 'GreaterThan',
-                                                                                     'options' => array(
-                                                                                         'min' => 0,
-                                                                                     )
-                                                                                 )
-                                                                             ),
-                                                                             'laborCostPerPage' => array(
-                                                                                 'Float',
-                                                                                 array(
-                                                                                     'name'    => 'GreaterThan',
-                                                                                     'options' => array(
-                                                                                         'min' => 0,
-                                                                                     )
-                                                                                 )
-                                                                             ),
-                                                                             'partsCostPerPage' => array(
-                                                                                 'Float',
-                                                                                 array(
-                                                                                     'name'    => 'GreaterThan',
-                                                                                     'options' => array(
-                                                                                         'min' => 0,
-                                                                                     )
-                                                                                 )
-                                                                             ),
-                                                                        )
+                                $dataArray = array(
+                                    'tonerId'   => $validData[$tonerPricingService::TONER_PRICING_TONER_ID],
+                                    'dealerSku' => $validData[$tonerPricingService::TONER_PRICING_DEALER_SKU],
+                                    'cost'      => $validData[$tonerPricingService::TONER_PRICING_NEW_PRICE],
+                                    'dealerId'  => $this->_dealerId,
                                 );
 
-                                foreach ($results as $value)
+                                $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($validData ['Toner ID']);
+                                if ($toner instanceof Proposalgen_Model_Toner)
                                 {
-                                    // Update records
-                                    if ($import_type == 'printer')
+                                    $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($dataArray['tonerId'], $this->_dealerId));
+                                    // Does the toner attribute exists ?
+                                    if ($tonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
                                     {
-                                        $inputFilter->setData(array('laborCostPerPage' => $value ['Labor CPP']));
-                                        $importLaborCpp = $inputFilter->laborCostPerPage;
-                                        $isLaborValid   = $inputFilter->isValid();
-
-                                        $inputFilter->setData(array('partsCostPerPage' => $value ['Parts CPP']));
-                                        $importPartsCpp = $inputFilter->partsCostPerPage;
-                                        $isPartsValid   = $inputFilter->isValid();
-
-                                        $masterDeviceId = $value ['Master Printer ID'];
-
-                                        $dataArray = array(
-                                            'masterDeviceId'   => $masterDeviceId,
-                                            'dealerId'         => $dealerId,
-                                            'laborCostPerPage' => $importLaborCpp,
-                                            'partsCostPerPage' => $importPartsCpp,
-                                        );
-
-                                        // Does the master device exist in our database?
-                                        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
-                                        if (count($masterDevice->toArray()) > 0)
+                                        // If cost && sku are empty  or cost = 0 -> delete.
+                                        // Delete
+                                        if (empty($importCost) && empty($importDealerSku))
                                         {
-                                            // Do we have the master device already in this dealer device table
-                                            $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($masterDeviceId, $dealerId));
-                                            if ($masterDeviceAttribute)
+                                            // If the attributes are empty after being found, delete them.
+                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
+                                        }
+                                        else
+                                        {
+                                            if ($this->_compareData($dataArray, $tonerAttribute))
                                             {
-                                                // If we have a master device attribute and the row is empty, delete the row
-                                                if (empty($importLaborCpp) && empty($importPartsCpp))
-                                                {
-                                                    Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
-                                                }
-                                                else
-                                                {
-                                                    // Have any values changed
-                                                    $hasChanged = false;
-
-                                                    if (!$isLaborValid)
-                                                    {
-                                                        $importLaborCpp = null;
-                                                    }
-
-                                                    if (!$isPartsValid)
-                                                    {
-                                                        $importPartsCpp = null;
-                                                    }
-
-                                                    if ((float)$importPartsCpp !== (float)$masterDeviceAttribute->partsCostPerPage)
-                                                    {
-                                                        if ($importPartsCpp === null)
-                                                        {
-                                                            $importPartsCpp = new Zend_Db_Expr('null');
-                                                        }
-                                                        $masterDeviceAttribute->partsCostPerPage = $importPartsCpp;
-                                                        $hasChanged                              = true;
-                                                    }
-
-                                                    if ((float)$importLaborCpp !== (float)$masterDeviceAttribute->laborCostPerPage)
-                                                    {
-                                                        if ($importLaborCpp === null)
-                                                        {
-                                                            $importLaborCpp = new Zend_Db_Expr('null');
-                                                        }
-                                                        $masterDeviceAttribute->laborCostPerPage = $importLaborCpp;
-                                                        $hasChanged                              = true;
-                                                    }
-
-                                                    if ($hasChanged)
-                                                    {
-                                                        Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if ($importLaborCpp > 0 || $importPartsCpp > 0)
-                                                {
-                                                    $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-                                                    $masterDeviceAttribute->populate($dataArray);
-                                                    Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
-                                                }
+                                                Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
                                             }
                                         }
                                     }
                                     else
                                     {
-
-                                        $inputFilter->setData(array('cost' => $value ['New Price']));
-                                        // Filter the data -
-                                        $importTonerId   = $value ['Toner ID'];
-                                        $importDealerSku = trim($value ['Dealer Sku']);
-                                        $importCost      = $inputFilter->cost;
-
-                                        $dataArray = array(
-                                            'tonerId'   => $importTonerId,
-                                            'dealerSku' => $importDealerSku,
-                                            'cost'      => $importCost,
-                                            'dealerId'  => $dealerId,
-                                        );
-
-                                        $toner = Proposalgen_Model_Mapper_Toner::getInstance()->find($value ['Toner ID']);
-                                        if ($toner && count($toner->toArray()) > 0)
+                                        if ($dataArray['cost'] > 0 || !empty($importDealerSku))
                                         {
-
-                                            $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($importTonerId, $dealerId));
-                                            // Does the toner attribute exists ?
-                                            if ($tonerAttribute)
-                                            {
-                                                // If cost && sku are empty  or cost = 0 -> delete.
-                                                // Delete
-                                                if (empty($importCost) && empty($importDealerSku))
-                                                {
-                                                    // If the attributes are empty after being found, delete them.
-                                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
-                                                }
-                                                else
-                                                {
-                                                    // Have any values changed
-                                                    $hasChanged = false;
-
-                                                    if (!$inputFilter->isValid('cost'))
-                                                    {
-                                                        $importCost = null;
-                                                    }
-
-                                                    if ((float)$importCost !== (float)$tonerAttribute->cost)
-                                                    {
-                                                        if ($importCost === null)
-                                                        {
-                                                            $importCost = new Zend_Db_Expr('NULL');
-                                                        }
-                                                        $tonerAttribute->cost = $importCost;
-                                                        $hasChanged           = true;
-                                                    }
-
-                                                    if ($tonerAttribute->dealerSku != $importDealerSku)
-                                                    {
-                                                        if (empty($importDealerSku))
-                                                        {
-                                                            $importDealerSku = new Zend_Db_Expr('NULL');
-                                                        }
-                                                        $tonerAttribute->dealerSku = $importDealerSku;
-                                                        $hasChanged                = true;
-                                                    }
-
-                                                    if ($hasChanged)
-                                                    {
-                                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($tonerAttribute);
-
-                                                    }
-                                                }
-                                            }
-                                            else
-                                            {
-                                                if ($importCost > 0 || !empty($importDealerSku))
-                                                {
-                                                    $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                                    $tonerAttribute->populate($dataArray);
-                                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
-                                                }
-                                            }
+                                            $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                            $tonerAttribute->populate($dataArray);
+                                            Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($tonerAttribute);
                                         }
-
                                     }
                                 }
-                                $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
-                                $db->commit();
                             }
-                            catch
-                            (Exception $e)
+                            else
                             {
-
-                                $db->rollback();
-
-                                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                                $errorMessages [$lineCounter] = $validData['error'];
                             }
+                            $lineCounter++;
                         }
+                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $db->commit();
                     }
-                    catch (Exception $e)
+                    else
                     {
-                        $db->rollback();
-                        $this->_flashMessenger->addMessage(array("error" => " An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
                     }
-
-                    // delete the file we just uploaded
-                    unlink($upload->getFileName());
                 }
-                else
+                catch (Exception $e)
                 {
-                    // if upload fails, print error message message
-                    $this->view->errMessages = $upload->getMessages();
+                    $db->rollback();
+                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                 }
+                $tonerPricingService->closeFiles();
             }
-            $this->view->hdnRole = $formData ['hdnRole'];
+            else
+            {
+                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+            }
+        }
+        $this->view->canApprove    = $canApprove;
+        $this->view->errorMessages = $errorMessages;
+    }
+
+    public function bulkFileTonerMatchupAction ()
+    {
+        Zend_Session::start();
+        $db             = Zend_Db_Table::getDefaultAdapter();
+        $errorMessages  = array();
+        $canApprove     = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $matchupService = new Proposalgen_Service_Import_Toner_Matchup();
+
+        if ($this->_request->isPost())
+        {
+            if (!is_array($matchupService->getValidFile($this->_config)))
+            {
+                $db->beginTransaction();
+                try
+                {
+                    if ($matchupService->validatedHeaders())
+                    {
+                        $lineCounter = 2;
+                        while (($value = fgetcsv($matchupService->importFile)) !== false)
+                        {
+                            $value     = array_combine($matchupService->importHeaders, $value);
+                            $validData = $matchupService->processValidation($value);
+
+                            if (!isset($validData['error']))
+                            {
+                                // Did we find the compatible toner inside our system
+                                if (isset($validData['parsedToners']['comp']['id']))
+                                {
+                                    $tonerId = $validData['parsedToners']['comp']['id'];
+                                }
+                                else
+                                {
+                                    // Insert
+                                    // If we insert then we want to use the dealer price as the base price
+                                    $toner                 = new Proposalgen_Model_Toner($validData['parsedToners']['comp']);
+                                    $toner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($toner->cost);
+                                    $toner->isSystemDevice = $canApprove;
+                                    $toner->userId         = $this->_userId;
+                                    $tonerId               = Proposalgen_Model_Mapper_Toner::getInstance()->insert($toner);
+                                }
+
+                                $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($tonerId, $this->_dealerId));
+                                if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                                {
+                                    // Update
+                                    $dealerTonerAttribute->cost = $validData['parsedToners']['comp']['cost'];
+                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($dealerTonerAttribute);
+                                }
+                                else
+                                {
+                                    // Insert
+                                    $dealerTonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                    $dealerTonerAttribute->tonerId   = $tonerId;
+                                    $dealerTonerAttribute->dealerId  = $this->_dealerId;
+                                    $dealerTonerAttribute->cost      = $validData['parsedToners']['comp']['cost'];
+                                    $dealerTonerAttribute->dealerSku = $validData['parsedToners']['comp']['dealerSku'];
+
+                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($dealerTonerAttribute);
+                                }
+
+                                // Have we found the oem toner data based on the Oem Toner Sku?
+                                // Attempt to link device toners to existing toner id
+                                if (isset($validData['parsedToners']['oem']['id']))
+                                {
+                                    // Insert
+                                    // Find the master devices that we have assigned for this toner.
+                                    $existingDeviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
+                                    foreach ($existingDeviceToners as $existingDeviceToner)
+                                    {
+                                        if (!Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                        {
+                                            $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                            $deviceToner->toner_id         = $tonerId;
+                                            $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
+                                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $errorMessages [$lineCounter] = $validData['error'];
+                            }
+                            $lineCounter++;
+                        }
+                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $db->commit();
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                    }
+                }
+                catch (Exception $e)
+                {
+                    $db->rollback();
+                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                }
+                $matchupService->closeFiles();
+            }
+            else
+            {
+                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+            }
+        }
+        $this->view->canApprove    = $canApprove;
+        $this->view->errorMessages = $errorMessages;
+    }
+
+    public function bulkFileDevicePricingAction ()
+    {
+        Zend_Session::start();
+        $db                   = Zend_Db_Table::getDefaultAdapter();
+        $errorMessages        = array();
+        $canApprove           = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $devicePricingService = new Proposalgen_Service_Import_Device_Pricing();
+
+        if ($this->_request->isPost())
+        {
+            if (!is_array($devicePricingService->getValidFile($this->_config)))
+            {
+                $db->beginTransaction();
+                try
+                {
+                    if ($devicePricingService->validatedHeaders())
+                    {
+                        $lineCounter = 2;
+                        while (($value = fgetcsv($devicePricingService->importFile)) !== false)
+                        {
+                            $value     = array_combine($devicePricingService->importHeaders, $value);
+                            $validData = $devicePricingService->processValidation($value);
+
+                            if (!isset($validData['error']))
+                            {
+                                $masterDeviceId = $validData ['Master Printer ID'];
+
+                                $dataArray = array(
+                                    'masterDeviceId'   => $masterDeviceId,
+                                    'dealerId'         => $this->_dealerId,
+                                    'laborCostPerPage' => $validData[$devicePricingService::DEVICE_PRICING_LABOR_CPP],
+                                    'partsCostPerPage' => $validData[$devicePricingService::DEVICE_PRICING_PARTS_CPP],
+                                );
+
+                                // Does the master device exist in our database?
+                                $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+                                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                                {
+                                    // Do we have the master device already in this dealer device table
+                                    $masterDeviceAttribute = Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->find(array($masterDeviceId, $this->_dealerId));
+                                    if ($masterDeviceAttribute instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+                                    {
+                                        // If we have a master device attribute and the row is empty, delete the row
+                                        if (empty($dataArray['laborCostPerPage']) && empty($dataArray['partsCostPerPage']))
+                                        {
+                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->delete($masterDeviceAttribute);
+                                        }
+                                        else
+                                        {
+                                            if ($this->_compareData($dataArray, $masterDeviceAttribute))
+                                            {
+                                                Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->save($masterDeviceAttribute);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if ($dataArray['laborCostPerPage'] > 0 || $dataArray['partsCostPerPage'] > 0)
+                                        {
+                                            $masterDeviceAttribute = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+                                            $masterDeviceAttribute->populate($dataArray);
+                                            Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute::getInstance()->insert($masterDeviceAttribute);
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                $errorMessages [$lineCounter] = $validData['error'];
+                            }
+                            $lineCounter++;
+                        }
+                        $this->_flashMessenger->addMessage(array("success" => "Your pricing updates have been applied successfully."));
+                        $db->commit();
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                    }
+                }
+                catch (Exception $e)
+                {
+                    $db->rollback();
+                    $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+                }
+                $devicePricingService->closeFiles();
+            }
+            else
+            {
+                $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
+            }
+        }
+        $this->view->canApprove    = $canApprove;
+        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        $this->view->errorMessages = $errorMessages;
+    }
+
+    /**
+     * @param $importData  array
+     * @param $object      mixed
+     *
+     * @return bool
+     */
+    private function _compareData ($importData, &$object)
+    {
+        $hasChanged = false;
+
+        foreach ($importData as $key => $value)
+        {
+            if ($object->$key != $value)
+            {
+                if (empty($value))
+                {
+                    $value = new Zend_Db_Expr('NULL');
+                }
+
+                $object->$key = $value;
+                $hasChanged   = true;
+            }
         }
 
-        $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
+        return $hasChanged;
     }
 
     public function exportpricingAction ()
     {
         $this->_helper->layout->disableLayout();
-        $db             = Zend_Db_Table::getDefaultAdapter();
-        $manufacturerId = $this->_getParam('manufacturerId', false);
-        $pricing        = $this->_getParam('pricing', 'printer');
 
+        $importType   = $this->_getParam('type', false);
+        $fieldTitles  = array();
+        $fieldList    = array();
+        $filename     = "";
+        $newFieldList = "";
 
-        // filename for CSV file
-        $filename = "system_pricing" . "_" . $pricing . "_pricing_" . date('m_d_Y') . ".csv";
-
-        // check post back for update
-        $db->beginTransaction();
         try
         {
-            // Get device list
-            if ($pricing == 'printer')
+            if ($importType == 'printer')
             {
-                $fieldTitles = array(
-                    'Master Printer ID',
-                    'Manufacturer',
-                    'Printer Model',
-                    'Labor CPP',
-                    'Parts CPP',
-                );
-
-                $select = $db->select()
-                          ->from(array(
-                                      'md' => 'master_devices'
-                                 ), array(
-                                         'id AS master_id',
-                                         'modelName',
-                                    ))
-                          ->joinLeft(array(
-                                          'm' => 'manufacturers'
-                                     ), 'm.id = md.manufacturerId', array(
-                                                                         'fullname'
-                                                                    ))
-                          ->joinLeft(array(
-                                          'dmda' => 'dealer_master_device_attributes'
-                                     ), 'dmda.masterDeviceId = md.id',
-                        array(
-                             'laborCostPerPage',
-                             'partsCostPerPage',
-                        ))
-                          ->order(array(
-                                       'm.fullname',
-                                       'md.modelName',
-                                  ));
-                $stmt   = $db->query($select);
-                $result = $stmt->fetchAll();
-                foreach ($result as $value)
-                {
-                    $fieldList [] = array(
-                        $value ['master_id'],
-                        $value ['fullname'],
-                        $value ['modelName'],
-                        $value ['laborCostPerPage'],
-                        $value ['partsCostPerPage'],
-                    );
-                }
-
+                $manufacturerId       = $this->_getParam('manufacturer', false);
+                $filename             = "system_printer_pricing_" . date('m_d_Y') . ".csv";
+                $devicePricingService = new Proposalgen_Service_Import_Device_Pricing();
+                $fieldTitles          = $devicePricingService->csvHeaders;
+                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterPricingForExport($manufacturerId, $this->_dealerId);
             }
-            /* Begin toner export export logic here */
-            else
+            else if ($importType == 'features')
             {
-                $fieldTitles = array(
-                    'Toner ID',
-                    'Manufacturer',
-                    'SKU',
-                    'Color',
-                    'Yield',
-                    'System Price',
-                    'Dealer Sku',
-                    'Dealer Price',
-                );
-                $dealerId    = $this->_dealerId;
-                // Get Count
-                $select = $db->select()
-                          ->from(array(
-                                      't' => 'toners'), array(
-                                                             'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
-                                                        )
-                              )
-                          ->joinLeft(array(
-                                          'dt' => 'device_toners'
-                                     ), 'dt.toner_id = t.id', array(
-                                                                   'master_device_id'
-                                                              ))
-                          ->joinLeft(array(
-                                          'tm' => 'manufacturers'
-                                     ), 'tm.id = t.manufacturerId', array(
-                                                                         'fullname'
-                                                                    ))
-                          ->joinLeft(array(
-                                          'tc' => 'toner_colors'
-                                     ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                          ->joinLeft(array(
-                                          'dta' => 'dealer_toner_attributes'
-                                     ), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
-                          ->where("t.id > 0")
-                          ->group('t.id')
-                          ->order(array(
-                                       'tm.fullname'
-                                  ));
-
-                if ($manufacturerId > 0)
-                {
-                    $select->where("manufacturerId = ?", $manufacturerId);
-                }
-
-                $stmt   = $db->query($select);
-                $result = $stmt->fetchAll();
-
-
-                foreach ($result as $value)
-                {
-                    $fieldList [] = array(
-                        $value ['toners_id'],
-                        $value ['fullname'],
-                        $value ['sku'],
-                        $value ['toner_color'],
-                        $value ['yield'],
-                        $value ['systemCost'],
-                        $value ['dealerSku'],
-                        $value ['cost'],
-                    );
-                }
+                $filename             = "system_printer_features_" . date('m_d_Y') . ".csv";
+                $deviceFeatureService = new Proposalgen_Service_Import_Device_Features();
+                $fieldTitles          = $deviceFeatureService->csvHeaders;
+                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterFeaturesForExport();
+            }
+            else if ($importType == 'toner')
+            {
+                $manufacturerId      = $this->_getParam('manufacturer', false);
+                $filename            = "system_toner_pricing_" . date('m_d_Y') . ".csv";
+                $tonerPricingService = new Proposalgen_Service_Import_Toner_Pricing();
+                $fieldTitles         = $tonerPricingService->csvHeaders;
+                $fieldList           = Proposalgen_Model_Mapper_Toner::getInstance()->getTonerPricingForExport($manufacturerId, $this->_dealerId);
+            }
+            else if ($importType == "matchup")
+            {
+                $filename            = "system_toner_matchup.csv";
+                $tonerMatchupService = new Proposalgen_Service_Import_Toner_Matchup();
+                $fieldTitles         = $tonerMatchupService->csvHeaders;
+                $fieldList           = array();
             }
         }
         catch (Exception $e)
@@ -946,14 +794,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        $this->view->fieldTitles = implode(",", $fieldTitles);
-        $newFieldList            = "";
         foreach ($fieldList as $row)
         {
             $newFieldList .= implode(",", $row);
             $newFieldList .= "\n";
         }
-        $this->view->fieldList = $newFieldList;
+
         Tangent_Functions::setHeadersForDownload($filename);
+
+        $this->view->fieldTitles = implode(",", $fieldTitles);
+        $this->view->fieldList   = $newFieldList;
     }
 }

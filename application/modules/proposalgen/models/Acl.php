@@ -23,8 +23,12 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE          = "proposalgen__admin__saveandapprove";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
-    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING   = "proposalgen__costs__bulkfilepricing";
     const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__exportpricing";
+
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING   = "proposalgen__costs__bulk-file-toner-pricing";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP   = "proposalgen__costs__bulk-file-toner-matchup";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG   = "proposalgen__costs__bulk-file-device-pricing";
+    const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES = "proposalgen__costs__bulk-file-device-features";
 
     const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = "proposalgen__fleet__device-summary-list";
     const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = "proposalgen__fleet__excluded-list";
@@ -99,7 +103,10 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
@@ -195,7 +202,6 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_REPORT_OPTIMIZATION_CUSTOMER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_OPTIMIZATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
-
         /**
          * Hardware Admin
          */
@@ -209,7 +215,9 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
@@ -217,7 +225,7 @@ class Proposalgen_Model_Acl
          */
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
-
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
          * System Admin
