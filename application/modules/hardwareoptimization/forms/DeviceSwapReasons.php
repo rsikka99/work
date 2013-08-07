@@ -4,7 +4,7 @@ class Hardwareoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form
     public function init ()
     {
         $this->setMethod("POST");
-        $this->_addClassNames('reportSettingsForm form-center-actions');
+        $this->_addClassNames('form-center-actions');
         $this->setAttrib('id', 'deviceSwapReason');
 
         $reasonCategoryElement = $this->createElement("select", "reasonCategory", array(
