@@ -19,3 +19,4 @@
 [FIXED]   quote settings form multi select width bug
 [FIXED]   the ability to save user profiles
 [FIXED]   the alignment of device swaps reason textbox
+[FIXED]   the assigned toners jqgrid from not being able to be sorted

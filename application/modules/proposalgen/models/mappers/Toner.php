@@ -342,7 +342,7 @@ WHERE `device_toners`.`master_device_id` = ?';
      *
      * @return Proposalgen_Model_Toner []
      */
-    public function fetchTonersAssignedToDeviceWithMachineCompatibility ($masterDeviceId)
+    public function fetchTonersAssignedToDeviceWithMachineCompatibility ($masterDeviceId, $order = null, $justCount = false)
     {
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $db       = $this->getDbTable()->getAdapter();
@@ -370,8 +370,21 @@ FROM toners
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
         WHERE master_device_id = {$masterDeviceId}";
-        $stmt     = $db->query($sql);
-        $result   = $stmt->fetchAll();
+
+        if ($order)
+        {
+            $sql .= " ORDER BY " . implode(" ", $order);
+        }
+
+        $query = $db->query($sql);
+
+        if ($justCount)
+        {
+            return count($query->fetchAll());
+        }
+
+        $stmt   = $db->query($sql);
+        $result = $stmt->fetchAll();
 
         return $result;
     }
@@ -593,7 +606,7 @@ FROM toners
      *
      * @return array
      */
-    public function fetchListOfToners ($tonerIdList)
+    public function fetchListOfToners ($tonerIdList, $order = null, $justCount = false)
     {
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $db       = $this->getDbTable()->getAdapter();
@@ -622,9 +635,19 @@ FROM `toners`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId}
 WHERE `toners`.`id` IN ({$tonerIdList})
-                GROUP BY id;";
+                GROUP BY id";
+
+        if ($order)
+        {
+            $sql .= " ORDER BY " . implode(" ", $order);
+        }
 
         $query = $db->query($sql);
+
+        if ($justCount)
+        {
+            return count($query->fetchAll());
+        }
 
         return $query->fetchAll();
     }
