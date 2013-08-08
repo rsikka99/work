@@ -457,21 +457,34 @@ class Proposalgen_Service_ManageMasterDevices
                 {
                     $alreadyExists = false;
 
-                    foreach ($assignedToners as $assignedToner)
+                    foreach ($assignedToners as $tonersByManufacturer)
                     {
-                        if ($tonerId == $assignedToner->id)
+                        foreach ($tonersByManufacturer as $tonersByColor)
                         {
-                            $alreadyExists = true;
+                            foreach ($tonersByColor as $assignedToner)
+                            {
+                                if ($tonerId === $assignedToner->id)
+                                {
+                                    $alreadyExists = true;
+                                }
+                            }
                         }
                     }
 
                     if ($alreadyExists == false)
                     {
-                        $deviceToner                 = new Proposalgen_Model_DeviceToner();
-                        $deviceToner->master_device_id = $this->masterDeviceId;
-                        $deviceToner->toner_id        = $tonerId;
-                        $deviceTonersMapper          = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                        $deviceTonersMapper->save($deviceToner);
+                        $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                        $deviceToner->master_device_id = (int)$this->masterDeviceId;
+                        $deviceToner->toner_id         = (int)$tonerId;
+                        $deviceToner->isSystemDevice   = ($this->_isAdmin ? 1 : 0);
+                        $deviceToner->userId           = Zend_Auth::getInstance()->getIdentity()->id;
+                        $deviceTonersMapper            = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+
+                        // If it doesn't exist in the database then insert it
+                        if (!$deviceTonersMapper->find(array($deviceToner->toner_id, $deviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                        {
+                            $deviceTonersMapper->insert($deviceToner);
+                        }
                     }
                 }
             }
@@ -766,7 +779,7 @@ class Proposalgen_Service_ManageMasterDevices
                         // Their dealer cost gets set to the cost they chose
                         $validData['dealerCost'] = $validData['systemCost'];
                         $toner->cost             = Tangent_Accounting::obfuscateTonerCost($validData['systemCost']);
-                        $toner->isSystemDevice = 0;
+                        $toner->isSystemDevice   = 0;
                     }
                     $toner->tonerColorId = $validData['tonerColorId'];
                     $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;

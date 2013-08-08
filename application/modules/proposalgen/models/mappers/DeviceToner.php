@@ -237,19 +237,7 @@ class Proposalgen_Model_Mapper_DeviceToner extends My_Model_Mapper_Abstract
      */
     public function getDeviceToners ($masterDeviceId)
     {
-        $deviceToners = $this->fetchAll(array('master_device_id = ?' => $masterDeviceId));
-        $entries      = array();
-        foreach ($deviceToners as $deviceToner)
-        {
-            $tonerId = $deviceToner->toner_id;
-            $toner   = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
-
-            $object = new Proposalgen_Model_Toner($toner->toArray());
-
-            $entries [] = $object;
-        }
-
-        return $entries;
+        return $this->fetchAll(array('master_device_id = ?' => $masterDeviceId));
     }
 
     /**

@@ -263,8 +263,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 // Save Toners
                                 foreach ($toners as $value)
                                 {
-                                    $deviceToner                 = new Proposalgen_Model_DeviceToner();
-                                    $deviceToner->toner_id        = $value;
+                                    $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                    $deviceToner->toner_id         = $value;
                                     $deviceToner->master_device_id = $masterDeviceId;
                                     Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
                                 }
@@ -675,8 +675,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             if ($validToner)
                             {
                                 // Save device toner
-                                $deviceToner                 = new Proposalgen_Model_DeviceToner();
-                                $deviceToner->toner_id        = $tonerId;
+                                $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                $deviceToner->toner_id         = $tonerId;
                                 $deviceToner->master_device_id = $masterDeviceId;
                                 Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
 
@@ -730,9 +730,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($safeToDelete)
                         {
                             Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete(array(
-                                                             'toner_id = ?'         => $tonerId,
-                                                             'master_device_id = ?' => $masterDeviceId
-                                                        ));
+                                                                                             'toner_id = ?'         => $tonerId,
+                                                                                             'master_device_id = ?' => $masterDeviceId
+                                                                                        ));
 
                             $this->_flashMessenger->addMessage(array('success' => "The toner was unassigned successfully."));
                         }
@@ -750,9 +750,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         $assignedToners = array(
                             ''
                         );
-                        foreach ($deviceToners as $toner)
+                        foreach ($deviceToners as $deviceToner)
                         {
-                            $assignedToners [] = $toner->id;
+                            $assignedToners [] = $deviceToner->toner_id;
                         }
 
                         if ($view == "assigned")
@@ -804,9 +804,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         $deviceToners   = Proposalgen_Model_Mapper_DeviceToner::getInstance()->getDeviceToners($masterDeviceId);
         $assignedToners = array();
-        foreach ($deviceToners as $toner)
+        foreach ($deviceToners as $deviceToner)
         {
-            $assignedToners [] = $toner->id;
+            $assignedToners [] = $deviceToner->toner_id;
         }
         $this->view->assignedToners = $assignedToners;
 

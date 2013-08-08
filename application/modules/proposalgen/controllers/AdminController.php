@@ -612,7 +612,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
-                            $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                            $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
                             $device_toner->toner_id = $with_id;
                             Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
                             $toner_count += 1;
@@ -631,11 +631,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                             $stmt        = $db->query($select);
                             $num_devices = $stmt->fetchAll();
+
                             if (count($num_devices) == 1)
                             {
                                 // UPDATE THIS DEVICE WITH REPLCEMENT TONER
                                 // (with_id)
-                                $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                                $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
                                 $device_toner->toner_id = $with_id;
                                 Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
                                 $toner_count += 1;
