@@ -58,21 +58,32 @@ label.label-phone-number-country {
     float        : left;
 }
 
-.reportSettingsForm input {
-    text-align : right;
-}
-
 .reportSettingsForm td {
     height : 50px;
-    width  : 120px;
 }
 
 .reportSettingsForm .description {
-    width        : 100px;
-    margin-right : 50px;
+    text-align : left;
+    //    width      : 100px;
 }
 
-.reportSettingsForm td:nth-child(1) {
+th.property {
+    padding-left: 20px;
+    width : 350px;
+}
+
+th.default {
+    width : 310px;
+}
+
+.reportSettingsForm .controls {
+    text-align : right;
+}
+
+.reportSettingsForm td:first-child {
+    padding-left: 20px;
+}
+.reportSettingsForm td:nth-child(1) input {
     width        : 250px;
     padding-left : 15px;
 }
@@ -90,14 +101,27 @@ label.label-phone-number-country {
     font-weight : bold;
 }
 
-.reportSettingsForm .headerRow td:last-child {
+.reportSettingsForm .headerRow .property, .reportSettingsForm .headerRow .default {
+    text-align : left;
+}
+
+.reportSettingsForm .headerRow .value {
     text-align : right;
+}
+
+.reportSettingsForm .short-row {
+    height : 15px;
+}
+
+.reportSettingsForm table {
+    width : 100%;
+ }
+ 
+.manufacturerMultiSelect{
+    width: 200px;
 }
 
 .center-form-actions {
     text-align : center;
 }
 
-.reportSettingsForm .short-row {
-    height:15px;
-}

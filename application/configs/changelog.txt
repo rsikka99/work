@@ -1,11 +1,40 @@
+Version 1.4.4
+-------------
+[ADDED]   a new bulk file imports into the system.
+[ADDED]   a new interface for import and export files.
+[ADDED]   a new report, Toner Vendor Gross Margin
+[ADDED]   explanation of how dealer / system overrides work for labor and parts cost per page
+[ADDED]   the ability for Master Device Administrators to approve toners.
+[ADDED]   the ability for Master Device Administrators to edit manufacturers.
+[ADDED]   the ability for users that are not administrators to create, edit and delete toners that are not system toners.
+[ADDED]   the ability for users to create manufacturers.
+[ADDED]   the ability to add names to the reports
+[ADDED]   the ability to filter toner exports by manufacturer
+[ADDED]   the ability to import leasing rates
+
+[CHANGED] look and feel of form / buttons to be more uniform across the application
+[CHANGED} look and feel of manufacturers edit / create forms
+[CHANGED] mapping no longer closes modal after saving.
+[CHANGED] toners now are assigned automatically after creating them on the assigned toners page.
+
+[FIXED]   exclusion of devices for hardware optimization not working.
+[FIXED]   machine compatibility from not showing when assigning toners that were not yet saved.
+[FIXED]   quote device groups not being saved
+[FIXED]   quote settings form multi select width bug
+[FIXED]   the ability to save user profiles
+[FIXED]   the alignment of device swaps reason textbox
+[FIXED]   the assigned toners jqgrid from not being able to be sorted
+
 Version 1.4.3
 -------------
 [FIXED]   issue cost delta would not include parts and labor cost per page (display only)
+
 [REMOVED] part types from toners. Toner vendors are now used instead.
 
 Version 1.4.2
 -------------
 [ADDED]   the ability to export replacement devices to a quote
+
 [FIXED]   issue where the quote menu would not show up
 [FIXED]   issue where pages were taken into account when calculating the monthly lease price
 
@@ -27,6 +56,7 @@ Version 1.4.0
 [ADDED]   support for management of other users part of your organization
 [ADDED]   the forgot password system
 [ADDED]   the health check report
+
 [CHANGED] assessments, hardware optimization, hardware quotes and health checks
 [CHANGED] hardware optimization to use ajax for a better ux
 [CHANGED] how toner pricing imports handle finding a toner
@@ -34,34 +64,39 @@ Version 1.4.0
 [CHANGED] order of settings fields to be more uniform
 [CHANGED] service cost per page to a combination of parts and labor
 [CHANGED] user names to be email addresses
+
 [FIXED]   bugs with report generation
 [FIXED]   issue with cost delta not showing up when switching hardware optimization device back to keep
-[FIXED]   issues with update pricing
 [FIXED]   issue where service cost was sometimes not being applied to hardware optimization replacements
+[FIXED]   issues with update pricing
 [FIXED]   replacement devices did not have service cost per page
 [FIXED]   titles inside customer facing hardware optimization report to be less ambiguous
+
 [REMOVED] customer pricing config for hardware optimization
 [REMOVED] dealer margin for hardware optimization
 
 Version 1.3.1
 -------------
 [FIXED]   bugs with toner management
+
 [REMOVED] transfer reports functionality
 
 Version 1.3.0
 -------------
 [ADDED]   support for xerox csv file imports
+
 [REMOVED] old 'ticketing' system for hardware additions
 
 Version 1.0.0
 -------------
 [ADDED]   support for the assessment, gross margin, and solution reports
+
 [CHANGED] permissions to allow role management
 [CHANGED] proposal generator workflow
 
 Version 0.5.0
 -------------
-[ADDED]   First functional version of the quote generator
+[ADDED]   the first functional version of the quote generator
 
 Version 0.1.0
 -------------

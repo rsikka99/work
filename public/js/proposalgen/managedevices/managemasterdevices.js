@@ -9,6 +9,7 @@
 
 var masterDeviceId = 0;
 var isAllowed = false;
+
 function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAllowedToEdit)
 {
     if (isAllowedToEdit == 'undefined' || isAllowedToEdit == 'false')
@@ -119,7 +120,7 @@ $(document).on("click", "#btnSaveAndApprove", function ()
  * It outputs errors onto the forms if received from json
  * @param formName
  */
-function createOrEdit(formName)
+function createOrEdit(formName, shouldAssign)
 {
     $.ajax({
         url     : TMTW_BASEURL + "proposalgen/managedevices/sauron?masterDeviceId=" + masterDeviceId,
@@ -129,7 +130,7 @@ function createOrEdit(formName)
             form    : $("#" + formName).serialize(),
             formName: formName
         },
-        success : function ()
+        success : function (xhr)
         {
             // Hide our modal (formName.length - 4) is to remove the word 'form' from the end of the formName, which happens to always be our jqgrid name!
             $('#' + formName.substr(0, formName.length - 4) + 'Modal').modal('hide');
@@ -139,7 +140,11 @@ function createOrEdit(formName)
             $("#" + formName.substr(0, formName.length - 4)).trigger('reloadGrid');
 
             // Special Case, We want to reload more than one grid when available toners is changed
-            if (formName.substr(0, formName.length - 4) === 'availableToners')
+            if (xhr.id > 0 && shouldAssign && isAllowed == true && masterDeviceId > 0)
+            {
+                $("#availableTonersForm").trigger("createTonerSuccess", xhr.id);
+            }
+            else if (formName.substr(0, formName.length - 4) == 'availableToners')
             {
                 $("#assignedToners").trigger('reloadGrid');
             }
@@ -206,6 +211,7 @@ function clearForm(formName)
         elements[key].value = '';
     });
 }
+
 /**
  * This shows or hides the tabs depending on form data
  */
@@ -283,6 +289,7 @@ function setupModalPosition(modelName, screenWidth)
         return $left;
     });
 }
+
 /**
  * Displays a message at the top of the page,
  * @param type The type of alert to show, success/alert/danger
@@ -370,13 +377,16 @@ function saveChanges(approve)
                     parent.innerHTML = parent.innerHTML + "<span class='help-inline'>" + errorMessage + "</span>";
                 });
             });
-            
+
             // We need to recreate the datepicker when we have an error!
             $("#launchDate").datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
             displayAlert("danger", "Please fix the errors before continuing");
         }
     });
 }
-window.onresize = function(event) {
+
+window.onresize = function (event)
+{
     setupModalPosition("manageMasterDeviceModal", ($(this).width()));
 }
+

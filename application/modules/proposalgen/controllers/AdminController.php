@@ -392,15 +392,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($toner_id);
                 $toner_color_id = $toner->tonerColorId;
                 // GET NUMBER OF DEVICES USING THIS TONER
-                $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
-                $total_devices_count = count($total_devices);
+                $deviceToners      = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($toner_id);
+                $deviceTonersCount = count($deviceToners);
 
                 // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
                 $num_devices_count = 0;
-                foreach ($total_devices as $key)
+                foreach ($deviceToners as $deviceToner)
                 {
-                    $master_device_id = $key->masterDeviceId;
-
                     // GET ALL SAME COLOR TONERS FOR DEVICE
                     $select = $db->select();
                     $select->from(array(
@@ -409,7 +407,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     $select->joinLeft(array(
                                            't' => 'toners'
                                       ), 'dt.toner_id = t.id');
-                    $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
+                    $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $deviceToner->master_device_id);
                     $stmt        = $db->query($select);
                     $num_devices = $stmt->fetchAll();
 
@@ -482,7 +480,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $row ['yield'],
                             $row ['cost'],
                             $num_devices_count,
-                            $total_devices_count
+                            $deviceTonersCount
                         );
                         $i++;
                     }
@@ -520,14 +518,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $toner_color_id = $toner->tonerColorId;
 
             // GET NUMBER OF DEVICES USING THIS TONER
-            $total_devices       = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $toner_id);
-            $total_devices_count = count($total_devices);
+            $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($toner_id);
 
             // GET NUMBER OF DEVICES WHERE LAST TONER FOR THIS COLOR
             $num_devices_count = 0;
-            foreach ($total_devices as $key)
+            foreach ($deviceToners as $deviceToner)
             {
-                $master_device_id = $key->masterDeviceId;
+                $master_device_id = $deviceToner->master_device_id;
                 // GET ALL SAME COLOR TONERS FOR DEVICE
                 $select = $db->select();
                 $select->from(array(
@@ -547,7 +544,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
 
             $formData = array(
-                'total_count'  => $total_devices_count,
+                'total_count'  => count($deviceToners),
                 'device_count' => $num_devices_count
             );
         }
@@ -576,7 +573,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $toner_color_id = $toner->tonerColorId;
 
         // GET ALL DEVICES USING THIS TONER
-        $total_devices = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchAll('toner_id = ' . $replace_id);
+        $deviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($replace_id);
 
         $db->beginTransaction();
         try
@@ -587,15 +584,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 // LOOP THROUGH ALL DEVICES AND UPDATE TO REPLACEMENT TONER ID
                 // ($with_id)
-                foreach ($total_devices as $key)
+                foreach ($deviceToners as $deviceToner)
                 {
-                    $master_device_id = $key->masterDeviceId;
                     // UPDATE ALL DEVICES WITH THIS TONER (replace_id) TO
                     // REPLACEMENT TONER (with_id)
-                    $device_tonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                    $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
+                    $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $deviceToner->master_device_id));
                     $device_toner->toner_id = $with_id;
-                    $device_tonerMapper->save($device_toner);
+                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
                     $toner_count += 1;
                 }
                 $message = "The toner has been replaced and deleted successfully.";
@@ -608,19 +603,18 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                     // LOOP THROUGH ALL DEVICES AND UPDATE TO REPLACEMENT TONER
                     // ID ($with_id)
-                    foreach ($total_devices as $key)
+                    foreach ($deviceToners as $deviceToner)
                     {
-                        $master_device_id = $key->masterDeviceId;
+                        $master_device_id = $deviceToner->master_device_id;
 
                         if ($apply_all == 1)
                         {
 
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
-                            $device_tonerMapper    = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                            $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
-                            $device_toner->tonerId = $with_id;
-                            $device_tonerMapper->save($device_toner);
+                            $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                            $device_toner->toner_id = $with_id;
+                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
                             $toner_count += 1;
                         }
                         else
@@ -637,14 +631,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                             $stmt        = $db->query($select);
                             $num_devices = $stmt->fetchAll();
+
                             if (count($num_devices) == 1)
                             {
                                 // UPDATE THIS DEVICE WITH REPLCEMENT TONER
                                 // (with_id)
-                                $device_tonerMapper    = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                                $device_toner          = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchRow('toner_id = ' . $replace_id . ' AND master_device_id = ' . $master_device_id);
-                                $device_toner->tonerId = $with_id;
-                                $device_tonerMapper->save($device_toner);
+                                $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
+                                $device_toner->toner_id = $with_id;
+                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
                                 $toner_count += 1;
                             }
                         }
@@ -979,39 +973,33 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     public function masterdeviceslistAction ()
     {
         $response = new stdClass();
+
         // Criteria is the values that the client wants to search by
         $criteria = $this->_getParam('criteria', false);
+
         // Filter is what column the client wants to do a search by
         $filter = $this->_getParam('filter', false);
+
         // Order in which the columns are sorted
         $sortOrder = $this->_getParam('sord', 'asc');
+
         // Index in which the columns should be sorted
         $sortIndex = $this->_getParam('sidx', 'id');
+
         // Rows that are passed
         $limit = $this->_getParam('rows');
+
         // Page that the JQGrid is currently on
         $page = $this->_getParam('page');
 
-
+        // Start is offset for MySQL query
         $start = $limit * $page - $limit;
+
         try
         {
             // Based on the filter allow the mappers to return the appropriate device
-            if ($filter === 'manufacturerId' && $criteria != '')
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria, "{$sortIndex} {$sortOrder}", 100, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllByManufacturerFullName($criteria));
-            }
-            else if ($filter === 'modelName')
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllLikePrinterModel($criteria));
-            }
-            else
-            {
-                $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null, "{$sortIndex} {$sortOrder}", $limit, $start);
-                $count         = count(Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAll(null));
-            }
+            $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, $start, false);
+            $count         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, 0, true);
             // Set the total pages that we have
             if ($count > 0)
             {

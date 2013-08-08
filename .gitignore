@@ -46,3 +46,4 @@ data/uploads/*
 public/cache/*
 public/downloads/*
 phinx.yml
+.vagrant/

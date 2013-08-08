@@ -9,7 +9,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
     public function init ()
     {
         $this->setMethod('post');
-        $this->_addClassNames('reportSettingsForm form-center-actions');
+        $this->_addClassNames('reportSettingsForm form-center-actions hardwareOptimizationSettings');
         $this->addPrefixPath('My_Form_Decorator', 'My/Form/Decorator/', 'decorator');
 
         $costValidator = array(
@@ -57,7 +57,10 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         );
 
 
-        $this->addElement('text', 'name', array('label' => 'Report Name'));
+        $this->addElement('text', 'name', array(
+                                               'label' => 'Report Name',
+                                               'append'     => ' ',
+                                          ));
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(
                                                         'label'      => 'Cost Threshold',
@@ -152,7 +155,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
                                          'ElementErrors',
                                          array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
                                          'Wrapper',
-                                         array(array('data' => 'HtmlTag'), array('tag' => 'td')),
+                                         array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'value')),
                                          array('Description', array('tag' => 'td', 'placement' => 'prepend', 'class' => 'description')),
                                          array('Label', array('tag' => 'td')),
                                          array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
@@ -176,7 +179,7 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
         $group = $this->getDisplayGroup('hardwareOptimization');
         $group->setDecorators(array(
                                    'FormElements',
-                                   array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'placement' => 'prepend')),
+                                   array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'class' => array('property', 'default', 'value'), 'placement' => 'prepend')),
                                    array(array('table' => 'HtmlTag'), array('tag' => 'table')),
                                    'Fieldset'
                               ));

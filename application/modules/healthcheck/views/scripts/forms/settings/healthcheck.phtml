@@ -10,10 +10,9 @@ $tonerVendorElements = array('customerMonochromeRankSetArray' => 'Monochrome Ton
             <h3><?php echo $group->title; ?></h3>
             <table style="width: 100%;">
                 <tr style="height: 50px;">
-                    <th style="width: 410px; padding-left: 20px; text-align: left;">Property</th>
+                    <th style="width: 375px; padding-left: 20px; text-align: left;">Property</th>
                     <th style="text-align: left;">Default</th>
-                    <th style="width: 150px; text-align: right;">Value</th>
-                    <th style="width: 75px;"></th>
+                    <th style="width: 125px; text-align: right; padding-right:40px;">Value</th>
                 </tr>
                 <?php /* @var $element Zend_Form_Element_Text */ ?>
                 <?php foreach ($group->elements as $element) :
@@ -24,29 +23,36 @@ $tonerVendorElements = array('customerMonochromeRankSetArray' => 'Monochrome Ton
                         $append       = (strlen($element->getAttrib('append')) > 0) ? $element->getAttrib('append') : false;
                         ?>
                         <tr style="height: 50px;">
-                            <td style="padding-left: 20px; "><?php echo $element->getLabel(); ?></td>
+                            <td style="padding-left: 20px;"><?php echo $element->getLabel(); ?></td>
                             <td><?php echo ($inputPrepend) ? : ""; ?><?php echo $element->getAttrib('data-defaultvalue'); ?><?php echo ($inputAppend) ? : ""; ?></td>
-                            <td style="text-align: right;"><?php echo ($inputPrepend) ? : ""; ?><?php
-                                if ($element instanceof ZendX_JQuery_Form_Element_UiWidget)
-                                {
-                                    // Well this work around isn't so great, but it's necessary.
-                                    echo $element->renderUiWidgetElement();
-                                }
-                                else
-                                {
-                                    echo $element->renderViewHelper();
-
-                                }
-                                ?></td>
-                            <td style="padding-left: 5px;"><?php echo ($inputAppend . $append) ? : ""; ?></td>
-                        </tr>
-                        <?php if ($element->hasErrors()) : ?>
-                        <tr>
-                            <td colspan="4" style="text-align: right;">
-                                <div class="control-group error"><?php echo $element->renderErrors(); ?></div>
+                            <td style="text-align: right;">
+                                <?php if ($element instanceof ZendX_JQuery_Form_Element_UiWidget) : ?>
+                                    <div class='control-group '>
+                                        <div class='controls'>
+                                            <div class='input-append'>
+                                                <?php echo $element->renderUiWidgetElement(); ?>
+                                                <span class='add-on' style="width: 65px;"><?php echo $inputPrepend . ' ' . $inputAppend; ?></span>;
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php
+                                else :
+                                    $errors = ($element->hasErrors()) ? 'error' : null;
+                                    ?>
+                                    <div class='control-group <?php echo $errors; ?>'>
+                                        <div class='controls'>
+                                            <div class='input-append'>
+                                                <?php echo $element->renderViewHelper(); ?>
+                                                <span class='add-on' style="width: 65px;"><?php echo $inputPrepend . ' ' . $inputAppend; ?></span>;
+                                            </div>
+                                            <?php foreach ($element->getMessages() as $key => $errorMessages) : ?>
+                                                <span class='help-inline'> <?php echo $errorMessages; ?> </span>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </td>
                         </tr>
-                    <?php endif; ?>
                     <?php else: ?>
                         <tr>
                             <td style="padding-left: 20px; height: 50px;">

@@ -94,7 +94,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
                                                       'min' => 0,
                                                       'max' => 99
                                                  )))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('%')
@@ -111,7 +111,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -130,7 +130,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -149,7 +149,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -168,7 +168,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -187,7 +187,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel('MPS Monochrome Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -206,7 +206,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel('MPS Color Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('page', 'page')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
@@ -227,7 +227,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -250,7 +250,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         ->addValidator('greaterThan', true, array(
                                                  'min' => 0
                                             ))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('%')
@@ -268,7 +268,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         ->addValidator('greaterThan', true, array(
                                                  'min' => 0
                                             ))
-        ->setAttrib('class', 'span1')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setAttrib('id', 'actualPageCoverageColor')
@@ -283,7 +283,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Charge')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -302,7 +302,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
         $labor_cost->setLabel('Labor Cost')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -321,7 +321,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
         $parts_cost->setLabel('Parts Cost Per Page')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -340,7 +340,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
         $averageItHourlyRate->setLabel('Estimated Average It Hourly Rate')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$ / hour')
@@ -358,7 +358,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $hoursSpentOnIt = new Zend_Form_Element_Text('hoursSpentOnIt');
         $hoursSpentOnIt->setLabel('Estimated Hours Spent On IT')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -376,7 +376,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $costOfLabor = new Zend_Form_Element_Text('costOfLabor');
         $costOfLabor->setLabel('Estimated Annual Cost Of Labor')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')
@@ -395,7 +395,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $costToExecuteSuppliesOrder = new Zend_Form_Element_Text('costToExecuteSuppliesOrder');
         $costToExecuteSuppliesOrder->setLabel('Estimated Cost To Execute Supplies Order')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setAttrib('prepend', '$')
@@ -415,7 +415,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $numberOfSupplyOrdersPerMonth = new Zend_Form_Element_Text('numberOfSupplyOrdersPerMonth');
         $numberOfSupplyOrdersPerMonth->setLabel('Estimated Supply Orders Per Month')
         ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'input-mini')
+        ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
         ->setAttrib('style', 'text-align: right')
         ->setDescription('$')

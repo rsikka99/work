@@ -154,38 +154,46 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
 
         if ($this->getRequest()->isPost())
         {
-            $db = Zend_Db_Table::getDefaultAdapter();
-            try
+            $postData = $this->getRequest()->getPost();
+            if (isset($postData['goBack']))
             {
-                $db->beginTransaction();
-                $postData = $this->getRequest()->getPost();
-                if ($assessmentSettingsService->update($postData))
+                $this->gotoPreviousNavigationStep($this->_navigation);
+            }
+            else
+            {
+                $db = Zend_Db_Table::getDefaultAdapter();
+                try
                 {
-                    $this->updateAssessmentStepName();
-                    $this->saveAssessment();
-
-                    $db->commit();
-
-                    if (isset($postData['saveAndContinue']))
+                    $db->beginTransaction();
+                    $postData = $this->getRequest()->getPost();
+                    if ($assessmentSettingsService->update($postData))
                     {
-                        $this->gotoNextNavigationStep($this->_navigation);
+                        $this->updateAssessmentStepName();
+                        $this->saveAssessment();
+
+                        $db->commit();
+
+                        if (isset($postData['saveAndContinue']))
+                        {
+                            $this->gotoNextNavigationStep($this->_navigation);
+                        }
+                        else if (isset($postData['goBack']))
+                        {
+                            $this->gotoPreviousNavigationStep($this->_navigation);
+                        }
                     }
-                    else if (isset($postData['goBack']))
+                    else
                     {
-                        $this->gotoPreviousNavigationStep($this->_navigation);
+                        $db->rollBack();
+                        $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
                     }
                 }
-                else
+                catch (Exception $e)
                 {
                     $db->rollBack();
                     $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
+                    Tangent_Log::logException($e);
                 }
-            }
-            catch (Exception $e)
-            {
-                $db->rollBack();
-                $this->_flashMessenger->addMessage(array('danger' => 'There was an error saving your settings.'));
-                Tangent_Log::logException($e);
             }
         }
 

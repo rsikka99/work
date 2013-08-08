@@ -457,21 +457,34 @@ class Proposalgen_Service_ManageMasterDevices
                 {
                     $alreadyExists = false;
 
-                    foreach ($assignedToners as $assignedToner)
+                    foreach ($assignedToners as $tonersByManufacturer)
                     {
-                        if ($tonerId == $assignedToner->id)
+                        foreach ($tonersByManufacturer as $tonersByColor)
                         {
-                            $alreadyExists = true;
+                            foreach ($tonersByColor as $assignedToner)
+                            {
+                                if ($tonerId === $assignedToner->id)
+                                {
+                                    $alreadyExists = true;
+                                }
+                            }
                         }
                     }
 
                     if ($alreadyExists == false)
                     {
-                        $deviceToner                 = new Proposalgen_Model_DeviceToner();
-                        $deviceToner->masterDeviceId = $this->masterDeviceId;
-                        $deviceToner->tonerId        = $tonerId;
-                        $deviceTonersMapper          = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                        $deviceTonersMapper->save($deviceToner);
+                        $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                        $deviceToner->master_device_id = (int)$this->masterDeviceId;
+                        $deviceToner->toner_id         = (int)$tonerId;
+                        $deviceToner->isSystemDevice   = ($this->_isAdmin ? 1 : 0);
+                        $deviceToner->userId           = Zend_Auth::getInstance()->getIdentity()->id;
+                        $deviceTonersMapper            = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+
+                        // If it doesn't exist in the database then insert it
+                        if (!$deviceTonersMapper->find(array($deviceToner->toner_id, $deviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                        {
+                            $deviceTonersMapper->insert($deviceToner);
+                        }
                     }
                 }
             }
@@ -723,13 +736,14 @@ class Proposalgen_Service_ManageMasterDevices
      * @param array|bool $data
      * @param bool       $deleteTonerId
      *
-     * @return bool
+     * @return int
      */
     public function updateAvailableTonersForm ($data = false, $deleteTonerId = false)
     {
         $dealerTonerAttributesMapper = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance();
         $tonerMapper                 = Proposalgen_Model_Mapper_Toner::getInstance();
         $validData                   = array();
+        $toner                       = null;
 
         // We need to remove the prefix on the formValues
         foreach ($data as $key => $value)
@@ -739,7 +753,6 @@ class Proposalgen_Service_ManageMasterDevices
 
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->beginTransaction();
-
         try
         {
             // If we are not deleting a toner
@@ -765,13 +778,14 @@ class Proposalgen_Service_ManageMasterDevices
                         // We need to apply a random 5 to 10% margin to the system cost they add to our system
                         // Their dealer cost gets set to the cost they chose
                         $validData['dealerCost'] = $validData['systemCost'];
-                        $toner->cost             = round(Tangent_Accounting::applyMargin($validData['systemCost'], rand(5, 10)));
+                        $toner->cost             = Tangent_Accounting::obfuscateTonerCost($validData['systemCost']);
                         $toner->isSystemDevice   = 0;
                     }
                     $toner->tonerColorId = $validData['tonerColorId'];
                     $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;
 
                     $validData['id'] = $tonerMapper->insert($toner);
+                    $toner->id       = (int)$validData['id'];
                 }
                 // We are editing a toner
                 else if ($validData['id'] > 0)
@@ -839,8 +853,13 @@ class Proposalgen_Service_ManageMasterDevices
             }
 
             $db->commit();
+            $id = 0;
+            if ($toner instanceof Proposalgen_Model_Toner)
+            {
+                $id = $toner->id;
+            }
 
-            return true;
+            return $id;
         }
         catch (Exception $e)
         {
@@ -849,8 +868,6 @@ class Proposalgen_Service_ManageMasterDevices
 
             return false;
         }
-
-        return true;
     }
 
     /**

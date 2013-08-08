@@ -61,6 +61,12 @@ class Admin_UserController extends Tangent_Controller_Action
                             $user->populate($values);
                             $user->password = Application_Model_User::cryptPassword($user->password);
                             $userId         = $mapper->insert($user);
+
+                            if (!isset($values["userRoles"]))
+                            {
+                                $values['userRoles'] = array();
+                            }
+
                             // Save changes to the user roles
                             if (isset($values ["userRoles"]))
                             {
@@ -97,6 +103,9 @@ class Admin_UserController extends Tangent_Controller_Action
 
                                 // Reset the form after everything is saved successfully
                                 $form->reset();
+
+                                // Select the same dealer so we can keep creating users easier
+                                $form->populate(array('dealerId' => $values['dealerId']));
                             }
                             $db->commit();
                         }
@@ -145,6 +154,10 @@ class Admin_UserController extends Tangent_Controller_Action
                                                        ));
                     $form->populate($request->getPost());
                 }
+            }
+            else
+            {
+                $this->redirector('index');
             }
         }
 
@@ -348,59 +361,57 @@ class Admin_UserController extends Tangent_Controller_Action
                         // Save to the database with cascade insert turned on
                         $mapper->save($user, $userId);
 
-                        // Save changes to the user roles
-                        if (isset($formValues ["userRoles"]))
+                        if (!isset($formValues['userRoles']))
                         {
-                            $userRole         = new Admin_Model_UserRole();
-                            $userRole->userId = $userId;
+                            $formValues['userRoles'] = array();
+                        }
+                        // Save changes to the user roles
+                        $userRole         = new Admin_Model_UserRole();
+                        $userRole->userId = $userId;
 
-                            // Loop through our new roles
-                            foreach ($formValues ["userRoles"] as $roleId)
+                        // Loop through our new roles
+                        foreach ($formValues ["userRoles"] as $roleId)
+                        {
+                            $hasRole = false;
+
+                            foreach ($userRoles as $existingUserRole)
                             {
-                                $hasRole = false;
-
-                                foreach ($userRoles as $existingUserRole)
+                                if ($existingUserRole->roleId == $roleId)
                                 {
-                                    if ($existingUserRole->roleId == $roleId)
-                                    {
-                                        $hasRole = true;
-                                        break;
-                                    }
-                                }
-
-                                // If the role is new
-                                if (!$hasRole)
-                                {
-                                    $userRole->roleId = $roleId;
-                                    $userRoleMapper->insert($userRole);
+                                    $hasRole = true;
+                                    break;
                                 }
                             }
 
-
-                            // Loop through our old roles to see which were removed
-                            /* @var $userRole Admin_Model_UserRole */
-                            foreach ($userRoles as $userRole)
+                            // If the role is new
+                            if (!$hasRole)
                             {
-                                $hasRole = false;
-                                foreach ($formValues ["userRoles"] as $roleId)
-                                {
-                                    if ($userRole->roleId == $roleId)
-                                    {
-                                        $hasRole = true;
-                                        break;
-                                    }
-                                }
-
-                                // If the old role is no longer needed
-                                if (!$hasRole)
-                                {
-                                    // Delete role
-                                    $userRoleMapper->delete($userRole);
-                                }
+                                $userRole->roleId = $roleId;
+                                $userRoleMapper->insert($userRole);
                             }
                         }
-                        else
+
+
+                        // Loop through our old roles to see which were removed
+                        /* @var $userRole Admin_Model_UserRole */
+                        foreach ($userRoles as $userRole)
                         {
+                            $hasRole = false;
+                            foreach ($formValues ["userRoles"] as $roleId)
+                            {
+                                if ($userRole->roleId == $roleId)
+                                {
+                                    $hasRole = true;
+                                    break;
+                                }
+                            }
+
+                            // If the old role is no longer needed
+                            if (!$hasRole)
+                            {
+                                // Delete role
+                                $userRoleMapper->delete($userRole);
+                            }
                         }
 
                         $this->_flashMessenger->addMessage(array(

@@ -193,7 +193,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * calculated values and other things
      */
     public $adminCostPerPage;
-    protected $_costPerPage;
     protected $_cachedCostPerPage;
     protected $_cachedCheapestTonerVendorSet;
     protected $_usingIncompleteBlackTonerData;
@@ -485,19 +484,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "partsCostPerPage"    => $this->partsCostPerPage,
             "laborCostPerPage"    => $this->laborCostPerPage,
         );
-    }
-
-
-    /**
-     * @param stdClass $CostPerPage
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function setCostPerPage ($CostPerPage)
-    {
-        $this->_costPerPage = $CostPerPage;
-
-        return $this;
     }
 
     /**

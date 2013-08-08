@@ -132,18 +132,9 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      */
     public function createCacheKey ()
     {
-        $monochromeRankSetId = (isset($this->monochromeTonerRankSet) && $this->monochromeTonerRankSet->id > 0) ? $this->monochromeTonerRankSet->id : 0;
-        $colorRankSetId      = (isset($this->colorTonerRankSet) && $this->colorTonerRankSet->id > 0) ? $this->colorTonerRankSet->id : 0;
+        $monochromeRanks = implode("_", $this->monochromeTonerRankSet->getRanksAsArray());
+        $colorRanks      = implode("_", $this->colorTonerRankSet->getRanksAsArray());
 
-        if (isset($this->monochromeTonerRankSet) && $this->monochromeTonerRankSet->overrideManufacturer != null)
-        {
-            $overrideManufacturerId = $this->monochromeTonerRankSet->overrideManufacturer;
-        }
-        else
-        {
-            $overrideManufacturerId = 0;
-        }
-
-        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$monochromeRankSetId}_{$colorRankSetId}_{$overrideManufacturerId}";
+        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_monoranks_{$monochromeRanks}_colorranks_{$colorRanks}";
     }
 }

@@ -46,7 +46,6 @@ class Proposalgen_Form_HardwareConfigurations extends Twitter_Bootstrap_Form_Hor
 
         $this->addElement('text', 'hardwareConfigurationsname', array(
                                                                      'label'     => 'Name:',
-                                                                     'class'     => 'span2',
                                                                      'required'  => true,
                                                                      'maxlength' => 255,
                                                                      'filters'   => array(
@@ -62,7 +61,6 @@ class Proposalgen_Form_HardwareConfigurations extends Twitter_Bootstrap_Form_Hor
 
         $this->addElement('textarea', 'hardwareConfigurationsdescription', array(
                                                                                 'label'     => 'Description:',
-                                                                                'class'     => 'span2',
                                                                                 'required'  => true,
                                                                                 'style'     => 'height: 100px',
                                                                                 'maxlength' => 255,

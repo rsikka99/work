@@ -224,6 +224,10 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                                         'quoteId' => $this->_quoteId 
                                 ));
                             }
+                            else
+                            {
+                                $form->populate($values);
+                            }
                         }
                         catch ( Exception $e )
                         {

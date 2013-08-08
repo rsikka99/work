@@ -199,7 +199,7 @@ function loadSuppliesAndService()
                     }
 
                     /**
-                     * Not sure what this max variable is actually used for.
+                     * This is the number of Devices to list before the view all toggle takes into effect
                      * @type {number}
                      */
                     var max = 1;
@@ -219,18 +219,21 @@ function loadSuppliesAndService()
                         {
                             deviceListCollapsibleContainer += '<div id="assignedToners_inner_' + ids[i] + '" style="display: none;">';
                         }
+
                         deviceListCollapsibleContainer += device + '<br />';
-                        if (j > max && j == compatibleDevices.length - 1)
-                        {
-                            deviceListCollapsibleContainer += '</div>';
-                            deviceListCollapsibleContainer += '<a id="assignedToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'assignedToners\',' + ids[i] + ');">View All...</a>';
-                        }
+                    }
+
+                    if (compatibleDevices.length > max)
+                    {
+                        deviceListCollapsibleContainer += '</div>';
+                        deviceListCollapsibleContainer += '<a id="assignedToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'assignedToners\',' + ids[i] + ');">View All...</a>';
                     }
 
                     currentRow.device_list = deviceListCollapsibleContainer;
                     currentRow.tonerColorIdModified = "<div style='text-align: center;padding-top:5px;'><img src=" + image + " width='24' /><br/>" + label + "</div>";
 
                     grid.setRowData(currentRowId, currentRow);
+
                 }
             }
         });
@@ -240,6 +243,7 @@ function loadSuppliesAndService()
 
     var assignedTonersjQuery = jQuery("#assignedToners");
     assignedTonersjQuery.navGrid('#assignedToners_toppager', {edit: false, add: false, del: false, search: false, refresh: false});
+
     //Create New
     assignedTonersjQuery.navButtonAdd('#assignedToners_toppager', {
         caption      : "Create New",
@@ -252,7 +256,7 @@ function loadSuppliesAndService()
             var systemCostLabel = $("label[for='availableTonerssystemCost']");
 
             $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
-
+            $("#availableTonersFormBtn").attr('onClick', "javascript: createOrEdit('availableTonersForm',true);");
             if (!isSaveAndApproveAdmin)
             {
                 availableTonersDealerCost.parentNode.parentNode.setAttribute("style", "display:none");
@@ -630,7 +634,7 @@ function loadSuppliesAndService()
                             break;
                     }
                     /**
-                     * Not sure what this max variable is actually used for.
+                     * This is the number of Devices to list before the view all toggle takes into effect
                      * @type {number}
                      */
                     var max = 1;
@@ -650,13 +654,16 @@ function loadSuppliesAndService()
                         {
                             deviceListCollapsibleContainer += '<div id="availableToners_inner_' + ids[i] + '" style="display: none;">';
                         }
+
                         deviceListCollapsibleContainer += device + '<br />';
-                        if (j > max && j == compatibleDevices.length - 1)
-                        {
-                            deviceListCollapsibleContainer += '</div>';
-                            deviceListCollapsibleContainer += '<a id="availableToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'availableToners\',' + ids[i] + ');">View All...</a>';
-                        }
                     }
+
+                    if (compatibleDevices.length > max)
+                    {
+                        deviceListCollapsibleContainer += '</div>';
+                        deviceListCollapsibleContainer += '<a id="availableToners_view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'availableToners\',' + ids[i] + ');">View All...</a>';
+                    }
+
                     currentRow.device_list = deviceListCollapsibleContainer;
                     currentRow.tonerColorIdModified = "<div style='text-align: center;padding-top:5px;'><img src=" + image + " width='24' /><br/>" + label + "</div>";
                     grid.setRowData(currentRowId, currentRow);
@@ -683,6 +690,7 @@ function loadSuppliesAndService()
             var availableTonersDealerCost = document.getElementById("availableTonersdealerCost");
             var systemCostLabel = $("label[for='availableTonerssystemCost']");
 
+            $("#availableTonersFormBtn").attr('onClick', "javascript: createOrEdit('availableTonersForm',false);");
             $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none');
 
             if (!isSaveAndApproveAdmin)
@@ -1334,6 +1342,11 @@ function loadSuppliesAndService()
             availableTonersCriteria.css({"display": 'initial'});
         }
     });
+
+    $("#availableTonersForm").bind("createTonerSuccess", function (e, masterDeviceId)
+    {
+        assignToner(masterDeviceId);
+    });
 }
 /**
  * Adds a toner to tonersList
@@ -1345,6 +1358,7 @@ function assignToner(tonerId)
     tonersList.push(tonerId);
     jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
     reloadTonersGrids();
+
 }
 /**
  * Removes a toner from tonersList
@@ -1530,6 +1544,6 @@ $(document).on("click", "#replacementTonersReset", function ()
 function tonerSaveAndApprove()
 {
     document.getElementById('availableTonerssaveAndApproveHdn').value = 1;
-    createOrEdit('availableTonersForm');
+    createOrEdit('availableTonersForm', false);
     document.getElementById('availableTonerssaveAndApproveHdn').value = 0;
 }

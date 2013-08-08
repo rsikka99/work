@@ -75,7 +75,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 // Bring the user back to the home page
                 $this->redirector("index", "index", "index");
             }
-            else if (isset($values ["performUpload"]))
+            else if (isset($values ["performUpload"]) && !($rmsUpload instanceof Proposalgen_Model_Rms_Upload))
             {
                 /*
                  * Handle Upload

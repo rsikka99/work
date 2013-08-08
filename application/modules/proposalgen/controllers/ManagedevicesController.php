@@ -41,48 +41,22 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
      */
     public function assignedTonerListAction ()
     {
-        $masterDeviceId = $this->_getParam('masterDeviceId', false);
-        $tonerList      = $this->_getParam('tonersList', false);
-        $firstLoad      = $this->_getParam('firstLoad', false);
-        $jsonArray      = array();
-        $jqGridService  = new Tangent_Service_JQGrid();
-
-        /**
-         * If we passed a list of toners, it means those are all the toners assigned to a device.
-         * Otherwise we'll fetch the toners that are assigned to the device already.
-         */
-        if ($tonerList)
-        {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList);
-        }
-        else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
-        {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId);
-        }
-
+        $masterDeviceId   = $this->_getParam('masterDeviceId', false);
+        $tonerList        = $this->_getParam('tonersList', false);
+        $firstLoad        = $this->_getParam('firstLoad', false);
+        $jsonArray        = array();
+        $jqGridService    = new Tangent_Service_JQGrid();
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'id'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
+        
         if ($jqGridService->sortingIsValid())
         {
-            $jqGridService->setRecordCount(count($toners));
-            // Validate current page number since we don't want to be out of bounds
-            if ($jqGridService->getCurrentPage() < 1)
-            {
-                $jqGridService->setCurrentPage(1);
-            }
-            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
-            {
-                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
-            }
-
-            // Return a small subset of the results based on the jqGrid parameters
-            $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
-
-            if ($startRecord < 0)
-            {
-                $startRecord = 0;
-            }
-
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
             $sortOrder = array();
-
             if ($jqGridService->hasGrouping())
             {
                 $sortOrder[] = $jqGridService->getGroupByColumn() . ' ' . $jqGridService->getGroupBySortOrder();
@@ -93,6 +67,36 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
             }
 
+            $toners     = [];
+            $tonerCount = 0;
+
+            /**
+             * If we passed a list of toners, it means those are all the toners assigned to a device.
+             * Otherwise we'll fetch the toners that are assigned to the device already.
+             */
+            if ($tonerList)
+            {
+                $tonerCount = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, null, true);
+            }
+            else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
+            {
+                $tonerCount = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, null, true);
+            }
+
+            $jqGridService->setRecordCount($tonerCount);
+
+            /**
+             * If we passed a list of toners, it means those are all the toners assigned to a device.
+             * Otherwise we'll fetch the toners that are assigned to the device already.
+             */
+            if ($tonerList)
+            {
+                $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $sortOrder);
+            }
+            else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
+            {
+                $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDeviceWithMachineCompatibility($masterDeviceId, $sortOrder);
+            }
 
             $jqGridService->setRows($toners);
 
@@ -587,9 +591,10 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 else if ($formName == 'availableTonersForm')
                 {
-                    if ($manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0))
+                    $id = $manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0);
+                    if ($id > 0)
                     {
-                        $this->sendJson("Successfully updated available toners form");
+                        $this->sendJson(array("Message" => "Successfully updated available toners form", "id" => $id));
                     }
                     else
                     {
@@ -764,8 +769,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         if ($tonerId && $masterDeviceId)
         {
             $deviceToner                 = new Proposalgen_Model_DeviceToner();
-            $deviceToner->masterDeviceId = $masterDeviceId;
-            $deviceToner->tonerId        = $tonerId;
+            $deviceToner->master_device_id = $masterDeviceId;
+            $deviceToner->toner_id        = $tonerId;
 
             try
             {
@@ -799,8 +804,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         if ($tonerId && $masterDeviceId)
         {
             $deviceToner                 = new Proposalgen_Model_DeviceToner();
-            $deviceToner->masterDeviceId = $masterDeviceId;
-            $deviceToner->tonerId        = $tonerId;
+            $deviceToner->master_device_id = $masterDeviceId;
+            $deviceToner->toner_id        = $tonerId;
 
             try
             {

@@ -103,10 +103,13 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                     $userRole         = new Admin_Model_UserRole();
                     $userRole->userId = $userId;
 
-                    foreach ($filteredData['userRoles'] as $roleId)
+                    if (isset($filteredData['userRoles']) && is_array($filteredData['userRoles']))
                     {
-                        $userRole->roleId = (int)$roleId;
-                        $userRoleMapper->insert($userRole);
+                        foreach ($filteredData['userRoles'] as $roleId)
+                        {
+                            $userRole->roleId = (int)$roleId;
+                            $userRoleMapper->insert($userRole);
+                        }
                     }
 
                     $success = true;
@@ -164,6 +167,11 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                 {
                     // Make sure the users password is encrypted.
                     $user->password = $user->cryptPassword($filteredData['password']);
+                }
+
+                if (!isset($filteredData['userRoles']))
+                {
+                    $filteredData['userRoles'] = array();
                 }
 
                 $userMapper->save($user);

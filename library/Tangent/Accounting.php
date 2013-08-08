@@ -8,7 +8,7 @@ class Tangent_Accounting
      * MARGINS
      * ****************************************************************************************************************
      */
-    
+
     /**
      * *************************************************************************************************************
      * Margin calculations
@@ -53,7 +53,7 @@ class Tangent_Accounting
      *
      * *************************************************************************************************************
      */
-    
+
     /**
      * Applies a margin to a cost.
      *
@@ -62,20 +62,22 @@ class Tangent_Accounting
      * @param number $marginPercent
      *            A number representing a percentage. E.g. If you want 20%, you pass 20 to the function. Must be between
      *            -100 and 100 exclusively.
+     *
      * @throws InvalidArgumentException If the margin is out of range this exception will be thrown.
      * @return number The cost with the margin applied. Also known as the price.
      */
     public static function applyMargin ($cost, $marginPercent)
     {
         $price = 0;
-        
+
         // Validate that margin percentage is correct
-        if ($marginPercent <= - 100 || $marginPercent >= 100)
+        if ($marginPercent <= -100 || $marginPercent >= 100)
         {
             trigger_error('Margin percent must be between -100 and 100 exclusively.', E_USER_NOTICE);
+
             return $cost;
         }
-        
+
         // Only apply a margin on something that has a cost > 0.
         if ($cost > 0)
         {
@@ -83,13 +85,13 @@ class Tangent_Accounting
             {
                 // When we have a positive margin, we apply it to the cost
                 $margin = 1 - (abs($marginPercent) / 100);
-                $price = $cost / $margin;
+                $price  = $cost / $margin;
             }
-            else if ($marginPercent < 0 && $marginPercent > - 100)
+            else if ($marginPercent < 0 && $marginPercent > -100)
             {
                 // When we have a negative margin, we remove it from the cost
                 $margin = 1 - (abs($marginPercent) / 100);
-                $price = $cost * $margin;
+                $price  = $cost * $margin;
             }
             else
             {
@@ -97,6 +99,7 @@ class Tangent_Accounting
                 $price = $cost;
             }
         }
+
         return $price;
     }
 
@@ -107,12 +110,13 @@ class Tangent_Accounting
      *            The cost
      * @param number $price
      *            The price
+     *
      * @return number The margin percentage. E.g. 20% returns as 20
      */
     public static function reverseEngineerMargin ($cost, $price)
     {
         $margin = 0;
-        
+
         // Only calculate if we have real numbers to return
         if ($cost > 0 && $price > 0)
         {
@@ -134,6 +138,7 @@ class Tangent_Accounting
                 $margin = 0;
             }
         }
+
         return $margin;
     }
 }

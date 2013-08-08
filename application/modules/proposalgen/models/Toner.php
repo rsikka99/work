@@ -53,11 +53,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     public $calculatedCost;
 
     /**
-     * @var string
-     */
-    public $dealerSku;
-
-    /**
      * @var Proposalgen_Model_Manufacturer
      */
     protected $_manufacturer;
@@ -115,11 +110,6 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
         if (isset($params->tonerColorId) && !is_null($params->tonerColorId))
         {
             $this->tonerColorId = $params->tonerColorId;
-        }
-
-        if (isset($params->dealerSku) && !is_null($params->dealerSku))
-        {
-            $this->dealerSku = $params->dealerSku;
         }
 
         if (isset($params->calculatedCost) && !is_null($params->calculatedCost))
