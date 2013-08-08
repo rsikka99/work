@@ -191,7 +191,7 @@ $(document).ready(function ()
                 name       : 'dealer_sku',
                 index      : 'dealerSku',
                 label      : 'Dealer Sku',
-                sortable : true,
+                sortable   : true,
                 editable   : true,
                 editoptions: {size: 10, maxlength: 4},
                 align      : 'right'
@@ -283,9 +283,9 @@ $(document).ready(function ()
             {
                 var cur_row = ids[i];
                 var cur_price = document.getElementById("toners_list").rows[i + 1].cells[7].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i+1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
-                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:60px' onkeypress='javascript: return numbersonly(this, event);' />";
-                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i+1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px';' />";
+                hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i + 1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i + 1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
+                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i + 1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i + 1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:60px' onkeypress='javascript: return numbersonly(this, event);' />";
+                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i + 1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i + 1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px';' />";
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_dealer_sku: new_dealer_sku_element});
                 jQuery("#toners_list").jqGrid('setRowData', ids[i], {new_toner_price: hidden_price_element + new_price_element});
 
@@ -456,9 +456,9 @@ function setupManufacturerList(url)
                 obj = jQuery.parseJSON(data);
             }
             else
-
-
-            var options = '';
+            {
+                var options = '';
+            }
             for (var i = 0; i < data.rows.length; i++)
             {
                 list = (data.rows[i].cell);
@@ -552,104 +552,111 @@ function update_grid(action)
 
 function apply_percentage()
 {
-    var id = 0;
     var old_price = 0;
     var new_price = 0;
+    var default_labor = '';
+    var default_parts = '';
     var sign = $("#cboSign").val();
     var percentage = $("#txtUpdate").val();
-    var decimals = 2;
+    var decimals = 4;
+    var pricingFilterElement = $('#pricing_filter');
 
-    //find decimal places
-    if ($('#pricing_filter').val() != 'Toner Costs')
+
+    // Get our jqGrid
+    var jqGridSelector = '';
+    if (pricingFilterElement.val() == 'toner')
     {
-        decimals = 4;
+        jqGridSelector = jQuery("#toners_list");
     }
-
-    //master or dealer?
-    var grid = '';
-    var company = '';
-
-    //toner or device?
-    var list = 'devices';
-    var type = 'Device';
-    if ($('#pricing_filter').val() == 'toner')
+    else
     {
-        list = 'toners';
-        type = 'Toner';
+        jqGridSelector = jQuery("#devices_list");
     }
 
     if (percentage > 0)
     {
-        var ids = jQuery("#" + grid + list + "_list").jqGrid('getDataIDs');
+        var ids = jqGridSelector.jqGrid('getGridParam', 'selarrrow');
+        var jqGridRow = '';
+
         for (var i = 0; i < ids.length; i++)
         {
             var cur_row = ids[i];
-            var old_price = $("#hdn" + company + type + "Price" + cur_row).val();
-            var old_price_labor = $("#hdn" + type + "PriceLabor" + cur_row).val();
-            var old_price_parts = $("#hdn" + type + "PriceParts" + cur_row).val();
-            if (old_price_labor == 0)
+            if (pricingFilterElement.val() == 'printer')
             {
-                old_price_labor = default_labor;
-            }
-            if (old_price_parts == 0)
-            {
-                old_price_parts = default_parts;
-            }
-            if (old_price == 0)
-            {
-                old_price = default_price;
-            }
-            if ($("#jqg_" + grid + list + "_list_" + cur_row).is(':checked'))
-            {
-                if (type == 'Device')
-                {
-                    if (sign == "-")
-                    {
-                        //Labor
-                        new_price = old_price_labor - (old_price_labor * (percentage / 100));
-                        $("#laborCostPerPage" + cur_row).css('color', 'black');
-                        $("#laborCostPerPage" + cur_row).val(new_price.toFixed(decimals));
-                        //Parts
-                        new_price = old_price_parts - (old_price_parts * (percentage / 100));
-                        $("#partsCostPerPage" + cur_row).css('color', 'black');
-                        $("#partsCostPerPage" + cur_row).val(new_price.toFixed(decimals));
-                    }
-                    else
-                    {
-                        new_price = (old_price_labor * ((percentage / 100) + 1));
-                        $("#laborCostPerPage" + cur_row).css('color', 'black');
-                        $("#laborCostPerPage" + cur_row).val(new_price.toFixed(decimals));
+                jqGridRow = jqGridSelector.getRowData(cur_row);
+                var masterId = jqGridRow.masterID;
 
-                        new_price = (old_price_parts * ((percentage / 100) + 1));
-                        $("#partsCostPerPage" + cur_row).css('color', 'black');
-                        $("#partsCostPerPage" + cur_row).val(new_price.toFixed(decimals));
-                    }
+
+                var laborCostPerPageElement = $("#laborCostPerPage" + masterId);
+                var partsCostPerPageElement = $("#partsCostPerPage" + masterId);
+
+                old_price = $("#hdnDevicePrice" + masterId).val();
+                var old_price_labor = $("#hdnDevicePriceLabor" + masterId).val();
+                var old_price_parts = $("#hdnDevicePriceParts" + masterId).val();
+
+                if (old_price_labor == 0)
+                {
+                    old_price_labor = default_labor;
+                }
+                if (old_price_parts == 0)
+                {
+                    old_price_parts = default_parts;
+                }
+                if (old_price == 0)
+                {
+                    old_price = default_price;
+                }
+
+                if (sign == "-")
+                {
+                    // Labor
+                    new_price = old_price_labor - (old_price_labor * (percentage / 100));
+                    laborCostPerPageElement.val(new_price.toFixed(decimals));
+                    // Parts
+                    new_price = old_price_parts - (old_price_parts * (percentage / 100));
+                    partsCostPerPageElement.val(new_price.toFixed(decimals));
                 }
                 else
                 {
-                    if (sign == "-")
-                    {
-                        new_price = old_price - (old_price * (percentage / 100));
-                        $("#txt" + company + type + "Price" + cur_row).css('color', 'black');
-                        $("#txt" + company + type + "Price" + cur_row).val(new_price.toFixed(decimals));
-                    }
-                    else
-                    {
-                        new_price = (old_price * ((percentage / 100) + 1));
-                        $("#txt" + company + type + "Price" + cur_row).css('color', 'black');
-                        $("#txt" + company + type + "Price" + cur_row).val(new_price.toFixed(decimals));
-                    }
+                    // Labor
+                    new_price = (old_price_labor * ((percentage / 100) + 1));
+                    laborCostPerPageElement.val(new_price.toFixed(decimals));
+                    // Parts
+                    new_price = (old_price_parts * ((percentage / 100) + 1));
+                    partsCostPerPageElement.val(new_price.toFixed(decimals));
+                }
+            }
+            else
+            {
+                jqGridRow = jqGridSelector.getRowData(cur_row);
+                var tonerPriceElement = $("#txtTonerPrice" + jqGridRow.toner_id);
+                var tonerPrice = 0;
 
+                if (parseFloat(jqGridRow.toner_dealer_price) > 0)
+                {
+                    tonerPrice = jqGridRow.toner_dealer_price;
+                }
+                else
+                {
+                    tonerPrice = jqGridRow.toner_price;
                 }
 
+                if (sign == "-")
+                {
+                    new_price = tonerPrice - (tonerPrice * (percentage / 100));
+                    tonerPriceElement.val(new_price.toFixed(decimals));
+                }
+                else
+                {
+                    new_price = (tonerPrice * ((percentage / 100) + 1));
+                    tonerPriceElement.val(new_price.toFixed(decimals));
+                }
             }
-
         }
     }
     else
     {
         $("#message_container").html("Please enter a percentage.");
-
     }
 }
 
