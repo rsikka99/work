@@ -17,6 +17,7 @@ Version 1.4.4
 [CHANGED] mapping no longer closes modal after saving.
 [CHANGED] toners now are assigned automatically after creating them on the assigned toners page.
 
+[FIXED]   bulk file pricing not being able to update by percentage
 [FIXED]   exclusion of devices for hardware optimization not working.
 [FIXED]   machine compatibility from not showing when assigning toners that were not yet saved.
 [FIXED]   quote device groups not being saved
