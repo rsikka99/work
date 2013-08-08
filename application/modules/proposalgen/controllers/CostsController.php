@@ -117,7 +117,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                                                        ));
                                     break;
                                 }
-                                else if ($price != '')
+                                else if ($price != '' && $price > 0)
                                 {
                                     $tonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner_id, $this->_dealerId);
                                     if ($tonerAttribute)
