@@ -261,7 +261,6 @@ class Admin_DealerController extends Tangent_Controller_Action
             $this->redirect('index');
         }
 
-
         $message = "Are you sure you want to delete {$dealer->dealerName}";
         $form    = new Application_Form_Delete($message);
 
@@ -288,6 +287,8 @@ class Admin_DealerController extends Tangent_Controller_Action
                             Preferences_Model_Mapper_Dealer_Setting::getInstance()->delete($dealer);
                         }
 
+                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->deleteDefaultReasonByDealerId($dealer->id);
+                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->deleteReasonsByDealerId($dealer->id);
                         Admin_Model_Mapper_Dealer::getInstance()->delete($dealer);
 
                         $db->commit();

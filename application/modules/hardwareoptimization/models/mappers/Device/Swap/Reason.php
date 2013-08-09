@@ -297,4 +297,15 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapp
                                ));
     }
 
+    /**
+     * Deletes the device swap reason by dealer id
+     *
+     * @param $dealerId
+     *
+     * @return int
+     */
+    public function deleteReasonsByDealerId ($dealerId)
+    {
+        return $this->getDbTable()->delete(array("{$this->col_dealerId} = ?" => $dealerId));
+    }
 }

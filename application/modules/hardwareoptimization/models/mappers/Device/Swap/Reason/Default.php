@@ -253,4 +253,16 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default extends My_Mo
     {
         return $this->fetch(array("{$this->col_deviceSwapReasonCategoryId} = ?" => $categoryId, "{$this->col_dealerId} = ?" => $dealerId));
     }
+
+    /**
+     * Dealers all the default reasons for a dealer
+     *
+     * @param $dealerId
+     *
+     * @return int
+     */
+    public function deleteDefaultReasonByDealerId ($dealerId)
+    {
+        return $this->getDbTable()->delete(array("{$this->col_dealerId} = ?" => $dealerId));
+    }
 }

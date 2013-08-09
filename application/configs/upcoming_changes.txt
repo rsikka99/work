@@ -1,0 +1,1 @@
+[FIXED]   the ability to delete dealers when they have a device swap attached
