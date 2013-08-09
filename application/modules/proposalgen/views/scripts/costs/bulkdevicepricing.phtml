@@ -13,8 +13,6 @@
 var repop = '<?php echo isset($this->pricing_filter); ?>';
 var refilter = '<?php echo !empty($this->search_criteria); ?>';
 var default_labor = <?php echo $this->default_labor; ?>;
-var default_labor_formated = <?php echo number_format($this->default_labor, 4, '.', ','); ?>;
-var default_parts_formated = <?php echo number_format($this->default_parts, 4, '.', ','); ?>;
 var default_parts  = <?php echo $this->default_parts; ?>;
 var repop_array = '<?php echo $this->repop_array; ?>';
 var repop_page = '<?php echo $this->repop_page; ?>';
@@ -36,14 +34,14 @@ var repop_page = '<?php echo $this->repop_page; ?>';
         <p>If you wish to remove a price, enter 0 as the new price and update.</p>
     </div>
 
-    <div id="message_container" class="message_container" style="height: 30px;">
+    <div id="message_container" class="message_container" style="height: 50px;">
         <?php echo $this->message; ?>
     </div>
 
     <div id="options_container" style="margin: 0px 0px 10px 5px;">
         <div id="filter_pricing" style="display: inline; padding: 0px 0px 0px 0px;">
             <label for="pricing_filter" class="details_label" style="display: inline;">Property:</label>
-            <select name="pricing_filter" id="pricing_filter" class="filter_dropdown" style="width: 180px; margin: 0px 0px 0px 15px;" onchange="javascript: update_grid('pricing');">
+            <select name="pricing_filter" id="pricing_filter" class="filter_dropdown input-large">
                 <option value="printer" <?php if ($this->pricing_filter == 'printer')
                 {
                     echo "selected";
@@ -54,8 +52,6 @@ var repop_page = '<?php echo $this->repop_page; ?>';
                     echo "selected";
                 } ?>>Toner Costs
                 </option>
-                <!-- option value="parts" <?php if($this->pricing_filter == 'parts') { echo "selected"; } ?>>Parts Cost Per Page</option -->
-                <!-- option value="labor" <?php if($this->pricing_filter == 'labor') { echo "selected"; } ?>>Labor Cost Per Page</option -->
             </select>
         </div>
 
@@ -66,10 +62,10 @@ var repop_page = '<?php echo $this->repop_page; ?>';
 
     </div>
 
-    <div id="filter_container" class="well">
+    <div id="filter_container" class="well form-inline">
         <div id="criteria_container">
-            <label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
-            <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+            <label for="criteria_filter" class="details_label">Filter:</label>
+            <select name="criteria_filter" id="criteria_filter" class="filter_dropdown input-large">
                 <option value="manufacturerId" <?php if ($this->search_filter == 'manufacturerId')
                 {
                     echo "selected";
@@ -81,17 +77,17 @@ var repop_page = '<?php echo $this->repop_page; ?>';
                 } ?>>Printer Model
                 </option>
             </select>
-            <label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
-            <span id="text_criteria"><input type="text" name="txtCriteria" style="width: 152px;" id="txtCriteria" <?php if ($this->search_criteria != '')
+            <label for="txtCriteria" class="details_label">for</label>
+            <span id="text_criteria"><input type="text" name="txtCriteria" id="txtCriteria" <?php if ($this->search_criteria != '')
                 {
                     echo 'value="' . $this->search_criteria . '"';
                 } ?> /></span>
-            <span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 0px 0px 0px;"></select></span>
+            <span id="list_criteria" style="display: none;"><select name="cboCriteria" id="cboCriteria" class="input-large"></select></span>
             <input type="button" name="btnSearch" id="btnSearch" value="Search" class="btn btn-info" />
             <input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
         </div>
     </div>
-
+    <br>
     <div class="results_container">
         <div class="list_container">
             <div style="margin: 0px 0px 5px 0px;">
@@ -101,10 +97,10 @@ var repop_page = '<?php echo $this->repop_page; ?>';
                         <option value="+">+</option>
                         <option value="-">-</option>
                     </select>
-                    <input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" class="span1" style="text-align: right; margin: 0px 0px 0px 0px;" onkeypress="javascript: return numbersonly(this, event);" />%
-                    <input type="button" name="btnApply" id="btnApply" value="Preview" onclick="javascript: apply_percentage();" class="btn" />
+                    <input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" class="span1 int-only" style="text-align: right; margin: 0px 0px 0px 0px;" />%
+                    <input type="button" name="btnApply" id="btnApply" value="Preview" class="btn" />
                 </div>
-                <div id="default_price" class="details_label margined" style="display: none; float: right; margin-right: 5px;">Default Price: $<?php echo $this->default_price; ?></div>
+                <div id="default_price" class="details_label margined" style="display: none; float: right; margin-right: 5px;">Default Labor: $<?php echo $this->default_labor; ?> Default Parts: $<?php echo $this->default_parts; ?></div>
             </div>
 
             <div id="devices_table">
@@ -130,8 +126,8 @@ var repop_page = '<?php echo $this->repop_page; ?>';
             <br />
 
             <div class="submitBar">
-                <input type="button" name="btnUpdate" id="btnUpdate" value="Save" onclick="javascript: do_update();" class="btn btn-primary" />
-                <input type="button" name="btnDone" id="btnDone" value="Done" onClick="javascript:  document.location.href='<?php echo $this->baseUrl("/admin") ?>';" class="btn" />
+                <input type="button" name="btnUpdate" id="btnUpdate" value="Save" class="btn btn-primary" />
+                <a href="<?php echo $this->baseUrl("/admin"); ?>" class="btn">Done</a>
             </div>
         </div>
     </div>
