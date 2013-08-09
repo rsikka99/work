@@ -1,0 +1,88 @@
+<?xml version="1.0" standalone="yes"?>
+<clients>
+    <client>
+        <accountNumber>accountNumber</accountNumber>
+        <companyName>companyName</companyName>
+        <employeeCount>#ofemployees</employeeCount>
+        <legalName>legalName</legalName>
+        <countryCode>1</countryCode>
+        <areaCode>999</areaCode>
+        <exchangeCode>123</exchangeCode>
+        <number>1234</number>
+        <extension>1234</extension>
+        <addressLine1>myAddress</addressLine1>
+        <city>Kingston</city>
+        <region>ON</region>
+        <postCode>K1K 1K1</postCode>
+        <countryId>1</countryId>
+        <dealerId>4</dealerId>
+    </client>
+    <client>
+        <accountNumber>accountNumber</accountNumber>
+        <companyName>companyName</companyName>
+        <employeeCount>#ofemployees</employeeCount>
+        <legalName>legalName</legalName>
+        <countryCode>12</countryCode>
+        <areaCode>123</areaCode>
+        <exchangeCode>123</exchangeCode>
+        <number>1234</number>
+        <extension>1234</extension>
+        <addressLine1>myAddress</addressLine1>
+        <city>Kingston</city>
+        <region>ON</region>
+        <postCode>K1K 1K1</postCode>
+        <countryId>1</countryId>
+        <dealerId>2</dealerId>
+    </client>
+    <client>
+        <accountNumber>accountNumber</accountNumber>
+        <companyName>companyName</companyName>
+        <employeeCount>#ofemployees</employeeCount>
+        <legalName>legalName</legalName>
+        <countryCode>123</countryCode>
+        <areaCode>123</areaCode>
+        <exchangeCode>123</exchangeCode>
+        <number>1234</number>
+        <extension>1234</extension>
+        <addressLine1>myAddress</addressLine1>
+        <city>Kingston</city>
+        <region>ON</region>
+        <postCode>K1K 1K1</postCode>
+        <countryId>1</countryId>
+        <dealerId>1</dealerId>
+    </client>
+    <client>
+        <accountNumber>accountNumber</accountNumber>
+        <companyName>companyName</companyName>
+        <employeeCount>#ofemployees</employeeCount>
+        <legalName>legalName</legalName>
+        <countryCode>1234</countryCode>
+        <areaCode>123</areaCode>
+        <exchangeCode>123</exchangeCode>
+        <number>1234</number>
+        <extension>1234</extension>
+        <addressLine1>myAddress</addressLine1>
+        <city>Kingston</city>
+        <region>ON</region>
+        <postCode>K1K 1K1</postCode>
+        <countryId>1</countryId>
+        <dealerId>1</dealerId>
+    </client>
+    <client>
+        <accountNumber>accountNumber</accountNumber>
+        <companyName>companyName</companyName>
+        <employeeCount>#ofemployees</employeeCount>
+        <legalName>legalName</legalName>
+        <countryCode>1234</countryCode>
+        <areaCode>123</areaCode>
+        <exchangeCode>123</exchangeCode>
+        <number>1234</number>
+        <extension>1234</extension>
+        <addressLine1>myAddress</addressLine1>
+        <city>Kingston</city>
+        <region>ON</region>
+        <postCode>K1K 1K1</postCode>
+        <countryId>1</countryId>
+        <dealerId>1</dealerId>
+    </client>
+</clients>
