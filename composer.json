@@ -31,7 +31,8 @@
         "robmorgan/phinx"             : "*"
     },
     "require-dev" : {
-        "phpunit/phpunit": "3.7.x"
+        "phpunit/phpunit": "3.7.x",
+        "phpunit/dbunit": "1.2.x"
     },
     "autoload"    : {
         "psr-0": {

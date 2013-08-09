@@ -3,20 +3,18 @@
 /**
  * Class Admin_Form_ClientTest
  */
-class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
+class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Admin_Form_Client
-     */
-    protected $_form;
 
     /**
      * Builds the form to be used for testing
      *
      * @param bool $dealerManagement
      * @param bool $isAdmin
+     *
+     * @return \Admin_Form_Client
      */
-    public function buildForm ($dealerManagement = true, $isAdmin = false)
+    public function getForm ($dealerManagement = true, $isAdmin = false)
     {
         $view = $this->getMock('Zend_View', array('IsAllowed'));
 
@@ -24,7 +22,7 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
         ->method('IsAllowed')
         ->will($this->returnValue($isAdmin));
 
-        $this->_form = new Admin_Form_Client($dealerManagement, array('view' => $view));
+        return new Admin_Form_Client($dealerManagement, array('view' => $view));
     }
 
     /**
@@ -32,11 +30,8 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function goodClientData ()
     {
-        $xmlStr = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
-        $xml    = new SimpleXMLElement($xmlStr->asXML());
-
+        $xml     = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
         $clients = array();
-
         foreach ($xml->client as $client)
         {
             $clients[] = (array)$client;
@@ -50,11 +45,8 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function badClientData ()
     {
-        $xmlStr = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
-        $xml    = new SimpleXMLElement($xmlStr->asXML());
-
+        $xml     = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
         $clients = array();
-
         foreach ($xml->client as $client)
         {
             $clients[] = (array)$client;
@@ -70,9 +62,6 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function testFormAcceptsValidData ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId)
     {
-        $this->buildForm();
-
-
         $data = array(
             'accountNumber' => $accountNumber,
             'companyName'   => $companyName,
@@ -89,7 +78,7 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
             'postCode'      => $postCode,
             'countryId'     => $countryId
         );
-        $this->assertTrue($this->_form->isValid($data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm()->isValid($data), "Client form did not accept good data.");
     }
 
     /**
@@ -99,7 +88,6 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function testFormRejectsInvalidData ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId)
     {
-        $this->buildForm();
 
         $data = array(
             'accountNumber' => $accountNumber,
@@ -117,7 +105,7 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
             'postCode'      => $postCode,
             'countryId'     => $countryId
         );
-        $this->assertFalse($this->_form->isValid($data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm()->isValid($data), "Client form did not reject bad data.");
     }
 
     /**
@@ -127,8 +115,6 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function testFormAcceptsValidDataAsAdmin ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId, $dealerId)
     {
-        $this->buildForm();
-
         $data = array(
             'accountNumber' => $accountNumber,
             'companyName'   => $companyName,
@@ -146,7 +132,7 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
             'countryId'     => $countryId,
             'dealerId'      => $dealerId
         );
-        $this->assertTrue($this->_form->isValid($data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm(true, true)->isValid($data), "Client form did not accept good data.");
     }
 
     /**
@@ -156,8 +142,6 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
      */
     public function testFormRejectsInvalidDataAsAdmin ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId, $dealerId)
     {
-        $this->buildForm();
-
         $data = array(
             'accountNumber' => $accountNumber,
             'companyName'   => $companyName,
@@ -175,36 +159,17 @@ class Admin_Form_ClientTest extends Zend_Test_PHPUnit_ControllerTestCase
             'countryId'     => $countryId,
             'dealerId'      => $dealerId
         );
-        $this->assertFalse($this->_form->isValid($data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm(true, true)->isValid($data), "Client form did not reject bad data.");
     }
 
-    /**
-     * Test the form when user is a dealer and has admin rights
-     *
-     */
-    public function testAdminAndDealer ()
-    {
-        $this->buildForm(true, true);
-    }
-
-    /**
-     * Test form loading when not managing as a dealer and not an admin
-     */
-    public function testNotAdminOrDealer ()
-    {
-        $this->buildForm(false);
-    }
 
     public function testDealerFieldExists ()
     {
-        $this->buildForm(false, true);
-        $this->assertInstanceOf('Zend_Form_Element_Select', $this->_form->getElement('dealerId'));
+        $this->assertInstanceOf('Zend_Form_Element_Select', $this->getForm(false, true)->getElement('dealerId'));
     }
 
     public function testDealerFieldDoesNotExist ()
     {
-        $this->buildForm();
-        $this->assertNotInstanceOf('Zend_Form_Element_Select', $this->_form->getElement('dealerId'));
+        $this->assertNotInstanceOf('Zend_Form_Element_Select', $this->getForm()->getElement('dealerId'));
     }
-
 }

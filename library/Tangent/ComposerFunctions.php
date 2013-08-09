@@ -63,6 +63,6 @@ class ComposerFunctions
      */
     static function postPackageUpdate (PackageEvent $event)
     {
-        self::handlePackage($event, $event->getOperation()->getPackage());
+        self::handlePackage($event, $event->getOperation()->getTargetPackage());
     }
 }
