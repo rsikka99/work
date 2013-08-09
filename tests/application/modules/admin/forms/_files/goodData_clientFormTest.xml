@@ -1,88 +1,88 @@
-<?xml version="1.0" standalone="yes"?>
-<clients>
-    <client>
-        <accountNumber>accountNumber</accountNumber>
-        <companyName>companyName</companyName>
-        <employeeCount>#ofemployees</employeeCount>
-        <legalName>legalName</legalName>
-        <countryCode>1</countryCode>
-        <areaCode>999</areaCode>
-        <exchangeCode>123</exchangeCode>
-        <number>1234</number>
-        <extension>1234</extension>
-        <addressLine1>myAddress</addressLine1>
-        <city>Kingston</city>
-        <region>ON</region>
-        <postCode>K1K 1K1</postCode>
-        <countryId>1</countryId>
-        <dealerId>4</dealerId>
-    </client>
-    <client>
-        <accountNumber>accountNumber</accountNumber>
-        <companyName>companyName</companyName>
-        <employeeCount>#ofemployees</employeeCount>
-        <legalName>legalName</legalName>
-        <countryCode>12</countryCode>
-        <areaCode>123</areaCode>
-        <exchangeCode>123</exchangeCode>
-        <number>1234</number>
-        <extension>1234</extension>
-        <addressLine1>myAddress</addressLine1>
-        <city>Kingston</city>
-        <region>ON</region>
-        <postCode>K1K 1K1</postCode>
-        <countryId>1</countryId>
-        <dealerId>2</dealerId>
-    </client>
-    <client>
-        <accountNumber>accountNumber</accountNumber>
-        <companyName>companyName</companyName>
-        <employeeCount>#ofemployees</employeeCount>
-        <legalName>legalName</legalName>
-        <countryCode>123</countryCode>
-        <areaCode>123</areaCode>
-        <exchangeCode>123</exchangeCode>
-        <number>1234</number>
-        <extension>1234</extension>
-        <addressLine1>myAddress</addressLine1>
-        <city>Kingston</city>
-        <region>ON</region>
-        <postCode>K1K 1K1</postCode>
-        <countryId>1</countryId>
-        <dealerId>1</dealerId>
-    </client>
-    <client>
-        <accountNumber>accountNumber</accountNumber>
-        <companyName>companyName</companyName>
-        <employeeCount>#ofemployees</employeeCount>
-        <legalName>legalName</legalName>
-        <countryCode>1234</countryCode>
-        <areaCode>123</areaCode>
-        <exchangeCode>123</exchangeCode>
-        <number>1234</number>
-        <extension>1234</extension>
-        <addressLine1>myAddress</addressLine1>
-        <city>Kingston</city>
-        <region>ON</region>
-        <postCode>K1K 1K1</postCode>
-        <countryId>1</countryId>
-        <dealerId>1</dealerId>
-    </client>
-    <client>
-        <accountNumber>accountNumber</accountNumber>
-        <companyName>companyName</companyName>
-        <employeeCount>#ofemployees</employeeCount>
-        <legalName>legalName</legalName>
-        <countryCode>1234</countryCode>
-        <areaCode>123</areaCode>
-        <exchangeCode>123</exchangeCode>
-        <number>1234</number>
-        <extension>1234</extension>
-        <addressLine1>myAddress</addressLine1>
-        <city>Kingston</city>
-        <region>ON</region>
-        <postCode>K1K 1K1</postCode>
-        <countryId>1</countryId>
-        <dealerId>1</dealerId>
-    </client>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<clients xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<client>
+		<accountNumber>ABC1234</accountNumber>
+		<companyName>St. Lawrence College</companyName>
+		<employeeCount>12</employeeCount>
+		<legalName>Saint Lawrence College Tri-Campus</legalName>
+		<countryCode>1</countryCode>
+		<areaCode>999</areaCode>
+		<exchangeCode>123</exchangeCode>
+		<number>1234</number>
+		<extension>1234</extension>
+		<addressLine1>100 Portsmouth Avenue</addressLine1>
+		<city>Kingston</city>
+		<region>ON</region>
+		<postCode>K7L 5A6</postCode>
+		<countryId>1</countryId>
+		<dealerId>4</dealerId>
+	</client>
+	<client>
+		<accountNumber>WEB123</accountNumber>
+		<companyName>Parts Now!</companyName>
+		<employeeCount>14</employeeCount>
+		<legalName>Parts Now!</legalName>
+		<countryCode>12</countryCode>
+		<areaCode>123</areaCode>
+		<exchangeCode>123</exchangeCode>
+		<number>1234</number>
+		<extension>1234</extension>
+		<addressLine1>3150 Pleasant View Road</addressLine1>
+		<city>Middleton</city>
+		<region>WI</region>
+		<postCode>53562</postCode>
+		<countryId>2</countryId>
+		<dealerId>2</dealerId>
+	</client>
+	<client>
+		<accountNumber>WEB_TANG_123</accountNumber>
+		<companyName>Tangent MTW</companyName>
+		<employeeCount>15</employeeCount>
+		<legalName>Tangent MTW Inc.</legalName>
+		<countryCode>123</countryCode>
+		<areaCode>123</areaCode>
+		<exchangeCode>123</exchangeCode>
+		<number>1234</number>
+		<extension>1234</extension>
+		<addressLine1>myAddress</addressLine1>
+		<city>Kingston</city>
+		<region>ON</region>
+		<postCode>K1K 1K1</postCode>
+		<countryId>1</countryId>
+		<dealerId>1</dealerId>
+	</client>
+	<client>
+		<accountNumber>ABC1234</accountNumber>
+		<companyName>21st Century Oncology</companyName>
+		<employeeCount>2000</employeeCount>
+		<legalName>Twenty-First Century Oncology</legalName>
+		<countryCode>1234</countryCode>
+		<areaCode>123</areaCode>
+		<exchangeCode>123</exchangeCode>
+		<number>1234</number>
+		<extension>1234</extension>
+		<addressLine1>myAddress</addressLine1>
+		<city>Kingston</city>
+		<region>ON</region>
+		<postCode>K1K 1K1</postCode>
+		<countryId>1</countryId>
+		<dealerId>1</dealerId>
+	</client>
+	<client>
+		<accountNumber>ABC1234</accountNumber>
+		<companyName>Print-Rite N.A.</companyName>
+		<employeeCount>239</employeeCount>
+		<legalName>Print-Rite North American Division Inc.</legalName>
+		<countryCode>1234</countryCode>
+		<areaCode>123</areaCode>
+		<exchangeCode>123</exchangeCode>
+		<number>1234</number>
+		<extension>1234</extension>
+		<addressLine1>myAddress</addressLine1>
+		<city>Kingston</city>
+		<region>ON</region>
+		<postCode>K1K 1K1</postCode>
+		<countryId>1</countryId>
+		<dealerId>1</dealerId>
+	</client>
 </clients>
