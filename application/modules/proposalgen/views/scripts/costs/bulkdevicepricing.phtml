@@ -34,7 +34,7 @@ var repop_page = '<?php echo $this->repop_page; ?>';
         <p>If you wish to remove a price, enter 0 as the new price and update.</p>
     </div>
 
-    <div id="message_container" class="message_container" style="height: 30px;">
+    <div id="message_container" class="message_container" style="height: 50px;">
         <?php echo $this->message; ?>
     </div>
 
@@ -97,7 +97,7 @@ var repop_page = '<?php echo $this->repop_page; ?>';
                         <option value="+">+</option>
                         <option value="-">-</option>
                     </select>
-                    <input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" class="span1" style="text-align: right; margin: 0px 0px 0px 0px;" />%
+                    <input type="text" name="txtUpdate" id="txtUpdate" size="3" maxlength="3" class="span1 int-only" style="text-align: right; margin: 0px 0px 0px 0px;" />%
                     <input type="button" name="btnApply" id="btnApply" value="Preview" class="btn" />
                 </div>
                 <div id="default_price" class="details_label margined" style="display: none; float: right; margin-right: 5px;">Default Labor: $<?php echo $this->default_labor; ?> Default Parts: $<?php echo $this->default_parts; ?></div>

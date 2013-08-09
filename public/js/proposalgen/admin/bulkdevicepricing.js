@@ -1,5 +1,9 @@
-jQuery(document).ready(function ()
+var $document = jQuery(document);
+$document.ready(function ()
 {
+    /**
+     * FIXME lrobert: Ok this list of elements is getting a bit crazy
+     */
     var $devices_list = jQuery("#devices_list");
     var $devices_table = jQuery("#devices_table");
     var $toners_list = jQuery("#toners_list");
@@ -16,38 +20,28 @@ jQuery(document).ready(function ()
     var $button_update = jQuery("#btnUpdate");
     var $button_apply = jQuery("#btnApply");
     var $text_update = jQuery("#txtUpdate");
+    var $message_container = jQuery("#message_container");
 
 
     var setupManufacturerList = function (url)
     {
         $.ajax({
-            type       : "POST",
-            url        : url,
-            contentType: "application/json; charset=utf-8",
-            dataType   : "json",
-            success    : function (data)
+            type    : "POST",
+            url     : url,
+            dataType: "json",
+            success : function (data)
             {
-                var obj = data;
-                if (typeof(data) == 'string')
-                {
-                    obj = jQuery.parseJSON(data);
-                }
-                else
-                {
-                    var options = '';
-                }
+                $cbo_criteria.empty();
                 for (var i = 0; i < data.rows.length; i++)
                 {
-                    list = (data.rows[i].cell);
-                    options += '<option value="' + list[0] + '">' + list[1] + '</option>';
+                    $cbo_criteria.append(jQuery("<option></option>").val(data.rows[i].cell[0]).text(data.rows[i].cell[1]));
                 }
-                $cbo_criteria.html(options);
             },
-            error      : function ()
+            error   : function ()
             {
                 $details_error.html("Error returning criteria list.");
             },
-            complete   : function ()
+            complete: function ()
             {
                 $text_criteria.hide();
                 $list_criteria.show();
@@ -60,9 +54,6 @@ jQuery(document).ready(function ()
     //*********************************************************************
     var update_grid = function (action)
     {
-        $devices_table.hide();
-        $toners_table.hide();
-
         //update column headers
         if ($pricing_filter.val() == 'printer')
         {
@@ -75,35 +66,33 @@ jQuery(document).ready(function ()
             $default_price.hide();
         }
 
-        var params = '?filter=&criteria=';
+        var filter, criteria;
+
         if (action == 'search')
         {
-            if ($cbo_criteria.is(":visible"))
-            {
-                criteria = jQuery("#cboCriteria").val();
-            }
-            else
-            {
-                criteria = jQuery("#txtCriteria").val();
-            }
-
-            params = '?filter=' + $criteria_filter.val() + '&criteria=' + criteria;
+            criteria = ($cbo_criteria.is(":visible")) ? $cbo_criteria.val() : $txt_criteria.val();
+            filter = $criteria_filter.val();
         }
         else if (action == 'clear')
         {
             $criteria_filter.attr('selectedIndex', 2);
-            jQuery("#list_criteria").hide();
-            jQuery("#text_criteria").show();
-            jQuery("#txtCriteria").val('');
+            $list_criteria.hide();
+            $text_criteria.show();
+            $txt_criteria.val('');
             $criteria_filter.change();
         }
 
         // Refresh the grid
         if ($pricing_filter.val() == 'toner')
         {
+            $toners_table.hide();
             $toners_list.setGridParam({
-                url : TMTW_BASEURL + '/proposalgen/admin/tonerslist' + params,
-                page: $hdn_page.val()
+                url     : TMTW_BASEURL + '/proposalgen/admin/tonerslist',
+                postData: {
+                    'filter'  : filter,
+                    'criteria': criteria
+                },
+                page    : $hdn_page.val()
             });
             $toners_list.trigger("reloadGrid");
 
@@ -115,7 +104,16 @@ jQuery(document).ready(function ()
         }
         else
         {
-            $devices_list.setGridParam({url: TMTW_BASEURL + '/proposalgen/admin/masterdeviceslist' + params + '&type=' + $pricing_filter.val(), page: $hdn_page.val()});
+            $devices_table.hide();
+            $devices_list.setGridParam({
+                url     : TMTW_BASEURL + '/proposalgen/admin/masterdeviceslist',
+                postData: {
+                    'type'    : $pricing_filter.val(),
+                    'filter'  : filter,
+                    'criteria': criteria
+                },
+                page    : $hdn_page.val()
+            });
             $devices_list.trigger('reloadGrid');
 
             setTimeout(function ()
@@ -127,23 +125,13 @@ jQuery(document).ready(function ()
 
     var apply_percentage = function ()
     {
-        var new_price = 0;
-        var default_labor = '';
-        var default_parts = '';
+
         var sign = jQuery("#cboSign").val();
-        var percentage = jQuery("#txtUpdate").val();
-        var decimals = 4;
+        var percentage = parseFloat($text_update.val());
+        var decimalPlacesToShow = 4;
 
         // Get our jqGrid
-        var jqGridSelector = '';
-        if ($pricing_filter.val() == 'toner')
-        {
-            jqGridSelector = $toners_list;
-        }
-        else
-        {
-            jqGridSelector = $devices_list;
-        }
+        var jqGridSelector = ($pricing_filter.val() == 'toner') ? $toners_list : $devices_list;
 
         if (percentage > 0)
         {
@@ -152,52 +140,39 @@ jQuery(document).ready(function ()
 
             for (var i = 0; i < ids.length; i++)
             {
-                var cur_row = ids[i];
+                jqGridRow = jqGridSelector.getRowData(ids[i]);
                 if ($pricing_filter.val() == 'printer')
                 {
-                    jqGridRow = jqGridSelector.getRowData(cur_row);
-                    var masterId = jqGridRow.masterID;
+                    /**
+                     * Master Device Parts & Labor
+                     */
+                    var laborCostPerPageElement = jQuery("#laborCostPerPage" + jqGridRow.masterID);
+                    var partsCostPerPageElement = jQuery("#partsCostPerPage" + jqGridRow.masterID);
 
-
-                    var laborCostPerPageElement = jQuery("#laborCostPerPage" + masterId);
-                    var partsCostPerPageElement = jQuery("#partsCostPerPage" + masterId);
-
-                    var old_price_labor = jQuery("#hdnDevicePriceLabor" + masterId).val();
-                    var old_price_parts = jQuery("#hdnDevicePriceParts" + masterId).val();
-
-                    if (old_price_labor == 0)
-                    {
-                        old_price_labor = default_labor;
-                    }
-
-                    if (old_price_parts == 0)
-                    {
-                        old_price_parts = default_parts;
-                    }
+                    var oldLaborCostPerPage = (jqGridRow.labor_cost_per_page_dealer > 0) ? jqGridRow.labor_cost_per_page_dealer : default_labor;
+                    var oldPartsCostPerPage = (jqGridRow.parts_cost_per_page_dealer > 0) ? jqGridRow.parts_cost_per_page_dealer : default_parts;
 
                     if (sign == "-")
                     {
-                        // Labor
-                        laborCostPerPageElement.val((old_price_labor - (old_price_labor * (percentage / 100))).toFixed(decimals));
-
-                        // Parts
-                        partsCostPerPageElement.val((old_price_parts - (old_price_parts * (percentage / 100))).toFixed(decimals));
+                        // Subtract
+                        laborCostPerPageElement.val((oldLaborCostPerPage - (oldLaborCostPerPage * (percentage / 100))).toFixed(decimalPlacesToShow));
+                        partsCostPerPageElement.val((oldPartsCostPerPage - (oldPartsCostPerPage * (percentage / 100))).toFixed(decimalPlacesToShow));
                     }
                     else
                     {
-                        // Labor
-                        laborCostPerPageElement.val(((old_price_labor * ((percentage / 100) + 1))).toFixed(decimals));
-
-                        // Parts
-                        partsCostPerPageElement.val(((old_price_parts * ((percentage / 100) + 1))).toFixed(decimals));
+                        // Add
+                        laborCostPerPageElement.val(((oldLaborCostPerPage * ((percentage / 100) + 1))).toFixed(decimalPlacesToShow));
+                        partsCostPerPageElement.val(((oldPartsCostPerPage * ((percentage / 100) + 1))).toFixed(decimalPlacesToShow));
                     }
                 }
                 else
                 {
-                    jqGridRow = jqGridSelector.getRowData(cur_row);
+                    /**
+                     * Toner Pricing
+                     */
                     var tonerPriceElement = jQuery("#txtTonerPrice" + jqGridRow.toner_id);
-
                     var tonerPrice = 0;
+                    var newTonerPrice = 0;
 
                     if (parseFloat(jqGridRow.toner_dealer_price) > 0)
                     {
@@ -210,20 +185,22 @@ jQuery(document).ready(function ()
 
                     if (sign == "-")
                     {
-                        new_price = tonerPrice - (tonerPrice * (percentage / 100));
-                        tonerPriceElement.val(new_price.toFixed(decimals));
+                        newTonerPrice = tonerPrice - (tonerPrice * (percentage / 100));
+                        tonerPriceElement.val(newTonerPrice.toFixed(decimalPlacesToShow));
                     }
                     else
                     {
-                        new_price = (tonerPrice * ((percentage / 100) + 1));
-                        tonerPriceElement.val(new_price.toFixed(decimals));
+                        newTonerPrice = (tonerPrice * ((percentage / 100) + 1));
+                        tonerPriceElement.val(newTonerPrice.toFixed(decimalPlacesToShow));
                     }
                 }
             }
+
+            $message_container.empty();
         }
         else
         {
-            jQuery("#message_container").html("Please enter a percentage.");
+            $message_container.html("<div class='alert'>Please enter a percentage.</div>");
         }
     };
 
@@ -234,20 +211,6 @@ jQuery(document).ready(function ()
     {
         document.getElementById("hdnMode").value = 'update';
         document.getElementById("bulk").submit();
-    };
-
-    var view_device_list = function (type, id)
-    {
-        if (document.getElementById(type + 'inner_' + id).style.display == 'none')
-        {
-            document.getElementById(type + 'inner_' + id).style.display = 'block';
-            document.getElementById(type + 'view_link_' + id).innerHTML = 'Collapse...';
-        }
-        else
-        {
-            document.getElementById(type + 'inner_' + id).style.display = 'none';
-            document.getElementById(type + 'view_link_' + id).innerHTML = 'View All...';
-        }
     };
 
     //*********************************************************************
@@ -277,16 +240,31 @@ jQuery(document).ready(function ()
                 label: 'Printer Model'
             },
             {
-                width   : 100, name: 'labor_cost_per_page_dealer',
-                index   : 'labor_cost_per_page_dealer',
+                width : 100,
+                name  : 'labor_cost_per_page_dealer',
+                index : 'labor_cost_per_page_dealer',
+                label : 'Labor CPP',
+                hidden: true
+            },
+            {
+                width : 100,
+                name  : 'parts_cost_per_page_dealer',
+                index : 'parts_cost_per_page_dealer',
+                label : 'Parts CPP',
+                hidden: true
+            },
+            {
+                width   : 100,
+                name    : 'pretty_labor_cost_per_page_dealer',
+                index   : 'pretty_labor_cost_per_page_dealer',
                 label   : 'Labor CPP',
                 align   : 'right',
                 sorttype: 'int'
             },
             {
                 width   : 100,
-                name    : 'parts_cost_per_page_dealer',
-                index   : 'parts_cost_per_page_dealer',
+                name    : 'pretty_parts_cost_per_page_dealer',
+                index   : 'pretty_parts_cost_per_page_dealer',
                 label   : 'Parts CPP',
                 align   : 'right',
                 sorttype: 'int'
@@ -317,42 +295,26 @@ jQuery(document).ready(function ()
         pager       : '#devices_pager',
         onPaging    : function ()
         {
-            //update hdnPage
+            // Update hdnPage
             $hdn_page.val($devices_list.jqGrid('getGridParam', 'page'));
         },
         gridComplete: function ()
         {
-            var ids = $devices_list.jqGrid('getDataIDs');
-            var grid = jQuery(this).jqGrid();
+            var $grid = jQuery(this).jqGrid();
+            var ids = $grid.getDataIDs();
+
             for (var i = 0; i < ids.length; i++)
             {
-                var cur_row = ids[i];
-                var laborCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                if (laborCostPerPage == 0)
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML = "$ -";
-                }
-                else
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[4].innerHTML = "$ " + laborCostPerPage;
-                }
+                var row = $grid.getRowData(ids[i]);
 
-                var partsCostPerPage = document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                if (partsCostPerPage == 0)
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML = "$ -";
-                }
-                else
-                {
-                    document.getElementById("devices_list").rows[i + 1].cells[5].innerHTML = "$ " + partsCostPerPage;
-                }
+                // Reformat
+                row.pretty_labor_cost_per_page_dealer = (parseFloat(row.labor_cost_per_page_dealer) > 0.0) ? "$ " + row.labor_cost_per_page_dealer : "$ -";
+                row.pretty_parts_cost_per_page_dealer = (parseFloat(row.parts_cost_per_page_dealer) > 0.0) ? "$ " + row.parts_cost_per_page_dealer : "$ -";
 
-                hidden_price_element_parts = "<input type='hidden' id='hdnDevicePriceParts" + grid.getRowData(i + 1).masterID + "' name='hdnDevicePriceParts" + grid.getRowData(i + 1).masterID + "' value='" + partsCostPerPage + "' class='span1' maxlength='8' />";
-                hidden_price_element_labor = "<input type='hidden' id='hdnDevicePriceLabor" + grid.getRowData(i + 1).masterID + "' name='hdnDevicePriceLabor" + grid.getRowData(i + 1).masterID + "' value='" + laborCostPerPage + "' class='span1' maxlength='8' />";
-                new_labor_cost_per_page_element = "$ <input type='text' id='laborCostPerPage" + grid.getRowData(i + 1).masterID + "' name='laborCostPerPage" + grid.getRowData(i + 1).masterID + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
-                new_parts_cost_per_page_element = "$ <input type='text' id='partsCostPerPage" + grid.getRowData(i + 1).masterID + "' name='partsCostPerPage" + grid.getRowData(i + 1).masterID + "' class='span1' maxlength='12' style='text-align:right;width:70px' onkeypress='javascript: return numbersonly(this, event);' />";
-                $devices_list.jqGrid('setRowData', ids[i], {new_labor_cost_per_page: hidden_price_element_labor + new_labor_cost_per_page_element});
-                $devices_list.jqGrid('setRowData', ids[i], {new_parts_cost_per_page: hidden_price_element_parts + new_parts_cost_per_page_element});
+                // Add text boxes to edit1
+                row.new_labor_cost_per_page = "$ <input type='text' id='laborCostPerPage" + row.masterID + "' name='laborCostPerPage" + row.masterID + "' class='input-small text-right int-only' maxlength='12' />";
+                row.new_parts_cost_per_page = "$ <input type='text' id='partsCostPerPage" + row.masterID + "' name='partsCostPerPage" + row.masterID + "' class='input-small text-right int-only' maxlength='12' />";
+                $grid.setRowData(ids[i], row);
             }
         },
         editurl     : 'dummy.php'
@@ -499,47 +461,50 @@ jQuery(document).ready(function ()
         pager       : '#toners_pager',
         onPaging    : function ()
         {
-            //update hdnPage
+            // We keep our current page in a hidden page for when we repopulate
             $hdn_page.val($toners_list.jqGrid('getGridParam', 'page'));
         },
         gridComplete: function ()
         {
-            var ids = $toners_list.jqGrid('getDataIDs');
-            var grid = jQuery(this).jqGrid();
+            var $grid = jQuery(this).jqGrid();
+            var ids = $grid.getDataIDs();
+            var maxMachinesToShow = 2;
+
             for (var i = 0; i < ids.length; i++)
             {
-                var cur_row = ids[i];
-                var cur_price = document.getElementById("toners_list").rows[i + 1].cells[7].innerHTML.replace("$", "").replace(/,/gi, "").replace(/ /gi, "");
-                hidden_price_element = "<input type='hidden' name='hdnTonerPrice" + grid.getRowData(i + 1).toner_id + "' id='hdnTonerPrice" + grid.getRowData(i + 1).toner_id + "' value='" + cur_price + "' class='span1' maxlength='8' />";
-                new_price_element = "$ <input type='text' name='txtTonerPrice" + grid.getRowData(i + 1).toner_id + "' id='txtTonerPrice" + grid.getRowData(i + 1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:60px' onkeypress='javascript: return numbersonly(this, event);' />";
-                new_dealer_sku_element = "<input type='text' name='txtNewDealerSku" + grid.getRowData(i + 1).toner_id + "' id='txtNewDealerSku" + grid.getRowData(i + 1).toner_id + "' class='span1' maxlength='8' style='text-align:right;width:100px';' />";
-                $toners_list.jqGrid('setRowData', ids[i], {new_dealer_sku: new_dealer_sku_element});
-                $toners_list.jqGrid('setRowData', ids[i], {new_toner_price: hidden_price_element + new_price_element});
+                var row = $grid.getRowData(ids[i]);
 
-                var min = 4;
-                var max = 2;
-                var output = '';
-                device_list = document.getElementById("toners_list").rows[i + 1].cells[13].innerHTML;
-                var pieces = device_list.split("; ");
-                output += '<div id="outer_' + ids[i] + '" style="text-align: left; width: 200px;">';
-                for (var j = 0; j < pieces.length; j++)
+                row.new_toner_price = "$ <input type='text' name='txtTonerPrice" + row.toner_id + "' id='txtTonerPrice" + row.toner_id + "' class='input-mini int-only' maxlength='8' />";
+                row.new_dealer_sku = "<input type='text' name='txtNewDealerSku" + row.toner_id + "' id='txtNewDealerSku" + row.toner_id + "' class='input-small' maxlength='255' />";
+
+                var $output = jQuery('<div class="outer">');
+
+                var pieces = row.device_list.split("; " + "");
+                var firstLoopLength = (pieces.length > maxMachinesToShow) ? maxMachinesToShow : pieces.length;
+                for (var j = 0; j < firstLoopLength; j++)
                 {
-                    device = pieces[j];
-                    if (j == max)
-                    {
-                        output += '<div id="inner_' + ids[i] + '" style="display: none;">';
-                    }
-                    output += device + '<br />';
-                    if (j > max && j == pieces.length - 1)
-                    {
-                        doubleQuotes = "''";
-                        output += '</div>';
-                        output += '<a id="view_link_' + ids[i] + '" href="javascript: void(0);" class="blue_link" onclick="javascript: view_device_list(\'\',' + ids[i] + ');">View All...</a>';
-                    }
+                    $output.append(pieces[j]);
+                    $output.append("<br>");
                 }
-                output += '</div>';
-                $toners_list.jqGrid('setRowData', ids[i], {device_list: output});
+
+                if (pieces.length > maxMachinesToShow)
+                {
+                    var $inner = jQuery('<div class="inner"></div>').hide();
+                    for (j = maxMachinesToShow; j < pieces.length; j++)
+                    {
+                        $inner.append(pieces[j]);
+                        $inner.append("<br>");
+                    }
+                    $output.append($inner);
+                    $output.append('<a class="view-all-machine-compatibility">View All...</a>');
+                }
+
+
+                row.device_list = $output.html();
+
+                $grid.setRowData(ids[i], row);
             }
+
         },
         editurl     : 'dummy.php'
     });
@@ -557,7 +522,7 @@ jQuery(document).ready(function ()
         $criteria_filter.empty();
 
         //add new options depending on selection
-        if (jQuery('#pricing_filter').val() == 'toner')
+        if ($pricing_filter.val() == 'toner')
         {
             $criteria_filter.append(jQuery('<option></option>').val('machine_compatibility').html('Machine Compatibility'));
             $criteria_filter.append(jQuery('<option></option>').val('toner_sku').html('SKU'));
@@ -570,7 +535,7 @@ jQuery(document).ready(function ()
         {
             $criteria_filter.append(jQuery('<option></option>').val('manufacturerId').html('Manufacturer'));
             $criteria_filter.append(jQuery('<option></option>').val('modelName').html('Printer Model'));
-            setupManufacturerList(TMTW_BASEURL + '/proposalgen/admin/filterlistitems' + '?list=man');
+            setupManufacturerList(TMTW_BASEURL + '/proposalgen/admin/filterlistitems?list=man');
 
         }
     });
@@ -580,19 +545,19 @@ jQuery(document).ready(function ()
         var url = '';
 
         //clear searches
-        jQuery("#txtCriteria").val('');
-        jQuery("#cboCriteria").html('');
+        $txt_criteria.val('');
+        $cbo_criteria.html('');
 
         switch (this.value)
         {
             case "manufacturerId":
-                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems' + '?list=man';
+                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems?list=man';
                 break;
             case "type_name":
-                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems' + '?list=type';
+                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems?list=type';
                 break;
             case "toner_color_name":
-                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems' + '?list=color';
+                url = TMTW_BASEURL + '/proposalgen/admin/filterlistitems?list=color';
                 break;
             default:
                 break;
@@ -601,12 +566,11 @@ jQuery(document).ready(function ()
         if (url != '')
         {
             setupManufacturerList(url)
-
         }
         else
         {
-            jQuery("#list_criteria").hide();
-            jQuery("#text_criteria").show();
+            $list_criteria.hide();
+            $text_criteria.show();
         }
 
     });
@@ -615,7 +579,7 @@ jQuery(document).ready(function ()
     {
         repop_page = 1;
         $hdn_page.val(1);
-        jQuery("#message_container").html('');
+        $message_container.html('');
         setTimeout(function ()
         {
             update_grid('search');
@@ -626,7 +590,7 @@ jQuery(document).ready(function ()
     {
         repop_page = 1;
         $hdn_page.val(1);
-        jQuery("#message_container").html('');
+        $message_container.html('');
         setTimeout(function ()
         {
             update_grid('clear');
@@ -694,9 +658,28 @@ jQuery(document).ready(function ()
         apply_percentage();
     });
 
-    $text_update.on('keypress', function (event)
+    $document.on('keypress', 'input.float-only', function (event)
     {
-        numbersonly(this, event, true);
+        return numbersonly(this, event, true);
+    });
+
+    $document.on('keypress', 'input.int-only', function (event)
+    {
+        return numbersonly(this, event, false);
+    });
+
+    /**
+     * Function #1
+     * Toggle display machine compatibility
+     */
+    $document.on('click', 'a.view-all-machine-compatibility', function (event)
+    {
+        event.preventDefault();
+        var $link = jQuery(this);
+        var $inner = $link.siblings(".inner");
+        $inner.toggle();
+        var linkText = ($inner.is(":visible")) ? "Collapse..." : "View All...";
+        $link.text(linkText);
     });
 
     $criteria_filter.change();
