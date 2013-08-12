@@ -1361,6 +1361,9 @@ th.property {
 th.default {
   width: 310px;
 }
+.reportSettingsForm input {
+  text-align: right;
+}
 .reportSettingsForm .controls {
   text-align: right;
 }
@@ -1394,11 +1397,11 @@ th.default {
 .reportSettingsForm table {
   width: 100%;
 }
-.center-form-actions {
-  text-align: center;
-}
 .manufacturerMultiSelect {
   width: 200px;
+}
+.center-form-actions {
+  text-align: center;
 }
 /* Fix jqGrid for bootstrap */
 tr.ui-search-toolbar select {
