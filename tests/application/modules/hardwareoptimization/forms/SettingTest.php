@@ -28,13 +28,13 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
     public function goodHOSettingData ()
     {
         $xml = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareFormTest.xml");
-        $settings = array();
-        foreach ($xml->setting as $setting)
+        $data = array();
+        foreach ($xml->setting as $row)
         {
-            $settings[] = (array)$setting;
+            $data[] = (array)$row;
         }
 
-        return $settings;
+        return $data;
     }
 
     /**
@@ -43,13 +43,13 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
     public function badHOSettingData ()
     {
         $xml = simplexml_load_file(__DIR__ . "/_files/badData_hardwareFormTest.xml");
-        $settings = array();
-        foreach ($xml->setting as $setting)
+        $data = array();
+        foreach ($xml->setting as $row)
         {
-            $settings[] = (array)$setting;
+            $data[] = (array)$row;
         }
 
-        return $settings;
+        return $data;
     }
 
     /**

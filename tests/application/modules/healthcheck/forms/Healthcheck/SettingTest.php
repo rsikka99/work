@@ -47,13 +47,13 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
     public function badHCFormSettingsData ()
     {
         $xml = simplexml_load_file(__DIR__ . "/_files/badData_HCFormSettingsTest.xml");
-        $parentArr = array();
-        foreach ($xml->healthcheck as $childArr)
+        $data = array();
+        foreach ($xml->healthcheck as $row)
         {
-            $parentArr[] = (array)$childArr;
+            $data[] = (array)$row;
         }
 
-        return $parentArr;
+        return $data;
     }
 
     /**

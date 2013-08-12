@@ -31,13 +31,13 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
     public function goodClientData ()
     {
         $xml     = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
-        $clients = array();
-        foreach ($xml->client as $client)
+        $data = array();
+        foreach ($xml->client as $row)
         {
-            $clients[] = (array)$client;
+            $data[] = (array)$row;
         }
 
-        return $clients;
+        return $data;
     }
 
     /**
@@ -46,13 +46,13 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
     public function badClientData ()
     {
         $xml     = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
-        $clients = array();
-        foreach ($xml->client as $client)
+        $data = array();
+        foreach ($xml->client as $row)
         {
-            $clients[] = (array)$client;
+            $data[] = (array)$row;
         }
 
-        return $clients;
+        return $data;
     }
 
     /**
