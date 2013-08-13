@@ -185,8 +185,13 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
 
 
         $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
+        $validVendors = new Zend_Validate_InArray(array_keys($tonerVendors));
+
         $dealerMonochromeVendor->setMultiOptions($tonerVendors);
+        $dealerMonochromeVendor->addValidator($validVendors);
+
         $dealerColorVendor->setMultiOptions($tonerVendors);
+        $dealerColorVendor->addValidator($validVendors);
 
         $this->tonerSelectElementsDisplayGroups(2);
     }
