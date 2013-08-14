@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<dealerData>
+    <dealer>
+        <dealerName></dealerName>
+        <userLicenses></userLicenses>
+    </dealer>
+    <dealer>
+        <dealerName>lrobert</dealerName>
+        <userLicenses></userLicenses>
+    </dealer>
+    <dealer>
+        <dealerName></dealerName>
+        <userLicenses>somePassword</userLicenses>
+    </dealer>
+    <dealer>
+        <dealerName>a</dealerName>
+        <userLicenses>25</userLicenses>
+    </dealer>
+    <dealer>
+        <dealerName>boundary</dealerName>
+        <userLicenses>0</userLicenses>
+    </dealer>
+    <dealer>
+        <dealerName>boundary</dealerName>
+        <userLicenses>1001</userLicenses>
+    </dealer>
+</dealerData>
