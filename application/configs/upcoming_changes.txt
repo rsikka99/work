@@ -1,2 +1,3 @@
+[ADDED]   tracking of users last valid login time
 [FIXED]   the ability to delete dealers when they have a device swap attached
 [FIXED]   the alignment of text inside text fields for settings

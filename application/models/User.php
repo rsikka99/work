@@ -82,6 +82,11 @@ class Application_Model_User extends My_Model_Abstract
     public $dealerId;
 
     /**
+     * @var string
+     */
+    public $lastSeen;
+
+    /**
      * The user settings row
      *
      * @var Preferences_Model_User_Setting
@@ -165,6 +170,10 @@ class Application_Model_User extends My_Model_Abstract
         {
             $this->dealerId = $params->dealerId;
         }
+        if (isset($params->lastSeen) && !is_null($params->lastSeen))
+        {
+            $this->lastSeen = $params->lastSeen;
+        }
     }
 
     /**
@@ -183,7 +192,8 @@ class Application_Model_User extends My_Model_Abstract
             'resetPasswordOnNextLogin' => $this->resetPasswordOnNextLogin,
             'eulaAccepted'             => $this->eulaAccepted,
             'locked'                   => $this->locked,
-            "dealerId"                 => $this->dealerId
+            "dealerId"                 => $this->dealerId,
+            "lastSeen"                 => $this->lastSeen
         );
     }
 

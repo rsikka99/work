@@ -79,6 +79,7 @@ return array(
             'plugins'             => array(
                 'My_Controller_Plugin_Acl',
                 'My_Controller_Plugin_ForceUserAction',
+                'My_Controller_Plugin_UserActivity',
             ),
         ),
         'jquery'          => array(
