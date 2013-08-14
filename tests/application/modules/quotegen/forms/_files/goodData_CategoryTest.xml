@@ -1,0 +1,33 @@
+<?xml version="1.0" standalone="yes"?>
+<categorys>
+    <category>
+        <data>
+            <name>Jim</name>
+            <description>James Tiberius Kirk was arguably the most famous and highly-decorated starship captain in the history of Starfleet. Over the span of three decades in the late 23rd century, he commanded the Constitution-class starships USS Enterprise and USS Enterprise-A, serving Federation interests as an explorer, soldier, time-traveler, and diplomat.</description>
+        </data>
+    </category>
+    <category>
+        <data>
+            <name>Spock</name>
+            <description>As a Starfleet officer in the latter half of the 23rd century, he served aboard the starship USS Enterprise as science officer under Captain Christopher Pike, as first officer and science officer under Captain James T. Kirk, and as the Enterprise's commanding officer during her tenure as a training vessel. In the 24th century, Spock became a celebrated ambassador and adviser to the Federation's leadership. He disappeared in 2387 after saving the Federation from a supernova that destroyed Romulus, causing the creation of the alternate reality.</description>
+        </data>
+    </category>
+    <category>
+        <data>
+            <name>Leonard</name>
+            <description>Leonard H. McCoy, MD was a noted physician and scientist of the 23rd and 24th centuries. McCoy was an accomplished surgeon, physician, psychologist, and exobiologist, and was also considered an expert in space psychology. As ship's surgeon and chief medical officer, he served aboard the USS Enterprise and USS Enterprise-A for a combined twenty-seven years.</description>
+        </data>
+    </category>
+    <category>
+        <data>
+            <name>Montgomery</name>
+            <description>Montgomery Scott (referred to as Scotty by his shipmates), serial number SE 19754 T, was the chief engineer of both the USS Enterprise and the USS Enterprise-A for a period of nearly thirty years. Having the reputation as a "miracle worker", he was a man of superior technical and engineering skill, experience and ingenuity. Despite his superior talents as an Engineer, he was often the source of comic relief amongst the crew.</description>
+        </data>
+    </category>
+    <category>
+        <data>
+            <name>Hikaru</name>
+            <description>Hikaru Sulu was a Human Starfleet officer in the 23rd century. He served first as the staff physicist and the majority of his duty as Chief Helmsman. On a few occasions, Sulu was in temporary command when Captain James T. Kirk, First Officer Commander Spock and Chief Engineer Lieutenant Commander Montgomery Scott were on away missions or otherwise occupied aboard the USS Enterprise during its historic and original five-year mission. He also served as Helmsman aboard the USS Enterprise-A. He was later promoted to commanding officer of the USS Excelsior, and was widely regarded as a tactical genius, as well as an expert on Klingon culture and society.</description>
+        </data>
+    </category>
+</categorys>
