@@ -33,7 +33,8 @@ class Application_Model_UserTest extends PHPUnit_Framework_TestCase
             'resetPasswordOnNextLogin' => 0,
             'eulaAccepted'             => null,
             'locked'                   => 0,
-            'dealerId'                 => null
+            'dealerId'                 => null,
+            "lastSeen"                 => null
         );
         $userData = $this->_user->toArray();
         $this->assertSame($data, $userData);
