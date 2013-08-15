@@ -31,7 +31,7 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      */
     public function goodHCFormSettingsData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_HCFormSettingsTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_HealthcheckFormSettingsTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {
@@ -46,7 +46,7 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      */
     public function badHCFormSettingsData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_HCFormSettingsTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_HealthcheckFormSettingsTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {

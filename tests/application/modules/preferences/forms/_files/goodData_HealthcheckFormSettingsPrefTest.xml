@@ -20,8 +20,8 @@
             <costOfLabor>0.01</costOfLabor>
             <costToExecuteSuppliesOrder>0.01</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.01</numberOfSupplyOrdersPerMonth>
-            <customerMonochromeRankSetArray>1</customerMonochromeRankSetArray>
-            <customerColorRankSetArray>1</customerColorRankSetArray>
+            <customerMonochromeRankSetArray>3</customerMonochromeRankSetArray>
+            <customerColorRankSetArray>3</customerColorRankSetArray>
         </data>
     </healthcheck>
     <healthcheck>

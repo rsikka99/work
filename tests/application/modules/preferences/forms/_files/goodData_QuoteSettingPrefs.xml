@@ -8,7 +8,7 @@
             <pageMargin>0.000000001</pageMargin>
             <adminCostPerPage>0.000000001</adminCostPerPage>
             <dealerMonochromeRankSetArray>8</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>45</dealerColorRankSetArray>
+            <dealerColorRankSetArray>29</dealerColorRankSetArray>
         </data>
     </quote>
     <quote>
@@ -18,8 +18,8 @@
             <deviceMargin>-50</deviceMargin>
             <pageMargin>50</pageMargin>
             <adminCostPerPage>0.00000456</adminCostPerPage>
-            <dealerMonochromeRankSetArray>4</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>2</dealerColorRankSetArray>
+            <dealerMonochromeRankSetArray>6</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>3</dealerColorRankSetArray>
         </data>
     </quote>
     <quote>
@@ -29,8 +29,8 @@
             <deviceMargin>99</deviceMargin>
             <pageMargin>89</pageMargin>
             <adminCostPerPage>4.1</adminCostPerPage>
-            <dealerMonochromeRankSetArray>44</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>13</dealerColorRankSetArray>
+            <dealerMonochromeRankSetArray>29</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>8</dealerColorRankSetArray>
         </data>
     </quote>
     <quote>
@@ -40,8 +40,8 @@
             <deviceMargin>-97</deviceMargin>
             <pageMargin>-100</pageMargin>
             <adminCostPerPage>5.00000</adminCostPerPage>
-            <dealerMonochromeRankSetArray>99</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>100</dealerColorRankSetArray>
+            <dealerMonochromeRankSetArray>8</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>29</dealerColorRankSetArray>
         </data>
     </quote>
     <quote>
@@ -51,8 +51,8 @@
             <deviceMargin>0.0032424</deviceMargin>
             <pageMargin>0.000000001</pageMargin>
             <adminCostPerPage>0.000000001</adminCostPerPage>
-            <dealerMonochromeRankSetArray>4</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>1</dealerColorRankSetArray>
+            <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>6</dealerColorRankSetArray>
         </data>
     </quote>
 </quotes>

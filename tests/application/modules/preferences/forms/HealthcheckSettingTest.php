@@ -27,7 +27,7 @@ class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
      */
     public function goodHCFormSettingsPrefData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/goodData_HCFormSettingsPrefTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_HealthcheckFormSettingsPrefTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {
@@ -42,7 +42,7 @@ class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
      */
     public function badHCFormSettingsPrefData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_HCFormSettingsPrefTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_HealthcheckFormSettingsPrefTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {
@@ -69,8 +69,7 @@ class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider badHCFormSettingsPrefData
      */
-    public
-    function testFormRejectsBadData ($data)
+    public function testFormRejectsBadData ($data)
     {
         $this->assertFalse($this->_form->isValid((array)$data), "Healthcheck setting preferences form accepted bad data!");
     }

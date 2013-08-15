@@ -31,7 +31,10 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
         $data = array();
         foreach ($xml->quote as $row)
         {
-            $data[] = (array)$row;
+            $row                                         = json_decode(json_encode($row), 1);
+            $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
+            $row["data"]["dealerColorRankSetArray"]      = explode(',', $row["data"]["dealerColorRankSetArray"]);
+            $data[]                                      = (array)$row;
         }
 
         return $data;
@@ -46,7 +49,10 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
         $data = array();
         foreach ($xml->quote as $row)
         {
-            $data[] = (array)$row;
+            $row                                         = json_decode(json_encode($row), 1);
+            $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
+            $row["data"]["dealerColorRankSetArray"]      = explode(',', $row["data"]["dealerColorRankSetArray"]);
+            $data[]                                  = (array)$row;
         }
 
         return $data;
@@ -60,7 +66,7 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->assertTrue($this->_form->isValid((array)$data), "Hardware optimization setting form did not accept good data.");
+        $this->assertTrue($this->_form->isValid($data), "Hardware optimization setting form did not accept good data.");
     }
 
 
@@ -72,7 +78,7 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
     public
     function testFormRejectsBadData ($data)
     {
-        $this->assertFalse($this->_form->isValid((array)$data), "Hardware optimization setting form accepted bad data!");
+        $this->assertFalse($this->_form->isValid($data), "Hardware optimization setting form accepted bad data!");
     }
 
 }
