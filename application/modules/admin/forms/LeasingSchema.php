@@ -12,12 +12,13 @@ class Admin_Form_LeasingSchema extends EasyBib_Form
 
     /**
      * @param bool $dealerManagement
+     * @param null|array $options
      */
-    public function __construct ($dealerManagement = false)
+    public function __construct ($dealerManagement = false, $options = null)
     {
         $this->_dealerManagement = $dealerManagement;
 
-        parent::__construct();
+        parent::__construct($options);
     }
 
     public function init ()
