@@ -31,7 +31,7 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      */
     public function goodHCFormSettingsData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/goodData_HCFormSettingsTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_HCFormSettingsTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {
@@ -46,7 +46,7 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      */
     public function badHCFormSettingsData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_HCFormSettingsTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_HCFormSettingsTest.xml");
         $data = array();
         foreach ($xml->healthcheck as $row)
         {
@@ -62,48 +62,9 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      *
      * @dataProvider goodHCFormSettingsData
      */
-    public function testFormAcceptsValidData ($reportDate,
-                                              $healthcheckMargin,
-                                              $monthlyLeasePayment,
-                                              $defaultPrinterCost,
-                                              $leasedBwCostPerPage,
-                                              $leasedColorCostPerPage,
-                                              $mpsBwCostPerPage,
-                                              $mpsColorCostPerPage,
-                                              $kilowattsPerHour,
-                                              $pageCoverageMonochrome,
-                                              $pageCoverageColor,
-                                              $adminCostPerPage,
-                                              $laborCostPerPage,
-                                              $partsCostPerPage,
-                                              $averageItHourlyRate,
-                                              $hoursSpentOnIt,
-                                              $costOfLabor,
-                                              $costToExecuteSuppliesOrder,
-                                              $numberOfSupplyOrdersPerMonth)
+    public function testFormAcceptsValidData ($data)
     {
-        $data = array(
-            'reportDate'                   => $reportDate,
-            'healthcheckMargin'            => $healthcheckMargin,
-            'monthlyLeasePayment'          => $monthlyLeasePayment,
-            'defaultPrinterCost'           => $defaultPrinterCost,
-            'leasedBwCostPerPage'          => $leasedBwCostPerPage,
-            'leasedColorCostPerPage'       => $leasedColorCostPerPage,
-            'mpsBwCostPerPage'             => $mpsBwCostPerPage,
-            'mpsColorCostPerPage'          => $mpsColorCostPerPage,
-            'kilowattsPerHour'             => $kilowattsPerHour,
-            'pageCoverageMonochrome'       => $pageCoverageMonochrome,
-            'pageCoverageColor'            => $pageCoverageColor,
-            'adminCostPerPage'             => $adminCostPerPage,
-            'laborCostPerPage'             => $laborCostPerPage,
-            'partsCostPerPage'             => $partsCostPerPage,
-            'averageItHourlyRate'          => $averageItHourlyRate,
-            'hoursSpentOnIt'               => $hoursSpentOnIt,
-            'costOfLabor'                  => $costOfLabor,
-            'costToExecuteSuppliesOrder'   => $costToExecuteSuppliesOrder,
-            'numberOfSupplyOrdersPerMonth' => $numberOfSupplyOrdersPerMonth,
-        );
-        $this->assertTrue($this->_form->isValid($data), "Hardware optimization setting form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), "Hardware optimization setting form did not accept good data.");
     }
 
 
@@ -113,48 +74,8 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      * @dataProvider badHCFormSettingsData
      */
     public
-    function testFormRejectsBadData ($reportDate,
-                                     $healthcheckMargin,
-                                     $monthlyLeasePayment,
-                                     $defaultPrinterCost,
-                                     $leasedBwCostPerPage,
-                                     $leasedColorCostPerPage,
-                                     $mpsBwCostPerPage,
-                                     $mpsColorCostPerPage,
-                                     $kilowattsPerHour,
-                                     $pageCoverageMonochrome,
-                                     $pageCoverageColor,
-                                     $adminCostPerPage,
-                                     $laborCostPerPage,
-                                     $partsCostPerPage,
-                                     $averageItHourlyRate,
-                                     $hoursSpentOnIt,
-                                     $costOfLabor,
-                                     $costToExecuteSuppliesOrder,
-                                     $numberOfSupplyOrdersPerMonth)
+    function testFormRejectsBadData ($data)
     {
-        $data = array(
-            'reportDate'                   => $reportDate,
-            'healthcheckMargin'            => $healthcheckMargin,
-            'monthlyLeasePayment'          => $monthlyLeasePayment,
-            'defaultPrinterCost'           => $defaultPrinterCost,
-            'leasedBwCostPerPage'          => $leasedBwCostPerPage,
-            'leasedColorCostPerPage'       => $leasedColorCostPerPage,
-            'mpsBwCostPerPage'             => $mpsBwCostPerPage,
-            'mpsColorCostPerPage'          => $mpsColorCostPerPage,
-            'kilowattsPerHour'             => $kilowattsPerHour,
-            'pageCoverageMonochrome'       => $pageCoverageMonochrome,
-            'pageCoverageColor'            => $pageCoverageColor,
-            'adminCostPerPage'             => $adminCostPerPage,
-            'laborCostPerPage'             => $laborCostPerPage,
-            'partsCostPerPage'             => $partsCostPerPage,
-            'averageItHourlyRate'          => $averageItHourlyRate,
-            'hoursSpentOnIt'               => $hoursSpentOnIt,
-            'costOfLabor'                  => $costOfLabor,
-            'costToExecuteSuppliesOrder'   => $costToExecuteSuppliesOrder,
-            'numberOfSupplyOrdersPerMonth' => $numberOfSupplyOrdersPerMonth,
-        );
-        $this->assertFalse($this->_form->isValid($data), "Hardware optimization setting form accepted bad data! [" . strtotime('01/19/2037') . "][" . strtotime($reportDate) . "] [{$reportDate}]");
+        $this->assertFalse($this->_form->isValid((array)$data), "Hardware optimization setting form accepted bad data!");
     }
-
 }

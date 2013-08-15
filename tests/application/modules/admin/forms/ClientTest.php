@@ -30,7 +30,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function goodClientData ()
     {
-        $xml     = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_clientFormTest.xml");
         $data = array();
         foreach ($xml->client as $row)
         {
@@ -45,7 +45,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function badClientData ()
     {
-        $xml     = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_clientFormTest.xml");
         $data = array();
         foreach ($xml->client as $row)
         {
@@ -60,25 +60,9 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider goodClientData
      */
-    public function testFormAcceptsValidData ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId)
+    public function testFormAcceptsValidData ($data)
     {
-        $data = array(
-            'accountNumber' => $accountNumber,
-            'companyName'   => $companyName,
-            'employeeCount' => $employeeCount,
-            'legalName'     => $legalName,
-            'countryCode'   => $countryCode,
-            'areaCode'      => $areaCode,
-            'exchangeCode'  => $exchangeCode,
-            'number'        => $number,
-            'extension'     => $extension,
-            'addressLine1'  => $addressLine1,
-            'city'          => $city,
-            'region'        => $region,
-            'postCode'      => $postCode,
-            'countryId'     => $countryId
-        );
-        $this->assertTrue($this->getForm()->isValid($data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm()->isValid((array)$data), "Client form did not accept good data.");
     }
 
     /**
@@ -86,26 +70,9 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider badClientData
      */
-    public function testFormRejectsInvalidData ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId)
+    public function testFormRejectsInvalidData ($data)
     {
-
-        $data = array(
-            'accountNumber' => $accountNumber,
-            'companyName'   => $companyName,
-            'employeeCount' => $employeeCount,
-            'legalName'     => $legalName,
-            'countryCode'   => $countryCode,
-            'areaCode'      => $areaCode,
-            'exchangeCode'  => $exchangeCode,
-            'number'        => $number,
-            'extension'     => $extension,
-            'addressLine1'  => $addressLine1,
-            'city'          => $city,
-            'region'        => $region,
-            'postCode'      => $postCode,
-            'countryId'     => $countryId
-        );
-        $this->assertFalse($this->getForm()->isValid($data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm()->isValid((array)$data), "Client form did not reject bad data.");
     }
 
     /**
@@ -113,26 +80,9 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider goodClientData
      */
-    public function testFormAcceptsValidDataAsAdmin ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId, $dealerId)
+    public function testFormAcceptsValidDataAsAdmin ($data)
     {
-        $data = array(
-            'accountNumber' => $accountNumber,
-            'companyName'   => $companyName,
-            'employeeCount' => $employeeCount,
-            'legalName'     => $legalName,
-            'countryCode'   => $countryCode,
-            'areaCode'      => $areaCode,
-            'exchangeCode'  => $exchangeCode,
-            'number'        => $number,
-            'extension'     => $extension,
-            'addressLine1'  => $addressLine1,
-            'city'          => $city,
-            'region'        => $region,
-            'postCode'      => $postCode,
-            'countryId'     => $countryId,
-            'dealerId'      => $dealerId
-        );
-        $this->assertTrue($this->getForm(true, true)->isValid($data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm(true, true)->isValid((array)$data), "Client form did not accept good data.");
     }
 
     /**
@@ -140,28 +90,10 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider badClientData
      */
-    public function testFormRejectsInvalidDataAsAdmin ($accountNumber, $companyName, $employeeCount, $legalName, $countryCode, $areaCode, $exchangeCode, $number, $extension, $addressLine1, $city, $region, $postCode, $countryId, $dealerId)
+    public function testFormRejectsInvalidDataAsAdmin ($data)
     {
-        $data = array(
-            'accountNumber' => $accountNumber,
-            'companyName'   => $companyName,
-            'employeeCount' => $employeeCount,
-            'legalName'     => $legalName,
-            'countryCode'   => $countryCode,
-            'areaCode'      => $areaCode,
-            'exchangeCode'  => $exchangeCode,
-            'number'        => $number,
-            'extension'     => $extension,
-            'addressLine1'  => $addressLine1,
-            'city'          => $city,
-            'region'        => $region,
-            'postCode'      => $postCode,
-            'countryId'     => $countryId,
-            'dealerId'      => $dealerId
-        );
-        $this->assertFalse($this->getForm(true, true)->isValid($data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm(true, true)->isValid((array)$data), "Client form did not reject bad data.");
     }
-
 
     public function testDealerFieldExists ()
     {

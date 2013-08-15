@@ -58,20 +58,9 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider goodHOSettingData
      */
-    public function testFormAcceptsValidData ($name, $costThreshold, $pageCoverageMonochrome, $pageCoverageColor, $adminCostPerPage, $partsCostPerPage, $laborCostPerPage, $targetMonochromeCostPerPage, $targetColorCostPerPage)
+    public function testFormAcceptsValidData ($data)
     {
-        $data = array(
-            'name'                        => $name,
-            'costThreshold'               => $costThreshold,
-            'pageCoverageMonochrome'      => $pageCoverageMonochrome,
-            'pageCoverageColor'           => $pageCoverageColor,
-            'adminCostPerPage'            => $adminCostPerPage,
-            'partsCostPerPage'            => $partsCostPerPage,
-            'laborCostPerPage'            => $laborCostPerPage,
-            'targetMonochromeCostPerPage' => $targetMonochromeCostPerPage,
-            'targetColorCostPerPage'      => $targetColorCostPerPage
-        );
-        $this->assertTrue($this->_form->isValid($data), "Hardware optimization setting form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), "Hardware optimization setting form did not accept good data.");
     }
 
 
@@ -80,20 +69,9 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider badHOSettingData
      */
-    public function testFormRejectsBadData ($name, $costThreshold, $pageCoverageMonochrome, $pageCoverageColor, $adminCostPerPage, $partsCostPerPage, $laborCostPerPage, $targetMonochromeCostPerPage, $targetColorCostPerPage)
+    public function testFormRejectsBadData ($data)
     {
-        $data = array(
-            'name'                        => $name,
-            'costThreshold'               => $costThreshold,
-            'pageCoverageMonochrome'      => $pageCoverageMonochrome,
-            'pageCoverageColor'           => $pageCoverageColor,
-            'adminCostPerPage'            => $adminCostPerPage,
-            'partsCostPerPage'            => $partsCostPerPage,
-            'laborCostPerPage'            => $laborCostPerPage,
-            'targetMonochromeCostPerPage' => $targetMonochromeCostPerPage,
-            'targetColorCostPerPage'      => $targetColorCostPerPage
-        );
-        $this->assertFalse($this->_form->isValid($data), "Hardware optimization setting form accepted bad data!");
+        $this->assertFalse($this->_form->isValid((array)$data), "Hardware optimization setting form accepted bad data!");
     }
 
 }

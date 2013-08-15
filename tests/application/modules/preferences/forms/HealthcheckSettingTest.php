@@ -58,51 +58,9 @@ class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider goodHCFormSettingsPrefData
      */
-    public function testFormAcceptsValidData ($pageCoverageMonochrome,
-                                              $pageCoverageColor,
-                                              $healthcheckMargin,
-                                              $monthlyLeasePayment,
-                                              $defaultPrinterCost,
-                                              $leasedBwCostPerPage,
-                                              $leasedColorCostPerPage,
-                                              $mpsBwCostPerPage,
-                                              $mpsColorCostPerPage,
-                                              $kilowattsPerHour,
-                                              $adminCostPerPage,
-                                              $laborCostPerPage,
-                                              $partsCostPerPage,
-                                              $averageItHourlyRate,
-                                              $hoursSpentOnIt,
-                                              $costOfLabor,
-                                              $costToExecuteSuppliesOrder,
-                                              $numberOfSupplyOrdersPerMonth,
-                                              $customerMonochromeRankSetArray,
-                                              $customerColorRankSetArray
-    )
+    public function testFormAcceptsValidData ($data)
     {
-        $data = array(
-            'pageCoverageMonochrome'       => $pageCoverageMonochrome,
-            'pageCoverageColor'            => $pageCoverageColor,
-            'healthcheckMargin'            => $healthcheckMargin,
-            'monthlyLeasePayment'          => $monthlyLeasePayment,
-            'defaultPrinterCost'           => $defaultPrinterCost,
-            'leasedBwCostPerPage'          => $leasedBwCostPerPage,
-            'leasedColorCostPerPage'       => $leasedColorCostPerPage,
-            'mpsBwCostPerPage'             => $mpsBwCostPerPage,
-            'mpsColorCostPerPage'          => $mpsColorCostPerPage,
-            'kilowattsPerHour'             => $kilowattsPerHour,
-            'adminCostPerPage'             => $adminCostPerPage,
-            'laborCostPerPage'             => $laborCostPerPage,
-            'partsCostPerPage'             => $partsCostPerPage,
-            'averageItHourlyRate'          => $averageItHourlyRate,
-            'hoursSpentOnIt'               => $hoursSpentOnIt,
-            'costOfLabor'                  => $costOfLabor,
-            'costToExecuteSuppliesOrder'   => $costToExecuteSuppliesOrder,
-            'numberOfSupplyOrdersPerMonth' => $numberOfSupplyOrdersPerMonth,
-            'customerMonochromeRankSetArray[]' => $customerMonochromeRankSetArray,
-            'customerColorRankSetArray[]' => $customerColorRankSetArray,
-        );
-        $this->assertTrue($this->_form->isValid($data), "Healthcheck setting preferences form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), "Healthcheck setting preferences form did not accept good data.");
     }
 
 
@@ -112,46 +70,9 @@ class Preferences_Form_HealthcheckSettingTest extends PHPUnit_Framework_TestCase
      * @dataProvider badHCFormSettingsPrefData
      */
     public
-    function testFormRejectsBadData ($pageCoverageMonochrome,
-                                     $pageCoverageColor,
-                                     $healthcheckMargin,
-                                     $monthlyLeasePayment,
-                                     $defaultPrinterCost,
-                                     $leasedBwCostPerPage,
-                                     $leasedColorCostPerPage,
-                                     $mpsBwCostPerPage,
-                                     $mpsColorCostPerPage,
-                                     $kilowattsPerHour,
-                                     $adminCostPerPage,
-                                     $laborCostPerPage,
-                                     $partsCostPerPage,
-                                     $averageItHourlyRate,
-                                     $hoursSpentOnIt,
-                                     $costOfLabor,
-                                     $costToExecuteSuppliesOrder,
-                                     $numberOfSupplyOrdersPerMonth)
+    function testFormRejectsBadData ($data)
     {
-        $data = array(
-            'pageCoverageMonochrome'       => $pageCoverageMonochrome,
-            'pageCoverageColor'            => $pageCoverageColor,
-            'healthcheckMargin'            => $healthcheckMargin,
-            'monthlyLeasePayment'          => $monthlyLeasePayment,
-            'defaultPrinterCost'           => $defaultPrinterCost,
-            'leasedBwCostPerPage'          => $leasedBwCostPerPage,
-            'leasedColorCostPerPage'       => $leasedColorCostPerPage,
-            'mpsBwCostPerPage'             => $mpsBwCostPerPage,
-            'mpsColorCostPerPage'          => $mpsColorCostPerPage,
-            'kilowattsPerHour'             => $kilowattsPerHour,
-            'adminCostPerPage'             => $adminCostPerPage,
-            'laborCostPerPage'             => $laborCostPerPage,
-            'partsCostPerPage'             => $partsCostPerPage,
-            'averageItHourlyRate'          => $averageItHourlyRate,
-            'hoursSpentOnIt'               => $hoursSpentOnIt,
-            'costOfLabor'                  => $costOfLabor,
-            'costToExecuteSuppliesOrder'   => $costToExecuteSuppliesOrder,
-            'numberOfSupplyOrdersPerMonth' => $numberOfSupplyOrdersPerMonth,
-        );
-        $this->assertFalse($this->_form->isValid($data), "Healthcheck setting preferences form accepted bad data! [" . strtotime('01/19/2037') . "][" . strtotime($reportDate) . "] [{$reportDate}]");
+        $this->assertFalse($this->_form->isValid((array)$data), "Healthcheck setting preferences form accepted bad data!");
     }
 
 }

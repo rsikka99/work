@@ -1,48 +1,58 @@
 <?xml version="1.0" standalone="yes"?>
 <quotes>
     <quote>
-        <pageCoverageMonochrome>100</pageCoverageMonochrome>
-        <pageCoverageColor>100</pageCoverageColor>
-        <deviceMargin>0.000000001</deviceMargin>
-        <pageMargin>0.000000001</pageMargin>
-        <adminCostPerPage>0.000000001</adminCostPerPage>
-        <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
-        <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        <data>
+            <pageCoverageMonochrome>100</pageCoverageMonochrome>
+            <pageCoverageColor>100</pageCoverageColor>
+            <deviceMargin>0.000000001</deviceMargin>
+            <pageMargin>0.000000001</pageMargin>
+            <adminCostPerPage>0.000000001</adminCostPerPage>
+            <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        </data>
     </quote>
     <quote>
-        <pageCoverageMonochrome>99.999999999</pageCoverageMonochrome>
-        <pageCoverageColor>99.99999999</pageCoverageColor>
-        <deviceMargin>0.00000456</deviceMargin>
-        <pageMargin>0.00000456</pageMargin>
-        <adminCostPerPage>-0.00000456</adminCostPerPage>
-        <dealerMonochromeRankSetArray>4</dealerMonochromeRankSetArray>
-        <dealerColorRankSetArray>4564</dealerColorRankSetArray>
+        <data>
+            <pageCoverageMonochrome>99.999999999</pageCoverageMonochrome>
+            <pageCoverageColor>99.99999999</pageCoverageColor>
+            <deviceMargin>0.00000456</deviceMargin>
+            <pageMargin>0.00000456</pageMargin>
+            <adminCostPerPage>-0.00000456</adminCostPerPage>
+            <dealerMonochromeRankSetArray>4</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>4564</dealerColorRankSetArray>
+        </data>
     </quote>
     <quote>
-        <pageCoverageMonochrome>0</pageCoverageMonochrome>
-        <pageCoverageColor>99.99999999</pageCoverageColor>
-        <deviceMargin>0.000000001</deviceMargin>
-        <pageMargin>0.000000001</pageMargin>
-        <adminCostPerPage>0.000000001</adminCostPerPage>
-        <dealerMonochromeRankSetArray>-44</dealerMonochromeRankSetArray>
-        <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        <data>
+            <pageCoverageMonochrome>0</pageCoverageMonochrome>
+            <pageCoverageColor>99.99999999</pageCoverageColor>
+            <deviceMargin>0.000000001</deviceMargin>
+            <pageMargin>0.000000001</pageMargin>
+            <adminCostPerPage>0.000000001</adminCostPerPage>
+            <dealerMonochromeRankSetArray>-44</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        </data>
     </quote>
     <quote>
-        <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
-        <pageCoverageColor>100</pageCoverageColor>
-        <deviceMargin>0.000000001</deviceMargin>
-        <pageMargin>0.000000001</pageMargin>
-        <adminCostPerPage>0.000000001</adminCostPerPage>
-        <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
-        <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        <data>
+            <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
+            <pageCoverageColor>100</pageCoverageColor>
+            <deviceMargin>0.000000001</deviceMargin>
+            <pageMargin>0.000000001</pageMargin>
+            <adminCostPerPage>0.000000001</adminCostPerPage>
+            <dealerMonochromeRankSetArray>0.000000001</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        </data>
     </quote>
     <quote>
-        <pageCoverageMonochrome>84</pageCoverageMonochrome>
-        <pageCoverageColor>99.99999999</pageCoverageColor>
-        <deviceMargin>0.0032424</deviceMargin>
-        <pageMargin>87</pageMargin>
-        <adminCostPerPage>letters don't go here!</adminCostPerPage>
-        <dealerMonochromeRankSetArray></dealerMonochromeRankSetArray>
-        <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        <data>
+            <pageCoverageMonochrome>84</pageCoverageMonochrome>
+            <pageCoverageColor>99.99999999</pageCoverageColor>
+            <deviceMargin>0.0032424</deviceMargin>
+            <pageMargin>87</pageMargin>
+            <adminCostPerPage>letters don't go here!</adminCostPerPage>
+            <dealerMonochromeRankSetArray></dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>0.000000001</dealerColorRankSetArray>
+        </data>
     </quote>
 </quotes>

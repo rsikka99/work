@@ -58,24 +58,9 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider goodQuoteSettingPrefData
      */
-    public function testFormAcceptsValidData ($pageCoverageMonochrome,
-                                              $pageCoverageColor,
-                                              $deviceMargin,
-                                              $pageMargin,
-                                              $adminCostPerPage,
-                                              $dealerMonochromeRankSetArray,
-                                              $dealerColorRankSetArray)
+    public function testFormAcceptsValidData ($data)
     {
-        $data = array(
-            'pageCoverageMonochrome'         => $pageCoverageMonochrome,
-            'pageCoverageColor'              => $pageCoverageColor,
-            'deviceMargin'                   => $deviceMargin,
-            'pageMargin'                     => $pageMargin,
-            'adminCostPerPage'               => $adminCostPerPage,
-            'dealerMonochromeRankSetArray[]' => $dealerMonochromeRankSetArray,
-            'dealerColorRankSetArray[]'      => $dealerColorRankSetArray
-        );
-        $this->assertTrue($this->_form->isValid($data), "Hardware optimization setting form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), "Hardware optimization setting form did not accept good data.");
     }
 
 
@@ -85,24 +70,9 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
      * @dataProvider badQuoteSettingPrefData
      */
     public
-    function testFormRejectsBadData ($pageCoverageMonochrome,
-                                     $pageCoverageColor,
-                                     $deviceMargin,
-                                     $pageMargin,
-                                     $adminCostPerPage,
-                                     $dealerMonochromeRankSetArray,
-                                     $dealerColorRankSetArray)
+    function testFormRejectsBadData ($data)
     {
-        $data = array(
-            'pageCoverageMonochrome'         => $pageCoverageMonochrome,
-            'pageCoverageColor'              => $pageCoverageColor,
-            'deviceMargin'                   => $deviceMargin,
-            'pageMargin'                     => $pageMargin,
-            'adminCostPerPage'               => $adminCostPerPage,
-            'dealerMonochromeRankSetArray[]' => $dealerMonochromeRankSetArray,
-            'dealerColorRankSetArray[]'      => $dealerColorRankSetArray
-        );
-        $this->assertFalse($this->_form->isValid($data), "Hardware optimization setting form accepted bad data!");
+        $this->assertFalse($this->_form->isValid((array)$data), "Hardware optimization setting form accepted bad data!");
     }
 
 }
