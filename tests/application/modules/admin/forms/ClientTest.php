@@ -62,7 +62,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->assertTrue($this->getForm()->isValid((array)$data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     /**
@@ -72,7 +72,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testFormRejectsInvalidData ($data)
     {
-        $this->assertFalse($this->getForm()->isValid((array)$data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     /**
@@ -82,7 +82,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidDataAsAdmin ($data)
     {
-        $this->assertTrue($this->getForm(true, true)->isValid((array)$data), "Client form did not accept good data.");
+        $this->assertTrue($this->getForm(true, true)->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     /**
@@ -92,7 +92,7 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
      */
     public function testFormRejectsInvalidDataAsAdmin ($data)
     {
-        $this->assertFalse($this->getForm(true, true)->isValid((array)$data), "Client form did not reject bad data.");
+        $this->assertFalse($this->getForm(true, true)->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     public function testDealerFieldExists ()

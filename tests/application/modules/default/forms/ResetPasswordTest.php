@@ -57,7 +57,7 @@ class Default_Form_ResetPasswordTest extends PHPUnit_Framework_TestCase
             'password'         => $password,
             'password_confirm' => $passwordConfirm
         );
-        $this->assertTrue($this->_form->isValid($data), "Reset password form did not accept good data.");
+        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
     }
 
     /**
@@ -97,7 +97,7 @@ class Default_Form_ResetPasswordTest extends PHPUnit_Framework_TestCase
             'password'         => $password,
             'password_confirm' => $passwordConfirm
         );
-        $this->assertFalse($this->_form->isValid($data), "Reset password form accepted bad data!");
+        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
     }
 
 }

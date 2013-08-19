@@ -64,7 +64,7 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->assertTrue($this->_form->isValid((array)$data), "Hardware optimization setting form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
     }
 
 
@@ -76,6 +76,6 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
     public
     function testFormRejectsBadData ($data)
     {
-        $this->assertFalse($this->_form->isValid((array)$data), "Hardware optimization setting form accepted bad data!");
+        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
     }
 }

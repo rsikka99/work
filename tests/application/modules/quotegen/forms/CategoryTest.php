@@ -60,7 +60,7 @@ class Quotegen_Form_CategoryTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->assertTrue($this->_form->isValid((array)$data), "Quotegen Category form did not accept good data.");
+        $this->assertTrue($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
     }
 
 
@@ -72,6 +72,6 @@ class Quotegen_Form_CategoryTest extends PHPUnit_Framework_TestCase
     public
     function testFormRejectsBadData ($data)
     {
-        $this->assertFalse($this->_form->isValid((array)$data), "Quotegen Category form accepted bad data!");
+        $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
     }
 }
