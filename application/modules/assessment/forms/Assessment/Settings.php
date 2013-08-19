@@ -7,7 +7,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
     /**
      * The default settings
      *
-     * @var Proposalgen_Model_Assessment_Setting
+     * @var Assessment_Model_Assessment_Setting
      */
     protected $_defaultSettings;
 
