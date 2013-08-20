@@ -35,11 +35,8 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-        $db         = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $roleMapper = new Admin_Model_Mapper_Role();
-        $roles      = $roleMapper->fetchAll();
-        $form       = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $roles, null, false);
-
+        $db      = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $form    = new Admin_Form_User(Admin_Form_User::MODE_CREATE);
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -275,7 +272,7 @@ class Admin_UserController extends Tangent_Controller_Action
         }
 
         // Create a new form with the mode and roles set
-        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT, $roles, null, false);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
 
         // Prepare the data for the form
         $values               = $user->toArray();
@@ -457,7 +454,7 @@ class Admin_UserController extends Tangent_Controller_Action
         $userMapper = new Application_Model_Mapper_User();
         $user       = $userMapper->find($userId);
 
-        $form = new Admin_Form_User(Admin_Form_User::MODE_USER_EDIT, null, null, false);
+        $form = new Admin_Form_User(Admin_Form_User::MODE_EDIT);
         $form->populate($user->toArray());
 
         $request = $this->getRequest();

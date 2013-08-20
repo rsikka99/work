@@ -17,30 +17,17 @@ class Admin_Form_User extends EasyBib_Form
      */
     protected $_formMode = self::MODE_CREATE;
 
-    /**
-     * @var Admin_Model_Role[]
-     */
-    protected $_roles;
 
     /**
-     * @var bool
+     * @param null|int   $formMode
+     * @param null|array $options
      */
-    protected $_dealerManagement;
-
-    /**
-     * @param null|int                $formMode
-     * @param null|Admin_Model_Role[] $roles
-     * @param null|array              $options
-     * @param bool                    $dealerManagement
-     */
-    public function __construct ($formMode = null, $roles = null, $options = null, $dealerManagement = true)
+    public function __construct ($formMode = null, $options = null)
     {
         if (null !== $formMode)
         {
             $this->_formMode = $formMode;
         }
-        $this->_dealerManagement = $dealerManagement;
-        $this->_roles            = $roles;
 
         parent::__construct($options);
     }
@@ -120,12 +107,13 @@ class Admin_Form_User extends EasyBib_Form
                                                 )
                                            ));
 
-        if ($this->_roles)
+        $roles = Admin_Model_Mapper_Role::getInstance()->fetchAll();
+        if (count($roles) > 0)
         {
             $userRoles = new Zend_Form_Element_MultiCheckbox('userRoles');
             $userRoles->setLabel("User Roles:");
 
-            foreach ($this->_roles as $role)
+            foreach ($roles as $role)
             {
                 if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->_dealerManagement == false))
                 {
@@ -135,30 +123,29 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($userRoles);
         }
 
-        $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_USER_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ($isAdmin && $this->_dealerManagement == false)
+        $firstDealerId = null;
+        $dealers       = array();
+        foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
         {
-            $firstDealerId = null;
-            $dealers       = array();
-            foreach (Admin_Model_Mapper_Dealer::getInstance()->fetchAll() as $dealer)
+            // Use this to grab the first id in the leasing schema dropdown
+            if (!$firstDealerId)
             {
-                // Use this to grab the first id in the leasing schema dropdown
-                if (!$firstDealerId)
-                {
-                    $firstDealerId = $dealer->id;
-                }
-                $dealers [$dealer->id] = $dealer->dealerName;
+                $firstDealerId = $dealer->id;
             }
-            if ($dealers)
-            {
-                $this->addElement('select', 'dealerId', array(
-                                                             'label'        => 'Dealer:',
-                                                             'class'        => 'input-medium',
-                                                             'multiOptions' => $dealers,
-                                                             'required'     => true,
-                                                             'value'        => $firstDealerId));
-            }
+            $dealers [$dealer->id] = $dealer->dealerName;
         }
+
+        if ($dealers)
+        {
+            $this->addElement('select', 'dealerId', array(
+                                                         'label'        => 'Dealer:',
+                                                         'class'        => 'input-medium',
+                                                         'multiOptions' => $dealers,
+                                                         'required'     => true,
+                                                         'value'        => $firstDealerId)
+            );
+        }
+
         // No need to edit this when creating a user
         if ($this->getFormMode() === self::MODE_EDIT)
         {
@@ -173,11 +160,7 @@ class Admin_Form_User extends EasyBib_Form
                                                                      'required' => true
                                                                 ));
 
-            /*
-             * $frozenUntil = new Zend_Form_Element_Text('frozen_until'); $frozenUntil->setLabel('Frozen Until:');
-             * $frozenUntil->setRequired(true); $frozenUntil->addValidator($datetimeValidator);
-             * $this->addElement($frozenUntil);
-             */
+
             $minYear     = (int)date('Y') - 2;
             $maxYear     = $minYear + 4;
             $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
