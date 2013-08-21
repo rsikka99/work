@@ -26,7 +26,7 @@
     <setting>
         <data>
             <reportDate>12/03/2013</reportDate>
-            <name>St. Lawerence College</name>
+            <name>St. Lawrence College</name>
             <assessmentReportMargin>13</assessmentReportMargin>
             <monthlyLeasePayment>87943</monthlyLeasePayment>
             <defaultPrinterCost>1337</defaultPrinterCost>
@@ -111,29 +111,6 @@
             <adminCostPerPage>2</adminCostPerPage>
             <laborCostPerPage>0.0045641</laborCostPerPage>
             <partsCostPerPage>0.00987981</partsCostPerPage>
-            <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
-            <dealerColorRankSetArray>3</dealerColorRankSetArray>
-        </data>
-    </setting>
-    <setting>
-        <data>
-            <reportDate>08/09/2040</reportDate>
-            <name>Beef Jerky</name>
-            <assessmentReportMargin>50</assessmentReportMargin>
-            <monthlyLeasePayment>500</monthlyLeasePayment>
-            <defaultPrinterCost>1000</defaultPrinterCost>
-            <leasedBwCostPerPage>0.0000346346</leasedBwCostPerPage>
-            <leasedColorCostPerPage>0.0034263461</leasedColorCostPerPage>
-            <mpsBwCostPerPage>0.003462</mpsBwCostPerPage>
-            <mpsColorCostPerPage>0.03463461</mpsColorCostPerPage>
-            <kilowattsPerHour>0.00043634</kilowattsPerHour>
-            <customerMonochromeRankSetArray>3</customerMonochromeRankSetArray>
-            <customerColorRankSetArray>3</customerColorRankSetArray>
-            <actualPageCoverageMono>50</actualPageCoverageMono>
-            <actualPageCoverageColor>20</actualPageCoverageColor>
-            <adminCostPerPage>0.00023463421</adminCostPerPage>
-            <laborCostPerPage>0.00346231</laborCostPerPage>
-            <partsCostPerPage>0.0053253251</partsCostPerPage>
             <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
             <dealerColorRankSetArray>3</dealerColorRankSetArray>
         </data>
