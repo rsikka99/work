@@ -123,12 +123,13 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
         foreach ($vendorSeperatedData as $arrayData)
         {
-            if ($arrayData['statisticsGroup']['right']['Overall Margin'] > $highestMargin)
+            $currentPercentage = $arrayData['statisticsGroup']['right']['Overall Margin'];
+            if ($currentPercentage > $highestMargin)
             {
                 $highestMarginNames = array($arrayData['pageTitle']);
-                $highestMargin      = $arrayData['statisticsGroup']['right']['Overall Margin'];
+                $highestMargin      = $currentPercentage;
             }
-            else if ($arrayData['statisticsGroup']['right']['Overall Margin'] == $highestMargin)
+            else if ($currentPercentage == $highestMargin)
             {
                 $highestMarginNames[] = $arrayData['pageTitle'];
             }
@@ -136,7 +137,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
         $this->view->vendorSeperatedData = $vendorSeperatedData;
         $this->view->highestNames        = $highestMarginNames;
-        $this->view->highestMargin       = $highestMargin;
+        $this->view->highestMargin       = $highestMargin . "%";
     }
 
     /**
@@ -158,7 +159,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         $statisticsGroup['right']['Total Cost']     = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined, 2, '.', '');
         $statisticsGroup['right']['Total Revenue']  = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
         $statisticsGroup['right']['Monthly Profit'] = "$" . number_format($assessmentViewModel->getGrossMarginMonthlyProfit($costPerPageSetting), 2, '.', '');
-        $statisticsGroup['right']['Overall Margin'] = number_format($assessmentViewModel->getGrossMarginOverallMargin($costPerPageSetting), 0, '.', '') . "%";
+        $statisticsGroup['right']['Overall Margin'] = number_format($assessmentViewModel->getGrossMarginOverallMargin($costPerPageSetting), 0, '.', '');
         $statisticsGroup['right']['Color Margin']   = number_format($assessmentViewModel->getGrossMarginColorMargin($costPerPageSetting), 0, '.', '') . "%";
 
         return $statisticsGroup;
@@ -183,8 +184,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         // If we are using a specific toner vendor
         if ($tonerVendorId > 0)
         {
-            $tonerRankSet                               = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
-            $ranking = new Proposalgen_Model_Toner_Vendor_Ranking();
+            $tonerRankSet            = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+            $ranking                 = new Proposalgen_Model_Toner_Vendor_Ranking();
             $ranking->manufacturerId = $tonerVendorId;
             $tonerRankSet->setRankings($ranking);
             $costPerPageSetting                         = $assessmentViewModel->getCostPerPageSettingForDealer();

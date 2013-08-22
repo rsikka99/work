@@ -55,7 +55,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 ?>
                 <tr <?= (in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
                     <td><?= $vendorName ?></td>
-                    <td><?= $vendorOverallMargin; ?></td>
+                    <td><?= $vendorOverallMargin; ?>%</td>
                 </tr>
             <?php } ?>
         </table>
@@ -132,7 +132,7 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading">Overall Margin:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Overall Margin'] ?></div>
+                        <div><?= $vendorData['statisticsGroup']['right']['Overall Margin'] ?>%</div>
                     </td>
                 </tr>
                 <tr>

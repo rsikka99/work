@@ -127,7 +127,7 @@ foreach ($this->vendorSeperatedData as $vendorData)
     $vendorName          = $vendorData['pageTitle'];
     $currentRow          = $activeSheet->getHighestRow() + 1;
     $activeSheet->setCellValue("A{$currentRow}", $vendorName);
-    $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin);
+    $activeSheet->setCellValue("B{$currentRow}", $vendorOverallMargin . "%");
     if ($isHighest)
     {
         $activeSheet->getStyle("A{$currentRow}:B{$currentRow}")->applyFromArray($styleHighestMargin);
@@ -189,14 +189,29 @@ foreach ($this->vendorSeperatedData as $vendorData)
     }
 
     $currentRow = $startRow;
-    // Display the right side of the statistics group
-    foreach ($vendorData['statisticsGroup']['right'] as $key => $value)
-    {
-        $activeSheet->setCellValue("D{$currentRow}", $key);
-        $activeSheet->setCellValue("E{$currentRow}", $value);
-        $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
-        $currentRow += 1;
-    }
+
+    // Right side statistics
+    $activeSheet->setCellValue("D{$currentRow}", "Total Cost");
+    $activeSheet->setCellValue("E{$currentRow}", $vendorData['statisticsGroup']['right']['Total Cost']);
+    $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+    $currentRow += 1;
+    $activeSheet->setCellValue("D{$currentRow}", "Total Revenue");
+    $activeSheet->setCellValue("E{$currentRow}", $vendorData['statisticsGroup']['right']['Total Revenue']);
+    $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+    $currentRow += 1;
+    $activeSheet->setCellValue("D{$currentRow}", "Monthly Profit");
+    $activeSheet->setCellValue("E{$currentRow}", $vendorData['statisticsGroup']['right']['Monthly Profit']);
+    $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+    $currentRow += 1;
+    $activeSheet->setCellValue("D{$currentRow}", "Overall Margin");
+    $activeSheet->setCellValue("E{$currentRow}", $vendorData['statisticsGroup']['right']['Overall Margin'] . "%");
+    $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+    $currentRow += 1;
+    $activeSheet->setCellValue("D{$currentRow}", "Color Margin");
+    $activeSheet->setCellValue("E{$currentRow}", $vendorData['statisticsGroup']['right']['Color Margin']);
+    $activeSheet->getStyle("E{$currentRow}")->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
+    $currentRow += 1;
+    // End right side statistics
 
     $currentRow = $activeSheet->getHighestRow() + 2;
     $activeSheet->setCellValue("A{$currentRow}", "Yellow highlighted rows indicate devices that have not been assigned toners matching your selected first toner vendor preference.");
