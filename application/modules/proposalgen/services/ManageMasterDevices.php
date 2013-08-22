@@ -91,7 +91,7 @@ class Proposalgen_Service_ManageMasterDevices
             $formsToShow['availableTonersForm'] = $this->getAvailableTonersForm();
         }
 
-        $formsToShow['delete'] = new Proposalgen_Form_Delete();
+        $formsToShow['delete'] = new Proposalgen_Form_MasterDeviceManagement_Delete();
 
         return $formsToShow;
     }
@@ -585,13 +585,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Supplies And Services Form
      *
-     * @return Proposalgen_Form_SuppliesAndService
+     * @return Proposalgen_Form_MasterDeviceManagement_SuppliesAndService
      */
     public function getSuppliesAndServicesForm ()
     {
         if (!isset($this->_suppliesAndServiceForm))
         {
-            $this->_suppliesAndServiceForm = new Proposalgen_Form_SuppliesAndService(null, $this->_isAllowed, $this->isQuoteDevice);
+            $this->_suppliesAndServiceForm = new Proposalgen_Form_MasterDeviceManagement_SuppliesAndService(null, $this->_isAllowed, $this->isQuoteDevice);
             $masterDevice                  = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->masterDeviceId);
 
             if ($this->data && !$masterDevice)
@@ -616,13 +616,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Device Attributes Form
      *
-     * @return Proposalgen_Form_DeviceAttributes
+     * @return Proposalgen_Form_MasterDeviceManagement_DeviceAttributes
      */
     public function getDeviceAttributesForm ()
     {
         if (!isset($this->_deviceAttributesForm))
         {
-            $this->_deviceAttributesForm = new Proposalgen_Form_DeviceAttributes(null, $this->_isAllowed);
+            $this->_deviceAttributesForm = new Proposalgen_Form_MasterDeviceManagement_DeviceAttributes(null, $this->_isAllowed);
             $masterDevice                = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->masterDeviceId);
 
             if ($this->data && !$masterDevice)
@@ -641,13 +641,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Hardware Optimization Form
      *
-     * @return Proposalgen_Form_HardwareOptimization
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareOptimization
      */
     public function getHardwareOptimizationForm ()
     {
         if (!isset($this->_hardwareOptimizationForm))
         {
-            $this->_hardwareOptimizationForm = new Proposalgen_Form_HardwareOptimization();
+            $this->_hardwareOptimizationForm = new Proposalgen_Form_MasterDeviceManagement_HardwareOptimization();
             $deviceSwap                      = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
 
             if ($deviceSwap)
@@ -663,13 +663,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Hardware Quote Form
      *
-     * @return Proposalgen_Form_HardwareQuote
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareQuote
      */
     public function getHardwareQuoteForm ()
     {
         if (!isset($this->_hardwareQuoteForm))
         {
-            $this->_hardwareQuoteForm = new Proposalgen_Form_HardwareQuote();
+            $this->_hardwareQuoteForm = new Proposalgen_Form_MasterDeviceManagement_HardwareQuote();
             $device                   = Quotegen_Model_Mapper_Device::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
 
             if ($device)
@@ -686,13 +686,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Hardware Configuration Form
      *
-     * @return Proposalgen_Form_HardwareConfigurations
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations
      */
     public function getHardwareConfigurationsForm ()
     {
         if (!isset($this->_hardwareConfigurationsForm))
         {
-            $this->_hardwareConfigurationsForm = new Proposalgen_Form_HardwareConfigurations($this->masterDeviceId);
+            $this->_hardwareConfigurationsForm = new Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations($this->masterDeviceId);
         }
 
         return $this->_hardwareConfigurationsForm;
@@ -701,13 +701,13 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Available Options Form
      *
-     * @return Proposalgen_Form_AvailableOptions
+     * @return Proposalgen_Form_MasterDeviceManagement_AvailableOptions
      */
     public function getAvailableOptionsForm ()
     {
         if (!isset($this->_availableOptionsForm))
         {
-            $this->_availableOptionsForm = new Proposalgen_Form_AvailableOptions();
+            $this->_availableOptionsForm = new Proposalgen_Form_MasterDeviceManagement_AvailableOptions();
         }
 
         return $this->_availableOptionsForm;
@@ -718,13 +718,13 @@ class Proposalgen_Service_ManageMasterDevices
      *
      * @param bool $creating
      *
-     * @return Proposalgen_Form_AvailableToners
+     * @return Proposalgen_Form_MasterDeviceManagement_AvailableToners
      */
     public function getAvailableTonersForm ($creating = false)
     {
         if (!isset($this->_availableTonersForm))
         {
-            $this->_availableTonersForm = new Proposalgen_Form_AvailableToners(null, $this->_isAdmin);
+            $this->_availableTonersForm = new Proposalgen_Form_MasterDeviceManagement_AvailableToners(null, $this->_isAdmin);
         }
 
         return $this->_availableTonersForm;

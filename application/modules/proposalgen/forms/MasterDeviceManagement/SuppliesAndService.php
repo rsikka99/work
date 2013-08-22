@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_SuppliesAndService
+ * Class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService
  */
-class Proposalgen_Form_SuppliesAndService extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_isAllowed;
     protected $_isQuoteDevice;
@@ -15,7 +15,7 @@ class Proposalgen_Form_SuppliesAndService extends Twitter_Bootstrap_Form_Horizon
      */
     public function __construct ($options = null, $isAllowed = false, $isQuoteDevice = false)
     {
-        $this->_isAllowed = $isAllowed;
+        $this->_isAllowed     = $isAllowed;
         $this->_isQuoteDevice = $isQuoteDevice;
         parent::__construct($options);
     }
@@ -25,7 +25,8 @@ class Proposalgen_Form_SuppliesAndService extends Twitter_Bootstrap_Form_Horizon
 
         $this->setMethod('post');
         $tonerConfigurationElement = $this->createElement('select', 'tonerConfigId', array(
-                                                                                          'label' => 'Toner Configuration: '
+                                                                                          'label' => 'Toner Configuration: ',
+                                                                                          'required' => false
                                                                                      ));
         if (!$this->_isAllowed)
         {
@@ -145,6 +146,7 @@ class Proposalgen_Form_SuppliesAndService extends Twitter_Bootstrap_Form_Horizon
             $systemPartsCPPElement->setAttrib('disabled', 'disabled');
             $systemLaborCPPElement->setAttrib('disabled', 'disabled');
         }
+
         $this->addDisplayGroup(array($dealerPartsCPPElement, $systemPartsCPPElement, $tonerConfigurationElement), 'leftSide');
         $this->addDisplayGroup(array($dealerLaborCPPElement, $systemLaborCPPElement, $isLeasedElement, $leasedTonerYieldElement), 'rightSide');
         $this->getElement("isLeased")->setDecorators(array("ViewHelper",
@@ -200,9 +202,16 @@ class Proposalgen_Form_SuppliesAndService extends Twitter_Bootstrap_Form_Horizon
         {
             $tonerConfigMultiOptions [$tonerConfig->tonerConfigId] = $tonerConfig->tonerConfigName;
         }
+
         /**
          * Data for select box
          */
         $tonerConfigurationElement->addMultiOptions($tonerConfigMultiOptions);
+
+        $leasedTonerYieldElement->addValidators(array(new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
+                                                                                                                     new Zend_Validate_NotEmpty(),
+                                                                                                                     new Zend_Validate_Int(),
+                                                                                                                ))));
+
     }
 }

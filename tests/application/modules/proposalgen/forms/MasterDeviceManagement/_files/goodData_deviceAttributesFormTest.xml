@@ -1,0 +1,59 @@
+<?xml version="1.0" standalone="yes"?>
+<deviceAttributes>
+    <deviceAttribute>
+        <data>
+            <isCopier>1</isCopier>
+            <isDuplex>1</isDuplex>
+            <isFax>1</isFax>
+            <reportsTonerLevels>1</reportsTonerLevels>
+            <ppmBlack>15</ppmBlack>
+            <ppmColor>55</ppmColor>
+            <launchDate>2007-06-20 00:00:00</launchDate>
+            <wattsPowerNormal>123</wattsPowerNormal>
+            <dutyCycle>1</dutyCycle>
+            <wattsPowerIdle>55</wattsPowerIdle>
+        </data>
+    </deviceAttribute>
+    <deviceAttribute>
+        <data>
+            <isCopier>0</isCopier>
+            <isDuplex>1</isDuplex>
+            <isFax>0</isFax>
+            <reportsTonerLevels>1</reportsTonerLevels>
+            <ppmBlack>500</ppmBlack>
+            <ppmColor>100</ppmColor>
+            <launchDate>2001-01-10</launchDate>
+            <wattsPowerNormal>1</wattsPowerNormal>
+            <dutyCycle>99999</dutyCycle>
+            <wattsPowerIdle>555</wattsPowerIdle>
+        </data>
+    </deviceAttribute>
+    <deviceAttribute>
+        <data>
+            <isCopier>1</isCopier>
+            <isDuplex>1</isDuplex>
+            <isFax>1</isFax>
+            <reportsTonerLevels>1</reportsTonerLevels>
+            <ppmBlack>25</ppmBlack>
+            <ppmColor>25</ppmColor>
+            <launchDate>2007-06-20 00:00:00</launchDate>
+            <wattsPowerNormal>4242</wattsPowerNormal>
+            <dutyCycle>13456</dutyCycle>
+            <wattsPowerIdle>5555</wattsPowerIdle>
+        </data>
+    </deviceAttribute>
+    <deviceAttribute>
+        <data>
+            <isCopier>1</isCopier>
+            <isDuplex>1</isDuplex>
+            <isFax>1</isFax>
+            <reportsTonerLevels>1</reportsTonerLevels>
+            <ppmBlack>1</ppmBlack>
+            <ppmColor>1</ppmColor>
+            <launchDate>2007-06-20 00:00:00</launchDate>
+            <wattsPowerNormal>4242</wattsPowerNormal>
+            <dutyCycle>13456</dutyCycle>
+            <wattsPowerIdle>5555</wattsPowerIdle>
+        </data>
+    </deviceAttribute>
+</deviceAttributes>

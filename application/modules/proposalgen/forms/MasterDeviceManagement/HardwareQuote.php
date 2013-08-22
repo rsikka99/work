@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_HardwareQuote
+ * Class Proposalgen_Form_MasterDeviceManagement_HardwareQuote
  */
-class Proposalgen_Form_HardwareQuote extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_MasterDeviceManagement_HardwareQuote extends Twitter_Bootstrap_Form_Horizontal
 {
 
     public function init ()
@@ -14,10 +14,10 @@ class Proposalgen_Form_HardwareQuote extends Twitter_Bootstrap_Form_Horizontal
                                                         'label' => 'Sell This Device'
                                                    ));
         $this->getElement("isSelling")->setDecorators(array("ViewHelper",
-                                                           array(array('wrapper' => 'HtmlTag'),array('tag' => 'div','class' => 'switch','data-on-label' => 'Yes','data-off-label' => 'No','data-off' => 'danger','data-on' => 'success')),
-                                                           array(array('donkeyKong' => 'HtmlTag'),array('tag' => 'div','class' => 'controls')),
-                                                           array("label",array('class' => 'control-label')),
-                                                           array(array('controls' => 'HtmlTag'),array('tag' => 'div','class' => 'control-group'))));
+                                                            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'switch', 'data-on-label' => 'Yes', 'data-off-label' => 'No', 'data-off' => 'danger', 'data-on' => 'success')),
+                                                            array(array('donkeyKong' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                            array("label", array('class' => 'control-label')),
+                                                            array(array('controls' => 'HtmlTag'), array('tag' => 'div', 'class' => 'control-group'))));
         /*
          * Your SKU
          */

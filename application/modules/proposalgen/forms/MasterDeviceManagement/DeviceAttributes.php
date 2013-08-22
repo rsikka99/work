@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_DeviceAttributes
+ * Class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes
  */
-class Proposalgen_Form_DeviceAttributes extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_Bootstrap_Form_Horizontal
 {
     protected $_isAllowed = false;
 

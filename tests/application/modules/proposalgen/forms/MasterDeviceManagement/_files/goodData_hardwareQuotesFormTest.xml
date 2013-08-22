@@ -1,0 +1,35 @@
+<?xml version="1.0" standalone="yes"?>
+<hardwareQuotes>
+    <hardwareQuote>
+        <data>
+            <isSelling>0</isSelling>
+            <oemSku>asdfg</oemSku>
+            <dealerSku>gfsda</dealerSku>
+            <cost>cake walk bro</cost>
+        </data>
+    </hardwareQuote>
+    <hardwareQuote>
+        <data>
+            <isSelling>1</isSelling>
+            <oemSku>testers</oemSku>
+            <dealerSku>12345</dealerSku>
+            <cost>25.55</cost>
+        </data>
+    </hardwareQuote>
+    <hardwareQuote>
+        <data>
+            <isSelling>1</isSelling>
+            <oemSku>1</oemSku>
+            <dealerSku>1</dealerSku>
+            <cost>1</cost>
+        </data>
+    </hardwareQuote>
+    <hardwareQuote>
+        <data>
+            <isSelling>0</isSelling>
+            <oemSku />
+            <dealerSku />
+            <cost />
+        </data>
+    </hardwareQuote>
+</hardwareQuotes>

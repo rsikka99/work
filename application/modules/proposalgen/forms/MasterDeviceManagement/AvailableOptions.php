@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_AvailableOptions
+ * Class Proposalgen_Form_MasterDeviceManagement_AvailableOptions
  */
-class Proposalgen_Form_AvailableOptions extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_MasterDeviceManagement_AvailableOptions extends Twitter_Bootstrap_Form_Horizontal
 {
 
     public function init ()

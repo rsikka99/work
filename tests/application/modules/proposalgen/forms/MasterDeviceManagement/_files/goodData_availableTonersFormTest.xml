@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+<toners>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>3</availableTonerstonerColorId>
+            <availableTonersdealerSku />
+            <availableTonerssystemSku>ed2d2</availableTonerssystemSku>
+            <availableTonersyield>3000</availableTonersyield>
+            <availableTonersdealerCost>155</availableTonersdealerCost>
+            <availableTonerssystemCost>150</availableTonerssystemCost>
+        </data>
+    </toner>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>25</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>2</availableTonerstonerColorId>
+            <availableTonersdealerSku>testDealerSku1234</availableTonersdealerSku>
+            <availableTonerssystemSku>system[]sku</availableTonerssystemSku>
+            <availableTonersyield>144.00</availableTonersyield>
+            <availableTonersdealerCost>3</availableTonersdealerCost>
+            <availableTonerssystemCost>242.224244</availableTonerssystemCost>
+        </data>
+    </toner>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>3</availableTonerstonerColorId>
+            <availableTonersdealerSku />
+            <availableTonerssystemSku>1</availableTonerssystemSku>
+            <availableTonersyield>0</availableTonersyield>
+            <availableTonersdealerCost>252</availableTonersdealerCost>
+            <availableTonerssystemCost>150</availableTonerssystemCost>
+        </data>
+    </toner>
+</toners>

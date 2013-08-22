@@ -1,0 +1,17 @@
+<?xml version="1.0" standalone="yes"?>
+<deviceAttributes>
+    <deviceAttribute>
+        <data>
+            <isCopier>3</isCopier>
+            <isDuplex>1</isDuplex>
+            <isFax>1</isFax>
+            <reportsTonerLevels>1</reportsTonerLevels>
+            <ppmBlack>1</ppmBlack>
+            <ppmColor>1</ppmColor>
+            <launchDate>222222-06-20 00:00:00</launchDate>
+            <wattsPowerNormal>123</wattsPowerNormal>
+            <dutyCycle>12</dutyCycle>
+            <wattsPowerIdle>55</wattsPowerIdle>
+        </data>
+    </deviceAttribute>
+</deviceAttributes>

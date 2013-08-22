@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+<toners>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>2</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>3</availableTonerstonerColorId>
+            <availableTonersdealerSku>1</availableTonersdealerSku>
+            <availableTonerssystemSku>1</availableTonerssystemSku>
+            <availableTonersyield>1</availableTonersyield>
+            <availableTonersdealerCost>1</availableTonersdealerCost>
+            <availableTonerssystemCost>1</availableTonerssystemCost>
+        </data>
+    </toner>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>1</availableTonerstonerColorId>
+            <availableTonersdealerSku>1</availableTonersdealerSku>
+            <availableTonerssystemSku>1</availableTonerssystemSku>
+            <availableTonersyield>1</availableTonersyield>
+            <availableTonersdealerCost>a</availableTonersdealerCost>
+            <availableTonerssystemCost>a</availableTonerssystemCost>
+        </data>
+    </toner>
+    <toner>
+        <data>
+            <availableTonersmanufacturerId>Ã</availableTonersmanufacturerId>
+            <availableTonerstonerColorId>Ã</availableTonerstonerColorId>
+            <availableTonersdealerSku>testS1122344</availableTonersdealerSku>
+            <availableTonerssystemSku>55667878787_2s</availableTonerssystemSku>
+            <availableTonersyield>666</availableTonersyield>
+            <availableTonersdealerCost>1.1</availableTonersdealerCost>
+            <availableTonerssystemCost>1.1</availableTonerssystemCost>
+        </data>
+    </toner>
+</toners>

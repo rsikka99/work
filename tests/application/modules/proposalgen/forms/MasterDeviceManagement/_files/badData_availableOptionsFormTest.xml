@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<options>
+    <option>
+        <data>
+            <availableOptionsname />
+            <availableOptionsdescription />
+            <availableOptionscost />
+            <availableOptionsoemSku />
+            <availableOptionsdealerSku />
+        </data>
+    </option>
+    <option>
+        <data>
+            <availableOptionsname>testNane</availableOptionsname>
+            <availableOptionsdescription>qweqwe</availableOptionsdescription>
+            <availableOptionscost>2CAN</availableOptionscost>
+            <availableOptionsoemSku>22</availableOptionsoemSku>
+            <availableOptionsdealerSku>qwe</availableOptionsdealerSku>
+        </data>
+    </option>
+    <option>
+        <data>
+            <availableOptionsname>33</availableOptionsname>
+            <availableOptionsdescription>22</availableOptionsdescription>
+            <availableOptionscost />
+            <availableOptionsoemSku>232</availableOptionsoemSku>
+            <availableOptionsdealerSku>123</availableOptionsdealerSku>
+        </data>
+    </option>
+</options>

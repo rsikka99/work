@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_HardwareConfigurations
+ * Class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations
  */
-class Proposalgen_Form_Delete extends Twitter_Bootstrap_Form_Vertical
+class Proposalgen_Form_MasterDeviceManagement_Delete extends Twitter_Bootstrap_Form_Vertical
 {
 
     /**

@@ -1,0 +1,36 @@
+<?xml version="1.0" standalone="yes"?>
+<suppliesAndServices>
+    <suppliesAndService>
+        <data>
+            <dealerPartsCostPerPage>1</dealerPartsCostPerPage>
+            <partsCostPerPage>2</partsCostPerPage>
+            <dealerLaborCostPerPage>3</dealerLaborCostPerPage>
+            <laborCostPerPage>4</laborCostPerPage>
+            <tonerConfigId>1</tonerConfigId>
+            <isLeased>0</isLeased>
+            <leasedTonerYield>asdf</leasedTonerYield>
+        </data>
+    </suppliesAndService>
+    <suppliesAndService>
+        <data>
+            <dealerPartsCostPerPage>1</dealerPartsCostPerPage>
+            <partsCostPerPage>2</partsCostPerPage>
+            <dealerLaborCostPerPage>3</dealerLaborCostPerPage>
+            <laborCostPerPage>4</laborCostPerPage>
+            <tonerConfigId>1</tonerConfigId>
+            <isLeased>1</isLeased>
+            <leasedTonerYield>150</leasedTonerYield>
+        </data>
+    </suppliesAndService>
+    <suppliesAndService>
+        <data>
+            <dealerPartsCostPerPage>2</dealerPartsCostPerPage>
+            <partsCostPerPage>2</partsCostPerPage>
+            <dealerLaborCostPerPage>3</dealerLaborCostPerPage>
+            <laborCostPerPage>4</laborCostPerPage>
+            <tonerConfigId>1</tonerConfigId>
+            <isLeased>0</isLeased>
+            <leasedTonerYield>0</leasedTonerYield>
+        </data>
+    </suppliesAndService>
+</suppliesAndServices>

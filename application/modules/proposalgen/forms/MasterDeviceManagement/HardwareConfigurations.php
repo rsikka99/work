@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Form_HardwareConfigurations
+ * Class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations
  */
-class Proposalgen_Form_HardwareConfigurations extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations extends Twitter_Bootstrap_Form_Horizontal
 {
     /**
      * If this is set to false it the form will display a dropdown to select a device.
@@ -89,25 +89,26 @@ class Proposalgen_Form_HardwareConfigurations extends Twitter_Bootstrap_Form_Hor
                 foreach ($device->getDeviceOptions() as $deviceOption)
                 {
                     $deviceConfigurationOption = $deviceConfigurationOptionMapper->find(array($this->_deviceConfigurationId, $deviceOption->getOption()->id));
-                    $optionElement             = $this->createElement('text', "hardwareConfigurationsoption{$deviceOption->optionId}", array(
-                                                                                                                                            'label'      => $deviceOption->getOption()->name,
-                                                                                                                                            'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
-                                                                                                                                            'class'      => 'span4',
-                                                                                                                                            'maxlength'  => 8,
-                                                                                                                                            'required'   => false,
-                                                                                                                                            'allowEmpty' => true,
-                                                                                                                                            'filters'    => array(
-                                                                                                                                                'StringTrim',
-                                                                                                                                                'StripTags'
-                                                                                                                                            ),
-                                                                                                                                            'validators' => array(
-                                                                                                                                                array(
-                                                                                                                                                    'validator' => 'Between',
-                                                                                                                                                    'options'   => array('min' => 0, 'max' => 1000),
-                                                                                                                                                ),
-                                                                                                                                                'int'
-                                                                                                                                            ),
-                                                                                                                                       )
+
+                    $optionElement = $this->createElement('text', "hardwareConfigurationsoption{$deviceOption->optionId}", array(
+                                                                                                                                'label'      => $deviceOption->getOption()->name,
+                                                                                                                                'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
+                                                                                                                                'class'      => 'span4',
+                                                                                                                                'maxlength'  => 8,
+                                                                                                                                'required'   => false,
+                                                                                                                                'allowEmpty' => true,
+                                                                                                                                'filters'    => array(
+                                                                                                                                    'StringTrim',
+                                                                                                                                    'StripTags'
+                                                                                                                                ),
+                                                                                                                                'validators' => array(
+                                                                                                                                    array(
+                                                                                                                                        'validator' => 'Between',
+                                                                                                                                        'options'   => array('min' => 0, 'max' => 1000),
+                                                                                                                                    ),
+                                                                                                                                    'int'
+                                                                                                                                ),
+                                                                                                                           )
                     );
                     $optionElement->setAttrib('class', 'span1');
                     $optionElement->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');

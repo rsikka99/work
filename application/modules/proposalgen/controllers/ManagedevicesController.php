@@ -445,17 +445,17 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
             if (count($formData['deviceAttributes']) > 0)
             {
-                $forms['deviceAttributes'] = new Proposalgen_Form_DeviceAttributes(null, $isAllowed);
+                $forms['deviceAttributes'] = new Proposalgen_Form_MasterDeviceManagement_DeviceAttributes(null, $isAllowed);
             }
 
             if (count($formData['hardwareOptimization']) > 0)
             {
-                $forms['hardwareOptimization'] = new Proposalgen_Form_HardwareOptimization();
+                $forms['hardwareOptimization'] = new Proposalgen_Form_MasterDeviceManagement_HardwareOptimization();
             }
 
             if (count($formData['hardwareQuote']) > 0)
             {
-                $forms['hardwareQuote'] = new Proposalgen_Form_HardwareQuote();
+                $forms['hardwareQuote'] = new Proposalgen_Form_MasterDeviceManagement_HardwareQuote();
             }
 
             $formErrors = array();
@@ -546,7 +546,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             }
             else if ($formName == 'hardwareConfigurationsForm')
             {
-                $form = new Proposalgen_Form_HardwareConfigurations(0, $masterDeviceId);
+                $form = new Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations(0, $masterDeviceId);
             }
             else if ($formName == 'availableTonersForm')
             {
@@ -743,7 +743,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         $id             = $this->_getParam('id', false);
 
         $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($id);
-        $form                = new Proposalgen_Form_HardwareConfigurations($id, $masterDeviceId);
+        $form                = new Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations($id, $masterDeviceId);
 
         if ($deviceConfiguration instanceof Quotegen_Model_DeviceConfiguration)
         {
