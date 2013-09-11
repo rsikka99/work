@@ -778,7 +778,7 @@ class Proposalgen_Service_ManageMasterDevices
                         // We need to apply a random 5 to 10% margin to the system cost they add to our system
                         // Their dealer cost gets set to the cost they chose
                         $validData['dealerCost'] = $validData['systemCost'];
-                        $toner->cost             = Tangent_Accounting::obfuscateTonerCost($validData['systemCost']);
+                        $toner->cost             = Proposalgen_Service_Toner::obfuscateTonerCost($validData['systemCost']);
                         $toner->isSystemDevice   = 0;
                     }
                     $toner->tonerColorId = $validData['tonerColorId'];
