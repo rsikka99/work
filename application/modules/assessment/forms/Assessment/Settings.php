@@ -257,9 +257,11 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
         ->setAttrib('inputprepend', '$')
         ->setAttrib('inputappend', ' / KWh')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+        ->addValidator('between', true, array(
+                                             'inclusive' => true,
+                                             'min'       => 0,
+                                             'max'       => 25
+                                        ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -320,7 +322,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
-        $admin_charge->setLabel('Admin Charge')
+        $admin_charge->setLabel('Admin Cost Per Page')
         ->addValidator(new Zend_Validate_Float())
         ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
@@ -329,9 +331,11 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
         ->setAttrib('inputprepend', '$')
         ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+        ->addValidator('between', true, array(
+                                             'inclusive' => true,
+                                             'min'       => 0,
+                                             'max'       => 5
+                                        ));
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($admin_charge);
@@ -339,7 +343,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
-        $labor_cost->setLabel('Labor Cost')
+        $labor_cost->setLabel('Labor Cost Per Page')
         ->addValidator(new Zend_Validate_Float())
         ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
@@ -348,9 +352,11 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
         ->setAttrib('inputprepend', '$')
         ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+        ->addValidator('between', true, array(
+                                             'inclusive' => true,
+                                             'min'       => 0,
+                                             'max'       => 5
+                                        ));
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($labor_cost);
@@ -358,7 +364,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         // Service Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
-        $parts_cost->setLabel('Parts Cost')
+        $parts_cost->setLabel('Parts Cost Per Page')
         ->addValidator(new Zend_Validate_Float())
         ->setAttrib('class', 'span2')
         ->setAttrib('maxlength', 10)
@@ -367,9 +373,12 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
         ->setAttrib('inputprepend', '$')
         ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+        ->addValidator('between', true, array(
+                                             'inclusive' => true,
+                                             'min'       => 0,
+                                             'max'       => 5
+                                        ));
+
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($parts_cost);

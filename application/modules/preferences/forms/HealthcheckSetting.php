@@ -45,6 +45,18 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
             'Float'
         );
 
+        $energyCostValidator = array(
+            array(
+                'validator' => 'Between',
+                'options'   => array(
+                    'min'       => 0,
+                    'max'       => 25,
+                    'inclusive' => true
+                )
+            ),
+            'Float'
+        );
+
         $cppValidator = array(
             array(
                 'validator' => 'Between',
@@ -108,20 +120,20 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
         $this->addElement('text', 'kilowattsPerHour', array(
                                                            'label'      => 'Energy Cost',
                                                            'append'     => '$ / KWh',
-                                                           'validators' => $costValidator
+                                                           'validators' => $energyCostValidator
                                                       ));
         $this->addElement('text', 'adminCostPerPage', array(
-                                                           'label'      => 'Admin Cost',
+                                                           'label'      => 'Admin Cost Per Page',
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'laborCostPerPage', array(
-                                                           'label'      => 'Labor Cost',
+                                                           'label'      => 'Labor Cost Per Page',
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));
         $this->addElement('text', 'partsCostPerPage', array(
-                                                           'label'      => 'Parts Cost',
+                                                           'label'      => 'Parts Cost Per Page',
                                                            'append'     => '$ / page',
                                                            'validators' => $cppValidator
                                                       ));

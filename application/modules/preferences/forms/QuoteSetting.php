@@ -99,7 +99,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
                                                 ));
 
         $this->addElement('text', 'adminCostPerPage', array(
-                                                           'label'      => 'Admin Cost:',
+                                                           'label'      => 'Admin Cost Per Page:',
                                                            'required'   => true,
                                                            'append'     => '$ / per page',
                                                            'filters'    => array(

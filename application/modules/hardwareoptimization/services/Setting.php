@@ -118,7 +118,7 @@ class Hardwareoptimization_Service_Setting
         {
             foreach ($validData as $key => $value)
             {
-                if (empty($value))
+                if (empty($value) && $value != 0)
                 {
                     unset($validData [$key]);
                 }

@@ -72,4 +72,16 @@
             <targetColorCostPerPage>1</targetColorCostPerPage>
         </data>
     </setting>
+    <setting>
+        <data>
+            <costThreshold>90044564689423331</costThreshold>
+            <pageCoverageMonochrome>50</pageCoverageMonochrome>
+            <pageCoverageColor>50</pageCoverageColor>
+            <adminCostPerPage>0</adminCostPerPage>
+            <partsCostPerPage>0</partsCostPerPage>
+            <laborCostPerPage>0</laborCostPerPage>
+            <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>1</targetColorCostPerPage>
+        </data>
+    </setting>
 </settings>

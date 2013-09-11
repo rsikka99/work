@@ -12,7 +12,7 @@
             <actualPageCoverageMono>0.0001</actualPageCoverageMono>
             <actualPageCoverageColor>99.99</actualPageCoverageColor>
             <monthlyLeasePayment>1</monthlyLeasePayment>
-            <kilowattsPerHour>10000</kilowattsPerHour>
+            <kilowattsPerHour>0</kilowattsPerHour>
         </data>
     </reportSetting>
 </reportSettings>

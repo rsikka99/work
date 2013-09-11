@@ -53,9 +53,9 @@ class Preferences_Service_HardwareoptimizationSetting
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
                 $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-                $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
-                $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
-                $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
+                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"],4));
+                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"],4));
+                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"],4));
                 $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
                 $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 // Re-load the settings into report settings
@@ -157,7 +157,7 @@ class Preferences_Service_HardwareoptimizationSetting
         {
             foreach ($validData as $key => $value)
             {
-                if (empty($value))
+                if (empty($value) && $value != 0)
                 {
                     unset($validData [$key]);
                 }

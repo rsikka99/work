@@ -55,4 +55,15 @@
             <dealerColorRankSetArray>6</dealerColorRankSetArray>
         </data>
     </quote>
+    <quote>
+        <data>
+            <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
+            <pageCoverageColor>99.99999999</pageCoverageColor>
+            <deviceMargin>0.0032424</deviceMargin>
+            <pageMargin>0.000000001</pageMargin>
+            <adminCostPerPage>0</adminCostPerPage>
+            <dealerMonochromeRankSetArray>3</dealerMonochromeRankSetArray>
+            <dealerColorRankSetArray>6</dealerColorRankSetArray>
+        </data>
+    </quote>
 </quotes>

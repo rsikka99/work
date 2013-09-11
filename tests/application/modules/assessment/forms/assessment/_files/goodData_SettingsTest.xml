@@ -34,7 +34,7 @@
             <leasedColorCostPerPage>0.0043</leasedColorCostPerPage>
             <mpsBwCostPerPage>0.051</mpsBwCostPerPage>
             <mpsColorCostPerPage>0.061</mpsColorCostPerPage>
-            <kilowattsPerHour>181</kilowattsPerHour>
+            <kilowattsPerHour>23</kilowattsPerHour>
             <customerMonochromeRankSetArray>3</customerMonochromeRankSetArray>
             <customerColorRankSetArray>3</customerColorRankSetArray>
             <actualPageCoverageMono>75</actualPageCoverageMono>

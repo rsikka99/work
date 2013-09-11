@@ -67,12 +67,12 @@ class Preferences_Service_ReportSetting
                 $this->_form->getElement("leasedColorCostPerPage")->setDescription($populateSettings["leasedColorCostPerPage"]);
                 $this->_form->getElement("mpsBwCostPerPage")->setDescription($populateSettings["mpsBwCostPerPage"]);
                 $this->_form->getElement("mpsColorCostPerPage")->setDescription($populateSettings["mpsColorCostPerPage"]);
-                $this->_form->getElement("kilowattsPerHour")->setDescription($populateSettings["kilowattsPerHour"]);
+                $this->_form->getElement("kilowattsPerHour")->setDescription(number_Format($populateSettings["kilowattsPerHour"],4));
                 $this->_form->getElement("actualPageCoverageMono")->setDescription($populateSettings["actualPageCoverageMono"]);
                 $this->_form->getElement("actualPageCoverageColor")->setDescription($populateSettings["actualPageCoverageColor"]);
-                $this->_form->getElement("adminCostPerPage")->setDescription($populateSettings["adminCostPerPage"]);
-                $this->_form->getElement("laborCostPerPage")->setDescription($populateSettings["laborCostPerPage"]);
-                $this->_form->getElement("partsCostPerPage")->setDescription($populateSettings["partsCostPerPage"]);
+                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"],4));
+                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"],4));
+                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"],4));
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings;
             }
@@ -169,7 +169,7 @@ class Preferences_Service_ReportSetting
         {
             foreach ($validData as $key => $value)
             {
-                if (empty($value))
+                if (empty($value) && $value != 0)
                 {
                     unset($validData [$key]);
                 }

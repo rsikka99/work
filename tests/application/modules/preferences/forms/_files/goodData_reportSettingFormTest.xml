@@ -16,7 +16,7 @@
             <assessmentReportMargin>-100</assessmentReportMargin>
             <monthlyLeasePayment>1</monthlyLeasePayment>
             <defaultPrinterCost>1000</defaultPrinterCost>
-            <kilowattsPerHour>10000</kilowattsPerHour>
+            <kilowattsPerHour>25</kilowattsPerHour>
         </data>
     </reportSetting>
     <reportSetting>
@@ -35,7 +35,7 @@
             <assessmentReportMargin>40</assessmentReportMargin>
             <monthlyLeasePayment>1</monthlyLeasePayment>
             <defaultPrinterCost>1000</defaultPrinterCost>
-            <kilowattsPerHour>10000</kilowattsPerHour>
+            <kilowattsPerHour>0</kilowattsPerHour>
         </data>
     </reportSetting>
     <reportSetting>
@@ -54,7 +54,26 @@
             <assessmentReportMargin>100</assessmentReportMargin>
             <monthlyLeasePayment>1</monthlyLeasePayment>
             <defaultPrinterCost>1000</defaultPrinterCost>
-            <kilowattsPerHour>10000</kilowattsPerHour>
+            <kilowattsPerHour>15</kilowattsPerHour>
+        </data>
+    </reportSetting>
+    <reportSetting>
+        <data>
+            <leasedBwCostPerPage>0.001</leasedBwCostPerPage>
+            <leasedColorCostPerPage>4.99</leasedColorCostPerPage>
+            <mpsBwCostPerPage>0.0019</mpsBwCostPerPage>
+            <mpsColorCostPerPage>0.02</mpsColorCostPerPage>
+            <adminCostPerPage>0</adminCostPerPage>
+            <laborCostPerPage>0</laborCostPerPage>
+            <partsCostPerPage>0</partsCostPerPage>
+            <pageCoverageMono>99.99</pageCoverageMono>
+            <pageCoverageColor>0.001</pageCoverageColor>
+            <actualPageCoverageMono>0.0001</actualPageCoverageMono>
+            <actualPageCoverageColor>99.99</actualPageCoverageColor>
+            <assessmentReportMargin>100</assessmentReportMargin>
+            <monthlyLeasePayment>1</monthlyLeasePayment>
+            <defaultPrinterCost>1000</defaultPrinterCost>
+            <kilowattsPerHour>0</kilowattsPerHour>
         </data>
     </reportSetting>
 </reportSettings>

@@ -33,12 +33,12 @@
             <leasedColorCostPerPage>99999999999</leasedColorCostPerPage>
             <mpsBwCostPerPage>99999999999</mpsBwCostPerPage>
             <mpsColorCostPerPage>99999999999</mpsColorCostPerPage>
-            <kilowattsPerHour>99999999999</kilowattsPerHour>
+            <kilowattsPerHour>25</kilowattsPerHour>
             <pageCoverageMonochrome>99.999999999</pageCoverageMonochrome>
             <pageCoverageColor>99.999999999</pageCoverageColor>
-            <adminCostPerPage>99999999999</adminCostPerPage>
-            <laborCostPerPage>99999999999</laborCostPerPage>
-            <partsCostPerPage>99999999999</partsCostPerPage>
+            <adminCostPerPage>5</adminCostPerPage>
+            <laborCostPerPage>5</laborCostPerPage>
+            <partsCostPerPage>5</partsCostPerPage>
             <averageItHourlyRate>99999999999</averageItHourlyRate>
             <hoursSpentOnIt>99999999999</hoursSpentOnIt>
             <costOfLabor>0.000000001</costOfLabor>
