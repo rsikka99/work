@@ -285,6 +285,31 @@ $styles = (object)array(
                 "valign"           => "center"
             )
         ),
+        "uniqueDevices"       => (object)array(
+            "tablestyle" => array(
+                'cellMarginTop'    => 30,
+                'cellMarginRight'  => 30,
+                'cellMarginBottom' => 30,
+                'cellMarginLeft'   => 30
+            ),
+            "rowheight"  => 200,
+            "firstCell"  => array(
+                "borderTopSize"    => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "middleCell" => array(
+                "borderTopSize"    => 1,
+                "borderBottomSize" => 1,
+                "valign"           => "center"
+            ),
+            "lastCell"   => array(
+                "borderTopSize"    => 1,
+                "borderBottomSize" => 1,
+                "borderRightSize"  => 1,
+                "valign"           => "center"
+            )),
         "utilization"         => (object)array(
             "tablestyle" => array(
                 'cellMarginTop'    => 100,
@@ -572,10 +597,10 @@ $styles = (object)array(
         ),
         "fleetattributes"     => (object)array(
             "tablestyle"      => array(
-                'cellMarginTop'    => 100,
-                'cellMarginRight'  => 100,
-                'cellMarginBottom' => 100,
-                'cellMarginLeft'   => 100
+                'cellMarginTop'    => 50,
+                'cellMarginRight'  => 50,
+                'cellMarginBottom' => 50,
+                'cellMarginLeft'   => 50
             ),
             "rowheight"       => 100,
             "cellHeader"      => array(
@@ -655,22 +680,22 @@ $styles = (object)array(
 
 
 $titledata = array(
-    "phpword"        => $phpword,
-    "section"        => $titlepageSection,
-    "healthcheckViewModel"       => $this->healthcheckViewModel,
-    "styles"         => $styles,
-    "dealerLogoFile" => $this->dealerLogoFile,
+    "phpword"              => $phpword,
+    "section"              => $titlepageSection,
+    "healthcheckViewModel" => $this->healthcheckViewModel,
+    "styles"               => $styles,
+    "dealerLogoFile"       => $this->dealerLogoFile,
 );
 
 $data = array(
-    "phpword"     => $phpword,
-    "section"     => $section,
-    "healthcheckViewModel"    => $this->healthcheckViewModel,
-    "styles"      => $styles,
-    "brandName"   => "MPSToolbox.com",
-    "companyName" => "MPSToolbox.com",
-    "jitName"     => "MPSToolbox.com JIT",
-    "jitFullName" => "MPSToolbox.com Just In Time (JIT)"
+    "phpword"              => $phpword,
+    "section"              => $section,
+    "healthcheckViewModel" => $this->healthcheckViewModel,
+    "styles"               => $styles,
+    "brandName"            => "MPSToolbox.com",
+    "companyName"          => "MPSToolbox.com",
+    "jitName"              => "MPSToolbox.com JIT",
+    "jitFullName"          => "MPSToolbox.com Just In Time (JIT)"
 );
 // Actual document pages
 $this->partial("report/healthcheck/docx/01_titlepage.phtml", $titledata);

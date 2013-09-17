@@ -15,12 +15,6 @@ $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
-$gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
-$gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($healthcheckViewModel->getRanking()->getPrintingHardwareUsage()->RankingText);
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($healthcheckViewModel->getRanking()->getPrintingHardwareUsage()->Rank, 1), "gradeFont", "gradeParagraph");
-
-$section->addTextBreak();
 $section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
 $section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())));
 
@@ -122,7 +116,7 @@ $section->addTextBreak();
 
 $section->addTitle($this->translate('Color Usage'), 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices (excluding leased devices) that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($healthcheckViewModel->getNumberOfColorCapablePurchasedDevices()), number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumePurchasedColorMonthly(), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($healthcheckViewModel->getNumberOfColorCapableDevices()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

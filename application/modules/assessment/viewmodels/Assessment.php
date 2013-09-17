@@ -16,6 +16,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * All devices that have ages older than this are considered old/
      */
     const OLD_DEVICE_THRESHOLD = 10;
+    /**
+     * Average Monthly Pages Per Employee
+     */
+    const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
+    /**
+     * Average Monthly Pages Per Device
+     */
+    const AVERAGE_MONTHLY_PAGES_PER_DEVICE = 1500;
+
+    /**
+     * AVERAGE NUMBER OF EMPLOYEES PER DEVICE
+     */
+    const AVERAGE_EMPLOYEES_PER_DEVICE = 4.4;
 
     public static $_instance;
 
@@ -1996,11 +2009,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->Graphs))
         {
-            // Variables that could be settings
-            $OD_AverageMonthlyPagesPerEmployee = 200;
-            $OD_AverageMonthlyPages            = 4200;
-            $OD_AverageEmployeesPerDevice      = 4.4;
-
             // Other variables used in several places
             $companyName   = $this->assessment->getClient()->companyName;
             $employeeCount = $this->assessment->getClient()->employeeCount;
@@ -2157,7 +2165,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
              * -- AverageMonthlyPagesBarGraph
              */
             $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
-            $highest          = ($averagePageCount > $OD_AverageMonthlyPages) ? $averagePageCount : $OD_AverageMonthlyPages;
+            $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
             $barGraph->setVisibleAxes(array(
@@ -2170,7 +2178,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       $OD_AverageMonthlyPages
+                                       self::AVERAGE_MONTHLY_PAGES_PER_DEVICE
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -2194,7 +2202,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
             $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $employeeCount);
-            $highest          = ($OD_AverageMonthlyPagesPerEmployee > $pagesPerEmployee) ? $OD_AverageMonthlyPagesPerEmployee : $pagesPerEmployee;
+            $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
             $barGraph->setVisibleAxes(array(
@@ -2207,7 +2215,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       $OD_AverageMonthlyPagesPerEmployee
+                                       Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -2230,7 +2238,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
             $devicesPerEmployee = round($employeeCount / $this->getDevices()->allIncludedDeviceInstances->getCount(), 2);
-            $highest            = ($devicesPerEmployee > $OD_AverageEmployeesPerDevice) ? $devicesPerEmployee : $OD_AverageEmployeesPerDevice;
+            $highest            = ($devicesPerEmployee > self::AVERAGE_EMPLOYEES_PER_DEVICE) ? $devicesPerEmployee : self::AVERAGE_EMPLOYEES_PER_DEVICE;
             $barGraph           = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Employees per|printing device");
             $barGraph->setVisibleAxes(array(
@@ -2243,7 +2251,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       $OD_AverageEmployeesPerDevice
+                                       self::AVERAGE_EMPLOYEES_PER_DEVICE
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);

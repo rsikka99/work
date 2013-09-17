@@ -11,30 +11,24 @@ $section = $this->section;
 
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs   = $healthcheckViewModel->getGraphs();
+$graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
 $section->addTitle($this->translate("Analysis: Technology Reliability and User Productivity"), 1);
-$gradeTable = $section->addTable($this->styles->tables->grades->tablestyle);
-$gradeTable->addRow();
-$gradeTable->addCell(8028, $this->styles->tables->grades->cell1)->addText($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->RankingText);
-$gradeTable->addCell(1000, $this->styles->tables->grades->cell2)->addText(number_format($healthcheckViewModel->getRanking()->getTechnologyReliabilityAndUserProductivity()->Rank, 1), "gradeFont", "gradeParagraph");
-
-$section->addTextBreak();
 $section->addTitle($this->translate('Age of Printing Devices'), 2);
 $section->addText(sprintf($this->translate('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.'), number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1)));
 
-$imageTable = $section->addTable(array (
-    'borderBottomSize' => 1 
-));
+$imageTable = $section->addTable(array(
+                                      'borderBottomSize' => 1
+                                 ));
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array (
-    'valign' => 'center' 
-));
+$cell = $imageTable->addCell(9028.8, array(
+                                          'valign' => 'center'
+                                     ));
 
-$cell->addImage($graphs ['AgeBarGraph'], array (
-    'align' => 'center' 
-));
+$cell->addImage($graphs ['AgePieGraph'], array(
+                                              'align' => 'center'
+                                         ));
 $section->addText($this->translate('The breakdown of the age of your printing devices is shown above.'));
 $section->addTextBreak();
 
@@ -49,4 +43,4 @@ $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage(
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['colorCapablePieChart']);
 
 $section->addTextBreak();
-$section->addText(sprintf($this->translate('If you are in need of additional features and functionality to improve workflow and print quality, %1$s has a variety of printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.'),$this->companyName));
+$section->addText(sprintf($this->translate('If you are in need of additional features and functionality to improve workflow and print quality, %1$s has a variety of printing devices that can meet your specific business needs. If you already have everything you need, we can manage the printing assets you have.'), $this->companyName));

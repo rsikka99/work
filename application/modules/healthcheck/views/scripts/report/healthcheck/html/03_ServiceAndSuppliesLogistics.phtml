@@ -1,108 +1,127 @@
 <?php
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
-$graphs   = $healthcheckViewModel->getGraphs();
+$graphs = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
-<br />
-<table cellspacing="0" class="gradesTable">
-    <tr>
-        <td class="gradeDescription">
-            <p><?php echo $healthcheckViewModel->getRanking()->getSuppliesAndServiceLogistics()->RankingText; ?></p>
-        </td>
-        <td class="gradeNumber"><?php echo number_format($healthcheckViewModel->getRanking()->getSuppliesAndServiceLogistics()->Rank, 1); ?></td>
-    </tr>
-</table>
-<br />
 <div class="pheader">Printing Device Management Breakdown</div>
 <p>Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
 <br />
 <div class="center">
     <table>
         <tbody>
-            <tr>
-                <td><img src="<?php echo $graphs[1]; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs[2]; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-            </tr>
+        <tr>
+            <td><img src="<?php echo $graphs['UnmanagedVsManagedDevices']; ?>" /></td>
+            <!-- Devices leased/Devices Purchased -->
+            <td><img src="<?php echo $graphs['PagesWithOrWithoutJIT']; ?>" /></td>
+            <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+        </tr>
         </tbody>
     </table>
 </div>
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
-<p>Out of your <strong><?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?></strong> networked printing devices, you have of <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. We estimate that <strong><?php echo count($healthcheckViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices are leased machines, for which supplies are included in your contract. The <strong><?php echo count($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?></strong> remaining machines consist of <strong><?php echo $healthcheckViewModel->getNumberOfUniquePurchasedModels(); ?></strong> different models and use <strong><?php echo $healthcheckViewModel->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you have an estimated <strong>$<?php echo number_format($healthcheckViewModel->getCashHeldInInventory()); ?>
-    in operating cash held in printer supplies inventory</strong> at any given time.</p>
+<p>Out of your
+    <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
+    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
+</p>
 <div class="center">
-    <img src="<?php echo $graphs[3] ?>" /> <!--  Giant pie chart -->
+    <img src="<?php echo $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->
 </div>
+<?php
+$uniqueDeviceArray = $healthcheckViewModel->getUniqueDeviceCountArray();
+$totalAmount = count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances);
+$amountOfRows = ceil(count($uniqueDeviceArray) / 2);
+
+//FirstHalf is whether we are writing to the left side of the table or the right side.
+$firstColumn = true;
+$colorCounter = 0;
+
+$tableData = array();
+
+?>
+<table class="table-bordered" style="border-collapse: collapse;">
+    <?php
+
+    $counter = 0;
+    foreach ($uniqueDeviceArray as $key => $value)
+    {
+        if ($counter < $amountOfRows)
+        {
+            $tableData[$counter]["column1"] = array(
+                "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
+                "name"    => $key,
+                "percent" => number_format(($value / $totalAmount) * 100, 1) . "%",
+            );
+        }
+        else
+        {
+            $tableData[$counter - $amountOfRows]["column2"] = array(
+                "color"   => Healthcheck_ViewModel_Healthcheck::$COLOR_ARRAY[$counter],
+                "name"    => $key,
+                "percent" => number_format(($value / $totalAmount) * 100, 1) . "%",
+            );
+
+        }
+        $counter++;
+    }
+    ?>
+    <?php foreach ($tableData as $row) : ?>
+        <tr>
+            <?php if (array_key_exists("column1", $row)) : ?>
+                <td style="border:1px solid">
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column1"]["color"]; ?>"></div>
+                </td>
+                <td style="border:1px solid"><?= $row["column1"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column1"]["percent"] ?></td>
+            <?php else : ?>
+                <td colspan="3">&nbsp;</td>
+            <?php endif; ?>
+
+
+            <?php if (array_key_exists("column2", $row)) : ?>
+                <td style="border:1px solid">
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column2"]["color"]; ?>"></div>
+                </td>
+                <td style="border:1px solid"><?= $row["column2"]["name"]; ?></td>
+                <td style="border:1px solid"><?= $row["column2"]["percent"] ?></td>
+            <?php else : ?>
+                <td colspan="3">&nbsp;</td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+</table>
 <p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. <?php echo $this->reportName ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
 
+<div class="pheader">Number of Printing Device Vendors</div>
+<p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
+    networked printing devices, you have <strong>
+        <?php echo count($healthcheckViewModel->getDeviceVendorCount());
+        ?></strong> different vendors. Each section of the chart below represents a single vendor name.
+
+<div class="center">
+    <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
+</div>
+
 <div class="pheader">Number of Printing Devices Compatible with <?php echo $this->jitName ?></div>
-<p>Out of your <?php echo $healthcheckViewModel->getDevices()->purchasedDeviceInstances->getCount(); ?>
-    networked printing devices(excluding leased devices), you have <strong><?php echo $healthcheckViewModel->getNumberOfDevicesReportingTonerLevels(); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo $healthcheckViewModel->getNumberOfDevicesNotReportingTonerLevels()?>
-    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.</p>
+<p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
+    networked printing devices, you have
+    <strong><?php echo count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels()); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels()) ?>
+    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.
+</p>
 <br />
 <div class="center">
     <table>
         <tbody>
-            <tr>
-                <td><img src="<?php echo $graphs['CompatibleATRBarGraph']; ?>" /></td> <!-- Devices leased/Devices Purchased -->
-                <td><img src="<?php echo $graphs['PagesPrinterATRPieGraph']; ?>" /></td> <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
-            </tr>
+        <tr>
+            <td><img src="<?php echo $graphs['CompatibleJITBarGraph']; ?>" /></td>
+            <!-- Devices leased/Devices Purchased -->
+            <td><img src="<?php echo $graphs['PagesPrinterJITPieGraph']; ?>" /></td>
+            <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+        </tr>
         </tbody>
     </table>
 </div>
 
 <div class="pheader">Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs</div>
-<table cellspacing="0">
-    <thead>
-        <tr>
-            <th class="noborder" width="150px"></th>
-            <th class="noborder"><strong>Monthly Volume</strong></th>
-            <th class="noborder"><strong>Cost per Page (OEM)</strong></th>
-            <th class="noborder shaded"><strong>Total Cost (OEM)</strong></th>
-            <th class="noborder"><strong>Cost per Page (Comp.)</strong></th>
-            <th class="noborder shaded"><strong>Total Cost (Comp.)</strong></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>Black Toner</strong></td>
-            <td class="right"><?php echo number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly()) ?></td>
-            <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostOemMonochromeMonthly(), array('precision' => 2)) ?></td>
-            <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleMonochromeMonthly(), array('precision' => 2)) ?></td>
-        </tr>
-        <tr>
-            <td><strong>Color Toner</strong></td>
-            <td class="right"><?php echo number_format($healthcheckViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()) ?></td>
-            <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageOemOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostOemColorMonthly(), array('precision' => 2)) ?></td>
-            <td class="right"><?php echo $this->currency($healthcheckViewModel->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage, array('precision' => 4)) ?></td>
-            <td class="shaded right"><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleColorMonthly(), array('precision' => 2)) ?></td>
-        </tr>
-        <tr>
-            <td><strong>TOTAL (Monthly)</strong></td>
-            <td class="right"></td>
-            <td class="right"></td>
-            <td class="shaded right"><strong><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostOemCombinedMonthly(), array('precision' => 2)) ?></strong></td>
-            <td class="right"></td>
-            <td class="shaded right"><strong><?php echo $this->currency($healthcheckViewModel->calculateAverageTotalCostCompatibleCombinedMonthly(), array('precision' => 2)) ?></strong></td>
-        </tr>
-        <tr>
-            <td><strong>TOTAL (Annual)</strong></td>
-            <td class="right"></td>
-            <td class="right"></td>
-            <td class="shaded right"><strong><?php echo $this->currency($healthcheckViewModel->calculateEstimatedOemTonerCostAnnually(), array('precision' => 2)); ?></strong></td>
-            <td class="right"></td>
-            <td class="shaded right"><strong><?php echo $this->currency($healthcheckViewModel->calculateEstimatedCompTonerCostAnnually(), array('precision' => 2)); ?></strong></td>
-        </tr>
-    </tbody>
-</table>
-<div class="pheader">DIFFERENCE<span style="text-align:right;float:right"><?php echo $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)) ?></span></div>
-<p>
-        Where compatible substitutes are available, we estimate that by switching even 50% of your OEM toner to compatible toner, you can save an estimated <strong><?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 0)) ?>
-    per year</strong> in toner costs.
-    </p>
-<div class="center">
-<img src="<?php echo $graphs['DifferenceBarGraph']; ?>" />
-</div>
+<p>You are saving money by moving to private brand toner for the machines that are on your JIT Program.</p>
+<p>MPSToolbox.com analyzed your usage on your ink and toner spend and you can save an additional <?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)) ?> over the next 6 months by moving to the suggested items on the attached analysis.</p>
