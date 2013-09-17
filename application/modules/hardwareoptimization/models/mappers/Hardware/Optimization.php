@@ -10,6 +10,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
     public $col_id = 'id';
     public $col_clientId = 'clientId';
     public $col_rmsUploadId = "rmsUploadId";
+    public $col_dateCreated = 'dateCreated';
 
     /**
      * The default db table class to use
@@ -253,6 +254,11 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
      */
     public function fetchAllForClient ($clientId, $order = null, $count = 50, $offset = null)
     {
+        if ($order == null)
+        {
+            $order = $this->col_dateCreated . " DESC";
+        }
+
         return $this->fetchAll(array("{$this->col_clientId} = ?" => $clientId), $order, $count, $offset);
     }
 
@@ -270,7 +276,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
 
-        $hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+        $hardwareOptimization                                   = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 

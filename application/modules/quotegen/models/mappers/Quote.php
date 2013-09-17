@@ -18,6 +18,7 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     public $col_id = 'id';
     public $col_clientId = 'clientId';
     public $col_quoteDate = 'quoteDate';
+    public $col_dateCreated = 'dateCreated';
 
     /**
      * Gets an instance of the mapper
@@ -218,7 +219,10 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     {
         return $this->fetchAll(array(
                                     "{$this->col_clientId} = ?" => $clientId
-                               ));
+                               ),
+            "{$this->col_dateCreated} DESC",
+            100
+        );
     }
 
     /**
