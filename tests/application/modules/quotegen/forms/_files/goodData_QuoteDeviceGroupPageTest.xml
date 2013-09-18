@@ -1,0 +1,30 @@
+<?xml version="1.0" standalone="yes"?>
+<quotes>
+    <quote>
+        <data>
+            <name>Jim</name>
+            <oemSku>string up to 255!</oemSku>
+            <pricePerPage>4</pricePerPage>
+            <includedPrice>4999</includedPrice>
+            <includedQuantity>49999</includedQuantity>
+        </data>
+    </quote>
+    <quote>
+        <data>
+            <name>Joe</name>
+            <oemSku>this is required!</oemSku>
+            <pricePerPage>4.99999</pricePerPage>
+            <includedPrice>0</includedPrice>
+            <includedQuantity>50000</includedQuantity>
+        </data>
+    </quote>
+    <quote>
+        <data>
+            <name>Jim</name>
+            <oemSku>string up to 255!</oemSku>
+            <pricePerPage>1</pricePerPage>
+            <includedPrice>5000</includedPrice>
+            <includedQuantity>0</includedQuantity>
+        </data>
+    </quote>
+</quotes>
