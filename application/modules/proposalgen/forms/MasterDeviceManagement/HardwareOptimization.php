@@ -43,7 +43,6 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimization extends Twitt
                                                                                          'label'      => 'Maximum Page Count',
                                                                                          'class'      => 'span4',
                                                                                          'maxlength'  => 8,
-                                                                                         'allowEmpty' => false,
                                                                                          'filters'    => array(
                                                                                              'StringTrim',
                                                                                              'StripTags'

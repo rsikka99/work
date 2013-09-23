@@ -23,14 +23,23 @@
     </hardwareOptimization>
     <hardwareOptimization>
         <data>
-            <isDeviceSwap>asd</isDeviceSwap>
-            <minimumPageCount>2</minimumPageCount>
-            <maximumPageCount>5</maximumPageCount>
-        </data>
-        <data>
-            <isDeviceSwap>0</isDeviceSwap>
+            <isDeviceSwap>1</isDeviceSwap>
             <minimumPageCount>5</minimumPageCount>
             <maximumPageCount>2</maximumPageCount>
+        </data>
+    </hardwareOptimization>
+    <hardwareOptimization>
+        <data>
+            <isDeviceSwap>1</isDeviceSwap>
+            <minimumPageCount></minimumPageCount>
+            <maximumPageCount></maximumPageCount>
+        </data>
+    </hardwareOptimization>
+    <hardwareOptimization>
+        <data>
+            <isDeviceSwap>1</isDeviceSwap>
+            <minimumPageCount>0</minimumPageCount>
+            <maximumPageCount>0</maximumPageCount>
         </data>
     </hardwareOptimization>
 </hardwareOptimizations>
