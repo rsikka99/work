@@ -33,7 +33,7 @@ class Proposalgen_Form_DeviceSwapTest extends PHPUnit_Framework_TestCase
      */
     public function testFormRejectsBadData ($data)
     {
-        $this->assertFalse($this->getForm()->isValid((array)$data));
+        $this->assertFalse($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     /**
@@ -41,7 +41,7 @@ class Proposalgen_Form_DeviceSwapTest extends PHPUnit_Framework_TestCase
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->assertTrue($this->getForm()->isValid((array)$data));
+        $this->assertTrue($this->getForm()->isValid((array)$data), implode(' | ', $this->getForm()->getErrorMessages()));
     }
 
     private function getForm ()

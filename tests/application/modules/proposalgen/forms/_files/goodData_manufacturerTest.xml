@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<manufacturers>
+    <manufacturer>
+        <data>
+            <fullname>1</fullname>
+            <displayname>1</displayname>
+            <isDeleted>true</isDeleted>
+        </data>
+    </manufacturer>
+    <manufacturer>
+        <data>
+            <fullname>1</fullname>
+            <displayname>        </displayname>
+            <isDeleted>false</isDeleted>
+        </data>
+    </manufacturer>
+    <manufacturer>
+        <data>
+            <fullname>dyFAqExNj56gW81hdev8c8FycD6oqPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</fullname>
+            <displayname>dyFAqExNj56gW81hdev8c8FycD6oqPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</displayname>
+            <isDeleted>false</isDeleted>
+        </data>
+    </manufacturer>
+    <manufacturer>
+        <data>
+            <fullname>dyFAqExNj56gW81hdev8c8FycD6oqPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</fullname>
+            <displayname>dyFAqExNj56gW81hdev8c8FycD6oqPjN0npMa938O0NPqchcEzTmbRaSrg4Ea6qdNstQMxp3LoNIMwcOfhEwo745E66UcLLfnawNkalMEYnO12IOx8toevMroHU9i4t2x9q90TenyNvt7olujeASKXrXmZtbEpJVmyXouf3sBNahzO67Fm516GqUrD443kB2q59aNbiD3jKXs2CMoYPH65KfHa4dYhnndFDDMJ4Rqhyogct6gfLTOHEQyVmLFza</displayname>
+            <isDeleted>true</isDeleted>
+        </data>
+    </manufacturer>
+</manufacturers>

@@ -1,17 +1,17 @@
 <?php
 /**
- * Class Proposalgen_Form_MasterDeviceTest
+ * Class Proposalgen_Form_ManufacturerTest
  */
-class Proposalgen_Form_MasterDeviceTest extends PHPUnit_Framework_TestCase
+class Proposalgen_Form_ManufacturerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Form_MasterDevice
+     * @var Proposalgen_Form_Manufacturer
      */
     protected $_form;
 
     public function setUp ()
     {
-        $this->_form = new Proposalgen_Form_MasterDevice();
+        $this->_form = new Proposalgen_Form_Manufacturer();
         parent::setUp();
     }
 
@@ -23,9 +23,9 @@ class Proposalgen_Form_MasterDeviceTest extends PHPUnit_Framework_TestCase
 
     public function goodData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_masterDeviceTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_manufacturerTest.xml");
         $data = array();
-        foreach ($xml->masterDevice as $row)
+        foreach ($xml->manufacturer as $row)
         {
             $data[] = (array)$row;
         }
@@ -35,9 +35,9 @@ class Proposalgen_Form_MasterDeviceTest extends PHPUnit_Framework_TestCase
 
     public function badData ()
     {
-        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_masterDeviceTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_manufacturerTest.xml");
         $data = array();
-        foreach ($xml->masterDevice as $row)
+        foreach ($xml->manufacturer as $row)
         {
             $data[] = (array)$row;
         }
