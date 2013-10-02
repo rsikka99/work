@@ -525,6 +525,7 @@ $(document).ready(function ()
                     $("#reportsTonerLevels").attr('checked', data.reportsTonerLevels);
                     $("#is_fax").attr('checked', data.is_fax);
                     $("#is_duplex").attr('checked', data.is_duplex);
+                    $("#is_a3").attr('checked', data.is_a3);
                     $("#watts_power_normal").val(data.watts_power_normal);
                     $("#watts_power_idle").val(data.watts_power_idle);
                     $("#toner_array").val(data.toner_array);
@@ -837,6 +838,7 @@ function empty_form()
     $("#reportsTonerLevels").removeAttr('checked');
     $("#is_fax").removeAttr('checked');
     $("#is_duplex").removeAttr('checked');
+    $("#is_a3").removeAttr('checked');
     $("#ppm_black").val('');
     $("#ppm_color").val('');
     $("#duty_cycle").val('');
@@ -881,6 +883,7 @@ function disable_form()
     $("#reportsTonerLevels").attr('disabled', 'disabled');
     $("#is_fax").attr('disabled', 'disabled');
     $("#is_duplex").attr('disabled', 'disabled');
+    $("#is_a3").attr('disabled', 'disabled');
     $("#ppm_black").attr('disabled', 'disabled');
     $("#ppm_color").attr('disabled', 'disabled');
     $("#duty_cycle").attr('disabled', 'disabled');
@@ -922,6 +925,7 @@ function enable_form()
     $("#reportsTonerLevels").removeAttr('disabled');
     $("#is_fax").removeAttr('disabled');
     $("#is_duplex").removeAttr('disabled');
+    $("#is_a3").removeAttr('disabled');
     $("#ppm_black").removeAttr('disabled');
     $("#ppm_color").removeAttr('disabled');
     $("#duty_cycle").removeAttr('disabled');

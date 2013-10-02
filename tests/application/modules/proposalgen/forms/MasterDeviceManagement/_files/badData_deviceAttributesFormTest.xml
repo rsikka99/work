@@ -5,6 +5,7 @@
             <isCopier>3</isCopier>
             <isDuplex>1</isDuplex>
             <isFax>1</isFax>
+            <isA3>0</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
             <ppmBlack>1</ppmBlack>
             <ppmColor>1</ppmColor>

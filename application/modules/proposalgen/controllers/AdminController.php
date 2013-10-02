@@ -130,6 +130,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'is_scanner'            => $row [0] ['isScanner'] ? true : false,
                     'is_fax'                => $row [0] ['isFax'] ? true : false,
                     'is_duplex'             => $row [0] ['isDuplex'] ? true : false,
+                    'is_a3'                 => $row [0] ['isA3'] ? true : false,
                     'reportsTonerLevels'    => $row [0] ['reportsTonerLevels'] ? true : false,
                     'is_replacement_device' => $row [0] ['isReplacementDevice'],
                     'watts_power_normal'    => $row [0] ['wattsPowerNormal'],
@@ -681,7 +682,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
         $this->sendJson(array("message" => $message));
     }
-
 
 
     /**

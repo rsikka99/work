@@ -81,6 +81,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var bool
      */
+    public $isA3;
+
+    /**
+     * @var bool
+     */
     public $isReplacementDevice;
 
     /**
@@ -350,6 +355,11 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->isDuplex = $params->isDuplex;
         }
 
+        if (isset($params->isA3) && !is_null($params->isA3))
+        {
+            $this->isA3 = $params->isA3;
+        }
+
         if (isset($params->isReplacementDevice) && !is_null($params->isReplacementDevice))
         {
             $this->isReplacementDevice = $params->isReplacementDevice;
@@ -469,6 +479,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isFax"               => $this->isFax,
             "isScanner"           => $this->isScanner,
             "isDuplex"            => $this->isDuplex,
+            "isA3"                => $this->isA3,
             "isReplacementDevice" => $this->isReplacementDevice,
             "isSystemDevice"      => $this->isSystemDevice,
             "wattsPowerNormal"    => $this->wattsPowerNormal,

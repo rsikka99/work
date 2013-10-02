@@ -5,6 +5,7 @@
             <isCopier>1</isCopier>
             <isDuplex>1</isDuplex>
             <isFax>1</isFax>
+            <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
             <ppmBlack>15</ppmBlack>
             <ppmColor>55</ppmColor>
@@ -19,6 +20,7 @@
             <isCopier>0</isCopier>
             <isDuplex>1</isDuplex>
             <isFax>0</isFax>
+            <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
             <ppmBlack>500</ppmBlack>
             <ppmColor>100</ppmColor>
@@ -33,6 +35,7 @@
             <isCopier>1</isCopier>
             <isDuplex>1</isDuplex>
             <isFax>1</isFax>
+            <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
             <ppmBlack>25</ppmBlack>
             <ppmColor>25</ppmColor>
@@ -47,6 +50,7 @@
             <isCopier>1</isCopier>
             <isDuplex>1</isDuplex>
             <isFax>1</isFax>
+            <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
             <ppmBlack>1</ppmBlack>
             <ppmColor>1</ppmColor>
