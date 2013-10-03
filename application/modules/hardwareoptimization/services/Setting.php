@@ -74,7 +74,17 @@ class Hardwareoptimization_Service_Setting
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
-            $this->_form->populate(array_merge($this->_hardwareOptimizationSettingss->toArray(), $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettingss->getTonerRankSets()));
+            $hardwareSettingsArray = $this->_hardwareOptimizationSettingss->toArray();
+
+            foreach ($hardwareSettingsArray as $key => $value)
+            {
+                if ($value === null)
+                {
+                    unset($hardwareSettingsArray[$key]);
+                }
+            }
+
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $hardwareSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettingss->getTonerRankSets()));
             $this->_form->populate(array('name' => $this->_hardwareOptimization->name));
         }
 
@@ -118,7 +128,7 @@ class Hardwareoptimization_Service_Setting
         {
             foreach ($validData as $key => $value)
             {
-                if (empty($value) && $value != 0)
+                if (empty($value) && $value != 0 || $value === '')
                 {
                     unset($validData [$key]);
                 }
