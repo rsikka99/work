@@ -29,7 +29,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 </div>
 <?php
 $uniqueDeviceArray = $healthcheckViewModel->getUniqueDeviceCountArray();
-$totalAmount = count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances);
+$totalAmount = $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount();
 $amountOfRows = ceil(count($uniqueDeviceArray) / 2);
 
 //FirstHalf is whether we are writing to the left side of the table or the right side.
