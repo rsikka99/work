@@ -12,14 +12,7 @@ var isAllowed = false;
 
 function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAllowedToEdit)
 {
-    if (isAllowedToEdit == 'undefined' || isAllowedToEdit == 'false')
-    {
-        isAllowed = false;
-    }
-    else
-    {
-        isAllowed = true;
-    }
+    isAllowed = !(isAllowedToEdit == 'undefined' || isAllowedToEdit == 'false');
 
     masterDeviceId = newMasterDeviceId;
     var $screenWidth = ($(this).width());
@@ -119,6 +112,7 @@ $(document).on("click", "#btnSaveAndApprove", function ()
  * This handles the create or edit jqgrid buttons.
  * It outputs errors onto the forms if received from json
  * @param formName
+ * @param shouldAssign
  */
 function createOrEdit(formName, shouldAssign)
 {
@@ -338,9 +332,9 @@ function saveChanges(approve)
         error   : function (xhr)
         {
             clearErrors();
-
+            var launchDate = $("#launchDate");
             // We need to destroy the launchDate datepicker
-            $("#launchDate").datepicker("destroy");
+            launchDate.datepicker("destroy");
             var data = $.parseJSON(xhr.responseText);
             var errorMessage;
             var element;
@@ -379,14 +373,16 @@ function saveChanges(approve)
             });
 
             // We need to recreate the datepicker when we have an error!
-            $("#launchDate").datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
+            launchDate.datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
             displayAlert("danger", "Please fix the errors before continuing");
         }
     });
 }
 
-window.onresize = function (event)
+window.onresize = function ()
 {
-    setupModalPosition("manageMasterDeviceModal", ($(this).width()));
-}
-
+    if ($("#manageMasterDeviceModal").is(':visible'))
+    {
+        setupModalPosition("manageMasterDeviceModal", ($(this).width()));
+    }
+};

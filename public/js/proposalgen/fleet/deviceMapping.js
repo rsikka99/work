@@ -387,7 +387,7 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
             $("#mappingGrid").trigger("reloadGrid");
         }
     });
-};
+}
 
 var deviceInstanceIdList = [];
 function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInstanceIds)
