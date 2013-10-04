@@ -196,8 +196,7 @@ LEFT JOIN device_instance_master_devices ON device_instance_master_devices.devic
 LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
 LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
 WHERE device_instances.rmsUploadId = {$rmsUploadId}
-GROUP BY device_instances.rmsUploadRowId
-ORDER BY deviceCount DESC
+GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)
 ) AS countTable";
             $justCountQuery = $db->query($justCountSql);
 
