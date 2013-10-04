@@ -35,7 +35,7 @@ class AddLastSeenToUserTable extends AbstractMigration
     {
         $this->execute('DROP TABLE `user_activities`');
         $this->execute('ALTER TABLE `users`
-            DROP COLUMN `lastSeen;
+            DROP COLUMN `lastSeen`;
         ');
     }
 }
