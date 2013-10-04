@@ -343,7 +343,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
                 "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
                 "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
-                "isScan"                => (int)$deviceInstance->getMasterDevice()->isScanner,
                 "ppmBlack"              => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
                 "ppmColor"              => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
             ),
@@ -360,7 +359,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->colorCostPerPage, array("precision" => 4)),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
-                "isScan"                => (int)$replacementDevice->isScanner,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
                 "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
                 "reason"                => $deviceInstance->getReason($this->_hardwareOptimization->id)

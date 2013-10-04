@@ -71,11 +71,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var bool
      */
-    public $isScanner;
-
-    /**
-     * @var bool
-     */
     public $isDuplex;
 
     /**
@@ -345,11 +340,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->isFax = $params->isFax;
         }
 
-        if (isset($params->isScanner) && !is_null($params->isScanner))
-        {
-            $this->isScanner = $params->isScanner;
-        }
-
         if (isset($params->isDuplex) && !is_null($params->isDuplex))
         {
             $this->isDuplex = $params->isDuplex;
@@ -477,7 +467,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "tonerConfigId"       => $this->tonerConfigId,
             "isCopier"            => $this->isCopier,
             "isFax"               => $this->isFax,
-            "isScanner"           => $this->isScanner,
             "isDuplex"            => $this->isDuplex,
             "isA3"                => $this->isA3,
             "isReplacementDevice" => $this->isReplacementDevice,

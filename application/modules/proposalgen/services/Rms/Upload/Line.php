@@ -102,11 +102,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     /**
      * @var bool
      */
-    public $isScanner;
-
-    /**
-     * @var bool
-     */
     public $isFax;
 
     /**
@@ -462,11 +457,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->isCopier = $params->isCopier;
         }
 
-        if (isset($params->isScanner) && !is_null($params->isScanner))
-        {
-            $this->isScanner = $params->isScanner;
-        }
-
         if (isset($params->isFax) && !is_null($params->isFax))
         {
             $this->isFax = $params->isFax;
@@ -792,7 +782,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "ipAddress"              => $this->ipAddress,
             "isColor"                => $this->isColor,
             "isCopier"               => $this->isCopier,
-            "isScanner"              => $this->isScanner,
             "isFax"                  => $this->isFax,
             "manufacturer"           => $this->manufacturer,
             "modelName"              => $this->modelName,

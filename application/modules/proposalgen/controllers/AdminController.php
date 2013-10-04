@@ -127,7 +127,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'launch_date'           => $launch_date->toString('mm/dd/yyyy'),
                     'toner_config_id'       => $row [0] ['tonerConfigId'],
                     'is_copier'             => $row [0] ['isCopier'] ? true : false,
-                    'is_scanner'            => $row [0] ['isScanner'] ? true : false,
                     'is_fax'                => $row [0] ['isFax'] ? true : false,
                     'is_duplex'             => $row [0] ['isDuplex'] ? true : false,
                     'is_a3'                 => $row [0] ['isA3'] ? true : false,

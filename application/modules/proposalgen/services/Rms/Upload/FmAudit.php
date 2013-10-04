@@ -30,7 +30,6 @@ class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upl
         'device ip address'        => 'ipAddress',
         'is color'                 => 'isColor',
         'is copier'                => 'isCopier',
-        'is scanner'               => 'isScanner',
         'is fax'                   => 'isFax',
         'manufacturer'             => 'manufacturer',
         'model name'               => 'modelName',

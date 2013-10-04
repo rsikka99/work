@@ -178,17 +178,6 @@ $(function ()
                         $table.append($row);
 
                         $row = $("<tr></tr>");
-                        if (data.deviceInstance.isScan)
-                        {
-                            $row.append("<td>Scan</td><td>Yes</td>");
-                        }
-                        else
-                        {
-                            $row.append("<td>Scan</td><td>No</td>");
-                        }
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
                         $row.append("<td>PPM - Mono</td> <td>" + data.deviceInstance.ppmBlack + "</td>");
                         $table.append($row);
 
@@ -264,16 +253,6 @@ $(function ()
                             }
                             $replacementTable.append($row);
 
-                            $row = $("<tr></tr>");
-                            if (data.replacementDevice.isScan)
-                            {
-                                $row.append("<td>Scan</td><td>Yes</td>");
-                            }
-                            else
-                            {
-                                $row.append("<td>Scan</td><td>No</td>");
-                            }
-                            $replacementTable.append($row);
                             $row = $("<tr></tr>");
                             $row.append("<td>PPM - Mono</td> <td>" + data.replacementDevice.ppmBlack + "</td>");
                             $replacementTable.append($row);

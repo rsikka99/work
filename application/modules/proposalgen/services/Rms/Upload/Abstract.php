@@ -43,7 +43,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'ipAddress'              => false,
         'isColor'                => false,
         'isCopier'               => false,
-        'isScanner'              => false,
         'isFax'                  => false,
         'manufacturer'           => true,
         'modelName'              => true,
@@ -183,16 +182,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 'Int'
             ),
             'isCopier'         => array(
-                'StringTrim',
-                array(
-                    'filter'  => 'Boolean',
-                    'options' => array(
-                        'type' => Zend_Filter_Boolean::ALL
-                    )
-                ),
-                'Int'
-            ),
-            'isScanner'        => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',

@@ -206,16 +206,6 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                ));
 
         /*
-         * Is scanner
-         */
-        $this->addElement('checkbox', 'isScanner', array(
-                                                        'label'   => 'Is Scanner:',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
-
-        /*
          * Is duplex
          */
         $this->addElement('checkbox', 'isDuplex', array(

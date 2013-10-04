@@ -80,11 +80,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $isLeased;
 
     /**
-     * @var bool
-     */
-    public $isScanner;
-
-    /**
      * @var string
      */
     public $launchDate;
@@ -421,11 +416,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->isLeased = $params->isLeased;
         }
 
-        if (isset($params->isScanner) && !is_null($params->isScanner))
-        {
-            $this->isScanner = $params->isScanner;
-        }
-
         if (isset($params->launchDate) && !is_null($params->launchDate))
         {
             $this->launchDate = $params->launchDate;
@@ -694,7 +684,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "isFax"                    => $this->isFax,
             "isLeased"                 => $this->isLeased,
             "isDuplex"                 => $this->isDuplex,
-            "isScanner"                => $this->isScanner,
             "launchDate"               => $this->launchDate,
             "leasedTonerYield"         => $this->leasedTonerYield,
             "ppmBlack"                 => $this->ppmBlack,

@@ -580,7 +580,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->isScanner)
+                if ($deviceInstance->getMasterDevice()->isCopier)
                 {
                     $numberOfDevices++;
                 }
@@ -2833,7 +2833,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                     switch ($device->getMasterDevice()->tonerConfigId)
                     {
                         case Proposalgen_Model_TonerConfig::BLACK_ONLY :
-                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isCopier)
                             {
                                 $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]->monthlyRate;
                                 // MFP
@@ -2856,7 +2856,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED :
                         case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED :
                         case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED :
-                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isScanner || $device->getMasterDevice()->isCopier)
+                            if ($device->getMasterDevice()->isFax || $device->getMasterDevice()->isCopier)
                             {
                                 // MFP
                                 $savings = $device->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getReportMargin()) - $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP]->monthlyRate;

@@ -26,7 +26,6 @@ class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upl
         'ipaddress'            => 'ipAddress',
         'is_color'             => 'isColor',
         'is_copier'            => 'isCopier',
-        'is_scanner'           => 'isScanner',
         'is_fax'               => 'isFax',
         'ppm_black'            => 'ppmBlack',
         'ppm_color'            => 'ppmColor',

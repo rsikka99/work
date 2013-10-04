@@ -12,7 +12,6 @@
             <tonerConfigId>1</tonerConfigId>
             <isCopier></isCopier>
             <isFax></isFax>
-            <isScanner></isScanner>
             <isDuplex></isDuplex>
             <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
@@ -39,7 +38,6 @@
             <tonerConfigId></tonerConfigId>
             <isCopier></isCopier>
             <isFax></isFax>
-            <isScanner></isScanner>
             <isDuplex></isDuplex>
             <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
@@ -66,7 +64,6 @@
             <tonerConfigId></tonerConfigId>
             <isCopier></isCopier>
             <isFax></isFax>
-            <isScanner></isScanner>
             <isDuplex></isDuplex>
             <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>50000</wattsPowerNormal>
@@ -93,7 +90,6 @@
             <tonerConfigId></tonerConfigId>
             <isCopier></isCopier>
             <isFax></isFax>
-            <isScanner></isScanner>
             <isDuplex></isDuplex>
             <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
@@ -120,7 +116,6 @@
             <tonerConfigId></tonerConfigId>
             <isCopier>ff</isCopier>
             <isFax></isFax>
-            <isScanner></isScanner>
             <isDuplex></isDuplex>
             <reportsTonerLevels></reportsTonerLevels>
             <wattsPowerNormal>1000</wattsPowerNormal>
