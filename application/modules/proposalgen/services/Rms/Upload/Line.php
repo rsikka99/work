@@ -320,6 +320,26 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $endMeterFax;
 
     /**
+     * @var int
+     */
+    public $startMeterPrintA3Black;
+
+    /**
+     * @var int
+     */
+    public $endMeterPrintA3Black;
+
+    /**
+     * @var int
+     */
+    public $startMeterPrintA3Color;
+
+    /**
+     * @var int
+     */
+    public $endMeterPrintA3Color;
+
+    /**
      * @var bool
      */
     public $reportsTonerLevels;
@@ -675,6 +695,26 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         if (isset($params->endMeterFax) && !is_null($params->endMeterFax))
         {
             $this->endMeterFax = $params->endMeterFax;
+        }
+
+        if (isset($params->startMeterPrintA3Black) && !is_null($params->startMeterPrintA3Black))
+        {
+            $this->startMeterPrintA3Black = $params->startMeterPrintA3Black;
+        }
+
+        if (isset($params->endMeterPrintA3Black) && !is_null($params->endMeterPrintA3Black))
+        {
+            $this->endMeterPrintA3Black = $params->endMeterPrintA3Black;
+        }
+
+        if (isset($params->startMeterPrintA3Color) && !is_null($params->startMeterPrintA3Color))
+        {
+            $this->startMeterPrintA3Color = $params->startMeterPrintA3Color;
+        }
+
+        if (isset($params->endMeterPrintA3Color) && !is_null($params->endMeterPrintA3Color))
+        {
+            $this->endMeterPrintA3Color = $params->endMeterPrintA3Color;
         }
 
         if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))

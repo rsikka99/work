@@ -189,9 +189,10 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         $assessmentSettings = $this->assessment->getAssessmentSettings();
 
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $assessmentSettings->kilowattsPerHour;
-
-
-        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly());
+        if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
+        {
+            Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
+        }
     }
 
     /**
@@ -215,9 +216,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyBlackAndWhitePercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyBlackAndWhitePercentage = $percentage;
         }
@@ -233,9 +234,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyColorPercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyColorPercentage = $percentage;
         }
@@ -251,9 +252,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyPurchasedBlackAndWhitePercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyPurchasedBlackAndWhitePercentage = $percentage;
         }
@@ -269,9 +270,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyPurchasedColorPercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyPurchasedColorPercentage = $percentage;
         }
@@ -287,9 +288,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyLeasedBlackAndWhitePercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyLeasedBlackAndWhitePercentage = $percentage;
         }
@@ -305,9 +306,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         if (!isset($this->YearlyLeasedColorPercentage))
         {
             $percentage = 0.0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
             {
-                $percentage = $this->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $percentage = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             $this->YearlyLeasedColorPercentage = $percentage;
         }
@@ -415,9 +416,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->PerPageLeaseCost))
         {
-            if ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getYearly())
+            if ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly())
             {
-                $this->PerPageLeaseCost = $this->getCombinedAnnualLeasePayments() / $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $this->PerPageLeaseCost = $this->getCombinedAnnualLeasePayments() / $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
         }
 
@@ -497,7 +498,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->EstimatedAnnualCostOfLeaseMachines))
         {
-            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly() * $this->getLeasedBlackAndWhiteCharge()) + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly() * $this->getLeasedColorCharge());
+            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() * $this->getLeasedBlackAndWhiteCharge()) + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() * $this->getLeasedColorCharge());
         }
 
         return $this->EstimatedAnnualCostOfLeaseMachines;
@@ -855,19 +856,19 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $Percentages->PurchasedVsLeasedColor                    = new stdClass();
             $Percentages->PurchasedVsLeasedColor->Leased            = 0;
             $Percentages->PurchasedVsLeasedColor->Purchased         = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
             {
-                $Percentages->TotalColorPercentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
+                $Percentages->TotalColorPercentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             }
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly())
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly())
             {
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly();
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->monochrome->getYearly();
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
+                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
             }
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly())
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly())
             {
-                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly();
-                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getYearly();
+                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
+                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
             }
             $this->Percentages = $Percentages;
         }
@@ -911,7 +912,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -932,7 +933,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesOverusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
                 {
                     $devicesOverusedCount++;
                 }
@@ -953,7 +954,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -1049,7 +1050,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
                     if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) < 1)
@@ -1179,7 +1180,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
-                    $costArray[] = array($key, $deviceInstance->getPageCounts()->color->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                    $costArray[] = array($key, $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
                 }
             }
 
@@ -1213,7 +1214,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
             {
-                $costArray[] = array($key, ($deviceInstance->getPageCounts()->color->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getPageCounts()->monochrome->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
+                $costArray[] = array($key, ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
             }
 
             usort($costArray, array(
@@ -1250,7 +1251,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
-                    $costArray[] = array($key, $deviceInstance->getPageCounts()->color->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                    $costArray[] = array($key, $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
                 }
             }
 
@@ -1283,7 +1284,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
             {
-                $costArray[] = array($key, $deviceInstance->getPageCounts()->monochrome->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage);
+                $costArray[] = array($key, $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage);
             }
 
             usort($costArray, array(
@@ -1668,10 +1669,24 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->GrossMarginTotalMonthlyRevenue))
         {
-            $totalCost                = new stdClass();
-            $totalCost->BlackAndWhite = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly() * $this->getMPSBlackAndWhiteCPP();
-            $totalCost->Color         = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() * $this->getMPSColorCPP();
-            $totalCost->Combined      = $totalCost->BlackAndWhite + $totalCost->Color;
+            $totalCost = new stdClass();
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly() > 0)
+            {
+                $totalCost->BlackAndWhite = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly() * $this->getMPSBlackAndWhiteCPP();
+            }
+            else
+            {
+                $totalCost->BlackAndWhite = 0;
+            }
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0)
+            {
+                $totalCost->Color = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() * $this->getMPSColorCPP();
+            }
+            else
+            {
+                $totalCost->Color = 0;
+            }
+            $totalCost->Combined = $totalCost->BlackAndWhite + $totalCost->Color;
 
             $this->GrossMarginTotalMonthlyRevenue = $totalCost;
         }
@@ -2089,20 +2104,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
+            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
+                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
+                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -2164,7 +2179,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
+            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > self::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : self::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -2201,7 +2216,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
@@ -2304,9 +2319,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
              * -- ColorVSBWPagesGraph
              */
             $colorPercentage = 0;
-            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() > 0)
+            if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > 0)
             {
-                $colorPercentage = round((($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) * 100), 2);
+                $colorPercentage = round((($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100), 2);
             }
 
             $bwPercentage        = 100 - $colorPercentage;
@@ -2595,17 +2610,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $monochromeCostPerPage          = 0;
             $costOfBlackAndWhiteInkAndToner = 0;
             $costWithNoInkToner             = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly())
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly())
             {
-                $workingCPP = $costWithNoInkToner / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $workingCPP = $costWithNoInkToner / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $costOfBlackAndWhiteInkAndToner += $device->getCostOfBlackAndWhiteInkAndToner($this->getCostPerPageSettingForCustomer(), $this->getReportMargin());
             }
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly())
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly())
             {
-                $monochromeCostPerPage = $workingCPP + ($costOfBlackAndWhiteInkAndToner / ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() / 12));
+                $monochromeCostPerPage = $workingCPP + ($costOfBlackAndWhiteInkAndToner / ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / 12));
             }
             $this->EstimatedAllInBlackAndWhiteCPP = $monochromeCostPerPage;
         }
@@ -2624,17 +2639,17 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $costOfColorInkAndToner = 0;
             $ColorCPP               = 0;
             $costWithNoInkToner     = $this->getTotalPurchasedAnnualCost() - $this->getCostOfInkAndToner($this->getCostPerPageSettingForCustomer());
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly())
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly())
             {
-                $workingCPP = $costWithNoInkToner / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly();
+                $workingCPP = $costWithNoInkToner / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly();
             }
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $costOfColorInkAndToner += $device->getCostOfColorInkAndToner($this->getCostPerPageSettingForCustomer(), $this->getReportMargin());
             }
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly())
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly())
             {
-                $ColorCPP = $workingCPP + ($costOfColorInkAndToner / ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() / 12));
+                $ColorCPP = $workingCPP + ($costOfColorInkAndToner / ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / 12));
             }
             $this->EstimatedAllInColorCPP = $ColorCPP;
         }
@@ -2688,7 +2703,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->PrintIQTotalCost))
         {
-            $this->PrintIQTotalCost = $this->getInternalAdminCost() + ($this->getAnnualITCost() * 0.5) + ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() * $this->getMPSColorCPP()) + ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() * $this->getMPSBlackAndWhiteCPP()) + $this->getAnnualCostOfHardwarePurchases();
+            $this->PrintIQTotalCost = $this->getInternalAdminCost() + ($this->getAnnualITCost() * 0.5) + ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() * $this->getMPSColorCPP()) + ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() * $this->getMPSBlackAndWhiteCPP()) + $this->getAnnualCostOfHardwarePurchases();
         }
 
         return $this->PrintIQTotalCost;
@@ -2823,7 +2838,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
                 $deviceReplaced = false;
-                if ($device->getPageCounts()->getCombined()->getMonthly() >= $ampvThreshold)
+                if ($device->getPageCounts()->getCombinedPageCount()->getMonthly() >= $ampvThreshold)
                 {
                     $replacedDevices->OverMaxLeasedCapacity [] = $device;
                 }
@@ -2905,7 +2920,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->LeftOver as $deviceInstance)
             {
-                $pageCount += $deviceInstance->getPageCounts()->monochrome->getMonthly();
+                $pageCount += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly();
             }
             $this->LeftOverBlackAndWhitePageCount = $pageCount * 12;
         }
@@ -2924,7 +2939,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
             foreach ($this->getDevicesToBeReplaced()->LeftOver as $deviceInstance)
             {
-                $pageCount += $deviceInstance->getPageCounts()->color->getMonthly();
+                $pageCount += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly();
             }
             $this->LeftOverColorPageCount = $pageCount * 12;
         }
@@ -3216,7 +3231,14 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     {
         if (!isset($this->GrossMarginOverallMargin))
         {
-            $this->GrossMarginOverallMargin = $this->getGrossMarginMonthlyProfit() / $this->getGrossMarginTotalMonthlyRevenue()->Combined * 100;
+            if ($this->getGrossMarginTotalMonthlyRevenue()->Combined > 0)
+            {
+                $this->GrossMarginOverallMargin = $this->getGrossMarginMonthlyProfit() / $this->getGrossMarginTotalMonthlyRevenue()->Combined * 100;
+            }
+            else
+            {
+                $this->GrossMarginOverallMargin = 0;
+            }
         }
 
         return $this->GrossMarginOverallMargin;
@@ -3234,13 +3256,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $this->GrossMarginWeightedCPP                = new stdClass();
             $this->GrossMarginWeightedCPP->BlackAndWhite = 0;
             $this->GrossMarginWeightedCPP->Color         = 0;
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly() > 0)
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly() > 0)
             {
-                $this->GrossMarginWeightedCPP->BlackAndWhite = $this->getGrossMarginTotalMonthlyCost($costPerPageSetting)->BlackAndWhite / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+                $this->GrossMarginWeightedCPP->BlackAndWhite = $this->getGrossMarginTotalMonthlyCost($costPerPageSetting)->BlackAndWhite / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
             }
-            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0)
+            if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0)
             {
-                $this->GrossMarginWeightedCPP->Color = $this->getGrossMarginTotalMonthlyCost()->Color / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+                $this->GrossMarginWeightedCPP->Color = $this->getGrossMarginTotalMonthlyCost()->Color / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
             }
         }
 
@@ -3503,18 +3525,18 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $this->_dealerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
-            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
-            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
+            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
             $colorCpp                      = 0;
             $monoCpp                       = 0;
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
-                $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                $monoCpp += ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
                 if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
                 {
-                    $colorCpp += ($deviceInstance->getPageCounts()->color->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                    $colorCpp += ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
                 }
             }
 
@@ -3545,18 +3567,21 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $this->_customerWeightedAverageMonthlyCostPerPage = new Proposalgen_Model_CostPerPage();
 
             $costPerPageSetting            = $this->getCostPerPageSettingForCustomer();
-            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
-            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+            $totalMonthlyMonoPagesPrinted  = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
+            $totalMonthlyColorPagesPrinted = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
             $colorCpp                      = 0;
             $monoCpp                       = 0;
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
-                $monoCpp += ($deviceInstance->getPageCounts()->monochrome->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                if ($totalMonthlyMonoPagesPrinted > 0)
+                {
+                    $monoCpp += ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+                }
                 if ($totalMonthlyColorPagesPrinted > 0 && $deviceInstance->getMasterDevice()->isColor())
                 {
-                    $colorCpp += ($deviceInstance->getPageCounts()->color->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                    $colorCpp += ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
                 }
             }
 
@@ -3603,8 +3628,8 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->monochrome->getMonthly() * $this->assessment->getAssessmentSettings()->targetMonochromeCostPerPage;
-                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->color->getMonthly() * $this->assessment->getAssessmentSettings()->targetColorCostPerPage;
+                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $this->assessment->getAssessmentSettings()->targetMonochromeCostPerPage;
+                $this->_dealerMonthlyRevenueUsingTargetCostPerPage += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $this->assessment->getAssessmentSettings()->targetColorCostPerPage;
             }
         }
 
@@ -3684,7 +3709,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function calculateTotalCostOfMonochromePagesAnnually ()
     {
-        return $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly() * $this->getMPSBlackAndWhiteCPP();
+        return $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() * $this->getMPSBlackAndWhiteCPP();
     }
 
     /**
@@ -3694,7 +3719,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function calculateTotalCostOfColorPagesAnnually ()
     {
-        return $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly() * $this->getMPSColorCPP();
+        return $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() * $this->getMPSColorCPP();
     }
 
     /**
@@ -3714,6 +3739,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      */
     public function calculateAveragePagesPerDeviceMonthly ()
     {
-        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
+        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
     }
 }

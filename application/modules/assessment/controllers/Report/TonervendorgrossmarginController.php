@@ -274,13 +274,13 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 $rowData [0]['name']         = $deviceInstance->getMasterDevice()->modelName;
                 $rowData [0]['ipAddress']    = $deviceInstance->ipAddress;
                 $rowData [0]['serialNumber'] = $deviceInstance->serialNumber;
-                $rowData [1]                 = $deviceInstance->getPageCounts()->monochrome->getMonthly();
+                $rowData [1]                 = $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly();
                 $rowData [2]                 = $blackCost;
                 $rowData [3]                 = $blackYield;
                 $blackCPP                    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
                 $rowData [4]                 = $blackCPP;
                 $rowData [5]                 = $deviceInstance->getMonthlyBlackAndWhiteCost($costPerPageSetting);
-                $rowData [6]                 = $isColor ? number_format($deviceInstance->getPageCounts()->color->getMonthly(), 0, '.', '') : "-";
+                $rowData [6]                 = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
                 $rowData [7]                 = $colorCost;
                 $rowData [8]                 = $colorYield;
                 $rowData [9]                 = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, 4, '.', '') : "-";
@@ -292,12 +292,12 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
             $fieldTotals      = array();
             $fieldTotals [0]  = 'Totals for ' . $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount() . ' devices:';
-            $fieldTotals [4]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+            $fieldTotals [4]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
             $fieldTotals [5]  = '';
             $fieldTotals [6]  = '';
             $fieldTotals [7]  = '';
             $fieldTotals [8]  = $assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->BlackAndWhite;
-            $fieldTotals [9]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+            $fieldTotals [9]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
             $fieldTotals [10] = '';
             $fieldTotals [11] = '';
             $fieldTotals [12] = '';

@@ -45,7 +45,7 @@ $this->companyName = "MPSToolbox.com";
                 <div class="center"><?php echo ($deviceInstance->getMasterDevice()->isLeased) ? "Leased" : "Purchased"; ?></div>
             </td>
             <td class="column5">
-                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?></div>
+                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column6">
                 <div class="center"><?php echo ($deviceInstance->isCapableOfReportingTonerLevels()) ? "Yes" : "No"; ?></div>

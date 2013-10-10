@@ -34,8 +34,8 @@ $deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($cust
             <tr>
                 <td><?php echo $deviceInstance->getDeviceName(); ?></td>
                 <td class='number'><?php echo $percentOfMonthlyCost; ?>%</td>
-                <td class='number'><?php echo number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()); ?></td>
-                <td class='number'><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : 'N/A'; ?></td>
+                <td class='number'><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+                <td class='number'><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A'; ?></td>
                 <td class='number cpp'><?php echo $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->monochromeCostPerPage, array("precision" => 4)); ?></td>
                 <td class='number cpp'><?php echo ($isColor) ? $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->colorCostPerPage, array("precision" => 4)) : 'N/A'; ?></td>
                 <td class='number'><?php echo $this->currency($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting)); ?></td>

@@ -113,8 +113,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $fieldList    = array();
                 $fieldList [] = $deviceInstance->getDeviceName();
                 $fieldList [] = "%" . number_format($percentOfMonthlyCost, 2);
-                $fieldList [] = round($deviceInstance->getPageCounts()->monochrome->getMonthly());
-                $fieldList [] = ($isColor) ? round($deviceInstance->getPageCounts()->color->getMonthly()) : '-';
+                $fieldList [] = round($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
+                $fieldList [] = ($isColor) ? round($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : '-';
                 $fieldList [] = $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->monochromeCostPerPage, array("precision" => 4));
                 $fieldList [] = ($isColor) ? $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->colorCostPerPage, array("precision" => 4)) : '-';
                 $fieldList [] = $this->view->currency($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()));

@@ -9,7 +9,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print an average of
     <strong><?php echo number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()); ?>
     </strong> pages each per month, for an average total monthly print volume of
-    <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()); ?></strong> pages.
+    <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
     Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
 <br /> <br />
 <div class="center">
@@ -28,7 +28,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     </tr>
     <tr>
         <td width="400px">Average number of total printed pages per month</td>
-        <td width="400px" style="text-align:right"><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()); ?></td>
+        <td width="400px" style="text-align:right"><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
     </tr>
     <tr>
         <td width="400px">Average number of pages per device, per month</td>
@@ -70,7 +70,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
                 <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
@@ -104,7 +104,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown' ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
                 <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
@@ -123,7 +123,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="pheader">Color Usage</div>
 <p>You currently have
     <strong><?php echo $healthcheckViewModel->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of
-    <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()); ?></strong> color pages per month, which is
+    <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
     <strong><?php echo number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2); ?>%</strong> of your total monthly print volume.
 </p>
 <br />
@@ -172,7 +172,7 @@ $graphs = $healthcheckViewModel->getGraphs();
             <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>
                 %
             </td>
-            <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->color->getMonthly()); ?></td>
+            <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
             <td><?php echo $this->currency($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin()), array('precision' => 4)); ?></td>
             <td><?php echo $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin()), array('precision' => 2)) ?></td>
         </tr>

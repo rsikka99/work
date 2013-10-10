@@ -187,7 +187,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
             {
                 // We replaced the device on cost at this point, we need to look at ampv
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombined()->getMonthly() > $deviceSwap->minimumPageCount)
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();
                     $greatestSavings = $costDelta;
@@ -336,8 +336,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"          => $deviceInstance->serialNumber,
                 "lifePageCount"         => number_format($deviceInstance->getLifePageCount()),
-                "monoAmpv"              => number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()),
-                "colorAmpv"             => number_format($deviceInstance->getPageCounts()->color->getMonthly()),
+                "monoAmpv"              => number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
+                "colorAmpv"             => number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
                 "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array("precision" => 4)),
                 "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array("precision" => 4)),
                 "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,

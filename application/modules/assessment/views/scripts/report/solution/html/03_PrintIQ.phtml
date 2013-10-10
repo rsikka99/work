@@ -53,14 +53,14 @@ $this->companyName = "MPSToolbox.com";
         <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualCostOfOutSourcing()); ?></td>
 
         <td>Estimated monochrome pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Internal IT support for printers</td>
         <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualITCost()); ?></td>
 
         <td>Estimated color pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Hardware purchases</td>

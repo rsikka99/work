@@ -55,8 +55,8 @@ foreach ($profitabiltyDevices->flagged as $device)
     $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 
     $table->addCell($tcStyle->col3Width, $ampvStyle)->addText($device->getReason($hardwareOptimization->id), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText(number_format($device->getPageCounts()->monochrome->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText(number_format($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
     $table->addCell($tcStyle->col6Width, $ampvStyle)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
     $table->addCell($tcStyle->col7Width, $ampvStyle)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
     $table->addCell($tcStyle->col8Width, $ampvStyle)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);

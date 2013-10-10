@@ -184,13 +184,13 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
                 $fieldList [] = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . " (" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")";
-                $fieldList [] = number_format($deviceInstance->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
+                $fieldList [] = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
                 $fieldList [] = number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
 
                 $fieldList [] = "$" . number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
-                $fieldList [] = $isColor ? number_format($deviceInstance->getPageCounts()->color->getMonthly(), 0, '.', '') : "-";
+                $fieldList [] = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
                 $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
@@ -200,13 +200,13 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
 
             $fieldTotals    = array();
             $fieldTotals [] = 'Totals for ' . $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount() . ' devices:';
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly(), 0, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly(), 0, '.', '');
+            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '');
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';

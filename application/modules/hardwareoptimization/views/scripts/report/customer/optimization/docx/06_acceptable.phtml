@@ -46,8 +46,8 @@ foreach ($profitabiltyDevices->kept as $device)
     $cell2 = $table->addCell($tcStyle->col2Width, $style);
     $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col3Width, $ampvStyle)->addText(number_format($device->getPageCounts()->monochrome->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText(($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $ampvStyle)->addText(number_format($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $ampvStyle)->addText(($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
 }
 
 $section->addTextBreak();
@@ -63,7 +63,7 @@ $section->addText($this->translate('By using printing devices with the same supp
 Office Depot can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'));
 
 $section->addTitle($this->translate('Color Usage'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($optimization->getNumberOfColorCapableDevices()), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()), number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2)));
+$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($optimization->getNumberOfColorCapableDevices()), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format(($optimization->getPercentages()->TotalColorPercentage * 100), 2)));
 
 $section->addText($this->translate('Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your
 company\'s professional image, improve comprehension and increase readership. Office Depot can help you track your color printing and provide low-cost color hardware options.'));

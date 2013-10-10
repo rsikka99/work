@@ -134,11 +134,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * ********************************************************************************
      */
     /**
-     * An array of all the meters
+     * Our Meter
      *
-     * @var Proposalgen_Model_DeviceInstanceMeter[]
+     * @var Proposalgen_Model_DeviceInstanceMeter
      */
-    protected $_meters;
+    protected $_meter;
 
     /**
      * The device instance's pageCounts
@@ -512,7 +512,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
             foreach (self::$RUNNING_HOUR_ARRAY as $pages => $runningHours)
             {
-                if ($this->getPageCounts()->getCombined()->getDaily() >= $pages)
+                if ($this->getPageCounts()->getCombinedPageCount()->getDaily() >= $pages)
                 {
                     break;
                 }
@@ -552,16 +552,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_lifeBlackAndWhitePageCount))
         {
-            $meters = $this->getMeters();
-            if (!isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
-            {
-                // if no life or color then throw exception
-                throw new Exception("Device does not have a BLACK meter! " . $this->id);
-            }
-
-            $pageCount = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->endMeter;
-
-            $this->_lifeBlackAndWhitePageCount = $pageCount;
+            $meter                             = $this->getMeter();
+            $this->_lifeBlackAndWhitePageCount = $meter->endMeterPrintBlack;
         }
 
         return $this->_lifeBlackAndWhitePageCount;
@@ -574,13 +566,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_lifeColorPageCount))
         {
-            $meters    = $this->getMeters();
-            $pageCount = 0;
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
-            {
-                $pageCount = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->endMeter;
-            }
-            $this->_lifeColorPageCount = $pageCount;
+            $meter                     = $this->getMeter();
+            $this->_lifeColorPageCount = $meter->endMeterPrintColor;
         }
 
         return $this->_lifeColorPageCount;
@@ -607,47 +594,21 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @return Proposalgen_Model_DeviceInstanceMeter[]
+     * @return Proposalgen_Model_DeviceInstanceMeter
      */
-    public function getMeters ()
+    public function getMeter ()
     {
-        if (!isset($this->_meters))
+        if (!isset($this->_meter))
         {
-            $meters = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchAllForDeviceInstance($this->id);
-
-            // If we do not have a BLACK meter, then we should try and calculate
-            // it
-            if (!isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
-            {
-                /**
-                 * BLACK METER Calculation:
-                 * StartMeterBLACK = StartMeterLife - StartMeterCOLOR
-                 * EndMeterBLACK = EndMeterLIFE - EndMeterCOLOR
-                 *
-                 * To calculate the BLACK METER we need to have a LIFE meter AND
-                 * a COLOR Meter
-                 */
-                if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]) && isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
-                {
-                    $startMeter                                                       = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]->startMeter - $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->startMeter;
-                    $endMeter                                                         = $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE]->endMeter - $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->endMeter;
-                    $newBlackMeter                                                    = new Proposalgen_Model_DeviceInstanceMeter();
-                    $newBlackMeter->startMeter                                        = $startMeter;
-                    $newBlackMeter->endMeter                                          = $endMeter;
-                    $newBlackMeter->meterType                                         = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
-                    $newBlackMeter->deviceInstanceId                                  = $this->id;
-                    $newBlackMeter->generatedBySystem                                 = true;
-                    $meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK] = $newBlackMeter;
-                }
-            }
-            $this->_meters = $meters;
+            $meters       = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchForDeviceInstance($this->id);
+            $this->_meter = $meters;
         }
 
-        return $this->_meters;
+        return $this->_meter;
     }
 
     /**
-     * @param Proposalgen_Model_DeviceInstanceMeter[] $Meters
+     * @param Proposalgen_Model_DeviceInstanceMeter $Meters
      *
      * @return Proposalgen_Model_DeviceInstance
      */
@@ -712,7 +673,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->monochrome->getMonthly(), $margin);
+            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly(), $margin);
         }
 
         return $this->_costOfBlackAndWhiteInkAndToner;
@@ -728,7 +689,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getPageCounts()->color->getMonthly(), $margin);
+            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly(), $margin);
         }
 
         return $this->_costOfColorInkAndToner;
@@ -806,7 +767,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             // Calculate device usage by dividing it's current monthly volume by its maximum
             if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) > 0)
             {
-                $this->_usage = $this->getPageCounts()->getCombined()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting);
+                $this->_usage = $this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting);
             }
         }
 
@@ -994,7 +955,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $cacheKey = $costPerPageSetting->createCacheKey();
         if (!array_key_exists($cacheKey, $this->_cachedMonthlyBlackAndWhiteCost))
         {
-            $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->monochrome->getMonthly());
+            $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
         }
 
         return $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey];;
@@ -1016,7 +977,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->_monthlyRate = 0;
             $this->_monthlyRate += $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting, $margin);
             $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting, $margin);
-            $this->_monthlyRate += ($this->getPageCounts()->getCombined()->getMonthly() * self::getITCostPerPage());
+            $this->_monthlyRate += ($this->getPageCounts()->getCombinedPageCount()->getMonthly() * self::getITCostPerPage());
         }
 
         return $this->_monthlyRate;
@@ -1057,7 +1018,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getLeasedMonthlyRate ($monthlyLeasePayment, $monochromeCostPerPage, $colorCostPerPage)
     {
-        return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getPageCounts()->monochrome->getMonthly()) + ($colorCostPerPage * $this->getPageCounts()->color->getMonthly());
+        return $monthlyLeasePayment + ($monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly()) + ($colorCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
     }
 
     /**
@@ -1288,11 +1249,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceAction))
         {
-            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombined()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
+            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombinedPageCount()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
-            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getPageCounts()->getCombined()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getPageCounts()->getCombinedPageCount()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
@@ -1333,18 +1294,18 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_pageCounts))
         {
             $pageCounts = new Proposalgen_Model_PageCounts();
-            $meters     = $this->getMeters();
+            $meter      = $this->getMeter();
 
-            // Black page counts
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]))
+            if ($meter instanceof Proposalgen_Model_DeviceInstanceMeter)
             {
-                $pageCounts->monochrome->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK]->calculateAverageDailyPageVolume());
-            }
-
-            // Color page counts
-            if (isset($meters [Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]))
-            {
-                $pageCounts->color->setDaily($meters[Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR]->calculateAverageDailyPageVolume());
+                $pageCounts->getBlackPageCount()->add($meter->getBlackPageCount());
+                $pageCounts->getColorPageCount()->add($meter->getColorPageCount());
+                $pageCounts->getCopyBlackPageCount()->add($meter->getCopyBlackPageCount());
+                $pageCounts->getCopyColorPageCount()->add($meter->getCopyColorPageCount());
+                $pageCounts->getFaxPageCount()->add($meter->getFaxPageCount());
+                $pageCounts->getScanPageCount()->add($meter->getScanPageCount());
+                $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
+                $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
             }
 
             $this->_pageCounts = $pageCounts;
@@ -1470,7 +1431,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
 
-        return $monoCostPerPage * $this->getPageCounts()->monochrome->getMonthly();
+        return $monoCostPerPage * $this->getMeter()->getBlackPageCount()->getMonthly();
     }
 
     /**
@@ -1487,7 +1448,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
 
-        return $colorCostPerPage * $this->getPageCounts()->color->getMonthly();
+        return $colorCostPerPage * $this->getMeter()->getColorPageCount()->getMonthly();
     }
 
     /**
@@ -1503,7 +1464,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $percent = 0;
         if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) > 0)
         {
-            $percent = ($this->getPageCounts()->getCombined()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 100);
+            $percent = ($this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 100);
         }
 
         return $percent;
@@ -1519,7 +1480,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateMonthlyPercentOfTotalVolume ($totalPageVolume)
     {
-        return $this->getPageCounts()->getCombined()->getMonthly() / $totalPageVolume * 100;
+        return $this->getPageCounts()->getCombinedPageCount()->getMonthly() / $totalPageVolume * 100;
     }
 
     /**

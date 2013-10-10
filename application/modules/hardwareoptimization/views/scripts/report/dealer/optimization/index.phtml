@@ -57,9 +57,9 @@ $totalDevices = $optimizationDevices->getDeviceCount();
     </tr>
     <tr>
         <td><strong>Monthly Monochrome Page Count:</strong></td>
-        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly());?></td>
+        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
         <td><strong>Monthly Color Page Count:</strong></td>
-        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly());?></td>
+        <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly());?></td>
     </tr>
 </table>
 <br />
@@ -78,9 +78,9 @@ $totalDevices = $optimizationDevices->getDeviceCount();
     </tr>
     <tr>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
+        <td><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
         <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td style='width:250px;'><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() > 0) ?$this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
+        <td style='width:250px;'><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ?$this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'No print volume'; ?></td>
     </tr>
     <tr>
         <td style='width:150px;'><strong>Total Cost:</strong></td>
@@ -156,8 +156,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
                 <td><?php echo ($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
                 <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice));?></td>
                 <!-- Monthly Statistics -->
-                <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-                <td><?php echo ($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';?></td>
+                <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+                <td><?php echo ($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A';?></td>
                 <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice()));?></td>
             </tr>
         <?php endforeach?>
@@ -185,8 +185,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
         <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next();?>'>
             <td class='deviceName'><?php echo '<em>' . $device->getMasterDevice()->getManufacturer()->fullname . '</em><br/><strong>' . $device->getMasterDevice()->modelName . '</strong><br/><em>';?></td>
             <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-            <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';?></td>
+            <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
             <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
@@ -246,8 +246,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
             <td><?php echo number_format($device->getLifePageCount())?></td>
             <td><?php echo number_format($device->getMasterDevice()->getAge());?></td>
             <td><?php echo ($device->reportsTonerLevels) ? 'Yes' : 'No';?>
-            <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';?></td>
+            <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
             <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
@@ -274,8 +274,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
         <tr>
             <td class='deviceName'><?php echo '<em>' . $device->getMasterDevice()->getManufacturer()->fullname . '</em><br/><strong>' . $device->getMasterDevice()->modelName . '</strong><br/><em>';?></td>
             <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-            <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';?></td>
+            <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array('precision' => 4));?></td>
             <td><?php echo ($isColor) ? $this->currency($device->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, array('precision' => 4)) : 'N/A';?></td>
             <td><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting));?></td>
@@ -301,8 +301,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
 
             <td class='deviceName'><?php echo '<em>' . $device->getMasterDevice()->getManufacturer()->fullname . '</em><br/><strong>' . $device->getMasterDevice()->modelName . '</strong><br/><em>';?></td>
             <td class='deviceName'><?php echo $device->serialNumber . '<br/>' . $device->ipAddress . '</em>';?></td>
-            <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->color->getMonthly()) : 'N/A';?></td>
+            <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+            <td><?php echo ($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A';?></td>
         </tr>
     <?php endforeach?>
 </table>
@@ -322,8 +322,8 @@ $totalDevices = $optimizationDevices->getDeviceCount();
             <td class='deviceName'><?php echo $device->getDeviceName();?></td>
             <td><?php echo $device->ipAddress;?></td>
             <td><?php echo $device->serialNumber;?></td>
-            <td><?php echo number_format($device->getPageCounts()->monochrome->getMonthly());?></td>
-            <td><?php echo number_format($device->getPageCounts()->color->getMonthly());?></td>
+            <td><?php echo number_format($device->getPageCounts()->getBlackPageCount()->getMonthly());?></td>
+            <td><?php echo number_format($device->getPageCounts()->getColorPageCount()->getMonthly());?></td>
         </tr>
     <?php endforeach;?>
 </table>

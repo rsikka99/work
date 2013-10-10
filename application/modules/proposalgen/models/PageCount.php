@@ -13,34 +13,29 @@ class Proposalgen_Model_PageCount
     const DAYS_IN_A_YEAR    = 365.242;
 
     /**
-     * @var int
+     * @var float
      */
     protected $_daily = 0;
 
     /**
-     * @var int
+     * @var float
      */
     protected $_weekly;
 
     /**
-     * @var int
+     * @var float
      */
     protected $_monthly;
 
     /**
-     * @var int
+     * @var float
      */
     protected $_quarterly;
 
     /**
-     * @var int
+     * @var float
      */
     protected $_yearly;
-
-    /**
-     * @var bool
-     */
-    protected $_recalculate = false;
 
     /**
      * Adds a page count
@@ -52,7 +47,7 @@ class Proposalgen_Model_PageCount
     public function add ($pageCount)
     {
         $this->_daily += $pageCount->_daily;
-        $this->_recalculate = true;
+        $this->_resetCalculatedPageCounts();
 
         return $this;
     }
@@ -67,7 +62,7 @@ class Proposalgen_Model_PageCount
     public function subtract ($pageCount)
     {
         $this->_daily -= $pageCount->_daily;
-        $this->_recalculate = true;
+        $this->_resetCalculatedPageCounts();
 
         return $this;
     }
@@ -75,7 +70,7 @@ class Proposalgen_Model_PageCount
     /**
      * Gets the daily page count
      *
-     * @return int
+     * @return float
      */
     public function getDaily ()
     {
@@ -85,14 +80,14 @@ class Proposalgen_Model_PageCount
     /**
      * Sets the daily value
      *
-     * @param int $pageCount
+     * @param float $pageCount
      *
      * @return $this
      */
     public function setDaily ($pageCount)
     {
-        $this->_recalculate = true;
-        $this->_daily       = $pageCount;
+        $this->_resetCalculatedPageCounts();
+        $this->_daily = $pageCount;
 
         return $this;
     }
@@ -100,15 +95,10 @@ class Proposalgen_Model_PageCount
     /**
      * Gets the weekly page count
      *
-     * @return int
+     * @return float
      */
     public function getWeekly ()
     {
-        if ($this->_recalculate)
-        {
-            $this->_resetCalculatedPageCounts();
-        }
-
         if (!isset($this->_weekly))
         {
             $this->_weekly = $this->_daily * self::DAYS_IN_A_WEEK;
@@ -120,15 +110,10 @@ class Proposalgen_Model_PageCount
     /**
      * Gets the monthly page count
      *
-     * @return int
+     * @return float
      */
     public function getMonthly ()
     {
-        if ($this->_recalculate)
-        {
-            $this->_resetCalculatedPageCounts();
-        }
-
         if (!isset($this->_monthly))
         {
             $this->_monthly = $this->_daily * self::DAYS_IN_A_MONTH;
@@ -140,15 +125,10 @@ class Proposalgen_Model_PageCount
     /**
      * Gets the quarterly page count
      *
-     * @return int
+     * @return float
      */
     public function getQuarterly ()
     {
-        if ($this->_recalculate)
-        {
-            $this->_resetCalculatedPageCounts();
-        }
-
         if (!isset($this->_quarterly))
         {
             $this->_quarterly = $this->_daily * self::DAYS_IN_A_QUARTER;
@@ -160,15 +140,10 @@ class Proposalgen_Model_PageCount
     /**
      * Gets the yearly page count
      *
-     * @return int
+     * @return float
      */
     public function getYearly ()
     {
-        if ($this->_recalculate)
-        {
-            $this->_resetCalculatedPageCounts();
-        }
-
         if (!isset($this->_yearly))
         {
             $this->_yearly = $this->_daily * self::DAYS_IN_A_YEAR;
@@ -182,10 +157,9 @@ class Proposalgen_Model_PageCount
      */
     protected function _resetCalculatedPageCounts ()
     {
-        $this->_recalculate = false;
-        $this->_weekly      = null;
-        $this->_monthly     = null;
-        $this->_quarterly   = null;
-        $this->_yearly      = null;
+        $this->_weekly    = null;
+        $this->_monthly   = null;
+        $this->_quarterly = null;
+        $this->_yearly    = null;
     }
 }

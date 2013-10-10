@@ -234,29 +234,144 @@ class Proposalgen_Service_Rms_Upload
                                 $meter->monitorStartDate = $line->monitorStartDate;
                                 $meter->monitorEndDate   = $line->monitorEndDate;
 
-                                // Black Meter
-                                $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_BLACK;
-                                $meter->startMeter = $line->startMeterBlack;
-                                $meter->endMeter   = $line->endMeterBlack;
-                                $deviceInstanceMeterMapper->insert($meter);
+                                $defaultDatabaseField = new Zend_Db_Expr('NULL');
 
-                                // Color Meter
+                                //  Black
+                                if ($line->endMeterBlack > 0)
+                                {
+                                    $meter->startMeterBlack = $line->startMeterBlack;
+                                    $meter->endMeterBlack   = $line->endMeterBlack;
+                                }
+                                // If we don't have a meter lets try creating it
+                                else if ($line->endMeterLife > 0)
+                                {
+                                    $endMeterBlack = $line->endMeterLife - $line->endMeterPrintColor - $line->endMeterCopyColor - $line->endMeterPrintA3Color;
+                                    if ($endMeterBlack > 0)
+                                    {
+                                        $meter->startMeterBlack = $line->startMeterLife - $line->startMeterPrintColor - $line->startMeterCopyColor - $line->startMeterPrintA3Color;
+                                        $meter->endMeterBlack   = $endMeterBlack;
+                                    }
+                                    else
+                                    {
+                                        $meter->startMeterBlack = $defaultDatabaseField;
+                                        $meter->endMeterBlack   = $defaultDatabaseField;
+                                    }
+                                }
+                                else
+                                {
+                                    $meter->startMeterBlack = $defaultDatabaseField;
+                                    $meter->endMeterBlack   = $defaultDatabaseField;
+                                }
+
+                                //  Color
                                 if ($line->endMeterColor > 0)
                                 {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_COLOR;
-                                    $meter->startMeter = $line->startMeterColor;
-                                    $meter->endMeter   = $line->endMeterColor;
-                                    $deviceInstanceMeterMapper->insert($meter);
+                                    $meter->startMeterColor = $line->startMeterColor;
+                                    $meter->endMeterColor   = $line->endMeterColor;
+                                }
+                                else
+                                {
+                                    $meter->startMeterColor = $defaultDatabaseField;
+                                    $meter->endMeterColor   = $defaultDatabaseField;
                                 }
 
-                                // Life Meter
-                                if ($line->endMeterLife > 0)
+                                // Print Black
+                                if ($line->endMeterPrintBlack > 0)
                                 {
-                                    $meter->meterType  = Proposalgen_Model_DeviceInstanceMeter::METER_TYPE_LIFE;
-                                    $meter->startMeter = $line->startMeterLife;
-                                    $meter->endMeter   = $line->endMeterLife;
-                                    $deviceInstanceMeterMapper->insert($meter);
+                                    $meter->startMeterPrintBlack = $line->startMeterPrintBlack;
+                                    $meter->endMeterPrintBlack   = $line->endMeterPrintBlack;
                                 }
+                                else
+                                {
+                                    $meter->startMeterPrintBlack = $defaultDatabaseField;
+                                    $meter->endMeterPrintBlack   = $defaultDatabaseField;
+                                }
+
+                                // Print Color
+                                if ($line->endMeterPrintColor > 0)
+                                {
+                                    $meter->startMeterPrintColor = $line->startMeterPrintColor;
+                                    $meter->endMeterPrintColor   = $line->endMeterPrintColor;
+                                }
+                                else
+                                {
+                                    $meter->startMeterPrintColor = $defaultDatabaseField;
+                                    $meter->endMeterPrintColor   = $defaultDatabaseField;
+                                }
+
+                                // Copy Black
+                                if ($line->endMeterCopyBlack > 0)
+                                {
+                                    $meter->startMeterCopyBlack = $line->startMeterCopyBlack;
+                                    $meter->endMeterCopyBlack   = $line->endMeterCopyBlack;
+                                }
+                                else
+                                {
+                                    $meter->startMeterCopyBlack = $defaultDatabaseField;
+                                    $meter->endMeterCopyBlack   = $defaultDatabaseField;
+                                }
+
+                                // Copy Color
+                                if ($line->endMeterCopyColor > 0)
+                                {
+                                    $meter->startMeterCopyColor = $line->startMeterCopyColor;
+                                    $meter->endMeterCopyColor   = $line->endMeterCopyColor;
+                                }
+                                else
+                                {
+                                    $meter->startMeterCopyColor = $defaultDatabaseField;
+                                    $meter->endMeterCopyColor   = $defaultDatabaseField;
+                                }
+
+                                // Fax
+                                if ($line->endMeterFax > 0)
+                                {
+                                    $meter->startMeterFax = $line->startMeterFax;
+                                    $meter->endMeterFax   = $line->endMeterFax;
+                                }
+                                else
+                                {
+                                    $meter->startMeterFax = $defaultDatabaseField;
+                                    $meter->endMeterFax   = $defaultDatabaseField;
+                                }
+
+                                // Scan
+                                if ($line->endMeterScan > 0)
+                                {
+                                    $meter->startMeterScan = $line->startMeterScan;
+                                    $meter->endMeterScan   = $line->endMeterScan;
+                                }
+                                else
+                                {
+                                    $meter->startMeterScan = $defaultDatabaseField;
+                                    $meter->endMeterScan   = $defaultDatabaseField;
+                                }
+
+                                // Print A3 Black
+                                if ($line->endMeterPrintA3Black > 0)
+                                {
+                                    $meter->startMeterPrintA3Black = $line->startMeterPrintA3Black;
+                                    $meter->endMeterPrintA3Black   = $line->endMeterPrintA3Black;
+                                }
+                                else
+                                {
+                                    $meter->startMeterPrintA3Black = $defaultDatabaseField;
+                                    $meter->endMeterPrintA3Black   = $defaultDatabaseField;
+                                }
+
+                                // Print A3 Color
+                                if ($line->endMeterPrintA3Color > 0)
+                                {
+                                    $meter->startMeterPrintA3Color = $line->startMeterPrintA3Color;
+                                    $meter->endMeterPrintA3Color   = $line->endMeterPrintA3Color;
+                                }
+                                else
+                                {
+                                    $meter->startMeterPrintA3Color = $defaultDatabaseField;
+                                    $meter->endMeterPrintA3Color   = $defaultDatabaseField;
+                                }
+
+                                Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->insert($meter);
                             }
 
                             /**

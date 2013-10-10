@@ -208,9 +208,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
         Proposalgen_Model_DeviceInstance::$KWH_Cost = $healthcheckSettings->kilowattsPerHour;
 
-        Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getYearly());
-//        $this->_pageCount = new Proposalgen_Model_PageCounts();
-//        $this->_pageCount->add($this->getDevices()->allIncludedDeviceInstances->devices);
+        if ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() > 0)
+        {
+            Proposalgen_Model_DeviceInstance::$ITCostPerPage = (($this->getAnnualITCost() * 0.5 + $this->getAnnualCostOfOutSourcing()) / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly());
+        }
+        else
+        {
+            Proposalgen_Model_DeviceInstance::$ITCostPerPage = 0.0;
+        }
     }
 
     /**
@@ -323,7 +328,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->EstimatedAnnualCostOfLeaseMachines))
         {
-            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly() * $this->getLeasedBlackAndWhiteCharge()) + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly() * $this->getLeasedColorCharge());
+            $this->EstimatedAnnualCostOfLeaseMachines = $this->getCombinedAnnualLeasePayments() + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() * $this->getLeasedBlackAndWhiteCharge()) + ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() * $this->getLeasedColorCharge());
         }
 
         return $this->EstimatedAnnualCostOfLeaseMachines;
@@ -580,7 +585,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -601,7 +606,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesOverusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()))
                 {
                     $devicesOverusedCount++;
                 }
@@ -622,7 +627,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -745,7 +750,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getPageCounts()->getCombined()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
                     if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) < 1)
@@ -848,7 +853,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
-                    $costArray[] = array($key, $deviceInstance->getPageCounts()->color->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                    $costArray[] = array($key, $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
                 }
             }
 
@@ -1364,24 +1369,24 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[1]
             $this->Graphs [] = $barGraph->getUrl();
-            $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
+            $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
+            $highest  = ($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
+                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly())
+                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -1443,7 +1448,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
+            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -1480,7 +1485,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
@@ -1834,7 +1839,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateEstimatedCompTonerCostAnnually ()
     {
-        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
+        return ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
     }
 
     /**
@@ -1844,7 +1849,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateEstimatedOemTonerCostAnnually ()
     {
-        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
+        return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
     }
 
     /**
@@ -1992,7 +1997,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAveragePagesPerDeviceMonthly ()
     {
-        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
+        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
     }
 
     /**
@@ -2002,7 +2007,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculatePercentOfTotalVolumePurchasedColorMonthly ()
     {
-        return ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) * 100;
+        return ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100;
     }
 
     /**
@@ -2012,7 +2017,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculatePercentOfTotalVolumeColorMonthly ()
     {
-        return ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) * 100;
+        return ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100;
     }
 
     /**
@@ -2023,7 +2028,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculateAverageTotalCostOemMonochromeMonthly ()
     {
 
-        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+        return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
     }
 
     /**
@@ -2033,7 +2038,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAverageTotalCostCompatibleMonochromeMonthly ()
     {
-        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly();
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
     }
 
     /**
@@ -2043,7 +2048,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAverageTotalCostOemColorMonthly ()
     {
-        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+        return $this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
     }
 
     /**
@@ -2053,7 +2058,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAverageTotalCostCompatibleColorMonthly ()
     {
-        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly();
+        return $this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
     }
 
     /**
@@ -2107,11 +2112,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($device->isManaged)
                 {
-                    $deviceAges ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombined()->getMonthly();
+                    $deviceAges ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $deviceAges ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombined()->getMonthly();
+                    $deviceAges ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
             $dataSet     = array();
@@ -2124,7 +2129,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 {
                     $dataSet []     = $count;
                     $legendItems [] = $legendItem;
-                    $percentage     = round(($count / $this->getPageCounts()->getCombined()->getMonthly()) * 100, 2);
+                    $percentage     = round(($count / $this->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100, 2);
                     $labels []      = "$percentage%";
                 }
             }
@@ -2145,14 +2150,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- HardwareUtilizationCapacityBar
              */
-            $highest  = ($this->getMaximumMonthlyPrintVolume() > $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()) ? $this->getMaximumMonthlyPrintVolume() : $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly();
+            $highest  = ($this->getMaximumMonthlyPrintVolume() > $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->getMaximumMonthlyPrintVolume() : $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $barGraph = new gchart\gGroupedBarChart(600, 160);
             $barGraph->setHorizontal(true);
             $barGraph->setVisibleAxes(array(
                                            'x'
                                       ));
             $barGraph->addDataSet(array(
-                                       $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly()
+                                       $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
@@ -2217,16 +2222,16 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ColorVSBWPagesGraph
              */
-            $blackAndWhitePageCount = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() - $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly();
+            $blackAndWhitePageCount = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() - $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
 
-            $highest  = ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() > $blackAndWhitePageCount) ? $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly() : $blackAndWhitePageCount;
+            $highest  = ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > $blackAndWhitePageCount) ? $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() : $blackAndWhitePageCount;
             $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color vs Black/White Pages");
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->color->getMonthly()
+                                       $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
@@ -2315,8 +2320,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             // CompatibleJITBarGraph
             $healthcheckGraphs['CompatibleJITBarGraph'] = $barGraph->getUrl();
 
-            $oemCost  = ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
-            $compCost = ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly())) * 12;
+            $oemCost  = ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
+            $compCost = ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
             /**
              * -- DifferenceBarGraph
              */
@@ -2352,7 +2357,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- HardwareUtilizationCapacityPercent
              */
-            $percentage = ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getMaximumMonthlyPrintVolume());
+            $percentage = ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMaximumMonthlyPrintVolume());
             $highest    = 100;
             $barGraph   = new gchart\gStackedBarChart(600, 160);
             $barGraph->setHorizontal(true);
@@ -2578,7 +2583,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesBarGraph
              */
-            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
+            $averagePageCount = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount(), 0);
             $highest          = ($averagePageCount > Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE) ? $averagePageCount : Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_DEVICE;
             $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
@@ -2615,7 +2620,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getMonthly() / $employeeCount);
+            $pagesPerEmployee = round($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $employeeCount);
             $highest          = (Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(165, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
@@ -2758,11 +2763,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($device->isManaged)
                 {
-                    $pagesPrinted ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombined()->getMonthly();
+                    $pagesPrinted ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $pagesPrinted ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombined()->getMonthly();
+                    $pagesPrinted ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
 
@@ -2876,7 +2881,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateNumberOfTreesUsed ()
     {
-        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() / self::PAGES_PER_TREE;
+        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() / self::PAGES_PER_TREE;
     }
 
     /**
@@ -2896,7 +2901,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateNumberOfGallonsWaterUsed ()
     {
-        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombined()->getYearly() * self::GALLONS_WATER_PER_PAGE;
+        return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getYearly() * self::GALLONS_WATER_PER_PAGE;
     }
 
     /**

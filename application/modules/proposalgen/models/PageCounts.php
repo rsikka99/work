@@ -7,30 +7,96 @@ class Proposalgen_Model_PageCounts
     /**
      * @var Proposalgen_Model_PageCount
      */
-    public $monochrome;
+    protected $_blackPageCount;
 
     /**
      * @var Proposalgen_Model_PageCount
      */
-    public $color;
+    protected $_colorPageCount;
 
     /**
      * @var Proposalgen_Model_PageCount
      */
-    protected $_combined;
+    protected $_combinedPageCount;
 
     /**
-     * @var bool
+     * @var Proposalgen_Model_PageCount
      */
-    protected $_recalculateCombined = false;
+    protected $_printBlackPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_printColorPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_printCombinedPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_copyBlackPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_copyColorPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_copyCombinedPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_faxPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_scanPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_printA3BlackPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_printA3ColorPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_printA3CombinedPageCount;
+
+    /**
+     * @var Proposalgen_Model_PageCount
+     */
+    protected $_lifePageCount;
 
     /**
      * Creates a page counts object
      */
     public function __construct ()
     {
-        $this->monochrome = new Proposalgen_Model_PageCount();
-        $this->color      = new Proposalgen_Model_PageCount();
+        $this->_blackPageCount        = new Proposalgen_Model_PageCount();
+        $this->_colorPageCount        = new Proposalgen_Model_PageCount();
+        $this->_printBlackPageCount   = new Proposalgen_Model_PageCount();
+        $this->_printColorPageCount   = new Proposalgen_Model_PageCount();
+        $this->_copyBlackPageCount    = new Proposalgen_Model_PageCount();
+        $this->_copyColorPageCount    = new Proposalgen_Model_PageCount();
+        $this->_faxPageCount          = new Proposalgen_Model_PageCount();
+        $this->_scanPageCount         = new Proposalgen_Model_PageCount();
+        $this->_printA3BlackPageCount = new Proposalgen_Model_PageCount();
+        $this->_printA3ColorPageCount = new Proposalgen_Model_PageCount();
+        $this->_lifePageCount         = new Proposalgen_Model_PageCount();
+
+        $this->resetCombinedPageCounts();
     }
 
     /**
@@ -40,9 +106,19 @@ class Proposalgen_Model_PageCounts
      */
     public function add ($pageCounts)
     {
-        $this->monochrome->add($pageCounts->monochrome);
-        $this->color->add($pageCounts->color);
-        $this->_recalculateCombined = true;
+        $this->_blackPageCount->add($pageCounts->_blackPageCount);
+        $this->_colorPageCount->add($pageCounts->_colorPageCount);
+        $this->_printBlackPageCount->add($pageCounts->_printBlackPageCount);
+        $this->_printColorPageCount->add($pageCounts->_printColorPageCount);
+        $this->_copyBlackPageCount->add($pageCounts->_copyBlackPageCount);
+        $this->_copyColorPageCount->add($pageCounts->_copyColorPageCount);
+        $this->_faxPageCount->add($pageCounts->_faxPageCount);
+        $this->_scanPageCount->add($pageCounts->_scanPageCount);
+        $this->_printA3BlackPageCount->add($pageCounts->_printA3BlackPageCount);
+        $this->_printA3ColorPageCount->add($pageCounts->_printA3ColorPageCount);
+        $this->_lifePageCount->add($pageCounts->_lifePageCount);
+
+        $this->resetCombinedPageCounts();
     }
 
     /**
@@ -52,26 +128,184 @@ class Proposalgen_Model_PageCounts
      */
     public function subtract ($pageCounts)
     {
-        $this->monochrome->subtract($pageCounts->monochrome);
-        $this->color->subtract($pageCounts->color);
-        $this->_recalculateCombined = true;
+        $this->_blackPageCount->subtract($pageCounts->_blackPageCount);
+        $this->_colorPageCount->subtract($pageCounts->_colorPageCount);
+        $this->_printBlackPageCount->subtract($pageCounts->_printBlackPageCount);
+        $this->_printColorPageCount->subtract($pageCounts->_printColorPageCount);
+        $this->_copyBlackPageCount->subtract($pageCounts->_copyBlackPageCount);
+        $this->_copyColorPageCount->subtract($pageCounts->_copyColorPageCount);
+        $this->_faxPageCount->subtract($pageCounts->_faxPageCount);
+        $this->_scanPageCount->subtract($pageCounts->_scanPageCount);
+        $this->_printA3BlackPageCount->subtract($pageCounts->_printA3BlackPageCount);
+        $this->_printA3ColorPageCount->subtract($pageCounts->_printA3ColorPageCount);
+        $this->_lifePageCount->subtract($pageCounts->_lifePageCount);
+
+        $this->resetCombinedPageCounts();
     }
 
     /**
-     * Gets the combined page count
-     *
+     * Resets all the combined and total page counts.
+     */
+    protected function resetCombinedPageCounts ()
+    {
+        $this->_printCombinedPageCount   = null;
+        $this->_copyCombinedPageCount    = null;
+        $this->_combinedPageCount        = null;
+        $this->_printA3CombinedPageCount = null;
+    }
+
+    /**
      * @return Proposalgen_Model_PageCount
      */
-    public function getCombined ()
+    public function getBlackPageCount ()
     {
-        if (!isset($this->_combined) || $this->_recalculateCombined)
+        return $this->_blackPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getColorPageCount ()
+    {
+        return $this->_colorPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getCombinedPageCount ()
+    {
+        if (!isset($this->_combinedPageCount))
         {
-            $this->_recalculateCombined = false;
-            $this->_combined            = new Proposalgen_Model_PageCount();
-            $this->_combined->add($this->monochrome);
-            $this->_combined->add($this->color);
+            $this->_combinedPageCount = new Proposalgen_Model_PageCount();
+            $this->_combinedPageCount->add($this->_blackPageCount);
+            $this->_combinedPageCount->add($this->_colorPageCount);
         }
 
-        return $this->_combined;
+        return $this->_combinedPageCount;
     }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public function getPrintBlackPageCount ()
+    {
+        return $this->_printBlackPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getPrintColorPageCount ()
+    {
+        return $this->_printColorPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getPrintCombinedPageCount ()
+    {
+        if (!isset($this->_printCombinedPageCount))
+        {
+            $this->_printCombinedPageCount = new Proposalgen_Model_PageCount();
+            $this->_printCombinedPageCount->add($this->_printBlackPageCount);
+            $this->_printCombinedPageCount->add($this->_printColorPageCount);
+        }
+
+        return $this->_printCombinedPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getCopyBlackPageCount ()
+    {
+        return $this->_copyBlackPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getCopyColorPageCount ()
+    {
+        return $this->_copyColorPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getCopyCombinedPageCount ()
+    {
+        if (!isset($this->_copyCombinedPageCount))
+        {
+            $this->_copyCombinedPageCount = new Proposalgen_Model_PageCount();
+            $this->_copyCombinedPageCount->add($this->_copyBlackPageCount);
+            $this->_copyCombinedPageCount->add($this->_copyColorPageCount);
+        }
+
+        return $this->_copyCombinedPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getFaxPageCount ()
+    {
+        return $this->_faxPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getScanPageCount ()
+    {
+        return $this->_scanPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getPrintA3BlackPageCount ()
+    {
+        return $this->_printA3BlackPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getPrintA3ColorPageCount ()
+    {
+        return $this->_printA3ColorPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public Function getPrintA3CombinedPageCount ()
+    {
+        if (!isset($this->_printA3CombinedPageCount))
+        {
+            $this->_printA3CombinedPageCount = new Proposalgen_Model_PageCount();
+            $this->_printA3CombinedPageCount->add($this->_printA3BlackPageCount);
+            $this->_printA3CombinedPageCount->add($this->_printA3ColorPageCount);
+        }
+
+        return $this->_printA3CombinedPageCount;
+    }
+
+    /**
+     * @return Proposalgen_Model_PageCount
+     */
+    public function getLifePageCount ()
+    {
+        if (!isset($this->_lifePageCount))
+        {
+            $this->_lifePageCount = new Proposalgen_Model_PageCount();
+            $this->_lifePageCount->add($this->_lifePageCount);
+        }
+
+        return $this->_lifePageCount;
+    }
+
 }

@@ -11,6 +11,13 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
     public $col_deviceInstanceId = 'deviceInstanceId';
 
     /**
+     * Caches all the different meters using the deviceInstanceId as the key
+     *
+     * @var array
+     */
+    protected $_deviceInstanceMeterCache = array();
+
+    /**
      * The default db table class to use
      *
      * @var String
@@ -231,29 +238,21 @@ class Proposalgen_Model_Mapper_DeviceInstanceMeter extends My_Model_Mapper_Abstr
     }
 
 
-    protected $_ICACHETHINGS = array();
     /**
      * Fetches all the meters for a given device instance
      *
      * @param $deviceInstanceId
      *
-     * @return Proposalgen_Model_DeviceInstanceMeter[]
+     * @return Proposalgen_Model_DeviceInstanceMeter
      */
-    public function fetchAllForDeviceInstance ($deviceInstanceId)
+    public function fetchForDeviceInstance ($deviceInstanceId)
     {
-        if (!isset($this->_ICACHETHINGS[$deviceInstanceId]))
+        if (!isset($this->_deviceInstanceMeterCache[$deviceInstanceId]))
         {
-        $meterArray = array();
-        $meters     = $this->fetchAll(array("{$this->col_deviceInstanceId} = ?" => $deviceInstanceId));
-
-        foreach ($meters as $meter)
-        {
-            $meterArray[$meter->meterType] = $meter;
+            $meters                                             = $this->fetch(array("{$this->col_deviceInstanceId} = ?" => $deviceInstanceId));
+            $this->_deviceInstanceMeterCache[$deviceInstanceId] = $meters;
         }
 
-            $this->_ICACHETHINGS[$deviceInstanceId] = $meterArray;
-        }
-
-        return $this->_ICACHETHINGS[$deviceInstanceId];
+        return $this->_deviceInstanceMeterCache[$deviceInstanceId];
     }
 }

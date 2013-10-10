@@ -172,7 +172,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
                 <div><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>
             </td>
             <td class="column2 mono">
-                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->monochrome->getMonthly()); ?></div>
+                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
             </td>
 
             <td class="column3 mono">
@@ -191,7 +191,7 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
 
             <!-- Color -->
             <td class="column7 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->color->getMonthly()) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-"; ?></div>
             </td>
             <td class="column8 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo $colorCost ?></div>
@@ -214,14 +214,14 @@ $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/gros
             <div>Totals for <?php echo $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount(); ?> devices:</div>
         </td>
         <td>
-            <div class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getMonthly()); ?></div>
+            <div class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td class="column2">
             <div class="right">$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2); ?></div>
         </td>
         <td>
-            <div class="center"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getMonthly()); ?></div>
+            <div class="center"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td>

@@ -75,22 +75,22 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
+                        $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
                     else
                     {
-                        $replacementDevices = $this->getBlackReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
+                        $replacementDevices = $this->getBlackReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
                 }
                 else
                 {
                     if ($deviceInstance->getMasterDevice()->isCopier)
                     {
-                        $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
+                        $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
                     else
                     {
-                        $replacementDevices = $this->getColorReplacementDevices($deviceInstance->getPageCounts()->getCombined()->getMonthly());
+                        $replacementDevices = $this->getColorReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
                 }
                 $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimizationId);

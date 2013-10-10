@@ -55,11 +55,11 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Predicted average annual monochrome prints on leased machines</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td></td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Estimated annual total lease payments<br /><em>Based on
@@ -153,11 +153,11 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Predicted average annual monochrome prints</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->monochrome->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Predicted average annual color prints</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->color->getYearly()); ?></td>
+        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td class="bold">Estimated all-in cost for a monochrome page</td>
@@ -196,7 +196,7 @@ $assessmentViewModel = $this->assessmentViewModel;
                 <div style="width: 225px; padding: 0px;"><?php echo $deviceInstance->getDeviceName(); ?></div>
             </td>
             <td class="center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
-            <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->getCombined()->getMonthly()); ?> pages</td>
+            <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?> pages</td>
             <td class="center">
                 $<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(), $assessmentViewModel->getReportMargin())); ?></td>
         </tr>

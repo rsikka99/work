@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<deviceInstanceMeters>
+    <deviceInstanceMeter>
+        <data>
+            <monitorStartDate>2013-10-03 00:00:00</monitorStartDate>
+            <monitorEndDate>2013-10-04 00:00:00</monitorEndDate>
+            <startMeter>100</startMeter>
+            <endMeter>400</endMeter>
+            <expectedPageCount>300</expectedPageCount>
+        </data>
+    </deviceInstanceMeter>
+    <deviceInstanceMeter>
+        <data>
+            <monitorStartDate>2013-10-03 00:00:00</monitorStartDate>
+            <monitorEndDate>2013-10-13 00:00:00</monitorEndDate>
+            <startMeter>0</startMeter>
+            <endMeter>10000</endMeter>
+            <expectedPageCount>1000</expectedPageCount>
+        </data>
+    </deviceInstanceMeter>
+</deviceInstanceMeters>
