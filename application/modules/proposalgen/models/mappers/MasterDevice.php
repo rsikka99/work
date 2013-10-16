@@ -423,6 +423,11 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         }
         else
         {
+            if ($sortColumn == "modelName")
+            {
+                $sortColumn = "CONCAT({$manufacturerTableName}.fullname, \" \", {$masterDevicesTableName}.modelName)";
+            }
+
             $zendDbSelect->order("{$sortColumn} {$sortDirection}");
             $zendDbStatement = $db->query($zendDbSelect);
 
