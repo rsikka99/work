@@ -74,6 +74,7 @@
 <?php if ($this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX)
           || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD)
           || $this->isAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_USER_WILDCARD)
+          || $this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE)
 ) : ?>
     <h3>Account Management</h3>
     <div class="row">
@@ -93,6 +94,12 @@
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "user", "module" => "dealermanagement")); ?>"><i class="icon-group icon-4x"></i><br /><br />
                     Users<br /><br /></a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "manufacturer", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
+                    Manufacturers<br /><br /></a>
             </div>
         <?php endif; ?>
     </div>
