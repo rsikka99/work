@@ -82,7 +82,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                  */
                 if ($form->isValid($values))
                 {
-                    $success = $uploadService->processUpload($values);
+                    $success = $uploadService->processUpload($values, $this->_identity->dealerId);
 
                     /**
                      * Log how much time it took
@@ -411,7 +411,14 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstanceId;
                                 $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
                                 $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
+                            }
 
+                            // Update the device instances JIT Compatibility to the new master device
+                            $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
+                            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                            {
+                                $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_identity->dealerId);
+                                Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
                             }
                         }
                     }
@@ -430,7 +437,6 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 // Invalid Master Device
                 $errorMessage = "Invalid master device selected";
             }
-
         }
 
         if ($errorMessage !== null)
@@ -539,10 +545,11 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 {
 
                     $row = array(
-                        "id"         => $deviceInstance->id,
-                        "isExcluded" => $deviceInstance->isExcluded,
-                        "ampv"       => number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
-                        "isLeased"   => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
+                        "id"                       => $deviceInstance->id,
+                        "isExcluded"               => $deviceInstance->isExcluded,
+                        "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
+                        "ampv"                     => number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
+                        "isLeased"                 => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
                     );
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
@@ -763,16 +770,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         if ($rmsUploadId > 0)
         {
             $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
-            $isExcluded       = $this->_getParam("isExcluded", false);
-            if ($isExcluded == 'true')
-            {
-                $isExcluded = true;
-            }
-            else
-            {
-                $isExcluded = false;
-            }
-            $errorMessage = false;
+            $isExcluded       = $this->_getParam("isExcluded", false) == 'true';
+            $errorMessage     = false;
 
             if ($deviceInstanceId !== false)
             {
@@ -842,6 +841,95 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             else
             {
                 $this->sendJson(array("success" => true, "message" => "Device is now included. "));
+            }
+        }
+        else
+        {
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+        }
+    }
+
+    /**
+     * Handles Toggling the Jit Compatibility of devices
+     */
+    public function toggleJitFlagAction ()
+    {
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        if ($rmsUploadId > 0)
+        {
+            $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+            $isJitCompatible  = $this->_getParam("compatibleWithJitProgram", false) == 'true';
+            $errorMessage     = false;
+
+            if ($deviceInstanceId !== false)
+            {
+                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
+                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                {
+                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    if ($rmsUpload)
+                    {
+                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        if ($includedDeviceInstanceCount > 2 || $isJitCompatible === false)
+                        {
+                            if ($rmsUpload->id == $rmsUploadId)
+                            {
+                                $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                                $db->beginTransaction();
+                                try
+                                {
+                                    $deviceInstance->compatibleWithJitProgram = $isJitCompatible;
+                                    $deviceInstanceMapper->save($deviceInstance);
+                                    $db->commit();
+                                }
+                                catch (Exception $e)
+                                {
+                                    $db->rollBack();
+                                    Tangent_Log::logException($e);
+                                    $errorMessage = "The system encountered an error while trying to toggle the Jit Compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
+                                }
+                            }
+                            else
+                            {
+                                $errorMessage = "You can only change the Jit Compatibility of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
+                            }
+                        }
+                        else
+                        {
+                            $errorMessage = "You must include at least 2 devices in your report.";
+
+                        }
+                    }
+                    else
+                    {
+                        $errorMessage = "Invalid Rms Upload.";
+                    }
+                }
+                else
+                {
+                    $errorMessage = "Invalid device instance.";
+                }
+            }
+            else
+            {
+                $errorMessage = "Invalid device instance id.";
+            }
+
+            if ($errorMessage !== false)
+            {
+                $this->getResponse()->setHttpResponseCode(500);
+                $this->sendJson(array("error" => true, "message" => $errorMessage));
+            }
+
+            if ($isJitCompatible)
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is now Jit Compatible."));
+            }
+            else
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is now no longer Jit Compatible. "));
             }
         }
         else

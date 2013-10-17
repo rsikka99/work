@@ -63,9 +63,11 @@ class Proposalgen_Service_Rms_Upload
      *
      * @param $data
      *
+     * @param $dealerId
+     *
      * @return bool success
      */
-    public function processUpload ($data)
+    public function processUpload ($data, $dealerId)
     {
         $importSuccessful = false;
 
@@ -399,7 +401,25 @@ class Proposalgen_Service_Rms_Upload
                             $deviceMappingService = new Proposalgen_Service_DeviceMapping();
                             $deviceMappingService->mapDevices($deviceInstances, $this->_userId, true);
 
+                            /**
+                             * @var $deviceInstance Proposalgen_Model_DeviceInstance
+                             */
+                            foreach ($deviceInstances as $deviceInstance)
+                            {
+                                $deviceInstance             = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstance->id);
+                                $deviceInstanceMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance()->find($deviceInstance->id);
+
+                                if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
+                                {
+                                    $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
+                                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
+                                    Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
+                                }
+                            }
+
+
                             $db->commit();
+
                             $importSuccessful = true;
                         }
                     }

@@ -58,13 +58,17 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         }
 
         $isA3Element = $this->createElement('checkbox', 'isA3', array(
-                                                                     'label' => 'Can Print A3 '
+                                                                     'label' => 'Can Print A3'
                                                                 ));
 
         if (!$this->_isAllowedToEditFields)
         {
             $isA3Element->setAttrib('disabled', 'disabled');
         }
+
+        $jitCompatibleElement = $this->createElement('checkbox', 'jitCompatibleMasterDevice', array(
+                                                                                                   'label' => 'JIT Compatible'
+                                                                                              ));
 
         /*
          * Print Speed Monochrome
@@ -250,7 +254,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         }
 
         $this->addDisplayGroup(array($isCopierElement, $isDuplexElement, $isA3Element, $ppmBlackElement, $ppmColorElement, $dutyCycleElement), 'leftSide');
-        $this->addDisplayGroup(array($isFaxElement, $reportsTonerLevelsElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
+        $this->addDisplayGroup(array($isFaxElement, $reportsTonerLevelsElement, $jitCompatibleElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
 
         $this->getElement("isCopier")->setDecorators(
             array(
@@ -394,6 +398,41 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         );
 
         $this->getElement("isA3")->setDecorators(
+            array(
+                 "ViewHelper",
+                 array(
+                     array('wrapper' => 'HtmlTag'),
+                     array(
+                         'tag'            => 'div',
+                         'class'          => 'switch',
+                         'data-on-label'  => 'Yes',
+                         'data-off-label' => 'No',
+                         'data-off'       => 'danger',
+                         'data-on'        => 'success'
+                     )
+                 ),
+                 array(
+                     array('donkeyKong' => 'HtmlTag'),
+                     array(
+                         'tag'   => 'div',
+                         'class' => 'controls'
+                     )
+                 ),
+                 array(
+                     "label",
+                     array('class' => 'control-label')
+                 ),
+                 array(
+                     array('controls' => 'HtmlTag'),
+                     array(
+                         'tag'   => 'div',
+                         'class' => 'control-group'
+                     )
+                 )
+            )
+        );
+
+        $this->getElement("jitCompatibleMasterDevice")->setDecorators(
             array(
                  "ViewHelper",
                  array(

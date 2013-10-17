@@ -52,7 +52,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             'page' => $this->_getParam('page', 1),
             'rows' => $this->_getParam('rows', 10),
         );
-        
+
         if ($jqGridService->sortingIsValid())
         {
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
@@ -768,9 +768,9 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         if ($tonerId && $masterDeviceId)
         {
-            $deviceToner                 = new Proposalgen_Model_DeviceToner();
+            $deviceToner                   = new Proposalgen_Model_DeviceToner();
             $deviceToner->master_device_id = $masterDeviceId;
-            $deviceToner->toner_id        = $tonerId;
+            $deviceToner->toner_id         = $tonerId;
 
             try
             {
@@ -803,9 +803,9 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
         if ($tonerId && $masterDeviceId)
         {
-            $deviceToner                 = new Proposalgen_Model_DeviceToner();
+            $deviceToner                   = new Proposalgen_Model_DeviceToner();
             $deviceToner->master_device_id = $masterDeviceId;
-            $deviceToner->toner_id        = $tonerId;
+            $deviceToner->toner_id         = $tonerId;
 
             try
             {

@@ -417,6 +417,7 @@ class Proposalgen_Service_ManageMasterDevices
                     $validatedData['dateCreated'] = date('Y-m-d H:i:s');
                     $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
                     $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
+                    $masterDevice = $masterDeviceMapper->find($this->masterDeviceId);
                 }
 
                 $tonerIds = explode(',', $tonersList);
@@ -488,6 +489,26 @@ class Proposalgen_Service_ManageMasterDevices
                     }
                 }
             }
+
+            // If we are not a jit compatible device
+            if ($masterDevice instanceof Proposalgen_Model_MasterDevice && !$masterDevice->isJitCompatible($this->_dealerId))
+            {
+                if ($validatedData['jitCompatibleMasterDevice'] === '1')
+                {
+                    $jitCompatibleMasterDevice                 = new Proposalgen_Model_JitCompatibleMasterDevice();
+                    $jitCompatibleMasterDevice->dealerId       = $this->_dealerId;
+                    $jitCompatibleMasterDevice->masterDeviceId = $this->masterDeviceId;
+                    Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->insert($jitCompatibleMasterDevice);
+                }
+            }
+            else if ($validatedData['jitCompatibleMasterDevice'] === '0')
+            {
+                $jitCompatibleMasterDevice                 = new Proposalgen_Model_JitCompatibleMasterDevice();
+                $jitCompatibleMasterDevice->dealerId       = $this->_dealerId;
+                $jitCompatibleMasterDevice->masterDeviceId = $this->masterDeviceId;
+                Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->delete($jitCompatibleMasterDevice);
+            }
+
 
             $dealerMasterDeviceAttribute                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
             $dealerMasterDeviceAttribute->dealerId         = $this->_dealerId;
@@ -632,6 +653,12 @@ class Proposalgen_Service_ManageMasterDevices
             else if ($masterDevice)
             {
                 $this->_deviceAttributesForm->populate($masterDevice->toArray());
+            }
+
+            $jitCompatibleMasterDevice = Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->find(array($this->masterDeviceId, $this->_dealerId));
+            if ($jitCompatibleMasterDevice instanceof Proposalgen_Model_JitCompatibleMasterDevice)
+            {
+                $this->_deviceAttributesForm->populate(array('jitCompatibleMasterDevice' => true));
             }
         }
 

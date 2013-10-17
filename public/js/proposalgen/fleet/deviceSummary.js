@@ -30,7 +30,7 @@ $(function ()
                 {
                     name    : 'mappedToDeviceName', index: 'mappedToDeviceName', label: 'Mapped To Device Name',
                     sortable: false,
-                    width   : 150
+                    width   : 110
                 },
                 {
                     align   : 'right',
@@ -47,6 +47,12 @@ $(function ()
                 {
                     align   : 'center',
                     name    : 'isExcluded', index: 'isExcluded', label: 'Excluded',
+                    sortable: false,
+                    width   : 35
+                },
+                {
+                    align   : 'center',
+                    name    : 'compatibleWithJitProgram', index: 'compatibleWithJitProgram', label: 'Compatible with JIT Program',
                     sortable: false,
                     width   : 35
                 }
@@ -77,6 +83,12 @@ $(function ()
                         checked = 'checked="checked"';
                     }
                     row.isExcluded = '<input type="checkbox" class="toggleDeviceInstanceExcludedButton" data-device-instance-id="' + row.id + '" ' + checked + ' />';
+                    var jitChecked = "";
+                    if (row.compatibleWithJitProgram == 1)
+                    {
+                        jitChecked = 'checked="checked"';
+                    }
+                    row.compatibleWithJitProgram = '<input type="checkbox" class="toggleJitCompatibilityButton" data-device-instance-id="' + row.id + '" ' + jitChecked + ' />';
 
                     // Put our new data back into the grid
                     summaryGrid.setRowData(ids[i], row);
@@ -216,6 +228,36 @@ $(function ()
                         $('body').remove(popup);
                     }
                 });
+            }
+
+        });
+    });
+
+    /**
+     * Toggles whether or not a device is Compatible With JIT
+     */
+    $(document).on("click", ".toggleJitCompatibilityButton", function (eventObject)
+    {
+        var checkbox = $(this);
+        $.ajax({
+            url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-jit-flag',
+            dataType: 'json',
+            data    : {
+                rmsUploadId     : rmsUploadId,
+                deviceInstanceId: checkbox.data("device-instance-id"),
+                compatibleWithJitProgram      : (checkbox.is(':checked')) ? true : false
+            },
+            error   : function (jqXHR)
+            {
+                var data = $.parseJSON(jqXHR.responseText);
+                if (checkbox.is(':checked'))
+                {
+                    checkbox.removeAttr('checked');
+                }
+                else
+                {
+                    checkbox.attr('checked', 'checked');
+                }
             }
 
         });

@@ -958,4 +958,16 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
         return $this->_age;
     }
+
+    /**
+     * Returns whether this device is a jitCompatibleMasterDevice for a dealer
+     *
+     * @param $dealerId
+     *
+     * @return bool
+     */
+    public function isJitCompatible ($dealerId)
+    {
+        return Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->find(array($this->id, $dealerId)) instanceof Proposalgen_Model_JitCompatibleMasterDevice;
+    }
 }

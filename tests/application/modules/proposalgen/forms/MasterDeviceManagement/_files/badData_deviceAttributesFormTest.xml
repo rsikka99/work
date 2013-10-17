@@ -7,6 +7,7 @@
             <isFax>1</isFax>
             <isA3>0</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
+            <jitCompatibleMasterDevice>0</jitCompatibleMasterDevice>
             <ppmBlack>1</ppmBlack>
             <ppmColor>1</ppmColor>
             <launchDate>222222-06-20 00:00:00</launchDate>

@@ -7,6 +7,7 @@
             <isFax>1</isFax>
             <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
+            <jitCompatibleMasterDevice>1</jitCompatibleMasterDevice>
             <ppmBlack>15</ppmBlack>
             <ppmColor>55</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>
@@ -22,6 +23,7 @@
             <isFax>0</isFax>
             <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
+            <jitCompatibleMasterDevice>0</jitCompatibleMasterDevice>
             <ppmBlack>500</ppmBlack>
             <ppmColor>100</ppmColor>
             <launchDate>2001-01-10</launchDate>
@@ -37,6 +39,7 @@
             <isFax>1</isFax>
             <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
+            <jitCompatibleMasterDevice>0</jitCompatibleMasterDevice>
             <ppmBlack>25</ppmBlack>
             <ppmColor>25</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>
@@ -52,6 +55,7 @@
             <isFax>1</isFax>
             <isA3>1</isA3>
             <reportsTonerLevels>1</reportsTonerLevels>
+            <jitCompatibleMasterDevice>1</jitCompatibleMasterDevice>
             <ppmBlack>1</ppmBlack>
             <ppmColor>1</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>

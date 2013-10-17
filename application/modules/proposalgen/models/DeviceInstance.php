@@ -128,6 +128,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $deviceSwapReasonId;
 
+    /**
+     * @var bool
+     */
+    public $compatibleWithJitProgram;
+
     /*
      * ********************************************************************************
      * Related Objects
@@ -389,6 +394,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->rmsUploadRowId = $params->rmsUploadRowId;
         }
 
+        if (isset($params->compatibleWithJitProgram) && !is_null($params->compatibleWithJitProgram))
+        {
+            $this->compatibleWithJitProgram = $params->compatibleWithJitProgram;
+        }
+
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
         {
             $this->ipAddress = $params->ipAddress;
@@ -460,22 +470,23 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                     => $this->id,
-            "rmsUploadId"            => $this->rmsUploadId,
-            "rmsUploadRowId"         => $this->rmsUploadRowId,
-            "ipAddress"              => $this->ipAddress,
-            "isExcluded"             => $this->isExcluded,
-            "mpsDiscoveryDate"       => $this->mpsDiscoveryDate,
-            "reportsTonerLevels"     => $this->reportsTonerLevels,
-            "serialNumber"           => $this->serialNumber,
-            "useUserData"            => $this->useUserData,
-            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageCyan"       => $this->pageCoverageCyan,
-            "pageCoverageMagenta"    => $this->pageCoverageMagenta,
-            "pageCoverageYellow"     => $this->pageCoverageYellow,
-            "isManaged"              => $this->isManaged,
-            "rmsDeviceId"            => $this->rmsDeviceId,
-            "deviceSwapReasonId"     => $this->deviceSwapReasonId,
+            "id"                       => $this->id,
+            "rmsUploadId"              => $this->rmsUploadId,
+            "rmsUploadRowId"           => $this->rmsUploadRowId,
+            "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
+            "ipAddress"                => $this->ipAddress,
+            "isExcluded"               => $this->isExcluded,
+            "mpsDiscoveryDate"         => $this->mpsDiscoveryDate,
+            "reportsTonerLevels"       => $this->reportsTonerLevels,
+            "serialNumber"             => $this->serialNumber,
+            "useUserData"              => $this->useUserData,
+            "pageCoverageMonochrome"   => $this->pageCoverageMonochrome,
+            "pageCoverageCyan"         => $this->pageCoverageCyan,
+            "pageCoverageMagenta"      => $this->pageCoverageMagenta,
+            "pageCoverageYellow"       => $this->pageCoverageYellow,
+            "isManaged"                => $this->isManaged,
+            "rmsDeviceId"              => $this->rmsDeviceId,
+            "deviceSwapReasonId"       => $this->deviceSwapReasonId,
         );
     }
 
