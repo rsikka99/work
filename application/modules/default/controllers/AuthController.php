@@ -72,7 +72,6 @@ class Default_AuthController extends Tangent_Controller_Action
                         $currentSessionId = @session_id();
                         // Get all the sessions attached to current user signed in
                         $userSessionMapper = Application_Model_Mapper_User_Session::getInstance();
-                        $sessionMapper     = new Application_Model_DbTable_Session();
                         $config            = Zend_Registry::get('config');
 
                         $userSessions = $userSessionMapper->fetchSessionsByUserId($userInfo->id);
@@ -81,16 +80,9 @@ class Default_AuthController extends Tangent_Controller_Action
                             if ($userSession->sessionId != $currentSessionId)
                             {
                                 // If we are saving the session to the database or to the file system,
-                                if ($config->resources->session->saveHandler->class == "Zend_Session_SaveHandler_DbTable")
+                                if (file_exists($config->resources->session->save_path . '/sess_' . $userSession->sessionId))
                                 {
-                                    $sessionMapper->deleteSession($userSession->sessionId);
-                                }
-                                else
-                                {
-                                    if (file_exists($config->resources->session->save_path . '/sess_' . $userSession->sessionId))
-                                    {
-                                        @unlink($config->resources->session->save_path . '/sess_' . $userSession->sessionId);
-                                    }
+                                    @unlink($config->resources->session->save_path . '/sess_' . $userSession->sessionId);
                                 }
                                 $userSessionMapper->delete($userSession);
                             }

@@ -93,7 +93,7 @@ return array(
         'log'             => array(
             'stream' => array(
                 'filterName'   => 'Priority',
-                'filterParams'  => array(
+                'filterParams' => array(
                     'priority' => 4,
                 ),
                 'writerName'   => 'Stream',
@@ -121,18 +121,6 @@ return array(
             'use_only_cookies' => 'on',
             'cookie_lifetime'  => 43200,
             'gc_maxlifetime'   => '43200',
-            'saveHandler'      => array(
-                'class'   => 'Zend_Session_SaveHandler_DbTable',
-                'options' => array(
-                    'name'              => 'sessions',
-                    'primary'           => array('id'),
-                    'primaryAssignment' => array('sessionId'),
-                    'modifiedColumn'    => 'modified',
-                    'dataColumn'        => 'data',
-                    'lifetimeColumn'    => 'lifetime',
-                ),
-
-            ),
         ),
         'view'            => array(
             'helperPath' => array(
