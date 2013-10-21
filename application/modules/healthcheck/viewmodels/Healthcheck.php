@@ -760,7 +760,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                         if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHHOLD)
                         {
                             //Check to see if it is reporting toner levels
-                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->getIsLeased())
+                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->isLeased)
                             {
                                 /**
                                  * We are a fully optimized device!

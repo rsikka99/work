@@ -11,7 +11,7 @@ var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
     <h4>Device Details</h4>
     <table class="table table-bordered table-striped table-condensed">
         <tr>
-            <td style="width: 180px;">Launch Date:</td>
+            <td style="width: 200px;">Launch Date:</td>
             <td id="deviceDetails_launchDate">Launch Date</td>
         </tr>
         <tr>
@@ -59,8 +59,12 @@ var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
             <td id="deviceDetails_tonerConfigName"></td>
         </tr>
         <tr>
-            <td>Is Leased:</td>
+            <td>Leased by default:</td>
             <td id="deviceDetails_isLeased">YESNO</td>
+        </tr>
+        <tr>
+            <td>JIT compatible by default:</td>
+            <td id="deviceDetails_compatibleWithJit">YESNO</td>
         </tr>
     </table>
     <h4>Toners</h4>

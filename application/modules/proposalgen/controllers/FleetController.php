@@ -549,7 +549,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "isExcluded"               => $deviceInstance->isExcluded,
                         "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
                         "ampv"                     => number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
-                        "isLeased"                 => ($deviceInstance->getIsLeased()) ? "Leased" : "Purchased"
+                        "isLeased"                 => $deviceInstance->isLeased,
+                        "validToners"              => $deviceInstance->hasValidToners()
                     );
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
@@ -940,6 +941,103 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     }
 
     /**
+     * Handles Toggling of the isLeased flag
+     */
+    public function toggleLeasedFlagAction ()
+    {
+        $rmsUploadId = $this->_getParam('rmsUploadId', false);
+        if ($rmsUploadId > 0)
+        {
+            $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
+            $isLeased         = $this->_getParam("isLeased", false) == 'true';
+            $errorMessage     = false;
+
+            if ($deviceInstanceId !== false)
+            {
+                $deviceInstanceMapper = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
+                $deviceInstance       = $deviceInstanceMapper->find($deviceInstanceId);
+                if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                {
+                    $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($deviceInstance->rmsUploadId);
+                    if ($rmsUpload)
+                    {
+                        $includedDeviceInstanceCount = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->getMappedDeviceInstances($rmsUpload->id, null, null, null, null, true, true);
+                        if ($includedDeviceInstanceCount > 2 || $isLeased === false)
+                        {
+                            if ($rmsUpload->id == $rmsUploadId)
+                            {
+
+                                if ($isLeased || $deviceInstance->hasValidToners())
+                                {
+                                    $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                                    $db->beginTransaction();
+                                    try
+                                    {
+                                        $deviceInstance->isLeased = $isLeased;
+                                        $deviceInstanceMapper->save($deviceInstance);
+                                        $db->commit();
+                                    }
+                                    catch (Exception $e)
+                                    {
+                                        $db->rollBack();
+                                        Tangent_Log::logException($e);
+                                        $errorMessage = "The system encountered an error while trying to toggle the leased state of the device. Reference #" . Tangent_Log::getUniqueId();
+                                    }
+                                }
+                                else
+                                {
+                                    $errorMessage = "Device does not have valid toners";
+                                }
+                            }
+                            else
+                            {
+                                $errorMessage = "You can only change the leased state of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
+                            }
+                        }
+                        else
+                        {
+                            $errorMessage = "You must include at least 2 devices in your report.";
+
+                        }
+                    }
+                    else
+                    {
+                        $errorMessage = "Invalid Rms Upload.";
+                    }
+                }
+                else
+                {
+                    $errorMessage = "Invalid device instance.";
+                }
+            }
+            else
+            {
+                $errorMessage = "Invalid device instance id.";
+            }
+
+            if ($errorMessage !== false)
+            {
+                $this->getResponse()->setHttpResponseCode(500);
+                $this->sendJson(array("error" => true, "message" => $errorMessage));
+            }
+
+            if ($isLeased)
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is now leased."));
+            }
+            else
+            {
+                $this->sendJson(array("success" => true, "message" => "Device is no longer leased. "));
+            }
+        }
+        else
+        {
+            $this->getResponse()->setHttpResponseCode(500);
+            $this->sendJson(array("error" => true, "message" => "Invalid RMS Upload Id"));
+        }
+    }
+
+    /**
      * Gets all the details for a device instance
      */
     public function deviceInstanceDetailsAction ()
@@ -985,6 +1083,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
                         $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
+                        $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
+                        $jsonResponse["masterDevice"]["toners"]             = [];
 
                         foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByManufacturer)
                         {

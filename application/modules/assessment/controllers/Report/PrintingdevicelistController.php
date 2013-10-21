@@ -105,7 +105,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 $row [] = $device->getMasterDevice()->modelName;
                 $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
                 $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
-                $row [] = ($device->getMasterDevice()->isLeased) ? "Leased" : "Purchased";
+                $row [] = ($device->isLeased) ? "Leased" : "Purchased";
                 $row [] = $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 $row [] = ($device->isCapableOfReportingTonerLevels()) ? "Yes" : "No";
                 $appendix_values .= implode(",", $row) . "\n";

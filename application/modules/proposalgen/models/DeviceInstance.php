@@ -124,6 +124,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public $isManaged;
 
     /**
+     * @var bool
+     */
+    public $isLeased;
+
+    /**
      * @var int
      */
     public $deviceSwapReasonId;
@@ -409,6 +414,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->isExcluded = $params->isExcluded;
         }
 
+        if (isset($params->isLeased) && !is_null($params->isLeased))
+        {
+            $this->isLeased = $params->isLeased;
+        }
+
         if (isset($params->mpsDiscoveryDate) && !is_null($params->mpsDiscoveryDate))
         {
             $this->mpsDiscoveryDate = $params->mpsDiscoveryDate;
@@ -476,6 +486,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
             "ipAddress"                => $this->ipAddress,
             "isExcluded"               => $this->isExcluded,
+            "isLeased"                 => $this->isLeased,
             "mpsDiscoveryDate"         => $this->mpsDiscoveryDate,
             "reportsTonerLevels"       => $this->reportsTonerLevels,
             "serialNumber"             => $this->serialNumber,
@@ -1233,25 +1244,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Gets whether or not the device is leased
-     *
-     * @return bool
-     */
-    public function getIsLeased ()
-    {
-        if ($this->getIsMappedToMasterDevice())
-        {
-            $isLeased = $this->getMasterDevice()->isLeased;
-        }
-        else
-        {
-            $isLeased = $this->getRmsUploadRow()->isLeased;
-        }
-
-        return $isLeased;
-    }
-
-    /**
      * The action of the device
      *
      * @return String $Action
@@ -1519,5 +1511,40 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $hardwareOptimizationId)
     {
         return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
+    }
+
+    public function hasValidToners ()
+    {
+        $masterDevice        = $this->getMasterDevice();
+        $masterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDevice->id, $this->_identity->dealerId);
+        $first               = true;
+        $tonersList          = "";
+
+        foreach ($masterDevice->getToners() as $manufacturerIdList)
+        {
+            foreach ($manufacturerIdList as $tonerColorIdList)
+            {
+                foreach ($tonerColorIdList as $toner)
+                {
+                    if (!$first)
+                    {
+                        $tonersList .= ",";
+                    }
+                    else
+                    {
+                        $first = false;
+                    }
+
+                    $tonersList .= $toner->id;
+                }
+            }
+        }
+
+        if ($masterDeviceService->validateToners($tonersList, $masterDevice->getTonerConfig()->tonerConfigId, $masterDevice->manufacturerId, false) == null)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 }

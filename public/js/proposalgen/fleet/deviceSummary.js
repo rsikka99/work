@@ -40,7 +40,7 @@ $(function ()
                 },
                 {
                     align   : 'center',
-                    name    : 'isLeased', index: 'isLeased', label: 'Ownership',
+                    name    : 'isLeased', index: 'isLeased', label: 'Leased',
                     sortable: false,
                     width   : 40
                 },
@@ -54,6 +54,12 @@ $(function ()
                     align   : 'center',
                     name    : 'compatibleWithJitProgram', index: 'compatibleWithJitProgram', label: 'Compatible with JIT Program',
                     sortable: false,
+                    width   : 35
+                },
+                {
+                    name    : 'validToners', index: 'validToners', label: 'Valid Toners',
+                    sortable: false,
+                    hidden  : true,
                     width   : 35
                 }
             ],
@@ -89,6 +95,20 @@ $(function ()
                         jitChecked = 'checked="checked"';
                     }
                     row.compatibleWithJitProgram = '<input type="checkbox" class="toggleJitCompatibilityButton" data-device-instance-id="' + row.id + '" ' + jitChecked + ' />';
+
+                    var isLeased = "";
+                    if (row.isLeased == 1)
+                    {
+                        isLeased = 'checked="checked"';
+                    }
+
+                    var validToners = '';
+                    if (row.validToners == false)
+                    {
+                        validToners = 'disabled="disabled"';
+                    }
+
+                    row.isLeased = '<input type="checkbox" class="toggleLeasedButton" data-device-instance-id="' + row.id + '" ' + isLeased + " " + validToners + ' />';
 
                     // Put our new data back into the grid
                     summaryGrid.setRowData(ids[i], row);
@@ -127,6 +147,7 @@ $(function ()
                 $('#deviceDetails_cost').empty().html(data.masterDevice.cost);
                 $('#deviceDetails_tonerConfigName').empty().html(data.masterDevice.tonerConfigName);
                 $('#deviceDetails_isLeased').empty().html((data.masterDevice.isLeased) ? 'YES' : 'NO');
+                $('#deviceDetails_compatibleWithJit').empty().html((data.masterDevice.compatibleWithJit) ? 'YES' : 'NO');
 
                 var tonerTBody = $('#deviceDetails_toners');
                 tonerTBody.empty();
@@ -220,16 +241,16 @@ $(function ()
                     popup = $("<div class='modal' id='excludeDeviceErrorModal'><div class='modal-header'>Error Excluding Device<button type='button' class='close' data-dismiss='modal' aria-hidden='true'>×</button></div><div class='modal-body'></div><div class='modal-footer'><button type='button' data-dismiss='modal' class='btn btn-primary'>OK</button></div></div>");
                     $('body').append(popup);
                 }
-               
+
                 popup.find('.modal-body').html(data.message);
 
                 popup.modal({
-                    hidden : function () {
+                    hidden: function ()
+                    {
                         $('body').remove(popup);
                     }
                 });
             }
-
         });
     });
 
@@ -243,9 +264,9 @@ $(function ()
             url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-jit-flag',
             dataType: 'json',
             data    : {
-                rmsUploadId     : rmsUploadId,
-                deviceInstanceId: checkbox.data("device-instance-id"),
-                compatibleWithJitProgram      : (checkbox.is(':checked')) ? true : false
+                rmsUploadId             : rmsUploadId,
+                deviceInstanceId        : checkbox.data("device-instance-id"),
+                compatibleWithJitProgram: (checkbox.is(':checked')) ? true : false
             },
             error   : function (jqXHR)
             {
@@ -259,7 +280,37 @@ $(function ()
                     checkbox.attr('checked', 'checked');
                 }
             }
+        });
+    });
 
+    /**
+     * Toggles whether or not a device is leased
+     */
+    $(document).on("click", ".toggleLeasedButton", function (eventObject)
+    {
+        var checkbox = $(this);
+        $.ajax({
+            url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-leased-flag',
+            dataType: 'json',
+            data    : {
+                rmsUploadId     : rmsUploadId,
+                deviceInstanceId: checkbox.data("device-instance-id"),
+                isLeased        : (checkbox.is(':checked')) ? true : false
+            },
+            error   : function (jqXHR)
+            {
+                // This should never happen unless they edit the html and remove the disabled flag
+                alert("Device does not have valid toners");
+                var data = $.parseJSON(jqXHR.responseText);
+                if (checkbox.is(':checked'))
+                {
+                    checkbox.prop('checked', false);
+                }
+                else
+                {
+                    checkbox.prop('checked', true);
+                }
+            }
         });
     });
 

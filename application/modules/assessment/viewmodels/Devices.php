@@ -107,7 +107,7 @@ class Assessment_ViewModel_Devices
                         /*
                          * Sort leased and purchased devices
                          */
-                        if ($masterDevice->isLeased)
+                        if ($deviceInstance->isLeased)
                         {
                             $this->leasedDeviceInstances->add($deviceInstance);
                         }
