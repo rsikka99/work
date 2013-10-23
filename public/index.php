@@ -1,4 +1,6 @@
 <?php
+$applicationTimeStarted = microtime(true);
+
 defined('APPLICATION_BASE_PATH') || define('APPLICATION_BASE_PATH', realpath(dirname(__FILE__) . '/..'));
 
 // Define the paths
@@ -15,7 +17,7 @@ chdir(APPLICATION_BASE_PATH);
 
 // Setup autoloading
 require 'init_autoloader.php';
-
+My_Error_Handler::set();
 //
 //ini_set("display_errors", 1);
 //error_reporting(E_ALL);
@@ -30,3 +32,4 @@ $application = new Zend_Application('production', array(
                                                               APPLICATION_PATH . '/configs/local.php',
                                                           )));
 $application->bootstrap()->run();
+Tangent_Statsd::timing('pageloadtime', microtime(true) - $applicationTimeStarted);
