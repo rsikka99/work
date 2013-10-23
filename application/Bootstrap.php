@@ -37,7 +37,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public function _initCoreSession ()
     {
-        $this->bootstrap('db');
         $this->bootstrap('session');
         Zend_Session::start();
 
@@ -64,14 +63,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             @ini_set("display_errors", 1);
         }
-    }
-
-    /**
-     * Registers the error handler with php
-     */
-    protected function _initMyErrorHandler ()
-    {
-        My_Error_Handler::set();
     }
 
     /**

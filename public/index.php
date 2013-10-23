@@ -27,9 +27,19 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 
 // Create application, bootstrap, and run
 $application = new Zend_Application('production', array(
-                                                          'config' => array(
-                                                              APPLICATION_PATH . '/configs/global.php',
-                                                              APPLICATION_PATH . '/configs/local.php',
-                                                          )));
+                                                       'config' => array(
+                                                           APPLICATION_PATH . '/configs/global.php',
+                                                           APPLICATION_PATH . '/configs/local.php',
+                                                       )));
 $application->bootstrap()->run();
+
 Tangent_Statsd::timing('pageloadtime', microtime(true) - $applicationTimeStarted);
+
+/**
+ * Log our errors
+ */
+foreach (My_Error_Handler::$errorCounts as $errorLevel => $count)
+{
+    Tangent_Statsd::updateStats('php.' . $errorLevel, $count);
+    Tangent_Statsd::gauge('php.' . $errorLevel, $count);
+}
