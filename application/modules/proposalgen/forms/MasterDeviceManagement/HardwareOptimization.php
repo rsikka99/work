@@ -72,8 +72,9 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimization extends Twitt
                                                                                                                          new Zend_Validate_Between(array(
                                                                                                                                                         'min' => 0,
                                                                                                                                                         'max' => 9223372036854775807
-                                                                                                                                                   ))
-                                                                                                                         , new My_Validate_LessThanFormValue($maximumPageCountElement))), 'int'));
+                                                                                                                                                   )),
+                                                                                                                         new Tangent_Validate_LessThanFormValue($maximumPageCountElement)
+                                                                                                                    ))));
 
         $this->addElement($maximumPageCountElement);
     }
