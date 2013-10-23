@@ -1,11 +1,10 @@
 <?php
-namespace Tangent;
 
 use Composer\Package\Package;
 use Composer\Script\Event;
 use Composer\Script\PackageEvent;
 
-class ComposerFunctions
+class Tangent_ComposerFunctions
 {
 
     /**

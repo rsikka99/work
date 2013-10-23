@@ -38,10 +38,10 @@
     },
     "scripts"     : {
         "post-package-install": [
-            "Tangent\\ComposerFunctions::postPackageInstall"
+            "Tangent_ComposerFunctions::postPackageInstall"
         ],
         "post-package-update" : [
-            "Tangent\\ComposerFunctions::postPackageUpdate"
+            "Tangent_ComposerFunctions::postPackageUpdate"
         ]
     }
 }
