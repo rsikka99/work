@@ -3,20 +3,11 @@
 class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Proposalgen_Form_MasterDeviceManagement_HardwareOptimization
+     * @return Proposalgen_Form_MasterDeviceManagement_HardwareOptimization
      */
-    protected $_form;
-
-    public function setUp ()
+    public function getForm ()
     {
-        $this->_form = new Proposalgen_Form_MasterDeviceManagement_HardwareOptimization();
-        parent::setUp();
-    }
-
-    public function tearDown ()
-    {
-        parent::tearDown();
-        $this->_form = null;
+        return new Proposalgen_Form_MasterDeviceManagement_HardwareOptimization();
     }
 
     /**
@@ -42,8 +33,8 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest exte
      */
     public function testFormAcceptsValidData ($data)
     {
-        $this->_form->isValid($data);
-        $this->assertTrue($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        $form = $this->getForm();
+        $this->assertTrue($form->isValid($data), implode(' | ', $form->getErrorMessages()));
     }
 
     /**
@@ -69,7 +60,8 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimizationsFormTest exte
      */
     public function testFormRejectsBadData ($data)
     {
-        $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
+        $form = $this->getForm();
+        $this->assertFalse($form->isValid($data), implode(' | ', $form->getErrorMessages()));
     }
 }
 

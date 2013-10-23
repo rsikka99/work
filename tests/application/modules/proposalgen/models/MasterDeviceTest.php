@@ -52,6 +52,8 @@ class Proposalgen_Model_MasterDeviceTest extends PHPUnit_Framework_TestCase
      */
     public function testCalculateCostPerPage ()
     {
+        Zend_Auth::getInstance()->getStorage()->write((object)array("dealerId" => 1));
+
         $masterDevice       = $this->getMasterDevice();
         $costPerPageSetting = $this->getCostPerPageSetting();
 
