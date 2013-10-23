@@ -31,4 +31,10 @@ return array(
             ),
         ),
     ),
+    'statsd'      => array(
+        'rootBucket' => 'changeme',
+        'enabled'   => false,
+        'host'      => '',
+        'port'      => 8125,
+    ),
 );

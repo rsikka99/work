@@ -31,4 +31,10 @@ return array(
             ),
         ),
     ),
+    'statsd'      => array(
+        'site-name' => 'testing.mpstoolbox.com',
+        'enabled'   => false,
+        'host'      => '',
+        'port'      => 8125,
+    ),
 );
