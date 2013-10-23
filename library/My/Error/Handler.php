@@ -53,50 +53,58 @@ class My_Error_Handler
     );
     static $errors = array();
 
-    public static function handle ($errno, $errstr, $errfile, $errline)
+    /**
+     * Handles php errors
+     *
+     * @param int    $errorNumber
+     * @param string $errorString
+     * @param string $errorFile
+     * @param int    $errorLineNumber
+     */
+    public static function handle ($errorNumber, $errorString, $errorFile, $errorLineNumber)
     {
-        switch ($argv[0])
+        switch ($errorNumber)
         {
             case E_STRICT:
-                $errorCounts["E_STRICT"]++;
+                self::$errorCounts["E_STRICT"]++;
                 break;
             case E_ERROR:
             case E_USER_ERROR:
-                $errorCounts["E_ERROR"]++;
+                self::$errorCounts["E_ERROR"]++;
                 break;
             case E_WARNING:
             case E_USER_WARNING:
-                $errorCounts["E_WARNING"]++;
+                self::$errorCounts["E_WARNING"]++;
                 break;
             case E_NOTICE:
             case E_USER_NOTICE:
-                $errorCounts["E_NOTICE"]++;
+                self::$errorCounts["E_NOTICE"]++;
                 break;
             case E_PARSE:
-                $errorCounts["E_PARSE"]++;
+                self::$errorCounts["E_PARSE"]++;
                 break;
             case E_DEPRECATED:
             case E_USER_DEPRECATED:
-                $errorCounts["E_DEPRECATED"]++;
+                self::$errorCounts["E_DEPRECATED"]++;
                 break;
             default:
-                $errorCounts["E_OTHER"]++;
+                self::$errorCounts["E_OTHER"]++;
                 break;
         }
 
-        if (!error_reporting() || $errno > error_reporting())
+        if (!error_reporting() || $errorNumber > error_reporting())
         {
             return;
         }
 
-        $errorName = (array_key_exists($errno, self::$errorNames)) ? self::$errorNames [$errno] : '';
-        $fileName  = basename($errfile);
+        $errorName = (array_key_exists($errorNumber, self::$errorNames)) ? self::$errorNames [$errorNumber] : '';
+        $fileName  = basename($errorFile);
 
         // Create an error object
         $error           = new stdClass();
-        $error->message  = "{$errorName} : {$errstr} in {$fileName} on line {$errline}";
-        $error->color    = (array_key_exists($errno, self::$errorColors)) ? self::$errorColors [$errno] : '';
-        $error->number   = $errno;
+        $error->message  = "{$errorName} : {$errorString} in {$fileName} on line {$errorLineNumber}";
+        $error->color    = (array_key_exists($errorNumber, self::$errorColors)) ? self::$errorColors [$errorNumber] : '';
+        $error->number   = $errorNumber;
         self::$errors [] = $error;
     }
 
