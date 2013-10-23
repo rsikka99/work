@@ -4,7 +4,6 @@
         <data>
             <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
             <availableTonerstonerColorId>3</availableTonerstonerColorId>
-            <availableTonersdealerSku />
             <availableTonerssystemSku>ed2d2</availableTonerssystemSku>
             <availableTonersyield>3000</availableTonersyield>
             <availableTonersdealerCost>155</availableTonersdealerCost>
@@ -26,7 +25,6 @@
         <data>
             <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
             <availableTonerstonerColorId>3</availableTonerstonerColorId>
-            <availableTonersdealerSku />
             <availableTonerssystemSku>1</availableTonerssystemSku>
             <availableTonersyield>0</availableTonersyield>
             <availableTonersdealerCost>252</availableTonersdealerCost>

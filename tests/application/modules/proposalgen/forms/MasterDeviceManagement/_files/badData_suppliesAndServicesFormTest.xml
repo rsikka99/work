@@ -30,7 +30,6 @@
             <laborCostPerPage>4</laborCostPerPage>
             <tonerConfigId>0</tonerConfigId>
             <isLeased>0</isLeased>
-            <leasedTonerYield />
         </data>
     </suppliesAndService>
     <suppliesAndService>
@@ -41,7 +40,6 @@
             <laborCostPerPage>4</laborCostPerPage>
             <tonerConfigId>0</tonerConfigId>
             <isLeased>0</isLeased>
-            <leasedTonerYield />
         </data>
     </suppliesAndService>
 </suppliesAndServices>

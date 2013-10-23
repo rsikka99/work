@@ -49,10 +49,16 @@ class Preferences_Form_QuoteSettingTest extends PHPUnit_Framework_TestCase
         $data = array();
         foreach ($xml->quote as $row)
         {
-            $row                                         = json_decode(json_encode($row), 1);
-            $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
-            $row["data"]["dealerColorRankSetArray"]      = explode(',', $row["data"]["dealerColorRankSetArray"]);
-            $data[]                                  = (array)$row;
+            $row = json_decode(json_encode($row), 1);
+            if (isset($row["data"]["dealerMonochromeRankSetArray"]))
+            {
+                $row["data"]["dealerMonochromeRankSetArray"] = explode(',', $row["data"]["dealerMonochromeRankSetArray"]);
+            }
+            if (isset($row["data"]["dealerColorRankSetArray"]))
+            {
+                $row["data"]["dealerColorRankSetArray"] = explode(',', $row["data"]["dealerColorRankSetArray"]);
+            }
+            $data[] = (array)$row;
         }
 
         return $data;

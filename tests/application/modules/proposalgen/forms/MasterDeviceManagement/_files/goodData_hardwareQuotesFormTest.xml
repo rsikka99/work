@@ -27,9 +27,6 @@
     <hardwareQuote>
         <data>
             <isSelling>0</isSelling>
-            <oemSku />
-            <dealerSku />
-            <cost />
         </data>
     </hardwareQuote>
 </hardwareQuotes>

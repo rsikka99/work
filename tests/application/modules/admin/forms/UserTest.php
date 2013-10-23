@@ -140,24 +140,21 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
         $data = array();
         foreach ($xml->user as $row)
         {
-            $data[(string)$row->formMode][] = (array)$row->data;
+            $data[] = array(
+                (array)$row->data,
+                (strcasecmp((string)$row->formMode, 'create') === 0) ? 0 : 1
+            );
         }
 
         return $data;
     }
 
-    public function testFormRejectsBadData ()
+    /**
+     * @dataProvider getBadData
+     */
+    public function testFormRejectsBadData ($data, $formMode)
     {
-        $data = $this->getBadData();
-
-        foreach ($data['create'] as $data)
-        {
-            $this->assertFalse($this->getForm(Admin_Form_User::MODE_CREATE)->isValid((array)$data));
-        }
-        foreach ($data['edit'] as $data)
-        {
-            $this->assertFalse($this->getForm(Admin_Form_User::MODE_EDIT)->isValid((array)$data));
-        }
+        $this->assertFalse($this->getForm($formMode)->isValid($data));
     }
 
     public function getGoodData ()
@@ -166,26 +163,21 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
         $data = array();
         foreach ($xml->user as $row)
         {
-            $data[(string)$row->formMode][] = (array)$row->data;
+            $data[] = array(
+                (array)$row->data,
+                (strcasecmp((string)$row->formMode, 'create') === 0) ? 0 : 1
+            );
         }
 
         return $data;
     }
 
-    public function testFormAcceptsValidData ()
+    /**
+     * @dataProvider getGoodData
+     */
+    public function testFormAcceptsValidData ($data, $formMode)
     {
-        $data = $this->getGoodData();
-
-        foreach ($data['create'] as $data)
-        {
-            $form = $this->getForm(Admin_Form_User::MODE_CREATE);
-            $this->assertTrue($form->isValid((array)$data), "data: " . implode(" ", $data) . " errors: " . implode(' ', $form->getErrorMessages()));
-        }
-
-        foreach ($data['edit'] as $data)
-        {
-            $form = $this->getForm(Admin_Form_User::MODE_EDIT);
-            $this->assertTrue($form->isValid((array)$data), "data: " . implode(' ', $data) . " errors: " . implode(' ', $form->getErrorMessages()));
-        }
+        $form = $this->getForm($formMode);
+        $this->assertTrue($form->isValid((array)$data), "data: " . implode(" ", $data) . " errors: " . implode(' ', $form->getErrorMessages()));
     }
 }

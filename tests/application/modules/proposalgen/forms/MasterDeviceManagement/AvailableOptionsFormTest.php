@@ -34,8 +34,9 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableOptionsFormTest extends P
     }
 
     /**
+     * Tests whether the form accepts valid data
+     *
      * @dataProvider goodData
-     *               Tests whether the form accepts valid data
      */
     public function testFormAcceptsValidData ($data)
     {
@@ -60,8 +61,9 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableOptionsFormTest extends P
     }
 
     /**
+     * Tests if the form errors on invalid data
+     *
      * @dataProvider badData
-     *               Tests if the form errors on invalid data
      */
     public function testFormRejectsBadData ($data)
     {

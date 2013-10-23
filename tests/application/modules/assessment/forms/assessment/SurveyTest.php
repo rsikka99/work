@@ -27,8 +27,8 @@ class Assessment_Form_Assessment_SurveyTest extends PHPUnit_Framework_TestCase
      */
     public function goodSettingsData ()
     {
-        $xml      = simplexml_load_file(__DIR__ . "/_files/goodData_SurveyTest.xml");
-        $data     = array();
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_SurveyTest.xml");
+        $data = array();
 
         foreach ($xml->survey as $row)
         {
@@ -44,8 +44,8 @@ class Assessment_Form_Assessment_SurveyTest extends PHPUnit_Framework_TestCase
      */
     public function badSettingsData ()
     {
-        $xml      = simplexml_load_file(__DIR__ . "/_files/badData_SurveyTest.xml");
-        $data     = array();
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_SurveyTest.xml");
+        $data = array();
 
         foreach ($xml->survey as $row)
         {
@@ -72,8 +72,7 @@ class Assessment_Form_Assessment_SurveyTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider badSettingsData
      */
-    public
-    function testFormRejectsBadData ($data)
+    public function testFormRejectsBadData ($data)
     {
         $this->assertFalse($this->_form->isValid($data), implode(' | ', $this->_form->getErrorMessages()));
     }

@@ -2,11 +2,6 @@
 <options>
     <option>
         <data>
-            <availableOptionsname />
-            <availableOptionsdescription />
-            <availableOptionscost />
-            <availableOptionsoemSku />
-            <availableOptionsdealerSku />
         </data>
     </option>
     <option>
@@ -22,7 +17,6 @@
         <data>
             <availableOptionsname>33</availableOptionsname>
             <availableOptionsdescription>22</availableOptionsdescription>
-            <availableOptionscost />
             <availableOptionsoemSku>232</availableOptionsoemSku>
             <availableOptionsdealerSku>123</availableOptionsdealerSku>
         </data>
