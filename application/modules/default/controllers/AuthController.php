@@ -40,6 +40,8 @@ class Default_AuthController extends Tangent_Controller_Action
         $request = $this->getRequest();
         $form    = new Default_Form_Login();
 
+        Tangent_Statsd::increment('mpstoolbox.login.attempts');
+
         if ($this->getRequest()->isPost())
         {
             if ($request->getParam('forgotPassword', false))
@@ -61,6 +63,8 @@ class Default_AuthController extends Tangent_Controller_Action
                 // If the value is valid, store the information
                 if ($result->isValid())
                 {
+                    Tangent_Statsd::increment('mpstoolbox.login.successes');
+
                     // Get all the user information and only omit the password
                     // since we don't want to store it in the session.
                     $userInfo    = $authAdapter->getResultRowObject(null, 'password');
@@ -119,6 +123,8 @@ class Default_AuthController extends Tangent_Controller_Action
                 }
                 else
                 {
+                    Tangent_Statsd::increment('mpstoolbox.login.failures');
+
                     switch ($result->getCode())
                     {
                         case Zend_Auth_Result::FAILURE_UNCATEGORIZED :
