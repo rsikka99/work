@@ -39,7 +39,6 @@ class Application_Model_DbTable_Dealer_feature extends Zend_Db_Table_Abstract im
             {
                 $featureList[] = $feature[$this->col_featureId];
             }
-            var_dump($featureList);
         }
 
         return $featureList;
