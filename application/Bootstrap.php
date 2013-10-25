@@ -146,4 +146,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $currency = new Zend_Currency('en_US');
         Zend_Registry::set('Zend_Currency', $currency);
     }
+
+    /**
+     * Loads our My_Feature settings
+     */
+    protected function _initFeature ()
+    {
+        $options = $this->getOptions();
+
+        if (array_key_exists('feature', $options))
+        {
+            $adapter = new $options['feature']['adapter']($options['feature']['options']);
+            My_Feature::setAdapter($adapter);
+        }
+    }
 }

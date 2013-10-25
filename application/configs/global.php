@@ -14,7 +14,12 @@ return array(
         'path'  => APPLICATION_PATH . '/Bootstrap.php',
         'class' => 'Bootstrap',
     ),
-
+    'feature'              => array(
+        'adapter' => 'My_Feature_DbTableAdapter',
+        'options' => array(
+            'className' => 'Application_Model_DbTable_Dealer_Feature',
+        ),
+    ),
     'includePaths'         => array(
         'library' => APPLICATION_BASE_PATH . '/library',
     ),
