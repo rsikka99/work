@@ -4,6 +4,7 @@
 [ADDED]   the ability to mark device instances as leased.
 [CHANGED] admin/Labor/Parts CPP and Energy Cost are now allowed to be 0
 [FIXED]   the ability to delete dealers when they have a device swap attached
+[FIXED]   the hardware quote from displaying incorrect numbers
 [FIXED]   sorting on the hardware library all devices page
 [FIXED]   the alignment of text inside text fields for settings
 [FIXED]   order of quotes/optimization reports will be from newest created to oldest

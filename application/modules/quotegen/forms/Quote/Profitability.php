@@ -164,7 +164,7 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                                                                                   'label'      => 'Residual',
                                                                                   'required'   => true,
                                                                                   'class'      => 'input-mini rightAlign',
-                                                                                  'value'      => $quoteDevice->residual,
+                                                                                  'value'      => $quoteDevice->buyoutValue,
                                                                                   'validators' => array(
                                                                                       'Float',
                                                                                       array(

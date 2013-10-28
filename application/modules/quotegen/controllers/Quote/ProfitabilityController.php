@@ -74,9 +74,9 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                                 $residual = $form->getValue("residual_{$quoteDevice->id}");
 
                                 // Has the residual changed?
-                                if ((float)$quoteDevice->residual !== (float)$residual)
+                                if ((float)$quoteDevice->buyoutValue !== (float)$residual)
                                 {
-                                    $quoteDevice->residual = $residual;
+                                    $quoteDevice->buyoutValue = $residual;
                                     $quoteDeviceHasChanges = true;
                                 }
                             }

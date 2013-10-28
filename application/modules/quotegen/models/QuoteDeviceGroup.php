@@ -297,7 +297,7 @@ class Quotegen_Model_QuoteDeviceGroup extends My_Model_Abstract
         /* @var $quoteDevice Quotegen_Model_QuoteDevice */
         foreach ($this->getQuoteDeviceGroupDevices() as $quoteDevice)
         {
-            $totalResidual += $quoteDevice->residual;
+            $totalResidual += $quoteDevice->buyoutValue;
         }
 
         return $totalResidual;

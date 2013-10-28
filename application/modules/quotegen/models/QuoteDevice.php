@@ -63,7 +63,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     /**
      * @var int
      */
-    public $residual;
+    public $buyoutValue;
 
     /**
      * @var int
@@ -163,9 +163,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
             $this->cost = $params->cost;
         }
 
-        if (isset($params->residual) && !is_null($params->residual))
+        if (isset($params->buyoutValue) && !is_null($params->buyoutValue))
         {
-            $this->residual = $params->residual;
+            $this->buyoutValue = $params->buyoutValue;
         }
 
         if (isset($params->packageCost) && !is_null($params->packageCost))
@@ -191,19 +191,19 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                        => $this->id,
-            "quoteId"                   => $this->quoteId,
-            "margin"                    => $this->margin,
-            "name"                      => $this->name,
-            "oemSku"                    => $this->oemSku,
-            "dealerSku"                 => $this->dealerSku,
-            "costPerPageMonochrome"     => $this->costPerPageMonochrome,
-            "costPerPageColor"          => $this->costPerPageColor,
-            "cost"                      => $this->cost,
-            "residual"                  => $this->residual,
-            "packageCost"               => $this->packageCost,
-            "packageMarkup"             => $this->packageMarkup,
-            "tonerConfigId"             => $this->tonerConfigId,
+            "id"                    => $this->id,
+            "quoteId"               => $this->quoteId,
+            "margin"                => $this->margin,
+            "name"                  => $this->name,
+            "oemSku"                => $this->oemSku,
+            "dealerSku"             => $this->dealerSku,
+            "costPerPageMonochrome" => $this->costPerPageMonochrome,
+            "costPerPageColor"      => $this->costPerPageColor,
+            "cost"                  => $this->cost,
+            "buyoutValue"           => $this->buyoutValue,
+            "packageCost"           => $this->packageCost,
+            "packageMarkup"         => $this->packageMarkup,
+            "tonerConfigId"         => $this->tonerConfigId,
         );
     }
 
@@ -462,7 +462,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalPrice ()
     {
-        return ($this->calculatePackagePrice() + $this->residual) * $this->calculateTotalQuantity();
+        return ($this->calculatePackagePrice() + $this->buyoutValue) * $this->calculateTotalQuantity();
     }
 
     /**
@@ -472,7 +472,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateMonthlyLeasePrice ()
     {
-        $packagePrice = $this->calculatePackagePrice() + $this->residual;
+        $packagePrice = $this->calculatePackagePrice() + $this->buyoutValue;
         $leaseFactor  = $this->getQuote()->leaseRate;
 
         return $packagePrice * $leaseFactor;
@@ -495,7 +495,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateTotalResidual ()
     {
-        return $this->residual * $this->calculateTotalQuantity();
+        return $this->buyoutValue * $this->calculateTotalQuantity();
     }
 
     /**
@@ -505,17 +505,18 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      */
     public function calculateLeaseValue ()
     {
-        $value      = $this->calculatePackagePrice();
-        $residual   = $this->residual;
-        $leaseValue = 0;
+        $value       = $this->calculatePackagePrice();
+        $buyoutValue = $this->buyoutValue;
+        $leaseValue  = 0;
 
         /*
          * We need to be at or over 0 in all cases, otherwise we might as well return 0 since negative numbers make no
-         * sense for this.
+         * sense for this. Norm never wants a value to not show up on the hardware Financing page, so as long as both numbers
+         * are greater than or equal to 0, then we will get the lease value.
          */
-        if ($value > 0 && $residual >= 0 && ($value - $residual) >= 0)
+        if ($value >= 0 && $buyoutValue >= 0)
         {
-            $leaseValue = $value + $residual;
+            $leaseValue = $value + $buyoutValue;
         }
 
         return $leaseValue;

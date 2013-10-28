@@ -313,7 +313,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             $quoteDevice = $quoteDeviceService->syncDevice($favoriteDevice->getDevice()->masterDeviceId);
             $quoteDevice->quoteId       = $this->_quote->id;
             $quoteDevice->margin        = $defaultMargin;
-            $quoteDevice->residual      = 0;
+            $quoteDevice->buyoutValue   = 0;
             $quoteDevice->packageMarkup = 0;
             $quoteDevice->packageCost   = $quoteDevice->calculatePackageCost();
             $quoteDeviceId              = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
