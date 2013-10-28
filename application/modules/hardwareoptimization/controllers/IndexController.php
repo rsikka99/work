@@ -164,52 +164,13 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     }
 
     /**
-     * Finds a suitable replacement for a device instance or returns null if no replacement was found
-     *
-     * @param Proposalgen_Model_DeviceInstance         $deviceInstance
-     * @param Hardwareoptimization_Model_Device_Swap[] $replacementDevices
-     * @param Proposalgen_Model_CostPerPageSetting     $costPerPageSetting
-     * @param Proposalgen_Model_CostPerPageSetting     $replacementCostPerPageSetting
-     * @param number                                   $costSavingsThreshold
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    protected function _findReplacement (Proposalgen_Model_DeviceInstance $deviceInstance, $replacementDevices, Proposalgen_Model_CostPerPageSetting $costPerPageSetting, Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting, $costSavingsThreshold)
-    {
-        $suggestedDevice           = null;
-        $greatestSavings           = 0;
-        $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-
-        foreach ($replacementDevices as $deviceSwap)
-        {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_identity->dealerId, $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage, $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage));
-            $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
-            if ($costDelta > $costSavingsThreshold && $costDelta > $greatestSavings)
-            {
-                // We replaced the device on cost at this point, we need to look at ampv
-                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
-                {
-                    $suggestedDevice = $deviceSwap->getMasterDevice();
-                    $greatestSavings = $costDelta;
-                }
-            }
-        }
-
-        return $suggestedDevice;
-    }
-
-    /**
      * Analyzes the customers fleet and uses a threshold to determine which devices to automatically replace
      */
     protected function _analyzeFleet ()
     {
         $db                              = Zend_Db_Table::getDefaultAdapter();
         $optimization                    = $this->getOptimizationViewModel();
-        $savingsThreshold                = $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold;
         $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
-
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
         try
         {
@@ -232,35 +193,24 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $replacementMasterDevice->getMasterDevice()->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
             }
 
-            $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
-            $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
+            $standardDeviceReplacement = new Hardwareoptimization_Model_Optimization_StandardDeviceReplacement(
+                array(
+                     'black'    => $blackReplacementDevices,
+                     'blackmfp' => $blackMfpReplacementDevices,
+                     'color'    => $colorReplacementDevices,
+                     'colormfp' => $colorMfpReplacementDevices
+                ),
+                $this->_dealerId,
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold,
+                $optimization->getCostPerPageSettingForDealer(),
+                $optimization->getCostPerPageSettingForReplacements(),
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage,
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage
+            );
 
             foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $suggestedDevice = null;
-
-                if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
-                {
-                    if ($deviceInstance->getMasterDevice()->isCopier)
-                    {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackMfpReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
-                    }
-                    else
-                    {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $blackReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
-                    }
-                }
-                else
-                {
-                    if ($deviceInstance->getMasterDevice()->isCopier)
-                    {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorMfpReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
-                    }
-                    else
-                    {
-                        $suggestedDevice = $this->_findReplacement($deviceInstance, $colorReplacementDevices, $costPerPageSetting, $replacementCostPerPageSetting, $savingsThreshold);
-                    }
-                }
+                $suggestedDevice = $standardDeviceReplacement->findReplacement($deviceInstance);
 
                 if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
                 {
@@ -272,10 +222,12 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     $deviceInstanceReplacementMapper->insert($newDevice);
                 }
             }
+
             if (!$this->_saveDeviceSwapReason(true))
             {
                 return false;
             }
+
             $db->commit();
         }
         catch (Exception $e)
@@ -317,8 +269,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
-        $optimization       = $this->getOptimizationViewModel();
-        $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+        $optimization                  = $this->getOptimizationViewModel();
+        $costPerPageSetting            = $optimization->getCostPerPageSettingForDealer();
         $replacementCostPerPageSetting = $optimization->getCostPerPageSettingForReplacements();
 
         $instanceId     = $this->_getParam('deviceInstanceId');
