@@ -25,6 +25,11 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
     public $laborCostPerPage;
 
     /**
+     * @var Float
+     */
+    public $leaseBuybackPrice;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -53,6 +58,11 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         {
             $this->laborCostPerPage = $params->laborCostPerPage;
         }
+
+        if (isset($params->leaseBuybackPrice) && !is_null($params->leaseBuybackPrice))
+        {
+            $this->leaseBuybackPrice = $params->leaseBuybackPrice;
+        }
     }
 
     /**
@@ -61,15 +71,17 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "masterDeviceId"   => $this->masterDeviceId,
-            "dealerId"         => $this->dealerId,
-            "partsCostPerPage" => $this->partsCostPerPage,
-            "laborCostPerPage" => $this->laborCostPerPage,
+            "masterDeviceId"    => $this->masterDeviceId,
+            "dealerId"          => $this->dealerId,
+            "partsCostPerPage"  => $this->partsCostPerPage,
+            "laborCostPerPage"  => $this->laborCostPerPage,
+            "leaseBuybackPrice" => $this->leaseBuybackPrice,
         );
     }
 
     /**
      * Saves a dealer master device attribute
+     *
      * @return $this
      */
     public function saveObject ()
@@ -79,7 +91,7 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
 
         $this->_filterData();
 
-        if ($this->laborCostPerPage instanceof Zend_Db_Expr && $this->partsCostPerPage instanceof Zend_Db_Expr)
+        if ($this->laborCostPerPage instanceof Zend_Db_Expr && $this->partsCostPerPage instanceof Zend_Db_Expr && $this->leaseBuybackPrice instanceof Zend_Db_expr)
         {
             $dealerMasterDeviceAttributeMapper->delete($this);
         }
@@ -108,6 +120,11 @@ class Proposalgen_Model_Dealer_Master_Device_Attribute extends My_Model_Abstract
         if ($this->partsCostPerPage < 0)
         {
             $this->partsCostPerPage = new Zend_Db_Expr("null");
+        }
+
+        if ($this->leaseBuybackPrice < 0)
+        {
+            $this->leaseBuybackPrice = new Zend_Db_Expr("null");
         }
     }
 }

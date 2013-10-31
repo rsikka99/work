@@ -25,7 +25,7 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
 
         $this->setMethod('post');
         $tonerConfigurationElement = $this->createElement('select', 'tonerConfigId', array(
-                                                                                          'label' => 'Toner Configuration: ',
+                                                                                          'label'    => 'Toner Configuration: ',
                                                                                           'required' => false
                                                                                      ));
         if (!$this->_isAllowed)
@@ -147,7 +147,24 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
             $systemLaborCPPElement->setAttrib('disabled', 'disabled');
         }
 
-        $this->addDisplayGroup(array($dealerPartsCPPElement, $systemPartsCPPElement, $tonerConfigurationElement), 'leftSide');
+        /*
+        * Labor Cost Per Page
+        */
+        $leaseBuybackPriceElement = $this->createElement('text', 'leaseBuybackPrice', array(
+                                                                                           'label'      => 'Lease Buyback Price:',
+                                                                                           'class'      => 'span4',
+                                                                                           'maxlength'  => 8,
+                                                                                           'required'   => $this->_isQuoteDevice,
+                                                                                           'validators' => array(
+                                                                                               'float',
+                                                                                           ),
+                                                                                           'filters'    => array(
+                                                                                               'StringTrim',
+                                                                                               'StripTags'
+                                                                                           ),
+                                                                                      ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+
+        $this->addDisplayGroup(array($dealerPartsCPPElement, $systemPartsCPPElement, $tonerConfigurationElement, $leaseBuybackPriceElement), 'leftSide');
         $this->addDisplayGroup(array($dealerLaborCPPElement, $systemLaborCPPElement, $isLeasedElement, $leasedTonerYieldElement), 'rightSide');
         $this->getElement("isLeased")->setDecorators(array("ViewHelper",
                                                            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'switch', 'data-on-label' => 'Yes', 'data-off-label' => 'No', 'data-off' => 'danger', 'data-on' => 'success')),

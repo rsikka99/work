@@ -1,0 +1,64 @@
+<?php
+
+$filename = 'LeaseBuyback.xlsx';
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+
+$savePath   = $savePath . $filename;
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
+
+// Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
+/* @var $objPHPExcel PHPExcel */
+$objPHPExcel = $this->phpexcel;
+
+// Objects in memory are held in php memory as serialized objects, reduces memory footprint with little performance hit
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+/**
+ * Start of the summary Page
+ */
+
+$sheetCounter = 0;
+$activeSheet  = $objPHPExcel->getActiveSheet();
+$activeSheet->setTitle("Lease Buyback");
+// Start building the document
+$activeSheet->setCellValue('A1', 'Device Name');
+$activeSheet->setCellValue('B1', "Ip Address");
+$activeSheet->setCellValue('C1', "Serial Number");
+$activeSheet->setCellValue('D1', "Lease Buyback Price");
+
+foreach ($this->leaseDeviceData as $deviceData)
+{
+    $currentRow = $activeSheet->getHighestRow() + 1;
+    $activeSheet->setCellValue("A{$currentRow}", $deviceData['deviceName']);
+    $activeSheet->setCellValue("B{$currentRow}", $deviceData['ipAddress']);
+    $activeSheet->setCellValue("C{$currentRow}", $deviceData['serialNumber']);
+    $activeSheet->setCellValue("D{$currentRow}", $deviceData['leaseBuybackPrice']);
+}
+
+$currentRow = $activeSheet->getHighestRow() + 1;
+$activeSheet->setCellValue("A{$currentRow}", "Total");
+$activeSheet->setCellValue("D{$currentRow}", $this->totalBuybackPrice);
+
+$activeSheet->getColumnDimension('A')->setWidth(30);
+$activeSheet->getColumnDimension('B')->setWidth(20);
+$activeSheet->getColumnDimension('C')->setWidth(20);
+$activeSheet->getColumnDimension('D')->setWidth(20);
+// Default to the first page
+$objPHPExcel->setActiveSheetIndex(0);
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+$objWriter->save($savePath);
+
+//Clear the workbook from php's memory
+$objPHPExcel->disconnectWorksheets();
+
+echo $this->baseUrl($linkToFile);

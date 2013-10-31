@@ -9,6 +9,7 @@
             <tonerConfigId>asdf</tonerConfigId>
             <isLeased>asdf</isLeased>
             <leasedTonerYield>asdf</leasedTonerYield>
+            <leaseBuybackPrice>Cake</leaseBuybackPrice>
         </data>
     </suppliesAndService>
     <suppliesAndService>
@@ -20,6 +21,7 @@
             <tonerConfigId>1</tonerConfigId>
             <isLeased>1</isLeased>
             <leasedTonerYield>asdf</leasedTonerYield>
+            <leaseBuybackPrice>-520000</leaseBuybackPrice>
         </data>
     </suppliesAndService>
     <suppliesAndService>
@@ -30,6 +32,7 @@
             <laborCostPerPage>4</laborCostPerPage>
             <tonerConfigId>0</tonerConfigId>
             <isLeased>0</isLeased>
+            <leaseBuybackPrice>Morgan Freeman</leaseBuybackPrice>
         </data>
     </suppliesAndService>
     <suppliesAndService>
@@ -40,6 +43,7 @@
             <laborCostPerPage>4</laborCostPerPage>
             <tonerConfigId>0</tonerConfigId>
             <isLeased>0</isLeased>
+            <leaseBuybackPrice>Gordon Freeman</leaseBuybackPrice>
         </data>
     </suppliesAndService>
 </suppliesAndServices>

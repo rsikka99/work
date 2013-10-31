@@ -9,6 +9,7 @@
             <tonerConfigId>1</tonerConfigId>
             <isLeased>0</isLeased>
             <leasedTonerYield>asdf</leasedTonerYield>
+            <leaseBuybackPrice>0</leaseBuybackPrice>
         </data>
     </suppliesAndService>
     <suppliesAndService>
@@ -31,6 +32,7 @@
             <tonerConfigId>1</tonerConfigId>
             <isLeased>0</isLeased>
             <leasedTonerYield>0</leasedTonerYield>
+            <leaseBuybackPrice>100000</leaseBuybackPrice>
         </data>
     </suppliesAndService>
 </suppliesAndServices>

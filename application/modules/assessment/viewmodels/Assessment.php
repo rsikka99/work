@@ -170,6 +170,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     protected $_includedDevicesSortedDescendingByAge;
     protected $_pageCounts;
     protected $_cachedGrossMarginTotalMonthlyCost;
+    protected $_totalLeaseBuybackPrice;
 
     public $highCostPurchasedDevices;
 
@@ -3740,5 +3741,35 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     public function calculateAveragePagesPerDeviceMonthly ()
     {
         return $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getCount();
+    }
+
+    /**
+     * Calculates the total price of devices with a lease buyback
+     *
+     * @return float
+     */
+    public function getTotalLeaseBuybackPrice ()
+    {
+        if (!isset($this->_totalLeaseBuybackPrice))
+        {
+
+            $totalBuybackPrice = 0;
+
+            /**
+             * @var $deviceInstance Proposalgen_Model_DeviceInstance
+             */
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
+            {
+                $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
+                if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
+                {
+                    $totalBuybackPrice += $dealerMasterDeviceAttributes->leaseBuybackPrice;
+                }
+            }
+
+            $this->_totalLeaseBuybackPrice = $totalBuybackPrice;
+        }
+
+        return $this->_totalLeaseBuybackPrice;
     }
 }

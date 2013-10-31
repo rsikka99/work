@@ -393,6 +393,11 @@ class Proposalgen_Service_ManageMasterDevices
                     $validatedData['dealerPartsCostPerPage'] = new Zend_Db_Expr("NULL");
                 }
 
+                if ($validatedData['leaseBuybackPrice'] == '')
+                {
+                    $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
+                }
+
 
                 if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                 {
@@ -417,7 +422,7 @@ class Proposalgen_Service_ManageMasterDevices
                     $validatedData['dateCreated'] = date('Y-m-d H:i:s');
                     $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
                     $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
-                    $masterDevice = $masterDeviceMapper->find($this->masterDeviceId);
+                    $masterDevice                 = $masterDeviceMapper->find($this->masterDeviceId);
                 }
 
                 $tonerIds = explode(',', $tonersList);
@@ -510,11 +515,13 @@ class Proposalgen_Service_ManageMasterDevices
             }
 
 
-            $dealerMasterDeviceAttribute                   = new Proposalgen_Model_Dealer_Master_Device_Attribute();
-            $dealerMasterDeviceAttribute->dealerId         = $this->_dealerId;
-            $dealerMasterDeviceAttribute->masterDeviceId   = $this->masterDeviceId;
-            $dealerMasterDeviceAttribute->laborCostPerPage = ($validatedData['dealerLaborCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerLaborCostPerPage']);
-            $dealerMasterDeviceAttribute->partsCostPerPage = ($validatedData['dealerPartsCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerPartsCostPerPage']);
+            $dealerMasterDeviceAttribute                    = new Proposalgen_Model_Dealer_Master_Device_Attribute();
+            $dealerMasterDeviceAttribute->dealerId          = $this->_dealerId;
+            $dealerMasterDeviceAttribute->masterDeviceId    = $this->masterDeviceId;
+            $dealerMasterDeviceAttribute->laborCostPerPage  = ($validatedData['dealerLaborCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerLaborCostPerPage']);
+            $dealerMasterDeviceAttribute->partsCostPerPage  = ($validatedData['dealerPartsCostPerPage'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['dealerPartsCostPerPage']);
+            $dealerMasterDeviceAttribute->leaseBuybackPrice = ($validatedData['leaseBuybackPrice'] == '' ? new Zend_Db_Expr("NULL") : $validatedData['leaseBuybackPrice']);
+
             $dealerMasterDeviceAttribute->saveObject();
         }
         catch (Exception $e)
@@ -625,8 +632,9 @@ class Proposalgen_Service_ManageMasterDevices
 
                 if ($dealerMasterDeviceAttributes)
                 {
-                    $this->_suppliesAndServiceForm->populate(array("dealerLaborCostPerPage" => $dealerMasterDeviceAttributes->laborCostPerPage, "dealerPartsCostPerPage" => $dealerMasterDeviceAttributes->partsCostPerPage));
+                    $this->_suppliesAndServiceForm->populate(array("dealerLaborCostPerPage" => $dealerMasterDeviceAttributes->laborCostPerPage, "dealerPartsCostPerPage" => $dealerMasterDeviceAttributes->partsCostPerPage, 'leaseBuybackPrice' => $dealerMasterDeviceAttributes->leaseBuybackPrice));
                 }
+
                 $this->_suppliesAndServiceForm->populate($masterDevice->toArray());
             }
         }

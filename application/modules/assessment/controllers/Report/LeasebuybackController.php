@@ -1,0 +1,107 @@
+<?php
+/**
+ * Class Assessment_Report_LeasebuybackController
+ */
+class Assessment_Report_LeasebuybackController extends Assessment_Library_Controller_Action
+{
+    public function indexAction ()
+    {
+        $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
+
+        $this->initReportList();
+        $this->initHtmlReport();
+
+        $this->view->availableReports['LeaseBuyback']['active'] = true;
+        $this->view->formats                                    = array(
+            "/assessment/report_leasebuyback/generate/format/excel" => $this->_excelFormat,
+        );
+
+        try
+        {
+            // Clear the cache for the report before proceeding
+            $this->clearCacheForReport();
+            $assessmentViewModel             = $this->getAssessmentViewModel();
+            $this->view->assessmentViewModel = $assessmentViewModel;
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Could not generate the toner list.");
+        }
+    }
+
+    /**
+     * The Generate Action
+     */
+    public function generateAction ()
+    {
+        $format = $this->_getParam("format", "excel");
+
+        switch ($format)
+        {
+            case "excel" :
+                $this->_helper->layout->disableLayout();
+                $this->view->phpexcel = new PHPExcel();
+                $this->initExcelLeaseBuyback();
+                break;
+            default :
+                throw new Exception("Invalid Format Requested! ($format)");
+                break;
+        }
+
+        $filename = "tonerreport.$format";
+
+        $this->initReportVariables($filename);
+
+        // Render early
+        try
+        {
+            $this->render($format . "/00_render");
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Controller caught the exception!", 0, $e);
+        }
+    }
+
+    /**
+     * Sets up the excel data array
+     *
+     * @throws Exception
+     */
+    public function initExcelLeaseBuyback ()
+    {
+        try
+        {
+            $assessmentViewModel = $this->getAssessmentViewModel();
+        }
+        catch (Exception $e)
+        {
+            throw new Exception("Could not generate Lease Buyback excel report.");
+        }
+
+        $leaseDeviceData = array();
+        $deviceCounter   = 0;
+
+        /**
+         * @var $deviceInstance Proposalgen_Model_DeviceInstance
+         */
+        foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
+        {
+            $leaseBuybackPrice            = "-";
+            $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
+            if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute && $dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
+            {
+                $leaseBuybackPrice = $this->view->currency($dealerMasterDeviceAttributes->leaseBuybackPrice);
+            }
+
+            $leaseDeviceData[$deviceCounter]['deviceName']        = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName());
+            $leaseDeviceData[$deviceCounter]['ipAddress']         = $deviceInstance->ipAddress;
+            $leaseDeviceData[$deviceCounter]['serialNumber']      = $deviceInstance->serialNumber;
+            $leaseDeviceData[$deviceCounter]['leaseBuybackPrice'] = $leaseBuybackPrice;
+            $deviceCounter++;
+        }
+
+        $this->view->leaseDeviceData   = $leaseDeviceData;
+        $this->view->totalBuybackPrice = $this->view->currency($assessmentViewModel->getTotalLeaseBuybackPrice());
+    }
+}

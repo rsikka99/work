@@ -1,0 +1,67 @@
+<?php
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/essentials/essentials_html.css"));
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+?>
+<div class="container" id="htmlReportContainer">
+    <h2 class="reportTitle">Lease Buyback</h2><br />
+    <table class="mainTable">
+        <tbody>
+        <tr>
+            <th>Device Name</th>
+            <th>Ip Address</th>
+            <th>Serial Number</th>
+            <th>Lease Buyback Price</th>
+        </tr>
+        <?php
+
+        /**
+         * @var $deviceInstance Proposalgen_Model_DeviceInstance
+         */
+        foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) :
+            $leaseBuybackPrice            = "-";
+            $dealerMasterDeviceAttributes = $deviceInstance->getMasterDevice()->getDealerAttributes();
+
+            if ($dealerMasterDeviceAttributes instanceof Proposalgen_Model_Dealer_Master_Device_Attribute)
+            {
+                if ($dealerMasterDeviceAttributes->leaseBuybackPrice != null && $dealerMasterDeviceAttributes->leaseBuybackPrice >= 0)
+                {
+                    $leaseBuybackPrice = $this->currency($dealerMasterDeviceAttributes->leaseBuybackPrice);
+                }
+            }
+            ?>
+            <tr class="center">
+                <td class="column1">
+                    <div class="center"><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) ?></div>
+                </td>
+                <td class="column2">
+                    <div class="center"><?php echo $deviceInstance->ipAddress; ?></div>
+                </td>
+                <td class="column3">
+                    <div class="center"><?php echo $deviceInstance->serialNumber; ?></div>
+                </td>
+                <td class="column4">
+                    <div class="center"><?php echo $leaseBuybackPrice; ?></div>
+                </td>
+            </tr>
+        <?php
+        endforeach; ?>
+        <tr class="center">
+            <td class="column1">
+                <div class="center"><strong>Total</strong></div>
+            </td>
+            <td class="column2">
+                <div class="center"></div>
+            </td>
+            <td class="column3">
+                <div class="center"></div>
+            </td>
+            <td class="column4">
+                <div class="center"><strong><?php echo $this->currency($assessmentViewModel->getTotalLeaseBuybackPrice()); ?></strong></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

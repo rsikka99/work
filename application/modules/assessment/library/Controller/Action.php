@@ -91,50 +91,55 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     {
         // This is a list of reports that we can view.
         $this->view->availableReports = array(
-            "Reports"              => array(
+            "Reports"                => array(
                 "pagetitle" => "Select a report...",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_index/index')
             ),
-            "Assessment"           => array(
+            "Assessment"             => array(
                 "pagetitle" => "Assessment",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
             ),
-            "CustomerCostAnalysis" => array(
+            "CustomerCostAnalysis"   => array(
                 "pagetitle" => "Customer Cost Analysis",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_costanalysis/index')
             ),
-            "GrossMargin"          => array(
+            "GrossMargin"            => array(
                 "pagetitle" => "Gross Margin",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_grossmargin/index')
             ),
-            "TonerVendorGrossMargin"          => array(
+            "TonerVendorGrossMargin" => array(
                 "pagetitle" => "Toner Vendor Gross Margin",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_tonervendorgrossmargin/index')
             ),
-            "JITSupplyAndTonerSku" => array(
+            "JITSupplyAndTonerSku"   => array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_toners/index')
             ),
-            "OldDeviceList"        => array(
+            "OldDeviceList"          => array(
                 "pagetitle" => "Old Device List",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_olddevicelist/index')
             ),
-            "PrintingDeviceList"   => array(
+            "PrintingDeviceList"     => array(
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_printingdevicelist/index')
             ),
-            "Solution"             => array(
+            "Solution"               => array(
                 "pagetitle" => "Solution",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_solution/index')
+            ),
+            "LeaseBuyback"       => array(
+                "pagetitle" => "Lease Buyback",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/assessment/report_leasebuyback/index')
             ),
         );
     }
