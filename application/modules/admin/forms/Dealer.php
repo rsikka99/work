@@ -81,10 +81,6 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
 
             $this->addElement($dealerFeatures);
         }
-            }
-
-            $this->addElement($dealerFeatures);
-        }
 
         // Add the submit button
         $submit = $this->createElement('submit', 'submit', array(
