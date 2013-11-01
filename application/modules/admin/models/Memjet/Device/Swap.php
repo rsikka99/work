@@ -147,7 +147,7 @@ class Admin_Model_Memjet_Device_Swap extends My_Model_Abstract
         }
         catch (Exception $e)
         {
-            throw new Exception("Failed to save or insert the device swap", 0, $e);
+            Tangent_Log::logException($e);
         }
 
         return $successful;

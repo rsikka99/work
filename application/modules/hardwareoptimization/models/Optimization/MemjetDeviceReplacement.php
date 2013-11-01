@@ -112,7 +112,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
     {
         if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
         {
-            if ($deviceInstance->getMasterDevice()->isCopier)
+            if ($deviceInstance->getMasterDevice()->isMfp())
             {
                 $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_blackMfpReplacementDevices);
             }
@@ -123,7 +123,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
         }
         else
         {
-            if ($deviceInstance->getMasterDevice()->isCopier)
+            if ($deviceInstance->getMasterDevice()->isMfp())
             {
                 $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_colorMfpReplacementDevices);
             }
@@ -148,8 +148,6 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
     {
         $suggestedDevice = null;
         $greatestSavings = 0;
-        // FIXME triehl: Document $isMfp better or rename variable to better name so that it's purpose is clearer
-        $isMfp                     = false;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($this->_costPerPageSetting);
         foreach ($replacementDevices as $deviceSwap)
         {
@@ -163,7 +161,6 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();
                     $greatestSavings = $costDelta;
-                    $isMfp           = $suggestedDevice->isCopier;
                 }
 
                 /**
@@ -171,11 +168,10 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
                  * 1: New device is MFP while the last suggested is not OR
                  * 2: They have the same functionality and it is cheaper.
                  */
-                else if (($deviceSwap->getMasterDevice()->isCopier && $isMfp == false) || ($costDelta > $greatestSavings && $deviceSwap->getMasterDevice()->isCopier == $isMfp))
+                else if (($deviceSwap->getMasterDevice()->isMfp() && $suggestedDevice->isMfp() == false) || ($costDelta > $greatestSavings && $deviceSwap->getMasterDevice()->isMfp() == $suggestedDevice->isMfp()))
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();
                     $greatestSavings = $costDelta;
-                    $isMfp           = $suggestedDevice->isCopier;
                 }
             }
         }
