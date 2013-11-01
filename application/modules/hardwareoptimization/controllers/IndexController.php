@@ -138,6 +138,19 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                         $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
                     }
                 }
+                else if ($form->getValue('MemjetAnalyze'))
+                {
+                    // Analyze the fleet. If it is successful we need to rebuild our form
+                    if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION_MEMJET) && $this->_memjetAnalyzeFleet())
+                    {
+                        $this->_flashMessenger->addMessage(array('success' => "We've optimized your fleet. Please review the changes before proceeding."));
+                        $this->redirector('optimize', null, null, array());
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array('danger' => "There was an error saving your replacement choices."));
+                    }
+                }
                 else if ($form->getValue('ResetReplacements'))
                 {
                     if ($this->_resetReplacements())
@@ -223,6 +236,87 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 }
             }
 
+            if (!$this->_saveDeviceSwapReason(true))
+            {
+                return false;
+            }
+
+            $db->commit();
+        }
+        catch (Exception $e)
+        {
+            $db->rollBack();
+            Tangent_Log::logException($e);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Analyzes the customers fleet and uses average monthly page volume to determine which devices to automatically replace
+     */
+    protected function _memjetAnalyzeFleet ()
+    {
+        $db                              = Zend_Db_Table::getDefaultAdapter();
+        $optimization                    = $this->getOptimizationViewModel();
+        $deviceInstanceReplacementMapper = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
+
+        try
+        {
+            $db->beginTransaction();
+
+            // Delete all our replacements
+            if (!$this->_resetReplacements())
+            {
+                throw new Exception("Error resetting replacements!");
+            }
+
+            $blackReplacementDevices    = Admin_Model_Mapper_Memjet_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId, false);
+            $blackMfpReplacementDevices = Admin_Model_Mapper_Memjet_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId, false);
+            $colorReplacementDevices    = Admin_Model_Mapper_Memjet_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId, false);
+            $colorMfpReplacementDevices = Admin_Model_Mapper_Memjet_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId, false);
+
+            /* @var $replacementMasterDevice Admin_Model_Memjet_Device_Swap */
+            foreach (array_merge($blackReplacementDevices, $blackMfpReplacementDevices, $colorReplacementDevices, $colorMfpReplacementDevices) as $replacementMasterDevice)
+            {
+                $replacementMasterDevice->getMasterDevice()->processOverrides($this->_hardwareOptimization->getHardwareOptimizationSetting()->adminCostPerPage);
+            }
+
+            $memjetDeviceReplacement = new Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement(
+                array(
+                     'black'    => $blackReplacementDevices,
+                     'blackmfp' => $blackMfpReplacementDevices,
+                     'color'    => $colorReplacementDevices,
+                     'colormfp' => $colorMfpReplacementDevices
+                ),
+                $this->_dealerId,
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold,
+                $optimization->getCostPerPageSettingForDealer(),
+                $optimization->getCostPerPageSettingForReplacements(),
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage,
+                $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage
+            );
+
+            foreach ($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
+            {
+                $suggestedDevice = $memjetDeviceReplacement->findReplacement($deviceInstance);
+
+                if ($suggestedDevice instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $newDevice                         = new Proposalgen_Model_Device_Instance_Replacement_Master_Device();
+                    $newDevice->masterDeviceId         = $suggestedDevice->id;
+                    $newDevice->deviceInstanceId       = $deviceInstance->id;
+                    $newDevice->hardwareOptimizationId = $this->_hardwareOptimization->id;
+
+                    $deviceInstanceReplacementMapper->insert($newDevice);
+                }
+            }
+
+            /**
+             * This saves all the reasons for each device
+             */
             if (!$this->_saveDeviceSwapReason(true))
             {
                 return false;

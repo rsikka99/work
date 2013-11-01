@@ -1001,6 +1001,23 @@
                                 </delete>
                             </pages>
                         </DealerManagement>
+                        <MemjetDeviceSwaps>
+                            <label>Memjet Device Swaps</label>
+                            <module>admin</module>
+                            <controller>memjetdeviceswaps</controller>
+                            <action>index</action>
+                            <resource>admin__memjetdeviceswaps__index</resource>
+                            <pages>
+                                <index>
+                                    <label>Manage Memjet Device Swaps</label>
+                                    <module>admin</module>
+                                    <controller>memjetdeviceswaps</controller>
+                                    <action>index</action>
+                                    <resource>admin__memjetdeviceswaps__index</resource>
+                                    <visible>0</visible>
+                                </index>
+                            </pages>
+                        </MemjetDeviceSwaps>
                     </pages>
                 </sysadmin>
                 <settings>

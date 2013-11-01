@@ -32,6 +32,12 @@
                     Manage Master Matchups</a>
             </div>
         <?php endif; ?>
+        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_INDEX)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "memjetdeviceswaps", "module" => "admin")); ?>"><i class="icon-exchange icon-4x"></i><br /><br />
+                    Manage Memjet Device Swaps</a>
+            </div>
+        <?php endif; ?>
     </div>
 <?php endif; ?>
 <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)
