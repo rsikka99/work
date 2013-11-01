@@ -39,6 +39,7 @@ class Admin_DealerController extends Tangent_Controller_Action
          * Fetch the dealer
          */
         $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
+        $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
         $dealer       = $dealerMapper->find($dealerId);
 
         if (!$dealer instanceof Admin_Model_Dealer)
@@ -46,9 +47,16 @@ class Admin_DealerController extends Tangent_Controller_Action
             $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
             $this->redirect('index');
         }
+        $featureList = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
+        $features = array();
+        foreach ($featureList as $feature)
+        {
+            $features['dealerFeatures'][] = $feature->featureId;
+        }
 
         $form = new Admin_Form_Dealer();
         $form->populate($dealer->toArray());
+        $form->populate($features);
 
         if ($this->getRequest()->isPost())
         {
@@ -69,6 +77,50 @@ class Admin_DealerController extends Tangent_Controller_Action
                         // Save dealer object
                         $dealer->populate($form->getValues());
                         $dealerMapper->save($dealer);
+
+                        $dealerFeatureList   = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
+
+                        // Loop through our new features
+                        foreach ($postData ["dealerFeatures"] as $featureId)
+                        {
+                            $hasFeature = false;
+                            foreach ($dealerFeatureList as $existingFeature)
+                            {
+                                if ($existingFeature->featureId == $featureId)
+                                {
+                                    $hasFeature = true;
+                                    break;
+                                }
+                            }
+
+                            // If the feature is new
+                            if (!$hasFeature)
+                            {
+                                $dealerFeature            = new Application_Model_Dealer_Feature();
+                                $dealerFeature->featureId = $featureId;
+                                $dealerFeature->dealerId  = $dealerId;
+                                $dealerFeatureMapper->insert($dealerFeature);
+                            }
+                        }
+
+                        // Loop through all of our old features and delete ones that we no longer have
+                        foreach ($dealerFeatureList as $existingFeature)
+                        {
+                            $stillHasFeature = false;
+                            foreach ($postData["dealerFeatures"] as $featureId)
+                            {
+                                if ($existingFeature->featureId == $featureId)
+                                {
+                                    $stillHasFeature = true;
+                                    break;
+                                }
+                            }
+
+                            if (!$stillHasFeature)
+                            {
+                                $dealerFeatureMapper->delete($existingFeature);
+                            }
+                        }
 
                         $db->commit();
 
@@ -206,6 +258,17 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                                 Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($newDefaultReason);
                             }
+                        }
+
+                        $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
+
+                        // Loop through our new features
+                        foreach ($values ["dealerFeatures"] as $featureId)
+                        {
+                            $dealerFeature            = new Application_Model_Dealer_Feature();
+                            $dealerFeature->featureId = $featureId;
+                            $dealerFeature->dealerId  = $dealerId;
+                            $dealerFeatureMapper->insert($dealerFeature);
                         }
 
                         $db->commit();

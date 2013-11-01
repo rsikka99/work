@@ -12,5 +12,13 @@ class Admin_Bootstrap extends Zend_Application_Module_Bootstrap
             Admin_Model_Acl::setupAcl($acl);
         }
     }
+
+    /**
+     * @return Zend_Loader_Autoloader_Resource
+     */
+    protected function _initViewModelAutoloader ()
+    {
+        return $this->getResourceLoader()->addResourceType('ViewModel', 'viewmodels', 'ViewModel');
+    }
 }
 

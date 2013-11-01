@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Application_Model_DbTable_feature
+ * Class Application_Model_DbTable_Feature
  */
-class Application_Model_DbTable_feature extends Zend_Db_Table_Abstract
+class Application_Model_DbTable_Feature extends Zend_Db_Table_Abstract
 {
     protected $_primary = "id";
     protected $_name = "features";

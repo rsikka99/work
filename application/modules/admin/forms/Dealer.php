@@ -12,14 +12,14 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
         $this->_addClassNames('form-center-actions');
 
         $this->addElement('text', 'dealerName', array(
-                                                     'required'   => true,
-                                                     'label'      => 'Dealer Name',
+                                                     'required'    => true,
+                                                     'label'       => 'Dealer Name',
                                                      'description' => 'The name of the dealership',
-                                                     'filters'    => array(
+                                                     'filters'     => array(
                                                          'StringTrim',
                                                          'StripTags',
                                                      ),
-                                                     'validators' => array(
+                                                     'validators'  => array(
                                                          array(
                                                              'validator' => 'StringLength',
                                                              'options'   => array('min' => 2, 'max' => 255),
@@ -28,14 +28,14 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
                                                 ));
 
         $this->addElement('text', 'userLicenses', array(
-                                                       'required'   => true,
-                                                       'label'      => '# of user licenses',
+                                                       'required'    => true,
+                                                       'label'       => '# of user licenses',
                                                        'description' => 'The number of users a dealer can create. The dealer administrator counts towards these licenses',
-                                                       'filters'    => array(
+                                                       'filters'     => array(
                                                            'StringTrim',
                                                            'StripTags',
                                                        ),
-                                                       'validators' => array(
+                                                       'validators'  => array(
                                                            array(
                                                                'validator' => 'Between',
                                                                'options'   => array('min' => 1, 'max' => 1000),
@@ -68,6 +68,19 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
                                                               ),
                                                           ),
                                                      ));
+
+        $featuresList   = Application_Model_Mapper_Feature::getInstance()->fetchAllAsStringArray();
+        $dealerFeatures = $this->createElement('multiCheckbox', 'dealerFeatures', array('label' => 'Features:'));
+        if (count($featuresList) > 0)
+        {
+            // This removes the br that is put in between each element
+            foreach ($featuresList as $feature)
+            {
+                $dealerFeatures->addMultiOption($feature, $feature);
+            }
+
+            $this->addElement($dealerFeatures);
+        }
 
         // Add the submit button
         $submit = $this->createElement('submit', 'submit', array(
