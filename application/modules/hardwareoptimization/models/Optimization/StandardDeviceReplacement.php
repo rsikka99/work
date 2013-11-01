@@ -113,7 +113,7 @@ class Hardwareoptimization_Model_Optimization_StandardDeviceReplacement implemen
     {
         if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
         {
-            if ($deviceInstance->getMasterDevice()->isCopier)
+            if ($deviceInstance->getMasterDevice()->isMfp())
             {
                 $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_blackMfpReplacementDevices);
             }
@@ -124,7 +124,7 @@ class Hardwareoptimization_Model_Optimization_StandardDeviceReplacement implemen
         }
         else
         {
-            if ($deviceInstance->getMasterDevice()->isCopier)
+            if ($deviceInstance->getMasterDevice()->isMfp())
             {
                 $suggestedDevice = $this->_findReplacement($deviceInstance, $this->_colorMfpReplacementDevices);
             }

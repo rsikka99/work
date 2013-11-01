@@ -73,7 +73,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             {
                 if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
                 {
-                    if ($deviceInstance->getMasterDevice()->isCopier)
+                    if ($deviceInstance->getMasterDevice()->isMfp())
                     {
                         $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
@@ -84,7 +84,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 }
                 else
                 {
-                    if ($deviceInstance->getMasterDevice()->isCopier)
+                    if ($deviceInstance->getMasterDevice()->isMfp())
                     {
                         $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                     }
@@ -255,7 +255,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             if ($monthlyPageCounts < $replacementDevice->maximumPageCount && $monthlyPageCounts > $replacementDevice->minimumPageCount)
             {
                 $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);
-                if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isCopier)
+                if ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY && $masterDevice->isMfp())
                 {
                     $deviceArray [$replacementDevice->getMasterDevice()->id] = $masterDevice->getManufacturer()->fullname . ' ' . $masterDevice->modelName;
                 }

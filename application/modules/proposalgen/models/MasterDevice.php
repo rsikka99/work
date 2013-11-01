@@ -557,7 +557,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_Toner[][][] $Toners
+     * @param Proposalgen_Model_Toner [][][] $Toners
      *
      * @return Proposalgen_Model_MasterDevice
      */
@@ -905,7 +905,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             if ($this->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
-                if ($this->isCopier)
+                if ($this->isMfp())
                 {
                     $this->_deviceType = self::DEVICE_TYPE_MONO_MFP;
                 }
@@ -917,7 +917,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             }
             else
             {
-                if ($this->isCopier)
+                if ($this->isMfp())
                 {
                     $this->_deviceType = self::DEVICE_TYPE_COLOR_MFP;
                 }
@@ -969,5 +969,15 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function isJitCompatible ($dealerId)
     {
         return Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->find(array($this->id, $dealerId)) instanceof Proposalgen_Model_JitCompatibleMasterDevice;
+    }
+
+    /**
+     * Checks to see if the master device is a mfp device
+     *
+     * @return bool
+     */
+    public function isMfp ()
+    {
+        return ($this->isCopier);
     }
 }

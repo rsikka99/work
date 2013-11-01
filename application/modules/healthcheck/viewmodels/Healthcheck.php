@@ -409,7 +409,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->isCopier)
+                if ($deviceInstance->getMasterDevice()->isMfp())
                 {
                     $numberOfDevices++;
                 }
@@ -430,7 +430,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfDevices = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getMasterDevice()->isCopier)
+                if ($deviceInstance->getMasterDevice()->isMfp())
                 {
                     $numberOfDevices++;
                 }
