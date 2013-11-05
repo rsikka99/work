@@ -26,7 +26,7 @@
             <availableTonersmanufacturerId>1</availableTonersmanufacturerId>
             <availableTonerstonerColorId>3</availableTonerstonerColorId>
             <availableTonerssystemSku>1</availableTonerssystemSku>
-            <availableTonersyield>0</availableTonersyield>
+            <availableTonersyield>1</availableTonersyield>
             <availableTonersdealerCost>252</availableTonersdealerCost>
             <availableTonerssystemCost>150</availableTonerssystemCost>
         </data>

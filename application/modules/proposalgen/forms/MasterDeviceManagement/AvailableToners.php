@@ -91,11 +91,11 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
                                                                                                      'StripTags'
                                                                                                  ),
                                                                                                  'validators' => array(
-                                                                                                     array('validator' => 'StringLength',
-                                                                                                           'options'   => array(
-                                                                                                               1,
-                                                                                                               255
-                                                                                                           )),
+                                                                                                     array(
+                                                                                                         'validator' => 'greaterThan',
+                                                                                                         'options'   => array(
+                                                                                                             'min' => 0
+                                                                                                         )),
                                                                                                      'Int')
                                                                                             ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
