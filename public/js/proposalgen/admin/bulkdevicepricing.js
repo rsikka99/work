@@ -86,6 +86,7 @@ $document.ready(function ()
         if ($pricing_filter.val() == 'toner')
         {
             $toners_table.hide();
+            $devices_table.hide();
             $toners_list.setGridParam({
                 url     : TMTW_BASEURL + '/proposalgen/admin/tonerslist',
                 postData: {
@@ -104,6 +105,7 @@ $document.ready(function ()
         }
         else
         {
+            $toners_table.hide();
             $devices_table.hide();
             $devices_list.setGridParam({
                 url     : TMTW_BASEURL + '/proposalgen/admin/masterdeviceslist',

@@ -438,6 +438,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     /**
      * @param      $sortColumn
      * @param      $sortDirection
+     * @param int  $dealerId
      * @param null $filterByColumn
      * @param null $filterValue
      * @param null $limit
@@ -446,7 +447,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      *
      * @return Proposalgen_Model_MasterDevice[]
      */
-    public function fetchAllMasterDevices ($sortColumn, $sortDirection, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $justCount = false)
+    public function fetchAllMasterDevices ($sortColumn, $sortDirection, $dealerId, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null, $justCount = false)
     {
         $db                          = Zend_Db_Table::getDefaultAdapter();
         $masterDevicesTableName      = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getTableName();
@@ -489,18 +490,18 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         /*
          * Here we create our select statement
          */
-
         $zendDbSelect = $db->select()->from($masterDevicesTableName, $masterDeviceColumns);
-
         if (!$justCount)
         {
             $zendDbSelect->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns);
-            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id`", $dealerMasterDeviceColumns);
+            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id` AND {$dealerMasterDeviceTableName}.dealerId = ?", $dealerMasterDeviceColumns);
+            $zendDbSelect->bind($dealerId);
         }
         else if ($filterByColumn)
         {
             $zendDbSelect->join($manufacturerTableName, "{$manufacturerTableName}.`id` = {$masterDevicesTableName}.`manufacturerId`", $manufacturerColumns);
-            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id`", $dealerMasterDeviceColumns);
+            $zendDbSelect->joinleft($dealerMasterDeviceTableName, "{$dealerMasterDeviceTableName}.`masterDeviceid` = {$masterDevicesTableName}.`id` AND {$dealerMasterDeviceTableName}.dealerId = ?", $dealerMasterDeviceColumns);
+            $zendDbSelect->bind($dealerId);
         }
 
         // Apply the limit/offset

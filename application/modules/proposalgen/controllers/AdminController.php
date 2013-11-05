@@ -89,13 +89,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 // get toners for device
                 $select = $db->select()
-                          ->from(array(
-                                      't' => 'toners'
-                                 ))
-                          ->join(array(
-                                      'td' => 'device_toners'
-                                 ), 't.id = td.toner_id')
-                          ->where('td.master_device_id = ?', $deviceID);
+                             ->from(array(
+                                         't' => 'toners'
+                                    ))
+                             ->join(array(
+                                         'td' => 'device_toners'
+                                    ), 't.id = td.toner_id')
+                             ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
 
                 $result      = $stmt->fetchAll();
@@ -110,16 +110,16 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
 
                 $select      = $db->select()
-                               ->from(array(
-                                           'md' => 'master_devices'
-                                      ))
-                               ->joinLeft(array(
-                                               'm' => 'manufacturers'
-                                          ), 'm.id = md.manufacturerId')
-                               ->joinLeft(array(
-                                               'rd' => 'replacement_devices'
-                                          ), 'rd.masterDeviceId = md.id')
-                               ->where('md.id = ?', $deviceID);
+                                  ->from(array(
+                                              'md' => 'master_devices'
+                                         ))
+                                  ->joinLeft(array(
+                                                  'm' => 'manufacturers'
+                                             ), 'm.id = md.manufacturerId')
+                                  ->joinLeft(array(
+                                                  'rd' => 'replacement_devices'
+                                             ), 'rd.masterDeviceId = md.id')
+                                  ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
                 $launch_date = new Zend_Date($row [0] ['launchDate'], "yyyy/mm/dd HH:ii:ss");
@@ -753,8 +753,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         try
         {
             // Based on the filter allow the mappers to return the appropriate device
-            $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, $start, false);
-            $count         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $filter, $criteria, $limit, 0, true);
+
+            $masterDevices = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, $start, false);
+            $count         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->fetchAllMasterDevices($sortIndex, $sortOrder, $this->dealerId, $filter, $criteria, $limit, 0, true);
             // Set the total pages that we have
             if ($count > 0)
             {
@@ -885,36 +886,36 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             // get count
             $select = $db->select()
-                      ->from(array(
-                                  't' => 'toners'
-                             ), $toner_fields_list)
-                      ->joinLeft(array(
-                                      'dt' => 'device_toners'
-                                 ), 'dt.toner_id = t.id', array(
-                                                               'master_device_id'
-                                                          ))
-                      ->joinLeft(array(
-                                      'tm' => 'manufacturers'
-                                 ), 'tm.id = t.manufacturerId', array(
-                                                                     'tm.fullname AS toner_manufacturer'
-                                                                ))
-                      ->joinLeft(array(
-                                      'md' => 'master_devices'
-                                 ), 'md.id = dt.master_device_id')
-                      ->joinLeft(array(
-                                      'mdm' => 'manufacturers'
-                                 ), 'mdm.id = md.manufacturerId', array(
-                                                                       'mdm.fullname AS manufacturer_name'
-                                                                  ))
-                      ->joinLeft(array(
-                                      'tc' => 'toner_colors'
-                                 ), 'tc.id = t.tonerColorId', array(
-                                                                   'name AS toner_color_name'
-                                                              ))
-                      ->joinLeft(array(
-                                      'dta' => 'dealer_toner_attributes'
-                                 ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
-                      ->where('t.id > 0' . $where);
+                         ->from(array(
+                                     't' => 'toners'
+                                ), $toner_fields_list)
+                         ->joinLeft(array(
+                                         'dt' => 'device_toners'
+                                    ), 'dt.toner_id = t.id', array(
+                                                                  'master_device_id'
+                                                             ))
+                         ->joinLeft(array(
+                                         'tm' => 'manufacturers'
+                                    ), 'tm.id = t.manufacturerId', array(
+                                                                        'tm.fullname AS toner_manufacturer'
+                                                                   ))
+                         ->joinLeft(array(
+                                         'md' => 'master_devices'
+                                    ), 'md.id = dt.master_device_id')
+                         ->joinLeft(array(
+                                         'mdm' => 'manufacturers'
+                                    ), 'mdm.id = md.manufacturerId', array(
+                                                                          'mdm.fullname AS manufacturer_name'
+                                                                     ))
+                         ->joinLeft(array(
+                                         'tc' => 'toner_colors'
+                                    ), 'tc.id = t.tonerColorId', array(
+                                                                      'name AS toner_color_name'
+                                                                 ))
+                         ->joinLeft(array(
+                                         'dta' => 'dealer_toner_attributes'
+                                    ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                         ->where('t.id > 0' . $where);
 
             if ($where_compatible)
             {
@@ -1487,11 +1488,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             if ($device_id > 0)
             {
                 $select = $db->select()
-                          ->from(array(
-                                      'rd' => 'replacement_devices'
-                                 ))
-                          ->where('masterDeviceId = ?', $device_id, 'INTEGER')
-                          ->where('dealerId =  ?', $this->dealerId);
+                             ->from(array(
+                                         'rd' => 'replacement_devices'
+                                    ))
+                             ->where('masterDeviceId = ?', $device_id, 'INTEGER')
+                             ->where('dealerId =  ?', $this->dealerId);
                 $stmt   = $db->query($select);
                 $row    = $stmt->fetchAll();
 
