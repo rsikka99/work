@@ -96,8 +96,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'pageCoverageCyan'       => false,
         'pageCoverageMagenta'    => false,
         'pageCoverageYellow'     => false,
-        'isManaged'            => false,
-        'rmsDeviceId'          => false,
+        'isManaged'              => false,
+        'rmsDeviceId'            => false,
     );
 
     /**

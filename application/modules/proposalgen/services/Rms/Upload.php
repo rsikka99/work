@@ -92,6 +92,10 @@ class Proposalgen_Service_Rms_Upload
                     $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_XEROX;
                     $uploadCsvService = new Proposalgen_Service_Rms_Upload_Xerox();
                     break;
+                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINT_AUDIT:
+                    $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINT_AUDIT;
+                    $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintAudit();
+                    break;
                 default :
                     $uploadCsvService    = null;
                     $uploadProviderId    = null;
@@ -381,6 +385,7 @@ class Proposalgen_Service_Rms_Upload
                              */
                             foreach ($uploadCsvService->invalidCsvLines as $line)
                             {
+
                                 $rmsExcludedRow = new Proposalgen_Model_Rms_Excluded_Row($line->toArray());
 
                                 // Set values that have different names than in $line

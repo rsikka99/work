@@ -89,6 +89,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                      */
                     $time += microtime(true);
                     $filename = $uploadService->rmsUpload->fileName;
+
                     Tangent_Log::debug("It took {$time} seconds to process the csv upload ({$filename}). ");
 
                     if ($success)
