@@ -63,13 +63,6 @@
 
         <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
             <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-                    Solution Replacement <br /> Devices <br /> </a>
-            </div>
-        <?php endif; ?>
-
-        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-            <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
                     Manage Device <br /> Swaps <br /> </a>
             </div>

@@ -562,6 +562,7 @@
                             <controller>admin</controller>
                             <action>managereplacements</action>
                             <resource>proposalgen__admin__managereplacements</resource>
+                            <visible>0</visible>
                         </managereplacements>
                         <manufacturers>
                             <label>Manufacturers</label>
