@@ -154,7 +154,6 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
                                                                                            'label'      => 'Lease Buyback Price:',
                                                                                            'class'      => 'span4',
                                                                                            'maxlength'  => 8,
-                                                                                           'required'   => $this->_isQuoteDevice,
                                                                                            'validators' => array(
                                                                                                'float',
                                                                                            ),
