@@ -2286,21 +2286,21 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CompatibleJITBarGraph
              */
-            $numberOfIncludedDevicesReportingTonerLevels    = count($this->getIncludedDevicesCompatibleWithJit());
-            $numberOfIncludedDevicesNotReportingTonerLevels = count($this->getIncludedDevicesNotReportingTonerLevels());
-            $highest                                        = ($numberOfIncludedDevicesReportingTonerLevels > $numberOfIncludedDevicesNotReportingTonerLevels ? $numberOfIncludedDevicesReportingTonerLevels : ($numberOfIncludedDevicesNotReportingTonerLevels));
-            $barGraph                                       = new gchart\gBarChart(220, 220);
+            $numberOfJitCompatibleDevices = count($this->getIncludedDevicesCompatibleWithJit());
+            $numberOfIncompatibleDevices  = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfJitCompatibleDevices;
+            $highest                      = ($numberOfJitCompatibleDevices > $numberOfIncompatibleDevices ? $numberOfJitCompatibleDevices : ($numberOfIncompatibleDevices));
+            $barGraph                     = new gchart\gBarChart(220, 220);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       $numberOfIncludedDevicesReportingTonerLevels
+                                       $numberOfJitCompatibleDevices
                                   ));
             $barGraph->addColors(array(
                                       "0194D2"
                                  ));
             $barGraph->addDataSet(array(
-                                       ($numberOfIncludedDevicesNotReportingTonerLevels)
+                                       ($numberOfIncompatibleDevices)
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
