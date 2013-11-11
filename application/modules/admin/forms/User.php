@@ -117,7 +117,8 @@ class Admin_Form_User extends EasyBib_Form
             {
                 if ($role->id != Application_Model_Acl::ROLE_SYSTEM_ADMIN || ($role->id == Application_Model_Acl::ROLE_SYSTEM_ADMIN && $this->_dealerManagement == false))
                 {
-                    $userRoles->addMultiOption($role->id, $role->name);
+                    $roleName = ($role->systemRole) ? $role->name . " (System Role)" : $role->name;
+                    $userRoles->addMultiOption($role->id, $roleName);
                 }
             }
             $this->addElement($userRoles);
