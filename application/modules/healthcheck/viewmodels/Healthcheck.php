@@ -163,7 +163,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_unManagedDevices;
     protected $_uniqueDeviceCountArray;
     protected $_deviceVendorCount;
-    protected $_includedDevicesReportingTonerLevels;
+    protected $_includedDevicesCompatibleWithJit;
     protected $_includedDevicesNotReportingTonerLevels;
     protected $_pageCounts;
     public $highCostPurchasedDevices;
@@ -2286,7 +2286,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CompatibleJITBarGraph
              */
-            $numberOfIncludedDevicesReportingTonerLevels    = count($this->getIncludedDevicesReportingTonerLevels());
+            $numberOfIncludedDevicesReportingTonerLevels    = count($this->getIncludedDevicesCompatibleWithJit());
             $numberOfIncludedDevicesNotReportingTonerLevels = count($this->getIncludedDevicesNotReportingTonerLevels());
             $highest                                        = ($numberOfIncludedDevicesReportingTonerLevels > $numberOfIncludedDevicesNotReportingTonerLevels ? $numberOfIncludedDevicesReportingTonerLevels : ($numberOfIncludedDevicesNotReportingTonerLevels));
             $barGraph                                       = new gchart\gBarChart(220, 220);
@@ -2297,7 +2297,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                        $numberOfIncludedDevicesReportingTonerLevels
                                   ));
             $barGraph->addColors(array(
-                                      "E21736"
+                                      "0194D2"
                                  ));
             $barGraph->addDataSet(array(
                                        ($numberOfIncludedDevicesNotReportingTonerLevels)
@@ -2307,7 +2307,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setBarScale(70, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                                      "0194D2"
+                                      "E21736"
                                  ));
             $barGraph->setLegend(array(
                                       "Devices compatible with JIT",
@@ -3067,23 +3067,23 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function getIncludedDevicesReportingTonerLevels ()
+    public function getIncludedDevicesCompatibleWithJit ()
     {
-        if (!isset($this->_includedDevicesReportingTonerLevels))
+        if (!isset($this->_includedDevicesCompatibleWithJit))
         {
-            $devicesReportingTonerLevels = array();
+            $devicesCompatibleWithJit = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->isCapableOfReportingTonerLevels())
+                if ($device->compatibleWithJitProgram)
                 {
-                    $devicesReportingTonerLevels[] = $device;
+                    $devicesCompatibleWithJit[] = $device;
                 }
             }
 
-            $this->_includedDevicesReportingTonerLevels = $devicesReportingTonerLevels;
+            $this->_includedDevicesCompatibleWithJit = $devicesCompatibleWithJit;
         }
 
-        return $this->_includedDevicesReportingTonerLevels;
+        return $this->_includedDevicesCompatibleWithJit;
     }
 
     /**
