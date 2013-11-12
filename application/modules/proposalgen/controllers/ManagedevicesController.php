@@ -76,7 +76,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
              */
             if ($tonerList)
             {
-                $tonerCount = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, null, true);
+                $tonerCount = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $masterDeviceId, null, true);
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {
@@ -91,7 +91,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
              */
             if ($tonerList)
             {
-                $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $sortOrder);
+                $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $masterDeviceId, $sortOrder);
             }
             else if ($masterDeviceId !== false && $masterDeviceId !== 0 && $firstLoad)
             {

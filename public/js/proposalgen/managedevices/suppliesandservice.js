@@ -31,6 +31,13 @@ function loadSuppliesAndService()
                     hidden: true
                 },
                 {
+                    width : 30,
+                    name  : 'deviceTonersIsSystemDevice',
+                    index : 'deviceTonersIsSystemDevice',
+                    label : 'deviceTonersIsSystemDevice',
+                    hidden: true
+                },
+                {
                     width : 40,
                     name  : 'tonerColorId',
                     index : 'tonerColorId',
@@ -161,7 +168,7 @@ function loadSuppliesAndService()
                         currentRow.skuModified = currentRow.dealerSku + "</br>" + currentRow.systemSku;
                     }
 
-                    if (isAllowed)
+                    if (isAllowed || currentRow.isSystemDevice == false || currentRow.deviceTonersIsSystemDevice == false)
                     {
                         currentRow.action = '<input style="width 10px;" type="button" name="btnRemove' + currentRowId + '" id="btnRemove' + currentRowId + '" tag="Remove" value="' + 'Unassign' + '" class="btn"onclick="javascript: removeToner(' + currentRowId + ');" />';
                     }
@@ -298,20 +305,6 @@ function loadSuppliesAndService()
                 var systemCostLabel = $("label[for='availableTonerssystemCost']");
                 systemCostLabel.text("System Cost");
 
-                if (data['isSystemDevice'] == 0 && isSaveAndApproveAdmin)
-                {
-                    document.getElementById("availableTonersmanufacturerId").removeAttribute("disabled");
-                    document.getElementById("availableTonerstonerColorId").removeAttribute("disabled");
-                    document.getElementById("availableTonerssystemSku").removeAttribute("readonly");
-                    document.getElementById("availableTonersyield").removeAttribute("readonly");
-                    document.getElementById("availableTonerssystemCost").removeAttribute("readonly");
-                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:block');
-                }
-                else
-                {
-                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none')
-                }
-
                 // If it is not a system device or we are an admin
                 if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
                 {
@@ -328,6 +321,15 @@ function loadSuppliesAndService()
                     document.getElementById("availableTonerssystemSku").setAttribute("readonly", "readonly");
                     document.getElementById("availableTonersyield").setAttribute("readonly", "readonly");
                     document.getElementById("availableTonerssystemCost").setAttribute("readonly", "readonly");
+                }
+
+                if ((data['isSystemDevice'] == 0 || data['deviceTonersIsSystemDevice'] == 0) && isSaveAndApproveAdmin)
+                {
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:block');
+                }
+                else
+                {
+                    $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none')
                 }
 
                 $('#availableTonersModal').modal('show');
@@ -429,6 +431,13 @@ function loadSuppliesAndService()
                     name  : 'isSystemDevice',
                     index : 'isSystemDevice',
                     label : 'isSystemDevice',
+                    hidden: true
+                },
+                {
+                    width : 30,
+                    name  : 'deviceTonersIsSystemDevice',
+                    index : 'deviceTonersIsSystemDevice',
+                    label : 'deviceTonersIsSystemDevice',
                     hidden: true
                 },
                 {

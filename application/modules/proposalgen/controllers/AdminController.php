@@ -296,7 +296,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
          */
         if ($tonerArray != '')
         {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerArray);
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerArray, $masterDeviceId);
         }
         else if ($masterDeviceId !== false)
         {

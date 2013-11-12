@@ -281,13 +281,13 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
         $dealerId = $db->quote($dealerId, 'INT');
 
         $select = $db->select()
-                  ->from('toners', array('*'))
-                  ->joinLeft('device_toners', 'toner_id = id', array(null))
-                  ->joinLeft('dealer_toner_attributes', "tonerId = id AND dealerId = {$dealerId}", array(
-                                                                                                        "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
-                                                                                                        "dealerSku",
-                                                                                                   ))
-                  ->where('master_device_id = ?', $masterDeviceId);
+                     ->from('toners', array('*'))
+                     ->joinLeft('device_toners', 'toner_id = id', array(null))
+                     ->joinLeft('dealer_toner_attributes', "tonerId = id AND dealerId = {$dealerId}", array(
+                                                                                                           "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
+                                                                                                           "dealerSku",
+                                                                                                      ))
+                     ->where('master_device_id = ?', $masterDeviceId);
 
 
         $stmt = $db->query($select);
@@ -338,7 +338,9 @@ WHERE `device_toners`.`master_device_id` = ?';
     /**
      * Fetches a list of toners for a master device with machine compatibility
      *
-     * @param $masterDeviceId
+     * @param      $masterDeviceId
+     * @param null $order
+     * @param bool $justCount
      *
      * @return Proposalgen_Model_Toner []
      */
@@ -358,6 +360,7 @@ WHERE `device_toners`.`master_device_id` = ?';
     dealer_toner_attributes.cost        AS dealerCost,
     toners.yield,
     toners.tonerColorId,
+    dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
     IF(dt1.master_device_id = {$masterDeviceId},'1','0') AS is_added,
     (SELECT
     GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
@@ -367,9 +370,10 @@ WHERE `device_toners`.`master_device_id` = ?';
      WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM toners
     LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
+    LEFT JOIN device_toners dt3 ON toners.id = dt3.toner_id AND dt3.master_device_id = {$masterDeviceId}
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
-        WHERE master_device_id = {$masterDeviceId}";
+        WHERE dt1.master_device_id = {$masterDeviceId}";
 
         if ($order)
         {
@@ -422,6 +426,7 @@ DISTINCTROW
     dealer_toner_attributes.cost        AS dealerCost,
     toners.yield,
     toners.tonerColorId,
+    dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
     (SELECT
     GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
      FROM device_toners AS dt2
@@ -430,6 +435,7 @@ DISTINCTROW
      WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM toners
     LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
+    LEFT JOIN device_toners dt3 ON toners.id = dt3.toner_id AND dt3.master_device_id = {$masterDeviceId}
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
             ";
@@ -558,6 +564,7 @@ FROM toners
     dealer_toner_attributes.cost        AS dealerCost,
     toners.yield,
     toners.tonerColorId,
+    dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
     (SELECT
     GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
      FROM device_toners AS dt2
@@ -566,6 +573,7 @@ FROM toners
      WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM toners
     LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
+    LEFT JOIN device_toners dt3 ON toners.id = dt3.toner_id AND dt3.master_device_id = {$masterDeviceId}
     LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
     LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})
             ";
@@ -604,9 +612,13 @@ FROM toners
      *
      * @param array $tonerIdList A string of id's (comma separated)
      *
+     * @param null  $masterDeviceId
+     * @param null  $order
+     * @param bool  $justCount
+     *
      * @return array
      */
-    public function fetchListOfToners ($tonerIdList, $order = null, $justCount = false)
+    public function fetchListOfToners ($tonerIdList, $masterDeviceId = null, $order = null, $justCount = false)
     {
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         $db       = $this->getDbTable()->getAdapter();
@@ -622,7 +634,8 @@ FROM toners
             dealer_toner_attributes.cost       AS dealerCost,
             toners.yield,
             toners.tonerColorId,
-            IF(dt1.master_device_id IN ({$tonerIdList}),'1','0') AS is_added,
+            dt3.isSystemDevice                  AS deviceTonersIsSystemDevice,
+            IF(dt1.toner_id IN ({$tonerIdList}),'1','0') AS is_added,
     (SELECT
     GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
      FROM device_toners AS dt2
@@ -631,6 +644,7 @@ FROM toners
      WHERE dt2.toner_id = dt1.toner_id) AS device_list
 FROM `toners`
     LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
+    LEFT JOIN device_toners dt3 ON toners.id = dt3.toner_id AND dt3.master_device_id = {$masterDeviceId}
     LEFT JOIN `toner_colors` ON `toner_colors`.`id` = `toners`.`tonerColorId`
     LEFT JOIN `manufacturers` ON `manufacturers`.`id` = `toners`.`manufacturerId`
     LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId}
@@ -694,23 +708,23 @@ WHERE `toners`.`id` IN ({$tonerIdList})
             $toner        = Proposalgen_Model_Mapper_Toner::getInstance()->find($tonerId);
             $tonerColorId = $toner->tonerColorId;
             $select       = $db->select()
-                            ->from('toners', array(
-                                                  'tonerId'    => 'id',
-                                                  'systemSku'  => 'sku',
-                                                  'systemCost' => 'cost',
-                                                  'deviceName' => 'CONCAT(manufacturers.fullname," ",master_devices.modelName)',
-                                                  'tonerColorId',
-                                                  'yield'
-                                             ))
-                            ->joinLeft('device_toners', 'device_toners.toner_id = toners.id', array())
-                            ->joinLeft('master_devices', 'master_devices.id = device_toners.master_device_id', array())
-                            ->joinLeft('manufacturers', 'manufacturers.id = master_devices.manufacturerId', array())
-                            ->joinLeft('dealer_toner_attributes', 'dealer_toner_attributes.tonerId = toners.id', array('dealerSku', 'dealerCost' => 'cost'))
+                               ->from('toners', array(
+                                                     'tonerId'    => 'id',
+                                                     'systemSku'  => 'sku',
+                                                     'systemCost' => 'cost',
+                                                     'deviceName' => 'CONCAT(manufacturers.fullname," ",master_devices.modelName)',
+                                                     'tonerColorId',
+                                                     'yield'
+                                                ))
+                               ->joinLeft('device_toners', 'device_toners.toner_id = toners.id', array())
+                               ->joinLeft('master_devices', 'master_devices.id = device_toners.master_device_id', array())
+                               ->joinLeft('manufacturers', 'manufacturers.id = master_devices.manufacturerId', array())
+                               ->joinLeft('dealer_toner_attributes', 'dealer_toner_attributes.tonerId = toners.id', array('dealerSku', 'dealerCost' => 'cost'))
 //                      ->where("toners.{$this->col_id} = ?", $tonerId)
-                            ->where("master_devices.id in (SELECT master_device_id from device_toners AS dt where dt.toner_id = {$tonerId})")
-                            ->where("toners.{$this->col_tonerColorId} = ?", $tonerColorId)
-                            ->limit($count, $offset)
-                            ->order('deviceName asc');
+                               ->where("master_devices.id in (SELECT master_device_id from device_toners AS dt where dt.toner_id = {$tonerId})")
+                               ->where("toners.{$this->col_tonerColorId} = ?", $tonerColorId)
+                               ->limit($count, $offset)
+                               ->order('deviceName asc');
             $stmt         = $db->query($select);
 
             $result = $stmt->fetchAll();
@@ -777,30 +791,30 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         $db->beginTransaction();
 
         $select = $db->select()
-                  ->from(array(
-                              't' => 'toners'), array(
-                                                     'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
-                                                )
-                      )
-                  ->joinLeft(array(
-                                  'dt' => 'device_toners'
-                             ), 'dt.toner_id = t.id', array(
-                                                           'master_device_id'
-                                                      ))
-                  ->joinLeft(array(
-                                  'tm' => 'manufacturers'
-                             ), 'tm.id = t.manufacturerId', array(
-                                                                 'fullname'
-                                                            ))
-                  ->joinLeft(array(
-                                  'tc' => 'toner_colors'
-                             ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
-                  ->joinLeft(array('dta' => 'dealer_toner_attributes'), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
-                  ->where("t.id > 0")
-                  ->group('t.id')
-                  ->order(array(
-                               'tm.fullname'
-                          ));
+                     ->from(array(
+                                 't' => 'toners'), array(
+                                                        'id AS toners_id', 'sku', 'yield', "systemCost" => "cost"
+                                                   )
+            )
+                     ->joinLeft(array(
+                                     'dt' => 'device_toners'
+                                ), 'dt.toner_id = t.id', array(
+                                                              'master_device_id'
+                                                         ))
+                     ->joinLeft(array(
+                                     'tm' => 'manufacturers'
+                                ), 'tm.id = t.manufacturerId', array(
+                                                                    'fullname'
+                                                               ))
+                     ->joinLeft(array(
+                                     'tc' => 'toner_colors'
+                                ), 'tc.id = t.tonerColorId', array('name AS toner_color'))
+                     ->joinLeft(array('dta' => 'dealer_toner_attributes'), "dta.tonerId = t.id AND dta.dealerId = {$dealerId}", array('cost', 'dealerSku'))
+                     ->where("t.id > 0")
+                     ->group('t.id')
+                     ->order(array(
+                                  'tm.fullname'
+                             ));
 
         if ($manufacturerId > 0)
         {

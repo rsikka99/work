@@ -108,11 +108,9 @@ if ($this->suppliesAndService)
                     </div>
                 </div>
             </div>
-            <?php if ($this->isAllowed)
-            {
-                ?>
+            <?php if ($this->isAllowed || $this->IsAllowed(Hardwarelibrary_Model_Acl::RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW)) : ?>
                 <input type="button" value="Assign Toners" id="btnAssignToner" class="btn btn-success pull-right" style="margin:auto;margin-bottom: 10px" onclick="javascript: showAssignTonersModal()" />
-            <?php } ?>
+            <?php endif; ?>
         </div>
 
         <table id="assignedToners"></table>

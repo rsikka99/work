@@ -146,7 +146,7 @@ class Proposalgen_Service_ManageMasterDevices
 
         if ($tonerList)
         {
-            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList);
+            $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $this->masterDeviceId);
         }
 
         $toners_valid = false;
@@ -371,11 +371,12 @@ class Proposalgen_Service_ManageMasterDevices
     public function saveSuppliesAndDeviceAttributes ($validatedData, $tonersList = false, $approved = false)
     {
         $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+        $deviceTonerMapper  = Proposalgen_Model_Mapper_DeviceToner::getInstance();
         $masterDevice       = $masterDeviceMapper->find($this->masterDeviceId);
 
         try
         {
-
+            $tonerIds = explode(',', $tonersList);
             if ($this->_isAllowed)
             {
                 if ($validatedData['isLeased'] == false)
@@ -424,16 +425,44 @@ class Proposalgen_Service_ManageMasterDevices
                     $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
                     $masterDevice                 = $masterDeviceMapper->find($this->masterDeviceId);
                 }
+            }
 
-                $tonerIds = explode(',', $tonersList);
+            // If for some reason we have a '' without any numbers, lets remove it
+            if (count($tonerIds) > 0 && $tonerIds[0] == '')
+            {
+                unset($tonerIds[0]);
+            }
 
-                // If for some reason we have a '' without any numbers, lets remove it
-                if (count($tonerIds) > 0 && $tonerIds[0] == '')
+            $assignedToners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->masterDeviceId);
+
+            foreach ($assignedToners as $tonersByManufacturer)
+            {
+                foreach ($tonersByManufacturer as $tonersByColor)
                 {
-                    unset($tonerIds[0]);
-                }
+                    foreach ($tonersByColor as $assignedToner)
+                    {
+                        $shouldDelete = true;
 
-                $assignedToners = Proposalgen_Model_Mapper_Toner::getInstance()->getTonersForDevice($this->masterDeviceId);
+                        foreach ($tonerIds as $tonerId)
+                        {
+                            if ($assignedToner->id == $tonerId)
+                            {
+                                $shouldDelete = false;
+                            }
+                        }
+
+                        $deviceToner = $deviceTonerMapper->find(array($assignedToner->id, $this->masterDeviceId));
+                        if ($deviceToner instanceof Proposalgen_Model_DeviceToner && ($shouldDelete && ($assignedToner->isSystemDevice == false || $this->_isAllowed || $deviceToner->isSystemDevice == false)))
+                        {
+                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete(array($assignedToner->id, $this->masterDeviceId));
+                        }
+                    }
+                }
+            }
+
+            foreach ($tonerIds as $tonerId)
+            {
+                $alreadyExists = false;
 
                 foreach ($assignedToners as $tonersByManufacturer)
                 {
@@ -441,56 +470,26 @@ class Proposalgen_Service_ManageMasterDevices
                     {
                         foreach ($tonersByColor as $assignedToner)
                         {
-                            $shouldDelete = true;
-
-                            foreach ($tonerIds as $tonerId)
+                            if ($tonerId === $assignedToner->id)
                             {
-                                if ($assignedToner->id == $tonerId)
-                                {
-                                    $shouldDelete = false;
-                                }
-                            }
-
-                            if ($shouldDelete)
-                            {
-                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete(array($assignedToner->id, $this->masterDeviceId));
+                                $alreadyExists = true;
                             }
                         }
                     }
                 }
 
-                foreach ($tonerIds as $tonerId)
+                if ($alreadyExists == false)
                 {
-                    $alreadyExists = false;
+                    $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                    $deviceToner->master_device_id = (int)$this->masterDeviceId;
+                    $deviceToner->toner_id         = (int)$tonerId;
+                    $deviceToner->isSystemDevice   = ($this->_isAdmin ? 1 : 0);
+                    $deviceToner->userId           = Zend_Auth::getInstance()->getIdentity()->id;
 
-                    foreach ($assignedToners as $tonersByManufacturer)
+                    // If it doesn't exist in the database then insert it
+                    if (!$deviceTonerMapper->find(array($deviceToner->toner_id, $deviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
                     {
-                        foreach ($tonersByManufacturer as $tonersByColor)
-                        {
-                            foreach ($tonersByColor as $assignedToner)
-                            {
-                                if ($tonerId === $assignedToner->id)
-                                {
-                                    $alreadyExists = true;
-                                }
-                            }
-                        }
-                    }
-
-                    if ($alreadyExists == false)
-                    {
-                        $deviceToner                   = new Proposalgen_Model_DeviceToner();
-                        $deviceToner->master_device_id = (int)$this->masterDeviceId;
-                        $deviceToner->toner_id         = (int)$tonerId;
-                        $deviceToner->isSystemDevice   = ($this->_isAdmin ? 1 : 0);
-                        $deviceToner->userId           = Zend_Auth::getInstance()->getIdentity()->id;
-                        $deviceTonersMapper            = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-
-                        // If it doesn't exist in the database then insert it
-                        if (!$deviceTonersMapper->find(array($deviceToner->toner_id, $deviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
-                        {
-                            $deviceTonersMapper->insert($deviceToner);
-                        }
+                        $deviceTonerMapper->insert($deviceToner);
                     }
                 }
             }
@@ -834,6 +833,13 @@ class Proposalgen_Service_ManageMasterDevices
                             if ($validData['saveAndApproveHdn'] == 1 && $this->_isAdmin)
                             {
                                 $toner->isSystemDevice = 1;
+                                $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+                                $deviceToner       = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+                                if ($deviceToner instanceof Proposalgen_Model_DeviceToner)
+                                {
+                                    $deviceToner->isSystemDevice = 1;
+                                    $deviceTonerMapper->save($deviceToner);
+                                }
                             }
 
                             $toner->sku            = $validData['systemSku'];
