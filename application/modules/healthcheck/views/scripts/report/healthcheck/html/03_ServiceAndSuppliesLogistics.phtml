@@ -22,7 +22,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
     <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
+    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7% of the total device count are put into the "Other" group.
 </p>
 <div class="center">
     <img src="<?php echo $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->

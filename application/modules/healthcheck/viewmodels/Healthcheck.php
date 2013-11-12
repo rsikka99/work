@@ -2810,7 +2810,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $uniqueDevicesGraph = new gchart\gPie3DChart(400, 250);
             $uniqueDevicesGraph->addDataSet($uniqueModelArray);
-            $uniqueDevicesGraph->addColors(self::$COLOR_ARRAY);
+            $uniqueDevicesGraph->addColors(array_slice(self::$COLOR_ARRAY, 0, count($uniqueModelArray)));
             $uniqueDevicesGraph->setTitle("Percent per device on your network|Total Devices - " . $numberOfIncludedDevices);
             // Graphs[UniqueDevicesGraph]
             $healthcheckGraphs['UniqueDevicesGraph'] = $uniqueDevicesGraph->getUrl();
@@ -2997,7 +2997,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             foreach ($uniqueModelArray as $modelName => $deviceCount)
             {
                 // This device will not be shown
-                if ((($numberOfOtherDevices + $deviceCount) / count($allIncluded)) <= .1)
+                if (($deviceCount / count($allIncluded) <= .007))
                 {
                     $numberOfOtherDevices += $deviceCount;
                     array_push($removeArray, $modelName);

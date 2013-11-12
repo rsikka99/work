@@ -24,7 +24,7 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage(
 $section->addTextBreak(2);
 
 $section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type.')
+$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7%% of the total device count are put into the "Other" group.')
     , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances())) //1
     , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
 ));
