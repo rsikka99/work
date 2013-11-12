@@ -2,7 +2,7 @@ php5_ppa:
   pkgrepo.managed:
     - ppa: ondrej/php5
 
-php5-fpm:
+php5:
   pkg.latest:
     - refresh: True
     - require:
@@ -17,7 +17,6 @@ php5-fpm:
       - php5-intl
       - php5-json
       - php5-mcrypt
-      - php5-mysql
       - php5-mysqlnd
       - php5-readline
       - php5-redis
@@ -26,6 +25,7 @@ php5-fpm:
       - php5-xmlrpc
       - php5-xsl
   service.running:
+    - name: php5-fpm
     - enable: True
     - watch:
       - file: /etc/php5/fpm/pool.d/www.conf
@@ -35,5 +35,3 @@ php5-fpm:
     - user: root
     - group: root
     - mode: '0640'
-    - require:
-      - pkg: php5-fpm
