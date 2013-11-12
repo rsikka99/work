@@ -1,0 +1,37 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    server_tokens off;
+    autoindex on;
+
+    index index.php index.html index.htm;
+    root /home/vagrant/mpstoolbox/public;
+
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000
+    #
+    location ~* \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php5-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+    }
+
+    # don't allow hidden files
+    location ~ /\. {
+        access_log      off;
+        log_not_found   off;
+        deny all;
+    }
+
+    # Turn off logging and enable caching of static resources
+    location ~* \.(jpg|jpeg|gif|png|css|js|ico|xml)$ {
+        access_log        off;
+        log_not_found     off;
+        expires           360d;
+    }
+}
