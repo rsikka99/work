@@ -163,7 +163,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_unManagedDevices;
     protected $_uniqueDeviceCountArray;
     protected $_deviceVendorCount;
-    protected $_includedDevicesCompatibleWithJit;
+    protected $_includedDevicesReportingTonerLevels;
     protected $_includedDevicesNotReportingTonerLevels;
     protected $_pageCounts;
     public $highCostPurchasedDevices;
@@ -197,7 +197,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         parent::__construct($report);
         $this->DealerCompany = "Office Depot Inc.";
-
+        
         if (isset(self::$Proposal))
         {
             self::$Proposal = $this;
@@ -2108,9 +2108,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Pages Printed on JIT devices"     => 0,
                 "Pages Printed on non-JIT devices" => 0
             );
+
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->isManaged)
+                if ($device->isCapableOfReportingTonerLevels())
                 {
                     $deviceAges ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
@@ -2286,15 +2287,15 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CompatibleJITBarGraph
              */
-            $numberOfJitCompatibleDevices = count($this->getIncludedDevicesCompatibleWithJit());
-            $numberOfIncompatibleDevices  = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfJitCompatibleDevices;
-            $highest                      = ($numberOfJitCompatibleDevices > $numberOfIncompatibleDevices ? $numberOfJitCompatibleDevices : ($numberOfIncompatibleDevices));
+            $numberOfDevicesReportingTonerLevels = count($this->getIncludedDevicesReportingTonerLevels());
+            $numberOfIncompatibleDevices  = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
+            $highest                      = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
             $barGraph                     = new gchart\gBarChart(220, 220);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       $numberOfJitCompatibleDevices
+                                       $numberOfDevicesReportingTonerLevels
                                   ));
             $barGraph->addColors(array(
                                       "0194D2"
@@ -3067,23 +3068,23 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return Proposalgen_Model_DeviceInstance[]
      */
-    public function getIncludedDevicesCompatibleWithJit ()
+    public function getIncludedDevicesReportingTonerLevels ()
     {
-        if (!isset($this->_includedDevicesCompatibleWithJit))
+        if (!isset($this->_includedDevicesReportingTonerLevels))
         {
-            $devicesCompatibleWithJit = array();
+            $devicesReportingTonerLevels = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->compatibleWithJitProgram)
+                if ($device->isCapableOfReportingTonerLevels())
                 {
-                    $devicesCompatibleWithJit[] = $device;
+                    $devicesReportingTonerLevels[] = $device;
                 }
             }
 
-            $this->_includedDevicesCompatibleWithJit = $devicesCompatibleWithJit;
+            $this->_includedDevicesReportingTonerLevels = $devicesReportingTonerLevels;
         }
 
-        return $this->_includedDevicesCompatibleWithJit;
+        return $this->_includedDevicesReportingTonerLevels;
     }
 
     /**
