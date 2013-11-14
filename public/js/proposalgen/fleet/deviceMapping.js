@@ -273,7 +273,7 @@ $(function ()
                         open     : function (event, ui)
                         {
                             var termTemplate = '<strong>%s</strong>';
-                            var autocompleteData = $(this).data('autocomplete');
+                            var autocompleteData = $(this).data('uiAutocomplete');
                             autocompleteData.menu.element.find('a').each(function ()
                             {
                                 var label = $(this);

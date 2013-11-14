@@ -88,7 +88,7 @@ return array(
             ),
         ),
         'jquery'          => array(
-            'version'    => '1.9.1',
+            'version'    => '1.10.2',
             'ui_enable'  => true,
             'ui_version' => '1.10.3',
         ),
