@@ -401,12 +401,12 @@ class Proposalgen_Service_ManageMasterDevices
 
                 if (isset($validatedData['wattsPowerNormal']))
                 {
-                    $validatedData['wattsPowerNormal'] = round($validatedData['wattsPowerNormal'], 0);
+                    $validatedData['wattsPowerNormal'] = ceil($validatedData['wattsPowerNormal']);
                 }
 
                 if (isset($validatedData['wattsPowerIdle']))
                 {
-                    $validatedData['wattsPowerIdle'] = round($validatedData['wattsPowerIdle'], 0);
+                    $validatedData['wattsPowerIdle'] = ceil($validatedData['wattsPowerIdle']);
                 }
 
 
