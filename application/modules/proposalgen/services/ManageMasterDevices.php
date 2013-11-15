@@ -399,6 +399,16 @@ class Proposalgen_Service_ManageMasterDevices
                     $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
                 }
 
+                if (isset($validatedData['wattsPowerNormal']))
+                {
+                    $validatedData['wattsPowerNormal'] = round($validatedData['wattsPowerNormal'], 0);
+                }
+
+                if (isset($validatedData['wattsPowerIdle']))
+                {
+                    $validatedData['wattsPowerIdle'] = round($validatedData['wattsPowerIdle'], 0);
+                }
+
 
                 if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
                 {
@@ -833,8 +843,8 @@ class Proposalgen_Service_ManageMasterDevices
                             if ($validData['saveAndApproveHdn'] == 1 && $this->_isAdmin)
                             {
                                 $toner->isSystemDevice = 1;
-                                $deviceTonerMapper = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                                $deviceToner       = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+                                $deviceTonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
+                                $deviceToner           = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
                                 if ($deviceToner instanceof Proposalgen_Model_DeviceToner)
                                 {
                                     $deviceToner->isSystemDevice = 1;

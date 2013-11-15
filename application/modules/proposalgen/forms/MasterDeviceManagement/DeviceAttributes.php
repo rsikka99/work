@@ -172,7 +172,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         {
             $wattsPowerNormalElement->addValidators(
                 array(
-                     'Int',
+                     'float',
                      array(
                          'validator' => 'Between',
                          'options'   => array(
@@ -241,7 +241,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         {
             $wattsPowerIdleElement->addValidators(
                 array(
-                     'Int',
+                     'float',
                      array(
                          'validator' => 'Between',
                          'options'   => array(
