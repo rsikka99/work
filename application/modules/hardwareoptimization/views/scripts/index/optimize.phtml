@@ -12,7 +12,7 @@ $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
 
 $formActions [] = $form->getElement('ResetReplacements');
 
-if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION_MEMJET))
+if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION))
 {
     $formActions [] = $form->getElement('MemjetAnalyze');
 }

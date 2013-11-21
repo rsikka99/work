@@ -8,7 +8,7 @@ class My_Feature
     /**
      * Constants for each feature
      */
-    const HARDWARE_OPTIMIZATION_MEMJET = "hardware_optimization_memjet";
+    const MEMJET_OPTIMIZATION = "hardware_optimization_memjet";
 
     /**
      * @var My_Feature_AdapterInterface

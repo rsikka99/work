@@ -141,7 +141,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 else if ($form->getValue('MemjetAnalyze'))
                 {
                     // Analyze the fleet. If it is successful we need to rebuild our form
-                    if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION_MEMJET) && $this->_memjetAnalyzeFleet())
+                    if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION) && $this->_memjetAnalyzeFleet())
                     {
                         $this->_flashMessenger->addMessage(array('success' => "We've optimized your fleet. Please review the changes before proceeding."));
                         $this->redirector('optimize', null, null, array());
