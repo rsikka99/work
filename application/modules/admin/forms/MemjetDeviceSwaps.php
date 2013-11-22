@@ -10,7 +10,7 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         $this->setMethod("POST");
         $this->_addClassNames('form-center-actions');
         $this->setAttrib('id', 'deviceSwap');
-
+        $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         $masterDeviceElement = $this->createElement("text", "masterDeviceId", array(
                                                                                    "required" => true,
                                                                                    "label"    => "Device Name",
@@ -23,8 +23,8 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         );
 
         $maxPageCountElement = $this->createElement("text", "maximumPageCount", array(
-                                                                                     "required"   => true,
-                                                                                     "label"      => "Max Page Volume",
+                                                                                     "required"   => $isAdmin,
+                                                                                     "label"      => "System Max Page Volume",
                                                                                      "class"      => "span4",
                                                                                      "filters"    => array(
                                                                                          'StringTrim',
@@ -45,8 +45,8 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         );
 
         $minPageCountElement = $this->createElement("text", "minimumPageCount", array(
-                                                                                     "required"   => true,
-                                                                                     "label"      => "Min Page Volume",
+                                                                                     "required"   => $isAdmin,
+                                                                                     "label"      => "System Min Page Volume",
                                                                                      "class"      => "span4",
                                                                                      "filters"    => array(
                                                                                          'StringTrim',
@@ -66,6 +66,50 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
                                                                                 )
         );
 
+        $dealerMaxPageCountElement = $this->createElement("text", "dealerMaximumPageCount", array(
+                                                                                                 "required"   => !$isAdmin,
+                                                                                                 "label"      => "Dealer Max Page Volume",
+                                                                                                 "class"      => "span4",
+                                                                                                 "filters"    => array(
+                                                                                                     'StringTrim',
+                                                                                                     'StripTags'
+                                                                                                 ),
+                                                                                                 "validators" => array(
+                                                                                                     array(
+                                                                                                         'validator' => 'Between',
+                                                                                                         'options'   => array(
+                                                                                                             'min'       => 0,
+                                                                                                             'max'       => PHP_INT_MAX,
+                                                                                                             'inclusive' => true
+                                                                                                         )
+                                                                                                     ),
+                                                                                                     'Int'
+                                                                                                 ),
+                                                                                            )
+        );
+
+        $dealerMinPageCountElement = $this->createElement("text", "dealerMinimumPageCount", array(
+                                                                                                 "required"   => !$isAdmin,
+                                                                                                 "label"      => "Dealer Min Page Volume",
+                                                                                                 "class"      => "span4",
+                                                                                                 "filters"    => array(
+                                                                                                     'StringTrim',
+                                                                                                     'StripTags'
+                                                                                                 ),
+                                                                                                 "validators" => array(
+                                                                                                     array(
+                                                                                                         'validator' => 'Between',
+                                                                                                         'options'   => array(
+                                                                                                             'min'       => 0,
+                                                                                                             'max'       => PHP_INT_MAX,
+                                                                                                             'inclusive' => true
+                                                                                                         )
+                                                                                                     ),
+                                                                                                     'Int',
+                                                                                                 ),
+                                                                                            )
+        );
+
         $deviceTypeElement = $this->createElement("text", "deviceType", array(
                                                                              "label"   => "Device Type",
                                                                              "class"   => "span4",
@@ -77,11 +121,23 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
                                                                         )
         );
 
+        // If we are not an admin then disable masterDeviceElement
+        if (!$isAdmin)
+        {
+            $masterDeviceElement->setAttrib('disabled', 'disabled');
+            $minPageCountElement->setAttrib('disabled', 'disabled');
+            $maxPageCountElement->setAttrib('disabled', 'disabled');
+        }
 
         $this->addElement($maxPageCountElement);
         $minPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($maxPageCountElement));
         $this->addElement($minPageCountElement);
 
-        $this->addDisplayGroup(array($masterDeviceElement, $minPageCountElement, $maxPageCountElement, $deviceTypeElement), 'memjetDevicesSwaps');
+        $this->addElement($dealerMaxPageCountElement);
+        $dealerMinPageCountElement->addValidator(new Tangent_Validate_LessThanFormValue($dealerMaxPageCountElement));
+        $this->addElement($dealerMinPageCountElement);
+
+
+        $this->addDisplayGroup(array($masterDeviceElement, $minPageCountElement, $maxPageCountElement, $dealerMinPageCountElement, $dealerMaxPageCountElement, $deviceTypeElement), 'memjetDevicesSwaps');
     }
 }

@@ -32,12 +32,6 @@
                     Manage Master Matchups</a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_INDEX)) : ?>
-            <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "memjetdeviceswaps", "module" => "admin")); ?>"><i class="icon-exchange icon-4x"></i><br /><br />
-                    Manage Memjet Device Swaps</a>
-            </div>
-        <?php endif; ?>
     </div>
 <?php endif; ?>
 <?php if ($this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX)
@@ -65,6 +59,12 @@
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "deviceswaps", "module" => "hardwareoptimization")); ?>"><i class="icon-print icon-4x"></i><br /><br />
                     Manage Device <br /> Swaps <br /> </a>
+            </div>
+        <?php endif; ?>
+        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD) || My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
+            <div class="span2">
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "memjetdeviceswaps", "module" => "admin")); ?>"><i class="icon-exchange icon-4x"></i><br /><br />
+                    Manage Memjet Device Swaps</a>
             </div>
         <?php endif; ?>
     </div>

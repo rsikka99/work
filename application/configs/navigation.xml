@@ -549,6 +549,14 @@
                             <action>index</action>
                             <resource>hardwareoptimization__deviceswaps__index</resource>
                         </deviceswaps>
+                        <memjetdeviceswaps>
+                            <label>Memjet Device Swaps</label>
+                            <module>admin</module>
+                            <controller>memjetdeviceswaps</controller>
+                            <action>index</action>
+                            <visible>0</visible>
+                            <resource>memjetoptimization__deviceswaps__index</resource>
+                        </memjetdeviceswaps>
                         <managematchups>
                             <label>Manage Printer Matchups</label>
                             <module>proposalgen</module>

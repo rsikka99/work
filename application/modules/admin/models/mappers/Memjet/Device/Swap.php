@@ -272,28 +272,36 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
         }
         else
         {
-            $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
-            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
-            $returnLimit        = 10;
+            $manufacturerMapper                   = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+            $masterDeviceMapper                   = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+            $memjetDeviceSwapsPageThresholdMapper = Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold::getInstance();
+            $returnLimit                          = 10;
 
             if (!$limit)
             {
                 $offset = ($offset > 0) ? $offset : 0;
             }
 
-            $caseStatement = new Zend_Db_Expr("*, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
+            $caseStatement = new Zend_Db_Expr("mds.masterDeviceId,mds.minimumPageCount as minimumPageCount, mds.maximumPageCount as maximumPageCount, CASE WHEN md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome MFP'
             WHEN md.isCopier AND md.tonerConfigId > 1 THEN 'Color MFP'
             WHEN NOT md.isCopier AND md.tonerConfigId > 1 THEN 'Color '
             WHEN NOT md.isCopier AND md.tonerConfigId = 1 THEN 'Monochrome'
             END AS deviceType");
 
+            $memjetDeviceSwapPageThresholdColumns = array(
+                'mdspt.dealerId',
+                'minimumPageCount AS dealerMinimumPageCount',
+                'maximumPageCount AS dealerMaximumPageCount'
+            );
 
-            $db     = Zend_Db_Table::getDefaultAdapter();
-            $select = $db->select();
-            $select->from(array($this->getTableName()), $caseStatement)
-                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-                   ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
-                   ->limit($returnLimit, $offset)
+            $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+            $db       = Zend_Db_Table::getDefaultAdapter();
+            $select   = $db->select();
+            $select->from(array("mds" => $this->getTableName()), $caseStatement)
+                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "mds.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+                ->joinLeft(array("mdspt" => $memjetDeviceSwapsPageThresholdMapper->getTableName()), "mds.{$this->col_masterDeviceId} = mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_masterDeviceId} AND mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_dealerId} = {$dealerId}", $memjetDeviceSwapPageThresholdColumns)
+                ->limit($returnLimit, $offset)
                    ->order($sortOrder);
 
             $query = $db->query($select);

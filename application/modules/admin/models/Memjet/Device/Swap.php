@@ -47,6 +47,16 @@ class Admin_Model_Memjet_Device_Swap extends My_Model_Abstract
     protected $_replacementCategory;
 
     /**
+     * @var int
+     */
+    protected $_dealerMinimumPageCount;
+
+    /**
+     * @var int
+     */
+    protected $_dealerMaximumPageCount;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -200,5 +210,57 @@ class Admin_Model_Memjet_Device_Swap extends My_Model_Abstract
         }
 
         return $this->_replacementCategory;
+    }
+
+    /**
+     * Gets the minmimum page page count for the dealer, if that doesn't exist then it gets it from this
+     *
+     * @param $dealerId
+     *
+     * @return int
+     */
+    public function getDealerMinimumPageCount ($dealerId)
+    {
+        if (!isset($this->_dealerMinimumPageCount))
+        {
+            $memjetDeviceSwapPageThresholdMapper = Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold::getInstance();
+            $memjetDeviceSwapPageThreshold       = $memjetDeviceSwapPageThresholdMapper->find(array($this->masterDeviceId, $dealerId));
+            if ($memjetDeviceSwapPageThreshold instanceof Admin_Model_Memjet_Device_Swap_Page_Threshold)
+            {
+                $this->_dealerMinimumPageCount = $memjetDeviceSwapPageThreshold->minimumPageCount;
+            }
+            else
+            {
+                $this->_dealerMinimumPageCount = $this->minimumPageCount;
+            }
+        }
+
+        return $this->_dealerMinimumPageCount;
+    }
+
+    /**
+     * Gets the minmimum page page count for the dealer, if that doesn't exist then it gets it from this
+     *
+     * @param $dealerId
+     *
+     * @return int
+     */
+    public function getDealerMaximumPageCount ($dealerId)
+    {
+        if (!isset($this->_dealerMaximumPageCount))
+        {
+            $memjetDeviceSwapPageThresholdMapper = Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold::getInstance();
+            $memjetDeviceSwapPageThreshold       = $memjetDeviceSwapPageThresholdMapper->find(array($this->masterDeviceId, $dealerId));
+            if ($memjetDeviceSwapPageThreshold instanceof Admin_Model_Memjet_Device_Swap_Page_Threshold)
+            {
+                $this->_dealerMaximumPageCount = $memjetDeviceSwapPageThreshold->maximumPageCount;
+            }
+            else
+            {
+                $this->_dealerMaximumPageCount = $this->maximumPageCount;
+            }
+        }
+
+        return $this->_dealerMaximumPageCount;
     }
 }
