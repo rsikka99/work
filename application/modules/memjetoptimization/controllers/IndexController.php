@@ -74,9 +74,9 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
         $defaultMemjetOptimizationSettings = clone $user->getDealer()->getDealerSettings()->getMemjetOptimizationSettings();
         $defaultMemjetOptimizationSettings->populate($user->getUserSettings()->getMemjetOptimizationSettings()->toArray());
-        $hardwareOptimizationService = new Memjetoptimization_Service_Setting($this->_memjetOptimization->getMemjetOptimizationSetting(), $defaultMemjetOptimizationSettings, $this->_memjetOptimization->id);
+        $memjetOptimizationService = new Memjetoptimization_Service_Setting($this->_memjetOptimization->getMemjetOptimizationSetting(), $defaultMemjetOptimizationSettings, $this->_memjetOptimization->id);
 
-        $form = $hardwareOptimizationService->getFormWithDefaults();
+        $form = $memjetOptimizationService->getFormWithDefaults();
 
         if ($this->getRequest()->isPost())
         {
@@ -85,7 +85,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             {
                 // Save
                 $this->saveMemjetOptimization();
-                $hardwareOptimizationService->update($postData, $defaultMemjetOptimizationSettings->toArray());
+                $memjetOptimizationService->update($postData, $defaultMemjetOptimizationSettings->toArray());
 
                 if (isset($postData['saveAndContinue']))
                 {
