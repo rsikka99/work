@@ -51,6 +51,7 @@ class Default_IndexController extends Tangent_Controller_Action
         $availableQuotes                = array();
         $availableHealthchecks          = array();
         $availableHardwareOptimizations = array();
+        $availableMemjetOptimizations   = array();
         $rmsUploads                     = array();
 
         if ($this->_selectedClientId > 0)
@@ -66,6 +67,9 @@ class Default_IndexController extends Tangent_Controller_Action
 
             $availableHardwareOptimizations             = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableHardwareOptimizations = $availableHardwareOptimizations;
+
+            $availableMemjetOptimizations             = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->fetchAllForClient($this->_selectedClientId);
+            $this->view->availableMemjetOptimizations = $availableMemjetOptimizations;
 
             $rmsUploads                      = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableRmsUploads = $rmsUploads;
@@ -217,6 +221,37 @@ class Default_IndexController extends Tangent_Controller_Action
                 {
                     $this->_mpsSession->hardwareOptimizationId = $hardwareOptimizationId;
                     $this->redirector('index', 'index', 'hardwareoptimization');
+                }
+
+            }
+            else if (isset($postData['selectMemjetOptimization']))
+            {
+                $memjetOptimizationId = $postData['selectMemjetOptimization'];
+
+                if ($memjetOptimizationId > 0)
+                {
+                    $validReportIds = array(0);
+                    foreach ($availableMemjetOptimizations as $report)
+                    {
+                        $validReportIds[] = $report->id;
+                    }
+
+                    $inArray = new Zend_Validate_InArray($validReportIds);
+
+                    if ($inArray->isValid($memjetOptimizationId))
+                    {
+                        $this->_mpsSession->memjetOptimizationId = $memjetOptimizationId;
+                        $this->redirector('index', 'index', 'memjetoptimization');
+                    }
+                    else
+                    {
+                        $this->_flashMessenger->addMessage(array("warning" => "Please select a memjet optimization"));
+                    }
+                }
+                else
+                {
+                    $this->_mpsSession->memjetOptimizationId = $memjetOptimizationId;
+                    $this->redirector('index', 'index', 'memjetoptimization');
                 }
 
             }

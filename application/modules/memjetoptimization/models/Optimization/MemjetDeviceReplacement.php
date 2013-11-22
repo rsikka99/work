@@ -141,10 +141,9 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements M
         foreach ($replacementDevices as $deviceSwap)
         {
             $replacementDevice     = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage);
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $this->_blackToColorRatio : null);
+            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice, ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $this->_blackToColorRatio : null);
 
             $costDelta = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
-
             // Are we inside the page volume and above the lossThreshold?
             // If we are a color mfp and the replacement loses money, don't swap
             if

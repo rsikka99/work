@@ -182,6 +182,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_MasterDevice
      */
     protected $_replacementMasterDevice;
+    /**
+     * @var Proposalgen_Model_MasterDevice
+     */
+    protected $_memjetReplacementMasterDevice;
 
     /*
      * ********************************************************************************
@@ -314,6 +318,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_CostPerPage
      */
     protected $_cachedMonthlyBlackAndWhiteCost;
+
+    /**
+     * @var Proposalgen_Model_PageCounts
+     */
+    protected $_cachedPageCounts;
 
     /**
      * @var string
@@ -980,7 +989,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
         }
 
-        return $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey];;
+        return $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey];
     }
 
     /**
@@ -1210,6 +1219,27 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Gets the replacement master device
+     *
+     * @param int $memjetOptimizationId
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getMemjetReplacementMasterDevice ($memjetOptimizationId)
+    {
+        if (!isset($this->_memjetReplacementMasterDevice))
+        {
+            $deviceInstanceReplacementMasterDevice = Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find($this->id, $memjetOptimizationId);
+            if ($deviceInstanceReplacementMasterDevice)
+            {
+                $this->_memjetReplacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDevice();
+            }
+        }
+
+        return $this->_memjetReplacementMasterDevice;
+    }
+
+    /**
      * @param $hardwareOptimizationId
      *
      * @return Proposalgen_Model_MasterDevice
@@ -1227,6 +1257,26 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         }
 
         return $this->_replacementMasterDevice;
+    }
+
+    /**
+     * @param $memjetOptimizationId
+     *
+     * @return Proposalgen_Model_MasterDevice
+     */
+    public function getReplacementMasterDeviceForMemjetOptimization ($memjetOptimizationId)
+    {
+        if (!isset($this->_memjetReplacementMasterDevice))
+        {
+            $deviceInstanceReplacementMasterDevice = Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find(array($this->id, $memjetOptimizationId));
+            $memjetOptimization                    = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($memjetOptimizationId);
+            if ($deviceInstanceReplacementMasterDevice)
+            {
+                $this->_memjetReplacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($memjetOptimization->dealerId, $memjetOptimization->getMemjetOptimizationSetting()->laborCostPerPage, $memjetOptimization->getMemjetOptimizationSetting()->partsCostPerPage);
+            }
+        }
+
+        return $this->_memjetReplacementMasterDevice;
     }
 
     /**
@@ -1250,7 +1300,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getAction ()
     {
-        if (!isset($this->_deviceAction))
+        if (true)
         {
             if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombinedPageCount()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
@@ -1288,33 +1338,88 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
+     * Getter for $_reason
+     *
+     * @param $memjetoptimizationId
+     *
+     * @return string
+     */
+    public function getMemjetReason ($memjetoptimizationId)
+    {
+        if (!isset($this->_reason))
+        {
+            $deviceSwapReasonId = Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($memjetoptimizationId, $this->id))->deviceSwapReasonId;
+            $this->_reason      = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($deviceSwapReasonId);
+        }
+
+        return $this->_reason->reason;
+    }
+
+    /**
      * Gets this device instance's page counts
+     *
+     * @param int $blackToColorRatio
      *
      * @return Proposalgen_Model_PageCounts
      */
-    public function getPageCounts ()
+    public function getPageCounts ($blackToColorRatio = null)
     {
-        if (!isset($this->_pageCounts))
+        // Make sure our array is initialized
+        if (!isset($this->_cachedPageCounts))
+        {
+            $this->_cachedPageCounts = array();
+        }
+
+        $cacheKey = "{$blackToColorRatio}";
+        if (!array_key_exists($cacheKey, $this->_cachedPageCounts))
         {
             $pageCounts = new Proposalgen_Model_PageCounts();
             $meter      = $this->getMeter();
 
             if ($meter instanceof Proposalgen_Model_DeviceInstanceMeter)
             {
-                $pageCounts->getBlackPageCount()->add($meter->getBlackPageCount());
-                $pageCounts->getColorPageCount()->add($meter->getColorPageCount());
-                $pageCounts->getCopyBlackPageCount()->add($meter->getCopyBlackPageCount());
-                $pageCounts->getCopyColorPageCount()->add($meter->getCopyColorPageCount());
+                if ($blackToColorRatio != null)
+                {
+                    $blackRatio = 1 - ($blackToColorRatio / 100);
+                    $colorRatio = $blackToColorRatio / 100;
+
+                    //Normal Pages
+                    $tempPageCount = new Proposalgen_Model_PageCount();
+                    $tempPageCount->setDaily($meter->getBlackPageCount()->getDaily() * $colorRatio);
+                    $pageCounts->getColorPageCount()->add($tempPageCount);
+                    $tempPageCount->setDaily($meter->getBlackPageCount()->getDaily() * $blackRatio);
+                    $pageCounts->getBlackPageCount()->add($tempPageCount);
+
+                    //Copy
+                    $tempPageCount->setDaily($meter->getCopyBlackPageCount()->getDaily() * $colorRatio);
+                    $pageCounts->getCopyColorPageCount()->add($tempPageCount);
+                    $tempPageCount->setDaily($meter->getCopyBlackPageCount()->getDaily() * $blackRatio);
+                    $pageCounts->getCopyBlackPageCount()->add($tempPageCount);
+
+                    //A3
+                    $tempPageCount->setDaily($meter->getPrintA3BlackPageCount()->getDaily() * $colorRatio);
+                    $pageCounts->getPrintA3ColorPageCount()->add($tempPageCount);
+                    $tempPageCount->setDaily($meter->getPrintA3BlackPageCount()->getDaily() * $blackRatio);
+                    $pageCounts->getPrintA3BlackPageCount()->add($tempPageCount);
+                }
+                else
+                {
+                    $pageCounts->getBlackPageCount()->add($meter->getBlackPageCount());
+                    $pageCounts->getColorPageCount()->add($meter->getColorPageCount());
+                    $pageCounts->getCopyBlackPageCount()->add($meter->getCopyBlackPageCount());
+                    $pageCounts->getCopyColorPageCount()->add($meter->getCopyColorPageCount());
+                    $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
+                    $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
+                }
+
                 $pageCounts->getFaxPageCount()->add($meter->getFaxPageCount());
                 $pageCounts->getScanPageCount()->add($meter->getScanPageCount());
-                $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
-                $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
             }
 
-            $this->_pageCounts = $pageCounts;
+            $this->_cachedPageCounts[$cacheKey] = $pageCounts;
         }
 
-        return $this->_pageCounts;
+        return $this->_cachedPageCounts[$cacheKey];
     }
 
     /**
@@ -1332,6 +1437,34 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         else if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
         {
             $categoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
+        }
+
+        return $categoryId;
+    }
+
+    /**
+     * @param $memjetOptimizationId
+     *
+     * @return int
+     */
+    public function getDefaultMemjetDeviceSwapReasonCategoryId ($memjetOptimizationId)
+    {
+        $categoryId        = 0;
+        $replacementDevice = $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId);
+        if ($replacementDevice)
+        {
+            if (($replacementDevice->isColor() && $this->getMasterDevice()->isColor() == false) || ($replacementDevice->isMfp() && $this->getMasterDevice()->isMfp() == false))
+            {
+                $categoryId = Memjetoptimization_Model_Device_Swap_Reason_Category::FUNCTIONALITY_UPGRADE;
+            }
+            else
+            {
+                $categoryId = Memjetoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
+            }
+        }
+        else if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+        {
+            $categoryId = Memjetoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
         }
 
         return $categoryId;
@@ -1391,8 +1524,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-
-    /**
      * Figures out if the device can report toner levels
      *
      * @return bool|int
@@ -1412,12 +1543,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *            The settings to use when calculating cost per page
      * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            The master device to use
+     * @param int                                  $blackToColorRatio
      *
      * @return number
      */
-    public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    public function calculateMonthlyCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
-        return $this->calculateMonthlyMonoCost($costPerPageSetting, $masterDevice) + $this->calculateMonthlyColorCost($costPerPageSetting, $masterDevice);
+        return $this->calculateMonthlyMonoCost($costPerPageSetting, $masterDevice, $blackToColorRatio) + $this->calculateMonthlyColorCost($costPerPageSetting, $masterDevice, $blackToColorRatio);
     }
 
     /**
@@ -1428,13 +1560,20 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to us
      *
+     * @param int                                  $blackToColorRatio
+     *
      * @return number
      */
-    public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
 
-        return $monoCostPerPage * $this->getMeter()->getBlackPageCount()->getMonthly();
+        if ($blackToColorRatio != null)
+        {
+            return $monoCostPerPage * $this->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly();
+        }
+
+        return $monoCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly();
     }
 
     /**
@@ -1445,13 +1584,19 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @param Proposalgen_Model_MasterDevice       $masterDevice
      *            the master device to use, or null for current instance of device
      *
+     * @param int                                  $blackToColorRatio
+     *
      * @return number
      */
-    public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null)
+    public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
         $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+        if ($blackToColorRatio != null)
+        {
+            return $colorCostPerPage * $this->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly();
+        }
 
-        return $colorCostPerPage * $this->getMeter()->getColorPageCount()->getMonthly();
+        return $colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly();
     }
 
     /**
@@ -1511,6 +1656,21 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $hardwareOptimizationId)
     {
         return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
+    }
+
+    /**
+     * Calculates a cost per page for a memjet replacement device
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *            The settings to use when calculating cost per page
+     *
+     * @param                                      $memjetOptimizationId
+     *
+     * @return Proposalgen_Model_CostPerPage
+     */
+    public function calculateMemjetCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $memjetOptimizationId)
+    {
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId));
     }
 
     public function hasValidToners ()

@@ -32,6 +32,16 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
     /**
      * @var int
      */
+    public $memjetOptimizationSettingId;
+
+    /**
+     * @var Memjetoptimization_Model_Memjet_Optimization_Setting
+     */
+    protected $_memjetOptimizationSetting;
+
+    /**
+     * @var int
+     */
     public $healthcheckSettingId;
 
     /**
@@ -80,6 +90,10 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         {
             $this->hardwareOptimizationSettingId = $params->hardwareOptimizationSettingId;
         }
+        if (isset($params->memjetOptimizationSettingId) && !is_null($params->memjetOptimizationSettingId))
+        {
+            $this->memjetOptimizationSettingId = $params->memjetOptimizationSettingId;
+        }
         if (isset($params->healthcheckSettingId) && !is_null($params->healthcheckSettingId))
         {
             $this->healthcheckSettingId = $params->healthcheckSettingId;
@@ -103,6 +117,7 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
             "dealerId"                      => $this->dealerId,
             "assessmentSettingId"           => $this->assessmentSettingId,
             "hardwareOptimizationSettingId" => $this->hardwareOptimizationSettingId,
+            "memjetOptimizationSettingId"   => $this->memjetOptimizationSettingId,
             "healthcheckSettingId"          => $this->healthcheckSettingId,
             "surveySettingId"               => $this->surveySettingId,
             "quoteSettingId"                => $this->quoteSettingId,
@@ -211,6 +226,32 @@ class Preferences_Model_Dealer_Setting extends My_Model_Abstract
         }
 
         return $this->_hardwareOptimizationSetting;
+    }
+
+    /**
+     * Gets the memjet optimization settings
+     *
+     * @return Memjetoptimization_Model_Memjet_Optimization_Setting
+     */
+    public function getMemjetOptimizationSettings ()
+    {
+        if (!isset($this->_memjetOptimizationSetting))
+        {
+            $this->_memjetOptimizationSetting = Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting::getInstance()->find($this->memjetOptimizationSettingId);
+
+            if (!$this->_memjetOptimizationSetting instanceof memjetoptimization_Model_memjet_Optimization_Setting)
+            {
+                // Insert a new copy of the system setting
+                $this->_memjetOptimizationSetting = memjetoptimization_Model_Mapper_memjet_Optimization_Setting::getInstance()->fetchSystemSetting();
+                memjetoptimization_Model_Mapper_memjet_Optimization_Setting::getInstance()->insert($this->_memjetOptimizationSetting);
+                $this->memjetOptimizationSettingId = $this->_memjetOptimizationSetting->id;
+
+                // Save ourselves
+                Preferences_Model_Mapper_Dealer_Setting::getInstance()->save($this);
+            }
+        }
+
+        return $this->_memjetOptimizationSetting;
     }
 
     /**

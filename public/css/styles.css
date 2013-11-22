@@ -1684,6 +1684,9 @@ input.addEditUnknownDevice {
 .mpsicon-supplies {
   background-position: -165px 0;
 }
+.mpsicon-memjet {
+  background-position: -198px 0;
+}
 .masterDeviceModal {
   width: 960px;
 }

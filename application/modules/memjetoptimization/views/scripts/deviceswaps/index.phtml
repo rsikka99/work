@@ -1,0 +1,82 @@
+<?php $this->headScript()->appendFile($this->baseUrl('js/memjetoptimization/deviceSwap.js')); ?>
+<h4> Manage Device Swaps </h4>
+
+<div class="modal hide" id="deviceAddModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center">Create / Edit Device Swap</h3>
+    </div>
+    <div class="modal-body well">
+        <div class="alert" id="save-error" style="display:none;">
+
+        </div>
+        <?php echo $this->form; ?>
+        <div style="text-align: center">
+            <button type="button" id="saveDevice" class="btn btn-primary" style="width: 40%; padding: 4px;">Save</button>
+            <button type="button" id="cancelSave" class="btn cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+        </div>
+        <br /><br />
+        <em> Only devices from the hardware library that have "Can Sell" checked qualify to be a device swap.</em>
+    </div>
+</div>
+
+<div class="modal hide" id="deleteModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center">Confirm Delete Device Swap</h3>
+    </div>
+    <div class="modal-body well" style="height: 50px; text-align: center">
+        <button type="button" class="btn btn-inverse cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+        <button type="button" id="deleteDeviceBtn" class="btn btn-danger" style="width: 40%; padding: 4px;">Delete</button>
+    </div>
+</div>
+
+<div class="modal hide" id="deleteReasonModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center">Confirm Delete Swap Reason</h3>
+    </div>
+    <div class="modal-body well" style="height: 150px; text-align: center">
+        <div class="alert" id="device-swap-error-message" style="display:none;">
+        </div>
+            <p>Are you sure you want to delete this swap reason?</p>
+            <button type="button" id="cancelSwapBtn" class="btn btn-inverse cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+            <button type="button" id="deleteSwapBtn" class="btn btn-danger" style="width: 40%; padding: 4px;">Delete</button>
+
+    </div>
+</div>
+
+<div class="modal hide" id="reasonAddModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center">Create / Edit Swap Reason</h3>
+    </div>
+    <div class="modal-body well" style="height: 180px;">
+        <?php echo $this->deviceSwapForm; ?>
+        <div style="text-align: center">
+            <button type="button" id="saveDeviceReason" class="btn btn-primary" style="width: 40%; padding: 4px;">Submit</button>
+            <button type="button" id="cancelSave" class="btn cancelBtn" style="width: 40%; padding: 4px;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="well">
+    <button id="createNewBtn" class="btn btn-success" style="float:right">Create new</button>
+    <br /><br />
+    <table id='deviceSwapsTable' style="width: 100%" class="scroll">
+    </table>
+    <br />
+    <sup>*</sup><em>Cost per page for devices are derived using OEM toners.</em>
+</div>
+<h4> Device Swap Reasons </h4>
+<div class="well">
+    <button id='createReasonBtn' class="btn btn-success" style="float:right;">Create New</button>
+    <br /><br />
+    <table id='deviceReasonTable' style="width: 100%" class="scroll">
+    </table>
+</div>

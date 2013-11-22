@@ -248,7 +248,7 @@ class Memjetoptimization_Model_Mapper_Memjet_Optimization_Quote extends My_Model
 
         if ($memjetOptimizationQuote  instanceof Memjetoptimization_Model_Memjet_Optimization_Quote)
         {
-            return Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($memjetOptimizationQuote->hardwareOptimizationId);
+            return Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($memjetOptimizationQuote->memjetOptimizationId);
         }
         else
         {

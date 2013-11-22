@@ -45,7 +45,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
     /**
      * @var float
      */
-    protected $_savingsThreshold;
+    protected $_lossThreshold;
 
     /**
      * @var float
@@ -65,13 +65,13 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
     /**
      * @param Hardwareoptimization_Model_Device_Swap[] $replacementDevices
      * @param int                                      $dealerId
-     * @param int                                      $costThreshold
+     * @param int                                      $lossThreshold
      * @param Proposalgen_Model_CostPerPageSetting     $dealerCostPerPageSetting
      * @param Proposalgen_Model_CostPerPageSetting     $replacementsCostPerPageSetting
      * @param Proposalgen_Model_CostPerPage            $reportLaborCostPerPage
      * @param Proposalgen_Model_CostPerPage            $reportPartsCostPerPage
      */
-    public function __construct ($replacementDevices, $dealerId, $costThreshold, $dealerCostPerPageSetting, $replacementsCostPerPageSetting, $reportLaborCostPerPage, $reportPartsCostPerPage)
+    public function __construct ($replacementDevices, $dealerId, $lossThreshold, $dealerCostPerPageSetting, $replacementsCostPerPageSetting, $reportLaborCostPerPage, $reportPartsCostPerPage)
     {
         if (isset($replacementDevices['black']))
         {
@@ -96,7 +96,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
         $this->_costPerPageSetting                              = $dealerCostPerPageSetting;
         $this->_replacementCostPerPageSetting                   = $replacementsCostPerPageSetting;
         $this->_dealerId                                        = $dealerId;
-        $this->_savingsThreshold                                = $costThreshold;
+        $this->_lossThreshold                                   = $lossThreshold;
         $this->_reportPartsCostPerPage                          = $reportPartsCostPerPage;
         $this->_reportLaborCostPerPage                          = $reportLaborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $reportLaborCostPerPage;
@@ -139,22 +139,30 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
     /**
      * Finds a suitable replacement for a device instance or returns null if no replacement was found
      *
-     * @param Proposalgen_Model_DeviceInstance         $deviceInstance
-     * @param Hardwareoptimization_Model_Device_Swap[] $replacementDevices
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     * @param Admin_Model_Memjet_Device_Swap[] $replacementDevices
      *
      * @return Proposalgen_Model_MasterDevice
      */
     protected function _findReplacement (Proposalgen_Model_DeviceInstance $deviceInstance, $replacementDevices)
     {
-        $suggestedDevice = null;
-        $greatestSavings = 0;
+        $suggestedDevice           = null;
+        $greatestSavings           = 0;
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($this->_costPerPageSetting);
         foreach ($replacementDevices as $deviceSwap)
         {
             $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage));
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
 
-            if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
+            // Are we inside the page volume and above the lossThreshold?
+            // If we are a color mfp and the replacement loses money, don't swap
+            if
+            (
+                $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->getDealerMaximumPageCount($this->_dealerId) &&
+                $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->getDealerMinimumPageCount($this->_dealerId) &&
+                $costDelta > -$this->_lossThreshold &&
+                !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta < 0)
+            )
             {
                 // We have replaced a device based on ampv, but if there is more than one device within the page range, we want to get the cheapest one
                 if ($suggestedDevice == null)
@@ -168,7 +176,11 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
                  * 1: New device is MFP while the last suggested is not OR
                  * 2: They have the same functionality and it is cheaper.
                  */
-                else if (($deviceSwap->getMasterDevice()->isMfp() && $suggestedDevice->isMfp() == false) || ($costDelta > $greatestSavings && $deviceSwap->getMasterDevice()->isMfp() == $suggestedDevice->isMfp()))
+                else if
+                (
+                    ($deviceSwap->getMasterDevice()->isMfp() && $suggestedDevice->isMfp() == false) ||
+                    ($costDelta > $greatestSavings && $deviceSwap->getMasterDevice()->isMfp() == $suggestedDevice->isMfp())
+                )
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();
                     $greatestSavings = $costDelta;

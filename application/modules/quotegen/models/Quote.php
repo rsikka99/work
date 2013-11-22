@@ -527,9 +527,17 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     /**
      * @return int
      */
-    public function isExport ()
+    public function isHardwareOptimizationExport ()
     {
         return count(Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->fetchByQuoteId($this->id));
+    }
+
+    /**
+     * @return int
+     */
+    public function isMemjetOptimizationExport ()
+    {
+        return count(Memjetoptimization_Model_Mapper_Memjet_Optimization_Quote::getInstance()->fetchByQuoteId($this->id));
     }
 
     /**

@@ -41,11 +41,13 @@ class Quotegen_Service_QuoteDevice
     /**
      * Adds a quote device to the system
      *
-     * @param $masterDeviceId
+     * @param      $masterDeviceId
+     *
+     * @param bool $memjetOptimization
      *
      * @return Quotegen_Model_QuoteDevice
      */
-    public function addDeviceToQuote ($masterDeviceId)
+    public function addDeviceToQuote ($masterDeviceId, $memjetOptimization = false)
     {
         // Get the quote settings
         $quoteSetting = $this->getQuoteSetting();
@@ -64,7 +66,7 @@ class Quotegen_Service_QuoteDevice
         $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);
 
         // Add to default group
-        Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->getQuote()->id, (int)$quoteDeviceId, $this->getMasterDeviceQuantity($masterDeviceId));
+        Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->insertDeviceInDefaultGroup($this->getQuote()->id, (int)$quoteDeviceId, ($memjetOptimization ? $this->getMemjetMasterDeviceQuantity($masterDeviceId) : $this->getMasterDeviceQuantity($masterDeviceId)));
 
         // Create Link to Device
         $quoteDeviceConfiguration                 = new Quotegen_Model_QuoteDeviceConfiguration();
@@ -91,6 +93,31 @@ class Quotegen_Service_QuoteDevice
         if ($hardwareOptimizationQuote instanceof Hardwareoptimization_Model_Hardware_Optimization_Quote)
         {
             $count = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->countReplacementDevicesById($hardwareOptimizationQuote->hardwareOptimizationId, $masterDeviceId);
+        }
+        else
+        {
+            $count = self::DEFAULT_QUANTITY_DEFAULT_GROUP;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Gets the number of master devices, if quote id is found inside memjet_optimization_quotes it will count
+     * the master device ids in memjet_device_instance_replacement_devices
+     *
+     * @param $masterDeviceId
+     *
+     * @return int
+     */
+    public function getMemjetMasterDeviceQuantity ($masterDeviceId)
+    {
+        $memjetOptimizationQuoteMapper = Memjetoptimization_Model_Mapper_Memjet_Optimization_Quote::getInstance();
+        $memjetOptimizationQuote       = $memjetOptimizationQuoteMapper->find($this->_quoteId);
+
+        if ($memjetOptimizationQuote instanceof Memjetoptimization_Model_Memjet_Optimization_Quote)
+        {
+            $count = Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->countReplacementDevicesById($memjetOptimizationQuote->memjetOptimizationId, $masterDeviceId);
         }
         else
         {

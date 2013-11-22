@@ -1,0 +1,56 @@
+<?php
+
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+/* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */
+$memjetOptimization = $this->memjetOptimization;
+
+/* @var $section PHPWord_Section */
+$section       = $this->section;
+$titleImageStyle = array(
+    'align' => 'center'
+);
+
+// Table to fix the issue of images being different sizes
+$imageTable = $section->addTable(array(
+                                        'borderBottomSize' => 1
+                                   ));
+$imageTable->addRow(5760);
+$cell = $imageTable->addCell(15000.8, array(
+                                          'valign' => 'center'
+                                     ));
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+                                                                                                           'align' => 'center'
+                                                                                                      ));
+
+$section->addTextBreak();
+// Assessment Title
+$section->addText($this->translate(''), null, 'titleStyle2');
+$section->addText($this->translate('  Memjet Optimization'), 'titlepage_title', 'titleStyle2');
+$section->addText($this->translate(''), null, 'titleStyle2');
+
+
+$section->addTextBreak();
+
+$section->addText(' ', 'titlepage_address', 'titleStyle3');
+$section->addText(sprintf($this->translate('Prepared For: %1$s'), $this->proposal->Report->CustomerCompanyName), 'titlepage_subtitle', 'titleStyle3');
+
+
+// Parse the address
+$addressLines = explode("\n", $memjetOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressCount = 1;
+foreach ($addressLines as $line)
+{
+    $section->addText($line, 'titlepage_address', 'titleStyle3');
+    $addressCount++;
+}
+$section->addText(' ', 'titlepage_address', 'titleStyle3');
+$section->addText($this->translate('Date:') . " " . $memjetOptimization->dateCreated, 'titlepage_address', 'titleStyle3');
+// Add extra blank lines to make the grey box big
+if ($addressCount < 11)
+{
+    for ($i = 0; $i < 11 - $addressCount; $i++)
+    {
+        $section->addText(' ', 'titlepage_address', 'titleStyle3');
+    }
+}

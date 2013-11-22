@@ -24,6 +24,9 @@ class Preferences_Model_Acl
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM = "preferences__hardwareoptimization__system";
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER   = "preferences__hardwareoptimization__user";
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER = "preferences__hardwareoptimization__dealer";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM   = "preferences__memjetoptimization__system";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_USER     = "preferences__memjetoptimization__user";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_DEALER   = "preferences__memjetoptimization__dealer";
 
     /**
      * Sets up acl resources and access for a module
@@ -63,6 +66,9 @@ class Preferences_Model_Acl
         $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM);
         $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER);
         $acl->addResource(self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM);
+        $acl->addResource(self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_USER);
+        $acl->addResource(self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_DEALER);
     }
 
     /**
@@ -102,11 +108,16 @@ class Preferences_Model_Acl
         // Hardware Optimization Administrator
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
 
+        // Memjet Optimization
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_USER, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_DEALER, Application_Model_Acl::PRIVILEGE_VIEW);
+
         // System Admin
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_HEALTHCHECK_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_QUOTE_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_PROPOSAL_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_PREFERENCES_INDEX_SYSTEM, Application_Model_Acl::PRIVILEGE_VIEW);
 
     }

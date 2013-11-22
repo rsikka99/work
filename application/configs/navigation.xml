@@ -291,6 +291,58 @@
                         </dealerOptimization>
                     </pages>
                 </hardwareoptimization>
+                <memjetoptimization>
+                    <label>Memjet Optimization</label>
+                    <module>memjetoptimization</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                    <resource>memjetoptimization__index__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <select-upload>
+                            <label>Select Upload</label>
+                            <module>memjetoptimization</module>
+                            <controller>index</controller>
+                            <action>select-upload</action>
+                            <resource>memjetoptimization__index__select-upload</resource>
+                        </select-upload>
+                        <settings>
+                            <label>Settings</label>
+                            <module>memjetoptimization</module>
+                            <controller>index</controller>
+                            <action>settings</action>
+                            <resource>memjetoptimization__index__settings</resource>
+                        </settings>
+                        <optimize>
+                            <label>Optimization</label>
+                            <module>memjetoptimization</module>
+                            <controller>index</controller>
+                            <action>optimize</action>
+                            <resource>memjetoptimization__index__optimize</resource>
+                        </optimize>
+                        <reportIndex>
+                            <label>Report index</label>
+                            <module>memjetoptimization</module>
+                            <controller>report_index</controller>
+                            <action>index</action>
+                            <resource>memjetoptimization__report_index__index</resource>
+                        </reportIndex>
+                        <customerOptimization>
+                            <label>Customer Optimization</label>
+                            <module>memjetoptimization</module>
+                            <controller>report_customer_optimization</controller>
+                            <action>index</action>
+                            <resource>memjetoptimization__report_customer_optimization__index</resource>
+                        </customerOptimization>
+                        <dealerOptimization>
+                            <label>Customer Optimization</label>
+                            <module>memjetoptimization</module>
+                            <controller>report_dealer_optimization</controller>
+                            <action>index</action>
+                            <resource>memjetoptimization__report_dealer_optimization__index</resource>
+                        </dealerOptimization>
+                    </pages>
+                </memjetoptimization>
                 <healthcheck>
                     <label>Healthcheck</label>
                     <module>healthcheck</module>

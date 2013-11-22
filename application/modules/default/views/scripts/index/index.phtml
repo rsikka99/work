@@ -69,16 +69,98 @@
 
 <?php if (isset($this->selectedClientId)) : ?>
     <div class="tabbable">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
-            <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
-            <li><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
-            <li><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
-        </ul>
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
+        <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
+            <li><a href="#memjetOptimizationTabPane" data-toggle="tab" title="Memjet Optimization"><i class="mpsicon-memjet"></i></a></li>
+        <?php endif; ?>
+        <li><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
+        <li><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
+    </ul>
 
-        <div class="tab-content">
-            <div class="tab-pane active" id="assessmentTabPane">
-                <p>Assessment</p>
+    <div class="tab-content">
+        <div class="tab-pane active" id="assessmentTabPane">
+            <p>Assessment</p>
+
+            <form method="POST">
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>Title <br /> File Name</th>
+                        <th style="width:125px">Date Created <br /> Last Modified</th>
+                        <th>Finished</th>
+                        <th style="width: 70px;">Action</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
+                        </td>
+                    </tr>
+                    <?php foreach ($this->availableAssessments as $report) : /* @var $report Assessment_Model_Assessment */ ?>
+                        <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <td><?php echo $report->name . '<br/> <small>' . $report->getRmsUpload()->fileName; ?></small></td>
+                            <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
+                            <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
+                                <td>Finished</td>
+
+                            <?php else : ?>
+                                <td>In Progress</td>
+                            <?php endif; ?>
+                            <td style="text-align: center;">
+                                <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </form>
+
+        </div>
+        <div class="tab-pane" id="hardwareOptimizationTabPane">
+            <p>Hardware Optimization</p>
+
+            <form method="POST">
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>Title <br /> File Name</th>
+                        <th style="width:125px">Date Created <br /> Last Modified</th>
+                        <th>Finished</th>
+                        <th style="width: 70px;">Action</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button name="selectHardwareOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
+                        </td>
+                    </tr>
+                    <?php foreach ($this->availableHardwareOptimizations as $hardwareOptimization) : /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */ ?>
+                        <tr class="<?php echo ($hardwareOptimization->stepName == Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <td><?php echo $hardwareOptimization->name . '<br/> <small>' . $hardwareOptimization->getRmsUpload()->fileName; ?></small></td>
+                            <td><?php echo strftime("%B %d, %Y", strtotime($hardwareOptimization->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($hardwareOptimization->lastModified)); ?></td>
+
+                            <?php if ($hardwareOptimization->stepName == Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED) : ?>
+                                <td>Finished</td>
+
+                            <?php else : ?>
+                                <td>In Progress</td>
+                            <?php endif; ?>
+                            <td style="text-align: center;">
+                                <button name="selectHardwareOptimization" value="<?php echo $hardwareOptimization->id; ?>" class="btn btn-primary btn-mini">
+                                    Select
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+            </form>
+        </div>
+        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
+            <div class="tab-pane" id="memjetOptimizationTabPane">
+                <p>Memjet Optimization</p>
 
                 <form method="POST">
                     <table class="table table-striped table-condensed table-bordered">
@@ -93,60 +175,22 @@
                             <td></td>
                             <td></td>
                             <td style="text-align: center;">
-                                <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
+                                <button name="selectMemjetOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
                             </td>
                         </tr>
-                        <?php foreach ($this->availableAssessments as $report) : /* @var $report Assessment_Model_Assessment */ ?>
-                            <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                <td><?php echo $report->name . '<br/> <small>' . $report->getRmsUpload()->fileName; ?></small></td>
-                                <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
-                                <?php if ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) : ?>
+                        <?php foreach ($this->availableMemjetOptimizations as $memjetOptimization) : /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */ ?>
+                            <tr class="<?php echo ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
+                                <td><?php echo $memjetOptimization->name . '<br/> <small>' . $memjetOptimization->getRmsUpload()->fileName; ?></small></td>
+                                <td><?php echo strftime("%B %d, %Y", strtotime($memjetOptimization->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($memjetOptimization->lastModified)); ?></td>
+
+                                <?php if ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) : ?>
                                     <td>Finished</td>
 
                                 <?php else : ?>
                                     <td>In Progress</td>
                                 <?php endif; ?>
                                 <td style="text-align: center;">
-                                    <button name="selectAssessment" value="<?php echo $report->id; ?>" class="btn btn-primary btn-mini">Select</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </form>
-
-            </div>
-            <div class="tab-pane" id="hardwareOptimizationTabPane">
-                <p>Hardware Optimization</p>
-
-                <form method="POST">
-                    <table class="table table-striped table-condensed table-bordered">
-                        <tr>
-                            <th>Title <br /> File Name</th>
-                            <th style="width:125px">Date Created <br /> Last Modified</th>
-                            <th>Finished</th>
-                            <th style="width: 70px;">Action</th>
-                        </tr>
-                        <tr class="info">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td style="text-align: center;">
-                                <button name="selectHardwareOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
-                            </td>
-                        </tr>
-                        <?php foreach ($this->availableHardwareOptimizations as $hardwareOptimization) : /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */ ?>
-                            <tr class="<?php echo ($hardwareOptimization->stepName == Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                <td><?php echo $hardwareOptimization->name . '<br/> <small>' . $hardwareOptimization->getRmsUpload()->fileName; ?></small></td>
-                                <td><?php echo strftime("%B %d, %Y", strtotime($hardwareOptimization->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($hardwareOptimization->lastModified)); ?></td>
-
-                                <?php if ($hardwareOptimization->stepName == Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED) : ?>
-                                    <td>Finished</td>
-
-                                <?php else : ?>
-                                    <td>In Progress</td>
-                                <?php endif; ?>
-                                <td style="text-align: center;">
-                                    <button name="selectHardwareOptimization" value="<?php echo $hardwareOptimization->id; ?>" class="btn btn-primary btn-mini">
+                                    <button name="selectMemjetOptimization" value="<?php echo $memjetOptimization->id; ?>" class="btn btn-primary btn-mini">
                                         Select
                                     </button>
                                 </td>
@@ -155,81 +199,85 @@
                     </table>
                 </form>
             </div>
-            <div class="tab-pane" id="healthcheckTabPane">
-                <p>Health Check</p>
+        <?php endif; ?>
+        <div class="tab-pane" id="healthcheckTabPane">
+            <p>Health Check</p>
 
-                <form method="POST">
-                    <table class="table table-striped table-condensed table-bordered">
-                        <tr>
-                            <th>Title <br /> File Name</th>
-                            <th style="width:125px">Date Created <br /> Last Modified</th>
-                            <th>Finished</th>
-                            <th style="width: 70px;">Action</th>
-                        </tr>
-                        <tr class="info">
-                            <td></td>
-                            <td></td>
-                            <td></td>
+            <form method="POST">
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>Title <br /> File Name</th>
+                        <th style="width:125px">Date Created <br /> Last Modified</th>
+                        <th>Finished</th>
+                        <th style="width: 70px;">Action</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button name="selectHealthcheck" value="0" class="btn btn-success btn-mini">Start New</button>
+                        </td>
+                    </tr>
+                    <?php foreach ($this->availableHealthchecks as $healthcheck) : /* @var $healthcheck Healthcheck_Model_Healthcheck */ ?>
+                        <tr class="<?php echo ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <td><?php echo $healthcheck->name . '<br/> <small>' . $healthcheck->getRmsUpload()->fileName; ?></small></td>
+                            <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($healthcheck->lastModified)); ?></td>
+
+                            <?php if ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) : ?>
+                                <td>Finished</td>
+
+                            <?php else : ?>
+                                <td>In Progress</td>
+                            <?php endif; ?>
                             <td style="text-align: center;">
-                                <button name="selectHealthcheck" value="0" class="btn btn-success btn-mini">Start New</button>
+                                <button name="selectHealthcheck" value="<?php echo $healthcheck->id; ?>" class="btn btn-primary btn-mini">Select
+                                </button>
                             </td>
                         </tr>
-                        <?php foreach ($this->availableHealthchecks as $healthcheck) : /* @var $healthcheck Healthcheck_Model_Healthcheck */ ?>
-                            <tr class="<?php echo ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                <td><?php echo $healthcheck->name . '<br/> <small>' . $healthcheck->getRmsUpload()->fileName; ?></small></td>
-                                <td><?php echo strftime("%B %d, %Y", strtotime($healthcheck->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($healthcheck->lastModified)); ?></td>
-
-                                <?php if ($healthcheck->stepName == Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED) : ?>
-                                    <td>Finished</td>
-
-                                <?php else : ?>
-                                    <td>In Progress</td>
-                                <?php endif; ?>
-                                <td style="text-align: center;">
-                                    <button name="selectHealthcheck" value="<?php echo $healthcheck->id; ?>" class="btn btn-primary btn-mini">Select
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </form>
-            </div>
-            <div class="tab-pane" id="quoteTabPane">
-                <p>Hardware Quote</p>
-
-                <form method="POST">
-                    <p>
-                        <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
-                        <button name="createPurchasedQuote" value="0" class="btn btn-success btn-mini">Create New Purchased Quote</button>
-                    </p>
-                    <table class="table table-striped table-condensed table-bordered">
-                        <tr>
-                            <th>Title</th>
-                            <th style="width: 120px; ">Date Created <br /> Last Modified</th>
-                            <th>Type</th>
-                            <th style="width: 100px;">Action</th>
-                        </tr>
-
-                        <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
-                            <?php $hardwareOptimizationExportName = ($quote->isExport()) ? "Quote for: " . Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->fetchHardwareOptimizationByQuoteId($quote->id)->name : " "; ?>
-                            <tr>
-                                <td><?php echo $quote->name . "<br/><small>" . $hardwareOptimizationExportName; ?></small></td>
-                                <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
-
-                                <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
-                                    <td>Leased</td>
-                                <?php else : ?>
-                                    <td>Purchased</td>
-                                <?php endif; ?>
-                                <td>
-                                    <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-
-            </div>
+                    <?php endforeach; ?>
+                </table>
+            </form>
         </div>
+        <div class="tab-pane" id="quoteTabPane">
+            <p>Hardware Quote</p>
+
+            <form method="POST">
+                <p>
+                    <button name="createLeasedQuote" value="0" class="btn btn-primary btn-mini">Create New Leased Quote</button>
+                    <button name="createPurchasedQuote" value="0" class="btn btn-success btn-mini">Create New Purchased Quote</button>
+                </p>
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>Title</th>
+                        <th style="width: 120px; ">Date Created <br /> Last Modified</th>
+                        <th>Type</th>
+                        <th style="width: 100px;">Action</th>
+                    </tr>
+
+                    <?php foreach ($this->availableQuotes as $quote) : /* @var $quote Quotegen_Model_Quote */ ?>
+                        <?php
+                        $exportName = ($quote->isHardwareOptimizationExport()) ? "Quote for: " . Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote::getInstance()->fetchHardwareOptimizationByQuoteId($quote->id)->name
+                            : (($quote->isMemjetOptimizationExport()) ? "Quote for: " . Memjetoptimization_Model_Mapper_Memjet_Optimization_Quote::getInstance()->fetchMemjetOptimizationByQuoteId($quote->id)->name : " ");
+                        ?>
+                        <tr>
+                            <td><?php echo $quote->name . "<br/><small>" . $exportName; ?></small></td>
+                            <td><?php echo strftime("%B %d, %Y", strtotime($quote->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($quote->dateModified)); ?></td>
+
+                            <?php if ($quote->quoteType == Quotegen_Model_Quote::QUOTE_TYPE_LEASED) : ?>
+                                <td>Leased</td>
+                            <?php else : ?>
+                                <td>Purchased</td>
+                            <?php endif; ?>
+                            <td>
+                                <button name="selectQuote" value="<?php echo $quote->id; ?>" class="btn btn-primary btn-mini">Select</button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+
+        </div>
+    </div>
     </div>
     <hr>
 

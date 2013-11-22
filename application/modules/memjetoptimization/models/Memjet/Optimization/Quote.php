@@ -7,7 +7,7 @@ class Memjetoptimization_Model_Memjet_Optimization_Quote extends My_Model_Abstra
     /**
      * @var int
      */
-    public $MemjetoptimizationId;
+    public $memjetOptimizationId;
     /**
      * @var int
      */
@@ -22,9 +22,9 @@ class Memjetoptimization_Model_Memjet_Optimization_Quote extends My_Model_Abstra
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
         }
-        if (isset($params->MemjetoptimizationId) && !is_null($params->MemjetoptimizationId))
+        if (isset($params->memjetOptimizationId) && !is_null($params->memjetOptimizationId))
         {
-            $this->MemjetoptimizationId = $params->MemjetoptimizationId;
+            $this->memjetOptimizationId = $params->memjetOptimizationId;
         }
         if (isset($params->quoteId) && !is_null($params->quoteId))
         {
@@ -38,7 +38,7 @@ class Memjetoptimization_Model_Memjet_Optimization_Quote extends My_Model_Abstra
     public function toArray ()
     {
         return array(
-            "MemjetoptimizationId" => $this->MemjetoptimizationId,
+            "memjetOptimizationId" => $this->memjetOptimizationId,
             "quoteId"                => $this->quoteId,
         );
     }
