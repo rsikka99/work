@@ -1,3 +1,7 @@
+Version 1.4.6
+-------------
+[ADDED]   memjet optimize for select dealers
+
 Version 1.4.5
 -------------
 [ADDED]   A3 support for master devices
