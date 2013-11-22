@@ -38,9 +38,9 @@ class Admin_DealerController extends Tangent_Controller_Action
         /**
          * Fetch the dealer
          */
-        $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
+        $dealerMapper        = Admin_Model_Mapper_Dealer::getInstance();
         $dealerFeatureMapper = Application_Model_Mapper_Dealer_Feature::getInstance();
-        $dealer       = $dealerMapper->find($dealerId);
+        $dealer              = $dealerMapper->find($dealerId);
 
         if (!$dealer instanceof Admin_Model_Dealer)
         {
@@ -48,7 +48,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             $this->redirect('index');
         }
         $featureList = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
-        $features = array();
+        $features    = array();
         foreach ($featureList as $feature)
         {
             $features['dealerFeatures'][] = $feature->featureId;
@@ -78,7 +78,7 @@ class Admin_DealerController extends Tangent_Controller_Action
                         $dealer->populate($form->getValues());
                         $dealerMapper->save($dealer);
 
-                        $dealerFeatureList   = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
+                        $dealerFeatureList = $dealerFeatureMapper->fetchFeatureListForDealer($dealerId);
 
                         // Loop through our new features
                         foreach ($postData ["dealerFeatures"] as $featureId)

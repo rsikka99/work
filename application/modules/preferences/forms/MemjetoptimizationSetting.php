@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Preferences_Form_MemjetoptimizationSetting
+ * Class Preferences_Form_Memjet_OptimizationSetting
  */
-class Preferences_Form_MemjetoptimizationSetting extends Twitter_Bootstrap_Form_Horizontal
+class Preferences_Form_Memjet_OptimizationSetting extends Twitter_Bootstrap_Form_Horizontal
 {
     public $allowsNull = false;
 

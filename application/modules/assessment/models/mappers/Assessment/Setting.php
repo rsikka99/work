@@ -298,7 +298,7 @@ class Assessment_Model_Mapper_Assessment_Setting extends My_Model_Mapper_Abstrac
         // If we don't have a setting yet, make a blank one
         if (!$assessmentSetting)
         {
-            $assessmentSetting   = new Assessment_Model_Assessment_Setting();
+            $assessmentSetting = new Assessment_Model_Assessment_Setting();
             Assessment_Model_Mapper_Assessment_Setting::getInstance()->insert($assessmentSetting);
         }
 

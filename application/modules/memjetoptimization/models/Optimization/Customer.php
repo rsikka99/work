@@ -57,7 +57,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
                                       "0194D2"
                                  ));
             $barGraph->setLegend(array(
-                                      $this->_Memjetoptimization->getClient()->companyName,
+                                      $this->_memjetOptimization->getClient()->companyName,
                                       "Average"
                                  ));
 
@@ -65,12 +65,12 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[4]
-            $this-> _graphs [] = $barGraph->getUrl();
+            $this->_graphs [] = $barGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $pagesPerEmployee = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->_Memjetoptimization->getClient()->employeeCount);
+            $pagesPerEmployee = round($this->_optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->_memjetOptimization->getClient()->employeeCount);
             $highest          = (self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE > $pagesPerEmployee) ? self::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE : $pagesPerEmployee;
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
@@ -94,7 +94,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
                                       "0194D2"
                                  ));
             $barGraph->setLegend(array(
-                                      $this->_Memjetoptimization->getClient()->companyName,
+                                      $this->_memjetOptimization->getClient()->companyName,
                                       "Average"
                                  ));
             $barGraph->setProperty('chxs', '0N*sz0*');
@@ -106,8 +106,8 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $highest    = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $barGraph   = new gchart\gBarChart(200, 300);
+            $highest  = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $barGraph = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array(round($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
@@ -220,7 +220,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
              */
-            $employeeCount            = $this->_Memjetoptimization->getClient()->employeeCount;
+            $employeeCount            = $this->_memjetOptimization->getClient()->employeeCount;
             $averageEmployeePerDevice = 4.4;
 
             $devicesPerEmployee          = round($employeeCount / ($this->_optimization->getDevices()->allIncludedDeviceInstances->getCount() + count($this->retired) + count($this->leased) + count($this->excluded)), 1);
@@ -468,7 +468,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
                                       "Your Supply Uniqueness"
                                  ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest/20 + 1);
+            $tickSize = (int)($highest / 20 + 1);
             $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
@@ -506,7 +506,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
                                       "Your Optimized Supply Uniqueness"
                                  ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest/20 + 1);
+            $tickSize = (int)($highest / 20 + 1);
             $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);

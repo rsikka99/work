@@ -306,7 +306,7 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
      *
      * @return bool|Proposalgen_Model_Rms_Upload
      */
-    public function findRmsUploadRowByHardwareOptimizationId($healthcheckId)
+    public function findRmsUploadRowByHardwareOptimizationId ($healthcheckId)
     {
         $rmsUploadRow = false;
 

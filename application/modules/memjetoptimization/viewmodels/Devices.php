@@ -38,7 +38,7 @@ class Memjetoptimization_ViewModel_Devices
     /**
      * @var Memjetoptimization_Model_Memjet_Optimization
      */
-    protected $_Memjetoptimization;
+    protected $_memjetOptimization;
 
     /**
      * @var bool
@@ -48,14 +48,14 @@ class Memjetoptimization_ViewModel_Devices
     /**
      * Constructor
      *
-     * @param Memjetoptimization_Model_Memjet_Optimization $Memjetoptimization
+     * @param Memjetoptimization_Model_Memjet_Optimization $memjetOptimization
      */
-    public function __construct (Memjetoptimization_Model_Memjet_Optimization $Memjetoptimization)
+    public function __construct (Memjetoptimization_Model_Memjet_Optimization $memjetOptimization)
     {
-        $this->_Memjetoptimization = $Memjetoptimization;
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $Memjetoptimization->getMemjetoptimizationSetting()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $Memjetoptimization->getMemjetoptimizationSetting()->partsCostPerPage;
-        $this->_fetchAndSortAllDevices($Memjetoptimization->getRmsUpload()->id);
+        $this->_memjetOptimization                              = $memjetOptimization;
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $memjetOptimization->getMemjetoptimizationSetting()->laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $memjetOptimization->getMemjetoptimizationSetting()->partsCostPerPage;
+        $this->_fetchAndSortAllDevices($memjetOptimization->getRmsUpload()->id);
     }
 
     /**
@@ -117,7 +117,7 @@ class Memjetoptimization_ViewModel_Devices
                         }
 
                         // Might as well process the overrides now too
-                        $deviceInstance->processOverrides($this->_Memjetoptimization->getMemjetoptimizationSetting()->adminCostPerPage);
+                        $deviceInstance->processOverrides($this->_memjetOptimization->getMemjetoptimizationSetting()->adminCostPerPage);
                     }
                     else
                     {

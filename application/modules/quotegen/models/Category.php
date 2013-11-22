@@ -64,7 +64,7 @@ class Quotegen_Model_Category extends My_Model_Abstract
     {
         return array(
             "id"          => $this->id,
-            "dealerId"          => $this->dealerId,
+            "dealerId"    => $this->dealerId,
             "name"        => $this->name,
             "description" => $this->description,
         );

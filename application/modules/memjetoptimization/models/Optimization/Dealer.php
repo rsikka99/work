@@ -14,6 +14,7 @@ class Memjetoptimization_Model_Optimization_Dealer extends
 
     /**
      * Gets the array of graphs
+     *
      * @return array
      */
     public function getGraphs ()

@@ -21,9 +21,9 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
         $this->_createMode = $createMode;
         $this->roles       = $roles;
         $this->addPrefixPath(
-            'My_Form_Element',
-            'My/Form/Element',
-            'element'
+             'My_Form_Element',
+                 'My/Form/Element',
+                 'element'
         );
 
         parent::__construct($options);
@@ -137,18 +137,18 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
             /* @var $frozenUntil My_Form_Element_DateTimePicker */
             $frozenUntil = $this->createElement('DateTimePicker', 'frozenUntil');
             $frozenUntil->setJQueryParam('dateFormat', 'yy-mm-dd')
-            ->setJqueryParam('timeFormat', 'hh:mm')
-            ->setJQueryParam('changeYear', 'true')
-            ->setJqueryParam('changeMonth', 'true')
-            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-            ->setLabel('Frozen Until:')
-            ->addValidator($datetimeValidator)
-            ->setRequired(false)
-            ->setDescription('yyyy-mm-dd hh:mm')
-            ->addFilters(array(
-                              'StringTrim',
-                              'StripTags'
-                         ));
+                        ->setJqueryParam('timeFormat', 'hh:mm')
+                        ->setJQueryParam('changeYear', 'true')
+                        ->setJqueryParam('changeMonth', 'true')
+                        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                        ->setLabel('Frozen Until:')
+                        ->addValidator($datetimeValidator)
+                        ->setRequired(false)
+                        ->setDescription('yyyy-mm-dd hh:mm')
+                        ->addFilters(array(
+                                          'StringTrim',
+                                          'StripTags'
+                                     ));
 
             $this->addElement($frozenUntil);
 

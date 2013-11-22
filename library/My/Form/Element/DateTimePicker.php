@@ -3,9 +3,9 @@
 /**
  * Form Element for jQuery DateTimePicker View Helper
  *
- * @author Darius Matulionis
- * @category My
- * @package My_Form
+ * @author     Darius Matulionis
+ * @category   My
+ * @package    My_Form
  * @subpackage Element
  */
 class My_Form_Element_DateTimePicker extends ZendX_JQuery_Form_Element_UiWidget
@@ -26,24 +26,25 @@ class My_Form_Element_DateTimePicker extends ZendX_JQuery_Form_Element_UiWidget
         {
             return $this;
         }
-        
+
         /*
          * For some reason they decided to throw an exception within getDecorators if it doesnt have a decorator that
          * implements UiWidgetElementMarker, which makes it impossible for us to check if its there and add it on if it
          * does not. So instead we catch the error, and then add it on. From there we can manipulate the decorator array
          * so that it is the first one on the stack.
          */
-        if (! $this->_jqueryDecoratorExists())
+        if (!$this->_jqueryDecoratorExists())
         {
             $this->addDecorator('UiWidgetElement');
             $this->removeDecorator('ViewHelper');
-            
+
             $decorators = $this->getDecorators();
-            $uiDeco = array_pop($decorators);
+            $uiDeco     = array_pop($decorators);
             array_unshift($decorators, $uiDeco);
-            
+
             $this->setDecorators($decorators);
         }
+
         return $this;
     }
 
@@ -55,8 +56,8 @@ class My_Form_Element_DateTimePicker extends ZendX_JQuery_Form_Element_UiWidget
     {
         try
         {
-            
-            foreach ( $this->getDecorators() as $decorator )
+
+            foreach ($this->getDecorators() as $decorator)
             {
                 if ($decorator instanceof ZendX_JQuery_Form_Decorator_UiWidgetElementMarker)
                 {
@@ -64,10 +65,10 @@ class My_Form_Element_DateTimePicker extends ZendX_JQuery_Form_Element_UiWidget
                 }
             }
         }
-        catch ( Exception $e )
+        catch (Exception $e)
         {
         }
-        
+
         return false;
     }
 }

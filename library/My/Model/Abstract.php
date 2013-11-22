@@ -14,7 +14,7 @@ abstract class My_Model_Abstract extends stdClass
      * @var array
      */
     protected $_filters;
-    
+
     /**
      * An array of validators that we can use in setters if we wish
      *

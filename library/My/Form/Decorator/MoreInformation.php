@@ -7,8 +7,8 @@ class My_Form_Decorator_MoreInformation extends Zend_Form_Decorator_Abstract
         // Append is default - Prepend
         $placement = $this->getPlacement();
 
-        $text = $this->getOption('text');
-        $output    = "<p class='more_information>" . $text . "</p>";
+        $text   = $this->getOption('text');
+        $output = "<p class='more_information>" . $text . "</p>";
 
         switch ($placement)
         {

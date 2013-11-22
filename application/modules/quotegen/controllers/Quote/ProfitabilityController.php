@@ -77,7 +77,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                                 if ((float)$quoteDevice->buyoutValue !== (float)$residual)
                                 {
                                     $quoteDevice->buyoutValue = $residual;
-                                    $quoteDeviceHasChanges = true;
+                                    $quoteDeviceHasChanges    = true;
                                 }
                             }
 

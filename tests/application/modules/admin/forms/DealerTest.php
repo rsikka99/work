@@ -12,7 +12,7 @@ class Default_Form_DealerTest extends PHPUnit_Framework_TestCase
      */
     public function badData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_dealerTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_dealerTest.xml");
         $data = array();
 
         foreach ($xml->dealer as $dealer)

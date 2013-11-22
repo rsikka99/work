@@ -234,17 +234,17 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
     {
         $devOptTableName = Quotegen_Model_Mapper_DeviceOption::getInstance()->getTableName();
 
-        $sql = "SELECT * FROM {$this->getTableName()} as opt
+        $sql = "SELECT * FROM {$this->getTableName()} AS opt
                 WHERE NOT EXISTS (
-                    SELECT * from {$devOptTableName} AS do
+                    SELECT * FROM {$devOptTableName} AS do
                     WHERE do.masterDeviceId = ? AND do.optionId = opt.id
                 )
                 ORDER BY  opt.name ASC
                 ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql, $id);
+                          ->getAdapter()
+                          ->fetchAll($sql, $id);
 
         $entries = array();
         foreach ($resultSet as $row)
@@ -274,15 +274,15 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
         $devOptTableName    = $deviceOptionMapper->getTableName();
 
-        $sql = "SELECT * FROM {$this->getTableName()} as opt
+        $sql = "SELECT * FROM {$this->getTableName()} AS opt
         		JOIN {$devOptTableName} AS do ON opt.{$this->col_id} = do.optionId
                     WHERE do.masterDeviceId = ? AND do.optionId = opt.id
                 ORDER BY  opt.name ASC
         ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql, $id);
+                          ->getAdapter()
+                          ->fetchAll($sql, $id);
         $entries   = array();
 
         foreach ($resultSet as $row)
@@ -323,15 +323,15 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
     {
         $devOptTableName = Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->getTableName();
 
-        $sql = "SELECT * FROM {$devOptTableName} as dco
-                JOIN {$this->getTableName()} as opt on dco.optionId = opt.id
+        $sql = "SELECT * FROM {$devOptTableName} AS dco
+                JOIN {$this->getTableName()} AS opt ON dco.optionId = opt.id
                 WHERE dco.deviceConfigurationId = ?
                 ORDER BY opt.name ASC
         ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql, $id);
+                          ->getAdapter()
+                          ->fetchAll($sql, $id);
 
         $entries = array();
         foreach ($resultSet as $row)
@@ -372,15 +372,15 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $sql = "SELECT * FROM  {$deviceOptionTableName} AS do
                 JOIN  {$this->getTableName()} AS opt ON do.optionId = opt.id
                 WHERE NOT EXISTS (
-                    SELECT * from {$devOptTableName} AS dco
+                    SELECT * FROM {$devOptTableName} AS dco
                     WHERE dco.deviceConfigurationId = ? AND dco.optionId = opt.id
                 )
                 ORDER BY  opt.name ASC
                 ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql, $id);
+                          ->getAdapter()
+                          ->fetchAll($sql, $id);
 
         $entries = array();
         foreach ($resultSet as $row)
@@ -417,7 +417,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $sql = "SELECT * FROM  {$deviceOptionTableName} AS do
                 JOIN  {$this->getTableName()} AS opt ON do.optionId = opt.id
                 WHERE NOT EXISTS (
-                    SELECT * from {$quoteDeviceConfigurationOptionTableName} AS qdco
+                    SELECT * FROM {$quoteDeviceConfigurationOptionTableName} AS qdco
                     JOIN  {$quoteDeviceOptionTableName} AS qdo ON qdo.id = qdco.quoteDeviceOptionId
                     WHERE qdo.quoteDeviceId = ? AND qdco.optionId = opt.id
                 )
@@ -426,11 +426,11 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         ";
 
         $resultSet = $this->getDbTable()
-            ->getAdapter()
-            ->fetchAll($sql, array(
-                                  $quoteDeviceId,
-                                  $masterDeviceId
-                             ));
+                          ->getAdapter()
+                          ->fetchAll($sql, array(
+                                                $quoteDeviceId,
+                                                $masterDeviceId
+                                           ));
 
         $entries = array();
         foreach ($resultSet as $row)
@@ -460,24 +460,24 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         return $options;
     }
 
-    public function fetchAllOptionsWithDeviceOptions($masterDeviceId, $dealerId,$sortColumn = null, $sortDirection = null, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null)
+    public function fetchAllOptionsWithDeviceOptions ($masterDeviceId, $dealerId, $sortColumn = null, $sortDirection = null, $filterByColumn = null, $filterValue = null, $limit = null, $offset = null)
     {
-        $dbTable                          = $this->getDbTable();
+        $dbTable            = $this->getDbTable();
         $deviceOptionMapper = Quotegen_Model_Mapper_DeviceOption::getInstance();
-        $columns = array('id','name','description','dealerSku','oemSku','cost','CASE WHEN NOT ISNULL(do.masterDeviceId) THEN 1 ELSE 0 END AS assigned');
+        $columns            = array('id', 'name', 'description', 'dealerSku', 'oemSku', 'cost', 'CASE WHEN NOT ISNULL(do.masterDeviceId) THEN 1 ELSE 0 END AS assigned');
 
-        $select = $dbTable->select()->from(array("o" => $this->getTableName()),$columns)
-            ->joinLeft(array("do" => $deviceOptionMapper->getTableName()),"do.{$deviceOptionMapper->col_optionId} = o.{$this->col_id} AND do.{$deviceOptionMapper->col_masterDeviceId} = {$masterDeviceId}",array())
-        ->where("o.{$this->col_dealerId} = {$dealerId}");
+        $select = $dbTable->select()->from(array("o" => $this->getTableName()), $columns)
+                          ->joinLeft(array("do" => $deviceOptionMapper->getTableName()), "do.{$deviceOptionMapper->col_optionId} = o.{$this->col_id} AND do.{$deviceOptionMapper->col_masterDeviceId} = {$masterDeviceId}", array())
+                          ->where("o.{$this->col_dealerId} = {$dealerId}");
         if ($limit > 0)
         {
             $offset = ($offset > 0) ? $offset : null;
             $select->limit($limit, $offset);
         }
-        if($filterByColumn && $filterValue)
+        if ($filterByColumn && $filterValue)
         {
 
-            if($filterByColumn == "option")
+            if ($filterByColumn == "option")
             {
                 $filterByColumn = "name";
             }
@@ -487,6 +487,7 @@ class Quotegen_Model_Mapper_Option extends My_Model_Mapper_Abstract
         $query = $dbTable->getAdapter()->query($select);
 
         $results = $query->fetchAll();
+
         return $results;
     }
 }

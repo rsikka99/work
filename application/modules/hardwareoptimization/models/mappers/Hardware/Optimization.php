@@ -291,12 +291,12 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
             $selectStatement = new Zend_Db_Expr("COUNT(*)");
             $select          = $db->select();
             $select->from(array($this->getTableName()), $selectStatement)
-            ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
-            ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-            ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
-            ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
-            ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-            ->where("md.isLeased = ?", 0);
+                   ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+                   ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+                   ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+                   ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+                   ->where("md.isLeased = ?", 0);
 
             return $db->query($select)->fetchColumn();
         }
@@ -313,13 +313,13 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
             $select = $db->select();
             // Get all the devices, we will limit and offset them once they are sorted by cost.
             $select->from(array($this->getTableName()), $selectStatement)
-            ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
-            ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
-            ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
-            ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
-            ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-            ->where("md.isLeased = ?", 0)
-            ->where("di.isExcluded = ?", 0);
+                   ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
+                   ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
+                   ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
+                   ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+                   ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
+                   ->where("md.isLeased = ?", 0)
+                   ->where("di.isExcluded = ?", 0);
 
             $query = $db->query($select);
 

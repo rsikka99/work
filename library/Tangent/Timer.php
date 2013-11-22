@@ -2,6 +2,7 @@
 
 /**
  * A class to use to profile pages
+ *
  * @author "Lee Robert"
  *
  */
@@ -11,8 +12,9 @@ class Tangent_Timer
 
     /**
      * Sets a milestone for the page timer as well as the group
-     * @param string $name The name of the milestone
-     * @param string $group Optional Group Name
+     *
+     * @param string  $name                  The name of the milestone
+     * @param string  $group                 Optional Group Name
      * @param boolean $includeInPageCategory Include in the default "Page" category. If no group is provided this parameter will be ignored
      */
     public static function Milestone ($name, $group = null, $includeInPageCategory = true)
@@ -20,16 +22,16 @@ class Tangent_Timer
         $time = self::getMicrotimeFloat();
         if ($includeInPageCategory || is_null($group))
         {
-            self::$_milestones ["Page"] [] = array (
-                    $name, 
-                    $time 
+            self::$_milestones ["Page"] [] = array(
+                $name,
+                $time
             );
         }
-        if (! is_null($group))
+        if (!is_null($group))
         {
-            self::$_milestones [$group] [] = array (
-                    $name, 
-                    $time 
+            self::$_milestones [$group] [] = array(
+                $name,
+                $time
             );
         }
     }
@@ -39,7 +41,8 @@ class Tangent_Timer
      */
     static function getMicrotimeFloat ()
     {
-        list ( $utime, $time ) = explode(" ", microtime());
+        list ($utime, $time) = explode(" ", microtime());
+
         return ((float)$utime + (float)$time);
     }
 

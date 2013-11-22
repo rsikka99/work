@@ -37,13 +37,13 @@ class Quotegen_Form_Quote_General extends Twitter_Bootstrap_Form_Vertical
         $maxYear   = $minYear + 4;
         $quoteDate = $this->createElement('DateTimePicker', 'quoteDate');
         $quoteDate->setLabel('Quote Date:')
-        ->setJQueryParam('dateFormat', 'yy-mm-dd')
-        ->setJqueryParam('timeFormat', 'hh:mm')
-        ->setJQueryParam('changeYear', 'true')
-        ->setJqueryParam('changeMonth', 'true')
-        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-        ->addValidator(new My_Validate_DateTime())
-        ->setRequired(false);
+                  ->setJQueryParam('dateFormat', 'yy-mm-dd')
+                  ->setJqueryParam('timeFormat', 'hh:mm')
+                  ->setJQueryParam('changeYear', 'true')
+                  ->setJqueryParam('changeMonth', 'true')
+                  ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                  ->addValidator(new My_Validate_DateTime())
+                  ->setRequired(false);
         $quoteDate->addFilters(array(
                                     'StringTrim',
                                     'StripTags'

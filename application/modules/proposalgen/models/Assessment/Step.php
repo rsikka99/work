@@ -50,7 +50,7 @@ class Proposalgen_Model_Assessment_Step extends My_Model_Abstract
             'controller' => 'fleet',
             'action'     => 'reportsettings'
         ),
-        self::STEP_OPTIMIZATION       => array(
+        self::STEP_OPTIMIZATION         => array(
             'name'       => 'Optimization',
             'group'      => null,
             'controller' => 'optimization',

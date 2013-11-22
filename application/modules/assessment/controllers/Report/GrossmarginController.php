@@ -137,10 +137,10 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $blackToner                = null;
-                $colorToner                = null;
+                $blackToner = null;
+                $colorToner = null;
 
-                $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+                $toners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
 
                 foreach ($toners as $toner)
                 {

@@ -9,12 +9,12 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
     public function init ()
     {
         $this->_helper->contextSwitch()
-            ->addActionContext('get-reports-for-client', array(
-                                                              'xml',
-                                                              'json'
-                                                         ))
-            ->setAutoJsonSerialization(true)
-            ->initContext();
+                      ->addActionContext('get-reports-for-client', array(
+                                                                        'xml',
+                                                                        'json'
+                                                                   ))
+                      ->setAutoJsonSerialization(true)
+                      ->initContext();
 
         parent::init();
     }

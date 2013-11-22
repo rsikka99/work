@@ -58,8 +58,8 @@ class Hardwareoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizonta
 
 
         $this->addElement('text', 'name', array(
-                                               'label' => 'Report Name',
-                                               'append'     => ' ',
+                                               'label'  => 'Report Name',
+                                               'append' => ' ',
                                           ));
         // Hardware Optimization Elements
         $this->addElement('text', 'costThreshold', array(

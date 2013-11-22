@@ -75,7 +75,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     $this->_quote->populate($values);
 
                     // Save the toner ranks
-                    $rankingSetMapper                        = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+                    $rankingSetMapper = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
 
                     if (isset($values['dealerMonochromeRankSetArray']))
                     {
@@ -88,7 +88,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
 
                     if (isset($values['dealerColorRankSetArray']))
                     {
-                        $this->_quote->dealerColorRankSetId      = $rankingSetMapper->saveRankingSets($this->_quote->dealerColorRankSetId, $values['dealerColorRankSetArray']);
+                        $this->_quote->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_quote->dealerColorRankSetId, $values['dealerColorRankSetArray']);
                     }
                     else
                     {

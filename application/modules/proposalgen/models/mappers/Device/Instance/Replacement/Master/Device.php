@@ -5,7 +5,7 @@
 class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends My_Model_Mapper_Abstract
 {
     /**
-    /*
+     * /*
      * Column Definitions
      */
     public $col_deviceInstanceId = 'deviceInstanceId';
@@ -254,8 +254,8 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
 
         $select = $db->select()
-                  ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
-                  ->where("{$this->col_hardwareOptimizationId} = ?", $hardwareOptimizationId);
+                     ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
+                     ->where("{$this->col_hardwareOptimizationId} = ?", $hardwareOptimizationId);
 
         $masterDeviceIds = array();
         foreach ($db->query($select)->fetchAll() as $row)

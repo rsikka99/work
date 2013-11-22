@@ -27,7 +27,7 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
      */
     public function goodHOSettingData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareFormTest.xml");
         $data = array();
         foreach ($xml->setting as $row)
         {
@@ -42,7 +42,7 @@ class Hardwareoptimization_Form_SettingTest extends PHPUnit_Framework_TestCase
      */
     public function badHOSettingData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_hardwareFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_hardwareFormTest.xml");
         $data = array();
         foreach ($xml->setting as $row)
         {

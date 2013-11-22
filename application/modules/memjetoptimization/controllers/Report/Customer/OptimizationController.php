@@ -20,7 +20,7 @@ class Memjetoptimization_Report_Customer_OptimizationController extends Memjetop
             $this->clearCacheForReport();
             $this->view->optimization                                       = $this->getOptimizationViewModel();
             $this->view->availableReports['CustomerOptimization']['active'] = true;
-            $this->view->memjetOptimization                               = $this->_memjetOptimization;
+            $this->view->memjetOptimization                                 = $this->_memjetOptimization;
 
         }
         catch (Exception $e)

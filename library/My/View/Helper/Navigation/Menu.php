@@ -14,20 +14,21 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
      * attributes.
      *
      * @see Zend_View_Helper_Navigation_Menu::renderMenu()
+     *
      * @param Zend_Navigation_Container $container
      *            (Optional) The navigation container.
-     * @param array $options
+     * @param array                     $options
      *            (Optional) Options for controlling rendering.
-     *            
+     *
      * @return string
      */
     public function renderMenu (Zend_Navigation_Container $container = null, array $options = array())
     {
         return $this->applyBootstrapClassesAndIds(parent::renderMenu($container, $options));
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////
-    
+
 
     /**
      * Applies the custom Twitter Bootstrap dropdown class/id attributes where
@@ -35,6 +36,7 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
      *
      * @param string $html
      *            The HTML
+     *
      * @return string
      */
     protected function applyBootstrapClassesAndIds ($html)
@@ -45,25 +47,25 @@ class My_View_Helper_Navigation_Menu extends Zend_View_Helper_Navigation_Menu
         }
         $domDoc = new DOMDocument('1.0', 'utf-8');
         $domDoc->loadHTML($html);
-        
+
         $xpath = new DOMXPath($domDoc);
         /* @var $item DOMNode */
-        foreach ( $xpath->query('//a[starts-with(@class, "dropdown")]') as $item )
+        foreach ($xpath->query('//a[starts-with(@class, "dropdown")]') as $item)
         {
-            
+
             $result = $xpath->query('../ul', $item);
-            
+
             if ($result->length === 1)
             {
                 $ul = $result->item(0);
                 $ul->setAttribute('class', 'dropdown-menu');
-                
+
                 $item->parentNode->setAttribute('id', substr($item->getAttribute('href'), 1));
                 $item->parentNode->setAttribute('class', 'dropdown ' . $item->parentNode->getAttribute('class'));
                 $item->setAttribute('href', '#');
-                
+
                 $item->setAttribute('data-toggle', 'dropdown');
-                
+
                 if (($existingClass = $item->getAttribute('class')) !== '')
                 {
                     $item->setAttribute('class', $item->getAttribute('class') . ' dropdown-toggle');

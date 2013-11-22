@@ -15,7 +15,7 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
     /**
      * @var Memjetoptimization_Model_Memjet_Optimization|int
      */
-    protected $_Memjetoptimization;
+    protected $_memjetOptimization;
 
     /**
      * Devices that have replacement devices attached to them
@@ -177,12 +177,12 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
     /**
      * Constructor
      *
-     * @param int|Memjetoptimization_Model_Memjet_Optimization $Memjetoptimization
+     * @param int|Memjetoptimization_Model_Memjet_Optimization $memjetOptimization
      */
-    public function __construct ($Memjetoptimization)
+    public function __construct ($memjetOptimization)
     {
-        $this->_optimization         = new Memjetoptimization_ViewModel_Optimization($Memjetoptimization);
-        $this->_Memjetoptimization = $Memjetoptimization;
+        $this->_optimization       = new Memjetoptimization_ViewModel_Optimization($memjetOptimization);
+        $this->_memjetOptimization = $memjetOptimization;
 
         // Set up the arrays of devices to be produced
         $retiredDevices                      = array();
@@ -252,7 +252,7 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
             // Get the age rank of the device instance
             $ageRank = Tangent_Functions::getValueFromRangeStepTable($deviceInstance->getMasterDevice()->getAge(), self::$ageRankTable, false);
             // Get the replacement device of the device instance if there is one
-            $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($Memjetoptimization->id);
+            $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($memjetOptimization->id);
             if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 // Assigned the optimized age rank if replacement device exists
@@ -410,7 +410,7 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
         {
             if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
-                $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_Memjetoptimization->id);
+                $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_memjetOptimization->id);
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
                 {
                     $masterDevices [] = $replacementDevice;

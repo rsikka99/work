@@ -23,12 +23,13 @@ class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
     /**
      * Display Flash Messages.
      *
-     * @param  string $key Message level for string messages
+     * @param  string $key      Message level for string messages
      * @param  string $template Format string for message output
+     *
      * @return string Flash messages formatted for output
      */
-    public function flashMessenger($key = 'warning',
-                                   $template='<div class="%s">%s</div>')
+    public function flashMessenger ($key = 'warning',
+                                    $template = '<div class="%s">%s</div>')
     {
         $flashMessenger = $this->_getFlashMessenger();
 
@@ -36,7 +37,8 @@ class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
         $messages = $flashMessenger->getMessages();
 
         //add any messages from this request
-        if ($flashMessenger->hasCurrentMessages()) {
+        if ($flashMessenger->hasCurrentMessages())
+        {
             $messages = array_merge(
                 $messages,
                 $flashMessenger->getCurrentMessages()
@@ -46,15 +48,16 @@ class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
         }
 
         //initialise return string
-        $output ='';
+        $output = '';
 
         //process messages
         foreach ($messages as $message)
         {
-            if (is_array($message)) {
-                list($key,$message) = each($message);
+            if (is_array($message))
+            {
+                list($key, $message) = each($message);
             }
-            $output .= sprintf($template,$key,$message);
+            $output .= sprintf($template, $key, $message);
         }
 
         return $output;
@@ -65,13 +68,15 @@ class Tangent_View_Helper_FlashMessenger extends Zend_View_Helper_Abstract
      *
      * @return Zend_Controller_Action_Helper_FlashMessenger
      */
-    public function _getFlashMessenger()
+    public function _getFlashMessenger ()
     {
-        if (null === $this->_flashMessenger) {
+        if (null === $this->_flashMessenger)
+        {
             $this->_flashMessenger =
                 Zend_Controller_Action_HelperBroker::getStaticHelper(
-                    'FlashMessenger');
+                                                   'FlashMessenger');
         }
+
         return $this->_flashMessenger;
     }
 }

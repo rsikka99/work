@@ -59,7 +59,7 @@ class Preferences_Service_QuoteSetting
                 $this->_form->getElement('pageCoverageColor')->setDescription($populateSettings['pageCoverageColor']);
                 $this->_form->getElement('deviceMargin')->setDescription($populateSettings['deviceMargin']);
                 $this->_form->getElement('pageMargin')->setDescription($populateSettings['pageMargin']);
-                $this->_form->getElement('adminCostPerPage')->setDescription(number_Format($populateSettings["adminCostPerPage"],4));
+                $this->_form->getElement('adminCostPerPage')->setDescription(number_Format($populateSettings["adminCostPerPage"], 4));
 
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings->toArray();

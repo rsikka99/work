@@ -42,9 +42,9 @@ class Hardwareoptimization_Service_Setting
      */
     public function __construct ($defaultSettings, $populateSettings, $hardwareOptimizationId)
     {
-        $this->_hardwareOptimization          = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
-        $this->_hardwareOptimizationSettingss = $defaultSettings;
-        $this->_populateSettings              = $populateSettings;
+        $this->_hardwareOptimization         = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
+        $this->_hardwareOptimizationSettings = $defaultSettings;
+        $this->_populateSettings             = $populateSettings;
     }
 
     /**
@@ -74,7 +74,7 @@ class Hardwareoptimization_Service_Setting
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
-            $hardwareSettingsArray = $this->_hardwareOptimizationSettingss->toArray();
+            $hardwareSettingsArray = $this->_hardwareOptimizationSettings->toArray();
 
             foreach ($hardwareSettingsArray as $key => $value)
             {
@@ -84,7 +84,7 @@ class Hardwareoptimization_Service_Setting
                 }
             }
 
-            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $hardwareSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettingss->getTonerRankSets()));
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $hardwareSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_hardwareOptimizationSettings->getTonerRankSets()));
             $this->_form->populate(array('name' => $this->_hardwareOptimization->name));
         }
 
@@ -143,38 +143,38 @@ class Hardwareoptimization_Service_Setting
 
             if (isset($validData['replacementColorRankSetArray']))
             {
-                $this->_hardwareOptimizationSettings->replacementColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->replacementColorRankSetId, $validData['replacementColorRankSetArray']);
+                $this->_hardwareOptimizationSettings->replacementColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettings->replacementColorRankSetId, $validData['replacementColorRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->replacementColorRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettings->replacementColorRankSetId);
             }
 
             if (isset($validData['replacementMonochromeRankSetArray']))
             {
-                $this->_hardwareOptimizationSettings->replacementMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->replacementMonochromeRankSetId, $validData['replacementMonochromeRankSetArray']);
+                $this->_hardwareOptimizationSettings->replacementMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettings->replacementMonochromeRankSetId, $validData['replacementMonochromeRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->replacementMonochromeRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettings->replacementMonochromeRankSetId);
             }
 
             if (isset($validData['dealerColorRankSetArray']))
             {
-                $this->_hardwareOptimizationSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
+                $this->_hardwareOptimizationSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettings->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->dealerColorRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettings->dealerColorRankSetId);
             }
 
             if (isset($validData['dealerMonochromeRankSetArray']))
             {
-                $this->_hardwareOptimizationSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettingss->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
+                $this->_hardwareOptimizationSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_hardwareOptimizationSettings->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettingss->dealerMonochromeRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_hardwareOptimizationSettings->dealerMonochromeRankSetId);
             }
 
             $this->_populateSettings->replacementMonochromeRankSetId = $this->_hardwareOptimizationSettings->replacementMonochromeRankSetId;
@@ -184,7 +184,7 @@ class Hardwareoptimization_Service_Setting
 
             $this->_hardwareOptimizationSettings->populate($this->_populateSettings->toArray());
             $this->_hardwareOptimizationSettings->populate($validData);
-            $this->_hardwareOptimizationSettings->id = $this->_hardwareOptimizationSettingss->id;
+            $this->_hardwareOptimizationSettings->id = $this->_hardwareOptimizationSettings->id;
 
             Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($this->_hardwareOptimizationSettings);
 

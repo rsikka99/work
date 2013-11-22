@@ -74,7 +74,7 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_dealerId} = ?" => $primaryKey[0],
+                                                                "{$this->col_dealerId} = ?"       => $primaryKey[0],
                                                                 "{$this->col_masterDeviceId} = ?" => $primaryKey[1]
                                                            ));
 
@@ -239,31 +239,31 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
      */
     public function fetchCheapestForEachCategory ($dealerId)
     {
-        $replacementDevices                                                             = array();
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]       = $this->fetch(array(
-                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW,
-                                                                                                       ), array(
-                                                                                                               "{$this->col_monthlyRate} ASC"
-                                                                                                          ));
+        $replacementDevices                                                              = array();
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]        = $this->fetch(array(
+                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
+                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW,
+                                                                                                        ), array(
+                                                                                                                "{$this->col_monthlyRate} ASC"
+                                                                                                           ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]    = $this->fetch(array(
-                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP
-                                                                                                       ), array(
-                                                                                                               "{$this->col_monthlyRate} ASC"
-                                                                                                          ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]    = $this->fetch(array(
-                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
-                                                                                                       ), array(
-                                                                                                               "{$this->col_monthlyRate} ASC"
-                                                                                                          ));
+                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
+                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP
+                                                                                                        ), array(
+                                                                                                                "{$this->col_monthlyRate} ASC"
+                                                                                                           ));
+        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]     = $this->fetch(array(
+                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
+                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
+                                                                                                        ), array(
+                                                                                                                "{$this->col_monthlyRate} ASC"
+                                                                                                           ));
         $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP] = $this->fetch(array(
-                                                                                                            "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP
-                                                                                                       ), array(
-                                                                                                               "{$this->col_monthlyRate} ASC"
-                                                                                                          ));
+                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
+                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP
+                                                                                                        ), array(
+                                                                                                                "{$this->col_monthlyRate} ASC"
+                                                                                                           ));
 
         return $replacementDevices;
     }

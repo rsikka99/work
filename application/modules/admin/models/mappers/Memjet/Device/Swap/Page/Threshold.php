@@ -74,7 +74,7 @@ class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold extends My_Model_Mapp
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
                                                                 "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
-                                                                "{$this->col_dealerId} = ?" => $primaryKey [1],
+                                                                "{$this->col_dealerId} = ?"       => $primaryKey [1],
                                                            ));
 
         // Save the object into the cache
@@ -98,7 +98,7 @@ class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold extends My_Model_Mapp
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object->tonerId,
-                "{$this->col_dealerId} = ?" => $object->dealerId,
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
 
             );
         }
@@ -106,7 +106,7 @@ class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold extends My_Model_Mapp
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object[0],
-                "{$this->col_dealerId} = ?" => $object[1],
+                "{$this->col_dealerId} = ?"       => $object[1],
             );
         }
 
@@ -221,17 +221,17 @@ class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold extends My_Model_Mapp
     {
         return array(
             "{$this->col_masterDeviceId} = ?" => $id [0],
-            "{$this->col_dealerId} = ?" => $id [1],
+            "{$this->col_dealerId} = ?"       => $id [1],
         );
     }
 
     /**
-     * @param $tonerId int
+     * @param $tonerId  int
      * @param $dealerId int
      *
      * @return Admin_Model_Memjet_Device_Swap_Page_Threshold
      */
-    public function findTonerAttributeByTonerId($tonerId, $dealerId)
+    public function findTonerAttributeByTonerId ($tonerId, $dealerId)
     {
         return $this->fetch(array("{$this->col_masterDeviceId} = ?" => $tonerId, "{$this->col_dealerId} =  ?" => $dealerId));
     }

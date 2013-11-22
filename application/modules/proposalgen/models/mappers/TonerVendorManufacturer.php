@@ -247,9 +247,9 @@ class Proposalgen_Model_Mapper_TonerVendorManufacturer extends My_Model_Mapper_A
      */
     public function updateTonerVendorByManufacturerId ($manufacturerId)
     {
-        $db  = $this->getDbTable()->getDefaultAdapter();
-        $sql = $db->quoteInto("CALL updateTonerVendorByManufacturerId(?)", $manufacturerId, 'INTEGER');
-        $query   = $db->query($sql);
+        $db    = $this->getDbTable()->getDefaultAdapter();
+        $sql   = $db->quoteInto("CALL updateTonerVendorByManufacturerId(?)", $manufacturerId, 'INTEGER');
+        $query = $db->query($sql);
         $query->execute();
     }
 }

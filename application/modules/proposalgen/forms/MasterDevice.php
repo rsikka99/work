@@ -210,13 +210,13 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launch_date');
 
         $launchDate->setJQueryParam('dateFormat', 'yy-mm-dd')
-            ->setJqueryParam('timeFormat', 'hh:mm')
-            ->setJQueryParam('changeYear', 'true')
-            ->setJqueryParam('changeMonth', 'true')
-            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-            ->setDescription('yyyy-mm-dd')
-            ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-            ->setRequired(true)->setLabel('Launch Date:');
+                   ->setJqueryParam('timeFormat', 'hh:mm')
+                   ->setJQueryParam('changeYear', 'true')
+                   ->setJqueryParam('changeMonth', 'true')
+                   ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                   ->setDescription('yyyy-mm-dd')
+                   ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
+                   ->setRequired(true)->setLabel('Launch Date:');
         $launchDate->addFilters(array(
                                      'StringTrim',
                                      'StripTags'
@@ -309,13 +309,13 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
                                                              'allowEmpty' => false,
                                                              'validators' => array(
                                                                  new Tangent_Validate_FieldDependsOnValue('is_leased', '1', array(
-                                                                                                                                new Zend_Validate_NotEmpty(),
-                                                                                                                                new Zend_Validate_Int(),
-                                                                                                                                new Zend_Validate_Between(array(
-                                                                                                                                                               'min' => 0,
-                                                                                                                                                               'max' => 1000
-                                                                                                                                                          ))
-                                                                                                                           ))
+                                                                                                                                 new Zend_Validate_NotEmpty(),
+                                                                                                                                 new Zend_Validate_Int(),
+                                                                                                                                 new Zend_Validate_Between(array(
+                                                                                                                                                                'min' => 0,
+                                                                                                                                                                'max' => 1000
+                                                                                                                                                           ))
+                                                                                                                            ))
                                                              )
                                                         ));
 

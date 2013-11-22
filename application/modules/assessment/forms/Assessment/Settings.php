@@ -75,15 +75,15 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $report_date = new ZendX_JQuery_Form_Element_DatePicker('reportDate');
         //$report_date = new My_Form_Element_DateTimePicker('reportDate');
         $report_date->setLabel('Report Date')
-        ->setJQueryParam('dateFormat', 'mm/dd/yy')
-        ->setJQueryParam('changeYear', 'true')
-        ->setJqueryParam('changeMonth', 'true')
-        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-        ->addValidator($datetimeValidator)
-        ->setAttrib('placeholder', 'mm/dd/yyyy')
-        ->setAttrib('class', 'span2')
-        ->setAttrib('style', 'text-align: right')
-        ->setRequired(true);
+                    ->setJQueryParam('dateFormat', 'mm/dd/yy')
+                    ->setJQueryParam('changeYear', 'true')
+                    ->setJqueryParam('changeMonth', 'true')
+                    ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                    ->addValidator($datetimeValidator)
+                    ->setAttrib('placeholder', 'mm/dd/yyyy')
+                    ->setAttrib('class', 'span2')
+                    ->setAttrib('style', 'text-align: right')
+                    ->setRequired(true);
         $report_date->addFilters(array(
                                       'StringTrim',
                                       'StripTags'
@@ -95,9 +95,9 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $report_name = new Zend_Form_Element_Text('name');
         $report_name->setLabel('Report Name')
-        ->setAttrib('data-defaultvalue', "assessment" . date('Ymd'))
-        ->setAttrib('class', 'span2')
-        ->setAttrib('style', 'text-align: right');
+                    ->setAttrib('data-defaultvalue', "assessment" . date('Ymd'))
+                    ->setAttrib('class', 'span2')
+                    ->setAttrib('style', 'text-align: right');
         $report_name->addFilters(array(
                                       'StringTrim',
                                       'StripTags'
@@ -112,18 +112,18 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Page Pricing Margin
         $pricing_margin = new Zend_Form_Element_Text('assessmentReportMargin');
         $pricing_margin->setLabel('Pricing Margin')
-        ->addValidator(new Zend_Validate_Float())
-        ->addValidator(new Zend_Validate_Between(array(
-                                                      'min' => 0,
-                                                      'max' => 99
-                                                 )))
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('%')
-        ->setValue('20')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->assessmentReportMargin, 2))
-        ->setAttrib('inputappend', '%');
+                       ->addValidator(new Zend_Validate_Float())
+                       ->addValidator(new Zend_Validate_Between(array(
+                                                                     'min' => 0,
+                                                                     'max' => 99
+                                                                )))
+                       ->setAttrib('class', 'span2')
+                       ->setAttrib('maxlength', 10)
+                       ->setAttrib('style', 'text-align: right')
+                       ->setDescription('%')
+                       ->setValue('20')
+                       ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->assessmentReportMargin, 2))
+                       ->setAttrib('inputappend', '%');
         $pricing_margin->getValidator('Float')->setMessage('Please enter a number.');
         $pricing_margin->getValidator('Between')->setMessage('Must be greater than 0 and less than 100.');
 
@@ -133,17 +133,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Average Monthly Lease Payment
         $element = new Zend_Form_Element_Text('monthlyLeasePayment');
         $element->setLabel('Average Monthly Lease Payment')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->monthlyLeasePayment, 2))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / device')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->monthlyLeasePayment, 2))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / device')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -152,17 +152,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Default Printer Cost
         $element = new Zend_Form_Element_Text('defaultPrinterCost');
         $element->setLabel('Default Printer Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->defaultPrinterCost, 2))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / device')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->defaultPrinterCost, 2))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / device')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -171,17 +171,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Leased Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('leasedBwCostPerPage');
         $element->setLabel('Leased Monochrome Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedBwCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedBwCostPerPage, 4))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / page')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -190,17 +190,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Leased Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('leasedColorCostPerPage');
         $element->setLabel('Leased Color Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedColorCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->leasedColorCostPerPage, 4))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / page')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -209,17 +209,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // MPS Cost Per Page (Monochrome)
         $element = new Zend_Form_Element_Text('mpsBwCostPerPage');
         $element->setLabel('MPS Monochrome Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsBwCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsBwCostPerPage, 4))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / page')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -228,19 +228,19 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // MPS Cost Per Page (Color)
         $element = new Zend_Form_Element_Text('mpsColorCostPerPage');
         $element->setLabel('MPS Color Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('page', 'page')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setAttrib('id', 'mps_color_per_page')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsColorCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('page', 'page')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setAttrib('id', 'mps_color_per_page')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->mpsColorCostPerPage, 4))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / page')
+                ->addValidator('greaterThan', true, array(
+                                                         'min' => 0
+                                                    ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -249,19 +249,19 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Energy Cost ($/KW/H)
         $element = new Zend_Form_Element_Text('kilowattsPerHour');
         $element->setLabel('Energy Cost')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / KWh')
-        ->addValidator('between', true, array(
-                                             'inclusive' => true,
-                                             'min'       => 0,
-                                             'max'       => 25
-                                        ));
+                ->addValidator(new Zend_Validate_Float())
+                ->setAttrib('class', 'span2')
+                ->setAttrib('maxlength', 10)
+                ->setAttrib('style', 'text-align: right')
+                ->setDescription('$')
+                ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->kilowattsPerHour, 2))
+                ->setAttrib('inputprepend', '$')
+                ->setAttrib('inputappend', ' / KWh')
+                ->addValidator('between', true, array(
+                                                     'inclusive' => true,
+                                                     'min'       => 0,
+                                                     'max'       => 25
+                                                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -269,13 +269,13 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $customer_monochrome_vendor = new Zend_Form_Element_Multiselect('customerMonochromeRankSetArray');
         $customer_monochrome_vendor->setAttrib('class', 'tonerMultiselect')
-        ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
+                                   ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
         $this->addElement($customer_monochrome_vendor);
         $customerGroup->elements [] = $customer_monochrome_vendor;
 
         $customer_color_vendor = new Zend_Form_Element_Multiselect('customerColorRankSetArray');
         $customer_color_vendor->setAttrib('class', 'tonerMultiselect')
-        ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
+                              ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
         $this->addElement($customer_color_vendor);
         $customerGroup->elements [] = $customer_color_vendor;
 
@@ -286,17 +286,17 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Actual Page Coverage (Monochrome)
         $actual_page_coverage = new Zend_Form_Element_Text('actualPageCoverageMono');
         $actual_page_coverage->setLabel('Page Coverage Monochrome')
-        ->addValidator(new Zend_Validate_Float())
-        ->addValidator(new Zend_Validate_Between(0, 100), false)
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ))
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('%')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
-        ->setAttrib('inputappend', '%');
+                             ->addValidator(new Zend_Validate_Float())
+                             ->addValidator(new Zend_Validate_Between(0, 100), false)
+                             ->addValidator('greaterThan', true, array(
+                                                                      'min' => 0
+                                                                 ))
+                             ->setAttrib('class', 'span2')
+                             ->setAttrib('maxlength', 10)
+                             ->setAttrib('style', 'text-align: right')
+                             ->setDescription('%')
+                             ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageMono, 2))
+                             ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage);
         $dealerGroup->elements [] = $actual_page_coverage;
@@ -304,18 +304,18 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Actual Page Coverage (Color)
         $actual_page_coverage_color = new Zend_Form_Element_Text('actualPageCoverageColor');
         $actual_page_coverage_color->setLabel('Page Coverage Color')
-        ->addValidator(new Zend_Validate_Float())
-        ->addValidator(new Zend_Validate_Between(0, 100), false)
-        ->addValidator('greaterThan', true, array(
-                                                 'min' => 0
-                                            ))
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setAttrib('id', 'actualPageCoverageColor')
-        ->setDescription('%')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
-        ->setAttrib('inputappend', '%');
+                                   ->addValidator(new Zend_Validate_Float())
+                                   ->addValidator(new Zend_Validate_Between(0, 100), false)
+                                   ->addValidator('greaterThan', true, array(
+                                                                            'min' => 0
+                                                                       ))
+                                   ->setAttrib('class', 'span2')
+                                   ->setAttrib('maxlength', 10)
+                                   ->setAttrib('style', 'text-align: right')
+                                   ->setAttrib('id', 'actualPageCoverageColor')
+                                   ->setDescription('%')
+                                   ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->actualPageCoverageColor, 2))
+                                   ->setAttrib('inputappend', '%');
 
         $this->addElement($actual_page_coverage_color);
         $dealerGroup->elements [] = $actual_page_coverage_color;
@@ -323,19 +323,19 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
         $admin_charge->setLabel('Admin Cost Per Page')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('between', true, array(
-                                             'inclusive' => true,
-                                             'min'       => 0,
-                                             'max'       => 5
-                                        ));
+                     ->addValidator(new Zend_Validate_Float())
+                     ->setAttrib('class', 'span2')
+                     ->setAttrib('maxlength', 10)
+                     ->setAttrib('style', 'text-align: right')
+                     ->setDescription('$')
+                     ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->adminCostPerPage, 4))
+                     ->setAttrib('inputprepend', '$')
+                     ->setAttrib('inputappend', ' / page')
+                     ->addValidator('between', true, array(
+                                                          'inclusive' => true,
+                                                          'min'       => 0,
+                                                          'max'       => 5
+                                                     ));
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($admin_charge);
@@ -344,19 +344,19 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Service Cost Per Page
         $labor_cost = new Zend_Form_Element_Text('laborCostPerPage');
         $labor_cost->setLabel('Labor Cost Per Page')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('between', true, array(
-                                             'inclusive' => true,
-                                             'min'       => 0,
-                                             'max'       => 5
-                                        ));
+                   ->addValidator(new Zend_Validate_Float())
+                   ->setAttrib('class', 'span2')
+                   ->setAttrib('maxlength', 10)
+                   ->setAttrib('style', 'text-align: right')
+                   ->setDescription('$')
+                   ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->laborCostPerPage, 4))
+                   ->setAttrib('inputprepend', '$')
+                   ->setAttrib('inputappend', ' / page')
+                   ->addValidator('between', true, array(
+                                                        'inclusive' => true,
+                                                        'min'       => 0,
+                                                        'max'       => 5
+                                                   ));
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($labor_cost);
@@ -365,19 +365,19 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         // Service Cost Per Page
         $parts_cost = new Zend_Form_Element_Text('partsCostPerPage');
         $parts_cost->setLabel('Parts Cost Per Page')
-        ->addValidator(new Zend_Validate_Float())
-        ->setAttrib('class', 'span2')
-        ->setAttrib('maxlength', 10)
-        ->setAttrib('style', 'text-align: right')
-        ->setDescription('$')
-        ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
-        ->setAttrib('inputprepend', '$')
-        ->setAttrib('inputappend', ' / page')
-        ->addValidator('between', true, array(
-                                             'inclusive' => true,
-                                             'min'       => 0,
-                                             'max'       => 5
-                                        ));
+                   ->addValidator(new Zend_Validate_Float())
+                   ->setAttrib('class', 'span2')
+                   ->setAttrib('maxlength', 10)
+                   ->setAttrib('style', 'text-align: right')
+                   ->setDescription('$')
+                   ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->partsCostPerPage, 4))
+                   ->setAttrib('inputprepend', '$')
+                   ->setAttrib('inputappend', ' / page')
+                   ->addValidator('between', true, array(
+                                                        'inclusive' => true,
+                                                        'min'       => 0,
+                                                        'max'       => 5
+                                                   ));
 
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 
@@ -387,13 +387,13 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $dealer_monochrome_vendor = new Zend_Form_Element_Multiselect('dealerMonochromeRankSetArray');
         $dealer_monochrome_vendor->setAttrib('class', 'tonerMultiselect')
-        ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
+                                 ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
         $this->addElement($dealer_monochrome_vendor);
         $dealerGroup->elements [] = $dealer_monochrome_vendor;
 
         $dealer_color_vendor = new Zend_Form_Element_Multiselect('dealerColorRankSetArray');
         $dealer_color_vendor->setAttrib('class', 'tonerMultiselect')
-        ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
+                            ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());
         $this->addElement($dealer_color_vendor);
         $dealerGroup->elements [] = $dealer_color_vendor;
 

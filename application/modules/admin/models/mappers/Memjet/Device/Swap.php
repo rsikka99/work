@@ -298,10 +298,10 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
             $db       = Zend_Db_Table::getDefaultAdapter();
             $select   = $db->select();
             $select->from(array("mds" => $this->getTableName()), $caseStatement)
-                ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "mds.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-                ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
-                ->joinLeft(array("mdspt" => $memjetDeviceSwapsPageThresholdMapper->getTableName()), "mds.{$this->col_masterDeviceId} = mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_masterDeviceId} AND mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_dealerId} = {$dealerId}", $memjetDeviceSwapPageThresholdColumns)
-                ->limit($returnLimit, $offset)
+                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "mds.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                   ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+                   ->joinLeft(array("mdspt" => $memjetDeviceSwapsPageThresholdMapper->getTableName()), "mds.{$this->col_masterDeviceId} = mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_masterDeviceId} AND mdspt.{$memjetDeviceSwapsPageThresholdMapper->col_dealerId} = {$dealerId}", $memjetDeviceSwapPageThresholdColumns)
+                   ->limit($returnLimit, $offset)
                    ->order($sortOrder);
 
             $query = $db->query($select);

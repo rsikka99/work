@@ -10,7 +10,7 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         $this->setMethod("POST");
         $this->_addClassNames('form-center-actions');
         $this->setAttrib('id', 'deviceSwap');
-        $isAdmin = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $isAdmin             = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         $masterDeviceElement = $this->createElement("text", "masterDeviceId", array(
                                                                                    "required" => true,
                                                                                    "label"    => "Device Name",

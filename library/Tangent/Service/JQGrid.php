@@ -464,6 +464,6 @@ class Tangent_Service_JQGrid
      */
     public function hasColumns ()
     {
-        return (!empty($this->_sortColumn)&& !empty($this->_sortDirection));
+        return (!empty($this->_sortColumn) && !empty($this->_sortDirection));
     }
 }

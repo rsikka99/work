@@ -9,7 +9,7 @@ class Proposalgen_Form_MasterDeviceManagement_Delete extends Twitter_Bootstrap_F
     /**
      * @param null $options
      */
-    public function __construct ( $options = null)
+    public function __construct ($options = null)
     {
         parent::__construct($options);
     }
@@ -23,19 +23,19 @@ class Proposalgen_Form_MasterDeviceManagement_Delete extends Twitter_Bootstrap_F
 
         // Add the cancel button
         $cancel = $this->createElement('button', 'cancel', array(
-                                                   'label'  => 'Cancel',
-                                                   'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_INVERSE,
-                                                   'data-dismiss' => 'modal'
+                                                                'label'        => 'Cancel',
+                                                                'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_INVERSE,
+                                                                'data-dismiss' => 'modal'
                                                            ));
 
         $delete = $this->createElement('button', 'delete', array(
-                                                                'label'  => 'Delete',
-                                                                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_DANGER,
+                                                                'label'        => 'Delete',
+                                                                'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_DANGER,
                                                                 'data-dismiss' => 'modal'
                                                            ));
         $this->addElement('hidden', 'deleteId', array());
         $this->addElement('hidden', 'deleteColorId', array());
         $this->addElement('hidden', 'deleteFormName', array());
-        $this->addElements(array($cancel,$delete));
+        $this->addElements(array($cancel, $delete));
     }
 }

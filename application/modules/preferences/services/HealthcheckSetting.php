@@ -62,10 +62,10 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("leasedColorCostPerPage")->setDescription($populateSettings["leasedColorCostPerPage"]);
                 $this->_form->getElement("mpsBwCostPerPage")->setDescription($populateSettings["mpsBwCostPerPage"]);
                 $this->_form->getElement("mpsColorCostPerPage")->setDescription($populateSettings["mpsColorCostPerPage"]);
-                $this->_form->getElement("kilowattsPerHour")->setDescription(number_Format($populateSettings["kilowattsPerHour"],4));
-                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"],4));
-                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"],4));
-                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"],4));
+                $this->_form->getElement("kilowattsPerHour")->setDescription(number_Format($populateSettings["kilowattsPerHour"], 4));
+                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"], 4));
+                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"], 4));
+                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"], 4));
                 $this->_form->getElement("averageItHourlyRate")->setDescription($populateSettings["averageItHourlyRate"]);
                 $this->_form->getElement("hoursSpentOnIt")->setDescription(($populateSettings["hoursSpentOnIt"] ? $populateSettings["hoursSpentOnIt"] : "15 minutes per week per printer"));
                 $this->_form->getElement("costOfLabor")->setDescription(($populateSettings["costOfLabor"] ? $populateSettings["costOfLabor"] : "$200 per printer"));

@@ -28,8 +28,8 @@ class My_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
      * IMPORTANT:  Setting the max precision too small will cause the number to be rounded off.
      *
      *
-     * @param  float  $number       The decimal number to be formatted
-     * @param  int    $maxPrecision The maximum number of precision/digits to be displayed to the right of the decimal point.
+     * @param  float $number       The decimal number to be formatted
+     * @param  int   $maxPrecision The maximum number of precision/digits to be displayed to the right of the decimal point.
      *
      * @return string Formatted number converted to a string for display
      */
@@ -59,7 +59,7 @@ class My_View_Helper_NumberFormat extends Zend_View_Helper_Abstract
         {
             $this->_numberFormat =
                 Zend_Controller_Action_HelperBroker::getStaticHelper(
-                    'NumberFormat');
+                                                   'NumberFormat');
         }
 
         return $this->_numberFormat;

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Preferences_Service_MemjetoptimizationSetting
+ * Class Preferences_Service_Memjet_OptimizationSetting
  */
-class Preferences_Service_MemjetoptimizationSetting
+class Preferences_Service_Memjet_OptimizationSetting
 {
     /**
      * Default report settings and survey settings combined into an array
@@ -15,7 +15,7 @@ class Preferences_Service_MemjetoptimizationSetting
     /**
      * Gets the report setting form.
      *
-     * @var Preferences_Form_MemjetoptimizationSetting
+     * @var Preferences_Form_Memjet_OptimizationSetting
      */
     protected $_form;
 
@@ -39,13 +39,13 @@ class Preferences_Service_MemjetoptimizationSetting
      *
      * @param $populateSettings array
      *
-     * @return Preferences_Form_MemjetoptimizationSetting
+     * @return Preferences_Form_Memjet_OptimizationSetting
      */
     public function getFormWithDefaults ($populateSettings)
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Preferences_Form_MemjetoptimizationSetting();
+            $this->_form = new Preferences_Form_Memjet_OptimizationSetting();
 
             // User form will populate the description with defaults
             if (is_array($this->_defaultSettings->toArray()))
@@ -53,9 +53,9 @@ class Preferences_Service_MemjetoptimizationSetting
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
                 $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
-                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"],4));
-                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"],4));
-                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"],4));
+                $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"], 4));
+                $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"], 4));
+                $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"], 4));
                 $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
                 $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
                 // Re-load the settings into report settings
@@ -74,13 +74,13 @@ class Preferences_Service_MemjetoptimizationSetting
     /**
      * Gets the report setting form
      *
-     * @return Preferences_Form_MemjetoptimizationSetting
+     * @return Preferences_Form_Memjet_OptimizationSetting
      */
     public function getForm ()
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Preferences_Form_MemjetoptimizationSetting();
+            $this->_form = new Preferences_Form_Memjet_OptimizationSetting();
 
             if ($this->_defaultSettings)
             {
@@ -164,7 +164,7 @@ class Preferences_Service_MemjetoptimizationSetting
             }
 
             $memjetOptimizationSetting = new Memjetoptimization_Model_Memjet_Optimization_Setting();
-            $rankingSetMapper            = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
+            $rankingSetMapper          = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
 
             if (isset($validData['replacementColorRankSetArray']))
             {

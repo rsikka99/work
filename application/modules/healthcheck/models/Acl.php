@@ -6,7 +6,7 @@ class Healthcheck_Model_Acl
 {
 
 
-    const RESOURCE_HEALTHCHECK_INDEX_WILDCARD = "healthcheck__index__%";
+    const RESOURCE_HEALTHCHECK_INDEX_WILDCARD     = "healthcheck__index__%";
     const RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK = "healthcheck__report_healthcheck__%";
 
 

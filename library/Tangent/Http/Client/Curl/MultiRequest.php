@@ -249,7 +249,7 @@ class Tangent_Http_Client_Curl_MultiRequest
     /**
      * Returns cURL handle.
      *
-     * @param $new=false Flag if a new handle should be created
+     * @param $new =false Flag if a new handle should be created
      *
      * @return Resource of cURL Handle
      */

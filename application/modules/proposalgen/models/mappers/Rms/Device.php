@@ -304,11 +304,11 @@ class Proposalgen_Model_Mapper_Rms_Device extends My_Model_Mapper_Abstract
          * Here we create our select statement
          */
         $zendDbSelect = $db->select()
-            ->from($rmsDevicesTableName, $rmsDeviceColumns)
-            ->join($rmsProvidersTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsProvidersTableName}.`id`", $rmsProviderColumns)
-            ->joinLeft($rmsMasterMatchupsTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsMasterMatchupsTableName}.`rmsProviderId` AND {$rmsDevicesTableName}.`rmsModelId` = {$rmsMasterMatchupsTableName}.`rmsModelId`", $rmsMasterMatchupColumns)
-            ->joinLeft($masterDevicesTableName, "{$rmsMasterMatchupsTableName}.`masterDeviceId` = {$masterDevicesTableName}.`id`", $masterDeviceColumns)
-            ->joinLeft($manufacturersTableName, "{$masterDevicesTableName}.`manufacturerId` = {$manufacturersTableName}.`id`", $manufacturerColumns);
+                           ->from($rmsDevicesTableName, $rmsDeviceColumns)
+                           ->join($rmsProvidersTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsProvidersTableName}.`id`", $rmsProviderColumns)
+                           ->joinLeft($rmsMasterMatchupsTableName, "{$rmsDevicesTableName}.`rmsProviderId` = {$rmsMasterMatchupsTableName}.`rmsProviderId` AND {$rmsDevicesTableName}.`rmsModelId` = {$rmsMasterMatchupsTableName}.`rmsModelId`", $rmsMasterMatchupColumns)
+                           ->joinLeft($masterDevicesTableName, "{$rmsMasterMatchupsTableName}.`masterDeviceId` = {$masterDevicesTableName}.`id`", $masterDeviceColumns)
+                           ->joinLeft($manufacturersTableName, "{$masterDevicesTableName}.`manufacturerId` = {$manufacturersTableName}.`id`", $manufacturerColumns);
 
         // Apply our where clause
         foreach ($whereClause as $cond => $value)

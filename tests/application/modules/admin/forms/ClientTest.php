@@ -19,8 +19,8 @@ class Admin_Form_ClientTest extends PHPUnit_Framework_TestCase
         $view = $this->getMock('Zend_View', array('IsAllowed'));
 
         $view->expects($this->any())
-        ->method('IsAllowed')
-        ->will($this->returnValue($isAdmin));
+             ->method('IsAllowed')
+             ->will($this->returnValue($isAdmin));
 
         return new Admin_Form_Client($dealerManagement, array('view' => $view));
     }

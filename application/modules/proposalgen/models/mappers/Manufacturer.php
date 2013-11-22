@@ -260,6 +260,7 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
         {
             $results = $this->fetchAll(array("{$this->col_displayName} LIKE ?" => "%{$manufacturerName}%"));
         }
+
         return $results;
     }
 }

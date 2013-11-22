@@ -3,9 +3,9 @@
 /**
  * Form Element for adding text to a form
  *
- * @author Lee Robert
- * @category My
- * @package My_Form
+ * @author     Lee Robert
+ * @category   My
+ * @package    My_Form
  * @subpackage Element
  */
 

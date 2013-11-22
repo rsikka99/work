@@ -22,9 +22,9 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
     public function indexAction ()
     {
         $this->view->memjetDeviceSwap = new Admin_ViewModel_MemjetDeviceSwap();
-        $this->view->reasons        = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId($this->_identity->dealerId);
+        $this->view->reasons          = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId($this->_identity->dealerId);
         $this->view->form             = new Admin_Form_MemjetDeviceSwaps();
-        $this->view->deviceSwapForm = new Memjetoptimization_Form_DeviceSwapReasons();
+        $this->view->deviceSwapForm   = new Memjetoptimization_Form_DeviceSwapReasons();
     }
 
     /**

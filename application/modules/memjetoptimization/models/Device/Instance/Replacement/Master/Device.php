@@ -67,8 +67,8 @@ class Memjetoptimization_Model_Device_Instance_Replacement_Master_Device extends
     public function toArray ()
     {
         return array(
-            "deviceInstanceId"       => $this->deviceInstanceId,
-            "masterDeviceId"         => $this->masterDeviceId,
+            "deviceInstanceId"     => $this->deviceInstanceId,
+            "masterDeviceId"       => $this->masterDeviceId,
             "memjetOptimizationId" => $this->memjetOptimizationId,
         );
     }

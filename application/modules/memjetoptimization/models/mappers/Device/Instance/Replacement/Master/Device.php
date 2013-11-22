@@ -5,7 +5,7 @@
 class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device extends My_Model_Mapper_Abstract
 {
     /**
-    /*
+     * /*
      * Column Definitions
      */
     public $col_deviceInstanceId = 'deviceInstanceId';
@@ -72,7 +72,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceInstanceId} = ?"       => $primaryKey[0],
+                                                                "{$this->col_deviceInstanceId} = ?"     => $primaryKey[0],
                                                                 "{$this->col_memjetOptimizationId} = ?" => $primaryKey[1]
                                                            ));
         // Save the object into the cache
@@ -101,7 +101,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
         {
             $id          = array($object[0], $object[1]);
             $whereClause = array(
-                "{$this->col_deviceInstanceId} = ?"       => $object[0],
+                "{$this->col_deviceInstanceId} = ?"     => $object[0],
                 "{$this->col_memjetOptimizationId} = ?" => $object[1]
             );
         }
@@ -226,7 +226,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_deviceInstanceId} = ?"       => $id[0],
+            "{$this->col_deviceInstanceId} = ?"     => $id[0],
             "{$this->col_memjetOptimizationId} = ?" => $id[1]
         );
     }
@@ -250,12 +250,12 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
      */
     public function fetchUniqueReplacementDeviceInstancesForMemjetOptimization ($memjetOptimizationId)
     {
-        $db                     = $this->getDbTable()->getDefaultAdapter();
+        $db                   = $this->getDbTable()->getDefaultAdapter();
         $memjetOptimizationId = $db->quote($memjetOptimizationId, 'INTEGER');
 
         $select = $db->select()
-                  ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
-                  ->where("{$this->col_memjetOptimizationId} = ?", $memjetOptimizationId);
+                     ->from("{$this->getTableName()}", new Zend_Db_Expr("DISTINCT {$this->col_masterDeviceId} "))
+                     ->where("{$this->col_memjetOptimizationId} = ?", $memjetOptimizationId);
 
         $masterDeviceIds = array();
         foreach ($db->query($select)->fetchAll() as $row)
@@ -270,7 +270,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
      * Takes in a memjet optimization id, and a master device id, and returns the count of found devices
      *
      * @param $masterDeviceId         int
-     * @param $memjetoptimizationId int
+     * @param $memjetoptimizationId   int
      *
      * @return int The count of master devices in this table for a specific memjet optimization id
      */

@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
-        <!---->
-        <!--Only reasonCategory can have bad data in this form-->
-        <!---->
+<!---->
+<!--Only reasonCategory can have bad data in this form-->
+<!---->
 <settings>
     <setting>
         <data>
@@ -27,8 +27,7 @@
     <setting>
         <data>
             <reasonCategory>-1</reasonCategory>
-            <reason>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
-                abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</reason>
+            <reason>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</reason>
             <isDefault>-1</isDefault>
         </data>
     </setting>

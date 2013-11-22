@@ -9,7 +9,7 @@ class Memjetoptimization_Service_Setting
      *
      * @var Memjetoptimization_Model_Memjet_Optimization_Setting|null
      */
-    protected $_MemjetoptimizationSettings;
+    protected $_memjetOptimizationSettings;
 
     /**
      *
@@ -32,19 +32,19 @@ class Memjetoptimization_Service_Setting
     /**
      * @var Memjetoptimization_Model_Memjet_Optimization
      */
-    protected $_Memjetoptimization;
+    protected $_memjetOptimization;
 
     /**
      *
      * @param $defaultSettings        Memjetoptimization_Model_Memjet_Optimization_Setting
      * @param $populateSettings       Memjetoptimization_Model_Memjet_Optimization_Setting
-     * @param $MemjetoptimizationId   int
+     * @param $memjetOptimizationId   int
      */
-    public function __construct ($defaultSettings, $populateSettings, $MemjetoptimizationId)
+    public function __construct ($defaultSettings, $populateSettings, $memjetOptimizationId)
     {
-        $this->_Memjetoptimization          = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($MemjetoptimizationId);
-        $this->_MemjetoptimizationSettingss = $defaultSettings;
-        $this->_populateSettings            = $populateSettings;
+        $this->_memjetOptimization         = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($memjetOptimizationId);
+        $this->_memjetOptimizationSettings = $defaultSettings;
+        $this->_populateSettings           = $populateSettings;
     }
 
     /**
@@ -76,7 +76,7 @@ class Memjetoptimization_Service_Setting
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
-            $MemjetSettingsArray = $this->_MemjetoptimizationSettingss->toArray();
+            $MemjetSettingsArray = $this->_memjetOptimizationSettings->toArray();
 
             foreach ($MemjetSettingsArray as $key => $value)
             {
@@ -86,8 +86,8 @@ class Memjetoptimization_Service_Setting
                 }
             }
 
-            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $MemjetSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_MemjetoptimizationSettingss->getTonerRankSets()));
-            $this->_form->populate(array('name' => $this->_Memjetoptimization->name));
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $MemjetSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_memjetOptimizationSettings->getTonerRankSets()));
+            $this->_form->populate(array('name' => $this->_memjetOptimization->name));
         }
 
         return $this->_form;
@@ -137,61 +137,61 @@ class Memjetoptimization_Service_Setting
             }
 
             // Save the report name
-            $this->_Memjetoptimization->name = (isset($validData['name'])) ? $validData['name'] : "Memjetoptimization" . date('Ymd');
-            Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->save($this->_Memjetoptimization);
+            $this->_memjetOptimization->name = (isset($validData['name'])) ? $validData['name'] : "Memjetoptimization" . date('Ymd');
+            Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->save($this->_memjetOptimization);
 
-            $this->_MemjetoptimizationSettings = new Memjetoptimization_Model_Memjet_Optimization_Setting();
+            $this->_memjetOptimizationSettings = new Memjetoptimization_Model_Memjet_Optimization_Setting();
             $rankingSetMapper                  = Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set::getInstance();
 
             if (isset($validData['replacementColorRankSetArray']))
             {
-                $this->_MemjetoptimizationSettings->replacementColorRankSetId = $rankingSetMapper->saveRankingSets($this->_MemjetoptimizationSettingss->replacementColorRankSetId, $validData['replacementColorRankSetArray']);
+                $this->_memjetOptimizationSettings->replacementColorRankSetId = $rankingSetMapper->saveRankingSets($this->_memjetOptimizationSettings->replacementColorRankSetId, $validData['replacementColorRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_MemjetoptimizationSettingss->replacementColorRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_memjetOptimizationSettings->replacementColorRankSetId);
             }
 
             if (isset($validData['replacementMonochromeRankSetArray']))
             {
-                $this->_MemjetoptimizationSettings->replacementMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_MemjetoptimizationSettingss->replacementMonochromeRankSetId, $validData['replacementMonochromeRankSetArray']);
+                $this->_memjetOptimizationSettings->replacementMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_memjetOptimizationSettings->replacementMonochromeRankSetId, $validData['replacementMonochromeRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_MemjetoptimizationSettingss->replacementMonochromeRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_memjetOptimizationSettings->replacementMonochromeRankSetId);
             }
 
             if (isset($validData['dealerColorRankSetArray']))
             {
-                $this->_MemjetoptimizationSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_MemjetoptimizationSettingss->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
+                $this->_memjetOptimizationSettings->dealerColorRankSetId = $rankingSetMapper->saveRankingSets($this->_memjetOptimizationSettings->dealerColorRankSetId, $validData['dealerColorRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_MemjetoptimizationSettingss->dealerColorRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_memjetOptimizationSettings->dealerColorRankSetId);
             }
 
             if (isset($validData['dealerMonochromeRankSetArray']))
             {
-                $this->_MemjetoptimizationSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_MemjetoptimizationSettingss->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
+                $this->_memjetOptimizationSettings->dealerMonochromeRankSetId = $rankingSetMapper->saveRankingSets($this->_memjetOptimizationSettings->dealerMonochromeRankSetId, $validData['dealerMonochromeRankSetArray']);
             }
             else
             {
-                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_MemjetoptimizationSettingss->dealerMonochromeRankSetId);
+                Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_memjetOptimizationSettings->dealerMonochromeRankSetId);
             }
 
-            $this->_populateSettings->replacementMonochromeRankSetId = $this->_MemjetoptimizationSettings->replacementMonochromeRankSetId;
-            $this->_populateSettings->replacementColorRankSetId      = $this->_MemjetoptimizationSettings->replacementColorRankSetId;
-            $this->_populateSettings->dealerMonochromeRankSetId      = $this->_MemjetoptimizationSettings->dealerMonochromeRankSetId;
-            $this->_populateSettings->dealerColorRankSetId           = $this->_MemjetoptimizationSettings->dealerColorRankSetId;
+            $this->_populateSettings->replacementMonochromeRankSetId = $this->_memjetOptimizationSettings->replacementMonochromeRankSetId;
+            $this->_populateSettings->replacementColorRankSetId      = $this->_memjetOptimizationSettings->replacementColorRankSetId;
+            $this->_populateSettings->dealerMonochromeRankSetId      = $this->_memjetOptimizationSettings->dealerMonochromeRankSetId;
+            $this->_populateSettings->dealerColorRankSetId           = $this->_memjetOptimizationSettings->dealerColorRankSetId;
 
-            $this->_MemjetoptimizationSettings->populate($this->_populateSettings->toArray());
-            $this->_MemjetoptimizationSettings->populate($validData);
-            $this->_MemjetoptimizationSettings->id = $this->_MemjetoptimizationSettingss->id;
+            $this->_memjetOptimizationSettings->populate($this->_populateSettings->toArray());
+            $this->_memjetOptimizationSettings->populate($validData);
+            $this->_memjetOptimizationSettings->id = $this->_memjetOptimizationSettings->id;
 
-            Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting::getInstance()->save($this->_MemjetoptimizationSettings);
+            Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting::getInstance()->save($this->_memjetOptimizationSettings);
 
-            $this->_form->populate($this->_MemjetoptimizationSettings->toArray());
-            $this->_form->populate(array('name' => $this->_Memjetoptimization->name));
+            $this->_form->populate($this->_memjetOptimizationSettings->toArray());
+            $this->_form->populate(array('name' => $this->_memjetOptimization->name));
 
             return true;
         }

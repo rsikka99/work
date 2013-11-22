@@ -1,22 +1,22 @@
 <?php
 /**
  * Custom_Validate_FieldDependsOnValue
- * Requires field presence based on provided value of radio element.  
- * 
- * Example would be radio element with Yes, No, Other option, followed by an "If 
+ * Requires field presence based on provided value of radio element.
+ *
+ * Example would be radio element with Yes, No, Other option, followed by an "If
  * other, please explain" text area.
- * 
- * IMPORTANT: For this validator to work, allowEmpty must be set to false on 
+ *
+ * IMPORTANT: For this validator to work, allowEmpty must be set to false on
  * the child element being validated.
- * 
- * From Zend Framework Documentation 15.3: "By default, when an 
- * element is required, a flag, 'allowEmpty', is also true. This means that if 
- * a value evaluating to empty is passed to isValid(), the validators will be 
- * skipped. You can toggle this flag using the accessor setAllowEmpty($flag); 
- * when the flag is false, then if a value is passed, the validators will still 
-
+ *
+ * From Zend Framework Documentation 15.3: "By default, when an
+ * element is required, a flag, 'allowEmpty', is also true. This means that if
+ * a value evaluating to empty is passed to isValid(), the validators will be
+ * skipped. You can toggle this flag using the accessor setAllowEmpty($flag);
+ * when the flag is false, then if a value is passed, the validators will still
+ *
  * @author "Lee Robert"
- * @uses Zend_Validate_Abstract
+ * @uses   Zend_Validate_Abstract
  */
 class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
 {
@@ -29,7 +29,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
     /**
      * Validation failure message key for when the value is an empty string
      */
-    const KEY_IS_EMPTY = 'keyIsEmpty';
+    const KEY_IS_EMPTY     = 'keyIsEmpty';
     const VALIDATOR_FAILED = 'validatorFailed';
 
     /**
@@ -37,11 +37,11 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
      *
      * @var array
      */
-    protected $_messageTemplates = array (
-            self::VALIDATOR_FAILED => '%customError%',
-            self::KEY_NOT_FOUND => 'You must select an option', 
-            self::KEY_IS_EMPTY => 'Based on your previous answer, this field is required' );
-    
+    protected $_messageTemplates = array(
+        self::VALIDATOR_FAILED => '%customError%',
+        self::KEY_NOT_FOUND    => 'You must select an option',
+        self::KEY_IS_EMPTY     => 'Based on your previous answer, this field is required');
+
     protected $_messageVariables = array(
         'customError' => 'customErrorMessage'
     );
@@ -59,15 +59,15 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
      * @var string
      */
     protected $_testValue;
-    
-    
+
+
     protected $_validatorsToRun;
 
     /**
      * FieldDependsOnValue constructor
      *
      * @param string $contextKey Name of parent field to test against
-     * @param string $testValue Value of multi option that, if selected, child field required
+     * @param string $testValue  Value of multi option that, if selected, child field required
      */
     public function __construct ($contextKey, $testValue = null, $validatorsToRun = null)
     {
@@ -83,19 +83,20 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
      *
      * @param  string $value
      * @param  array  $context
+     *
      * @return boolean
      */
     public function isValid ($value, $context = null)
     {
         $contextKey = $this->getContextKey();
-        $isValid = true;
+        $isValid    = true;
         // If context key is an array, doValid for each context key
         if (is_array($contextKey))
         {
-            foreach ( $contextKey as $ck )
+            foreach ($contextKey as $ck)
             {
                 $this->setContextKey($ck);
-                if (! $this->doValid($value, $context))
+                if (!$this->doValid($value, $context))
                 {
                     $isValid = false;
                     break;
@@ -104,12 +105,12 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
         }
         else
         {
-            if (! $this->doValid($value, $context))
+            if (!$this->doValid($value, $context))
             {
                 $isValid = false;
             }
         }
-        
+
         return $isValid;
     }
 
@@ -119,17 +120,19 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
      *
      * @param  string $value
      * @param  array  $context
+     *
      * @return boolean
      */
     public function doValid ($value, $context = null)
     {
-        $testValue = $this->getTestValue();
+        $testValue  = $this->getTestValue();
         $contextKey = $this->getContextKey();
-        $value = (string)$value;
+        $value      = (string)$value;
         $this->_setValue($value);
-        if ((null === $context) || ! is_array($context) || ! array_key_exists($contextKey, $context))
+        if ((null === $context) || !is_array($context) || !array_key_exists($contextKey, $context))
         {
             $this->_error(self::KEY_NOT_FOUND);
+
             return false;
         }
         if (is_array($context [$contextKey]))
@@ -142,7 +145,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
         }
         if ($testValue)
         {
-            
+
             if ($testValue == ($parentField))
             {
                 foreach ($this->_validatorsToRun as $validator)
@@ -155,6 +158,7 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
                             $this->_error(self::VALIDATOR_FAILED);
                             break;
                         }
+
                         return false;
                     }
                 }
@@ -175,11 +179,13 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
                             $this->setMessage($message);
                             break;
                         }
+
                         return false;
                     }
                 }
             }
         }
+
         return true;
     }
 
@@ -214,24 +220,27 @@ class Tangent_Validate_FieldDependsOnValue extends Zend_Validate_Abstract
     {
         $this->_testValue = $testValue;
     }
-	/**
+
+    /**
      * @return the $_validatorsToRun
      */
     public function getValidatorsToRun ()
     {
         if (!isset($this->_validatorsToRun))
         {
-        	$this->_validatorsToRun = null;
-        }	
+            $this->_validatorsToRun = null;
+        }
+
         return $this->_validatorsToRun;
     }
 
-	/**
+    /**
      * @param field_type $_validatorsToRun
      */
     public function setValidatorsToRun ($_validatorsToRun)
     {
         $this->_validatorsToRun = $_validatorsToRun;
+
         return $this;
     }
 

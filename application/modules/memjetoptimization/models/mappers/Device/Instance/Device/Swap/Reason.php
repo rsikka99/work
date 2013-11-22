@@ -74,7 +74,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
                                                                 "{$this->col_memjetOptimizationId} = ?" => $primaryKey[0],
-                                                                "{$this->col_deviceInstanceId} = ?"       => $primaryKey[1]
+                                                                "{$this->col_deviceInstanceId} = ?"     => $primaryKey[1]
                                                            ));
 
         // Save the object into the cache
@@ -98,14 +98,14 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends
         {
             $whereClause = array(
                 "{$this->col_memjetOptimizationId} = ?" => $object->memjetOptimizationId,
-                "{$this->col_deviceInstanceId} = ?"       => $object->deviceInstanceId
+                "{$this->col_deviceInstanceId} = ?"     => $object->deviceInstanceId
             );
         }
         else
         {
             $whereClause = array(
                 "{$this->col_memjetOptimizationId} = ?" => $object[0],
-                "{$this->col_deviceInstanceId} = ?"       => $object[1]
+                "{$this->col_deviceInstanceId} = ?"     => $object[1]
             );
         }
 
@@ -216,7 +216,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends
     {
         return array(
             "{$this->col_memjetOptimizationId} = ?" => $id[0],
-            "{$this->col_deviceInstanceId} = ?"       => $id[1]
+            "{$this->col_deviceInstanceId} = ?"     => $id[1]
         );
     }
 

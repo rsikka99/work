@@ -46,8 +46,8 @@ class Memjetoptimization_Model_Device_Instance_Device_Swap_Reason extends My_Mod
     {
         return array(
             "memjetOptimizationId" => $this->memjetOptimizationId,
-            "deviceInstanceId"       => $this->deviceInstanceId,
-            "deviceSwapReasonId"     => $this->deviceSwapReasonId,
+            "deviceInstanceId"     => $this->deviceInstanceId,
+            "deviceSwapReasonId"   => $this->deviceSwapReasonId,
         );
     }
 

@@ -52,7 +52,7 @@ class Hardwareoptimization_ViewModel_Devices
      */
     public function __construct (Hardwareoptimization_Model_Hardware_Optimization $hardwareOptimization)
     {
-        $this->_hardwareOptimization = $hardwareOptimization;
+        $this->_hardwareOptimization                            = $hardwareOptimization;
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
         $this->_fetchAndSortAllDevices($hardwareOptimization->getRmsUpload()->id);

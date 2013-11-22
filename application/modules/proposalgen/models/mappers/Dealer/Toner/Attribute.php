@@ -73,7 +73,7 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_tonerId} = ?" => $primaryKey [0],
+                                                                "{$this->col_tonerId} = ?"  => $primaryKey [0],
                                                                 "{$this->col_dealerId} = ?" => $primaryKey [1],
                                                            ));
 
@@ -97,7 +97,7 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
         if ($object instanceof Proposalgen_Model_Dealer_Toner_Attribute)
         {
             $whereClause = array(
-                "{$this->col_tonerId} = ?" => $object->tonerId,
+                "{$this->col_tonerId} = ?"  => $object->tonerId,
                 "{$this->col_dealerId} = ?" => $object->dealerId,
 
             );
@@ -105,7 +105,7 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
         else
         {
             $whereClause = array(
-                "{$this->col_tonerId} = ?" => $object[0],
+                "{$this->col_tonerId} = ?"  => $object[0],
                 "{$this->col_dealerId} = ?" => $object[1],
             );
         }
@@ -220,18 +220,18 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_tonerId} = ?" => $id [0],
+            "{$this->col_tonerId} = ?"  => $id [0],
             "{$this->col_dealerId} = ?" => $id [1],
         );
     }
 
     /**
-     * @param $tonerId int
+     * @param $tonerId  int
      * @param $dealerId int
      *
      * @return Proposalgen_Model_Dealer_Toner_Attribute
      */
-    public function findTonerAttributeByTonerId($tonerId, $dealerId)
+    public function findTonerAttributeByTonerId ($tonerId, $dealerId)
     {
         return $this->fetch(array("{$this->col_tonerId} = ?" => $tonerId, "{$this->col_dealerId} =  ?" => $dealerId));
     }

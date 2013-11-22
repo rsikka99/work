@@ -39,7 +39,7 @@ class Memjetoptimization_Model_Memjet_Optimization_Quote extends My_Model_Abstra
     {
         return array(
             "memjetOptimizationId" => $this->memjetOptimizationId,
-            "quoteId"                => $this->quoteId,
+            "quoteId"              => $this->quoteId,
         );
     }
 

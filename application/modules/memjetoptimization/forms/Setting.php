@@ -105,17 +105,17 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
                                                                  'validators' => $cppValidator
                                                             ));
 
-            $this->addElement('text', 'blackToColorRatio', array(
-                                                                'label'      => 'Black to Color Page Ratio',
-                                                                'append'     => '%',
-                                                                'validators' => $coverageValidator
-                                                           ));
-
-            $this->addElement('text', 'lossThreshold', array(
-                                                            'label'      => 'Loss Threshold',
-                                                            'append'     => '$',
-                                                            'validators' => $costValidator
+        $this->addElement('text', 'blackToColorRatio', array(
+                                                            'label'      => 'Black to Color Page Ratio',
+                                                            'append'     => '%',
+                                                            'validators' => $coverageValidator
                                                        ));
+
+        $this->addElement('text', 'lossThreshold', array(
+                                                        'label'      => 'Loss Threshold',
+                                                        'append'     => '$',
+                                                        'validators' => $costValidator
+                                                   ));
 
         $replacementMonochromeVendor = $this->createElement('multiselect', 'replacementMonochromeRankSetArray',
             array(

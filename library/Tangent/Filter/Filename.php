@@ -11,15 +11,15 @@
  *   http://www.linfo.org/file_name.html
  *
  *   The following reserved characters cannot be in a Windows filename:
-        < (less than)
-        > (greater than)
-        : (colon)         -- Cannot be used in Mac OS 9 or OS X
-        " (double quote)
-        / (forward slash)
-        \ (backslash)     -- Cannot be used in Unix/Linux systems
-        | (vertical bar or pipe)
-        ? (question mark)
-         * (asterisk)
+ * < (less than)
+ * > (greater than)
+ * : (colon)         -- Cannot be used in Mac OS 9 or OS X
+ * " (double quote)
+ * / (forward slash)
+ * \ (backslash)     -- Cannot be used in Unix/Linux systems
+ * | (vertical bar or pipe)
+ * ? (question mark)
+ * (asterisk)
  *
  *  Also, do not end a file or directory name with a space or a period. Although the underlying file
  *  system may support such names, the Windows shell and user interface does not. However, it is
@@ -79,6 +79,7 @@ class Tangent_Filter_Filename implements Zend_Filter_Interface
             $filename = rtrim($filename, '._');
 
         }
+
         return $filename;
     }
 }

@@ -11,7 +11,7 @@ class Admin_Form_LeasingSchema extends EasyBib_Form
     protected $_dealerManagement;
 
     /**
-     * @param bool $dealerManagement
+     * @param bool       $dealerManagement
      * @param null|array $options
      */
     public function __construct ($dealerManagement = false, $options = null)

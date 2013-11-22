@@ -104,17 +104,17 @@ class Memjetoptimization_ViewModel_Optimization
     /**
      * Constructor
      *
-     * @param int|Memjetoptimization_Model_Memjet_Optimization $Memjetoptimization
+     * @param int|Memjetoptimization_Model_Memjet_Optimization $memjetOptimization
      */
-    public function __construct ($Memjetoptimization)
+    public function __construct ($memjetOptimization)
     {
-        if ($Memjetoptimization instanceof Memjetoptimization_Model_Memjet_Optimization)
+        if ($memjetOptimization instanceof Memjetoptimization_Model_Memjet_Optimization)
         {
-            $this->_optimization = $Memjetoptimization;
+            $this->_optimization = $memjetOptimization;
         }
         else
         {
-            $this->_optimization = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($Memjetoptimization);
+            $this->_optimization = Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->find($memjetOptimization);
         }
     }
 

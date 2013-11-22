@@ -343,12 +343,12 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
         }
 
         $select = $dbTable->select()->from(array("di" => $deviceInstanceTableName), $columns)
-                  ->distinct(true)
-                  ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
-                  ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
-                  ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
-                  ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
-                  ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
+                          ->distinct(true)
+                          ->joinLeft(array("di_md" => $deviceInstanceMasterDeviceMapper->getTableName()), "di_md.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$this->col_id}", array())
+                          ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}", array())
+                          ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array())
+                          ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
+                          ->where("di_md.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId} IS NOT NULL OR di.{$this->col_useUserData} = 1");
 
         if ($onlyIncluded)
         {

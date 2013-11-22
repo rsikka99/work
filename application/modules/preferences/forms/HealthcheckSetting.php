@@ -224,15 +224,15 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
 
         // Form Buttons
         $submitButton = $this->createElement('submit', 'save', array(
-                                                                      'label'      => 'Submit',
-                                                                      'class'      => 'btn-primary',
-                                                                      'decorators' => array(
-                                                                          'FieldSize',
-                                                                          'ViewHelper',
-                                                                          'Addon',
-                                                                          'ElementErrors'
-                                                                      )
-                                                                 ));
+                                                                    'label'      => 'Submit',
+                                                                    'class'      => 'btn-primary',
+                                                                    'decorators' => array(
+                                                                        'FieldSize',
+                                                                        'ViewHelper',
+                                                                        'Addon',
+                                                                        'ElementErrors'
+                                                                    )
+                                                               ));
 
         $cancelButton = $this->createElement('submit', 'cancel', array(
                                                                       'label'      => 'Cancel',

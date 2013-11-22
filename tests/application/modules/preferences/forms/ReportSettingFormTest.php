@@ -20,7 +20,7 @@ class Preferences_Form_ReportSettingFormTest extends PHPUnit_Framework_TestCase
 
     public function goodData ()
     {
-        $xml      = simplexml_load_file(__DIR__ . "/_files/goodData_reportSettingFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_reportSettingFormTest.xml");
         $data = array();
         foreach ($xml->reportSetting as $row)
         {
@@ -40,7 +40,7 @@ class Preferences_Form_ReportSettingFormTest extends PHPUnit_Framework_TestCase
 
     public function badData ()
     {
-        $xml      = simplexml_load_file(__DIR__ . "/_files/badData_reportSettingFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_reportSettingFormTest.xml");
         $data = array();
         foreach ($xml->reportSetting as $row)
         {
@@ -60,7 +60,7 @@ class Preferences_Form_ReportSettingFormTest extends PHPUnit_Framework_TestCase
 
     public function nullData ()
     {
-        $xml      = simplexml_load_file(__DIR__ . "/_files/nullData_reportSettingFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/nullData_reportSettingFormTest.xml");
         $data = array();
 
         foreach ($xml->reportSetting as $row)

@@ -297,11 +297,11 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             $select->from(array($this->getTableName()), $caseStatement)
-            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-            ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
-            ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
-            ->limit($returnLimit, $offset)
-            ->order($sortOrder);
+                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                   ->joinLeft(array("m" => $manufacturerMapper->getTableName()), "md.{$masterDeviceMapper->col_manufacturerId} = m.{$manufacturerMapper->col_id}", array($manufacturerMapper->col_fullName, "device_name" => new Zend_Db_Expr("concat({$manufacturerMapper->col_fullName},' ', {$masterDeviceMapper->col_modelName})")))
+                   ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+                   ->limit($returnLimit, $offset)
+                   ->order($sortOrder);
 
             $query = $db->query($select);
 
@@ -457,9 +457,9 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $db     = Zend_Db_Table::getDefaultAdapter();
             $select = $db->select();
             $select->from(array($this->getTableName()), $caseStatement)
-            ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
-            ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
-            ->order($order);
+                   ->joinLeft(array("md" => $masterDeviceMapper->getTableName()), "{$this->getTableName()}.{$this->col_masterDeviceId} = md.{$masterDeviceMapper->col_id}", array("{$masterDeviceMapper->col_id}"))
+                   ->where("{$this->getTableName()}.$this->col_dealerId = ?", $dealerId)
+                   ->order($order);
 
             $query = $db->query($select);
 

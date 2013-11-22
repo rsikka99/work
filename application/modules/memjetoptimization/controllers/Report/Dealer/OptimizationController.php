@@ -21,7 +21,7 @@ class Memjetoptimization_Report_Dealer_OptimizationController extends Memjetopti
             $this->clearCacheForReport();
             $this->view->optimization                                     = $this->getOptimizationViewModel();
             $this->view->availableReports['DealerOptimization']['active'] = true;
-            $this->view->memjetOptimization                             = $this->_memjetOptimization;
+            $this->view->memjetOptimization                               = $this->_memjetOptimization;
         }
         catch (Exception $e)
         {

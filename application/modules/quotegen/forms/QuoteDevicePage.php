@@ -13,7 +13,7 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
         /**
          * Add class to form for label alignment
          *
-         * - Vertical .form-vertical (not required)	Stacked, left-aligned labels
+         * - Vertical .form-vertical (not required)    Stacked, left-aligned labels
          * over controls (default)
          * - Inline .form-inline Left-aligned label and inline-block controls
          * for compact style
@@ -25,80 +25,80 @@ class Quotegen_Form_QuoteDevicePage extends EasyBib_Form
          */
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
-        $this->addElement('text', 'costPerPageMonochrome', array (
-                'label' => 'CPP Monochrome:',
-                'required' => true,
-                'filters' => array (
-                        'StringTrim',
-                        'StripTags'
-                ),
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength',
-                                'options' => array (
-                                        1,
-                                        255
-                                )
-                        )
-                )
-        ));
-        
-        $this->addElement('text', 'costPerPageColor', array (
-                'label' => 'CPP Color:', 
-                'required' => true,
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
-        $this->addElement('select', 'pageBillingPreference', array (
-                'label' => 'Page Billing Preference:', 
-                'required' => true,
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                )
-        ));
-        
-        $this->addElement('text', 'margin', array (
-                'label' => 'Margin:', 
-                'required' => true,
-                'filters' => array (
-                        'StringTrim', 
-                        'StripTags' 
-                ), 
-                'validators' => array (
-                        array (
-                                'validator' => 'StringLength', 
-                                'options' => array (
-                                        1, 
-                                        255 
-                                ) 
-                        ) 
-                ) 
-        ));
-        
+        $this->addElement('text', 'costPerPageMonochrome', array(
+                                                                'label'      => 'CPP Monochrome:',
+                                                                'required'   => true,
+                                                                'filters'    => array(
+                                                                    'StringTrim',
+                                                                    'StripTags'
+                                                                ),
+                                                                'validators' => array(
+                                                                    array(
+                                                                        'validator' => 'StringLength',
+                                                                        'options'   => array(
+                                                                            1,
+                                                                            255
+                                                                        )
+                                                                    )
+                                                                )
+                                                           ));
+
+        $this->addElement('text', 'costPerPageColor', array(
+                                                           'label'      => 'CPP Color:',
+                                                           'required'   => true,
+                                                           'filters'    => array(
+                                                               'StringTrim',
+                                                               'StripTags'
+                                                           ),
+                                                           'validators' => array(
+                                                               array(
+                                                                   'validator' => 'StringLength',
+                                                                   'options'   => array(
+                                                                       1,
+                                                                       255
+                                                                   )
+                                                               )
+                                                           )
+                                                      ));
+
+        $this->addElement('select', 'pageBillingPreference', array(
+                                                                  'label'    => 'Page Billing Preference:',
+                                                                  'required' => true,
+                                                                  'filters'  => array(
+                                                                      'StringTrim',
+                                                                      'StripTags'
+                                                                  )
+                                                             ));
+
+        $this->addElement('text', 'margin', array(
+                                                 'label'      => 'Margin:',
+                                                 'required'   => true,
+                                                 'filters'    => array(
+                                                     'StringTrim',
+                                                     'StripTags'
+                                                 ),
+                                                 'validators' => array(
+                                                     array(
+                                                         'validator' => 'StringLength',
+                                                         'options'   => array(
+                                                             1,
+                                                             255
+                                                         )
+                                                     )
+                                                 )
+                                            ));
+
         // Add the submit button
-        $this->addElement('submit', 'submit', array (
-                'ignore' => true,
-                'label' => 'Save' 
-        ));
-        
+        $this->addElement('submit', 'submit', array(
+                                                   'ignore' => true,
+                                                   'label'  => 'Save'
+                                              ));
+
         // Add the cancel button
-        $this->addElement('submit', 'cancel', array (
-                'ignore' => true,
-                'label' => 'Cancel' 
-        ));
+        $this->addElement('submit', 'cancel', array(
+                                                   'ignore' => true,
+                                                   'label'  => 'Cancel'
+                                              ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

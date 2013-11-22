@@ -27,7 +27,7 @@ class Preferences_Form_HardwareoptimizationSettingTest extends PHPUnit_Framework
      */
     public function goodHOSettingPrefData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareOptSettingPrefFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_hardwareOptSettingPrefFormTest.xml");
         $data = array();
         foreach ($xml->setting as $row)
         {
@@ -42,7 +42,7 @@ class Preferences_Form_HardwareoptimizationSettingTest extends PHPUnit_Framework
      */
     public function badHOSettingPrefData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_hardwareOptSettingPrefFormTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_hardwareOptSettingPrefFormTest.xml");
         $data = array();
         foreach ($xml->setting as $row)
         {

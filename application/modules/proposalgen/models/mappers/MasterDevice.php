@@ -282,9 +282,9 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     {
         $qdTableName = Quotegen_Model_Mapper_Device::getInstance()->getTableName();
 
-        $sql = "SELECT * FROM {$this->getTableName()} as md
+        $sql = "SELECT * FROM {$this->getTableName()} AS md
         LEFT JOIN {$qdTableName} AS qd ON qd.masterDeviceId = md.id
-        WHERE qd.masterDeviceId is null
+        WHERE qd.masterDeviceId IS null
         ORDER BY  md.manufacturer_id ASC, md.printer_model ASC
         ";
 

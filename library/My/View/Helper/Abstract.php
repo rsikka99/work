@@ -14,9 +14,10 @@ abstract class My_View_Helper_Abstract extends Zend_View_Helper_Abstract
      *
      * @param string $name
      *            The name of the request parameter
-     * @param mixed $default
+     * @param mixed  $default
      *            The value to return if $name is not defined in the
      *            request
+     *
      * @return mixed The value of parameter $name in the request object,
      *         or $default if $name is not defined in the request
      */
@@ -44,6 +45,7 @@ abstract class My_View_Helper_Abstract extends Zend_View_Helper_Abstract
         {
             $this->_frontController = Zend_Controller_Front::getInstance();
         }
+
         return $this->_frontController;
     }
 }

@@ -6,15 +6,15 @@ class Dealermanagement_Model_Acl
 {
     const RESOURCE_DEALERMANAGEMENT_WILDCARD               = "dealermanagement__%__%";
     const RESOURCE_DEALERMANAGEMENT_CLIENT_WILDCARD        = "dealermanagement__client__%";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX        = "dealermanagement__client__index";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE        = "dealermanagement__client__create";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT        = "dealermanagement__client__edit";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW        = "dealermanagement__client__view";
-    const RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE        = "dealermanagement__client__delete";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_INDEX           = "dealermanagement__client__index";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_CREATE          = "dealermanagement__client__create";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_EDIT            = "dealermanagement__client__edit";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_VIEW            = "dealermanagement__client__view";
+    const RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE          = "dealermanagement__client__delete";
     const RESOURCE_DEALERMANAGEMENT_INDEX                  = "dealermanagement__index__index";
     const RESOURCE_DEALERMANAGEMENT_LEASINGSCHEMA_WILDCARD = "dealermanagement__leasingschema__%";
     const RESOURCE_DEALERMANAGEMENT_USER_WILDCARD          = "dealermanagement__user__%";
-    const RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD          = "dealermanagement__dealer__%";
+    const RESOURCE_DEALERMANAGEMENT_DEALER_WILDCARD        = "dealermanagement__dealer__%";
 
     /**
      * Sets up acl resources and access for a module

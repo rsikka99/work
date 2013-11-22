@@ -50,32 +50,32 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 
         // Add the ability to have a docx context
         $this->_helper->contextSwitch()
-        ->addContext('docx', array(
-                                  'suffix'    => 'docx',
-                                  'callbacks' => array(
-                                      'init' => array(
-                                          $this,
-                                          'initDocxContext'
-                                      ),
-                                      'post' => array(
-                                          $this,
-                                          'postDocxContext'
-                                      )
-                                  )
-                             ))
-        ->addContext('xlsx', array(
-                                  'suffix'    => 'xlsx',
-                                  'callbacks' => array(
-                                      'init' => array(
-                                          $this,
-                                          'initXlsxContext'
-                                      ),
-                                      'post' => array(
-                                          $this,
-                                          'postXlsxContext'
-                                      )
-                                  )
-                             ));
+                      ->addContext('docx', array(
+                                                'suffix'    => 'docx',
+                                                'callbacks' => array(
+                                                    'init' => array(
+                                                        $this,
+                                                        'initDocxContext'
+                                                    ),
+                                                    'post' => array(
+                                                        $this,
+                                                        'postDocxContext'
+                                                    )
+                                                )
+                                           ))
+                      ->addContext('xlsx', array(
+                                                'suffix'    => 'xlsx',
+                                                'callbacks' => array(
+                                                    'init' => array(
+                                                        $this,
+                                                        'initXlsxContext'
+                                                    ),
+                                                    'post' => array(
+                                                        $this,
+                                                        'postXlsxContext'
+                                                    )
+                                                )
+                                           ));
 
         $this->_userId       = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
@@ -309,8 +309,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             }
 
             // Get a new device and sync the device properties
-            $quoteDeviceService = new Quotegen_Service_QuoteDevice($this->_userId,$this->_quote->id);
-            $quoteDevice = $quoteDeviceService->syncDevice($favoriteDevice->getDevice()->masterDeviceId);
+            $quoteDeviceService         = new Quotegen_Service_QuoteDevice($this->_userId, $this->_quote->id);
+            $quoteDevice                = $quoteDeviceService->syncDevice($favoriteDevice->getDevice()->masterDeviceId);
             $quoteDevice->quoteId       = $this->_quote->id;
             $quoteDevice->margin        = $defaultMargin;
             $quoteDevice->buyoutValue   = 0;
@@ -340,7 +340,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
                                                                                         ));
 
                 // Insert quote device option
-                $quoteDeviceOption                = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
 
                 $quoteDeviceOption->quoteDeviceId = $quoteDeviceId;
                 $quoteDeviceOption->quantity      = $option->quantity;

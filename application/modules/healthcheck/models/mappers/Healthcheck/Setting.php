@@ -251,20 +251,22 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
      */
     public function fetchSetting ($HealthcheckId)
     {
-        $Healthcheck = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
+        $Healthcheck        = Healthcheck_Model_Mapper_Healthcheck::getInstance()->find($HealthcheckId);
         $HealthcheckSetting = null;
-        if($Healthcheck)
+        if ($Healthcheck)
         {
             $HealthcheckSetting = $this->find($Healthcheck->healthcheckSettingId);
         }
         // If we don't have a setting yet, make a blank one
         if (!$HealthcheckSetting)
         {
-            $HealthcheckSetting   = new Healthcheck_Model_Healthcheck_Setting();
+            $HealthcheckSetting     = new Healthcheck_Model_Healthcheck_Setting();
             $HealthcheckSetting->id = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
         }
+
         return $HealthcheckSetting;
     }
+
     /**
      * Gets a users Healthcheck setting object
      *
@@ -275,8 +277,8 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
      */
     public function fetchUserSetting ($userId)
     {
-        $HealthcheckSetting     = false;
-        $userSetting = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
+        $HealthcheckSetting = false;
+        $userSetting        = Preferences_Model_Mapper_User_Setting::getInstance()->find($userId);
         if ($userSetting)
         {
             $HealthcheckSetting = $this->find($userSetting->healthcheckSettingId);
@@ -285,7 +287,7 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
         // If we don't have a setting yet, make a blank one
         if (!$HealthcheckSetting)
         {
-            $HealthcheckSetting   = new Healthcheck_Model_Healthcheck_Setting();
+            $HealthcheckSetting     = new Healthcheck_Model_Healthcheck_Setting();
             $HealthcheckSetting->id = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
             if ($userSetting)
@@ -295,8 +297,8 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
             }
             else
             {
-                $userSetting                  = new Preferences_Model_User_Setting();
-                $userSetting->userId          = $userId;
+                $userSetting                       = new Preferences_Model_User_Setting();
+                $userSetting->userId               = $userId;
                 $userSetting->healthcheckSettingId = $HealthcheckSetting->id;
                 Preferences_Model_Mapper_User_Setting::getInstance()->insert($userSetting);
             }
@@ -324,7 +326,7 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
         if (!$HealthcheckSetting)
         {
             // Take a copy
-            $HealthcheckSetting   = $this->fetchSystemHealthcheckSetting();
+            $HealthcheckSetting     = $this->fetchSystemHealthcheckSetting();
             $HealthcheckSetting->id = Healthcheck_Model_Mapper_Healthcheck_Setting::getInstance()->insert($HealthcheckSetting);
 
             if ($HealthcheckDealerSetting)
@@ -334,9 +336,9 @@ class Healthcheck_Model_Mapper_Healthcheck_Setting extends My_Model_Mapper_Abstr
             }
             else
             {
-                $HealthcheckDealerSetting                  = new Preferences_Model_Dealer_Setting();
+                $HealthcheckDealerSetting                       = new Preferences_Model_Dealer_Setting();
                 $HealthcheckDealerSetting->healthcheckSettingId = $HealthcheckSetting->id;
-                $HealthcheckDealerSetting->dealerId        = $dealerId;
+                $HealthcheckDealerSetting->dealerId             = $dealerId;
                 Preferences_Model_Mapper_Dealer_Setting::getInstance()->insert($HealthcheckDealerSetting);
             }
         }

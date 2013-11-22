@@ -5,15 +5,15 @@
 class Default_Model_Acl
 {
     const RESOURCE_DEFAULT_WILDCARD            = "default__%__%";
-    const RESOURCE_DEFAULT_AUTH_WILDCARD            = "default__auth__%";
-    const RESOURCE_DEFAULT_ERROR_WILDCARD            = "default__error__%";
-    const RESOURCE_DEFAULT_INFO_WILDCARD            = "default__info__%";
-    const RESOURCE_DEFAULT_INDEX_WILDCARD            = "default__index__%";
-    const RESOURCE_DEFAULT_INDEX_INDEX            = "default__index__index";
-    const RESOURCE_DEFAULT_INDEX_CREATECLIENT            = "default__index__createClient";
-    const RESOURCE_DEFAULT_INDEX_EDITCLIENT            = "default__index__editClient";
-    const RESOURCE_DEFAULT_INDEX_SEARCHCLIENT            = "default__index__search-for-client";
-    const RESOURCE_DEFAULT_INDEX_VIEWCLIENTS            = "default__index__view-all-clients";
+    const RESOURCE_DEFAULT_AUTH_WILDCARD       = "default__auth__%";
+    const RESOURCE_DEFAULT_ERROR_WILDCARD      = "default__error__%";
+    const RESOURCE_DEFAULT_INFO_WILDCARD       = "default__info__%";
+    const RESOURCE_DEFAULT_INDEX_WILDCARD      = "default__index__%";
+    const RESOURCE_DEFAULT_INDEX_INDEX         = "default__index__index";
+    const RESOURCE_DEFAULT_INDEX_CREATECLIENT  = "default__index__createClient";
+    const RESOURCE_DEFAULT_INDEX_EDITCLIENT    = "default__index__editClient";
+    const RESOURCE_DEFAULT_INDEX_SEARCHCLIENT  = "default__index__search-for-client";
+    const RESOURCE_DEFAULT_INDEX_VIEWCLIENTS   = "default__index__view-all-clients";
     const RESOURCE_DEFAULT_AUTH_LOGIN          = "default__auth__login";
     const RESOURCE_DEFAULT_AUTH_LOGOUT         = "default__auth__logout";
     const RESOURCE_DEFAULT_AUTH_FORGOTPASSWORD = "default__auth__forgotpassword";

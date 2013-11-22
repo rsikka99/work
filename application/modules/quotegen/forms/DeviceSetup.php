@@ -90,14 +90,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                  'allowEmpty' => false,
                                                  'validators' => array(
                                                      new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                   new Zend_Validate_NotEmpty()
-                                                                                                              ), array(
-                                                                                                                      'validator' => 'StringLength',
-                                                                                                                      'options'   => array(
-                                                                                                                          1,
-                                                                                                                          255
-                                                                                                                      )
-                                                                                                                 ))
+                                                                                                                    new Zend_Validate_NotEmpty()
+                                                                                                               ), array(
+                                                                                                                       'validator' => 'StringLength',
+                                                                                                                       'options'   => array(
+                                                                                                                           1,
+                                                                                                                           255
+                                                                                                                       )
+                                                                                                                  ))
                                                  )
                                             ));
 
@@ -112,14 +112,14 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                     ),
                                                     'validators' => array(
                                                         new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                      new Zend_Validate_NotEmpty()
-                                                                                                                 ), array(
-                                                                                                                         'validator' => 'StringLength',
-                                                                                                                         'options'   => array(
-                                                                                                                             1,
-                                                                                                                             255
-                                                                                                                         )
-                                                                                                                    ))
+                                                                                                                       new Zend_Validate_NotEmpty()
+                                                                                                                  ), array(
+                                                                                                                          'validator' => 'StringLength',
+                                                                                                                          'options'   => array(
+                                                                                                                              1,
+                                                                                                                              255
+                                                                                                                          )
+                                                                                                                     ))
                                                     )
                                                ));
 
@@ -153,13 +153,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                ),
                                                'validators' => array(
                                                    new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                 new Zend_Validate_NotEmpty(),
-                                                                                                                 new Zend_Validate_Float(),
-                                                                                                                 new Zend_Validate_Between(array(
-                                                                                                                                                'min' => 1,
-                                                                                                                                                'max' => 30000
-                                                                                                                                           ))
-                                                                                                            ))
+                                                                                                                  new Zend_Validate_NotEmpty(),
+                                                                                                                  new Zend_Validate_Float(),
+                                                                                                                  new Zend_Validate_Between(array(
+                                                                                                                                                 'min' => 1,
+                                                                                                                                                 'max' => 30000
+                                                                                                                                            ))
+                                                                                                             ))
                                                )
                                           ));
 
@@ -286,13 +286,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StripTags'
                                                            ),
                                                            'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                               new Zend_Validate_NotEmpty(),
-                                                                                                                                               new Zend_Validate_Float(),
-                                                                                                                                               new Zend_Validate_Between(array(
-                                                                                                                                                                              'min' => 0,
-                                                                                                                                                                              'max' => 5,
-                                                                                                                                                                         ))
-                                                                                                                                          )))
+                                                                                                                                                new Zend_Validate_NotEmpty(),
+                                                                                                                                                new Zend_Validate_Float(),
+                                                                                                                                                new Zend_Validate_Between(array(
+                                                                                                                                                                               'min' => 0,
+                                                                                                                                                                               'max' => 5,
+                                                                                                                                                                          ))
+                                                                                                                                           )))
                                                       ));
 
         /*
@@ -308,13 +308,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                                'StripTags'
                                                            ),
                                                            'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                               new Zend_Validate_NotEmpty(),
-                                                                                                                                               new Zend_Validate_Float(),
-                                                                                                                                               new Zend_Validate_Between(array(
-                                                                                                                                                                              'min' => 0,
-                                                                                                                                                                              'max' => 5,
-                                                                                                                                                                         ))
-                                                                                                                                          )))
+                                                                                                                                                new Zend_Validate_NotEmpty(),
+                                                                                                                                                new Zend_Validate_Float(),
+                                                                                                                                                new Zend_Validate_Between(array(
+                                                                                                                                                                               'min' => 0,
+                                                                                                                                                                               'max' => 5,
+                                                                                                                                                                          ))
+                                                                                                                                           )))
                                                       ));
 
         /*
@@ -324,20 +324,20 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         $maxYear    = ((int)date('Y')) + 2;
         $launchDate = new ZendX_JQuery_Form_Element_DatePicker('launchDate');
         $launchDate->setLabel('Launch Date:')
-            ->setAttrib('class', 'span2')
-            ->setJQueryParam('dateFormat', 'yy-mm-dd')
-            ->setJqueryParam('timeFormat', 'hh:mm')
-            ->setJQueryParam('changeYear', 'true')
-            ->setJqueryParam('changeMonth', 'true')
-            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-            ->setDescription('yyyy-mm-dd')
-            ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-            ->setRequired(true)
-            ->setAttrib('maxlength', 10)
-            ->addFilters(array(
-                              'StringTrim',
-                              'StripTags'
-                         ));
+                   ->setAttrib('class', 'span2')
+                   ->setJQueryParam('dateFormat', 'yy-mm-dd')
+                   ->setJqueryParam('timeFormat', 'hh:mm')
+                   ->setJQueryParam('changeYear', 'true')
+                   ->setJqueryParam('changeMonth', 'true')
+                   ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                   ->setDescription('yyyy-mm-dd')
+                   ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
+                   ->setRequired(true)
+                   ->setAttrib('maxlength', 10)
+                   ->addFilters(array(
+                                     'StringTrim',
+                                     'StripTags'
+                                ));
         $this->addElement($launchDate);
         /*
          * / /* Duty Cycle
@@ -433,13 +433,13 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                                            'allowEmpty' => false,
                                                            'validators' => array(
                                                                new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
-                                                                                                                             new Zend_Validate_NotEmpty(),
-                                                                                                                             new Zend_Validate_Int(),
-                                                                                                                             new Zend_Validate_Between(array(
-                                                                                                                                                            'min' => 0,
-                                                                                                                                                            'max' => 100000
-                                                                                                                                                       ))
-                                                                                                                        ))
+                                                                                                                              new Zend_Validate_NotEmpty(),
+                                                                                                                              new Zend_Validate_Int(),
+                                                                                                                              new Zend_Validate_Between(array(
+                                                                                                                                                             'min' => 0,
+                                                                                                                                                             'max' => 100000
+                                                                                                                                                        ))
+                                                                                                                         ))
                                                            )
                                                       ));
 

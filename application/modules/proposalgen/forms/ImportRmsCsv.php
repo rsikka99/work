@@ -49,7 +49,7 @@ class Proposalgen_Form_ImportRmsCsv extends Twitter_Bootstrap_Form_Horizontal
                                                      'label'       => 'Choose a file to upload',
                                                      'destination' => $this->getView()->App()->uploadPath,
                                                      'required'    => true,
-                                                     'accept' => '.csv',
+                                                     'accept'      => '.csv',
                                                      'validators'  => array(
                                                          'Extension' => array('extension' => 'csv'),
                                                          'Count'     => array('count' => 1),

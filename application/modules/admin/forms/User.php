@@ -166,14 +166,14 @@ class Admin_Form_User extends EasyBib_Form
             $maxYear     = $minYear + 4;
             $frozenUntil = new My_Form_Element_DateTimePicker('frozenUntil');
             $frozenUntil->setLabel('Frozen Until:')
-            ->setJQueryParam('dateFormat', 'yy-mm-dd')
-            ->setJqueryParam('timeFormat', 'hh:mm')
-            ->setJQueryParam('changeYear', 'true')
-            ->setJqueryParam('changeMonth', 'true')
-            ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-            ->setDescription('yyyy-mm-dd hh:mm')
-            ->addValidator($datetimeValidator)
-            ->setRequired(false);
+                        ->setJQueryParam('dateFormat', 'yy-mm-dd')
+                        ->setJqueryParam('timeFormat', 'hh:mm')
+                        ->setJQueryParam('changeYear', 'true')
+                        ->setJqueryParam('changeMonth', 'true')
+                        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                        ->setDescription('yyyy-mm-dd hh:mm')
+                        ->addValidator($datetimeValidator)
+                        ->setRequired(false);
             $frozenUntil->addFilters(array(
                                           'StringTrim',
                                           'StripTags'

@@ -136,7 +136,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_solution/index')
             ),
-            "LeaseBuyback"       => array(
+            "LeaseBuyback"           => array(
                 "pagetitle" => "Lease Buyback",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_leasebuyback/index')

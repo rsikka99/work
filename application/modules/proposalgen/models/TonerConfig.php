@@ -81,7 +81,7 @@ class Proposalgen_Model_TonerConfig extends My_Model_Abstract
                 $tonerColors ["Yellow"]  = Proposalgen_Model_TonerColor::YELLOW;
                 break;
             case self::THREE_COLOR_COMBINED :
-                $tonerColors ["Black"]   = Proposalgen_Model_TonerColor::BLACK;
+                $tonerColors ["Black"]      = Proposalgen_Model_TonerColor::BLACK;
                 $tonerColors ["ThreeColor"] = Proposalgen_Model_TonerColor::THREE_COLOR;
                 break;
             case self::FOUR_COLOR_COMBINED :

@@ -21,8 +21,8 @@ class Admin_Form_LeasingSchemaTest extends Zend_Test_PHPUnit_ControllerTestCase
         $view = $this->getMock('Zend_View', array('IsAllowed'));
 
         $view->expects($this->any())
-        ->method('IsAllowed')
-        ->will($this->returnValue($isAdmin));
+             ->method('IsAllowed')
+             ->will($this->returnValue($isAdmin));
 
         $this->_form = new Admin_Form_LeasingSchema($dealerManagement, array('view' => $view));
     }

@@ -44,8 +44,8 @@ class Proposalgen_Model_Mapper_User_Survey_Setting extends My_Model_Mapper_Abstr
     /**
      * Saves (updates) an instance of Proposalgen_Model_User_Survey_Setting to the database.
      *
-     * @param Proposalgen_Model_User_Survey_Setting $object      The   user_survey_setting model to save to the database
-     * @param mixed                                 $primaryKey  Optional: The original primary key, in case we're changing it
+     * @param Proposalgen_Model_User_Survey_Setting $object     The   user_survey_setting model to save to the database
+     * @param mixed                                 $primaryKey Optional: The original primary key, in case we're changing it
      *
      * @return int The number of rows affected
      */

@@ -134,7 +134,7 @@ class Admin_Service_Client
                 $address = Quotegen_Model_Mapper_Address::getInstance()->getAddressByClientId($clientId);
                 if (!$address)
                 {
-                    $address   = new Quotegen_Model_Address($data);
+                    $address = new Quotegen_Model_Address($data);
                     Quotegen_Model_Mapper_Address::getInstance()->insert($address);
                 }
                 else
@@ -244,8 +244,8 @@ class Admin_Service_Client
         }
 
         $this->getForm()
-            ->getElement('phoneErrors')
-            ->addError(implode(', ', $phoneErrors));
+             ->getElement('phoneErrors')
+             ->addError(implode(', ', $phoneErrors));
 
         //validate and get the valid the postCode
         $postCode = $this->validatePostCode($validData ['postCode'], $validData ['countryId']);
@@ -253,9 +253,9 @@ class Admin_Service_Client
         {
             //postCode code was invalid, display error on form
             $this->getForm()
-                ->getElement('postCode')
-                ->clearErrorMessages()
-                ->addError('Invalid zip or postal code');
+                 ->getElement('postCode')
+                 ->clearErrorMessages()
+                 ->addError('Invalid zip or postal code');
             $valid = false;
         }
         else
@@ -268,9 +268,9 @@ class Admin_Service_Client
         if ($regionId == false)
         {
             $this->getForm()
-                ->getElement('region')
-                ->clearErrorMessages()
-                ->addError('Invalid state or province');
+                 ->getElement('region')
+                 ->clearErrorMessages()
+                 ->addError('Invalid state or province');
             $valid = false;
         }
         else

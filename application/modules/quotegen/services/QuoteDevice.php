@@ -60,7 +60,7 @@ class Quotegen_Service_QuoteDevice
         $quoteDevice->margin        = $quoteSetting->deviceMargin;
         $quoteDevice->packageCost   = $quoteDevice->calculatePackageCost();
         $quoteDevice->packageMarkup = 0;
-        $quoteDevice->buyoutValue      = 0;
+        $quoteDevice->buyoutValue   = 0;
 
         // Save our device
         $quoteDeviceId = Quotegen_Model_Mapper_QuoteDevice::getInstance()->insert($quoteDevice);

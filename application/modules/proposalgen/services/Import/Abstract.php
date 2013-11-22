@@ -35,7 +35,7 @@ class Proposalgen_Service_Import_Abstract
     /**
      * @var Zend_File_Transfer_Adapter_Http
      */
-    protected  $_upload;
+    protected $_upload;
 
     /**
      * The headers that we recieve from the import.

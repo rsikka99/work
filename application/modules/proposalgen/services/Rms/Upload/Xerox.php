@@ -13,6 +13,7 @@ class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Uploa
 
     /**
      * The number of lines to trim off the top of the csv
+     *
      * @var int
      */
     protected $_linesToTrim = 4;

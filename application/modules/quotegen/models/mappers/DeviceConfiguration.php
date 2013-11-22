@@ -257,7 +257,7 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
         $deviceConfigurations = array();
         $resultSet            = $this->getDbTable()->fetchAll(array(
                                                                    'masterDeviceId = ?' => $masterDeviceId,
-                                                                   'dealerId = ?' => Zend_Auth::getInstance()->getIdentity()->dealerId
+                                                                   'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
                                                               ));
 
         foreach ($resultSet as $row)

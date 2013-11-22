@@ -53,18 +53,18 @@
         </data>
     </user>
     <user>
-    <formMode>create</formMode>
-    <data>
-        <dealerId>1</dealerId>
-        <email>swilder@tangentmtw.com</email>
-        <firstname>a</firstname>
-        <lastname>Wilder</lastname>
-        <password>tmtwdev</password>
-        <password_confirm>tmtwdev</password_confirm>
-        <resetPasswordOnNextLogin>1</resetPasswordOnNextLogin>
-        <userRoles>2</userRoles>
-    </data>
-</user>
+        <formMode>create</formMode>
+        <data>
+            <dealerId>1</dealerId>
+            <email>swilder@tangentmtw.com</email>
+            <firstname>a</firstname>
+            <lastname>Wilder</lastname>
+            <password>tmtwdev</password>
+            <password_confirm>tmtwdev</password_confirm>
+            <resetPasswordOnNextLogin>1</resetPasswordOnNextLogin>
+            <userRoles>2</userRoles>
+        </data>
+    </user>
     <user>
         <formMode>create</formMode>
         <data>

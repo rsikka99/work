@@ -65,7 +65,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[4]
-            $this-> _graphs [] = $barGraph->getUrl();
+            $this->_graphs [] = $barGraph->getUrl();
 
             /**
              * -- AverageMonthlyPagesPerEmployeeBarGraph
@@ -106,8 +106,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             /**
              * -- LeasedVsPurchasedPageCountBarGraph
              */
-            $highest    = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $barGraph   = new gchart\gBarChart(200, 300);
+            $highest  = ($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() > $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) ? $this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() : $this->_optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $barGraph = new gchart\gBarChart(200, 300);
             $barGraph->setTitle("Leased Vs Purchase|Page Counts");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array(round($this->_optimization->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
@@ -468,7 +468,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                                       "Your Supply Uniqueness"
                                  ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest/20 + 1);
+            $tickSize = (int)($highest / 20 + 1);
             $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);
@@ -506,7 +506,7 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                                       "Your Optimized Supply Uniqueness"
                                  ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest/20 + 1);
+            $tickSize = (int)($highest / 20 + 1);
             $barGraph->addAxisRange(0, 0, $highest, $tickSize);
             $barGraph->setDataRange(0, $highest);
             $barGraph->setBarScale(40, 5);

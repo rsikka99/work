@@ -197,7 +197,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     {
         parent::__construct($report);
         $this->DealerCompany = "Office Depot Inc.";
-        
+
         if (isset(self::$Proposal))
         {
             self::$Proposal = $this;
@@ -2288,9 +2288,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- CompatibleJITBarGraph
              */
             $numberOfDevicesReportingTonerLevels = count($this->getIncludedDevicesReportingTonerLevels());
-            $numberOfIncompatibleDevices  = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
-            $highest                      = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
-            $barGraph                     = new gchart\gBarChart(220, 220);
+            $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
+            $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
+            $barGraph                            = new gchart\gBarChart(220, 220);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));

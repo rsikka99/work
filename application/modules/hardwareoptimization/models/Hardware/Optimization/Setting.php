@@ -166,7 +166,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
         }
     }
 
-     /**
+    /**
      * @return array
      */
     public function toArray ()

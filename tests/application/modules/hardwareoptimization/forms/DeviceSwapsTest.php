@@ -27,7 +27,7 @@ class Hardwareoptimization_Form_DeviceSwapsTest extends PHPUnit_Framework_TestCa
      */
     public function goodHOSettingData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/goodData_deviceSwapsSettingTest.xml");
         $data = array();
         foreach ($xml->deviceSwap as $row)
         {
@@ -42,7 +42,7 @@ class Hardwareoptimization_Form_DeviceSwapsTest extends PHPUnit_Framework_TestCa
      */
     public function badHOSettingData ()
     {
-        $xml = simplexml_load_file(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
+        $xml  = simplexml_load_file(__DIR__ . "/_files/badData_deviceSwapsSettingTest.xml");
         $data = array();
         foreach ($xml->deviceSwap as $row)
         {

@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Preferences_MemjetoptimizationController
+ * Class Preferences_Memjet_OptimizationController
  */
-class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
+class Preferences_Memjet_OptimizationController extends Tangent_Controller_Action
 {
     public function indexAction () { /** Do nothing */ }
 
@@ -12,7 +12,7 @@ class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         $settings                             = $dealer->getDealerSettings()->getMemjetOptimizationSettings();
-        $memjetoptimizationSettingFormService = new Preferences_Service_MemjetoptimizationSetting($settings);
+        $memjetoptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting($settings);
         $form                                 = $memjetoptimizationSettingFormService->getForm();
 
         $request = $this->getRequest();
@@ -48,8 +48,8 @@ class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
     public function systemAction ()
     {
         // Initialize and get the form
-        $MemjetoptimizationSettingFormService = new Preferences_Service_MemjetoptimizationSetting();
-        $form                                 = $MemjetoptimizationSettingFormService->getForm();
+        $memjetOptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting();
+        $form                                 = $memjetOptimizationSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -58,7 +58,7 @@ class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (isset($values["save"]))
             {
-                $success = $MemjetoptimizationSettingFormService->update($values);
+                $success = $memjetOptimizationSettingFormService->update($values);
 
                 if ($success)
                 {
@@ -86,9 +86,9 @@ class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
 
         // User
         $user                                 = Application_Model_Mapper_User::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->id);
-        $MemjetoptimizationSettingFormService = new Preferences_Service_MemjetoptimizationSetting($user->getUserSettings()->getMemjetOptimizationSettings());
+        $memjetOptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting($user->getUserSettings()->getMemjetOptimizationSettings());
 
-        $form = $MemjetoptimizationSettingFormService->getFormWithDefaults($combinedDealerSettings);
+        $form = $memjetOptimizationSettingFormService->getFormWithDefaults($combinedDealerSettings);
 
         $request = $this->getRequest();
 
@@ -98,7 +98,7 @@ class Preferences_MemjetoptimizationController extends Tangent_Controller_Action
             if (isset($values["save"]))
             {
 
-                $success = $MemjetoptimizationSettingFormService->update($values);
+                $success = $memjetOptimizationSettingFormService->update($values);
 
                 if ($success)
                 {

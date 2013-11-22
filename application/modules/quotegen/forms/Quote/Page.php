@@ -247,7 +247,7 @@ class Quotegen_Form_Quote_Page extends Twitter_Bootstrap_Form_Horizontal
                                                                              ));
         $this->addElement($adminCostPerPage);
 
-        $tonerRankSets = $this->_quote->getTonerRankSets();
+        $tonerRankSets          = $this->_quote->getTonerRankSets();
         $dealerMonochromeVendor = $this->createElement('multiselect', 'dealerMonochromeRankSetArray',
             array(
                  'class' => 'tonerMultiselect',

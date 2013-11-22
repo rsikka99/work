@@ -132,12 +132,12 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         $launchDateElement = new ZendX_JQuery_Form_Element_DatePicker('launchDate');
 
         $launchDateElement->setJQueryParam('dateFormat', 'yy-mm-dd')
-        ->setJqueryParam('timeFormat', 'hh:mm')
-        ->setJQueryParam('changeYear', 'true')
-        ->setJqueryParam('changeMonth', 'true')
-        ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
-        ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-        ->setRequired($this->_isAllowedToEditFields)->setLabel('Launch Date:');
+                          ->setJqueryParam('timeFormat', 'hh:mm')
+                          ->setJQueryParam('changeYear', 'true')
+                          ->setJqueryParam('changeMonth', 'true')
+                          ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
+                          ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
+                          ->setRequired($this->_isAllowedToEditFields)->setLabel('Launch Date:');
         $launchDateElement->addFilters(array(
                                             'StringTrim',
                                             'StripTags'
@@ -171,16 +171,16 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         else
         {
             $wattsPowerNormalElement->addValidators(
-                array(
-                     'float',
-                     array(
-                         'validator' => 'Between',
-                         'options'   => array(
-                             'min' => 1,
-                             'max' => 10000
-                         )
-                     )
-                )
+                                    array(
+                                         'float',
+                                         array(
+                                             'validator' => 'Between',
+                                             'options'   => array(
+                                                 'min' => 1,
+                                                 'max' => 10000
+                                             )
+                                         )
+                                    )
             );
         }
 
@@ -202,15 +202,15 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         else
         {
             $dutyCycleElement->addValidators(
-                array(
-                     'Int',
-                     array(
-                         'validator' => 'greaterThan',
-                         'options'   => array(
-                             0
-                         )
-                     )
-                )
+                             array(
+                                  'Int',
+                                  array(
+                                      'validator' => 'greaterThan',
+                                      'options'   => array(
+                                          0
+                                      )
+                                  )
+                             )
             );
         }
 
@@ -218,20 +218,20 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
          * Idle/Sleep Wattage
          */
         $wattsPowerIdleElement = $this->createElement(
-                                     'text',
-                                     'wattsPowerIdle',
-                                     array(
-                                          'label'      => 'Idle/Sleep Wattage',
-                                          'class'      => 'span4',
-                                          'maxlength'  => 8,
-                                          'allowEmpty' => false,
-                                          'required'   => $this->_isAllowedToEditFields,
-                                          'filters'    => array(
-                                              'StringTrim',
-                                              'StripTags'
-                                          ),
-                                     )
-                                 )->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+                                      'text',
+                                          'wattsPowerIdle',
+                                          array(
+                                               'label'      => 'Idle/Sleep Wattage',
+                                               'class'      => 'span4',
+                                               'maxlength'  => 8,
+                                               'allowEmpty' => false,
+                                               'required'   => $this->_isAllowedToEditFields,
+                                               'filters'    => array(
+                                                   'StringTrim',
+                                                   'StripTags'
+                                               ),
+                                          )
+        )                             ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
         if (!$this->_isAllowedToEditFields)
         {
@@ -240,16 +240,16 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         else
         {
             $wattsPowerIdleElement->addValidators(
-                array(
-                     'float',
-                     array(
-                         'validator' => 'Between',
-                         'options'   => array(
-                             'min' => 0,
-                             'max' => 10000
-                         )
-                     )
-                )
+                                  array(
+                                       'float',
+                                       array(
+                                           'validator' => 'Between',
+                                           'options'   => array(
+                                               'min' => 0,
+                                               'max' => 10000
+                                           )
+                                       )
+                                  )
             );
         }
 
@@ -257,280 +257,280 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         $this->addDisplayGroup(array($isFaxElement, $reportsTonerLevelsElement, $jitCompatibleElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
 
         $this->getElement("isCopier")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("isDuplex")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("isFax")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array(
-                         'controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array(
+                          'controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("reportsTonerLevels")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("isA3")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("jitCompatibleMasterDevice")->setDecorators(
-            array(
-                 "ViewHelper",
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array(
-                         'tag'            => 'div',
-                         'class'          => 'switch',
-                         'data-on-label'  => 'Yes',
-                         'data-off-label' => 'No',
-                         'data-off'       => 'danger',
-                         'data-on'        => 'success'
-                     )
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ),
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  "ViewHelper",
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array(
+                          'tag'            => 'div',
+                          'class'          => 'switch',
+                          'data-on-label'  => 'Yes',
+                          'data-off-label' => 'No',
+                          'data-off'       => 'danger',
+                          'data-on'        => 'success'
+                      )
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ),
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $this->getElement("launchDate")->addDecorators(
-            array(
-                 array(
-                     array('wrapper' => 'HtmlTag'),
-                     array('tag' => 'div')
-                 ),
-                 array(
-                     array('donkeyKong' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'controls'
-                     )
-                 ), // Shawn said donkey kong was legit
-                 array(
-                     "label",
-                     array('class' => 'control-label')
-                 ),
-                 array(
-                     array('controls' => 'HtmlTag'),
-                     array(
-                         'tag'   => 'div',
-                         'class' => 'control-group'
-                     )
-                 )
-            )
+             array(
+                  array(
+                      array('wrapper' => 'HtmlTag'),
+                      array('tag' => 'div')
+                  ),
+                  array(
+                      array('donkeyKong' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'controls'
+                      )
+                  ), // Shawn said donkey kong was legit
+                  array(
+                      "label",
+                      array('class' => 'control-label')
+                  ),
+                  array(
+                      array('controls' => 'HtmlTag'),
+                      array(
+                          'tag'   => 'div',
+                          'class' => 'control-group'
+                      )
+                  )
+             )
         );
 
         $leftSide = $this->getDisplayGroup('leftSide');
         $leftSide->setDecorators(
-            array(
-                 'FormElements',
                  array(
-                     'Fieldset',
-                     array('class' => 'pull-left half-width')
-                 ),
-                 array(
-                     'HtmlTag',
-                     array(
-                         'tag'       => 'div',
-                         'openOnly'  => true,
-                         'class'     => 'clearfix',
-                         'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                     )
-                 )
-            ));
+                      'FormElements',
+                      array(
+                          'Fieldset',
+                          array('class' => 'pull-left half-width')
+                      ),
+                      array(
+                          'HtmlTag',
+                          array(
+                              'tag'       => 'div',
+                              'openOnly'  => true,
+                              'class'     => 'clearfix',
+                              'placement' => Zend_Form_Decorator_Abstract::PREPEND
+                          )
+                      )
+                 ));
 
         $rightSide = $this->getDisplayGroup('rightSide');
         $rightSide->setDecorators(
-            array(
-                 'FormElements',
-                 array(
-                     'Fieldset',
-                     array('class' => 'pull-right half-width')
-                 ),
-                 array(
-                     'HtmlTag',
-                     array(
-                         'tag'       => 'div',
-                         'closeOnly' => true,
-                         'class'     => 'clearfix',
-                         'placement' => Zend_Form_Decorator_Abstract::APPEND
-                     )
-                 )
-            )
+                  array(
+                       'FormElements',
+                       array(
+                           'Fieldset',
+                           array('class' => 'pull-right half-width')
+                       ),
+                       array(
+                           'HtmlTag',
+                           array(
+                               'tag'       => 'div',
+                               'closeOnly' => true,
+                               'class'     => 'clearfix',
+                               'placement' => Zend_Form_Decorator_Abstract::APPEND
+                           )
+                       )
+                  )
         );
     }
 }

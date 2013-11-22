@@ -136,7 +136,7 @@ class Quotegen_Model_LeasingSchema extends My_Model_Abstract
     /**
      * Sets all ranges for leasing schema
      *
-     * @param multitype: $_ranges
+     * @param multitype : $_ranges
      *
      * @return Quotegen_Model_LeasingSchema
      */

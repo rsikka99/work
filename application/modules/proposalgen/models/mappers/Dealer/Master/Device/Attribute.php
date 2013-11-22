@@ -74,7 +74,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
                                                                 "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
-                                                                "{$this->col_dealerId} = ?" => $primaryKey [1],
+                                                                "{$this->col_dealerId} = ?"       => $primaryKey [1],
                                                            ));
 
         // Save the object into the cache
@@ -98,7 +98,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object->masterDeviceId,
-                "{$this->col_dealerId} = ?" => $object->dealerId,
+                "{$this->col_dealerId} = ?"       => $object->dealerId,
 
             );
         }
@@ -106,7 +106,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
         {
             $whereClause = array(
                 "{$this->col_masterDeviceId} = ?" => $object[0],
-                "{$this->col_dealerId} = ?" => $object[1],
+                "{$this->col_dealerId} = ?"       => $object[1],
             );
         }
 
@@ -221,7 +221,7 @@ class Proposalgen_Model_Mapper_Dealer_Master_Device_Attribute extends My_Model_M
     {
         return array(
             "{$this->col_masterDeviceId} = ?" => $id [0],
-            "{$this->col_dealerId} = ?" => $id [1],
+            "{$this->col_dealerId} = ?"       => $id [1],
         );
     }
 

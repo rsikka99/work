@@ -303,10 +303,10 @@ class Quotegen_Model_Mapper_Client extends My_Model_Mapper_Abstract
         $db                      = $this->getDbTable()->getAdapter();
         $select                  = $db->select();
         $select->from($this->getTableName())
-            ->joinLeft($recentlyViewedTableName, "{$recentlyViewedTableName}.{$userViewedClientMapper->col_clientId} = {$this->getTableName()}.{$this->col_id}")
-            ->where("{$recentlyViewedTableName}.{$userViewedClientMapper->col_userId} = ?", $userId)
-            ->order("{$userViewedClientMapper->col_dateViewed} DESC")
-            ->limit($limit);
+               ->joinLeft($recentlyViewedTableName, "{$recentlyViewedTableName}.{$userViewedClientMapper->col_clientId} = {$this->getTableName()}.{$this->col_id}")
+               ->where("{$recentlyViewedTableName}.{$userViewedClientMapper->col_userId} = ?", $userId)
+               ->order("{$userViewedClientMapper->col_dateViewed} DESC")
+               ->limit($limit);
 
         $resultSet = $db->fetchAll($select);
 
