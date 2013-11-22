@@ -186,7 +186,6 @@ class Memjetoptimization_Service_Setting
 
             $this->_memjetOptimizationSettings->populate($this->_populateSettings->toArray());
             $this->_memjetOptimizationSettings->populate($validData);
-            $this->_memjetOptimizationSettings->id = $this->_memjetOptimizationSettings->id;
 
             Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting::getInstance()->save($this->_memjetOptimizationSettings);
 

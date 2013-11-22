@@ -184,7 +184,6 @@ class Hardwareoptimization_Service_Setting
 
             $this->_hardwareOptimizationSettings->populate($this->_populateSettings->toArray());
             $this->_hardwareOptimizationSettings->populate($validData);
-            $this->_hardwareOptimizationSettings->id = $this->_hardwareOptimizationSettings->id;
 
             Hardwareoptimization_Model_Mapper_Hardware_Optimization_Setting::getInstance()->save($this->_hardwareOptimizationSettings);
 
