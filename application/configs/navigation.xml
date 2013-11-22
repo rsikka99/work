@@ -1127,6 +1127,14 @@
                                     <action>user</action>
                                     <resource>preferences__hardwareoptimization__user</resource>
                                 </hardwareoptimizationsettings>
+                                <memjetoptimizationsettings>
+                                    <label>Memjet Optimization</label>
+                                    <module>preferences</module>
+                                    <controller>memjet_optimization</controller>
+                                    <action>user</action>
+                                    <resource>preferences__memjet_optimization__user</resource>
+                                    <visible>0</visible>
+                                </memjetoptimizationsettings>
                             </pages>
                         </usersettings>
                         <dealersettings>
@@ -1165,6 +1173,14 @@
                                     <action>dealer</action>
                                     <resource>preferences__hardwareoptimization__dealer</resource>
                                 </hardwareoptimizationsettings>
+                                <memjetoptimizationsettings>
+                                    <label>Memjet Optimization</label>
+                                    <module>preferences</module>
+                                    <controller>memjet_optimization</controller>
+                                    <action>dealer</action>
+                                    <resource>preferences__memjet_optimization__dealer</resource>
+                                    <visible>0</visible>
+                                </memjetoptimizationsettings>
                             </pages>
                         </dealersettings>
                         <systemsettings>
@@ -1203,6 +1219,14 @@
                                     <action>system</action>
                                     <resource>preferences__hardwareoptimization__system</resource>
                                 </hardwareoptimizationsettings>
+                                <memjetoptimizationsettings>
+                                    <label>Memjet Optimization</label>
+                                    <module>preferences</module>
+                                    <controller>memjet_optimization</controller>
+                                    <action>system</action>
+                                    <resource>preferences__memjet_optimization__system</resource>
+                                    <visible>0</visible>
+                                </memjetoptimizationsettings>
                             </pages>
                         </systemsettings>
                     </pages>

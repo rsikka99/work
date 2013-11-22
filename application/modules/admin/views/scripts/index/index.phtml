@@ -61,7 +61,7 @@
                     Manage Device <br /> Swaps <br /> </a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD) || My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
+        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "index", "controller" => "memjetdeviceswaps", "module" => "admin")); ?>"><i class="icon-exchange icon-4x"></i><br /><br />
                     Manage Memjet Device Swaps</a>
@@ -132,7 +132,7 @@
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
             <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "memjetoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
                     Memjet<br /> Optimization<br /><br /></a>
             </div>
         <?php endif; ?>
@@ -167,7 +167,7 @@
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
             <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "memjetoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
                     Memjet<br /> Optimization<br /><br /></a>
             </div>
         <?php endif; ?>
@@ -202,7 +202,7 @@
         <?php endif; ?>
         <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM)) : ?>
             <div class="span2">
-                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "memjetoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
+                <a class="btn btn-block" href="<?php echo $this->url(array("action" => "system", "controller" => "memjet_optimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
                     Memjet<br /> Optimization<br /><br /></a>
             </div>
         <?php endif; ?>

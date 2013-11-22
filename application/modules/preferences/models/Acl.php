@@ -24,9 +24,9 @@ class Preferences_Model_Acl
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_SYSTEM = "preferences__hardwareoptimization__system";
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER   = "preferences__hardwareoptimization__user";
     const RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER = "preferences__hardwareoptimization__dealer";
-    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM   = "preferences__memjetoptimization__system";
-    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_USER     = "preferences__memjetoptimization__user";
-    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_DEALER   = "preferences__memjetoptimization__dealer";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_SYSTEM   = "preferences__memjet_optimization__system";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_USER     = "preferences__memjet_optimization__user";
+    const RESOURCE_PREFERENCES_MEMJETOPTIMIZATION_DEALER   = "preferences__memjet_optimization__dealer";
 
     /**
      * Sets up acl resources and access for a module
