@@ -76,17 +76,17 @@ class Memjetoptimization_Service_Setting
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();
             $this->_form->setUpFormWithDefaultDecorators();
-            $MemjetSettingsArray = $this->_memjetOptimizationSettings->toArray();
+            $memjetSettingsArray = $this->_memjetOptimizationSettings->toArray();
 
-            foreach ($MemjetSettingsArray as $key => $value)
+            foreach ($memjetSettingsArray as $key => $value)
             {
                 if ($value === null)
                 {
-                    unset($MemjetSettingsArray[$key]);
+                    unset($memjetSettingsArray[$key]);
                 }
             }
 
-            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $MemjetSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_memjetOptimizationSettings->getTonerRankSets()));
+            $this->_form->populate(array_merge($this->_populateSettings->toArray(), $memjetSettingsArray, $this->_populateSettings->getTonerRankSets(), $this->_memjetOptimizationSettings->getTonerRankSets()));
             $this->_form->populate(array('name' => $this->_memjetOptimization->name));
         }
 
