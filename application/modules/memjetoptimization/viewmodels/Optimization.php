@@ -54,9 +54,9 @@ class Memjetoptimization_ViewModel_Optimization
     protected $_maximumMonthlyPrintVolume;
 
     /**
-     * @var  Proposalgen_Model_PageCounts
+     * @var  Proposalgen_Model_PageCounts[]
      */
-    protected $_pageCounts;
+    protected $_pageCounts = array();
 
     /**
      * @var Memjetoptimization_ViewModel_Devices
@@ -100,6 +100,11 @@ class Memjetoptimization_ViewModel_Optimization
      * @var Proposalgen_Model_PageCounts
      */
     protected $_totalMonthlyPageCountsWithReplacements;
+
+    /**
+     * @var stdClass
+     */
+    protected $_percentages;
 
     /**
      * Constructor
@@ -184,16 +189,34 @@ class Memjetoptimization_ViewModel_Optimization
     /**
      * Gets the page counts
      *
+     * @param int $blackToColorRatio
+     *
      * @return Proposalgen_Model_PageCounts
      */
-    public function getPageCounts ()
+    public function getPageCounts ($blackToColorRatio = 0)
     {
-        if (!isset($this->_pageCounts))
+        if (!isset($this->_pageCounts[$blackToColorRatio]))
         {
-            $this->_pageCounts = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
+            if ($blackToColorRatio > 0)
+            {
+                $pageCounts = new Proposalgen_Model_PageCounts();
+                foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
+                {
+                    $memjetReplacement  = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_optimization->id);
+                    $isUpgradingToColor = $memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor() && $deviceInstance->getMasterDevice()->isColor() == false;
+                    $ratio              = ($isUpgradingToColor) ? $blackToColorRatio : 0;
+
+                    $pageCounts->add($deviceInstance->getPageCounts($ratio));
+                    $this->_pageCounts[$blackToColorRatio] = $pageCounts;
+                }
+            }
+            else
+            {
+                $this->_pageCounts[$blackToColorRatio] = $this->getDevices()->allIncludedDeviceInstances->getPageCounts();
+            }
         }
 
-        return $this->_pageCounts;
+        return $this->_pageCounts[$blackToColorRatio];
     }
 
     /**
@@ -203,34 +226,34 @@ class Memjetoptimization_ViewModel_Optimization
      */
     public function getPercentages ()
     {
-        if (!isset($this->Percentages))
+        if (!isset($this->_percentages))
         {
-            $Percentages                                            = new stdClass();
-            $Percentages->TotalColorPercentage                      = 0;
-            $Percentages->PurchasedVsLeasedBlackAndWhite            = new stdClass();
-            $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = 0;
-            $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = 0;
-            $Percentages->PurchasedVsLeasedColor                    = new stdClass();
-            $Percentages->PurchasedVsLeasedColor->Leased            = 0;
-            $Percentages->PurchasedVsLeasedColor->Purchased         = 0;
+            $fleetPercentages                                            = new stdClass();
+            $fleetPercentages->TotalColorPercentage                      = 0;
+            $fleetPercentages->PurchasedVsLeasedBlackAndWhite            = new stdClass();
+            $fleetPercentages->PurchasedVsLeasedBlackAndWhite->Leased    = 0;
+            $fleetPercentages->PurchasedVsLeasedBlackAndWhite->Purchased = 0;
+            $fleetPercentages->PurchasedVsLeasedColor                    = new stdClass();
+            $fleetPercentages->PurchasedVsLeasedColor->Leased            = 0;
+            $fleetPercentages->PurchasedVsLeasedColor->Purchased         = 0;
             if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
             {
-                $Percentages->TotalColorPercentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+                $fleetPercentages->TotalColorPercentage = $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             }
             if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly())
             {
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
-                $Percentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
+                $fleetPercentages->PurchasedVsLeasedBlackAndWhite->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
+                $fleetPercentages->PurchasedVsLeasedBlackAndWhite->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly();
             }
             if ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly())
             {
-                $Percentages->PurchasedVsLeasedColor->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
-                $Percentages->PurchasedVsLeasedColor->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
+                $fleetPercentages->PurchasedVsLeasedColor->Leased    = $this->getDevices()->leasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
+                $fleetPercentages->PurchasedVsLeasedColor->Purchased = $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly();
             }
-            $this->Percentages = $Percentages;
+            $this->_percentages = $fleetPercentages;
         }
 
-        return $this->Percentages;
+        return $this->_percentages;
     }
 
     /**
@@ -304,7 +327,7 @@ class Memjetoptimization_ViewModel_Optimization
      */
     public function getDeviceCount ()
     {
-        return count($this->getDevices()->allIncludedDeviceInstances);
+        return $this->getDevices()->allIncludedDeviceInstances->getCount();
     }
 
     /**
@@ -560,28 +583,34 @@ class Memjetoptimization_ViewModel_Optimization
      *
      * @return number
      */
-    public function calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements ($blackToColorRatio = null)
+    public function calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements ($blackToColorRatio = 0)
     {
         if (!isset($this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements))
         {
-            $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements = 0;
+            $total    = 0;
+            $settings = $this->_optimization->getMemjetoptimizationSetting();
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id);
-                if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
+
+                /**
+                 * Only need to change the ratio of pages when we've upgraded to color functionality
+                 */
+                if ($replacementDevice instanceof Proposalgen_Model_MasterDevice && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor())
                 {
-                    $blackToColorRatioForReplacement = ($deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $blackToColorRatio : null;
-                    $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements += $deviceInstance->getPageCounts($blackToColorRatioForReplacement)->getBlackPageCount()->getMonthly() * $this->_optimization->getMemjetoptimizationSetting()->targetMonochromeCostPerPage;
-                    $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements += $deviceInstance->getPageCounts($blackToColorRatioForReplacement)->getColorPageCount()->getMonthly() * $this->_optimization->getMemjetoptimizationSetting()->targetColorCostPerPage;
+                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly() * $settings->targetMonochromeCostPerPage;
+                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly() * $settings->targetColorCostPerPage;
                 }
                 else
                 {
-                    $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $this->_optimization->getMemjetoptimizationSetting()->targetMonochromeCostPerPage;
-                    $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $this->_optimization->getMemjetoptimizationSetting()->targetColorCostPerPage;
+                    $total += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $settings->targetMonochromeCostPerPage;
+                    $total += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $settings->targetColorCostPerPage;
                 }
 
             }
+
+            $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements = $total;
         }
 
         return $this->_dealerMonthlyRevenueUsingTargetCostPerPageWithReplacements;
@@ -664,7 +693,7 @@ class Memjetoptimization_ViewModel_Optimization
      *
      * @return Proposalgen_Model_CostPerPage
      */
-    public function calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements ($blackToColorRatio = null)
+    public function calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements ($blackToColorRatio = 0)
     {
         if (!isset($this->_dealerWeightedAverageMonthlyCostPerPageWithReplacements))
         {
@@ -673,12 +702,15 @@ class Memjetoptimization_ViewModel_Optimization
             $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
             $totalMonthlyMonoPagesPrinted  = 0;
             $totalMonthlyColorPagesPrinted = 0;
+
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
                 $memjetReplacement  = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_optimization->id);
                 $isUpgradingToColor = $memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor() && $deviceInstance->getMasterDevice()->isColor() == false;
-                $totalMonthlyMonoPagesPrinted += $deviceInstance->getPageCounts(($isUpgradingToColor) ? $blackToColorRatio : null)->getBlackPageCount()->getMonthly();
-                $totalMonthlyColorPagesPrinted += $deviceInstance->getPageCounts(($isUpgradingToColor) ? $blackToColorRatio : null)->getColorPageCount()->getMonthly();
+                $ratio              = ($isUpgradingToColor) ? $blackToColorRatio : 0;
+
+                $totalMonthlyMonoPagesPrinted += $deviceInstance->getPageCounts($ratio)->getBlackPageCount()->getMonthly();
+                $totalMonthlyColorPagesPrinted += $deviceInstance->getPageCounts($ratio)->getColorPageCount()->getMonthly();
             }
 
             $colorCpp = 0;
@@ -688,11 +720,20 @@ class Memjetoptimization_ViewModel_Optimization
             {
                 $memjetReplacement  = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_optimization->id);
                 $isUpgradingToColor = $memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor() && $deviceInstance->getMasterDevice()->isColor() == false;
+                $ratio              = ($isUpgradingToColor) ? $blackToColorRatio : 0;
                 $costPerPage        = $deviceInstance->calculateMemjetCostPerPageWithReplacement($costPerPageSetting, $this->_optimization->id);
-                $monoCpp += ($deviceInstance->getPageCounts(($isUpgradingToColor) ? $blackToColorRatio : null)->getBlackPageCount()->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+
+                /**
+                 * Mono CPP
+                 */
+                $monoCpp += ($deviceInstance->getPageCounts($ratio)->getBlackPageCount()->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;
+
+                /**
+                 * Only calculate when we are a color device or we are being replaced by a color device and we have color volume in the fleet
+                 */
                 if ($totalMonthlyColorPagesPrinted > 0 && ($deviceInstance->getMasterDevice()->isColor() || ($memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor())))
                 {
-                    $colorCpp += ($deviceInstance->getPageCounts(($isUpgradingToColor) ? $blackToColorRatio : null)->getColorPageCount()->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
+                    $colorCpp += ($deviceInstance->getPageCounts($ratio)->getColorPageCount()->getMonthly() / $totalMonthlyColorPagesPrinted) * $costPerPage->colorCostPerPage;
                 }
             }
 
@@ -722,7 +763,7 @@ class Memjetoptimization_ViewModel_Optimization
      *
      * @return number
      */
-    public function calculateDealerMonthlyCostWithReplacements ($blackToColorRatio = null)
+    public function calculateDealerMonthlyCostWithReplacements ($blackToColorRatio = 0)
     {
         if (!isset($this->_dealerMonthlyCostWithReplacements))
         {
@@ -735,7 +776,9 @@ class Memjetoptimization_ViewModel_Optimization
                 $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id);
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
                 {
-                    $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id), ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $blackToColorRatio : null);
+                    $replacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id);
+                    $ratio                   = ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $blackToColorRatio : 0;
+                    $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementMasterDevice, $ratio);
                 }
                 else
                 {
@@ -747,7 +790,7 @@ class Memjetoptimization_ViewModel_Optimization
         return $this->_dealerMonthlyCostWithReplacements;
     }
 
-    public function getTotalMonthlyPageCountsWithReplacements ($blackToColorRatio = null)
+    public function getTotalMonthlyPageCountsWithReplacements ($blackToColorRatio = 0)
     {
         if (!isset($this->_totalMonthlyPageCountsWithReplacements))
         {
@@ -755,9 +798,10 @@ class Memjetoptimization_ViewModel_Optimization
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $memjetReplacement  = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_optimization->id);
-                $isUpgradingToColor = $memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor() && $deviceInstance->getMasterDevice()->isColor() == false;
-                $pageCounts->add($deviceInstance->getPageCounts(($isUpgradingToColor) ? $blackToColorRatio : null));
+                $memjetReplacement = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_optimization->id);
+                $ratio             = ($memjetReplacement instanceof Proposalgen_Model_MasterDevice && $memjetReplacement->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $blackToColorRatio : 0;
+
+                $pageCounts->add($deviceInstance->getPageCounts($ratio));
             }
 
             $this->_totalMonthlyPageCountsWithReplacements = $pageCounts;

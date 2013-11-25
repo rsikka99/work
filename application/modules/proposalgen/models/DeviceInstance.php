@@ -151,12 +151,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     protected $_meter;
 
     /**
-     * The device instance's pageCounts
-     *
-     * @var Proposalgen_Model_PageCounts
-     */
-    protected $_pageCounts;
-    /**
      * Used in determining actions for replacement devices.
      *
      * @var String
@@ -631,8 +625,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_meter))
         {
-            $meters       = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchForDeviceInstance($this->id);
-            $this->_meter = $meters;
+            $meter        = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchForDeviceInstance($this->id);
+            $this->_meter = $meter;
         }
 
         return $this->_meter;
@@ -1340,15 +1334,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Getter for $_reason
      *
-     * @param $memjetoptimizationId
+     * @param $memjetOptimizationId
      *
      * @return string
      */
-    public function getMemjetReason ($memjetoptimizationId)
+    public function getMemjetReason ($memjetOptimizationId)
     {
         if (!isset($this->_reason))
         {
-            $deviceSwapReasonId = Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($memjetoptimizationId, $this->id))->deviceSwapReasonId;
+            $deviceSwapReasonId = Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($memjetOptimizationId, $this->id))->deviceSwapReasonId;
             $this->_reason      = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->find($deviceSwapReasonId);
         }
 
@@ -1358,11 +1352,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Gets this device instance's page counts
      *
-     * @param int $blackToColorRatio
+     * @param int $blackToColorRatio The amount of mono pages to convert to color pages. Defaults to 0%
      *
      * @return Proposalgen_Model_PageCounts
      */
-    public function getPageCounts ($blackToColorRatio = null)
+    public function getPageCounts ($blackToColorRatio = 0)
     {
         // Make sure our array is initialized
         if (!isset($this->_cachedPageCounts))
@@ -1378,42 +1372,19 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
             if ($meter instanceof Proposalgen_Model_DeviceInstanceMeter)
             {
-                if ($blackToColorRatio != null)
-                {
-                    $blackRatio = 1 - ($blackToColorRatio / 100);
-                    $colorRatio = $blackToColorRatio / 100;
-
-                    //Normal Pages
-                    $tempPageCount = new Proposalgen_Model_PageCount();
-                    $tempPageCount->setDaily($meter->getBlackPageCount()->getDaily() * $colorRatio);
-                    $pageCounts->getColorPageCount()->add($tempPageCount);
-                    $tempPageCount->setDaily($meter->getBlackPageCount()->getDaily() * $blackRatio);
-                    $pageCounts->getBlackPageCount()->add($tempPageCount);
-
-                    //Copy
-                    $tempPageCount->setDaily($meter->getCopyBlackPageCount()->getDaily() * $colorRatio);
-                    $pageCounts->getCopyColorPageCount()->add($tempPageCount);
-                    $tempPageCount->setDaily($meter->getCopyBlackPageCount()->getDaily() * $blackRatio);
-                    $pageCounts->getCopyBlackPageCount()->add($tempPageCount);
-
-                    //A3
-                    $tempPageCount->setDaily($meter->getPrintA3BlackPageCount()->getDaily() * $colorRatio);
-                    $pageCounts->getPrintA3ColorPageCount()->add($tempPageCount);
-                    $tempPageCount->setDaily($meter->getPrintA3BlackPageCount()->getDaily() * $blackRatio);
-                    $pageCounts->getPrintA3BlackPageCount()->add($tempPageCount);
-                }
-                else
-                {
-                    $pageCounts->getBlackPageCount()->add($meter->getBlackPageCount());
-                    $pageCounts->getColorPageCount()->add($meter->getColorPageCount());
-                    $pageCounts->getCopyBlackPageCount()->add($meter->getCopyBlackPageCount());
-                    $pageCounts->getCopyColorPageCount()->add($meter->getCopyColorPageCount());
-                    $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
-                    $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
-                }
-
+                $pageCounts->getBlackPageCount()->add($meter->getBlackPageCount());
+                $pageCounts->getColorPageCount()->add($meter->getColorPageCount());
+                $pageCounts->getCopyBlackPageCount()->add($meter->getCopyBlackPageCount());
+                $pageCounts->getCopyColorPageCount()->add($meter->getCopyColorPageCount());
                 $pageCounts->getFaxPageCount()->add($meter->getFaxPageCount());
+                $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
+                $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
                 $pageCounts->getScanPageCount()->add($meter->getScanPageCount());
+
+                if ($blackToColorRatio > 0)
+                {
+                    $pageCounts->processPageRatio($blackToColorRatio);
+                }
             }
 
             $this->_cachedPageCounts[$cacheKey] = $pageCounts;

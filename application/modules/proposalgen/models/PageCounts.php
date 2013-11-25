@@ -165,15 +165,48 @@ class Proposalgen_Model_PageCounts
     /**
      * @return Proposalgen_Model_PageCount
      */
-    public Function getColorPageCount ()
+    public function getColorPageCount ()
     {
         return $this->_colorPageCount;
+    }
+
+
+    /**
+     * Monochrome page count percentage
+     *
+     * @return float
+     */
+    public function getMonochromePagePercentage ()
+    {
+        $percent = 0;
+        if ($this->getBlackPageCount()->getDaily() > 0)
+        {
+            $percent = $this->getBlackPageCount()->getDaily() / $this->getCombinedPageCount()->getDaily() * 100;
+        }
+
+        return $percent;
+    }
+
+    /**
+     * Color page count percentage
+     *
+     * @return float
+     */
+    public function getColorPagePercentage ()
+    {
+        $percent = 0;
+        if ($this->getBlackPageCount()->getDaily() > 0)
+        {
+            $percent = $this->getColorPageCount()->getDaily() / $this->getCombinedPageCount()->getDaily() * 100;
+        }
+
+        return $percent;
     }
 
     /**
      * @return Proposalgen_Model_PageCount
      */
-    public Function getCombinedPageCount ()
+    public function getCombinedPageCount ()
     {
         if (!isset($this->_combinedPageCount))
         {
@@ -306,6 +339,39 @@ class Proposalgen_Model_PageCounts
         }
 
         return $this->_lifePageCount;
+    }
+
+    public function processPageRatio ($blackToColorRatio)
+    {
+        $blackRatio = 1 - ($blackToColorRatio / 100);
+        $colorRatio = $blackToColorRatio / 100;
+
+        /**
+         * Color Page Counts (Take $colorRatio of the black volume and put it into the color page count.)
+         * Note: Color needs to be done as once the black page counts are modified they won't calculate properly for the color page counts.
+         */
+
+        // A3 Color
+        $this->getPrintA3ColorPageCount()->setDaily($this->getPrintA3BlackPageCount()->getDaily() * $colorRatio);
+
+        // A4 Color
+        $this->getColorPageCount()->setDaily($this->getBlackPageCount()->getDaily() * $colorRatio);
+
+        // Copy Color
+        $this->getCopyColorPageCount()->setDaily($this->getCopyBlackPageCount()->getDaily() * $colorRatio);
+
+        /**
+         * Black Page Counts (Take $blackRatio of the black volume and put it into the black page count.)
+         */
+
+        // A3 Black
+        $this->getPrintA3BlackPageCount()->setDaily($this->getPrintA3BlackPageCount()->getDaily() * $blackRatio);
+
+        // A4 Black
+        $this->getBlackPageCount()->setDaily($this->getBlackPageCount()->getDaily() * $blackRatio);
+
+        // Copy Black
+        $this->getCopyBlackPageCount()->setDaily($this->getCopyBlackPageCount()->getDaily() * $blackRatio);
     }
 
 }

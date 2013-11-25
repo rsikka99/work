@@ -202,6 +202,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 ),
                 $this->_dealerId,
                 $this->_memjetOptimization->getMemjetOptimizationSetting()->lossThreshold,
+                10,
                 $optimization->getCostPerPageSettingForDealer(),
                 $optimization->getCostPerPageSettingForReplacements(),
                 $this->_memjetOptimization->getMemjetOptimizationSetting()->laborCostPerPage,
