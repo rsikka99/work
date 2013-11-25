@@ -118,7 +118,7 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
                                                    ));
 
         $this->addElement('text', 'costThreshold', array(
-                                                        'label'      => 'Cost Threshold',
+                                                        'label'      => 'Cost Savings Threshold',
                                                         'append'     => '$',
                                                         'validators' => $costValidator
                                                    ));

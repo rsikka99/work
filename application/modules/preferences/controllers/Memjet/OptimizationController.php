@@ -12,8 +12,8 @@ class Preferences_Memjet_OptimizationController extends Tangent_Controller_Actio
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
         $settings                             = $dealer->getDealerSettings()->getMemjetOptimizationSettings();
-        $memjetoptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting($settings);
-        $form                                 = $memjetoptimizationSettingFormService->getForm();
+        $memjetOptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting($settings);
+        $form                                 = $memjetOptimizationSettingFormService->getForm();
 
         $request = $this->getRequest();
 
@@ -22,7 +22,7 @@ class Preferences_Memjet_OptimizationController extends Tangent_Controller_Actio
             $values = $request->getPost();
             if (isset($values["save"]))
             {
-                $success = $memjetoptimizationSettingFormService->update($values);
+                $success = $memjetOptimizationSettingFormService->update($values);
 
                 if ($success)
                 {
