@@ -75,6 +75,7 @@ class Memjetoptimization_Service_Setting
             $this->_form->getElement("adminCostPerPage")->setDescription("$" . $this->_populateSettings->adminCostPerPage . " / page");
             $this->_form->getElement("lossThreshold")->setDescription("$" . $this->_populateSettings->lossThreshold);
             $this->_form->getElement("blackToColorRatio")->setDescription($this->_populateSettings->blackToColorRatio . "%");
+            $this->_form->getElement("costThreshold")->setDescription("$" . $this->_populateSettings->costThreshold);
 
             $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->targetMonochromeCostPerPage . " / page");
             $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $this->_populateSettings->targetColorCostPerPage . " / page");

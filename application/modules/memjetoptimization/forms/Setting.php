@@ -117,6 +117,12 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
                                                         'validators' => $costValidator
                                                    ));
 
+        $this->addElement('text', 'costThreshold', array(
+                                                        'label'      => 'Cost Threshold',
+                                                        'append'     => '$',
+                                                        'validators' => $costValidator
+                                                   ));
+
         $replacementMonochromeVendor = $this->createElement('multiselect', 'replacementMonochromeRankSetArray',
             array(
                  "class" => "tonerMultiselect",
@@ -147,7 +153,7 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
         }
 
 
-        $this->addDisplayGroup(array('name', 'pageCoverageMonochrome', 'pageCoverageColor', 'costThreshold', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', 'lossThreshold', 'blackToColorRatio', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'Memjetoptimization');
+        $this->addDisplayGroup(array('name', 'pageCoverageMonochrome', 'pageCoverageColor', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', 'lossThreshold', 'blackToColorRatio', 'costThreshold', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'Memjetoptimization');
 
         $group = $this->getDisplayGroup('Memjetoptimization');
         $group->setDecorators(array(
