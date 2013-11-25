@@ -16,11 +16,18 @@ $memjetOptimization = $this->memjetOptimization;
             <strong>Target Color CPP : </strong><?php echo $this->currency((float)$memjetOptimization->getMemjetOptimizationSetting()->targetColorCostPerPage, array('precision' => 4)); ?>
         </td>
         <td>
+            <strong>Mono/Color Conversion: </strong><?php echo number_format((float)$memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio); ?>%
+        </td>
+
+    </tr>
+    <tr>
+        <td>
             <strong>Loss Threshold : </strong><?php echo $this->currency((float)$memjetOptimization->getMemjetOptimizationSetting()->lossThreshold); ?>
         </td>
         <td>
-            <strong>Mono/Color Conversion: </strong><?php echo number_format((float)$memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio); ?>%
+            <strong>Cost Savings Threshold : </strong><?php echo $this->currency((float)$memjetOptimization->getMemjetOptimizationSetting()->costThreshold); ?>
         </td>
+        <td>&nbsp;</td>
     </tr>
     </tbody>
 </table>
