@@ -1426,8 +1426,6 @@ th.default {
 }
 .ui-widget-header {
   text-transform: uppercase;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
 }
 .ui-jqgrid tr.ui-row-ltr td {
   border-right-color: inherit;
