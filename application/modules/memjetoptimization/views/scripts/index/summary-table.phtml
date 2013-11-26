@@ -1,6 +1,6 @@
 <?php
-/* @var $optimization Memjetoptimization_ViewModel_Optimization */
-$optimization = $this->optmizationViewModel;
+/* @var $optimizationViewModel Memjetoptimization_ViewModel_Optimization */
+$optimizationViewModel = $this->optmizationViewModel;
 /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */
 $memjetOptimization = $this->memjetOptimization;
 ?>
@@ -39,24 +39,24 @@ $memjetOptimization = $this->memjetOptimization;
     <tbody>
     <tr>
         <td class="description"><strong>Mono CPP :</strong></td>
-        <td><?php echo $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)); ?></td>
+        <td><?php echo $this->currency($optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array('precision' => 4)); ?></td>
         <td class="description"><strong>Color CPP :</strong></td>
-        <td><?php echo $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)); ?></td>
+        <td><?php echo $this->currency($optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)); ?></td>
         <td class="description"><strong>Customer Cost :</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2)) ?></td>
+        <td><?php echo $this->currency((float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage(), array('precision' => 2)) ?></td>
     </tr>
     <tr>
         <td class="description"><strong>Mono Volume : </strong></td>
-        <td><?php echo number_format($optimization->getPageCounts()->getBlackPageCount()->getMonthly()); ?> (<?php echo number_format($optimization->getPageCounts()->getMonochromePagePercentage()); ?>%)</td>
+        <td><?php echo number_format($optimizationViewModel->getPageCounts()->getBlackPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getMonochromePagePercentage()); ?>%)</td>
         <td class="description"><strong>Color Volume : </strong></td>
-        <td><?php echo number_format($optimization->getPageCounts()->getColorPageCount()->getMonthly()); ?> (<?php echo number_format($optimization->getPageCounts()->getColorPagePercentage()); ?>%)</td>
+        <td><?php echo number_format($optimizationViewModel->getPageCounts()->getColorPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getColorPagePercentage()); ?>%)</td>
         <td class="description"><strong>Dealer Cost :</strong></td>
-        <td><?php echo $this->currency($optimization->calculateDealerMonthlyCost()); ?></td>
+        <td><?php echo $this->currency($optimizationViewModel->calculateDealerMonthlyCost()); ?></td>
     </tr>
     <tr>
         <td colspan="4">&nbsp;</td>
         <td class="description"><strong>Gross Margin :</strong></td>
-        <td><?php echo $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?> (<?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>%)</td>
+        <td><?php echo $this->currency($optimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?> (<?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimizationViewModel->calculateDealerMonthlyCost(), (float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>%)</td>
     </tr>
     </tbody>
 </table>
@@ -68,24 +68,30 @@ $memjetOptimization = $this->memjetOptimization;
     <tbody>
     <tr>
         <td class="description"><strong>Mono CPP :</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->monochromeCostPerPage, array('precision' => 4)) ?></td>
+        <td id="monochromeCpp"><?php echo $this->currency((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->monochromeCostPerPage, array('precision' => 4)) ?></td>
         <td class="description"><strong>Color CPP :</strong></td>
-        <td><?php echo ((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->colorCostPerPage > 0) ? $this->currency((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A'; ?></td>
+        <td id="colorCpp"><?php echo ((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->colorCostPerPage > 0) ? $this->currency((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array('precision' => 4)) : 'N/A'; ?></td>
         <td class="description"><strong>Customer Cost :</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></td>
+        <td id="totalRevenue"><?php echo $this->currency((float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></td>
     </tr>
     <tr>
         <td class="description"><strong>Mono Volume : </strong></td>
-        <td><?php echo number_format($optimization->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getBlackPageCount()->getMonthly()); ?> (<?php echo number_format($optimization->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getMonochromePagePercentage()); ?>%)</td>
+        <td>
+            <span id="monoVolume"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getBlackPageCount()->getMonthly()); ?></span> (<span id="monoVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getMonochromePagePercentage()); ?></span>%)
+        </td>
         <td class="description"><strong>Color Volume : </strong></td>
-        <td><?php echo number_format($optimization->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPageCount()->getMonthly()); ?> (<?php echo number_format($optimization->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPagePercentage()); ?>%)</td>
+        <td>
+            <span id="colorVolume"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPageCount()->getMonthly()); ?></span> (<span id="colorVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPagePercentage()); ?></span>%)
+        </td>
         <td class="description"><strong>Dealer Cost :</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></td>
+        <td id="totalCost"><?php echo $this->currency((float)$optimizationViewModel->calculateDealerMonthlyCostWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></td>
     </tr>
     <tr>
         <td colspan="4">&nbsp;</td>
         <td class="description"><strong>Gross Margin :</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?> (<?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)), 2) ?>%)</td>
+        <td>
+            <span id="marginDollar"><?php echo $this->currency((float)$optimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></span> (<span id="marginPercent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimizationViewModel->calculateDealerMonthlyCostWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), (float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)), 2) ?></span>%)
+        </td>
     </tr>
     <tr>
         <td colspan="4">&nbsp;</td>
@@ -94,11 +100,12 @@ $memjetOptimization = $this->memjetOptimization;
          * FIXME lrobert: This needs  to be removed from the view script
          */
         $grossMarginDelta =
-            (float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio) -
-            (float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage();
+            (float)$optimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio) -
+            (float)$optimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPage();
         ?>
-        <td class="description"><strong><?php echo ($grossMarginDelta >= 0) ? 'Gross Margin Increase' : 'Gross Margin Decrease'; ?> :</strong></td>
-        <td><?php echo $this->currency(abs($grossMarginDelta), array('precision' => 2)) ?></td>
+        <td class="description">
+            <strong id="grossMarginDeltaTitle"><?php echo ($grossMarginDelta >= 0) ? 'Gross Margin Increase' : 'Gross Margin Decrease'; ?> :</strong></td>
+        <td id="grossMarginDelta"><?php echo $this->currency(abs($grossMarginDelta), array('precision' => 2)) ?></td>
     </tr>
     <tr>
         <td colspan="4">&nbsp;</td>
@@ -107,13 +114,14 @@ $memjetOptimization = $this->memjetOptimization;
          * FIXME lrobert: This needs  to be removed from the view script
          */
         $customerCostDelta =
-            (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio) -
-            (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage();
+            (float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio) -
+            (float)$optimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage();
         ?>
-        <td class="description"><strong><?php echo ($customerCostDelta >= 0) ? 'Customer Cost Increase' : 'Customer Cost Decrease'; ?> :</strong></td>
-        <td><?php echo $this->currency(abs($customerCostDelta), array('precision' => 2)) ?></td>
+        <td class="description">
+            <strong id="customerCostDeltaTitle"><?php echo ($customerCostDelta >= 0) ? 'Customer Cost Increase' : 'Customer Cost Decrease'; ?> :</strong></td>
+        <td id="customerCostDelta"><?php echo $this->currency(abs($customerCostDelta), array('precision' => 2)) ?></td>
     </tr>
 
     </tbody>
 </table>
-<em>The following <?php echo count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?> out of <?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are eligible for potential optimization.</em>
+<em>The following <?php echo count($optimizationViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?> out of <?php echo $optimizationViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are eligible for potential optimization.</em>

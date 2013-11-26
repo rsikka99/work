@@ -61,6 +61,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 }
             }
         }
+
         $this->view->numberOfUploads = count(Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->getMemjetOptimization()->clientId));
         $this->view->rmsUpload       = $this->getMemjetOptimization()->getRmsUpload();
         $this->view->navigationForm  = new Memjetoptimization_Form_Memjet_Optimization_Navigation(Memjetoptimization_Form_Memjet_Optimization_Navigation::BUTTONS_NEXT);
@@ -102,6 +103,9 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         $this->view->form = $form;
     }
 
+    /**
+     * Displays all our devices and allows the user to optimize a fleet
+     */
     public function optimizeAction ()
     {
         // Mark the step we're on as active
@@ -324,12 +328,16 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         $this->sendJson($device);
     }
 
+    /**
+     * Handles updating single device replacements on the optimize page
+     */
     public function updateReplacementDeviceAction ()
     {
         // Setup the required mappers
         $memjetDeviceInstanceReplacementMasterDeviceMapper = Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance();
         $deviceInstanceDeviceSwapReasonMapper              = Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
-        $optimization                                      = $this->getOptimizationViewModel();
+        $memjetOptimizationViewModel                       = $this->getOptimizationViewModel();
+        $memjetOptimization                                = $this->getMemjetOptimization();
         $deviceInstanceReasonElement                       = null;
         $blackToColorRatio                                 = $this->getMemjetOptimization()->getMemjetOptimizationSetting()->blackToColorRatio;
 
@@ -383,8 +391,8 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             }
 
 
-            $costDelta = $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer()) -
-                         $deviceInstance->calculateMonthlyCost($optimization->getCostPerPageSettingForReplacements(), $replacementDevice, ($replacementDevice != null && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $blackToColorRatio : null);
+            $costDelta = $deviceInstance->calculateMonthlyCost($memjetOptimizationViewModel->getCostPerPageSettingForDealer()) -
+                         $deviceInstance->calculateMonthlyCost($memjetOptimizationViewModel->getCostPerPageSettingForReplacements(), $replacementDevice, ($replacementDevice != null && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $blackToColorRatio : null);
 
             $form                        = new Memjetoptimization_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_memjetOptimization->id);
             $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
@@ -408,24 +416,59 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         }
 
         $estimatedPageCounts = $deviceInstance->getPageCounts(($replacementDevice != null && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $blackToColorRatio : null);
-        // Add calculated amounts to json
-        // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
-        $this->sendJson(array(
-                             "monochromeCpp"       => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage, array("precision" => 4)),
-                             "colorCpp"            => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage, array("precision" => 4)),
-                             "totalCost"           => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements($blackToColorRatio)),
-                             "replaceReason"       => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
-                             "marginDollar"        => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio)),
-                             "costDelta"           => $this->view->currency($costDelta),
-                             "rawCostDelta"        => (float)$costDelta,
-                             "estimatedMonoAmpv"   => number_format($estimatedPageCounts->getBlackPageCount()->getMonthly()),
-                             "estimatedColorAmpv"  => number_format($estimatedPageCounts->getColorPageCount()->getMonthly()),
-                             "marginPercent"       => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
-                             "memjetOptimizedCost" => $this->view->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($this->getMemjetOptimization()->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)),
-                             "savings"             => $this->view->currency((float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage() - (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($this->getMemjetOptimization()->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2))
-                        ));
+
+        $grossMarginDelta           = (float)$memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio) -
+                                      (float)$memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPage();
+        $grossMarginDeltaIsPositive = ($grossMarginDelta >= 0);
+        $grossMarginDelta           = abs($grossMarginDelta);
+
+        $customerCostDelta         = (float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio) -
+                                     (float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage();
+        $customerCostDeltaPositive = ($customerCostDelta >= 0);
+        $customerCostDelta         = abs($customerCostDelta);
+
+        /**
+         * Send data back so we can update the page on the fly
+         */
+        $this->sendJson(
+             array(
+                  "summary" => array(
+                      /**
+                       * Summary page Page Data
+                       */
+                      "monochromeCpp"               => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage, array("precision" => 4)),
+                      "colorCpp"                    => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage, array("precision" => 4)),
+                      "totalRevenue"                => $this->view->currency((float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio), array('precision' => 2)),
+                      "monoVolume"                  => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly()),
+                      "monoVolumePercent"           => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getMonochromePagePercentage()),
+                      "colorVolume"                 => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly()),
+                      "colorVolumePercent"          => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPagePercentage()),
+                      "totalCost"                   => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements($blackToColorRatio)),
+                      "marginDollar"                => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio)),
+                      "marginPercent"               => number_format(Tangent_Accounting::reverseEngineerMargin((float)$memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements(), (float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
+                      "grossMarginDelta"            => $this->view->currency($grossMarginDelta),
+                      "grossMarginDeltaIsPositive"  => ($grossMarginDeltaIsPositive) ? true : false,
+                      "customerCostDelta"           => $this->view->currency($customerCostDelta),
+                      "customerCostDeltaIsPositive" => ($customerCostDeltaPositive) ? true : false,
+                  ),
+                  "device"  => array(
+                      /**
+                       * Device Data
+                       */
+
+                      "costDelta"          => $this->view->currency($costDelta),
+                      "rawCostDelta"       => (float)$costDelta,
+                      "estimatedMonoAmpv"  => number_format($estimatedPageCounts->getBlackPageCount()->getMonthly()),
+                      "estimatedColorAmpv" => number_format($estimatedPageCounts->getColorPageCount()->getMonthly()),
+                      "replaceReason"      => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
+                  ),
+             )
+        );
     }
 
+    /**
+     * Renders our summary table for us
+     */
     public function summaryTableAction ()
     {
         $this->_helper->layout()->disableLayout();
@@ -434,6 +477,9 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
     }
 
 
+    /**
+     * Provider the device list for jqgrid on the optimize page
+     */
     public function deviceListAction ()
     {
         $jqGridService            = new Tangent_Service_JQGrid();
@@ -558,6 +604,9 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         return $success;
     }
 
+    /**
+     * Updates a single devices swap reason
+     */
     public function updateDeviceSwapReasonAction ()
     {
         $deviceInstanceDeviceSwapReasonMapper = Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();

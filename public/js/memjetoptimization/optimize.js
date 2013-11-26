@@ -147,6 +147,7 @@ $(function ()
                             $row = $("<tr></tr>");
                             $row.append("<td>Color CPP</td><td>" + data.deviceInstance.costPerPageColor + "</td>");
                             $table.append($row);
+
                             $row = $("<tr></tr>");
                             $row.append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>");
                             $table.append($row);
@@ -333,18 +334,27 @@ $(function ()
                     },
                     success   : function (data)
                     {
-                        grid.setCell(rowId, 'reason', data.replaceReason);
-                        grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
-                        grid.setCell(rowId, 'estimatedMonoAmpv', data.estimatedMonoAmpv);
-                        grid.setCell(rowId, 'estimatedColorAmpv', data.estimatedColorAmpv);
+                        grid.setCell(rowId, 'reason', data.device.replaceReason);
+                        grid.setCell(rowId, 'costDelta', data.device.costDelta, (data.device.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                        grid.setCell(rowId, 'estimatedMonoAmpv', data.device.estimatedMonoAmpv);
+                        grid.setCell(rowId, 'estimatedColorAmpv', data.device.estimatedColorAmpv);
+
                         // Update the calculation
-                        $('#monochromeCpp').html(data.monochromeCpp);
-                        $('#colorCpp').html(data.colorCpp);
-                        $('#totalCost').html(data.totalCost);
-                        $('#marginDollar').html(data.marginDollar);
-                        $('#marginPercent').html(data.marginPercent);
-                        $('#memjetOptimizedCost').html(data.memjetOptimizedCost);
-                        $('#savings').html(data.savings);
+                        $('#monochromeCpp').html(data.summary.monochromeCpp);
+                        $('#colorCpp').html(data.summary.colorCpp);
+                        $('#totalRevenue').html(data.summary.totalRevenue);
+                        $('#monoVolume').html(data.summary.monoVolume);
+                        $('#monoVolumePercent').html(data.summary.monoVolumePercent);
+                        $('#colorVolume').html(data.summary.colorVolume);
+                        $('#colorVolumePercent').html(data.summary.colorVolumePercent);
+
+                        $('#totalCost').html(data.summary.totalCost);
+                        $('#marginDollar').html(data.summary.marginDollar);
+                        $('#marginPercent').html(data.summary.marginPercent);
+                        $('#grossMarginDelta').html(data.summary.grossMarginDelta);
+                        $('#grossMarginDeltaTitle').html((data.summary.grossMarginDeltaIsPositive) ? "Gross Margin Increase" : "Gross Margin Decrease");
+                        $('#customerCostDelta').html(data.summary.customerCostDelta);
+                        $('#customerCostDeltaTitle').html((data.summary.customerCostDeltaIsPositive) ? "Customer Cost Increase" : "Customer Cost Decrease");
                     }
                 });
             }
