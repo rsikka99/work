@@ -1524,6 +1524,14 @@ th.default {
 .ui-jqgrid-pager {
   height: 32px;
 }
+/*
+ * Fixes Columns not splitting into two lines
+ */
+th.ui-th-column div {
+  white-space: normal !important;
+  height: auto !important;
+  padding: 2px;
+}
 /* Nav Tabs */
 .nav-tabs > li > p:hover,
 .nav-pills > li > p:hover {

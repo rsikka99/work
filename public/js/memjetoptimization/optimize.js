@@ -37,7 +37,7 @@ $(function ()
             { label: 'Raw Mono CPP', name: 'rawMonoCpp', index: 'rawMonoCpp', align: 'right', width: 50, hidden: true },
             { label: 'Color CPP', name: 'colorCpp', index: 'colorCpp', align: 'right', width: 50, sortable: false },
             { label: 'Raw Color CPP', name: 'rawColorCpp', index: 'rawColorCpp', align: 'right', width: 50, hidden: true },
-            { label: 'Monthly Cost', name: 'monthlyCost', index: 'monthlyCost', align: 'right', width: 50, sortable: false },
+            { label: 'Monthly Cost', name: 'monthlyCost', index: 'monthlyCost', align: 'right', width: 65, sortable: false },
             { label: 'Action', name: 'action', index: 'action', align: 'right', width: 125, sortable: false },
             { label: 'Cost Delta', name: 'costDelta', index: 'costDelta', align: 'right', width: 50, sortable: false },
             { label: 'Raw Cost Delta', name: 'rawCostDelta', index: 'costDelta', align: 'right', width: 50, hidden: true },
@@ -89,7 +89,7 @@ $(function ()
 
                 if (row.rawCostDelta < 0)
                 {
-                    grid.setCell(ids[i], 'costDelta', '', 'negativeCostDelta');
+                    grid.setCell(ids[i], 'costDelta', '', {'background-color': 'red', 'font-weight': 'bold', 'color': 'white'});
                 }
             }
         },
@@ -335,7 +335,9 @@ $(function ()
                     success   : function (data)
                     {
                         grid.setCell(rowId, 'reason', data.device.replaceReason);
-                        grid.setCell(rowId, 'costDelta', data.device.costDelta, (data.device.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                        grid.setCell(rowId, 'rawCostDelta', data.device.rawCostDelta);
+                        grid.setCell(rowId, 'costDelta', data.device.costDelta, (data.device.rawCostDelta >= 0) ? {'background-color': 'white', 'font-weight': 'normal', 'color': 'black'} : {'background-color': 'red', 'font-weight': 'bold', 'color': 'white'});
+
                         grid.setCell(rowId, 'estimatedMonoAmpv', data.device.estimatedMonoAmpv);
                         grid.setCell(rowId, 'estimatedColorAmpv', data.device.estimatedColorAmpv);
 
