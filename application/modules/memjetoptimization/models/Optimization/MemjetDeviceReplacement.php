@@ -121,6 +121,11 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
     {
         $suggestedDevice = null;
 
+        if (substr_count($deviceInstance->getMasterDevice()->modelName, '4700') > 0)
+        {
+            $hey = "I'm a breakpoint";
+        }
+
         if ($deviceInstance->getAction() != "Retire")
         {
 
@@ -156,7 +161,7 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
                     $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() <= $deviceSwap->getDealerMaximumPageCount($this->_dealerId) &&
                     $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() >= $deviceSwap->getDealerMinimumPageCount($this->_dealerId) &&
                     $costDelta > $this->_lossThreshold &&
-                    !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta <= $this->_costSavingsThreshold)
+                    !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta < $this->_costSavingsThreshold)
                 )
                 {
                     /*
@@ -164,9 +169,12 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
                      */
                     if
                     (
-                        $suggestedDevice == null
-                        && (($deviceInstance->getMasterDevice()->isColor() === false && $deviceSwap->getMasterDevice()->isColor() === true) // Adding color
-                            || ($deviceInstance->getMasterDevice()->isMfp() === false && $deviceSwap->getMasterDevice()->isMfp() === true)) // Or Adding MFP
+                        $suggestedDevice == null &&
+                        (
+                            !($deviceInstance->getMasterDevice()->isColor() === true && $deviceSwap->getMasterDevice()->isColor() === false) && // Not losing color
+                            !($deviceInstance->getMasterDevice()->isMfp() === true && $deviceSwap->getMasterDevice()->isMfp() === false) // Not losing mfp
+
+                        )
                     )
                     {
                         $suggestedDevice = $deviceSwap;
