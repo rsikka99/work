@@ -46,9 +46,7 @@ $hardwareOptimization = $this->hardwareoptimization;
         <td><?php echo ($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage > 0) ? $this->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'N/A'; ?></td>
         <td><?php echo $this->currency($optimization->calculateDealerMonthlyCost()); ?></td>
         <td><?php echo $this->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()); ?></td>
-        <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>
-            %
-        </td>
+        <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2); ?>%</td>
     </tr>
     <tr>
         <td> Optimized</td>
