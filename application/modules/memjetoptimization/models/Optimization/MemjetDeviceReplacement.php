@@ -121,11 +121,6 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
     {
         $suggestedDevice = null;
 
-        if (substr_count($deviceInstance->getMasterDevice()->modelName, '4700') > 0)
-        {
-            $hey = "I'm a breakpoint";
-        }
-
         if ($deviceInstance->getAction() != "Retire")
         {
 
