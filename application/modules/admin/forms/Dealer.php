@@ -76,7 +76,7 @@ class Admin_Form_Dealer extends Twitter_Bootstrap_Form_Horizontal
             // This removes the br that is put in between each element
             foreach ($featuresList as $feature)
             {
-                $dealerFeatures->addMultiOption($feature, $feature);
+                $dealerFeatures->addMultiOption($feature['id'], $feature['name']);
             }
 
             $this->addElement($dealerFeatures);

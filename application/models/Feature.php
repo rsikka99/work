@@ -13,6 +13,13 @@ class Application_Model_Feature extends My_Model_Abstract
     public $id;
 
     /**
+     * The name of the feature
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -25,6 +32,10 @@ class Application_Model_Feature extends My_Model_Abstract
         {
             $this->id = $params->id;
         }
+        if (isset($params->name) && !is_null($params->name))
+        {
+            $this->name = $params->name;
+        }
     }
 
     /**
@@ -33,7 +44,8 @@ class Application_Model_Feature extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            'id' => $this->id,
+            'id'   => $this->id,
+            'name' => $this->name,
         );
     }
 }

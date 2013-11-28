@@ -5,7 +5,16 @@
 class Application_Model_Mapper_Feature extends My_Model_Mapper_Abstract
 {
     // Column Names
+    /**
+     * @var string
+     */
     public $col_id = "id";
+
+    /**
+     * @var string
+     */
+    public $col_name = "name";
+
     /**
      * The default db table class to use
      *
@@ -239,7 +248,7 @@ class Application_Model_Mapper_Feature extends My_Model_Mapper_Abstract
 
         foreach ($features as $feature)
         {
-            $featuresStringList[] = $feature->id;
+            $featuresStringList[] = array('id' => $feature->id, 'name' => $feature->name);
         }
 
         return $featuresStringList;
