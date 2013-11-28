@@ -550,7 +550,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             }
             else if ($formName == 'availableTonersForm')
             {
-                $form = $manageMasterDeviceService->getAvailableTonersForm();
+                $form = $manageMasterDeviceService->getAvailableTonersForm(isset($formData['form']['availableTonersid']) ? $formData['form']['availableTonersid'] : null);
             }
 
             $formErrors = array();

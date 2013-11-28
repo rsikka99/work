@@ -7,11 +7,17 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
 {
 
     /**
-     * @param null $options
-     *
+     * @var int
      */
-    public function __construct ($options = null)
+    protected $_id;
+
+    /**
+     * @param null $options
+     * @param int  $id
+     */
+    public function __construct ($options = null, $id = null)
     {
+        $this->_id = $id;
         parent::__construct($options);
     }
 
@@ -64,17 +70,26 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
                                                                    )
                                                               ));
 
+        $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
+
+        $dbNoRecordExistsValidator = $tonerMapper->getDbNoRecordExistsValidator($this->_id);
+        $dbNoRecordExistsValidator->setMessage("MFG. Part # is already in use");
+
         $availableTonersSystemSkuElement = $this->createElement('text', 'availableTonerssystemSku', array(
-                                                                                                         'label'     => 'MFG. Part #',
-                                                                                                         'class'     => 'span3',
-                                                                                                         'required'  => true,
-                                                                                                         'maxlength' => 255,
-                                                                                                         'filters'   => array(
+                                                                                                         'label'      => 'MFG. Part #',
+                                                                                                         'class'      => 'span3',
+                                                                                                         'required'   => true,
+                                                                                                         'maxlength'  => 255,
+                                                                                                         'filters'    => array(
                                                                                                              'StringTrim',
                                                                                                              'StripTags'
                                                                                                          ),
-                                                                                                         'validator' => 'StringLength',
-                                                                                                         'options'   => array(
+                                                                                                         'validators' =>
+                                                                                                             array(
+                                                                                                                 'StringLength',
+                                                                                                                 $dbNoRecordExistsValidator
+                                                                                                             ),
+                                                                                                         'options'    => array(
                                                                                                              1,
                                                                                                              255
                                                                                                          )

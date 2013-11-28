@@ -841,4 +841,25 @@ WHERE `toners`.`id` IN ({$tonerIdList})
 
         return $fieldList;
     }
+
+    /**
+     * Gets a Zend_Validate_Db_NoRecordExists to be used in a form
+     *
+     * @param $id
+     *
+     * @return \Zend_Validate_Db_NoRecordExists
+     */
+    public function getDbNoRecordExistsValidator ($id = null)
+    {
+        $noRecordExistsArray          = array();
+        $noRecordExistsArray['table'] = $this->getTableName();
+        $noRecordExistsArray['field'] = $this->col_sku;
+
+        if ($id)
+        {
+            $noRecordExistsArray['exclude'] = Zend_Db_Table::getDefaultAdapter()->quoteInto("{$this->col_id} != ?", $id);
+        }
+
+        return new Zend_Validate_Db_NoRecordExists($noRecordExistsArray);
+    }
 }

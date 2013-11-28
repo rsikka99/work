@@ -760,15 +760,15 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Gets the Available Toners Form
      *
-     * @param bool $creating
+     * @param int $id
      *
      * @return Proposalgen_Form_MasterDeviceManagement_AvailableToners
      */
-    public function getAvailableTonersForm ($creating = false)
+    public function getAvailableTonersForm ($id = null)
     {
         if (!isset($this->_availableTonersForm))
         {
-            $this->_availableTonersForm = new Proposalgen_Form_MasterDeviceManagement_AvailableToners(null, $this->_isAdmin);
+            $this->_availableTonersForm = new Proposalgen_Form_MasterDeviceManagement_AvailableToners(null, $id);
         }
 
         return $this->_availableTonersForm;
