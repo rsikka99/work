@@ -304,7 +304,7 @@ class Preferences_Form_Memjet_OptimizationSetting extends Twitter_Bootstrap_Form
 
 
     /**
-     * Allows the form to allow null vlaues
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {

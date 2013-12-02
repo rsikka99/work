@@ -2,7 +2,7 @@
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
-// Equipement and payement terms section
+// Equipment and payment terms section
 $this->leaseDetails = new stdClass();
 $this->leaseDetails->monthlyCharge = $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal());
 $this->leaseDetails->monochromeAllowance = number_format($quote->calculateTotalMonochromePages());
@@ -16,7 +16,7 @@ $this->leaseDetails->securityDeposit = $this->currency(0);
 // TODO: Should be blank if it's monthly.
 $this->leaseDetails->meterFrequency = '';
 
-// Information speicific for the company 
+// Information specific for the company
 $this->company = new stdClass();
 $this->company->name = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
 $this->company->address = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";

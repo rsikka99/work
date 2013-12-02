@@ -96,7 +96,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
             $jqGridService->setRows($deviceSwapMapper->fetAllForDealer($this->_identity->dealerId, $costPerPageSetting, $sortOrder, $jqGridService->getSortDirection()), $jqGridService->getRecordsPerPage(), $startRecord);
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else
@@ -172,7 +172,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
             $jqGridService->setRows($deviceSwapReasonMapper->fetAllForDealer($this->_identity->dealerId, $sortOrder, $jqGridService->getRecordsPerPage(), $startRecord));
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else

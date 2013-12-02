@@ -48,7 +48,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     /**
      * The printermodelsAction returns a list of printer_models by manufacturer
-     * to populate the dropdowns in json format
+     * to populate the dropdowns in JSON format
      */
     public function printermodelsAction ()
     {
@@ -73,10 +73,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     }
 
     /**
-     * The devicedetailsAction accepts a parameter for the deviceid and gets the
+     * The devicedetailsAction accepts a parameter for the deviceId and gets the
      * device
      * details from the database.
-     * Returns the details array in a json encoded format.
+     * Returns the details array in a JSON encoded format.
      */
     public function devicedetailsAction ()
     {
@@ -191,7 +191,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     }
 
     /**
-     * @throws \Exception This action seems to provide json lists for the following:
+     * @throws \Exception This action seems to provide JSON lists for the following:
      * - Manufacturers
      * - Toner Colors
      * - Part Types
@@ -281,7 +281,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      * The devicetonersAction accepts a parameter for the deviceid and gets the
      * device
      * toners from the database.
-     * Returns the parts array in a json encoded format.
+     * Returns the parts array in a JSON encoded format.
      */
     public function devicetonersAction ()
     {
@@ -487,13 +487,13 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    // empty form values
+                    // Empty form values
                     $formData = array();
                 }
             }
             catch (Exception $e)
             {
-                // critical exception
+                // Critical exception
                 Throw new exception("Critical Error: Unable to find device parts.", 0, $e);
             }
         }
@@ -634,7 +634,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                             if (count($num_devices) == 1)
                             {
-                                // UPDATE THIS DEVICE WITH REPLCEMENT TONER
+                                // UPDATE THIS DEVICE WITH REPLACEMENT TONER
                                 // (with_id)
                                 $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
                                 $device_toner->toner_id = $with_id;
@@ -684,10 +684,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
 
     /**
-     * The manufacturerdetailsAction accepts a parameter for the manufacturerid
+     * The manufacturerdetailsAction accepts a parameter for the manufacturerId
      * and gets the
      * details from the database.
-     * Returns the details array in a json encoded format.
+     * Returns the details array in a JSON encoded format.
      */
     public function manufacturerdetailsAction ()
     {
@@ -707,7 +707,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
             else
             {
-                // empty form values
+                // Empty form values
                 $formData = array(
                     'manufacturer_name'        => '',
                     'manufacturer_displayname' => '',
@@ -717,9 +717,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         catch (Exception $e)
         {
-            // critical exception
+            // Critical exception
             Throw new exception("Critical Error: Unable to find manufacturer.", 0, $e);
-        } // end catch
+        } // End catch
 
 
         $this->sendJson($formData);
@@ -771,7 +771,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 $page = $totalPages;
             }
-            // Page, total, and records are needed for the JQgrid to operate
+            // Page, total, and records are needed for the jqGrid to operate
             $response->page    = $page;
             $response->total   = $totalPages;
             $response->records = $count;
@@ -884,7 +884,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $dealerId = $this->dealerId;
         try
         {
-            // get count
+            // Get count
             $select = $db->select()
                          ->from(array(
                                      't' => 'toners'
@@ -1033,7 +1033,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
     }
 
     /**
-     * This action handles mapping rms models to master devices.
+     * This action handles mapping RMS models to master devices.
      * If masterDeviceId is set to -1 it will delete the matchup
      * This is used in @see \Proposalgen_AdminController::managematchupsAction()
      */
@@ -1097,7 +1097,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 }
                 else
                 {
-                    $errorMessage = 'Invalid Rms Device.';
+                    $errorMessage = 'Invalid RMS Device.';
                 }
             }
             else
@@ -1196,7 +1196,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
             $jqGrid->setRows($rmsDeviceMapper->getMatchupDevices($jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $searchCriteria, $searchValue, $jqGrid->getRecordsPerPage(), $startRecord));
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
@@ -1217,7 +1217,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $form                         = new Proposalgen_Form_ReplacementPrinter(null);
         $this->view->replacement_form = $form;
 
-        // fill manufacturer drop down
+        // Fill manufacturer drop down
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers      = $manufacturersTable->fetchAll('isDeleted = 0', 'fullname');
         $currElement        = $form->getElement('manufacturer_id');
@@ -1227,7 +1227,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $currElement->addMultiOption($row ['id'], ucwords(strtolower($row ['fullname'])));
         }
 
-        // fill replacement_category
+        // Fill replacement_category
         $currElement = $form->getElement('replacement_category');
         $currElement->addMultiOption('', 'Select a Category');
         $currElement->addMultiOption('BLACK & WHITE', 'Black & White');
@@ -1312,7 +1312,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $monthly_rate         = $formData ['monthly_rate'];
         $form_mode            = $formData ['form_mode'];
 
-        // validation
+        // Validation
         $validation = '';
         if ($manufacturer_id == "")
         {
@@ -1433,8 +1433,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         else
         {
-            // if formdata was not valid, repopulate form(error messages from
-            // validations are automatically added)
+            // If formData was not valid, repopulate form(error messages from
+            // Validations are automatically added)
             $this->view->message = $validation;
         }
         $this->sendJson($this->view->message);
@@ -1445,10 +1445,10 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $formData = new stdClass();
         try
         {
-            // get pf device list filter by manufacturer
+            // Get PF device list filter by manufacturer
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAllForDealer($this->dealerId);
 
-            // return results
+            // Return results
             if (count($replacementDevices) > 0)
             {
                 $i = 0;
@@ -1505,22 +1505,22 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             }
             else
             {
-                // empty form values
+                // Empty form values
                 $formData = array();
             }
         }
         catch (Exception $e)
         {
-            // critical exception
+            // Critical exception
             Throw new exception("Error: Unable to find replacement device.", 0, $e);
-        } // end catch
+        } // End catch
 
 
         $this->sendJson($formData);
     }
 
     /**
-     * This action is used for searching for master devices via
+     * This action is used for searching for master devices via manufacturerId
      *
      */
     public function searchForDeviceAction ()

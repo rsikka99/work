@@ -95,7 +95,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                         Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_quote->dealerColorRankSetId);
                     }
 
-                    // If we have a difference in page coverage we need to recalculate cpp rates for devices
+                    // If we have a difference in page coverage we need to recalculate CPP rates for devices
                     if ($quotePageCoverageMono !== (float)$this->_quote->pageCoverageMonochrome
                         || $quotePageCoverageColor !== (float)$this->_quote->pageCoverageColor
                         || $quoteAdminCostPerPage !== (float)$this->_quote->adminCostPerPage
@@ -144,7 +144,7 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                                                        ));
                 }
             }
-            // Go back button is clicked : got back to qoute_groups
+            // Go back button is clicked : got back to quote_groups
             else
             {
                 $this->redirector('index', 'quote_groups', null, array(

@@ -11,14 +11,14 @@ class Proposalgen_Form_Device extends Zend_Form
      * @param $options -
      *                 not used (required)
      * @param $type    -
-     *                 can be set to 'edit', or null. Differnt form elements are added for editing an instructor and adding a
+     *                 can be set to 'edit', or null. Different form elements are added for editing an instructor and adding a
      *                 new instructor.
      *
      * @return \Proposalgen_Form_Device markup for the from is automatically returned by zend_form
      */
     public function __construct ($options = null, $type = null)
     {
-        //call parent constructor
+        // Call parent constructor
         $currencyRegex = '/^\d+(?:\.\d{0,2})?$/';
 
         parent::__construct($options);
@@ -29,7 +29,7 @@ class Proposalgen_Form_Device extends Zend_Form
         //  DEVICE FIELDS
         //*****************************************************************
 
-        //hidden mode to toggle between add/edit
+        // Hidden mode to toggle between add/edit
         $hiddenMode = new Zend_Form_Element_Hidden('form_mode');
         $hiddenMode->setValue("edit");
         $hiddenMode->setDecorators(array(
@@ -38,7 +38,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $hiddenMode);
         $elementCounter++;
 
-        //hidden field for hdnID
+        // Hidden field for hdnID
         $element = new Zend_Form_Element_Hidden('hdnID');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -46,7 +46,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for hdnItem
+        // Hidden field for hdnItem
         $element = new Zend_Form_Element_Hidden('hdnItem');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -54,7 +54,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for ticket_id when in ticket mode
+        // Hidden field for ticket_id when in ticket mode
         $element = new Zend_Form_Element_Hidden('ticket_id');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -62,7 +62,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for devices_pf_id when in request mode
+        // Hidden field for devices_pf_id when in request mode
         $element = new Zend_Form_Element_Hidden('devices_pf_id');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -70,7 +70,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for unknown_device_instance_id when in request mode
+        // Hidden field for unknown_device_instance_id when in request mode
         $element = new Zend_Form_Element_Hidden('unknown_device_instance_id');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -78,7 +78,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for saving
+        // Hidden field for saving
         $element = new Zend_Form_Element_Hidden('save_flag');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -86,7 +86,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //hidden field for toners_array
+        // Hidden field for toners_array
         $element = new Zend_Form_Element_Hidden('toner_array');
         $element->setDecorators(array(
                                      'ViewHelper'
@@ -94,7 +94,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //manufacturers list
+        // Manufacturers list
         $manufacturer_id = new Zend_Form_Element_Select('manufacturer_id');
         $manufacturer_id->setLabel('* Manufacturer:')
                         ->setRequired(true)
@@ -130,7 +130,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $manufacturer_id);
         $elementCounter++;
 
-        //printer_model list
+        // Printer_model list
         $printer_model = new Zend_Form_Element_Select('printer_model');
         $printer_model->setLabel('* Printer Model:')
                       ->setOrder($elementCounter)
@@ -167,7 +167,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $printer_model);
         $elementCounter++;
 
-        //add printer
+        // Add printer
         $add_printer = new Zend_Form_Element_Text('new_printer');
         $add_printer->setLabel('* Printer Model:')
             //->setAttrib('size',30)
@@ -203,7 +203,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $add_printer);
         $elementCounter++;
 
-        //serial number
+        // Serial number
         $element = new Zend_Form_Element_Text('serial_number');
         $element->setLabel('Serial Number:')
                 ->setAttrib('size', 30)
@@ -213,7 +213,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //launch_date
+        // Launch_date
         $element = new Zend_Form_Element_Text('launch_date');
         $element->setLabel('* Launch Date:')
                 ->setRequired(true)
@@ -250,7 +250,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //override price
+        // Override price
         $override_price = new Zend_Form_Element_Text('override_price');
         $override_price->setLabel('Override Price:')
                        ->setAttrib('class', 'span1')
@@ -294,7 +294,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $override_price);
         $elementCounter++;
 
-        //toner_config list
+        // Toner_config list
         $toner_config = new Zend_Form_Element_Select('toner_config_id');
         $toner_config->setLabel('* Toner Config:')
                      ->setRequired(true)
@@ -328,7 +328,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $toner_config);
         $elementCounter++;
 
-        //copier
+        // Copier
         $is_copier = new Zend_Form_Element_Checkbox('is_copier');
         $is_copier->setLabel('Copier:')
                   ->setOrder($elementCounter)
@@ -360,7 +360,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $is_copier);
         $elementCounter++;
 
-        //scanner
+        // Scanner
         $is_scanner = new Zend_Form_Element_Checkbox('is_scanner');
         $is_scanner->setLabel('Scanner:')
                    ->setOrder($elementCounter)
@@ -423,7 +423,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $reportsTonerLevels);
         $elementCounter++;
 
-        //fax
+        // Fax
         $is_fax = new Zend_Form_Element_Checkbox('is_fax');
         $is_fax->setLabel('Fax:')
                ->setOrder($elementCounter)
@@ -455,7 +455,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $is_fax);
         $elementCounter++;
 
-        //duplex
+        // Duplex
         $is_duplex = new Zend_Form_Element_Checkbox('is_duplex');
         $is_duplex->setLabel('Duplex:')
                   ->setOrder($elementCounter)
@@ -487,7 +487,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $is_duplex);
         $elementCounter++;
 
-        //ppm black
+        // PPM Black
         $element = new Zend_Form_Element_Text('ppm_black');
         $element->setLabel('PPM Black:')
                 ->setAttrib('maxlength', 4)
@@ -528,7 +528,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //ppm color
+        // PPM Color
         $element = new Zend_Form_Element_Text('ppm_color');
         $element->setLabel('PPM Color:')
                 ->setAttrib('maxlength', 4)
@@ -569,7 +569,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //duty cycle
+        // Duty cycle
         $element = new Zend_Form_Element_Text('duty_cycle');
         $element->setLabel('Duty Cycle:')
                 ->setAttrib('maxlength', 8)
@@ -610,7 +610,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //watts normal
+        // Watts normal
         $watts_power_normal = new Zend_Form_Element_Text('watts_power_normal');
         $watts_power_normal->setLabel('* Power Consumption Normal:')
                            ->setAttrib('maxlength', 6)
@@ -653,7 +653,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $watts_power_normal);
         $elementCounter++;
 
-        //watts idle
+        // Watts idle
         $watts_power_idle = new Zend_Form_Element_Text('watts_power_idle');
         $watts_power_idle->setLabel('* Power Consumption Idle:')
                          ->setAttrib('maxlength', 6)
@@ -700,7 +700,7 @@ class Proposalgen_Form_Device extends Zend_Form
         //LEASED DEVICES BELOW
         //*********************************************************************
 
-        //leased toner yield
+        // Leased toner yield
         $element = new Zend_Form_Element_Text('leased_toner_yield');
         $element->setLabel('* Leased Toner Yield:')
                 ->setAttrib('maxlength', 6)
@@ -812,7 +812,7 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        //is leased flag
+        // Is leased flag
         $element = new Zend_Form_Element_Checkbox('is_leased');
         $element->setLabel('Leased:')
                 ->setAttrib('onclick', 'javascript: toggle_leased(this.checked)')

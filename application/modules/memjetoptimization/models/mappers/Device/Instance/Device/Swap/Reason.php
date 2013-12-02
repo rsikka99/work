@@ -234,7 +234,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends
     }
 
     /**
-     * Deletes all the device instance device swap reasons by memjet optimization id
+     * Deletes all the device instance device swap reasons by Memjet optimization id
      *
      * @param $memjetOptimizationId
      *

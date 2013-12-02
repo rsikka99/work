@@ -135,7 +135,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
     }
 
     /**
-     * Finds a Device Swapbased on it's primaryKey
+     * Finds a Device Swap based on it's primaryKey
      *
      * @param $id array
      *            The id of the Device Swap to find

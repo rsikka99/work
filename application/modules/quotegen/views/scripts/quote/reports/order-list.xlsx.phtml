@@ -60,7 +60,7 @@ $styleFillBold = array(
 $objPHPExcel = $this->phpexcel;
 $activeSheet = $objPHPExcel->getActiveSheet();
 
-// Ojbects in memory are held in php memory as serializeds objects, reduces memory footpirnt with little performance hit
+// Ojbects in memory are held in PHP memory as serialized objects, reduces memory footpirnt with little performance hit
 PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
 
 // Set properties
@@ -121,7 +121,7 @@ foreach ($quoteDeviceGroups as $quoteDeviceGroup)
             $activeSheet->fromArray($titles, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}:E{$currentRow}")->applyFromArray($styleFillBold);
 
-            // Deivce Row
+            // Device Row
             $currentRow = $activeSheet->getHighestRow() + 1;
             $activeSheet->fromArray($device, null, "A{$currentRow}");
             $activeSheet->getStyle("A{$currentRow}")->applyFromArray($boldFont);
@@ -156,7 +156,7 @@ $activeSheet->setTitle('Hardware Device List');
 $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
 $objWriter->save($savePath);
 
-//Clear the workbook from php's memory
+//Clear the workbook from PHP's memory
 $objPHPExcel->disconnectWorksheets();
 
 echo $this->baseUrl($linkToFile);

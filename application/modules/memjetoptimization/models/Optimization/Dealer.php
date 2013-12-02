@@ -6,7 +6,7 @@ class Memjetoptimization_Model_Optimization_Dealer extends
     Memjetoptimization_Model_Optimization_Abstract
 {
     /**
-     * a list of string to image resources to the graphs
+     * A list of string to image resources to the graphs
      *
      * @var string []
      */

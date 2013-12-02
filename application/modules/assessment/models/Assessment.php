@@ -267,7 +267,7 @@ class Assessment_Model_Assessment extends My_Model_Abstract
     }
 
     /**
-     * Gets the rms upload
+     * Gets the RMS upload
      *
      * @return Proposalgen_Model_Rms_Upload
      */
@@ -282,7 +282,7 @@ class Assessment_Model_Assessment extends My_Model_Abstract
     }
 
     /**
-     * Sets the rms upload
+     * Sets the RMS upload
      *
      * @param Proposalgen_Model_Rms_Upload $rmsUpload
      *

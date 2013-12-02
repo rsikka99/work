@@ -41,7 +41,7 @@ class Hardwareoptimization_Form_OptimizeActions extends Twitter_Bootstrap_Form
                                                                                             'icon'       => 'exclamation-sign',
                                                                                             'whiteIcon'  => true,
                                                                                             'ignore'     => false,
-                                                                                            'title'      => "Sets all the replacement devices back to there default action.",
+                                                                                            'title'      => "Sets all the replacement devices back to their default action.",
 
                                                                                        ));
 

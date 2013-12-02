@@ -157,7 +157,7 @@ class Proposalgen_Model_Assessment_Step extends My_Model_Abstract
     public $active = false;
 
     /**
-     * Is the step active?
+     * Can the step be accessed?
      *
      * @var string
      */

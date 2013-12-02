@@ -340,7 +340,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->addElement($parts_cost);
         $proposalGroup->elements [] = $parts_cost;
 
-        // Average It Hourly Rate
+        // Average IT Hourly Rate
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
         $averageItHourlyRate->setLabel('Estimated Average It Hourly Rate')
                             ->addValidator(new Zend_Validate_Float())
@@ -358,7 +358,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->addElement($averageItHourlyRate);
         $proposalGroup->elements [] = $averageItHourlyRate;
 
-        // Hours Spent On It
+        // Hours Spent On IT
         $hoursSpentOnIt = new Zend_Form_Element_Text('hoursSpentOnIt');
         $hoursSpentOnIt->setLabel('Estimated Hours Spent On IT')
                        ->addValidator(new Zend_Validate_Float())
@@ -432,7 +432,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->addElement($numberOfSupplyOrdersPerMonth);
         $proposalGroup->elements [] = $numberOfSupplyOrdersPerMonth;
 
-        // Toner preference for the healthcheck
+        // Toner preference for the Healthcheck
         $customer_monochrome_vendor = new Zend_Form_Element_Multiselect('customerMonochromeRankSetArray');
         $customer_monochrome_vendor->setAttrib('class', 'tonerMultiselect')
                                    ->setMultiOptions(Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown());

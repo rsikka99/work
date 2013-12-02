@@ -66,7 +66,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
     }
 
     /**
-     * Function to hold the old csv code for the printing device list
+     * Function to hold the old CSV code for the printing device list
      *
      * @throws Exception
      */
@@ -79,7 +79,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         }
         catch (Exception $e)
         {
-            throw new Exception("Could not generate toner csv report.");
+            throw new Exception("Could not generate toner CSV report.");
         }
 
         // Define our field titles

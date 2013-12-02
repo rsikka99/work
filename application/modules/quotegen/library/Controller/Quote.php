@@ -43,12 +43,12 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 
     /**
      * Last initialization step, called from the constructor.
-     * Initializes all varabiables for the controller actions to use.
+     * Initializes all variables for the controller actions to use.
      */
     public function init ()
     {
 
-        // Add the ability to have a docx context
+        // Add the ability to have a DOCX context
         $this->_helper->contextSwitch()
                       ->addContext('docx', array(
                                                 'suffix'    => 'docx',
@@ -80,7 +80,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         $this->_userId       = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
 
-        // Get the quote id from the url parameters
+        // Get the quote id from the URL parameters
         $this->_quoteId = $this->_getParam('quoteId');
 
         // If we have a quote id, fetch the quote object from the database. 
@@ -263,7 +263,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     }
 
     /**
-     * Initializes the view to work with docx
+     * Initializes the view to work with DOCX
      */
     public function initDocxContext ()
     {
@@ -273,7 +273,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 
     public function postDocxContext ()
     {
-        // Nothing to do in post yet
+        // Nothing to do in POST yet
     }
 
     /**
@@ -287,7 +287,7 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
 
     public function postXlsxContext ()
     {
-        // Nothing to do in post yet
+        // Nothing to do in POST yet
     }
 
     /**

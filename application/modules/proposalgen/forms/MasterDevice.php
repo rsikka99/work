@@ -68,16 +68,6 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
          * Is copier
          */
         $this->addElement('checkbox', 'is_copier', array(
-                                                        'label'   => 'Is Copier:',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
-
-        /*
-         * Is copier
-         */
-        $this->addElement('checkbox', 'is_copier', array(
                                                         'label'   => 'Is copier:',
                                                         'filters' => array(
                                                             'Boolean'

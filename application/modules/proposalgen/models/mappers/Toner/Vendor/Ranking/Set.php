@@ -56,7 +56,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set extends My_Model_Mapper_
     }
 
     /**
-     * Saves (updates) an instance of  Proposalgen_Model_Toner_Vendor_Ranking_Set to the database.
+     * Saves (updates) an instance of Proposalgen_Model_Toner_Vendor_Ranking_Set to the database.
      *
      * @param $object      Proposalgen_Model_Toner_Vendor_Ranking_Set
      *                     The Toner Vendor Ranking Set model to save to the database
@@ -89,7 +89,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set extends My_Model_Mapper_
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of  Proposalgen_Model_Toner_Vendor_Ranking_Set or the
+     *                This can either be an instance of Proposalgen_Model_Toner_Vendor_Ranking_Set or the
      *                primary key to delete
      *
      * @return int The number of rows deleted

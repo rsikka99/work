@@ -60,7 +60,7 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete manufacturer from database
+                // Delete manufacturer from database
                 if ($form->isValid($values))
                 {
                     $mapper->delete($manufacturer);

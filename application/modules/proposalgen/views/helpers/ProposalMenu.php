@@ -32,7 +32,7 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
                     $html [] = "<li class='disabled'>";
                 }
 
-                // Get the url and name
+                // Get the URL and name
                 $url  = $this->view->url(array(
                                               'controller' => $step->controller,
                                               'action'     => $step->action

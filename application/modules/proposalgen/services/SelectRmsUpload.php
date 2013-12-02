@@ -26,7 +26,7 @@ class Proposalgen_Service_SelectRmsUpload
     }
 
     /**
-     * Gets the RmsUploads available to the client
+     * Gets the rmsUploads available to the client
      *
      * @return Proposalgen_Model_Rms_Upload[]
      */
@@ -41,7 +41,7 @@ class Proposalgen_Service_SelectRmsUpload
     }
 
     /**
-     * Validates an incoming rms upload id to match the selected client id
+     * Validates an incoming RMS upload id to match the selected client id
      *
      * @param $rmsUploadId
      *

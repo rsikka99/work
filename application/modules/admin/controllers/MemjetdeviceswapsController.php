@@ -97,7 +97,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
 
             $jqGridService->setRows($memjetDeviceSwapMapper->fetchAllDeviceSwaps($costPerPageSetting, $sortOrder, $jqGridService->getSortDirection()), $jqGridService->getRecordsPerPage(), $startRecord);
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else
@@ -173,7 +173,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
 
             $jqGridService->setRows($deviceSwapReasonMapper->fetAllForDealer($this->_identity->dealerId, $sortOrder, null, $startRecord));
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else

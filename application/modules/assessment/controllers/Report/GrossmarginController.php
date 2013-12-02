@@ -75,7 +75,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
     }
 
     /**
-     * Function to hold the old csv code for the gross margin report
+     * Function to hold the old CSV code for the gross margin report
      *
      * @throws Exception
      */
@@ -99,7 +99,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         }
         catch (Exception $e)
         {
-            throw new Exception("Could not generate gross margin csv report.");
+            throw new Exception("Could not generate gross margin CSV report.");
         }
 
         // Define our field titles

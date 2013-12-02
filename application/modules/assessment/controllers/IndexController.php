@@ -13,7 +13,7 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
     }
 
     /**
-     * Handles selecting an rms upload
+     * Handles selecting an RMS upload
      */
     public function selectUploadAction ()
     {

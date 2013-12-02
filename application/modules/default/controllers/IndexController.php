@@ -245,7 +245,7 @@ class Default_IndexController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("warning" => "Please select a memjet optimization"));
+                        $this->_flashMessenger->addMessage(array("warning" => "Please select a Memjet optimization"));
                     }
                 }
                 else

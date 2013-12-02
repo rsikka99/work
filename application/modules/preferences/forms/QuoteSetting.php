@@ -256,7 +256,7 @@ class Preferences_Form_QuoteSetting extends Twitter_Bootstrap_Form_Horizontal
     }
 
     /**
-     * Allows the form to allow null vlaues
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {

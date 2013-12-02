@@ -14,7 +14,7 @@ class Proposalgen_Form_DeviceSwap extends Zend_Form
             'style' => 'width: 250px'
         );
 
-        // Manafucter of the device
+        // Manufacturer of the device
         $manufacturerElement = $this->createElement('select', 'manufacturer', array(
                                                                                    'label'   => 'Manufacturer: ',
                                                                                    'class'   => 'manufacturerId',

@@ -55,7 +55,7 @@ class Proposalgen_Model_Mapper_JitCompatibleMasterDevice extends My_Model_Mapper
      * Saves (updates) an instance of Proposalgen_Model_JitCompatibleMasterDevice to the database.
      *
      * @param $object     Proposalgen_Model_JitCompatibleMasterDevice
-     *                    The JitCompatibleMasterDevice model to save to the database
+     *                    The jitCompatibleMasterDevice model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *

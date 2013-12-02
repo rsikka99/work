@@ -6,7 +6,7 @@
  * ****************************************************************************************************************
  * A device's Average Monthly Page Volume must be between the replacement devices minimum and maximum page volume for the replacement to be eligible.
  * If there is more than one device that meets the page requirement, choose the one with the most functionality. If they are the same functionality then the cheapest one will be used?
- * A replacement device can upgrade color and mfp but can not downgrade either.
+ * A replacement device can upgrade color and MFP but can not downgrade either.
  *
  * Class Memjetoptimization_Model_Optimization_StandardDeviceReplacement
  */

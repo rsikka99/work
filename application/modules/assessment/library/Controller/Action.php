@@ -145,7 +145,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Init function for html reports
+     * Init function for HTML reports
      *
      * @throws Exception
      */
@@ -164,7 +164,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Prepares the view (for html reports) with the variables needed.
+     * Prepares the view (for HTML reports) with the variables needed.
      *
      * @param $filename
      */

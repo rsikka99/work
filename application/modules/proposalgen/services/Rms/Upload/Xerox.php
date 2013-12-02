@@ -5,14 +5,14 @@
 class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
-     * How to read the date coming in from the csv
+     * How to read the date coming in from the CSV
      *
      * @var string
      */
     protected $_incomingDateFormat = "F j Y";
 
     /**
-     * The number of lines to trim off the top of the csv
+     * The number of lines to trim off the top of the CSV
      *
      * @var int
      */

@@ -125,7 +125,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Init function for html reports
+     * Init function for HTML reports
      *
      * @throws Exception
      */
@@ -144,7 +144,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Prepares the view (for html reports) with the variables needed.
+     * Prepares the view (for HTML reports) with the variables needed.
      *
      * @param $filename
      */
@@ -193,7 +193,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Gets the memjet optimization we're working on
+     * Gets the Memjet optimization we're working on
      *
      * @return Memjetoptimization_Model_Memjet_Optimization
      */
@@ -236,7 +236,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
 
 
     /**
-     * Saves a memjet optimization
+     * Saves a Memjet optimization
      */
     public function saveMemjetOptimization ()
     {
@@ -255,7 +255,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Updates an memjet optimization to be at the next available step
+     * Updates an Memjet optimization to be at the next available step
      *
      * @param bool $force Whether or not to force the update
      */

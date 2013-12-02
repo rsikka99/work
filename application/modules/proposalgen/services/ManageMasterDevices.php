@@ -151,7 +151,7 @@ class Proposalgen_Service_ManageMasterDevices
 
         $toners_valid = false;
 
-        // validate toners against toner_config
+        // Validate toners against toner_config
         $has_toner       = false;
         $has_black       = false;
         $has_yellow      = false;
@@ -336,7 +336,7 @@ class Proposalgen_Service_ManageMasterDevices
         }
         else
         {
-            // if leased, then toners not required
+            // If leased, then toners not required
             if ($isLeased)
             {
                 $toners_valid = true;
@@ -504,7 +504,7 @@ class Proposalgen_Service_ManageMasterDevices
                 }
             }
 
-            // If we are not a jit compatible device
+            // If we are not a JIT compatible device
             if ($masterDevice instanceof Proposalgen_Model_MasterDevice && !$masterDevice->isJitCompatible($this->_dealerId))
             {
                 if ($validatedData['jitCompatibleMasterDevice'] === '1')
@@ -922,7 +922,7 @@ class Proposalgen_Service_ManageMasterDevices
     }
 
     /**
-     * This creates, saves and deletes for the buttons inside the available options jqgrid
+     * This creates, saves and deletes for the buttons inside the available options jqGrid
      *
      * @param array|bool $validatedData
      * @param bool       $deleteId
@@ -989,7 +989,7 @@ class Proposalgen_Service_ManageMasterDevices
     }
 
     /**
-     * This creates, saves and deletes for the buttons inside the hardware configurations jqgrid
+     * This creates, saves and deletes for the buttons inside the hardware configurations jqGrid
      *
      * @param bool $validatedData
      * @param bool $deleteId
@@ -1015,7 +1015,7 @@ class Proposalgen_Service_ManageMasterDevices
             // If we are not deleting
             if (!$deleteId)
             {
-                // If we are adding a new optionmanufacturerList
+                // If we are adding a new optionManufacturerList
                 if ($newData['id'] == 0)
                 {
                     $deviceConfiguration = new Quotegen_Model_DeviceConfiguration();

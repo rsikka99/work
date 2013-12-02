@@ -5,7 +5,7 @@ $rmsUpload = $this->rmsUpload;
 <div class="well">
 
     <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
-        <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> csv file. The name of the file is
+        <p>You currently have selected a  <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> CSV file. The name of the file is
             "<?php echo $this->escape($rmsUpload->fileName); ?>".
         <p>There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid devices imported.</p>
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>

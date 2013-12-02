@@ -1292,7 +1292,7 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                         // Delete current failed
                         $db->rollBack();
                         $this->_flashMessenger->addMessage(array(
-                                                                'error' => "An error occured while deleting the current schema."
+                                                                'error' => "An error occurred while deleting the current schema."
                                                            ));
                     }
                 }
@@ -1307,7 +1307,7 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
                 // Delete current failed
                 $db->rollBack();
                 $this->_flashMessenger->addMessage(array(
-                                                        'error' => "An error occured while deleting the current schema."
+                                                        'error' => "An error occurred while deleting the current schema."
                                                    ));
             }
 

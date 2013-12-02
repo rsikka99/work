@@ -103,7 +103,7 @@ class Quotegen_Service_QuoteDevice
     }
 
     /**
-     * Gets the number of master devices, if quote id is found inside memjet_optimization_quotes it will count
+     * Gets the number of master devices, if quote id is found inside Memjet_optimization_quotes it will count
      * the master device ids in memjet_device_instance_replacement_devices
      *
      * @param $masterDeviceId

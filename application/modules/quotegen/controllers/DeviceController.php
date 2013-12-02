@@ -87,7 +87,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete device from database
+                // Delete device from database
                 if ($form->isValid($values))
                 {
                     // Delete quote device options link 
@@ -202,7 +202,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
         $deviceMapper = Quotegen_Model_Mapper_Device::getInstance();
 
         $device = $deviceMapper->find($deviceId);
-        // If the device doesn't exist, send them back t the view all devices page
+        // If the device doesn't exist, send them back to the view all devices page
         if (!$device)
         {
             $this->_flashMessenger->addMessage(array(
@@ -251,7 +251,7 @@ class Quotegen_DeviceController extends Tangent_Controller_Action
                                                                 'success' => "Device '" . $this->view->escape($device->getMasterDevice()->getFullDeviceName()) . "' was updated successfully."
                                                            ));
 
-                        // Save new device attributes (sku)
+                        // Save new device attributes (SKU)
                         $deviceMapper->save($device);
 
                         if (isset($values ['addOption']))

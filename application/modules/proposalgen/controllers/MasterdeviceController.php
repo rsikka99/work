@@ -59,7 +59,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete masterDevice from database
+                // Delete masterDevice from database
                 if ($form->isValid($values))
                 {
                     $mapper->delete($masterDevice);
@@ -69,7 +69,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                     $this->redirector('index');
                 }
             }
-            else // go back
+            else // Go back
             {
                 $this->redirector('index');
             }
@@ -158,7 +158,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a masterDevice to edit first.'
+                                                    'warning' => 'Please select a master device to edit first.'
                                                ));
             $this->redirector('index');
         }
@@ -171,7 +171,7 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the masterDevice to edit.'
+                                                    'danger' => 'There was an error selecting the master device to edit.'
                                                ));
             $this->redirector('index');
         }

@@ -77,7 +77,7 @@ class Proposalgen_Service_Rms_Upload
             $values               = $this->getForm()->getValues();
             $this->_rmsProviderId = $values ['rmsProviderId'];
 
-            // Get the appropriate service based on the rms provider
+            // Get the appropriate service based on the RMS provider
             switch ((int)$this->_rmsProviderId)
             {
                 case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET :
@@ -189,7 +189,7 @@ class Proposalgen_Service_Rms_Upload
                                 $lineArray = $line->toArray();
 
                                 /*
-                                 * Check and insert rms device
+                                 * Check and insert RMS device
                                  */
                                 if ($line->rmsModelId > 0)
                                 {
@@ -205,7 +205,7 @@ class Proposalgen_Service_Rms_Upload
                                 }
 
                                 /*
-                                 * Save Rms Upload Row
+                                 * Save RMS Upload Row
                                  */
                                 $rmsUploadRow                 = new Proposalgen_Model_Rms_Upload_Row($lineArray);
                                 $rmsUploadRow->fullDeviceName = "{$line->manufacturer} {$line->modelName}";

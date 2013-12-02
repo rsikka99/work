@@ -88,7 +88,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
     }
 
     /**
-     * Creates an orderlist
+     * Creates an order list
      */
     public function orderListAction ()
     {

@@ -13,7 +13,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
     }
 
     /**
-     * Selects a upload to use for the healthcheck
+     * Selects a upload to use for the Healthcheck
      */
     public function selectUploadAction ()
     {
@@ -39,7 +39,7 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'The upload you selected is not valid.'));
                 }
             }
             else if (isset($postData['noUploads']))

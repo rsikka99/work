@@ -21,7 +21,7 @@ class Proposalgen_Service_Toner
     }
 
     /**
-     * Returns an array of toners based on oem manufacturer
+     * Returns an array of toners based on OEM manufacturer
      *
      * @param $tonerSets
      *

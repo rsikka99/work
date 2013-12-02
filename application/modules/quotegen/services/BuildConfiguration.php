@@ -56,7 +56,7 @@ class Quotegen_Service_BuildConfiguration extends Zend_Form
     }
 
     /**
-     * gets the list of all available favorite devices to a user
+     * Gets the list of all available favorite devices to a user
      *
      * @param int $userId
      *

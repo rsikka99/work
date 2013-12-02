@@ -10,7 +10,7 @@ class Proposalgen_Service_Import_Toner_Pricing extends Proposalgen_Service_Impor
     const TONER_PRICING_COLOR        = "Color";
     const TONER_PRICING_YIELD        = "Yield";
     const TONER_PRICING_SYSTEM_PRICE = "System Price";
-    const TONER_PRICING_DEALER_SKU   = "Dealer Sku";
+    const TONER_PRICING_DEALER_SKU   = "Dealer SKU";
     const TONER_PRICING_NEW_PRICE    = "New Price";
 
     public $csvHeaders = array(

@@ -22,7 +22,7 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareQuote extends Twitter_Boot
          * Your SKU
          */
         $this->addElement('text', 'oemSku', array(
-                                                 'label'      => 'OEM Sku',
+                                                 'label'      => 'OEM SKU',
                                                  'class'      => 'span2',
                                                  'maxlength'  => 255,
                                                  'required'   => false,
@@ -47,7 +47,7 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareQuote extends Twitter_Boot
          * Dealer SKU
          */
         $this->addElement('text', 'dealerSku', array(
-                                                    'label'      => 'Your Sku',
+                                                    'label'      => 'Your SKU',
                                                     'class'      => 'span2',
                                                     'maxlength'  => 255,
                                                     'required'   => false,

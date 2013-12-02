@@ -68,7 +68,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
     }
 
     /**
-     * Function to hold the old csv code for the printing device list
+     * Function to hold the old CSV code for the printing device list
      *
      * @throws Exception
      */

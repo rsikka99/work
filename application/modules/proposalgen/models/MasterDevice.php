@@ -14,9 +14,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
 
     static $TonerConfigNames = array(
         self::DEVICE_TYPE_MONO      => "Monochrome",
-        self::DEVICE_TYPE_MONO_MFP  => "Monochrome Mfp",
+        self::DEVICE_TYPE_MONO_MFP  => "Monochrome MFP",
         self::DEVICE_TYPE_COLOR     => "Color",
-        self::DEVICE_TYPE_COLOR_MFP => "Color Mfp"
+        self::DEVICE_TYPE_COLOR_MFP => "Color MFP"
     );
 
 
@@ -830,7 +830,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         $cacheKey = $costPerPageSetting->createCacheKey();
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
-            // Initialize the cpp object
+            // Initialize the CPP object
             $costPerPage                        = new Proposalgen_Model_CostPerPage();
             $costPerPage->monochromeCostPerPage = 0;
             $costPerPage->colorCostPerPage      = 0;
@@ -972,7 +972,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     * Checks to see if the master device is a mfp device
+     * Checks to see if the master device is a MFP device
      *
      * @return bool
      */

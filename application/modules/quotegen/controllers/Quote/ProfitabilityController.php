@@ -184,7 +184,7 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
     /**
      * The leasingdetailsAction accepts a leaseId as a GET parameter, and
      * returns
-     * information about the corresponding lease in json format.
+     * information about the corresponding lease in JSON format.
      * Jquery code
      * requesting data from this action is located in on the main layout page.
      */

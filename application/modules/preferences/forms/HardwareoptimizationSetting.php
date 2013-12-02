@@ -290,7 +290,7 @@ class Preferences_Form_HardwareoptimizationSetting extends Twitter_Bootstrap_For
 
 
     /**
-     * Allows the form to allow null vlaues
+     * Allows the form to allow null values
      */
     public function allowNullValues ()
     {

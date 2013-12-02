@@ -159,7 +159,7 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
     {
         //$toner = Proposalgen_Model_Mapper_Toner::getInstance()->searchBySku($tonerData['sku']);
         $toner = Proposalgen_Model_Mapper_Toner::getInstance()->fetchBySku($tonerData['sku']);
-        // Persist the id if we have found the toner by the sku
+        // Persist the id if we have found the toner by the SKU
         if ($toner instanceof Proposalgen_Model_Toner)
         {
             $tonerData['id']             = $toner->id;
@@ -171,7 +171,7 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
 
             if (empty($manufacturer))
             {
-                // This an oem or comp toner
+                // This an OEM or comp toner
                 if (isset($tonerData['dealerSku']))
                 {
                     return array(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => "Manufacturer does not exist, or it is spelt incorrectly.");

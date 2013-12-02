@@ -23,7 +23,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     }
 
     /**
-     * Handles selecting an rms upload
+     * Handles selecting a RMS upload
      */
     public function selectUploadAction ()
     {
@@ -46,7 +46,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'The upload you selected is not valid.'));
                 }
             }
             else if (isset($postData['noUploads']))
@@ -345,7 +345,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage;
 
-        // Get and see if we have a device instance id passed, if not send a json error
+        // Get and see if we have a device instance id passed, if not send a JSON error
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
         if ($deviceInstanceId === false)
         {
@@ -355,7 +355,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         $deviceInstanceId = (int)str_replace("deviceInstance_", "", $deviceInstanceId);
         $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
 
-        // Check if device belongs to rms
+        // Check if device belongs to RMS
         if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
         {
             $this->sendJsonError("You do not have permission to edit this device instance.");
@@ -413,7 +413,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $deviceInstanceDeviceSwapReasonMapper->insert($deviceInstanceDeviceSwapReason);
         }
 
-        // Add calculated amounts to json
+        // Add calculated amounts to JSON
         // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
         $this->sendJson(array(
                              "monochromeCpp" => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
@@ -506,7 +506,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         $jqGridService->setRows($jsonDataRows);
 
-        // Send back jqGrid json data
+        // Send back jqGrid JSON data
         $this->sendJson($jqGridService->createPagerResponseArray());
     }
 
@@ -575,7 +575,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $deviceInstanceId = (int)str_replace("deviceInstanceReason_", "", $deviceInstanceId);
             $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
 
-            // Check if device belongs to rms
+            // Check if device belongs to RMS
             if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_hardwareOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
             {
                 $this->sendJsonError("You do not have permission to edit this device instance.");

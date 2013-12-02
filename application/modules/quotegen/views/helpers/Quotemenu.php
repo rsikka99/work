@@ -17,7 +17,7 @@ class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
     const DEBUG_CONTROLLER         = 'quote_debug';
     static $pages = array(
         self::SETTINGS_CONTROLLER      => 'Adjust Settings',
-        self::DEVICES_CONTROLLER       => 'Build Devicess',
+        self::DEVICES_CONTROLLER       => 'Build Devices',
         self::GROUPS_CONTROLLER        => 'Group Devices',
         self::PAGES_CONTROLLER         => 'Add Pages',
         self::PROFITABILITY_CONTROLLER => 'Profitability',

@@ -242,7 +242,7 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
     }
 
     /**
-     * Returns an array of unique master device for the memjet optimization.
+     * Returns an array of unique master device for the Memjet optimization.
      *
      * @param $memjetOptimizationId
      *
@@ -267,12 +267,12 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device 
     }
 
     /**
-     * Takes in a memjet optimization id, and a master device id, and returns the count of found devices
+     * Takes in a Memjet optimization id, and a master device id, and returns the count of found devices
      *
      * @param $masterDeviceId         int
      * @param $memjetoptimizationId   int
      *
-     * @return int The count of master devices in this table for a specific memjet optimization id
+     * @return int The count of master devices in this table for a specific Memjet optimization id
      */
     public function countReplacementDevicesById ($memjetoptimizationId, $masterDeviceId)
     {

@@ -38,7 +38,7 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
                 $table->addRow($tcStyle->device->rowheight);
                 // Device Name
                 $table->addCell($tcStyle->col1Width, $tcStyle->device->cell1->cellStyle)->addText($device->name, $tcStyle->device->cell1->fontStyle, $tcStyle->device->cell1->paragraphStyle);
-                // Sku
+                // SKU
                 $table->addCell($tcStyle->col2Width, $tcStyle->device->cell2->cellStyle)->addText($device->getReportSku(), $tcStyle->device->cell2->fontStyle, $tcStyle->device->cell2->paragraphStyle);
                 // Description and features
                 $table->addCell($tcStyle->col3Width, $tcStyle->device->cell3->cellStyle);

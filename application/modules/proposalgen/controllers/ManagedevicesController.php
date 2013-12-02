@@ -100,7 +100,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
             $jqGridService->setRows($toners);
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else
@@ -187,7 +187,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
             }
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else
@@ -274,7 +274,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             }
             $options = $optionMapper->fetchAllOptionsWithDeviceOptions($masterDeviceId, $this->_identity->dealerId, $sortOrder, null, $searchCriteria, $searchValue, $jqGridService->getRecordsPerPage(), $startRecord);
             $jqGridService->setRows($options);
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else
@@ -377,7 +377,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
     /**
      * Validates all the main forms and saves them
-     * Returns json, A list of errors if the forms did not validate, Or a success message if they did
+     * Returns JSON, A list of errors if the forms did not validate, Or a success message if they did
      */
     public function updateMasterDeviceAction ()
     {
@@ -511,7 +511,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
      * One Function to update them all,
      * and in the modals bind them
      *
-     * Sauron handles the create and edit jqgrid buttons
+     * Sauron handles the create and edit jqGrid buttons
      * It validates the forms
      * Returns errors if they exist
      * And calls the update functions
@@ -532,7 +532,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
             $manageMasterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDeviceId, $this->_identity->dealerId, $isAllowed, $this->_isAdmin);
 
-            //Each array needs to be parsed
+            // Each array needs to be parsed
             foreach ($formData as $key => $form)
             {
                 parse_str($formData[$key], $formData[$key]);
@@ -723,7 +723,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
 
             $jqGridService->setRows($configurationMapper->fetchAllDeviceConfigurationByDeviceId($masterDeviceId));
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGridService->createPagerResponseArray());
         }
         else

@@ -54,7 +54,7 @@ class Proposalgen_Model_DeviceInstancesGroup
     }
 
     /**
-     * Removes a device from the devices array and from the pagecounts
+     * Removes a device from the devices array and from the page counts
      *
      * @param Proposalgen_Model_DeviceInstance $deviceInstance
      *

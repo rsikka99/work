@@ -64,7 +64,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->default_labor = $dealerSettings->getAssessmentSettings()->laborCostPerPage;
         $this->view->default_parts = $dealerSettings->getAssessmentSettings()->partsCostPerPage;
 
-        // fill manufacturers drop down
+        // Fill manufacturers drop down
         $manufacturersTable            = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers                 = $manufacturersTable->fetchAll('isDeleted = false', 'fullName');
         $this->view->manufacturer_list = $manufacturers;
@@ -74,12 +74,12 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
             $passvalid = 0;
             $formData  = $this->_request->getPost();
 
-            // check post back for update
+            // Check post back for update
             $db->beginTransaction();
             try
             {
 
-                // return current drop down states
+                // Return current drop down states
                 // $this->view->company_filter = $formData ['company_filter'];
                 $this->view->pricing_filter  = $formData ['pricing_filter'];
                 $this->view->search_filter   = $formData ['criteria_filter'];
@@ -88,12 +88,12 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
                 if ($formData ['hdnMode'] == "update")
                 {
-                    //$dealer_company_id = $formData ['company_filter'];
-                    //$dealer_company_id = 1;
+                    // $dealer_company_id = $formData ['company_filter'];
+                    // $dealer_company_id = 1;
                     // Save Master Company Pricing Changes
                     if ($formData ['pricing_filter'] == 'toner')
                     {
-                        // loop through $result
+                        // Loop through $result
                         foreach ($formData as $key => $value)
                         {
                             if (strstr($key, "txtTonerPrice"))
@@ -177,7 +177,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         {
                             $db->rollBack();
 
-                            // build repop values
+                            // Build repop values
                             $repop_array = '';
                             foreach ($formData as $key => $value)
                             {
@@ -186,7 +186,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     $toner_id = str_replace("txtTonerPrice", "", $key);
                                     $price    = $formData ['txtTonerPrice' . $toner_id];
 
-                                    // build repop array
+                                    // Build repop array
                                     if ($repop_array != '')
                                     {
                                         $repop_array .= ',';
@@ -309,7 +309,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         else
                         {
                             $db->rollBack();
-                            // build repop values
+                            // Build repop values
                             $repop_array = '';
                             foreach ($formData as $key => $value)
                             {
@@ -318,7 +318,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     $master_device_id = str_replace("txtDevicePrice", "", $key);
                                     $price            = $formData ['txtDevicePrice' . $master_device_id];
 
-                                    // build repop array
+                                    // Build repop array
                                     if ($repop_array != '')
                                     {
                                         $repop_array .= ',';
@@ -457,7 +457,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     // Does the toner attribute exists ?
                                     if ($tonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
                                     {
-                                        // If cost && sku are empty  or cost = 0 -> delete.
+                                        // If cost && SKU are empty  or cost = 0 -> delete.
                                         // Delete
                                         if (empty($importCost) && empty($importDealerSku))
                                         {
@@ -573,7 +573,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($dealerTonerAttribute);
                                 }
 
-                                // Have we found the oem toner data based on the Oem Toner Sku?
+                                // Have we found the OEM toner data based on the OEM Toner SKU?
                                 // Attempt to link device toners to existing toner id
                                 if (isset($validData['parsedToners']['oem']['id']))
                                 {

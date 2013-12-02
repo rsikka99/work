@@ -153,7 +153,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     }
 
     /**
-     * Gets the healthcheck settings
+     * Gets the Healthcheck settings
      *
      * @return Healthcheck_Model_Healthcheck_Setting
      */
@@ -231,7 +231,7 @@ class Preferences_Model_User_Setting extends My_Model_Abstract
     }
 
     /**
-     * Gets the memjet optimization settings
+     * Gets the Memjet optimization settings
      *
      * @return Memjetoptimization_Model_Memjet_Optimization_Setting
      */

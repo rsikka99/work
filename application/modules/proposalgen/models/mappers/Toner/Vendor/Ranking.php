@@ -56,7 +56,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking extends My_Model_Mapper_Abst
      * Saves (updates) an instance of Proposalgen_Model_Toner_Vendor_Ranking to the database.
      *
      * @param $object     Proposalgen_Model_Toner_Vendor_Ranking
-     *                    The Toner Vendor Rankingmodel to save to the database
+     *                    The Toner Vendor Ranking Model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -131,7 +131,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking extends My_Model_Mapper_Abst
     }
 
     /**
-     * Finds a Toner Vendor Rankingbased on it's primaryKey
+     * Finds a Toner Vendor Ranking based on it's primaryKey
      *
      * @param $id array
      *            The id of the Toner Vendor Rankingto find

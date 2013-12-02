@@ -67,7 +67,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete quote from database
+                // Delete quote from database
                 if ($form->isValid($values))
                 {
                     Quotegen_Model_Mapper_OptionCategory::getInstance()->deleteByOptionId($option->id);
@@ -79,7 +79,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     $this->redirector('index');
                 }
             }
-            else // go back
+            else // Go back
             {
                 $this->redirector('index');
             }
@@ -95,7 +95,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
 
         $form = new Quotegen_Form_Option();
 
-        // If the form is on post insert data
+        // If the form is on POST insert data
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -226,7 +226,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        // Update quotesetting and message to comfirm
+                        // Update quote setting and message to confirm
                         $option->populate($values);
 
                         $optionCategoryMapper = Quotegen_Model_Mapper_OptionCategory::getInstance();
@@ -277,7 +277,7 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                                                        ));
                 }
             }
-            else // Client hit cancel redicect
+            else // Client hit cancel, redirect
             {
                 // User has cancelled. We could do a redirect here if we wanted.
                 $this->redirector('index');

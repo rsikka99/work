@@ -38,7 +38,7 @@ class Proposalgen_Service_Import_Abstract
     protected $_upload;
 
     /**
-     * The headers that we recieve from the import.
+     * The headers that we receive from the import.
      *
      * @var array
      */

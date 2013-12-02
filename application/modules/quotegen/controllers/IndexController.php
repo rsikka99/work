@@ -138,10 +138,10 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
 
         $quoteList = array();
-        // Ensure that the client exist
+        // Ensure that the client exists
         if ($client instanceof Quotegen_Model_Client)
         {
-            // If the client exist get all quotes for the client
+            // If the client exists get all quotes for the client
             $quotes = Quotegen_Model_Mapper_Quote::getInstance()->fetchAllForClient($client->id);
 
             // Create a quote array to create option data

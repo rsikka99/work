@@ -48,7 +48,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $adminCostPerPage;
 
     /**
-     * The margin applied to the healthcheck
+     * The margin applied to the Healthcheck
      *
      * @var int
      */

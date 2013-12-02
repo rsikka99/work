@@ -79,7 +79,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * SKU
          */
         $this->addElement('text', 'oemSku', array(
-                                                 'label'      => 'OEM Sku:',
+                                                 'label'      => 'OEM SKU:',
                                                  'class'      => 'span2',
                                                  'maxlength'  => 255,
                                                  'required'   => false,
@@ -102,7 +102,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                             ));
 
         $this->addElement('text', 'dealerSku', array(
-                                                    'label'      => 'Dealer Sku:',
+                                                    'label'      => 'Dealer SKU:',
                                                     'class'      => 'span2',
                                                     'maxlength'  => 255,
                                                     'required'   => false,
@@ -340,7 +340,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                 ));
         $this->addElement($launchDate);
         /*
-         * / /* Duty Cycle
+         * Duty Cycle
          */
         $this->addElement('text', 'dutyCycle', array(
                                                     'label'      => 'Duty Cycle:',

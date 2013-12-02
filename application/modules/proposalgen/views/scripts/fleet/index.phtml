@@ -3,12 +3,12 @@
     <div class="well">
         <h1>Upload Complete</h1>
 
-        <p>You uploaded a <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> csv file. The name of the file is
+        <p>You uploaded a <?php echo $this->escape($rmsUpload->getRmsProvider()->name); ?> CSV file. The name of the file is
             "<?php echo $this->escape($rmsUpload->fileName); ?>". There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid
             devices
             imported.</p>
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
-            <p>The csv file that was uploaded also contained <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
+            <p>The CSV file that was uploaded also contained <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
         <?php endif; ?>
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
             <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>

@@ -191,7 +191,7 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             if ($monthlyPageCounts <= $replacementDevice->getDealerMaximumPageCount($this->_dealerId) && $monthlyPageCounts >= $replacementDevice->getDealerMinimumPageCount($this->_dealerId)
                 && !($deviceInstance->getMasterDevice()->isColor() && $replacementDevice->getMasterDevice()->isColor() == false) // Do not allow trades where you lose color
                 && !($deviceInstance->getMasterDevice()->isMfp() && $replacementDevice->getMasterDevice()->isMfp() == false)
-                // Do not allow trades where you lose mfp
+                // Do not allow trades where you lose MFP
             )
             {
                 $masterDevice                                            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($replacementDevice->getMasterDevice()->id);

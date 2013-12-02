@@ -12,21 +12,21 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     protected $_inputFilter;
 
     /**
-     * The number of lines to trim off the top of the csv
+     * The number of lines to trim off the top of the CSV
      *
      * @var int
      */
     protected $_linesToTrim = 0;
 
     /**
-     * How to read the date coming in from the csv
+     * How to read the date coming in from the CSV
      *
      * @var string
      */
     protected $_incomingDateFormat = "MM/dd/yyyy HH:ii:ss";
 
     /**
-     * The fields that must be present within the csv format
+     * The fields that must be present within the CSV format
      *
      * @var array
      */
@@ -101,7 +101,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     );
 
     /**
-     * A list of fields that are present in the csv file
+     * A list of fields that are present in the CSV file
      *
      * @var array
      */
@@ -116,35 +116,35 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     protected $_columnMapping = array();
 
     /**
-     * Valid csv lines
+     * Valid CSV lines
      *
      * @var Proposalgen_Service_Rms_Upload_Line[]
      */
     public $csvLines = array();
 
     /**
-     * Valid csv lines
+     * Valid CSV lines
      *
      * @var Proposalgen_Service_Rms_Upload_Line[]
      */
     public $validCsvLines = array();
 
     /**
-     * Invalid csv lines
+     * Invalid CSV lines
      *
      * @var Proposalgen_Service_Rms_Upload_Line[]
      */
     public $invalidCsvLines = array();
 
     /**
-     * Raw csv header
+     * Raw CSV header
      *
      * @var array
      */
     protected $_csvHeaders = array();
 
     /**
-     * Mapped csv header
+     * Mapped CSV header
      *
      * @var array
      */
@@ -229,7 +229,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     }
 
     /**
-     * Processes the csv file and inserts the data into the database
+     * Processes the CSV file and inserts the data into the database
      *
      * @param     $filename
      * @param int $maxLineCount

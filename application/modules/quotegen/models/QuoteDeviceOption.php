@@ -195,9 +195,9 @@ class Quotegen_Model_QuoteDeviceOption extends My_Model_Abstract
     }
 
     /**
-     * Returns the appropriate sku, dealer sku if filled out, oem sku if it is empty
+     * Returns the appropriate SKU, dealer SKU if filled out, OEM SKU if it is empty
      *
-     * @return String the sku to show on the reports
+     * @return String the SKU to show on the reports
      */
     public function getReportSku ()
     {

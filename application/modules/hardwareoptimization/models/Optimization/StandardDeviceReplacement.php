@@ -156,7 +156,7 @@ class Hardwareoptimization_Model_Optimization_StandardDeviceReplacement implemen
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
             if ($costDelta > $this->_savingsThreshold && $costDelta > $greatestSavings)
             {
-                // We replaced the device on cost at this point, we need to look at ampv
+                // We replaced the device on cost at this point, we need to look at AMPV
                 if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();

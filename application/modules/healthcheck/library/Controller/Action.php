@@ -100,7 +100,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Init function for html reports
+     * Init function for HTML reports
      *
      * @throws Exception
      */
@@ -120,7 +120,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Prepares the view (for html reports) with the variables needed.
+     * Prepares the view (for HTML reports) with the variables needed.
      *
      * @param $filename
      */
@@ -205,7 +205,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
 
     /**
-     * Gets the healthcheck we're working on
+     * Gets the Healthcheck we're working on
      *
      * @return Healthcheck_Model_Healthcheck
      */
@@ -254,7 +254,7 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     }
 
     /**
-     * Updates a healthcheck to be at the next available step
+     * Updates a Healthcheck to be at the next available step
      *
      * @param bool $force Whether or not to force the update
      */

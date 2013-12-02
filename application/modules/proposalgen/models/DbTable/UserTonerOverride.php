@@ -5,7 +5,6 @@
  */
 class Proposalgen_Model_DbTable_UserTonerOverride extends Zend_Db_Table_Abstract
 {
-    //put your code here
     protected $_name = 'user_toner_overrides';
     protected $_primary = array(
         'user_id',

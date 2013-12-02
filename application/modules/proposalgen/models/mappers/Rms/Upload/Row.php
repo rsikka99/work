@@ -268,7 +268,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      *
      * @param Proposalgen_Model_Rms_Upload_Row $rmsUploadRow
      *
-     * @return bool|\Proposalgen_Model_MasterDevice Returns a master device, or false if the rms upload row does not have complete information
+     * @return bool|\Proposalgen_Model_MasterDevice Returns a master device, or false if the RMS upload row does not have complete information
      */
     public function convertUploadRowToMasterDevice ($rmsUploadRow)
     {
@@ -354,7 +354,7 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
 
 
     /**
-     * Fetches an array with the key as the full device name and the value as the id of the rms upload rows.
+     * Fetches an array with the key as the full device name and the value as the id of the RMS upload rows.
      *
      * @return array
      */

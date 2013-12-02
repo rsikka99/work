@@ -134,7 +134,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
     }
 
     /**
-     * Sets the rms upload
+     * Sets the RMS upload
      *
      * @param Proposalgen_Model_Rms_Upload_Row[] $rmsUploadRows
      *
@@ -149,7 +149,7 @@ class Proposalgen_Model_Rms_Upload extends My_Model_Abstract
 
 
     /**
-     * Gets the rms provider
+     * Gets the RMS provider
      *
      * @return Proposalgen_Model_Rms_Provider
      */

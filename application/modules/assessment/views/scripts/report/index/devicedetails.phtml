@@ -25,9 +25,9 @@ $deviceinstanceFields = array(
     "MPS Discovery" => $this->device->MPSDiscoveryDate,
 	"MPS Interval" => $this->device->MPSMonitorInterval->days . " days",
 	"Age" => $this->device->Age . " Years(s)",
-	"Daily Power" => $this->device->AverageDailyPowerConsumption . " KWH",
+	"Daily Power" => $this->device->AverageDailyPowerConsumption . " kWh",
     "Daily Power Cost" => "$" . number_format($this->device->AverageDailyPowerCost, 2),
-	"Monthly Power" => $this->device->AverageMonthlyPowerConsumption . " KWH",
+	"Monthly Power" => $this->device->AverageMonthlyPowerConsumption . " kWh",
 	"Monthly Power Cost" => "$" . number_format($this->device->AverageMonthlyPowerCost, 2),
     "Monthly Usage" => number_format($this->device->Usage * 100, 2) . "%",
 	"Life Usage" => number_format($this->device->LifeUsage, 2) . "%",
@@ -40,7 +40,7 @@ $deviceinstanceFields = array(
 	"Age Rank" => number_format($this->device->AgeRank, 2),
     "Life Usage Rank" => number_format($this->device->LifeUsageRank, 2),
     "Risk Rank" => number_format($this->device->RiskRank, 2),
-    "Reccomended Action" => $this->device->Action,
+    "Recommended Action" => $this->device->Action,
 
 );
 

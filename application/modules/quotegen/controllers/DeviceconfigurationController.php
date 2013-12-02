@@ -81,7 +81,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete deviceConfiguration from database
+                // Delete deviceConfiguration from database
                 if ($form->isValid($values))
                 {
                     $mapper->delete($deviceConfiguration);
@@ -91,7 +91,7 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                     $this->redirector('index');
                 }
             }
-            else // go back
+            else // Go back
             {
                 $this->redirector('index');
             }

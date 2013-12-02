@@ -851,7 +851,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
     {
         // Represents quote total page weight
         $monochromeTotal = 0;
-        // The total cpp for all quote devices, used for calculation with no pages
+        // The total CPP for all quote devices, used for calculation with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
         $totalDevices = 0;
@@ -905,7 +905,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $colorTotal = 0;
         // The accumulation of cost for color pages per device
         $colorPageCostTotal = 0;
-        // The total cpp for all quote devices, used for calculation with no pages
+        // The total CPP for all quote devices, used for calculation with no pages
         $totalCpp = 0;
         // Total device count, used for calculation with no pages in quote
         $totalDevices = 0;

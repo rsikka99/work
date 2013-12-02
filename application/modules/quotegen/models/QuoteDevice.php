@@ -332,9 +332,9 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     }
 
     /**
-     * Returns the appropriate sku, dealer sku if filled out, oem sku if it is empty
+     * Returns the appropriate SKU, dealer SKU if filled out, OEM SKU if it is empty
      *
-     * @return String the sku to show on the reports
+     * @return String the SKU to show on the reports
      */
     public function getReportSku ()
     {
@@ -347,7 +347,7 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
      * ****************************************************************************************************************************************
      */
     /**
-     * Returns whether or not the device is capable of printing in color based on it's comp and oem cpp's (If they are 0
+     * Returns whether or not the device is capable of printing in color based on it's comp and OEM CPP's (If they are 0
      * it is not a color device)
      *
      * @return bool
@@ -549,8 +549,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
         $costPerPageColor = $this->costPerPageColor;
 
         /*
-         * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
-         * the problem instead of it being masked by service and admin cpp.
+         * Only add service and admin if we have a CPP > 0. This way if CPP is 0 for some reason the end user will see
+         * the problem instead of it being masked by service and admin CPP.
          */
         if ($costPerPageColor > 0)
         {
@@ -578,8 +578,8 @@ class Quotegen_Model_QuoteDevice extends My_Model_Abstract
     {
         $costPerPageMonochrome = $this->costPerPageMonochrome;
         /*
-         * Only add service and admin if we have a cpp > 0. This way if cpp is 0 for some reason the end user will see
-         * the problem instead of it being masked by service and admin cpp.
+         * Only add service and admin if we have a CPP > 0. This way if CPP is 0 for some reason the end user will see
+         * the problem instead of it being masked by service and admin CPP.
          */
         if ($costPerPageMonochrome > 0)
         {

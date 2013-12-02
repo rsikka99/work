@@ -925,7 +925,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the average cost per page for only toners that are Oem.
+     * Calculates the average cost per page for only toners that are OEM.
      *
      * @return Proposalgen_Model_CostPerPage
      */
@@ -1815,7 +1815,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates half the difference between Oem Total Cost Annually And Compatible
+     * Calculates half the difference between OEM Total Cost Annually And Compatible
      *
      * @return float
      */
@@ -1825,7 +1825,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the difference between Oem Total Cost Annually And Compatible
+     * Calculates the difference between OEM Total Cost Annually And Compatible
      *
      * @return float
      */
@@ -1843,7 +1843,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates The Estimated Oem Toner Cost Annually.
+     * Calculates The Estimated OEM Toner Cost Annually.
      *
      * @return float
      */
@@ -2021,7 +2021,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the total Average Cost For Oem Monochrome Printers Monthly
+     * Calculates the total Average Cost For OEM Monochrome Printers Monthly
      *
      * @return float
      */
@@ -2052,7 +2052,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the total Average Cost For Oem Color Printers Monthly
+     * Calculates the total Average Cost For OEM Color Printers Monthly
      *
      * @return float
      */
@@ -2062,7 +2062,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the total Average Cost For Oem Combined Printers Monthly
+     * Calculates the total Average Cost For OEM Combined Printers Monthly
      *
      * @return float
      */

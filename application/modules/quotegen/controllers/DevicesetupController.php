@@ -327,7 +327,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             }
         }
 
-        // Display filterd list of toners
+        // Display filtered list of toners
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
 
         // Set the current page we're on
@@ -490,7 +490,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         {
                             if ($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'] || $formValues ['partsCostPerPage'] || $formValues ['laborCostPerPage'])
                             {
-                                $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save Oem Sku, Dealer Sku, Standard Features or Device Cost."));
+                                $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save OEM SKU, Dealer SKU, Standard Features or Device Cost."));
                             }
 
                             $deviceMapper->delete($quoteDevice);
@@ -554,7 +554,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete device from database
+                // Delete device from database
                 if ($form->isValid($values))
                 {
                     // Get the Quotegen Device Object
@@ -638,7 +638,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             {
                 try
                 {
-                    // Get Toner Id
+                    // Get Toner ID
                     $tonerId = $values ['tonerid'];
 
                     $view   = null;
@@ -664,7 +664,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                     // Assign Toner
                     if (isset($values ['btnAssign']))
                     {
-                        // Save if tonerid and device id
+                        // Save if toner id and device id
                         if ($tonerId && $masterDeviceId)
                         {
                             // Get toner
@@ -810,7 +810,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
         $this->view->assignedToners = $assignedToners;
 
-        // Display filterd list of toners
+        // Display filtered list of toners
         switch ($tonerConfig)
         {
             case "3 COLOR - COMBINED" :
@@ -910,7 +910,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             {
                 try
                 {
-                    // Get Option Id
+                    // Get Option ID
                     $optionId           = $values ['optionid'];
                     $deviceOptionMapper = new Quotegen_Model_Mapper_DeviceOption();
                     $deviceOption       = new Quotegen_Model_DeviceOption();
@@ -941,7 +941,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             // Delete device option
                             $deviceOptionMapper->delete($deviceOption);
 
-                            // Delete all occurences of this option from the array
+                            // Delete all occurrences of this option from the array
                             $arrayKeys = array_keys($assignedOptions, $deviceOption->optionId);
                             foreach ($arrayKeys as $key)
                             {
@@ -1042,7 +1042,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         $where                   = array_merge((array)$where, $whereDealer);
         $this->view->view_filter = $view;
 
-        // Display filterd list of options
+        // Display filtered list of options
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Quotegen_Model_Mapper_Option::getInstance(), $where));
         // Set the current page we're on
         $paginator->setCurrentPageNumber($this->_getParam('page', 1));

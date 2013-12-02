@@ -1,7 +1,7 @@
 <script>
 	$(function(){
 		$("#commitChanges").click(function() {
-			var answer = confirm ("This will clear all database information and insert data from the import csv. Are you sure you want to do this?");
+			var answer = confirm ("This will clear all database information and insert data from the import CSV. Are you sure you want to do this?");
 			if (answer)
 			{
 				return true;
@@ -49,7 +49,7 @@
     		<?php endforeach; ?>
     		</tr>
     		<?php
-    		//loop through the array and build the preview
+    		// Loop through the array and build the preview
     		foreach ($this->csv->getData() as $row) : ?>
     			<tr>
     			<?php foreach ($row as $column) : ?>

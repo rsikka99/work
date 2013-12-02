@@ -23,7 +23,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
     }
 
     /**
-     * Handles selecting an rms upload
+     * Handles selecting a RMS upload
      */
     public function selectUploadAction ()
     {
@@ -46,7 +46,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 }
                 else
                 {
-                    $this->_flashMessenger->addMessage(array('danger' => 'The Upload you selected is not valid.'));
+                    $this->_flashMessenger->addMessage(array('danger' => 'The upload you selected is not valid.'));
                 }
             }
             else if (isset($postData['noUploads']))
@@ -270,7 +270,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
     }
 
     /**
-     * Returns Json based on id that has been passed via query string
+     * Returns JSON based on id that has been passed via query string
      */
     public function getDeviceByDeviceInstanceIdAction ()
     {
@@ -345,7 +345,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $this->_memjetOptimization->getMemjetOptimizationSetting()->laborCostPerPage;
         Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $this->_memjetOptimization->getMemjetOptimizationSetting()->partsCostPerPage;
 
-        // Get and see if we have a device instance id passed, if not send a json error
+        // Get and see if we have a device instance id passed, if not send a JSON error
         $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
         if ($deviceInstanceId === false)
         {
@@ -355,7 +355,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         $deviceInstanceId = (int)str_replace("deviceInstance_", "", $deviceInstanceId);
         $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
 
-        // Check if device belongs to rms
+        // Check if device belongs to RMS
         if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_memjetOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
         {
             $this->sendJsonError("You do not have permission to edit this device instance.");
@@ -551,14 +551,14 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
         $jqGridService->setRows($jsonDataRows);
 
-        // Send back jqGrid json data
+        // Send back jqGrid JSON data
         $this->sendJson($jqGridService->createPagerResponseArray());
     }
 
     /**
      * Processes device swaps reason saves.
      *
-     * @param bool $deleteSwapReasons If this is set, it will reset all the device swap reason for this memjet optimization
+     * @param bool $deleteSwapReasons If this is set, it will reset all the device swap reason for this Memjet optimization
      *
      * @throws Exception
      * @return bool
@@ -572,7 +572,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         {
             if ($deleteSwapReasons)
             {
-                // Delete all the device instances device swap reasons for this memjet optimization id
+                // Delete all the device instances device swap reasons for this Memjet optimization id
                 $deviceInstanceDeviceSwapReasonMapper->deleteAllByMemjetOptimizationId($this->_memjetOptimization->id);
             }
 
@@ -623,7 +623,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             $deviceInstanceId = (int)str_replace("deviceInstanceReason_", "", $deviceInstanceId);
             $deviceInstance   = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($deviceInstanceId);
 
-            // Check if device belongs to rms
+            // Check if device belongs to RMS
             if (!$deviceInstance instanceof Proposalgen_Model_DeviceInstance || $this->_memjetOptimization->rmsUploadId !== $deviceInstance->rmsUploadId)
             {
                 $this->sendJsonError("You do not have permission to edit this device instance.");

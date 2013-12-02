@@ -167,11 +167,11 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Fetches a deviceOption
      *
      * @param $where  string|array|Zend_Db_Table_Select
-     *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     *                OPTIONAL: An SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order  string|array
-     *                OPTIONAL: A SQL ORDER clause.
+     *                OPTIONAL: An SQL ORDER clause.
      * @param $offset int
-     *                OPTIONAL: A SQL OFFSET value.
+     *                OPTIONAL: An SQL OFFSET value.
      *
      * @return Quotegen_Model_DeviceOption
      */
@@ -197,13 +197,13 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
      * Fetches all deviceOptions
      *
      * @param $where  string|array|Zend_Db_Table_Select
-     *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     *                OPTIONAL: An SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order  string|array
-     *                OPTIONAL: A SQL ORDER clause.
+     *                OPTIONAL: An SQL ORDER clause.
      * @param $count  int
-     *                OPTIONAL: A SQL LIMIT count. (Defaults to 25)
+     *                OPTIONAL: An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *                OPTIONAL: A SQL LIMIT offset.
+     *                OPTIONAL: An SQL LIMIT offset.
      *
      * @return Quotegen_Model_DeviceOption[]
      */

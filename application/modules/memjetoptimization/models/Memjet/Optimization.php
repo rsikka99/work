@@ -175,7 +175,7 @@ class Memjetoptimization_Model_Memjet_Optimization extends My_Model_Abstract
     }
 
     /**
-     * Gets the memjet optimization settings
+     * Gets the Memjet optimization settings
      *
      * @return Memjetoptimization_Model_Memjet_Optimization_Setting
      */

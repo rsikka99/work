@@ -77,7 +77,7 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
             $values = $request->getPost();
             if (!isset($values ['cancel']))
             {
-                // delete deviceConfiguration from database
+                // Delete deviceConfiguration from database
                 if ($form->isValid($values))
                 {
                     $mapper->delete($deviceConfiguration);

@@ -21,7 +21,7 @@ class Admin_Model_Acl
     const RESOURCE_ADMIN_WILDCARD                   = "admin__%__%";
 
     /**
-     * Sets up acl resources and access for a module
+     * Sets up ACL resources and access for a module
      *
      * @param Application_Model_Acl $acl
      */

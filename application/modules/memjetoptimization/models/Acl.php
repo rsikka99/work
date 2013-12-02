@@ -7,7 +7,7 @@ class Memjetoptimization_Model_Acl
     const RESOURCE_MEMJETOPTIMIZATION_WILDCARD = "memjetoptimization__%__%";
 
     /**
-     * Sets up acl resources and access for a module
+     * Sets up ACL resources and access for a module
      *
      * @param Application_Model_Acl $acl
      */

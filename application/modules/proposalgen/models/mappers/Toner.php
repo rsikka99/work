@@ -182,13 +182,13 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
      * Fetches all toners
      *
      * @param $where  string|array|Zend_Db_Table_Select
-     *                OPTIONAL: A SQL WHERE clause or Zend_Db_Table_Select object.
+     *                OPTIONAL: An SQL WHERE clause or Zend_Db_Table_Select object.
      * @param $order  string|array
-     *                OPTIONAL: A SQL ORDER clause.
+     *                OPTIONAL: An SQL ORDER clause.
      * @param $count  int
-     *                OPTIONAL: A SQL LIMIT count. (Defaults to 25)
+     *                OPTIONAL: An SQL LIMIT count. (Defaults to 25)
      * @param $offset int
-     *                OPTIONAL: A SQL LIMIT offset.
+     *                OPTIONAL: An SQL LIMIT offset.
      *
      * @return Proposalgen_Model_Toner[]
      */
@@ -406,7 +406,7 @@ FROM toners
      * @param          $filter
      * @param          $criteria
      *
-     * @param int      $masterDeviceId The id of the currrent master device, this is used to populate the is_added flag to determine if it is added or not
+     * @param int      $masterDeviceId The id of the current master device, this is used to populate the is_added flag to determine if it is added or not
      *
      * @return Proposalgen_Model_Toner []
      */
@@ -441,7 +441,7 @@ FROM toners
             ";
         if ($tonerColorConfigId)
         {
-            // sets up what colors we want to use
+            // Sets up what colors we want to use
             $tonerColors = array();
             if ($tonerColorConfigId == 1)
             {
@@ -766,7 +766,7 @@ WHERE `toners`.`id` IN ({$tonerIdList})
     }
 
     /**
-     * Finds an instance of a Proposalgen_Model_Toner by it's sku
+     * Finds an instance of a Proposalgen_Model_Toner by it's SKU
      *
      * @param $sku
      *

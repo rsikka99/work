@@ -12,7 +12,7 @@ class Quotegen_Model_DbTable_Device extends Zend_Db_Table_Abstract
     );
 
     /**
-     * This function allows for searching by a device name, manufacturer, or sku
+     * This function allows for searching by a device name, manufacturer, or SKU
      *
      * @param string $searchString
      *

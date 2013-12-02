@@ -25,7 +25,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     public $replaced;
 
     /**
-     * Deices that have their action flagged as retire
+     * Devices that have their action flagged as retire
      *
      * @var Proposalgen_Model_DeviceInstance []
      */
@@ -124,28 +124,28 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
     public $deviceCategories = array();
 
     /**
-     * What a client should be a for average supplies
+     * What a client should have for average supplies
      *
      * @var int
      */
     public $averageSupplyType;
 
     /**
-     * The number of supply types used the clients fleet
+     * The number of supply types used in the client's fleet
      *
      * @var int
      */
     public $supplyTypeCount;
 
     /**
-     * The number of supply types used in a fleet after optimized
+     * The number of supply types used in a fleet after optimization
      *
      * @var int
      */
     public $optimizedSupplyType;
 
     /**
-     * The number of the devices that are used in hardware optimization
+     * The number of devices that are used in hardware optimization
      *
      * @var int
      */

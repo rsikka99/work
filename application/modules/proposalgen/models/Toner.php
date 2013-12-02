@@ -213,8 +213,8 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
         {
             $costPerPage = new Proposalgen_Model_CostPerPage();
             /*
-             * Cost per page is calculated by dividing the price by the yield. When providing a new coverage we need to
-             * divide the manufacturers coverage by our coverage in order to arrive to the right number.
+             * Cost per page is calculated by dividing the price by the yield. When providing new coverage we need to
+             * divide the manufacturers coverage by our coverage in order to arrive at the right number.
              */
             $monochromeCostPerPage = 0;
             $colorCostPerPage      = 0;

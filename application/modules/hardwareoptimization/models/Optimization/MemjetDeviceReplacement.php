@@ -155,7 +155,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
             $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
 
             // Are we inside the page volume and above the lossThreshold?
-            // If we are a color mfp and the replacement loses money, don't swap
+            // If we are a color MFP and the replacement loses money, don't swap
             if
             (
                 $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->getDealerMaximumPageCount($this->_dealerId) &&
@@ -164,7 +164,7 @@ class Hardwareoptimization_Model_Optimization_MemjetDeviceReplacement implements
                 !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta < 0)
             )
             {
-                // We have replaced a device based on ampv, but if there is more than one device within the page range, we want to get the cheapest one
+                // We have replaced a device based on AMPV, but if there is more than one device within the page range, we want to get the cheapest one
                 if ($suggestedDevice == null)
                 {
                     $suggestedDevice = $deviceSwap->getMasterDevice();

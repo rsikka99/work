@@ -526,7 +526,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * be operating for y hours
      * You can check the running hour array to see the specific values
      *
-     * @return float $AverageDailyPowerConsumption in KWH
+     * @return float $AverageDailyPowerConsumption in kWh
      */
     public function getAverageDailyPowerConsumption ()
     {
@@ -721,7 +721,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * gets the monochrome CPP with a margin
+     * Gets the monochrome CPP with a margin
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      * @param float                                $margin
@@ -734,7 +734,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * gets the monochrome CPP with a margin
+     * Gets the monochrome CPP with a margin
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      * @param float                                $margin
@@ -1125,7 +1125,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Gets the rms upload row
+     * Gets the RMS upload row
      *
      * @return Proposalgen_Model_Rms_Upload_Row
      */
@@ -1140,7 +1140,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Sets the rms upload row
+     * Sets the RMS upload row
      *
      * @param Proposalgen_Model_Rms_Upload_Row $rmsUploadRow
      *
@@ -1630,7 +1630,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Calculates a cost per page for a memjet replacement device
+     * Calculates a cost per page for a Memjet replacement device
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *            The settings to use when calculating cost per page

@@ -59,7 +59,7 @@ class Memjetoptimization_Service_Setting
      *
      * @return Memjetoptimization_Form_Setting
      */
-    // populate setting should be dealer user Memjet optimization settings overwritten
+    // Populate setting should be dealer user Memjet optimization settings overwritten
     public function getFormWithDefaults ()
     {
         if (!isset($this->_form))

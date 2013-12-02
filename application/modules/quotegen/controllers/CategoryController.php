@@ -184,7 +184,7 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     // Validate the form
                     if ($form->isValid($values))
                     {
-                        // Update quotesetting and message to comfirm
+                        // Update quote setting and message to confirm
                         $category->populate($values);
                         $category->id = $categoryId;
                         Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);

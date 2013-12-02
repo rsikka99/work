@@ -929,7 +929,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         // Correct the device name
         $deviceName = ucwords(trim($deviceName));
 
-        // Convert hp into it's full name
+        // Convert HP into it's full name
         if ($manufacturer == "hp")
         {
             $manufacturer = "hewlett-packard";
@@ -990,7 +990,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         }
 
 
-        // Convert all the dates back to mysql dates
+        // Convert all the dates back to MySQL dates
         $this->monitorStartDate = (!$monitorStartDate) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
         $this->monitorEndDate   = (!$monitorEndDate) ? null : $monitorEndDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
         $this->discoveryDate    = (!$discoveryDate) ? null : $discoveryDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);

@@ -175,7 +175,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Category extends My_M
     }
 
     /**
-     * Fetches all Device Swap Reason Categorys
+     * Fetches all Device Swap Reason Categories
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.

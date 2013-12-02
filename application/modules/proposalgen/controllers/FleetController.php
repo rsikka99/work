@@ -10,7 +10,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     protected $_selectedClientId;
 
     /**
-     * The namespace for our mps application
+     * The namespace for our MPS application
      *
      * @var Zend_Session_Namespace
      */
@@ -90,7 +90,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     $time += microtime(true);
                     $filename = $uploadService->rmsUpload->fileName;
 
-                    Tangent_Log::debug("It took {$time} seconds to process the csv upload ({$filename}). ");
+                    Tangent_Log::debug("It took {$time} seconds to process the CSV upload ({$filename}). ");
 
                     if ($success)
                     {
@@ -177,7 +177,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             $jqGrid->setRows($rmsUploads);
 
-            // Send back jqGrid json data
+            // Send back jqGrid JSON data
             $this->sendJson($jqGrid->createPagerResponseArray());
         }
         else
@@ -274,7 +274,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 $startRecord = $jqGrid->getRecordsPerPage() * ($jqGrid->getCurrentPage() - 1);
                 $jqGrid->setRows($mapDeviceInstanceMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
-                // Send back jqGrid json data
+                // Send back jqGrid JSON data
                 $this->sendJson($jqGrid->createPagerResponseArray());
             }
             else
@@ -347,7 +347,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
                 $jqGrid->setRows($excludedRowMapper->fetchAllForRmsUpload($rmsUploadId, $jqGrid->getSortColumn(), $jqGrid->getSortDirection(), $jqGrid->getRecordsPerPage(), $startRecord));
 
-                // Send back jqGrid json data
+                // Send back jqGrid JSON data
                 $this->sendJson($jqGrid->createPagerResponseArray());
             }
             else
@@ -570,7 +570,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
                 $jqGrid->setRows($rows);
 
-                // Send back jqGrid json data
+                // Send back jqGrid JSON data
                 $this->sendJson($jqGrid->createPagerResponseArray());
             }
             else
@@ -586,7 +586,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     }
 
     /**
-     * This is where a user can modify the properties of an rms upload row in a way that will make it valid
+     * This is where a user can modify the properties of an RMS upload row in a way that will make it valid
      */
     public function editUnknownDeviceAction ()
     {
@@ -661,7 +661,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             {
                                 $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
 
-                                // Update the rms upload row
+                                // Update the RMS upload row
                                 $rmsUploadRow = $deviceInstance->getRmsUploadRow();
                                 $rmsUploadRow->populate($formValues);
                                 $rmsUploadRow->hasCompleteInformation = true;
@@ -817,7 +817,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $errorMessage = "Invalid Rms Upload.";
+                        $errorMessage = "Invalid RMS Upload.";
                     }
                 }
                 else
@@ -853,7 +853,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     }
 
     /**
-     * Handles Toggling the Jit Compatibility of devices
+     * Handles Toggling the JIT Compatibility of devices
      */
     public function toggleJitFlagAction ()
     {
@@ -890,12 +890,12 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 {
                                     $db->rollBack();
                                     Tangent_Log::logException($e);
-                                    $errorMessage = "The system encountered an error while trying to toggle the Jit Compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
+                                    $errorMessage = "The system encountered an error while trying to toggle the JIT Compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
                                 }
                             }
                             else
                             {
-                                $errorMessage = "You can only change the Jit Compatibility of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
+                                $errorMessage = "You can only change the JIT Compatibility of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
                             }
                         }
                         else
@@ -906,7 +906,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $errorMessage = "Invalid Rms Upload.";
+                        $errorMessage = "Invalid RMS Upload.";
                     }
                 }
                 else
@@ -927,11 +927,11 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($isJitCompatible)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now Jit Compatible."));
+                $this->sendJson(array("success" => true, "message" => "Device is now JIT Compatible."));
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now no longer Jit Compatible. "));
+                $this->sendJson(array("success" => true, "message" => "Device is now no longer JIT Compatible. "));
             }
         }
         else
@@ -1003,7 +1003,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $errorMessage = "Invalid Rms Upload.";
+                        $errorMessage = "Invalid RMS Upload.";
                     }
                 }
                 else
