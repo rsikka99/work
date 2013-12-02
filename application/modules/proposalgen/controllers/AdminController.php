@@ -1220,7 +1220,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         // Fill manufacturer drop down
         $manufacturersTable = new Proposalgen_Model_DbTable_Manufacturer();
         $manufacturers      = $manufacturersTable->fetchAll('isDeleted = 0', 'fullname');
-        $currElement        = $form->getElement('manufacturer_id');
+
+        /* @var $currElement Zend_Form_Element_Multi */
+        $currElement = $form->getElement('manufacturer_id');
         $currElement->addMultiOption('0', 'Select Manufacturer');
         foreach ($manufacturers as $row)
         {
@@ -1433,8 +1435,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         }
         else
         {
-            // If formData was not valid, repopulate form(error messages from
-            // Validations are automatically added)
+            // If the form data was not valid we will repopulate the form (error messages from validations are automatically added)
             $this->view->message = $validation;
         }
         $this->sendJson($this->view->message);
@@ -1445,7 +1446,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $formData = new stdClass();
         try
         {
-            // Get PF device list filter by manufacturer
+            // Get PrintFleet device list filter by manufacturer
             $replacementDevices = Proposalgen_Model_Mapper_ReplacementDevice::getInstance()->fetchAllForDealer($this->dealerId);
 
             // Return results

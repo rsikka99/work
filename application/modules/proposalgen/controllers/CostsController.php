@@ -71,7 +71,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
         if ($this->_request->isPost())
         {
-            $passvalid = 0;
+            $hasErrors = 0;
             $formData  = $this->_request->getPost();
 
             // Check post back for update
@@ -103,7 +103,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 // check if new price is populated.
                                 if ($price == "0")
                                 {
-                                    $passvalid = 1;
+                                    $hasErrors = 1;
                                     $this->_flashMessenger->addMessage(array(
                                                                             "error" => "All values must be greater than 0. Please correct it and try again."
                                                                        ));
@@ -111,7 +111,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
-                                    $passvalid = 1;
+                                    $hasErrors = 1;
                                     $this->_flashMessenger->addMessage(array(
                                                                             "error" => "All values must be numeric. Please correct it and try again."
                                                                        ));
@@ -167,7 +167,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             }
                         }
 
-                        if ($passvalid == 0)
+                        if ($hasErrors == 0)
                         {
                             $this->_flashMessenger->addMessage(array(
                                                                     "success" => "The toner pricing updates have been applied successfully."
@@ -177,8 +177,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         {
                             $db->rollBack();
 
-                            // Build repop values
-                            $repop_array = '';
+                            // Build repopulate values
+                            $repopulateArray = '';
                             foreach ($formData as $key => $value)
                             {
                                 if (strstr($key, "txtTonerPrice"))
@@ -186,15 +186,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     $toner_id = str_replace("txtTonerPrice", "", $key);
                                     $price    = $formData ['txtTonerPrice' . $toner_id];
 
-                                    // Build repop array
-                                    if ($repop_array != '')
+                                    // Build repopulate array
+                                    if ($repopulateArray != '')
                                     {
-                                        $repop_array .= ',';
+                                        $repopulateArray .= ',';
                                     }
-                                    $repop_array .= $toner_id . ':' . $price;
+                                    $repopulateArray .= $toner_id . ':' . $price;
                                 }
                             }
-                            $this->view->repop_array = $repop_array;
+                            $this->view->repop_array = $repopulateArray;
                         }
                     }
                     else
@@ -300,7 +300,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                             }
                         }
 
-                        if ($passvalid == 0)
+                        if ($hasErrors == 0)
                         {
                             $this->_flashMessenger->addMessage(array(
                                                                     "success" => "The device pricing updates have been applied successfully."
@@ -309,8 +309,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         else
                         {
                             $db->rollBack();
-                            // Build repop values
-                            $repop_array = '';
+                            // Build repopulate values
+                            $repopulateArray = '';
                             foreach ($formData as $key => $value)
                             {
                                 if (strstr($key, "txtDevicePrice"))
@@ -318,15 +318,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     $master_device_id = str_replace("txtDevicePrice", "", $key);
                                     $price            = $formData ['txtDevicePrice' . $master_device_id];
 
-                                    // Build repop array
-                                    if ($repop_array != '')
+                                    // Build repopulate array
+                                    if ($repopulateArray != '')
                                     {
-                                        $repop_array .= ',';
+                                        $repopulateArray .= ',';
                                     }
-                                    $repop_array .= $master_device_id . ':' . $price;
+                                    $repopulateArray .= $master_device_id . ':' . $price;
                                 }
                             }
-                            $this->view->repop_array = $repop_array;
+                            $this->view->repop_array = $repopulateArray;
                         }
                     }
                 }
