@@ -1,64 +1,44 @@
 <?php
 /**
- * managematchups.phtml
- *
- * @author	John Sadler
- * @version	v1.0
+ * Include our javascript
  */
+$this->headScript()->appendFile($this->baseUrl('/js/manageMatchups.js'));
 ?>
-<?php $this->headScript()->captureStart('prepend','text/javascript') ?>
-<?php if (isset($this->pf_model_id)) : ?>
-var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json?filter=model&criteria=<?php echo $this->pf_model_id; ?>' ;
-<?php else : ?>
-var url_matchuplist = TMTW_BASEURL + 'proposalgen/admin/matchuplist/format/json';
-<?php endif; ?>
-<?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('/js/manageMatchups.js')); ?>
 <div class="page-header">
     <h1>Manage Printer Matchups</h1>
 </div>
-<form class="form-inline"name="matchups" id="matchups" action="" method="post">
-<input type="hidden" name="ticket_id" id="ticket_id" value="<?php echo $this->ticket_id; ?>" />
-<input type="hidden" name="devices_pf_id" id="devices_pf_id" value="<?php echo $this->devices_pf_id; ?>" />
-<input type="hidden" name="rmsProviderId" id="rmsProviderId" value="<?php echo $this->rmsProviderId; ?>" />
-<input type="hidden" name="rmsModelId" id="rmsModelId" value="<?php echo $this->rmsModelId; ?>" />
-<input type="hidden" name="form_mode" id="form_mode" value="<?php echo $this->form_mode; ?>" />
-<input type="hidden" name="hdnIdArray" id="hdnIdArray" value="" />
+<div class="alert alert-warning">
+    <p>This page is where you would manage default matchups for printers.</p>
 
-	<dl class="zend_form">
-		<dt class="botMenu">
-			<div id="instruction_container" class="margined">
-				<p>Please map the following <?php echo $this->source; ?> printers to a master printer.</p>
-			</div>
-			<div id="filter_container">
-				<div id="criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
-					<label for="criteria_filter" >Filter:</label>
-					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0px 0px 0px 26px;">
-						<option value="model">Model Id</option>
-						<option value="printer">Provider Device Name</option>
-						<option value="onlyUnmapped">Show Only Unmapped</option>
-					</select>
-					<label for="txtCriteria" style="padding: 0px 0px 0px 10px;">for</label>
-					<input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
-					<input type="button" name="btnSearch" id="btnSearch" value="Search" class='btn btn-info' onclick="javascript: update_grid('search');" />
-					<input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class='btn' onclick="javascript: update_grid('clear');" />
-                </div>
+    <p>
+        <small>Please keep in mind that this will affect all users in the system.</small>
+    </p>
+</div>
+<div class="well">
+    <form class="form-inline" method="post">
+        <div id="filter_container">
+            <div id="criteria_container" style="display: inline; padding: 0;">
+                <label for="criteria_filter">Filter:</label>
+                <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0 0 0 26px;">
+                    <option value="model">Model Id</option>
+                    <option value="printer">Provider Device Name</option>
+                    <option value="onlyUnmapped">Show Only Unmapped</option>
+                </select>
+                <label for="txtCriteria" style="padding: 0 0 0 10px;">for</label>
+                <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />
+                <input type="button" name="btnSearch" id="btnSearch" value="Search" class='btn btn-info' onclick="update_grid('search');" />
+                <input type="button" name="btnClearSearch" id="btnClearSearch" value="Clear" class='btn' onclick="update_grid('clear');" />
             </div>
-            <br/>
-
-			<div id="grid_container" class="margined">
-				<table id="grid_list"></table>
-				<div id="grid_pager"></div>
-			</div>
-			
-			<br/>
-			<div class="submitBar">
-				<div id="submitBtns">
-					<div class="backbtn">
-						<input type="button" name="btnDone" id="btnDone" value="Back" class='btn btn-inverse' onClick="javascript: do_action('done');">
-					</div>
-				</div>
-			</div>
-        </dt>
-	</dl>
-</form>
+        </div>
+    </form>
+    <hr>
+    <div id="grid_container">
+        <table id="grid_list"></table>
+        <div id="grid_pager"></div>
+    </div>
+    <div class="form-actions">
+        <p>
+            <a href="<?php echo $this->url(array('action' => 'index', 'controller' => 'index', 'module' => 'admin')); ?>" title="Go Back" class="btn btn-inverse">Go Back</a>
+        </p>
+    </div>
+</div>

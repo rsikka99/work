@@ -1,11 +1,7 @@
 $(document).ready(function ()
 {
-    // find center screen for modal popup
-    var sTop = ($(window).height() / 2) - 100;
-    var sLeft = ($(window).width() / 2) - 200;
-
     $("#grid_list").jqGrid({
-        url         : url_matchuplist,
+        url         : TMTW_BASEURL + 'proposalgen/admin/matchuplist',
         datatype    : 'json',
         colModel    : [
             {
@@ -81,9 +77,6 @@ $(document).ready(function ()
                 var devices_pf_id = document.getElementById("grid_list").rows[i + 1].cells[0].innerHTML;
                 var master_device_id = document.getElementById("grid_list").rows[i + 1].cells[1].innerHTML;
 
-                hidden_devices_pf_id = "<input type='hidden' name='hdnDevicesPFID" + ids[i] + "' id='hdnDevicesPFID" + ids[i] + "' value='" + devices_pf_id + "' />";
-                hidden_master_device_id = "<input type='hidden' name='hdnMasterDeviceID" + ids[i] + "' id='hdnMasterDeviceID" + ids[i] + "' value='" + master_device_id + "' />";
-
                 var mapped_to = rowData.modelName;
                 var mapped_to_id = rowData.master_device_id;
                 var mapped_to_manufacturer = rowData.displayname;
@@ -95,32 +88,32 @@ $(document).ready(function ()
                 rowData.masterDevice += '<input type="hidden" class="manufacturerName" value="' + mapped_to_manufacturer + '" />';
                 rowData.masterDevice += '<input style="width: 96%" type="text" name="txtMasterDevices' + rmsKey + '" id="txtMasterDevices' + rmsKey + '" size="55" class="autoCompleteDeviceName" value="' + mapped_to_deviceName + '" />';
 
-                var result = grid.setRowData(ids[i], rowData);
+                grid.setRowData(ids[i], rowData);
             }
 
             $(".autoCompleteDeviceName").autocomplete({
                 source   : function (request, response)
                 {
                     $.ajax({
-                        url     : TMTW_BASEURL + 'proposalgen/admin/get-models',
+                        url     : TMTW_BASEURL + "proposalgen/admin/search-for-device",
                         dataType: "json",
                         data    : {
-                            searchText: request.term
+                            searchTerm: request.term
                         },
                         success : function (data)
                         {
-                            data.unshift({label: "Remove mapping", manufacturer: "Remove mapping", value: 0});
+                            data.unshift({device_name: "Remove mapping", fullname: "Remove mapping", id: 0, modelName: "Remove Mapping"});
                             response($.map(data, function (item)
                             {
                                 return {
-                                    value       : item.label,
-                                    id          : item.value,
-                                    label       : item.label,
-                                    manufacturer: item.manufacturer
-                                }
-                            }))
+                                    value       : item.device_name,
+                                    id          : item.id,
+                                    label       : item.device_name,
+                                    manufacturer: item.fullName
+                                };
+                            }));
                         }
-                    })
+                    });
                 },
                 minLength: 0,
                 select   : function (event, ui)
@@ -131,11 +124,11 @@ $(document).ready(function ()
                     $(this).autocomplete('option', 'change').call(this);
 
                 },
-                open     : function (event, ui)
+                open     : function ()
                 {
                     // Perform auto complete, and bold the match criteria to help the end user see what was matched.
                     var termTemplate = '<strong>%s</strong>';
-                    var autocompleteData = $(this).data('autocomplete');
+                    var autocompleteData = $(this).data('uiAutocomplete');
                     autocompleteData.menu.element.find('a').each(function ()
                     {
                         var label = $(this);
@@ -153,7 +146,7 @@ $(document).ready(function ()
                         }
                     });
                 },
-                change   : function (event, ui)
+                change   : function ()
                 {
                     var parent = $(this).parent();
                     var textValue = $.trim(this.value);
@@ -196,9 +189,6 @@ $(document).ready(function ()
                     }
                 }
             });
-
-
-            $("#hdnIdArray").val(ids);
         },
         editurl     : 'dummy.php'
     });
@@ -252,33 +242,9 @@ function update_grid(action)
         $("#txtCriteria").val('');
     }
 
-    $('#grid_list').setGridParam({
+    var $grid_list = $('#grid_list');
+    $grid_list.setGridParam({
         url: TMTW_BASEURL + 'proposalgen/admin/matchuplist' + params
     });
-    $('#grid_list').trigger("reloadGrid");
-}
-
-/**
- * Performs an action
- *
- * @param inAction
- */
-function do_action(inAction)
-{
-    if (inAction == 'save')
-    {
-        $("#matchups").submit();
-
-    }
-    else if (inAction == 'done')
-    {
-        if ($("#ticket_id").val() > 0)
-        {
-            document.location.href = TMTW_BASEURL + 'proposalgen/ticket/ticketdetails?id=' + $("#ticket_id").val();
-        }
-        else
-        {
-            document.location.href = TMTW_BASEURL + '/admin';
-        }
-    }
+    $grid_list.trigger("reloadGrid");
 }

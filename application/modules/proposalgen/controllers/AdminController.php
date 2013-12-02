@@ -986,44 +986,9 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $this->sendJson($formData);
     }
 
-    /**
-     *
-     */
-    protected function getModelsAction ()
-    {
-        $terms      = explode(" ", trim($_REQUEST ["searchText"]));
-        $searchTerm = "%";
-        foreach ($terms as $term)
-        {
-            $searchTerm .= "$term%";
-        }
-        // Fetch Devices like term
-        $db = Zend_Db_Table::getDefaultAdapter();
-
-        $sql = "SELECT concat(displayname, ' ', modelName) AS device_name, master_devices.id, displayname, modelName FROM manufacturers
-        JOIN master_devices ON master_devices.manufacturerId = manufacturers.id
-        WHERE concat(displayname, ' ', modelName) LIKE '%$searchTerm%' AND manufacturers.isDeleted = 0 ORDER BY device_name ASC LIMIT 10;";
-
-        $results = $db->fetchAll($sql);
-        // $results is an array of device names
-        $devices = array();
-        foreach ($results as $row)
-        {
-            $deviceName = $row ["displayname"] . " " . $row ["modelName"];
-            $deviceName = ucwords(strtolower($deviceName));
-            $devices [] = array(
-                "label"        => $deviceName,
-                "value"        => $row ["id"],
-                "manufacturer" => ucwords(strtolower($row ["displayname"]))
-            );
-        }
-
-        $this->sendJson($devices);
-    }
-
     public function managematchupsAction ()
     {
-        $this->view->title  = 'Manage Printer Matchups';
+
         $this->view->source = "PrintFleet";
 
         // Fill manufacturers drop down
