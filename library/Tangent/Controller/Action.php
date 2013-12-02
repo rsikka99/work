@@ -23,7 +23,7 @@ class Tangent_Controller_Action extends Zend_Controller_Action
     /**
      * View object
      *
-     * @var Zend_View
+     * @var Tangent_View
      */
     public $view;
 
