@@ -45,6 +45,16 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->_dealerId     = $this->_identity->dealerId;
     }
 
+    /**
+     * Checks to see if the current user is allowed to approve devices
+     *
+     * @return boolean
+     */
+    protected function _canApprove ()
+    {
+        return $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
+    }
+
     public function indexAction ()
     {
         // Nothing to do here
@@ -344,15 +354,15 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
     public function bulkFileDeviceFeaturesAction ()
     {
-        Zend_Session::start();
         $db                    = Zend_Db_Table::getDefaultAdapter();
         $errorMessages         = array();
-        $canApprove            = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $deviceFeaturesService = new Proposalgen_Service_Import_Device_Features();
+
+        $this->view->canApprove = $this->_canApprove();
 
         if ($this->_request->isPost())
         {
-            if (!is_array($deviceFeaturesService->getValidFile($this->_config)) && $canApprove)
+            if (!is_array($deviceFeaturesService->getValidFile($this->_config)) && $this->view->canApprove)
             {
                 $db->beginTransaction();
                 try
@@ -414,16 +424,13 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
             }
         }
-        $this->view->canApprove    = $canApprove;
         $this->view->errorMessages = $errorMessages;
     }
 
     public function bulkFileTonerPricingAction ()
     {
-        Zend_Session::start();
         $db                  = Zend_Db_Table::getDefaultAdapter();
         $errorMessages       = array();
-        $canApprove          = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $tonerPricingService = new Proposalgen_Service_Import_Toner_Pricing();
 
         if ($this->_request->isPost())
@@ -509,17 +516,19 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
             }
         }
-        $this->view->canApprove    = $canApprove;
+
+        $this->view->canApprove    = $this->_canApprove();
         $this->view->errorMessages = $errorMessages;
     }
 
     public function bulkFileTonerMatchupAction ()
     {
-        Zend_Session::start();
         $db             = Zend_Db_Table::getDefaultAdapter();
         $errorMessages  = array();
-        $canApprove     = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $matchupService = new Proposalgen_Service_Import_Toner_Matchup();
+
+        $canApprove             = $this->_canApprove();
+        $this->view->canApprove = $canApprove;
 
         if ($this->_request->isPost())
         {
@@ -618,16 +627,13 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
             }
         }
-        $this->view->canApprove    = $canApprove;
         $this->view->errorMessages = $errorMessages;
     }
 
     public function bulkFileDevicePricingAction ()
     {
-        Zend_Session::start();
         $db                   = Zend_Db_Table::getDefaultAdapter();
         $errorMessages        = array();
-        $canApprove           = $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $devicePricingService = new Proposalgen_Service_Import_Device_Pricing();
 
         if ($this->_request->isPost())
@@ -714,7 +720,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
             }
         }
-        $this->view->canApprove    = $canApprove;
+        $this->view->canApprove    = $this->_canApprove();
         $this->view->manufacturers = Proposalgen_Model_Mapper_Manufacturer::getInstance()->fetchAll();
         $this->view->errorMessages = $errorMessages;
     }
