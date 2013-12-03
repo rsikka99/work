@@ -32,7 +32,7 @@ class Tangent_View extends Zend_View
      *
      * @return string
      */
-    public function currency ($value, $currency)
+    public function currency ($value = null, $currency = null)
     {
         /* @var $helper Zend_View_Helper_Currency */
         $helper = $this->getHelper('currency');
