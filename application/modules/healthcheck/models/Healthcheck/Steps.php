@@ -29,7 +29,7 @@ class Healthcheck_Model_Healthcheck_Steps extends My_Navigation_Abstract
         self::STEP_FINISHED      => array(
             'module'     => 'healthcheck',
             'name'       => 'Report',
-            'controller' => 'report_healthcheck',
+            'controller' => 'report_index',
             'action'     => 'index'
         )
     );

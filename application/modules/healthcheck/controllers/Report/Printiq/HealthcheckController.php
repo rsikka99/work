@@ -1,8 +1,8 @@
 <?php
 /**
- * Class Healthcheck_Report_HealthcheckController
+ * Class Healthcheck_Report_Printiq_HealthcheckController
  */
-class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Controller_Action
+class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Library_Controller_Action
 {
 
     /**
@@ -15,20 +15,20 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         /**
-         * If we have access to the printiq healthcheck, we will switch to it
+         * If we don't have access to printiq healthcheck, switch to normal healthcheck
          */
-        if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+        if(!My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
-            $this->redirector('index', 'report_printiq_healthcheck', 'healthcheck');
+            $this->redirector('index', 'report_healthcheck', 'healthcheck');
         }
 
         $this->initReportList();
         $this->initHtmlReport();
 
-        $this->view->availableReports['Healthcheck']['active'] = true;
+        $this->view->availableReports['Printiq_Healthcheck']['active'] = true;
 
         $this->view->formats = array(
-            "/healthcheck/report_healthcheck/generate/format/docx" => $this->_wordFormat
+            "/healthcheck/report_printiq_healthcheck/generate/format/docx" => $this->_wordFormat
         );
 
         $this->view->reportTitle = "Healthcheck";
@@ -62,8 +62,6 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         {
             throw new Exception("Healthcheck could not be generated.", 0, $e);
         }
-
-//        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**
@@ -91,7 +89,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), 'Healthcheck') . ".$format";
+        $filename = "healthcheck.$format";
 
         $this->initReportVariables($filename);
 

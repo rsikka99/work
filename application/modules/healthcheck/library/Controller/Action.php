@@ -99,13 +99,30 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $this->view->availableReports = array(
-            "Healthcheck" => array(
+        $availableReports            = array();
+        $availableReports["Reports"] = array(
+            "pagetitle" => "Select a report...",
+            "active"    => false,
+            "url"       => $this->view->baseUrl('/healthcheck/report_index/index')
+        );
+
+        if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+        {
+            $availableReports['Printiq_Healthcheck'] = array(
+                "pagetitle" => "Health Check",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/healthcheck/report_printiq_healthcheck/index')
+            );
+        }
+        else
+        {
+            $availableReports['Healthcheck'] = array(
                 "pagetitle" => "Health Check",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/healthcheck/report_healthcheck/index')
-            ),
-        );
+            );
+        }
+        $this->view->availableReports = $availableReports;
     }
 
     /**

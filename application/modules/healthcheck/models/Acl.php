@@ -7,7 +7,9 @@ class Healthcheck_Model_Acl
 
 
     const RESOURCE_HEALTHCHECK_INDEX_WILDCARD     = "healthcheck__index__%";
+    const RESOURCE_HEALTHCHECK_REPORT_INDEX = "healthcheck__report_index__%";
     const RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK = "healthcheck__report_healthcheck__%";
+    const RESOURCE_HEALTHCHECK_REPORT_PRINTIQ = "healthcheck__report_printiq_healthcheck__%";
 
 
     /**
@@ -29,7 +31,9 @@ class Healthcheck_Model_Acl
     private static function setupAclResources (Application_Model_Acl $acl)
     {
         $acl->addResource(self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD);
+        $acl->addResource(self::RESOURCE_HEALTHCHECK_REPORT_INDEX);
         $acl->addResource(self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK);
+        $acl->addResource(self::RESOURCE_HEALTHCHECK_REPORT_PRINTIQ);
 
     }
 
@@ -44,6 +48,8 @@ class Healthcheck_Model_Acl
          * Healthcheck user
          */
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HEALTHCHECK_INDEX_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HEALTHCHECK_REPORT_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HEALTHCHECK_REPORT_PRINTIQ, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HEALTHCHECK_REPORT_HEALTHCHECK, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }

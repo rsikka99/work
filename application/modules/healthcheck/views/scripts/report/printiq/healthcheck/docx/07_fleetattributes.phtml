@@ -1,0 +1,225 @@
+<?php
+/**
+ * Healthcheck - Analysis: Expense
+ */
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+$graphs               = $healthcheckViewModel->getGraphs();
+
+$section->addPageBreak();
+$section->addTitle($this->translate("Fleet Attributes"), 1);
+$section->addText("The following provides a summary of your existing printing devices.");
+$section->addText("Leased devices are shown in gray.");
+
+$cellWidths = array(
+    6500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500
+);
+$tcStyle    = $this->styles->tables->fleetattributes;
+/**
+ * Optimized Devices
+ */
+$section->addTitle($this->translate("Optimized Devices - No Changes Necessary"), 2);
+$optimizedDevicesTable = $section->addTable($tcStyle->tablestyle);
+$optimizedDevicesTable->addRow($tcStyle->rowheight);
+$optimizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this->translate('Device Age (Years)'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Page Volume'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Comp. with ATR'), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Linked to ATR Program'), 'bold_text', 'nospacing_centeralign');
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $optimizedDevicesTable->addRow();
+    $cell = $optimizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $optimizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
+    $optimizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->reportsTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $optimizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+}
+$section->addPageBreak();
+
+$cellWidths = array(
+    0,
+    1000,
+    1000,
+    0,
+    1000,
+    0,
+    0,
+    1000
+);
+
+/**
+ * Underutilized Devices
+ */
+$section->addTitle($this->translate("Underutilized Devices"), 2);
+$UnderutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
+$UnderutilizedDevicesTable->addRow($tcStyle->rowheight);
+$UnderutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this->translate('Device Age (Years)'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Comp. with ATR'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Linked to ATR Program'), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $UnderutilizedDevicesTable->addRow();
+    $cell = $UnderutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $UnderutilizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0), null, 'nospacing_rightalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) . '%', null, 'nospacing_rightalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->isLeased ? $device->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) . "%", null, 'nospacing_rightalign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->reportsTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+    $UnderutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to ATR compatible device.', null, 'nospacing_leftalign');
+}
+$section->addPageBreak();
+
+/**
+ * Overutilized Devices
+ */
+$section->addTitle($this->translate("Overutilized Devices"), 2);
+$OverutilizedDevicesTable = $section->addTable($tcStyle->tablestyle);
+$OverutilizedDevicesTable->addRow($tcStyle->rowheight);
+$OverutilizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this->translate('Device Age (Years)'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Suggested Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Comp. with ATR'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Linked to ATR Program'), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getOverutilizedDevices() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $OverutilizedDevicesTable->addRow();
+    $cell = $OverutilizedDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $OverutilizedDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $OverutilizedDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $OverutilizedDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0), null, 'nospacing_rightalign');
+    $OverutilizedDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) . '%', null, 'nospacing_rightalign');
+    $OverutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText(number_format(($device->isLeased ? $device->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) . "%", null, 'nospacing_rightalign');
+    $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->reportsTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $OverutilizedDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+    $OverutilizedDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate excess page volume to an ATR compatible device.', null, 'nospacing_leftalign');
+}
+
+$cellWidths = array(
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    5000
+);
+$section->addPageBreak();
+/**
+ * Old Devices
+ */
+$section->addTitle($this->translate("Old Devices"), 2);
+$oldDevicesTable = $section->addTable($tcStyle->tablestyle);
+$oldDevicesTable->addRow($tcStyle->rowheight);
+$oldDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this->translate('Device Age (Years)'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Volume'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Comp. with ATR'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Linked to ATR Program'), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getOldDevices() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $oldDevicesTable->addRow();
+    $cell = $oldDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $oldDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $oldDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $oldDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
+    $oldDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->isLeased ? $device->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) . "%"), null, 'nospacing_rightalign');
+    $oldDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->reportsTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $oldDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+    $oldDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to a newer ATR compatible device.', null, 'nospacing_leftalign');
+}
+$section->addTextBreak();
+
+$section->addPageBreak();
+/**
+ * Devices Not Reporting Toner Levels
+ */
+$section->addTitle($this->translate("Devices Not Reporting Toner Levels"), 2);
+$notReportingTonerDevicesTable = $section->addTable($tcStyle->tablestyle);
+$notReportingTonerDevicesTable->addRow($tcStyle->rowheight);
+$notReportingTonerDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText($this->translate('Device Age (Years)'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText($this->translate('Monthly Page Volume'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText($this->translate('Percent of Total Volume'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText($this->translate('Percent of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText($this->translate('Comp. with ATR'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText($this->translate('Linked to ATR Program'), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText($this->translate('Suggested Action'), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getDevicesNotReportingTonerLevels() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $notReportingTonerDevicesTable->addRow();
+    $cell = $notReportingTonerDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $notReportingTonerDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [4], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format(($device->isLeased ? $device->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $device->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) . "%"), null, 'nospacing_rightalign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->reportsTonerLevels ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+    $notReportingTonerDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText('Migrate all page volume to ATR compatible device.', null, 'nospacing_leftalign');
+}
+$section->addTextBreak();

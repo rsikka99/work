@@ -1,0 +1,53 @@
+<?php
+/**
+ * Healthcheck Title Page
+ */
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+
+/* @var $titlePage PHPWord_Section */
+$titlePage = $this->section;
+
+/**
+ * Right aligned logo
+ */
+$detailsTable = $titlePage->addTable(array('cellMarginRight' => 900));
+$detailsTable->addRow(4920);
+$imageCell = $detailsTable->addCell(12240);
+$imageCell->addImage(ASSETS_PATH . "/printiq/titlepage_logo.png", array(
+                                                                       'align' => 'right'
+                                                                  ));
+
+/**
+ * Report Title + Client Name
+ */
+$detailsTable->addRow(3070);
+$textCell = $detailsTable->addCell(12240);
+$textCell->addText($this->translate('Health Check'), 'titlepage_title', 'nospacing_rightalign');
+$textCell->addText($this->translate('Prepared For: '), 'titlepage_subtitle_italic', 'rightalign');
+$textCell->addText(sprintf($this->translate('%1$s'), $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', array(
+                                                                                                                                               'align'       => 'right',
+                                                                                                                                               'spaceBefore' => 200,
+                                                                                                                                          ));
+$textCell->addText(sprintf($this->translate('%1$s'), $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine1 . ((strlen($healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2)) > 0 ? ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2 : "")), 'titlepage_subtitle', 'rightalign');
+$textCell->addText(sprintf($this->translate('%1$s'), $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode), 'titlepage_subtitle', 'rightalign');
+$textCell->addText(sprintf($this->translate('%1$s'), $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry())), 'titlepage_subtitle', 'rightalign');
+
+$titlePage->addTextBreak(4);
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate("      Together, we'll identify how our world-class"), 'titlepage_text', 'titleTextStyle1');
+$titlePage->addText($this->translate("      Managed Print Services can meet all of your print"), 'titlepage_text', 'titleTextStyle1');
+$titlePage->addText($this->translate("      requirements, create a cost-efficient print environment and"), 'titlepage_text', 'titleTextStyle1');
+$titlePage->addText($this->translate("      impact your bottom line. We can offer:"), 'titlepage_text', 'titleTextStyle1');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate("          - A dedicated account team ready to help"), 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText($this->translate("          - Highly trained, managed print specialists to help ensure maximum productivity"), 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText($this->translate("          - Professional partnerships with OEM brands"), 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText($this->translate("          - Best-in-class solutions to save you time and money"), 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText($this->translate(''), null, 'titleStyle2');

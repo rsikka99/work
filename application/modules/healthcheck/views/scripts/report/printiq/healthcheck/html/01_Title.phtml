@@ -1,0 +1,32 @@
+<?php
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+?>
+<div class="titlepage">
+    <div class="header">
+        <div class="title-page-logo-box-wrapper">
+            <div class="title-page-logo-box">
+                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
+            </div>
+        </div>
+    </div>
+    <div class="title-page-report-title">
+        <h2>Health Check</h2>
+    </div>
+    <div class="title-page-customer-details">
+        <h3>Prepared for:
+            <?php
+            if (strlen($healthcheckViewModel->healthcheck->getClient()->companyName) > 26)
+            {
+                echo "<br/>";
+            }
+
+            echo $healthcheckViewModel->healthcheck->getClient()->companyName;
+            ?>
+        </h3>
+
+        <h3><?php echo $healthcheckViewModel->getDateReportPrepared(); ?></h3>
+
+        <p><?php echo nl2br($healthcheckViewModel->healthcheck->getClient()->getAddress()); ?></p>
+    </div>
+</div>

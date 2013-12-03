@@ -1835,6 +1835,16 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
+     * Calculates the difference between Oem Total Cost Monthly And Compatible Monthly
+     *
+     * @return float
+     */
+    public function calculateDifferenceBetweenOemTotalCostMonthlyAndCompMonthly ()
+    {
+        return $this->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually() / 12;
+    }
+
+    /**
      * @return float
      */
     public function calculateEstimatedCompTonerCostAnnually ()
@@ -1850,6 +1860,16 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculateEstimatedOemTonerCostAnnually ()
     {
         return ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
+    }
+
+    /**
+     * Calculates the percentage difference between Oem Total Cost Annually And Compatible
+     *
+     * @return float
+     */
+    public function calculateDifferencePercentageBetweenOemTotalCostAnnuallyAndCompAnnually ()
+    {
+        return 1 - ($this->calculateEstimatedCompTonerCostAnnually() / $this->calculateEstimatedOemTonerCostAnnually());
     }
 
     /**
@@ -2102,7 +2122,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfIncludedDevices = $this->getDeviceCount();
 
             /**
-             * -- PagesPrinterJITPieGraph
+             * -- PagesPrintedJITPieGraph
              */
             $deviceAges = array(
                 "Pages Printed on JIT devices"     => 0,
@@ -2145,8 +2165,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $deviceAgeGraph->setLegendPosition("bv");
             $deviceAgeGraph->setTitle("Pages printed on JIT");
 
-            // PagesPrinterATRPieGraph
-            $healthcheckGraphs['PagesPrinterJITPieGraph'] = $deviceAgeGraph->getUrl();
+            // PagesPrintedJITPieGraph
+            $healthcheckGraphs['PagesPrintedJITPieGraph'] = $deviceAgeGraph->getUrl();
+
+            $deviceAgeGraph->setTitle("Pages printed on ATR");
+            $deviceAgeGraph->setLegend(array("Pages Printed on ATR devices", "Pages Printed on non-ATR devices"));
+
+            // PagesPrintedATRPieGraph
+            $healthcheckGraphs['PagesPrintedATRPieGraph'] = $deviceAgeGraph->getUrl();
 
             /**
              * -- HardwareUtilizationCapacityBar
@@ -2311,8 +2337,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->setLegend(array(
-                                      "Devices compatible with JIT",
-                                      "Devices not compatible with JIT"
+                                      "Printers Compatible with JIT",
+                                      "Printers Not compatible with JIT"
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -2320,6 +2346,18 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             // CompatibleJITBarGraph
             $healthcheckGraphs['CompatibleJITBarGraph'] = $barGraph->getUrl();
+
+            /**
+             * -- CompatibleATRBarGraph
+             */
+            $barGraph->setLegend(array(
+                                      "Printers Compatible with ATR",
+                                      "Printers Not Compatible with ATR"
+                                 ));
+            $barGraph->setTitle("");
+
+            // CompatibleATRBarGraph
+            $healthcheckGraphs['CompatibleATRBarGraph'] = $barGraph->getUrl();
 
             $oemCost  = ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
             $compCost = ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
@@ -2803,6 +2841,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             // Graphs[LeasedVsPurchasedPageCountBarGraph]
             $healthcheckGraphs['PagesWithOrWithoutJIT'] = $barGraph->getUrl();
 
+            $barGraph->setLegend(array(
+                                      "Pages not on ATR program",
+                                      "Pages on ATR program"
+                                 ));
+
+            // Graphs[PagesWithOrWithoutATR]
+            $healthcheckGraphs['PagesWithOrWithoutATR'] = $barGraph->getUrl();
+
             /**
              * -- UniqueDevicesGraph
              */
@@ -3026,7 +3072,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             // If we only have one don't use the others section, show them all
             if (count($removeArray) > 1)
             {
-                $uniqueModelArray[count($removeArray) . ' Others'] = $numberOfOtherDevices;
+                $uniqueModelArray['Others'] = $numberOfOtherDevices;
             }
 
             $this->_uniqueDeviceCountArray = $uniqueModelArray;

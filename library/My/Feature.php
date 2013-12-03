@@ -12,6 +12,7 @@ class My_Feature
     const HARDWARE_OPTIMIZATION                      = "hardware_optimization";
     const HARDWARE_QUOTE                             = "hardware_quote";
     const HEALTHCHECK                                = "healthcheck";
+    const HEALTHCHECK_PRINTIQ                        = "healthcheck_printiq";
     const ASSESSMENT                                 = "assessment";
     const ASSESSMENT_CUSTOMER_COST_ANALYSYS          = "assessment_customer_cost_analysis";
     const ASSESSMENT_GROSS_MARGIN                    = "assessment_gross_margin";

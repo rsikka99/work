@@ -1,0 +1,19 @@
+<div class="container" id="htmlReportContainer">
+    <?php
+    $this->reportName = "Office Depot";
+    $this->jitName = "Office Depot ATR";
+    $this->jitFullName = "Office Depot(ATR)";
+
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
+    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
+    echo $this->render('report/healthcheck/html/01_Title.phtml');
+    echo $this->render('report/healthcheck/html/02_Scorecard.phtml');
+    echo $this->render('report/healthcheck/html/03_ServiceAndSuppliesLogistics.phtml');
+    echo $this->render('report/healthcheck/html/04_PrintingHardwareUsage.phtml');
+    echo $this->render('report/healthcheck/html/05_TechnologyReliabilityAndUserProductivity.phtml');
+    echo $this->render('report/healthcheck/html/06_EnvironmentalImpact.phtml');
+    echo $this->render('report/healthcheck/html/07_FleetAttributes.phtml');
+    echo $this->render('report/healthcheck/html/08_Summary.phtml');
+    ?>
+</div>
