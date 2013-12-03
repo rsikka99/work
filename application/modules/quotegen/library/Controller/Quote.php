@@ -48,7 +48,15 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
     public function init ()
     {
 
-        // Add the ability to have a DOCX context
+        if (!My_Feature::canAccess(My_Feature::HARDWARE_QUOTE))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
         $this->_helper->contextSwitch()
                       ->addContext('docx', array(
                                                 'suffix'    => 'docx',

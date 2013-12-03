@@ -6,7 +6,9 @@
                 <em>Please select a report from the list. After verifying the contents of your reports, you may download a copy by selecting your desired output
                     format from top right corner of each report. </em>
             </p>
-            <?php echo $this->form; ?>
+            <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) :
+                echo $this->form;
+            endif; ?>
         </div>
     </div>
 </div>

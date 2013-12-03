@@ -8,7 +8,19 @@ class My_Feature
     /**
      * Constants for each feature
      */
-    const MEMJET_OPTIMIZATION = "hardware_optimization_memjet";
+    const MEMJET_OPTIMIZATION                        = "hardware_optimization_memjet";
+    const HARDWARE_OPTIMIZATION                      = "hardware_optimization";
+    const HARDWARE_QUOTE                             = "hardware_quote";
+    const HEALTHCHECK                                = "healthcheck";
+    const ASSESSMENT                                 = "assessment";
+    const ASSESSMENT_CUSTOMER_COST_ANALYSYS          = "assessment_customer_cost_analysis";
+    const ASSESSMENT_GROSS_MARGIN                    = "assessment_gross_margin";
+    const ASSESSMENT_TONER_VENDOR_GROSS_MARGIN       = "assessment_toner_vendor_gross_margin";
+    const ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT = "assessment_jit_supply_and_toner_sku_report";
+    const ASSESSMENT_OLD_DEVICE_LIST                 = "assessment_old_device_list";
+    const ASSESSMENT_PRINTING_DEVICE_LIST            = "assessment_printing_device_list";
+    const ASSESSMENT_SOLUTION                        = "assessment_solution";
+    const ASSESSMENT_LEASE_BUYBACK                   = "assessment_lease_buyback";
 
     /**
      * @var My_Feature_AdapterInterface

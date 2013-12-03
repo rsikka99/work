@@ -5,6 +5,22 @@
  */
 class Assessment_Report_OldDeviceListController extends Assessment_Library_Controller_Action
 {
+    /**
+     * Makes sure the user has access to this report, otherwise it sends them back
+     */
+    public function init ()
+    {
+        if (!My_Feature::canAccess(My_Feature::ASSESSMENT_OLD_DEVICE_LIST))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
+        parent::init();
+    }
 
     public function indexAction ()
     {

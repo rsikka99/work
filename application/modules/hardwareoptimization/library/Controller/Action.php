@@ -54,6 +54,14 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         $this->_navigation = Hardwareoptimization_Model_Hardware_Optimization_Steps::getInstance();
         $this->_dealerId   = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
+        if (!My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
 
         if (isset($this->_mpsSession->selectedClientId))
         {

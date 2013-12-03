@@ -54,6 +54,15 @@ class Healthcheck_Library_Controller_Action extends My_Controller_Report
 
         $this->_navigation = Healthcheck_Model_Healthcheck_Steps::getInstance();
 
+        if (!My_Feature::canAccess(My_Feature::HEALTHCHECK))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
         if (isset($this->_mpsSession->selectedClientId))
         {
             $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);

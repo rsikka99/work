@@ -4,6 +4,22 @@
  */
 class Assessment_Report_TonervendorgrossmarginController extends Assessment_Library_Controller_Action
 {
+    /**
+     * Makes sure the user has access to this report, otherwise it sends them back
+     */
+    public function init ()
+    {
+        if (!My_Feature::canAccess(My_Feature::ASSESSMENT_TONER_VENDOR_GROSS_MARGIN))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
+        parent::init();
+    }
 
     /**
      * The gross margin Action will be used to display the gross margin report

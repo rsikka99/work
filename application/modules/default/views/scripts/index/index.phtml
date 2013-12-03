@@ -70,16 +70,25 @@
 <?php if (isset($this->selectedClientId)) : ?>
     <div class="tabbable">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
-        <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+        <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
+            <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
+        <?php endif; ?>
+        <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
+            <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+        <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
             <li><a href="#memjetOptimizationTabPane" data-toggle="tab" title="Memjet Optimization"><i class="mpsicon-memjet"></i></a></li>
         <?php endif; ?>
-        <li><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
-        <li><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
+        <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
+            <li><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
+        <?php endif; ?>
+        <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
+            <li><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
+        <?php endif; ?>
     </ul>
 
     <div class="tab-content">
+    <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
         <div class="tab-pane active" id="assessmentTabPane">
             <p>Assessment</p>
 
@@ -118,6 +127,8 @@
             </form>
 
         </div>
+    <?php endif; ?>
+    <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
         <div class="tab-pane" id="hardwareOptimizationTabPane">
             <p>Hardware Optimization</p>
 
@@ -158,48 +169,50 @@
                 </table>
             </form>
         </div>
-        <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-            <div class="tab-pane" id="memjetOptimizationTabPane">
-                <p>Memjet Optimization</p>
+    <?php endif; ?>
+    <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
+        <div class="tab-pane" id="memjetOptimizationTabPane">
+            <p>Memjet Optimization</p>
 
-                <form method="POST">
-                    <table class="table table-striped table-condensed table-bordered">
-                        <tr>
-                            <th>Title <br /> File Name</th>
-                            <th style="width:125px">Date Created <br /> Last Modified</th>
-                            <th>Finished</th>
-                            <th style="width: 70px;">Action</th>
-                        </tr>
-                        <tr class="info">
-                            <td></td>
-                            <td></td>
-                            <td></td>
+            <form method="POST">
+                <table class="table table-striped table-condensed table-bordered">
+                    <tr>
+                        <th>Title <br /> File Name</th>
+                        <th style="width:125px">Date Created <br /> Last Modified</th>
+                        <th>Finished</th>
+                        <th style="width: 70px;">Action</th>
+                    </tr>
+                    <tr class="info">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;">
+                            <button name="selectMemjetOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
+                        </td>
+                    </tr>
+                    <?php foreach ($this->availableMemjetOptimizations as $memjetOptimization) : /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */ ?>
+                        <tr class="<?php echo ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
+                            <td><?php echo $memjetOptimization->name . '<br/> <small>' . $memjetOptimization->getRmsUpload()->fileName; ?></small></td>
+                            <td><?php echo strftime("%B %d, %Y", strtotime($memjetOptimization->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($memjetOptimization->lastModified)); ?></td>
+
+                            <?php if ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) : ?>
+                                <td>Finished</td>
+
+                            <?php else : ?>
+                                <td>In Progress</td>
+                            <?php endif; ?>
                             <td style="text-align: center;">
-                                <button name="selectMemjetOptimization" value="0" class="btn btn-success btn-mini">Start New</button>
+                                <button name="selectMemjetOptimization" value="<?php echo $memjetOptimization->id; ?>" class="btn btn-primary btn-mini">
+                                    Select
+                                </button>
                             </td>
                         </tr>
-                        <?php foreach ($this->availableMemjetOptimizations as $memjetOptimization) : /* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */ ?>
-                            <tr class="<?php echo ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) ? "success" : "warning"; ?>">
-                                <td><?php echo $memjetOptimization->name . '<br/> <small>' . $memjetOptimization->getRmsUpload()->fileName; ?></small></td>
-                                <td><?php echo strftime("%B %d, %Y", strtotime($memjetOptimization->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($memjetOptimization->lastModified)); ?></td>
-
-                                <?php if ($memjetOptimization->stepName == Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED) : ?>
-                                    <td>Finished</td>
-
-                                <?php else : ?>
-                                    <td>In Progress</td>
-                                <?php endif; ?>
-                                <td style="text-align: center;">
-                                    <button name="selectMemjetOptimization" value="<?php echo $memjetOptimization->id; ?>" class="btn btn-primary btn-mini">
-                                        Select
-                                    </button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </table>
-                </form>
-            </div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                </table>
+            </form>
+        </div>
+    <?php endif; ?>
+    <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
         <div class="tab-pane" id="healthcheckTabPane">
             <p>Health Check</p>
 
@@ -239,6 +252,8 @@
                 </table>
             </form>
         </div>
+    <?php endif; ?>
+    <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
         <div class="tab-pane" id="quoteTabPane">
             <p>Hardware Quote</p>
 
@@ -275,8 +290,8 @@
                         </tr>
                     <?php endforeach; ?>
                 </table>
-
         </div>
+    <?php endif; ?>
     </div>
     </div>
     <hr>

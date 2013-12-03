@@ -4,6 +4,23 @@
  */
 class Assessment_Report_TonersController extends Assessment_Library_Controller_Action
 {
+    /**
+     * Makes sure the user has access to this report, otherwise it sends them back
+     */
+    public function init ()
+    {
+        if (!My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
+        parent::init();
+    }
+
     public function indexAction ()
     {
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);

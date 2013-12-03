@@ -54,6 +54,15 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
 
         $this->_navigation = Assessment_Model_Assessment_Steps::getInstance();
 
+        if (!My_Feature::canAccess(My_Feature::ASSESSMENT))
+        {
+            $this->_flashMessenger->addMessage(array(
+                                                    "error" => "You do not have permission to access this."
+                                               ));
+
+            $this->redirector('index', 'index', 'index');
+        }
+
         if (isset($this->_mpsSession->selectedClientId))
         {
             $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
@@ -90,58 +99,91 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $this->view->availableReports = array(
-            "Reports"                => array(
-                "pagetitle" => "Select a report...",
-                "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_index/index')
-            ),
-            "Assessment"             => array(
-                "pagetitle" => "Assessment",
-                "active"    => false,
-                "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
-            ),
-            "CustomerCostAnalysis"   => array(
+        $availableReportsArray               = array();
+        $availableReportsArray["Reports"]    = array(
+            "pagetitle" => "Select a report...",
+            "active"    => false,
+            "url"       => $this->view->baseUrl('/assessment/report_index/index')
+        );
+        $availableReportsArray["Assessment"] = array(
+            "pagetitle" => "Assessment",
+            "active"    => false,
+            "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
+        );
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSYS))
+        {
+            $availableReportsArray["CustomerCostAnalysis"] = array(
                 "pagetitle" => "Customer Cost Analysis",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_costanalysis/index')
-            ),
-            "GrossMargin"            => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_GROSS_MARGIN))
+        {
+            $availableReportsArray["GrossMargin"] = array(
                 "pagetitle" => "Gross Margin",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_grossmargin/index')
-            ),
-            "TonerVendorGrossMargin" => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_TONER_VENDOR_GROSS_MARGIN))
+        {
+            $availableReportsArray["TonerVendorGrossMargin"] = array(
                 "pagetitle" => "Toner Vendor Gross Margin",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_tonervendorgrossmargin/index')
-            ),
-            "JITSupplyAndTonerSku"   => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
+        {
+            $availableReportsArray["JITSupplyAndTonerSku"] = array(
                 "pagetitle" => "JIT Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_toners/index')
-            ),
-            "OldDeviceList"          => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_OLD_DEVICE_LIST))
+        {
+            $availableReportsArray["OldDeviceList"] = array(
                 "pagetitle" => "Old Device List",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_olddevicelist/index')
-            ),
-            "PrintingDeviceList"     => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_PRINTING_DEVICE_LIST))
+        {
+            $availableReportsArray["PrintingDeviceList"] = array(
                 "pagetitle" => "Printing Device List",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_printingdevicelist/index')
-            ),
-            "Solution"               => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_SOLUTION))
+        {
+            $availableReportsArray["Solution"] = array(
                 "pagetitle" => "Solution",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_solution/index')
-            ),
-            "LeaseBuyback"           => array(
+            );
+        }
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_LEASE_BUYBACK))
+        {
+            $availableReportsArray["LeaseBuyback"] = array(
                 "pagetitle" => "Lease Buyback",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_leasebuyback/index')
-            ),
-        );
+            );
+        }
+
+        $this->view->availableReports = $availableReportsArray;
     }
 
     /**
