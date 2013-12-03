@@ -2,21 +2,23 @@
 <settings>
     <setting>
         <data>
-            <name>Jim</name>
-            <pageCoverageMonochrome>99</pageCoverageMonochrome>
-            <pageCoverageColor>99</pageCoverageColor>
-            <adminCostPerPage>5</adminCostPerPage>
-            <partsCostPerPage>5</partsCostPerPage>
-            <laborCostPerPage>5</laborCostPerPage>
-            <targetMonochromeCostPerPage>5</targetMonochromeCostPerPage>
-            <targetColorCostPerPage>5</targetColorCostPerPage>
-            <blackToColorRatio>99</blackToColorRatio>
-            <lossThreshold>1999999999</lossThreshold>
+            <name>Memjet Optimization 2013/12/03</name>
+            <pageCoverageMonochrome>6</pageCoverageMonochrome>
+            <pageCoverageColor>24</pageCoverageColor>
+            <partsCostPerPage>0.0015</partsCostPerPage>
+            <laborCostPerPage>0.002</laborCostPerPage>
+            <adminCostPerPage>0.0006</adminCostPerPage>
+            <targetMonochromeCostPerPage>0.02</targetMonochromeCostPerPage>
+            <targetColorCostPerPage>0.1</targetColorCostPerPage>
+            <lossThreshold>20</lossThreshold>
+            <blackToColorRatio>15</blackToColorRatio>
+            <costThreshold>10</costThreshold>
         </data>
     </setting>
     <setting>
         <data>
             <name>Spock</name>
+            <costThreshold>10</costThreshold>
             <pageCoverageMonochrome>0</pageCoverageMonochrome>
             <pageCoverageColor>0</pageCoverageColor>
             <adminCostPerPage>0</adminCostPerPage>
@@ -31,6 +33,7 @@
     <setting>
         <data>
             <name>Leonard</name>
+            <costThreshold>10</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>3</adminCostPerPage>
@@ -38,13 +41,14 @@
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>3</targetMonochromeCostPerPage>
             <targetColorCostPerPage>3</targetColorCostPerPage>
-            <blackToColorRatio>0</blackToColorRatio>
-            <lossThreshold>1999999999</lossThreshold>
+            <blackToColorRatio>99</blackToColorRatio>
+            <lossThreshold>0</lossThreshold>
         </data>
     </setting>
     <setting>
         <data>
             <name>Montgomery</name>
+            <costThreshold>10</costThreshold>
             <pageCoverageMonochrome>99</pageCoverageMonochrome>
             <pageCoverageColor>99</pageCoverageColor>
             <adminCostPerPage>.01</adminCostPerPage>
@@ -52,13 +56,14 @@
             <laborCostPerPage>.3456</laborCostPerPage>
             <targetMonochromeCostPerPage>.4</targetMonochromeCostPerPage>
             <targetColorCostPerPage>2.5</targetColorCostPerPage>
-            <blackToColorRatio>0</blackToColorRatio>
+            <blackToColorRatio>99</blackToColorRatio>
             <lossThreshold>0</lossThreshold>
         </data>
     </setting>
     <setting>
         <data>
             <name>Hikaru</name>
+            <costThreshold>10</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>5</adminCostPerPage>
@@ -66,13 +71,14 @@
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
-            <blackToColorRatio>100</blackToColorRatio>
+            <blackToColorRatio>99</blackToColorRatio>
             <lossThreshold>0</lossThreshold>
         </data>
     </setting>
     <setting>
         <data>
             <name>42</name>
+            <costThreshold>10</costThreshold>
             <pageCoverageMonochrome>50</pageCoverageMonochrome>
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>5</adminCostPerPage>
@@ -80,8 +86,8 @@
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
-            <blackToColorRatio>100</blackToColorRatio>
-            <lossThreshold>1999999999</lossThreshold>
+            <blackToColorRatio>99</blackToColorRatio>
+            <lossThreshold>0</lossThreshold>
         </data>
     </setting>
 </settings>
