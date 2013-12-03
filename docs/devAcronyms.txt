@@ -1,0 +1,4 @@
+ACL - Access Control List
+HTML - HyperText Markup Language
+JSON - JavaScript Object Notation
+SQL - Structured Query Language

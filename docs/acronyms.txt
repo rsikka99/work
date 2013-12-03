@@ -1,0 +1,13 @@
+AMPV - Average Monthly Print Volume
+CPP - Cost Per Page
+CSV - Comma Separated Values
+IP Address - Internet Protocol Address
+IT - Information Technology
+JIT Supplies - Just In Time Supplies
+kWh - Kilowatt hour
+MFP - Multi-Function Printer
+OEM - Original Equipment Manufacturer
+PDF - Portable Document Format
+PPM - Pages Per Minute
+RMS - Remote Monitoring Software
+SKU - Stock Keeping Unit
