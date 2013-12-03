@@ -337,6 +337,7 @@ $(function ()
                         $('#totalCost').html(data.totalCost);
                         $('#marginDollar').html(data.marginDollar);
                         $('#marginPercent').html(data.marginPercent);
+                        $('#numberOfDevicesReplaced').html(data.summary.numberOfDevicesReplaced);
                     }
                 });
             }

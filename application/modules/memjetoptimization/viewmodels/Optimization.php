@@ -511,10 +511,29 @@ class Memjetoptimization_ViewModel_Optimization
      *
      * @return int
      */
+    public function getNumberOfDevicesWithReplacements ()
+    {
+        $numberOfDevices = 0;
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+        {
+            if ($device->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id) instanceof Proposalgen_Model_MasterDevice)
+            {
+                $numberOfDevices++;
+            }
+        }
+
+        return $numberOfDevices;
+    }
+
+    /**
+     * Gets the amount of color capable devices with replacement devices
+     *
+     * @return int
+     */
     public function getNumberOfColorCapableDevicesWithReplacements ()
     {
         $numberOfDevices = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
             $replacementDevice = $device->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id);
             if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)

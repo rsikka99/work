@@ -124,4 +124,4 @@ $memjetOptimization = $this->memjetOptimization;
 
     </tbody>
 </table>
-<em>The following <?php echo count($optimizationViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances()); ?> out of <?php echo $optimizationViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?> devices are eligible for potential optimization.</em>
+<em>The following <span id="numberOfDevicesReplaced"><?php echo number_format($optimizationViewModel->getNumberOfDevicesWithReplacements()); ?></span> out of <?php echo number_format($optimizationViewModel->getDevices()->purchasedDeviceInstances->getCount()); ?> eligible devices have been selected for replacement.</em>

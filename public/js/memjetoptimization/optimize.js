@@ -357,6 +357,7 @@ $(function ()
                         $('#grossMarginDeltaTitle').html((data.summary.grossMarginDeltaIsPositive) ? "Gross Margin Increase" : "Gross Margin Decrease");
                         $('#customerCostDelta').html(data.summary.customerCostDelta);
                         $('#customerCostDeltaTitle').html((data.summary.customerCostDeltaIsPositive) ? "Customer Cost Increase" : "Customer Cost Decrease");
+                        $('#numberOfDevicesReplaced').html(data.summary.numberOfDevicesReplaced);
                     }
                 });
             }

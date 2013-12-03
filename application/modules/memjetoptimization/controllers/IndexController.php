@@ -450,6 +450,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                       "grossMarginDeltaIsPositive"  => ($grossMarginDeltaIsPositive) ? true : false,
                       "customerCostDelta"           => $this->view->currency($customerCostDelta),
                       "customerCostDeltaIsPositive" => ($customerCostDeltaPositive) ? true : false,
+                      "numberOfDevicesReplaced"     => number_format($memjetOptimizationViewModel->getNumberOfDevicesWithReplacements()),
                   ),
                   "device"  => array(
                       /**

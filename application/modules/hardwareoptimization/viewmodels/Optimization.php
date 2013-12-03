@@ -86,6 +86,25 @@ class Hardwareoptimization_ViewModel_Optimization
     }
 
     /**
+     * Gets the amount of color capable devices with replacement devices
+     *
+     * @return int
+     */
+    public function getNumberOfDevicesWithReplacements ()
+    {
+        $numberOfDevices = 0;
+        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
+        {
+            if ($device->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id) instanceof Proposalgen_Model_MasterDevice)
+            {
+                $numberOfDevices++;
+            }
+        }
+
+        return $numberOfDevices;
+    }
+
+    /**
      * Gets the cost per page settings for the dealers point of view
      *
      * @return Proposalgen_Model_CostPerPageSetting
