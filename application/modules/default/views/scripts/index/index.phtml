@@ -70,45 +70,55 @@
 <?php if (isset($this->selectedClientId)) : ?>
     <div class="tabbable">
     <ul class="nav nav-tabs">
+        <?php $active = 'class="active"'; ?>
         <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
-            <li class="active"><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
+            <li <?php echo $active; ?>><a href="#assessmentTabPane" data-toggle="tab" title="Assessment"><i class="mpsicon-assessment"></i></a></li>
+            <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
-            <li><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+            <li <?php echo $active; ?>><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+            <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-            <li><a href="#memjetOptimizationTabPane" data-toggle="tab" title="Memjet Optimization"><i class="mpsicon-memjet"></i></a></li>
+            <li <?php echo $active; ?>><a href="#memjetOptimizationTabPane" data-toggle="tab" title="Memjet Optimization"><i class="mpsicon-memjet"></i></a>
+            </li>
+            <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
-            <li><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
+            <li <?php echo $active; ?>><a href="#healthcheckTabPane" data-toggle="tab" title="Health Check"><i class="mpsicon-healthcheck"></i></a></li>
+            <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
-            <li><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
+            <li <?php echo $active; ?>><a href="#quoteTabPane" data-toggle="tab" title="Hardware Quote"><i class="mpsicon-quote"></i></a></li>
+            <?php $active = ''; ?>
         <?php endif; ?>
     </ul>
 
     <div class="tab-content">
+    <?php $active = 'active'; ?>
     <?php if (My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
-        <div class="tab-pane active" id="assessmentTabPane">
-            <p>Assessment</p>
+        <div class="tab-pane <?php echo $active ?>" id="assessmentTabPane">
+            <?php $active = ''; ?>
+            <p> Assessment</p>
 
             <form method="POST">
                 <table class="table table-striped table-condensed table-bordered">
                     <tr>
-                        <th>Title <br /> File Name</th>
-                        <th style="width:125px">Date Created <br /> Last Modified</th>
-                        <th>Finished</th>
-                        <th style="width: 70px;">Action</th>
+                        <th> Title <br /> File Name</th>
+                        <th style="width:125px"> Date Created < br /> Last Modified</th>
+                        <th> Finished</th>
+                        <th style="width: 70px;"> Action</th>
                     </tr>
                     <tr class="info">
                         <td></td>
                         <td></td>
                         <td></td>
                         <td style="text-align: center;">
-                            <button name="selectAssessment" value="0" class="btn btn-success btn-mini">Start New</button>
+                            <button name="selectAssessment" value="0" class="btn btn-success btn-mini"> Start New</button>
                         </td>
                     </tr>
-                    <?php foreach ($this->availableAssessments as $report) : /* @var $report Assessment_Model_Assessment */ ?>
+                    <?php foreach ($this->availableAssessments as $report) : /* @var $report Assessment_Model_Assessment */
+                        ?>
                         <tr class="<?php echo ($report->stepName == Proposalgen_Model_Assessment_Step::STEP_FINISHED) ? "success" : "warning"; ?>">
                             <td><?php echo $report->name . '<br/> <small>' . $report->getRmsUpload()->fileName; ?></small></td>
                             <td><?php echo strftime("%B %d, %Y", strtotime($report->dateCreated)) . "<br/>" . strftime("%B %d, %Y", strtotime($report->lastModified)); ?></td>
@@ -129,7 +139,8 @@
         </div>
     <?php endif; ?>
     <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
-        <div class="tab-pane" id="hardwareOptimizationTabPane">
+        <div class="tab-pane <?php echo $active ?>" id="hardwareOptimizationTabPane">
+            <?php $active = ''; ?>
             <p>Hardware Optimization</p>
 
             <form method="POST">
@@ -171,7 +182,8 @@
         </div>
     <?php endif; ?>
     <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
-        <div class="tab-pane" id="memjetOptimizationTabPane">
+        <div class="tab-pane <?php echo $active ?>" id="memjetOptimizationTabPane">
+            <?php $active = ''; ?>
             <p>Memjet Optimization</p>
 
             <form method="POST">
@@ -213,7 +225,8 @@
         </div>
     <?php endif; ?>
     <?php if (My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
-        <div class="tab-pane" id="healthcheckTabPane">
+        <div class="tab-pane <?php echo $active ?>" id="healthcheckTabPane">
+            <?php $active = ''; ?>
             <p>Health Check</p>
 
             <form method="POST">
@@ -254,7 +267,8 @@
         </div>
     <?php endif; ?>
     <?php if (My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
-        <div class="tab-pane" id="quoteTabPane">
+        <div class="tab-pane <?php echo $active ?>" id="quoteTabPane">
+            <?php $active = ''; ?>
             <p>Hardware Quote</p>
 
             <form method="POST">

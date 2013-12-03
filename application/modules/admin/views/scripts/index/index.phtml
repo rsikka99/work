@@ -106,25 +106,25 @@
 <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_USER)) : ?>
     <h3>My Settings</h3>
     <div class="row">
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_USER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_USER) && My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "proposal", "module" => "preferences")); ?>"><i class="icon-star icon-4x"></i><br /><br />
                     Assessment<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_USER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_USER) && My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "quote", "module" => "preferences")); ?>"><i class="icon-money icon-4x"></i><br /><br />
                     Quote<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_USER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_USER) && My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "healthcheck", "module" => "preferences")); ?>"><i class="icon-medkit icon-4x"></i><br /><br />
                     Health Check<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_USER) && My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "user", "controller" => "hardwareoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
                     Hardware Optimization<br /><br /></a>
@@ -141,25 +141,25 @@
 <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_INDEX_DEALER)) : ?>
     <h3>Dealer Settings</h3>
     <div class="row">
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_DEALER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_PROPOSAL_DEALER) && My_Feature::canAccess(My_Feature::ASSESSMENT)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "proposal", "module" => "preferences")); ?>"><i class="icon-star icon-4x"></i><br /><br />
                     Assessment<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_DEALER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_QUOTE_DEALER) && My_Feature::canAccess(My_Feature::HARDWARE_QUOTE)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "quote", "module" => "preferences")); ?>"><i class="icon-money icon-4x"></i><br /><br />
                     Quote<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HEALTHCHECK_DEALER) && My_Feature::canAccess(My_Feature::HEALTHCHECK)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "healthcheck", "module" => "preferences")); ?>"><i class="icon-medkit icon-4x"></i><br /><br />
                     Health Check<br /><br /></a>
             </div>
         <?php endif; ?>
-        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER)) : ?>
+        <?php if ($this->isAllowed(Preferences_Model_Acl::RESOURCE_PREFERENCES_HARDWAREOPTIMIZATION_DEALER) && My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
             <div class="span2">
                 <a class="btn btn-block" href="<?php echo $this->url(array("action" => "dealer", "controller" => "hardwareoptimization", "module" => "preferences")); ?>"><i class="icon-dashboard icon-4x"></i><br />
                     Hardware Optimization<br /><br /></a>
