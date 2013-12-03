@@ -95,7 +95,7 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $report_name = new Zend_Form_Element_Text('name');
         $report_name->setLabel('Report Name')
-                    ->setAttrib('data-defaultvalue', "assessment" . date('Ymd'))
+                    ->setAttrib('data-defaultvalue', "Assessment " . date('Y/m/d'))
                     ->setAttrib('class', 'span2')
                     ->setAttrib('style', 'text-align: right');
         $report_name->addFilters(array(

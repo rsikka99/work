@@ -210,7 +210,7 @@ class Memjetoptimization_Library_Controller_Action extends My_Controller_Report
                 $this->_memjetOptimization               = new Memjetoptimization_Model_Memjet_Optimization();
                 $this->_memjetOptimization->dateCreated  = date('Y-m-d H:i:s');
                 $this->_memjetOptimization->lastModified = date('Y-m-d H:i:s');
-                $this->_memjetOptimization->name         = "memjetOptimization" . date('Ymd');
+                $this->_memjetOptimization->name         = "Memjet Optimization " . date('Y/m/d');
                 $this->_memjetOptimization->dealerId     = $this->_identity->dealerId;
                 $this->_memjetOptimization->clientId     = $this->_mpsSession->selectedClientId;
             }

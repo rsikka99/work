@@ -67,7 +67,7 @@ class Hardwareoptimization_Service_Setting
             $this->_form = new Hardwareoptimization_Form_Setting();
 
             // User form will populate the description with defaults
-            $this->_form->getElement("name")->setDescription("hardwareOptimization" . date('Ymd'));
+            $this->_form->getElement("name")->setDescription("Hardware Optimization " . date('Y/m/d'));
             $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
             $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
             $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
@@ -141,7 +141,7 @@ class Hardwareoptimization_Service_Setting
             }
 
             // Save the report name
-            $this->_hardwareOptimization->name = (isset($validData['name'])) ? $validData['name'] : "hardwareOptimization" . date('Ymd');
+            $this->_hardwareOptimization->name = (isset($validData['name'])) ? $validData['name'] : "Hardware Optimization " . date('Y/m/d');
             Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->save($this->_hardwareOptimization);
 
             $this->_hardwareOptimizationSettings = new Hardwareoptimization_Model_Hardware_Optimization_Setting();

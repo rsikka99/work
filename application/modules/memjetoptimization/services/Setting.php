@@ -67,7 +67,7 @@ class Memjetoptimization_Service_Setting
             $this->_form = new Memjetoptimization_Form_Setting();
 
             // User form will populate the description with defaults
-            $this->_form->getElement("name")->setDescription("Memjetoptimization" . date('Ymd'));
+            $this->_form->getElement("name")->setDescription("Memjet Optimization " . date('Y/m/d'));
             $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
             $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
             $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
@@ -142,7 +142,7 @@ class Memjetoptimization_Service_Setting
             }
 
             // Save the report name
-            $this->_memjetOptimization->name = (isset($validData['name'])) ? $validData['name'] : "Memjetoptimization" . date('Ymd');
+            $this->_memjetOptimization->name = (isset($validData['name'])) ? $validData['name'] : "Memjet Optimization" . date('Y/m/d');
             Memjetoptimization_Model_Mapper_Memjet_Optimization::getInstance()->save($this->_memjetOptimization);
 
             $this->_memjetOptimizationSettings = new Memjetoptimization_Model_Memjet_Optimization_Setting();

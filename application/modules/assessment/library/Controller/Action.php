@@ -309,7 +309,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
                 $this->_assessment->lastModified = date('Y-m-d H:i:s');
                 $this->_assessment->reportDate   = date('Y-m-d H:i:s');
                 $this->_assessment->dealerId     = $this->_identity->dealerId;
-                $this->_assessment->name         = "assessment" . date('Ymd');
+                $this->_assessment->name         = "Assessment " . date('Y/m/d');
                 $this->_assessment->clientId     = $this->_mpsSession->selectedClientId;
             }
         }

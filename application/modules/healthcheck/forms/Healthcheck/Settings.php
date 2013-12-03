@@ -73,7 +73,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $report_name = new Zend_Form_Element_Text('name');
         $report_name->setLabel('Report Name')
                     ->setAttrib('class', 'span2')
-                    ->setAttrib('data-defaultvalue', "healthCheck" . date('Ymd'));
+                    ->setAttrib('data-defaultvalue', "Health Check " . date('Y/m/d'));
         $report_name->addFilters(array(
                                       'StringTrim',
                                       'StripTags'

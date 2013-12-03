@@ -149,7 +149,7 @@ class Healthcheck_Service_HealthcheckSettings
                 }
             }
 
-            $this->_healthcheck->name = (isset($validData['name'])) ? $validData['name'] : "healthCheck" . date('Ymd');
+            $this->_healthcheck->name = (isset($validData['name'])) ? $validData['name'] : "Health Check " . date('Y/m/d');
             Healthcheck_Model_Mapper_Healthcheck::getInstance()->save($this->_healthcheck);
 
             // Save the id as it will get erased

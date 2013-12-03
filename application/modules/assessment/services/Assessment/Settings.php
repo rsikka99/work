@@ -154,7 +154,7 @@ class Assessment_Service_Assessment_Settings
                 }
             }
 
-            $this->_assessment->name = (isset($validData['name'])) ? $validData['name'] : "assessment" . date('Ymd');
+            $this->_assessment->name = (isset($validData['name'])) ? $validData['name'] : "Assessment " . date('Y/m/d');
             Assessment_Model_Mapper_Assessment::getInstance()->save($this->_assessment);
 
             // Save the id as it will get erased
