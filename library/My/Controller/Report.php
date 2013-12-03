@@ -301,4 +301,20 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
             $this->redirector($firstStep->action, $firstStep->controller, $firstStep->module);
         }
     }
+
+    /**
+     *  Generates a filename for a report
+     *
+     * @param $clientModel Quotegen_Model_Client
+     * @param $reportName string
+     *
+     * @return string
+     */
+    public function generateReportFilename ($clientModel, $reportName)
+    {
+        $filter = new Tangent_Filter_Filename();
+        $companyName = $filter->filter($clientModel->companyName);
+        return $companyName . "_" . $reportName;
+    }
+
 }

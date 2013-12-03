@@ -68,7 +68,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 break;
         }
 
-        $filename = "tonervendorgrossmargin.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner_Vendor_Gross_Margin') . ".$format";
 
         $this->initReportVariables($filename);
 

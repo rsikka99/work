@@ -84,7 +84,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
                 break;
         }
 
-        $filename = "assessment.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Assessment') . ".$format";
 
         $this->initReportVariables($filename);
 

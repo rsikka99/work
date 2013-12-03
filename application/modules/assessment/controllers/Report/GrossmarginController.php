@@ -75,7 +75,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 break;
         }
 
-        $filename = "grossmargin.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Gross_Margin') . ".$format";
 
         $this->initReportVariables($filename);
 

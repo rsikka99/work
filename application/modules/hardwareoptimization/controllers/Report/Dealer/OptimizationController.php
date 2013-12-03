@@ -58,7 +58,7 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
                 break;
         }
 
-        $filename = "dealerHardwareOptimization.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Dealer_Hardware_Optimization') . ".$format";
 
         $this->initReportVariables($filename);
         // Render early

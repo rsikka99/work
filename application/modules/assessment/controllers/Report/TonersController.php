@@ -67,7 +67,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
                 break;
         }
 
-        $filename = "tonerreport.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner_Report') . ".$format";
 
         $this->initReportVariables($filename);
 

@@ -58,7 +58,7 @@ class Memjetoptimization_Report_Dealer_OptimizationController extends Memjetopti
                 break;
         }
 
-        $filename = "dealerMemjetOptimization.$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Dealer_Memjet_Optimization') . ".$format";
 
         $this->initReportVariables($filename);
         // Render early
