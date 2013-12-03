@@ -15,7 +15,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         /**
-         * If we have access to the printiq healthcheck, we will switch to it
+         * If we have access to the PrintIQ Health Check, we will switch to it
          */
         if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
@@ -62,8 +62,6 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
         {
             throw new Exception("Healthcheck could not be generated.", 0, $e);
         }
-
-//        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**
