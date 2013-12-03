@@ -58,7 +58,7 @@ class Memjetoptimization_Report_Customer_OptimizationController extends Memjetop
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Customer_Memjet_Optimization') . ".$format";
+        $filename = $this->generateReportFilename($this->getMemjetOptimization()->getClient(), 'Customer_Memjet_Optimization') . ".$format";
 
         $this->initReportVariables($filename);
         // Render early
