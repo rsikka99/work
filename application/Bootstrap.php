@@ -24,12 +24,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     protected function _initStatsd ()
     {
-        $options                    = $this->getOptions();
-        Tangent_Statsd::$rootBucket = $options['statsd']['rootBucket'];
-        Tangent_Statsd::$enabled    = $options['statsd']['enabled'];
-        Tangent_Statsd::$host       = $options['statsd']['host'];
-        Tangent_Statsd::$port       = $options['statsd']['port'];
-        Tangent_Statsd::increment('mpstoolbox.pageloads', 1);
+        $options = $this->getOptions();
+        if (isset($options['statsd']))
+        {
+            Tangent_Statsd::$rootBucket = $options['statsd']['rootBucket'];
+            Tangent_Statsd::$enabled    = $options['statsd']['enabled'];
+            Tangent_Statsd::$host       = $options['statsd']['host'];
+            Tangent_Statsd::$port       = $options['statsd']['port'];
+            Tangent_Statsd::increment('mpstoolbox.pageloads', 1);
+        }
     }
 
     /**

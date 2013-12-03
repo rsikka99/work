@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="yes"?>
+<!---->
+<!--Only reasonCategory can have bad data in this form-->
+<!---->
+<settings>
+    <setting>
+        <data>
+            <reasonCategory>0</reasonCategory>
+            <reason>this is text</reason>
+            <isDefault>true</isDefault>
+        </data>
+    </setting>
+    <setting>
+        <data>
+            <reasonCategory>20</reasonCategory>
+            <reason></reason>
+            <isDefault>-1</isDefault>
+        </data>
+    </setting>
+    <setting>
+        <data>
+            <reasonCategory></reasonCategory>
+            <reason></reason>
+            <isDefault>564564564654897xffxhs</isDefault>
+        </data>
+    </setting>
+    <setting>
+        <data>
+            <reasonCategory>-1</reasonCategory>
+            <reason>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</reason>
+            <isDefault>-1</isDefault>
+        </data>
+    </setting>
+</settings>
