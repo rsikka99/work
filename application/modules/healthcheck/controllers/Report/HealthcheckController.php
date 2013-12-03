@@ -84,7 +84,7 @@ class Healthcheck_Report_HealthcheckController extends Healthcheck_Library_Contr
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Healthcheck') . ".$format";
+        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), 'Healthcheck') . ".$format";
 
         $this->initReportVariables($filename);
 
