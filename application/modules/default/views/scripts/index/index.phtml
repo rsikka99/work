@@ -76,7 +76,8 @@
             <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION)) : ?>
-            <li <?php echo $active; ?>><a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
+            <li <?php echo $active; ?>>
+                <a href="#hardwareOptimizationTabPane" data-toggle="tab" title="Hardware Optimization"><i class="mpsicon-optimize"></i></a></li>
             <?php $active = ''; ?>
         <?php endif; ?>
         <?php if (My_Feature::canAccess(My_Feature::MEMJET_OPTIMIZATION)) : ?>
@@ -105,7 +106,7 @@
                 <table class="table table-striped table-condensed table-bordered">
                     <tr>
                         <th> Title <br /> File Name</th>
-                        <th style="width:125px"> Date Created < br /> Last Modified</th>
+                        <th style="width:125px"> Date Created <br /> Last Modified</th>
                         <th> Finished</th>
                         <th style="width: 70px;"> Action</th>
                     </tr>
