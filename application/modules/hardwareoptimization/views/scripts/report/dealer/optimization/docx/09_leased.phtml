@@ -17,8 +17,8 @@ $costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText($this->translate('Leased Devices'),'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased). $this->translate(' of ') . $hardwareOptimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText('Leased Devices','titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased). ' of ' . $hardwareOptimizationDevices->getDeviceCount() . ')');
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
@@ -26,11 +26,11 @@ $tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial Number'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial Number', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($hardwareOptimizationDevices->leased as $device)

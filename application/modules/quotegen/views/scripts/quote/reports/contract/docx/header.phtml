@@ -29,4 +29,4 @@ $headerTable = $section->addTable($this->tableStyle->standard);
 
 $headerTable->addRow();
 $headerTable->addCell($tableSpan ['span4'], null, 4)->addText($this->translate($this->header->subHeader), $this->fontStyle->subHeader, $noSpacing);
-$headerTable->addCell($tableSpan ['span4'], $this->cellStyle->bottomAlign, 4)->addText($this->translate("Agreement No.: {$this->agreement->number}"), null, $noSpacing);
+$headerTable->addCell($tableSpan ['span4'], $this->cellStyle->bottomAlign, 4)->addText("Agreement No.: {$this->agreement->number}", null, $noSpacing);

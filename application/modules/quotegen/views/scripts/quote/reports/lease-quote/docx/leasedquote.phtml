@@ -10,7 +10,7 @@ $this->render("{$commonPartsBasePath}/styles.phtml");
 $section = $this->section;
 $section->addPageBreak();
 $section->addTitle($this->translate($this->docStrings->quoteHeader), 1);
-$section->addText($this->translate('Below is a quote for the requested hardware:'));
+$section->addText('Below is a quote for the requested hardware:');
 
 $quoteDeviceGroups = $quote->getQuoteDeviceGroups();
 $groupCount        = 0;
@@ -24,10 +24,10 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
         $table = $section->addTable($tcStyle->tablestyle);
 
         $table->addRow($tcStyle->header->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText($this->translate('Item'), $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
-        $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText($this->translate('SKU'), $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
-        $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText($this->translate('Description and Features'), $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
-        $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText($this->translate('Quantity'), $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
+        $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText('Item', $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
+        $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText('SKU', $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText('Description and Features', $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText('Quantity', $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
 
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
         foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
@@ -61,15 +61,15 @@ foreach ($this->quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 
         // Show page information in the rows, one for black and the other for.. you got it... color
         $table->addRow($tcStyle->pages->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Monochrome Pages'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText('Monochrome Pages', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText('');
-        $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included Per Month'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col3width, $tcStyle->pages->cell3->cellStyle)->addText('Pages Included Per Month', $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalMonochromePages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
 
         $table->addRow($tcStyle->pages->rowheight);
-        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText($this->translate('Color Pages'), $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
+        $table->addCell($tcStyle->col1Width, $tcStyle->pages->cell1->cellStyle)->addText('Color Pages', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->pages->cell2->cellStyle)->addText('');
-        $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText($this->translate('Pages Included Per Month'), $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $tcStyle->pages->cell3->cellStyle)->addText('Pages Included Per Month', $tcStyle->pages->cell3->fontStyle, $tcStyle->pages->cell3->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $tcStyle->pages->cell4->cellStyle)->addText(number_format($quoteDeviceGroup->calculateTotalColorPages()), $tcStyle->pages->cell4->fontStyle, $tcStyle->pages->cell4->paragraphStyle);
 
         // Show subtotal line
@@ -86,16 +86,16 @@ $table = $section->addTable($tcStyle->tablestyle);
 
 // Show CPP
 $table->addRow($tcStyle->cpp->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText($this->translate('Monochrome Overage Rate Per Page'), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText('Monochrome Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->currency($quote->calculateMonochromeOverageRatePerPage(), array('precision' => 3)), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 $table->addRow($tcStyle->cpp->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText($this->translate('Color Overage Rate Per Page'), $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->cpp->cell1->cellStyle, 3)->addText('Color Overage Rate Per Page', $tcStyle->cpp->cell1->fontStyle, $tcStyle->cpp->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->cpp->cell2->cellStyle)->addText($this->currency($quote->calculateColorOverageRatePerPage(), array('precision' => 3)), $tcStyle->cpp->cell2->fontStyle, $tcStyle->cpp->cell2->paragraphStyle);
 
 // Show monthly total
 $table->addRow($tcStyle->monthlyTotal->rowheight);
-$table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText($this->translate('Monthly Total (Term: ' . $quote->leaseTerm . ' Months)'), $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
+$table->addCell($tcStyle->span123Width, $tcStyle->monthlyTotal->cell1->cellStyle, 3)->addText('Monthly Total (Term: ' . $quote->leaseTerm . ' Months)', $tcStyle->monthlyTotal->cell1->fontStyle, $tcStyle->monthlyTotal->cell1->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->monthlyTotal->cell2->cellStyle)->addText($this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()), $tcStyle->monthlyTotal->cell2->fontStyle, $tcStyle->monthlyTotal->cell2->paragraphStyle);
 
 $section->addTextBreak();

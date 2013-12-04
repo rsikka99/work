@@ -11,22 +11,22 @@ $profitabiltyDevices = $this->profitabilityDevices;
 $deviceCount           = count($profitabiltyDevices->flagged);
 $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 ;
-$section->addTitle(sprintf($this->translate('Flagged Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
-$section->addText($this->translate('The following devices have been targeted for replacements: '));
+$section->addTitle(sprintf('Flagged Devices (%1$s of %2$s)', $deviceCount, $totalPurchasedDevices), 2);
+$section->addText('The following devices have been targeted for replacements: ');
 
 // Table with values
 $tcStyle = $this->devicetables->tables->flagged;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Reason'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color CPP'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col8Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Monthly Cost'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Mono CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Color CPP', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col8Width, $tcStyle->header->header->cellStyle)->addText('Monthly Cost', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($profitabiltyDevices->flagged as $device)
@@ -62,7 +62,7 @@ foreach ($profitabiltyDevices->flagged as $device)
     $table->addCell($tcStyle->col8Width, $ampvStyle)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
 }
 $section->addTextBreak();
-$section->addTitle($this->translate('Technology Features and Functionality'), 2);
+$section->addTitle('Technology Features and Functionality', 2);
 $section->addText($this->translate('If you printed every document on both sides of the page, you could use up to 50% less paper than you would by only printing on one side. You could further reduce your paper consumption
 by using a scanner to e-mail documents instead of printing copies for distribution. The following charts show how many of your printing devices have duplex and scanning capabilities:'));
 

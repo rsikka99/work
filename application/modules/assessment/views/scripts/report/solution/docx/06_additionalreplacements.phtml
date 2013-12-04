@@ -13,20 +13,20 @@ if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity)
 {
 
     $section->addPageBreak();
-    $section->addTitle($this->translate('Additional Replacement Suggestions'), 2);
+    $section->addTitle('Additional Replacement Suggestions', 2);
 
     $tc = $this->styles->tables->addtionalReplacements;
 
     if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity) > 0)
     {
-        $section->addText($this->translate('The following devices should also be considered for replacement because they print more than 7,000 pages per month and require further discussion to determine the best replacement device.'));
+        $section->addText('The following devices should also be considered for replacement because they print more than 7,000 pages per month and require further discussion to determine the best replacement device.');
 
         $table = $section->addTable($tc->tablestyle);
         $table->addRow($tc->header->rowheight);
-        $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText($this->translate('Device Name'), $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText($this->translate('Serial No.'), $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText($this->translate('Monthly Volume'), $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText($this->translate('Current Annual Cost*'), $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText('Device Name', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText('Serial No.', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText('Monthly Volume', $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText('Current Annual Cost*', $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
 
         /* @var $device Proposalgen_Model_DeviceInstance */
         foreach ($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity as $device)
@@ -38,20 +38,20 @@ if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity)
             $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }
 
-        $section->addText($this->translate('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. '), 'small_italic_text', 'nospacing');
+        $section->addText('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. ', 'small_italic_text', 'nospacing');
         $section->addTextBreak();
     }
 
     if (count($assessmentViewModel->getDevicesToBeReplaced()->NoTonerLevels) > 0)
     {
-        $section->addText($this->translate('The following devices should also be considered for replacement because they do not report toner levels and cannot be accommodated by a just-in-time supplies fulfillment program.'));
+        $section->addText('The following devices should also be considered for replacement because they do not report toner levels and cannot be accommodated by a just-in-time supplies fulfillment program.');
 
         $table = $section->addTable($tc->tablestyle);
         $table->addRow($tc->header->rowheight);
-        $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText($this->translate('Device Name'), $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
-        $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText($this->translate('Serial No.'), $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
-        $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText($this->translate('Monthly Volume'), $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
-        $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText($this->translate('Current Annual Cost*'), $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText('Device Name', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
+        $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText('Serial No.', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
+        $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText('Monthly Volume', $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
+        $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText('Current Annual Cost*', $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
 
         foreach ($assessmentViewModel->getDevicesToBeReplaced()->NoTonerLevels as $device)
         {
@@ -62,7 +62,7 @@ if (count($assessmentViewModel->getDevicesToBeReplaced()->OverMaxLeasedCapacity)
             $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($device->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(),$assessmentViewModel->getReportMargin()) * 12), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
         }
 
-        $section->addText($this->translate('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. '), 'small_italic_text', 'nospacing');
+        $section->addText('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. ', 'small_italic_text', 'nospacing');
         $section->addTextBreak();
     }
 }

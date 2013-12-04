@@ -12,19 +12,19 @@ $profitabilityDevices  = $this->profitabilityDevices;
 $deviceCount           = count($profitabilityDevices->replaced);
 $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
 
-$section->addTitle(sprintf($this->translate('Suggested Replacement Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
-$section->addText($this->translate('The following devices have been targeted for replacements: '));
+$section->addTitle(sprintf('Suggested Replacement Devices (%1$s of %2$s)', $deviceCount, $totalPurchasedDevices), 2);
+$section->addText('The following devices have been targeted for replacements: ');
 
 $tcStyle = $this->devicetables->tables->replacement;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Current Device'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Replacement Device'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Reason'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Mono AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Color AMPV'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Current Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 // Begin with data rows
 foreach ($profitabilityDevices->replaced as $device)
 {
@@ -65,10 +65,10 @@ foreach ($profitabilityDevices->replaced as $device)
 $section->addTextBreak();
 
 
-$section->addTitle($this->translate('Memjet Utilization and Capacity'), 2);
+$section->addTitle('Memjet Utilization and Capacity', 2);
 $section->addImage($this->graphs[4], $this->styles->images->center);
-$section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), number_format(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addTitle('Print Volume and Number of Printing Devices', 2);
+$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), number_format(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
 $section->addTextBreak();
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

@@ -25,9 +25,9 @@ $cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/
 
 $titlePage->addTextBreak();
 // Assessment Title
-$titlePage->addText($this->translate(''), null, 'titleStyle2');
-$titlePage->addText($this->translate('  MPSToolbox.com Hardware Quote'), 'titlepage_title', 'titleStyle2');
-$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('  MPSToolbox.com Hardware Quote', 'titlepage_title', 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
 
 
 $client = $quote->getClient();
@@ -35,7 +35,7 @@ $client = $quote->getClient();
 $titlePage->addTextBreak();
 
 $titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlePage->addText(sprintf($this->translate('Prepared For: %1$s'), $client->companyName), 'titlepage_subtitle', 'titleStyle3');
+$titlePage->addText(sprintf('Prepared For: %1$s', $client->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
 $addressLines = explode("\n", $client->getAddress()->getFullAddressMultipleLines());

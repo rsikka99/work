@@ -10,12 +10,12 @@ $section = $this->section;
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$section->addTitle($this->translate('Customer Cost Analysis'));
+$section->addTitle('Customer Cost Analysis');
 
 $textRun = $section->createTextRun();
-$textRun->addText($this->translate("Average Monochrome CPP: "), array("bold" => true));
+$textRun->addText("Average Monochrome CPP: ", array("bold" => true));
 $textRun->addText($this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4)));
 
 $textRun = $section->createTextRun();
-$textRun->addText($this->translate("Average Color CPP: "), array("bold" => true));
+$textRun->addText("Average Color CPP: ", array("bold" => true));
 $textRun->addText($this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4)));

@@ -13,18 +13,18 @@ $section = $this->section;
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
 
-$section->addTitle($this->translate('Analysis: Service and Supplies Logistics'), 1);
-$section->addTitle($this->translate('Printing Device Management Breakdown'), 2);
-$section->addText($this->translate('Printing devices can be managed in different ways; networked printers can be managed with remote monitoring software; leased multifunction devices can be managed by a dealer who sold the machine; and devices not connected to the network, such as inkjets and some older printers, are difficult to manage because they may not be capable for remote monitoring.'));
-$section->addText($this->translate('See below for results in your environment:'));
+$section->addTitle('Analysis: Service and Supplies Logistics', 1);
+$section->addTitle('Printing Device Management Breakdown', 2);
+$section->addText('Printing devices can be managed in different ways; networked printers can be managed with remote monitoring software; leased multifunction devices can be managed by a dealer who sold the machine; and devices not connected to the network, such as inkjets and some older printers, are difficult to manage because they may not be capable for remote monitoring.');
+$section->addText('See below for results in your environment:');
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs["UnmanagedVsManagedDevices"]);
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutATR']);
 $section->addTextBreak(2);
 
-$section->addTitle($this->translate('Number of Printing Device Models and Supply Types'), 2); //
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type.')
+$section->addTitle('Number of Printing Device Models and Supply Types', 2); //
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type.'
     , number_format(count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances())) //1
     , number_format($healthcheckViewModel->getNumberOfUniqueModels()) //2
 ));
@@ -112,15 +112,15 @@ foreach ($tableData as $row)
 }
 
 $section->addTextBreak(1);
-$section->addText(sprintf($this->translate('By using printing devices that use the same supplies, you can reduce the amount of cash tied up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'),
+$section->addText(sprintf('By using printing devices that use the same supplies, you can reduce the amount of cash tied up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.',
         $this->companyName
     )
 );
 $section->addTextBreak(2);
 // END TABLE
 
-$section->addTitle($this->translate('Number of Printing Vendors'), 2);
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have %2$s different vendors. Each section of the chart below represents a single vendor name.')
+$section->addTitle('Number of Printing Vendors', 2);
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s different vendors. Each section of the chart below represents a single vendor name.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getDeviceVendorCount())
 ));
@@ -128,8 +128,8 @@ $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
 
-$section->addTitle(sprintf($this->translate('Number of Printing Devices Compatible with %1$s (ATR)'), $this->companyNameFull), 2);
-$section->addText(sprintf($this->translate('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s (ATR) and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their ATR compatibility can be found in the Appendix.')
+$section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s (ATR)', $this->companyNameFull), 2);
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s (ATR) and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their ATR compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels())
     , count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels())
@@ -146,8 +146,8 @@ $cellWidths = array(
     1800
 );
 $section->addTextBreak(2);
-$section->addTitle($this->translate('Estimated OEM Toner Costs vs. Compatible Toner Costs'), 2);
-$section->addText(sprintf($this->translate('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.'),
+$section->addTitle('Estimated OEM Toner Costs vs. Compatible Toner Costs', 2);
+$section->addText(sprintf('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.',
         $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostMonthlyAndCompMonthly()),
         $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()),
         number_format($healthcheckViewModel->calculateDifferencePercentageBetweenOemTotalCostAnnuallyAndCompAnnually() * 100), 0)

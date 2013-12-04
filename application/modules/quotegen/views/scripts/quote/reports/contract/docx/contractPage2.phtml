@@ -15,9 +15,9 @@ $deviceTable->addRow();
 $deviceTable->addCell($tableSpan ['span4'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[7], $this->fontStyle->invertBackground, $this->paragraphStyle->noSpacing);
 // Header Row
 $deviceTable->addRow(600);
-$deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorderBAlign, 4)->addText($this->translate('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES'), $this->fontStyle->label, $this->paragraphStyle->noSpacing);
-$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText($this->translate('SERIAL NO.'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
-$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText($this->translate('ADDRESS'), $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorderBAlign, 4)->addText('MAKE, MODEL NUMBER & INCLUDED ACCESSORIES', $this->fontStyle->label, $this->paragraphStyle->noSpacing);
+$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText('SERIAL NO.', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
+$deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText('ADDRESS', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 // Devices Row(s)
 foreach ( $quote->getQuoteDevices() as $quoteDevice )
 {

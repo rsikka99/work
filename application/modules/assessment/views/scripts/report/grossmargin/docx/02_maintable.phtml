@@ -28,25 +28,25 @@ $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->nobottomborder)->addText(null, $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText($this->translate('Black And White'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText($this->translate('Color'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Black And White', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Color', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
 
 $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->header->notopborder);
-$column1->addText($this->translate('Device Name'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$column1->addText($this->translate('(IP Address - Serial Number)'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$column1->addText('Device Name', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$column1->addText('(IP Address - Serial Number)', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
-$table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('Toner Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Toner Yield'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText($this->translate('CPP'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText($this->translate('Total Printing Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col7Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col8Width, $tcStyle->header->cell)->addText($this->translate('Toner Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col9Width, $tcStyle->header->cell)->addText($this->translate('Toner Yield'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText($this->translate('CPP'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText($this->translate('Total Printing Cost'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText('AMPV', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('Toner Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText('Toner Yield', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText('CPP', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText('Total Printing Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col7Width, $tcStyle->header->cell)->addText('AMPV', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col8Width, $tcStyle->header->cell)->addText('Toner Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col9Width, $tcStyle->header->cell)->addText('Toner Yield', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText('CPP', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('Total Printing Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 
 foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
@@ -126,7 +126,7 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
 
 // Table footer (totals row)
 $table->addRow($tcStyle->footer->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText($this->translate('Totals for ' . $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount() . ' devices:'), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col1Width, $tcStyle->footer->cell)->addText('Totals for ' . $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount() . ' devices:', $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col2Width, $tcStyle->footer->cell)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col3Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col4Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

@@ -10,18 +10,18 @@ $profitabiltyDevices = $this->profitabilityDevices;
 // Table with values
 $deviceCount           = count($profitabiltyDevices->retired);
 $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances());
-$section->addTitle(sprintf($this->translate('Retired Devices (%1$s of %2$s)'), $deviceCount, $totalPurchasedDevices), 2);
-$section->addText($this->translate('Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device. '));
+$section->addTitle(sprintf('Retired Devices (%1$s of %2$s)', $deviceCount, $totalPurchasedDevices), 2);
+$section->addText('Devices with both low volume and age of over 8 years have been target for retirement. We suggest migrating the page volume into another device. ');
 
 $tcStyle = $this->devicetables->tables->retire;
 $table   = $section->addTable($tcStyle->tablestyle);
 // Table header
 $table->addRow($tcStyle->body->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Device Name'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Serial / IP Address'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Life Page Count'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText($this->translate('Age (Years)'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText($this->translate('JIT Compatible'), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Age (Years)', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('JIT Compatible', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($profitabiltyDevices->retired as $device)

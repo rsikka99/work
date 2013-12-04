@@ -27,13 +27,13 @@ $tcStyle = $this->styles->tables->includeTable;
 // Included Table header
 $table = $section->addTable($tcStyle->tablestyle);
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
-$table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText($this->translate('Manufacturer'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText($this->translate('Model'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('IP Address'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText($this->translate('Serial No.'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText($this->translate('Purchased or Leased'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText($this->translate('AMPV'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText($this->translate('JIT Compatible'), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText('Manufacturer', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText('Model', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('IP Address', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('Serial No.', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText('Purchased or Leased', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText('AMPV', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText('JIT Compatible', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 foreach($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance) /* @var $deviceInstance Proposalgen_Model_DeviceInstance */ {
     $table->addRow($tcStyle->cell->rowheight);

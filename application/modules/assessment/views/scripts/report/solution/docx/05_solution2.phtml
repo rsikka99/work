@@ -45,20 +45,20 @@ if ($reportHasDevicesToReplace)
      * Section Start
      */
     $section->addPageBreak();
-    $section->addTitle(sprintf($this->translate('Solution 2: Hybrid Program of %1$s and %1$s Plus'), $this->brandName), 1);
+    $section->addTitle(sprintf('Solution 2: Hybrid Program of %1$s and %1$s Plus', $this->brandName), 1);
 
-    $section->addText(sprintf($this->translate('There is no need to invest in expensive printing hardware. Our %1$s Plus program provides you with an economical flat-rate option to replace your old, expensive hardware with equipment that has the features and functionality you need. Remaining devices can be managed under our %1$s program.'), $this->brandName));
+    $section->addText(sprintf('There is no need to invest in expensive printing hardware. Our %1$s Plus program provides you with an economical flat-rate option to replace your old, expensive hardware with equipment that has the features and functionality you need. Remaining devices can be managed under our %1$s program.', $this->brandName));
 
-    $section->addTitle($this->translate('Program Components'), 2);
-    $section->addText(sprintf($this->translate('Get new printing equipment on a flat monthly rate with the %1$s Plus program:'), $this->brandName));
-    $section->addListItem($this->translate('Starting at $99/month'), 0, 'bold_text', null, $listParagraphStyle);
-    $section->addListItem($this->translate('Includes hardware and all related supplies and service'), 0, 'bold_text', null, $listParagraphStyle);
-    $section->addListItem(sprintf($this->translate('Equipment you are keeping can be transferred to %1$s'), $this->brandName), 0, 'bold_text', null, $listParagraphStyle);
+    $section->addTitle('Program Components', 2);
+    $section->addText(sprintf('Get new printing equipment on a flat monthly rate with the %1$s Plus program:', $this->brandName));
+    $section->addListItem('Starting at $99/month', 0, 'bold_text', null, $listParagraphStyle);
+    $section->addListItem('Includes hardware and all related supplies and service', 0, 'bold_text', null, $listParagraphStyle);
+    $section->addListItem(sprintf('Equipment you are keeping can be transferred to %1$s', $this->brandName), 0, 'bold_text', null, $listParagraphStyle);
     $section->addTextBreak();
 
-    $section->addTitle($this->translate('Recommended Hardware Replacements'), 2);
+    $section->addTitle('Recommended Hardware Replacements', 2);
 
-    $section->addText($this->translate('Based on our assessment of your printing environment, we have determined which devices are costing you the most on a monthly basis. The following recommendations maintain your current levels of copy, scan and fax functionality, but you may choose to upgrade your hardware to add more of these productivity-enhancing features.'));
+    $section->addText('Based on our assessment of your printing environment, we have determined which devices are costing you the most on a monthly basis. The following recommendations maintain your current levels of copy, scan and fax functionality, but you may choose to upgrade your hardware to add more of these productivity-enhancing features.');
 
     // Table style is defined here so we don't fetch it each time.
     $tc = $this->styles->tables->printiqplusdevices;
@@ -74,32 +74,32 @@ if ($reportHasDevicesToReplace)
             if (count($devicesToBeReplaced [$ctr]) > 0)
             {
                 $textRun = $section->createTextRun();
-                $textRun->addText($this->translate('We recommend replacing the following'));
+                $textRun->addText('We recommend replacing the following');
                 $textRun->addText(' ' . number_format(count($devicesToBeReplaced [$ctr])) . ' ', 'bold_text');
                 $textRun->addText($printerTypes [$ctr] . ' ');
-                $textRun->addText($this->translate('listed below with the'));
+                $textRun->addText('listed below with the');
                 $textRun->addText(' ' . $replacementDevice->MasterDevice->Manufacturer->ManufacturerName . ' ' . $replacementDevice->MasterDevice->PrinterModel . ' ', 'bold_text');
-                $textRun->addText($this->translate(', which offers the following benefits:'));
+                $textRun->addText(', which offers the following benefits:');
 
-                $section->addListItem(sprintf($this->translate('Flat monthly rate of $%1$s for up to 10,000 pages'), number_format($replacementDevice->monthlyRate)), 0, 'bold_text', null, $listParagraphStyle);
-                $section->addListItem(sprintf($this->translate('Prints up to %1$s pages per minute in monochrome'), $replacementDevice->printSpeed), 0, 'bold_text', null, $listParagraphStyle);
-                $section->addListItem(sprintf($this->translate('Up to %1$s resolution'), $replacementDevice->resolution), 0, 'bold_text', null, $listParagraphStyle);
+                $section->addListItem(sprintf('Flat monthly rate of $%1$s for up to 10,000 pages', number_format($replacementDevice->monthlyRate)), 0, 'bold_text', null, $listParagraphStyle);
+                $section->addListItem(sprintf('Prints up to %1$s pages per minute in monochrome', $replacementDevice->printSpeed), 0, 'bold_text', null, $listParagraphStyle);
+                $section->addListItem(sprintf('Up to %1$s resolution', $replacementDevice->resolution), 0, 'bold_text', null, $listParagraphStyle);
                 if ($replacementDevice->MasterDevice->isDuplex)
                 {
-                    $section->addListItem($this->translate('Standard duplexing'), 0, 'bold_text', null, $listParagraphStyle);
+                    $section->addListItem('Standard duplexing', 0, 'bold_text', null, $listParagraphStyle);
                 }
-                $section->addListItem($this->translate('ENERGY STAR qualified'), 0, 'bold_text', null, $listParagraphStyle);
+                $section->addListItem('ENERGY STAR qualified', 0, 'bold_text', null, $listParagraphStyle);
                 $section->addTextBreak();
                 $table = $section->addTable($tc->tablestyle);
 
                 // Header
                 $table->addRow($tc->header->rowheight);
-                $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText($this->translate('Device Name'), $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
-                $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText($this->translate('Serial No.'), $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
-                $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText($this->translate('Monthly Volume'), $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
-                $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText($this->translate('Current Annual Cost*'), $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
-                $table->addCell($tc->col5Width, $tc->header->cell5->cellStyle)->addText(sprintf($this->translate('%1$s Plus Annual Cost'), $this->brandName), $tc->header->cell5->fontStyle, $tc->header->cell5->paragraphStyle);
-                $table->addCell($tc->col6Width, $tc->header->cell6->cellStyle)->addText($this->translate('Annual Replacement Savings'), $tc->header->cell6->fontStyle, $tc->header->cell6->paragraphStyle);
+                $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText('Device Name', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
+                $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText('Serial No.', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
+                $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText('Monthly Volume', $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
+                $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText('Current Annual Cost*', $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
+                $table->addCell($tc->col5Width, $tc->header->cell5->cellStyle)->addText(sprintf('%1$s Plus Annual Cost', $this->brandName), $tc->header->cell5->fontStyle, $tc->header->cell5->paragraphStyle);
+                $table->addCell($tc->col6Width, $tc->header->cell6->cellStyle)->addText('Annual Replacement Savings', $tc->header->cell6->fontStyle, $tc->header->cell6->paragraphStyle);
 
                 // Body
                 /* @var $device Proposalgen_Model_DeviceInstance */
@@ -120,12 +120,12 @@ if ($reportHasDevicesToReplace)
 
                 // Footer
                 $table->addRow($tc->body->rowheight);
-                $table->addCell($tc->footerCol1Width, $tc->footer->cell1->cellStyle, 3)->addText($this->translate('Total'), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
+                $table->addCell($tc->footerCol1Width, $tc->footer->cell1->cellStyle, 3)->addText('Total', $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
                 $table->addCell($tc->footerCol2Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($currentCost), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
                 $table->addCell($tc->footerCol3Width, $tc->footer->cell3->cellStyle)->addText('$' . number_format($printIQCost), $tc->footer->cell3->fontStyle, $tc->footer->cell3->paragraphStyle);
                 $table->addCell($tc->footerCol4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($replacementSavings), $tc->footer->cell4->fontStyle, $tc->footer->cell4->paragraphStyle);
                 // Footer text for each table
-                $section->addText($this->translate('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. '), 'small_italic_text', 'nospacing');
+                $section->addText('* Monthly cost includes both toner and non-toner expenses such as service, hardware and administration. ', 'small_italic_text', 'nospacing');
                 $section->addTextBreak();
             }
         }
@@ -138,67 +138,67 @@ if ($reportHasDevicesToReplace)
     $section->addPageBreak();
 
     $textRun = $section->createTextRun();
-    $textRun->addText($this->translate('We recommend transferring the remaining'));
+    $textRun->addText('We recommend transferring the remaining');
     $textRun->addText(' ' . number_format(count($assessmentViewModel->getDevicesToBeReplaced()->LeftOver)) . ' ', 'bold_text');
-    $textRun->addText(sprintf($this->translate('printing devices to the %1$s program:'), $this->brandName));
+    $textRun->addText(sprintf('printing devices to the %1$s program:', $this->brandName));
 
     $tc    = $this->styles->tables->printiqpluscosts;
     $table = $section->addTable($tc->tablestyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Monochrome cost per page'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Monochrome cost per page', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Color cost per page'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Color cost per page', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSColorCPP(), 3), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated monochrome pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Estimated monochrome pages', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverBlackAndWhitePageCount()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated color pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Estimated color pages', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverColorPageCount()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated cost of monochrome pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Estimated cost of monochrome pages', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverBlackAndWhitePageCount() * $assessmentViewModel->getMPSBlackAndWhiteCPP()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Estimated cost of color pages'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Estimated cost of color pages', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverColorPageCount() * $assessmentViewModel->getMPSColorCPP()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf($this->translate('Processing 1 invoice/month @ %1$s'), $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText(sprintf('Processing 1 invoice/month @ %1$s', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getInternalAdminCost()), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('External service'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('External service', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('Included', $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Internal IT support for printers'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Internal IT support for printers', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualITCost() * 0.5), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
     $table->addRow($tc->row->rowheight);
-    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText($this->translate('Additional hardware purchases'), $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->row->cell1->cellStyle)->addText('Additional hardware purchases', $tc->row->cell1->fontStyle, $tc->row->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->row->cell2->cellStyle)->addText('$' . number_format(0), $tc->row->cell2->fontStyle, $tc->row->cell2->paragraphStyle);
 
-    $section->addText(sprintf($this->translate('With our recommended replacements, you are unlikely to require other new hardware this year. If you do, it can be obtained through %1$s and may result in additional savings.'), $this->companyName), 'small_italic_text');
+    $section->addText(sprintf('With our recommended replacements, you are unlikely to require other new hardware this year. If you do, it can be obtained through %1$s and may result in additional savings.', $this->companyName), 'small_italic_text');
 
     $table = $section->addTable($tc->tablestyle);
 
     $table->addRow($tc->boldRow->rowheight);
-    $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText(sprintf($this->translate('Total annual cost under %1$s'), $this->brandName), $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText(sprintf('Total annual cost under %1$s', $this->brandName), $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverPrintIQCost()), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
 
     $table->addRow($tc->boldRow->rowheight);
-    $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText($this->translate('Current annual cost of these devices'), $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->boldRow->cell1->cellStyle)->addText('Current annual cost of these devices', $tc->boldRow->cell1->fontStyle, $tc->boldRow->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->boldRow->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfRemainingDevices()), $tc->boldRow->cell2->fontStyle, $tc->boldRow->cell2->paragraphStyle);
 
     $table->addRow($tc->footer->rowheight);
-    $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText(sprintf($this->translate('Total annual savings for %1$s'), $this->brandName), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText(sprintf('Total annual savings for %1$s', $this->brandName), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
     $table->addCell($tc->col1Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfRemainingDevices() - $assessmentViewModel->getLeftOverPrintIQCost()), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
 
     $section->addTextBreak();
@@ -206,15 +206,15 @@ if ($reportHasDevicesToReplace)
     $table = $section->addTable($tc->tablestyle);
 
     $table->addRow($tc->header->rowheight);
-    $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText($this->translate('Summary'), $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
-    $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText($this->translate('Current Annual Cost'), $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
-    $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText($this->translate('Proposed Annual Cost'), $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
-    $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText($this->translate('Estimated Annual Savings'), $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->header->cell1->cellStyle)->addText('Summary', $tc->header->cell1->fontStyle, $tc->header->cell1->paragraphStyle);
+    $table->addCell($tc->col2Width, $tc->header->cell2->cellStyle)->addText('Current Annual Cost', $tc->header->cell2->fontStyle, $tc->header->cell2->paragraphStyle);
+    $table->addCell($tc->col3Width, $tc->header->cell3->cellStyle)->addText('Proposed Annual Cost', $tc->header->cell3->fontStyle, $tc->header->cell3->paragraphStyle);
+    $table->addCell($tc->col4Width, $tc->header->cell4->cellStyle)->addText('Estimated Annual Savings', $tc->header->cell4->fontStyle, $tc->header->cell4->paragraphStyle);
 
     if (count($assessmentViewModel->getDevicesToBeReplaced()->BlackAndWhite) > 0)
     {
         $table->addRow($tc->body->rowheight);
-        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('%1$s Plus�- Monochrome Devices'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('%1$s Plus�- Monochrome Devices', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
         $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
         $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getProposedCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
         $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedBlackAndWhitePrinters() - $assessmentViewModel->getProposedCostOfReplacedBlackAndWhitePrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
@@ -222,7 +222,7 @@ if ($reportHasDevicesToReplace)
     if (count($assessmentViewModel->getDevicesToBeReplaced()->BlackAndWhiteMFP) > 0)
     {
         $table->addRow($tc->body->rowheight);
-        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('%1$s Plus� - Monochrome MFP Devices'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('%1$s Plus� - Monochrome MFP Devices', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
         $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
         $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getProposedCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
         $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedBlackAndWhiteMFPPrinters() - $assessmentViewModel->getProposedCostOfReplacedBlackAndWhiteMFPPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
@@ -230,7 +230,7 @@ if ($reportHasDevicesToReplace)
     if (count($assessmentViewModel->getDevicesToBeReplaced()->Color) > 0)
     {
         $table->addRow($tc->body->rowheight);
-        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('%1$s Plus� - Color Devices'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('%1$s Plus� - Color Devices', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
         $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedColorPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
         $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getProposedCostOfReplacedColorPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
         $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedColorPrinters() - $assessmentViewModel->getProposedCostOfReplacedColorPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
@@ -239,7 +239,7 @@ if ($reportHasDevicesToReplace)
     if (count($assessmentViewModel->getDevicesToBeReplaced()->ColorMFP) > 0)
     {
         $table->addRow($tc->body->rowheight);
-        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('%1$s - Color MFP Devices'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('%1$s - Color MFP Devices', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
         $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedColorMFPPrinters()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
         $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getProposedCostOfReplacedColorMFPPrinters()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
         $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getCurrentCostOfReplacedColorMFPPrinters() - $assessmentViewModel->getProposedCostOfReplacedColorMFPPrinters()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
@@ -247,14 +247,14 @@ if ($reportHasDevicesToReplace)
     if (count($assessmentViewModel->getDevicesToBeReplaced()->LeftOver) > 0)
     {
         $table->addRow($tc->body->rowheight);
-        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('%1$s Plus� - Remaining print devices'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+        $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('%1$s Plus� - Remaining print devices', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
         $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfRemainingDevices()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
         $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getLeftOverPrintIQCost()), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
         $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfRemainingDevices() - $assessmentViewModel->getLeftOverPrintIQCost()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
     }
 
     $table->addRow($tc->footer->rowheight);
-    $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText($this->translate('TOTAL'), $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText('TOTAL', $tc->footer->cell1->fontStyle, $tc->footer->cell1->paragraphStyle);
     $table->addCell($tc->col2Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getTotalPurchasedAnnualCost()), $tc->footer->cell2->fontStyle, $tc->footer->cell2->paragraphStyle);
     $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText('$' . number_format($assessmentViewModel->getTotalProposedAnnualCost()), $tc->footer->cell3->fontStyle, $tc->footer->cell3->paragraphStyle);
     $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getTotalAnnualSavings()), $tc->footer->cell4->fontStyle, $tc->footer->cell4->paragraphStyle);
@@ -265,10 +265,10 @@ if ($reportHasDevicesToReplace)
     $table = $section->addTable($tc->tablestyle);
 
     $table->addRow($tc->body->rowheight);
-    $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf($this->translate('Total annual savings with %1$s'), $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+    $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('Total annual savings with %1$s', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
     $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getTotalAnnualSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 }
 
 // Disclaimer is added at the end
-$section->addText($this->translate('This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.'), 'small_italic_text');
+$section->addText('This quote is valid for 7 days from the date on the cover of this document. Depending on your requirements, you may be subject to additional charges for installation, insurance, and documentation fees. Please review the contract for details.', 'small_italic_text');
 

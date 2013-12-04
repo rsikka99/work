@@ -9,34 +9,34 @@ $section = $this->section;
 $assessmentViewModel = $this->assessmentViewModel;
 
 $section->addPageBreak();
-$section->addTitle($this->translate('Next Steps'), 1);
+$section->addTitle('Next Steps', 1);
 
-$section->addText($this->translate('We recommend the following implementation plan for your managed print services program:'));
+$section->addText('We recommend the following implementation plan for your managed print services program:');
 $section->addTextBreak();
 $tc    = $this->styles->tables->nextsteps;
 $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
-$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Today:'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Today:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
-$cell->addListItem($this->translate('Remote monitoring software is already installed.'), 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
-$cell->addListItem($this->translate('Select a department or floor for initial migration to managed print services.'), 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
+$cell->addListItem('Remote monitoring software is already installed.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
+$cell->addListItem('Select a department or floor for initial migration to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
 $table->addRow($tc->body->rowheight);
-$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Within 30 days:'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Within 30 days:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
-$cell->addListItem($this->translate('Migrate the selected department or floor to managed print services.'), 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
+$cell->addListItem('Migrate the selected department or floor to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
 $table->addRow($tc->body->rowheight);
-$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Within 90 days:'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Within 90 days:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
-$cell->addListItem($this->translate('Migrate all other desired locations to managed print services.'), 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
+$cell->addListItem('Migrate all other desired locations to managed print services.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
 $table->addRow($tc->body->rowheight);
-$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText($this->translate('Every six months:'), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
+$table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Every six months:', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle);
-$cell->addListItem($this->translate('Evaluation and adjustment of recommendations as needed.'), 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
+$cell->addListItem('Evaluation and adjustment of recommendations as needed.', 0, $tc->body->cell2->fontStyle, $tc->body->cell2->listStyle);
 
 $section->addTextBreak();
 
-$section->addText($this->translate('Whether you are looking for a comprehensive managed print services plan that includes new equipment, or are looking for assistance in maintaining your existing printer fleet, we can design a solution that meets your specific business needs. Let us take care of your print so you can get back to business.'));
+$section->addText('Whether you are looking for a comprehensive managed print services plan that includes new equipment, or are looking for assistance in maintaining your existing printer fleet, we can design a solution that meets your specific business needs. Let us take care of your print so you can get back to business.');

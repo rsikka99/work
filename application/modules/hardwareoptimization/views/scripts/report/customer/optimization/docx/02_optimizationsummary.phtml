@@ -2,7 +2,7 @@
 /* @var $section PHPWord_Section */
 $section = $this->section;
 $section->addPageBreak();
-$section->addTitle($this->translate('Current Fleet Statistics'), 2);
+$section->addTitle('Current Fleet Statistics', 2);
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
@@ -10,7 +10,7 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage(
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($this->graphs [1], array('align' => 'center'));
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell3)->addImage($this->graphs [2], array('align' => 'center'));
 
-$section->addTitle($this->translate('Optimization Summary'), 2);
+$section->addTitle('Optimization Summary', 2);
 $section->addText($this->translate('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris. Nunc id eros vel
 urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque tellus facilisis ligula, sed posuere ipsum odio eget est.
 Duis venenatis sodales nisi ut congue. '));

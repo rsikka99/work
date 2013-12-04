@@ -14,9 +14,9 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
 
 $section->addPageBreak();
-$section->addTitle($this->translate("Analysis: Printing Hardware Usage"), 1);
-$section->addTitle($this->translate('Print Volume and Number of Printing Devices'), 2);
-$section->addText(sprintf($this->translate('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.'), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addTitle("Analysis: Printing Hardware Usage", 1);
+$section->addTitle('Print Volume and Number of Printing Devices', 2);
+$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
 
 $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
@@ -24,8 +24,8 @@ $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell1)->addImage(
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['AverageMonthlyPagesPerEmployeeBarGraph'], array('align' => 'center'));
 $imageTable->addCell(3010, $this->styles->tables->tripleimage->cell3)->addImage($graphs ['EmployeesPerDeviceBarGraph'], array('align' => 'center'));
 
-$section->addTitle($this->translate('Hardware Utilization and Capacity'), 2);
-$section->addText($this->translate('Based on information collected with our monitoring software, we detected the following number of networked printers and have estimated your average page volumes:'));
+$section->addTitle('Hardware Utilization and Capacity', 2);
+$section->addText('Based on information collected with our monitoring software, we detected the following number of networked printers and have estimated your average page volumes:');
 $cellWidths = array(
     6018,
     3009
@@ -35,19 +35,19 @@ $cellWidths = array(
 $estimatedTonerCostsTable = $section->addTable($this->styles->tables->estimatedTonerCosts->tablestyle);
 
 $estimatedTonerCostsTable->addRow();
-$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Number of networked printing devices'), null, null);
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Number of networked printing devices', null, null);
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(), null, 'nospacing_rightalign');
 
 $estimatedTonerCostsTable->addRow();
-$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of total printed pages, per month'), null, null);
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of total printed pages, per month', null, null);
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
 
 $estimatedTonerCostsTable->addRow();
-$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText($this->translate('Average number of pages per device, per month'), null, null);
+$estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of pages per device, per month', null, null);
 $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), null, 'nospacing_rightalign');
 $section->addTextBreak();
-$section->addText($this->translate('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.'), null, array('spaceAfter' => 20));
-$section->addText($this->translate('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.'), null, 'nospacing');
+$section->addText('A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer\'s stated yield of a single print cartridge. In essence, you should not have to change the same toner cartridge more than once per month.', null, array('spaceAfter' => 20));
+$section->addText('Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your printing devices. As a guide we suggest that total company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at maximum capacity, the more return you are getting on your printing assets. Most companies find that they have more printing hardware than they need. The following chart displays your estimated monthly page volume compared to your maximum monthly page capacity.', null, 'nospacing');
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle);
@@ -59,10 +59,10 @@ $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['HardwareUtilizationCapacityPercent'], array('align' => 'center'));
 
 $section->addTextBreak();
-$section->addTitle($this->translate('Underused and Overused Printing Devices'), 2);
-$section->addText(sprintf($this->translate('Currently, %1$s%% of your printing devices are printing less than one quarter of our recommended monthly print volume, and %2$s%% are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer\'s stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).'), number_format($healthcheckViewModel->getPercentDevicesUnderused()), number_format($healthcheckViewModel->getPercentDevicesOverused())));
-$section->addText($this->translate('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device.'));
-$section->addText($this->translate('Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers, or they can be replaced with higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.'));
+$section->addTitle('Underused and Overused Printing Devices', 2);
+$section->addText(sprintf('Currently, %1$s%% of your printing devices are printing less than one quarter of our recommended monthly print volume, and %2$s%% are printing above our recommended monthly print volume. Our recommended monthly print volumes are equal to the manufacturer\'s stated yield for a single print cartridge (for monochrome devices, the black cartridge, and for color devices, a single color cartridge unless the device is not being used for color).', number_format($healthcheckViewModel->getPercentDevicesUnderused()), number_format($healthcheckViewModel->getPercentDevicesOverused())));
+$section->addText('Underused printing devices can be consolidated or retired to free up floor and desk space, reduce the amount of cash held in unused supplies inventory, and reduce the energy costs associated with powering underused machines. Devices printing fewer than 250 pages per month are likely performing less than 3 print jobs per day, and that volume can easily be accommodated by any nearby device.');
+$section->addText('Overused printing devices risk having more frequent breakdowns and should have a portion of their print volumes moved to underused printers, or they can be replaced with higher-capacity machines. As an example, small print devices can have paper trays of fewer than 250 pages, and may result in several paper tray changes per day which can lead to user frustration and machine failure.');
 $section->addPageBreak();
 
 
@@ -74,11 +74,11 @@ $cellWidths             = array(
 );
 $lowestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $lowestUtilizationTable->addRow();
-$lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Lowest Utilization'), 'bold_text', 'nospacing_centeralign');
-$lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
-$lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
-$lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
-$lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('% of Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Lowest Utilization', 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. Monthly Volume', 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
+$lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('% of Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getLeastUsedDevices() as $device)
 {
@@ -90,16 +90,16 @@ foreach ($healthcheckViewModel->getLeastUsedDevices() as $device)
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
 
-$section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
+$section->addText('Only takes into account devices for which expected cartridge yields are known.', 'small_italic_text', 'nospacing');
 $section->addTextBreak();
 
 $highestUtilizationTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $highestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
-$highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Highest Utilization'), 'bold_text', 'nospacing_centeralign');
-$highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
-$highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Avg. Monthly Volume'), 'bold_text', 'nospacing_centeralign');
-$highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
-$highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('% of Recommended Max. Volume'), 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Highest Utilization', 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('Avg. Monthly Volume', 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
+$highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('% of Recommended Max. Volume', 'bold_text', 'nospacing_centeralign');
 
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getMostUsedDevices() as $device)
@@ -111,12 +111,12 @@ foreach ($healthcheckViewModel->getMostUsedDevices() as $device)
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
-$section->addText($this->translate('Only takes into account devices for which expected cartridge yields are known.'), 'small_italic_text', 'nospacing');
+$section->addText('Only takes into account devices for which expected cartridge yields are known.', 'small_italic_text', 'nospacing');
 $section->addTextBreak();
 
-$section->addTitle($this->translate('Color Usage'), 2);
+$section->addTitle('Color Usage', 2);
 
-$section->addText(sprintf($this->translate('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.'), number_format($healthcheckViewModel->getNumberOfColorCapableDevices()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
+$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getNumberOfColorCapableDevices()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
@@ -125,15 +125,15 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage(
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs ['ColorVSBWPagesGraph']);
 $section->addTextBreak();
 
-$section->addText($this->translate('The following are the most expensive color devices currently in your fleet:'), null, 'nospacing');
+$section->addText('The following are the most expensive color devices currently in your fleet:', null, 'nospacing');
 $expensiveColorDevicesTable = $section->addTable($this->styles->tables->utilization->tablestyle);
 $expensiveColorDevicesTable->addRow($this->styles->tables->utilization->rowheight);
-$expensiveColorDevicesTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Device Name'), 'bold_text', 'nospacing_centeralign');
-$expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Serial No.'), 'bold_text', 'nospacing_centeralign');
-$expensiveColorDevicesTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText($this->translate('% of Monthly Cost'), 'bold_text', 'nospacing_centeralign');
-$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Monthly Color Volume'), 'bold_text', 'nospacing_centeralign');
-$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Color CPP'), 'bold_text', 'nospacing_centeralign');
-$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText($this->translate('Estimated Monthly Cost'), 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [0], $this->styles->tables->utilization->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cellHeader)->addText('Serial No.', 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [2], $this->styles->tables->utilization->cellHeader)->addText('% of Monthly Cost', 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Monthly Color Volume', 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Color CPP', 'bold_text', 'nospacing_centeralign');
+$expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader)->addText('Estimated Monthly Cost', 'bold_text', 'nospacing_centeralign');
 $ctr = 0;
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthcheckViewModel->getCostPerPageSettingForCustomer()) as $deviceInstance)
@@ -155,5 +155,5 @@ foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthc
 }
 
 
-$section->addText($this->translate('In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.'));
-$section->addText(sprintf($this->translate('%1$s can help you track your color printing and provide low-cost color hardware options.'), $this->companyName));
+$section->addText('In general, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of color in important documents can enhance your company\'s professional image, improve comprehension and increase readership.');
+$section->addText(sprintf('%1$s can help you track your color printing and provide low-cost color hardware options.', $this->companyName));

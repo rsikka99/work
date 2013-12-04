@@ -27,15 +27,15 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
 
 $titlePage->addTextBreak();
 // Assessment Title
-$titlePage->addText($this->translate(''), null, 'titleStyle2');
-$titlePage->addText($this->translate('  Assessment'), 'titlepage_title', 'titleStyle2');
-$titlePage->addText($this->translate(''), null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('  Assessment', 'titlepage_title', 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
 
 
 $titlePage->addTextBreak();
 
 $titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlePage->addText(sprintf($this->translate('Prepared For: %1$s'), $assessmentViewModel->assessment->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
+$titlePage->addText(sprintf('Prepared For: %1$s', $assessmentViewModel->assessment->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
 $addressLines = explode("\n", $assessmentViewModel->assessment->getClient()->getAddress()->getFullAddressMultipleLines());
@@ -46,7 +46,7 @@ foreach ($addressLines as $line)
     $addressCount++;
 }
 $titlePage->addText(' ', 'titlepage_address', 'titleStyle3');
-$titlePage->addText($this->translate('Date:') . " " . $assessmentViewModel->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
+$titlePage->addText('Date:' . " " . $assessmentViewModel->getDateReportPrepared(), 'titlepage_address', 'titleStyle3');
 // Add extra blank lines to make the grey box big
 if ($addressCount < 11)
 {
