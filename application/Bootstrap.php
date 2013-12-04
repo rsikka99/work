@@ -22,6 +22,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $config;
     }
 
+    protected function _initBrand ()
+    {
+        $options = $this->getOptions();
+        if (isset($options['app']['brand']))
+        {
+            // FIXME lrobert: Replace hard coded array with brand file loaded from the options
+            $brandVariables = array(
+                "reportHeadingColor"           => "#000",
+                "reportHeadingBackgroundColor" => "#FFF",
+            );
+
+            My_Brand::populate($brandVariables);
+        }
+    }
+
     protected function _initStatsd ()
     {
         $options = $this->getOptions();
