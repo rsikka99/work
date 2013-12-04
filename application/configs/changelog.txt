@@ -1,3 +1,9 @@
+Version 1.4.7
+-------------
+[CHANGED] backend storage
+[FIXED]   issues with toner data
+[FIXED]   many backend bugs
+
 Version 1.4.6
 -------------
 [ADDED]   memjet optimize for select dealers
