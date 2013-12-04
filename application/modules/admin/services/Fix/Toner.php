@@ -139,16 +139,28 @@ class Admin_Service_Fix_Toner
                     $dealerTonerAttribute = $dealerTonerAttributeMapper->find(array($toner->id, $dealerId));
                     if (!$dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
                     {
-                        $dealerTonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
-                        $dealerTonerAttribute->dealerId  = $dealerId;
-                        $dealerTonerAttribute->tonerId   = $toner->id;
-                        $dealerTonerAttribute->dealerSku = $csvToner['dealerSku'];
-                        $dealerTonerAttributeMapper->insert($dealerTonerAttribute);
+                        try
+                        {
+                            $dealerTonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
+                            $dealerTonerAttribute->dealerId  = $dealerId;
+                            $dealerTonerAttribute->tonerId   = $toner->id;
+                            $dealerTonerAttribute->dealerSku = $csvToner['dealerSku'];
+                            $dealerTonerAttributeMapper->insert($dealerTonerAttribute);
+                        }
+                        catch (Exception $e)
+                        {
+                        }
                     }
                     else
                     {
-                        $dealerTonerAttribute->dealerSku = $csvToner['dealerSku'];
-                        $dealerTonerAttributeMapper->save($dealerTonerAttribute);
+                        try
+                        {
+                            $dealerTonerAttribute->dealerSku = $csvToner['dealerSku'];
+                            $dealerTonerAttributeMapper->save($dealerTonerAttribute);
+                        }
+                        catch (Exception $e)
+                        {
+                        }
                     }
 
                 }
