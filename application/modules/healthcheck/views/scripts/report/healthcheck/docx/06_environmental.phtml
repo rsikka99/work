@@ -28,10 +28,10 @@ $imageTable  = $section->addTable($this->styles->tables->tripleimage->tablestyle
 $imageTable->addRow();
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/tree.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
-$imageTable->addCell($cellWidths[1], $this->styles->tables->tripleimage->cell1)->addText(sprintf(' %1$s trees', number_format($healthcheckViewModel->calculateNumberOfTreesUsed()))), "forestWaterFont", array('align' => 'center', 'valign' => 'center');
+$imageTable->addCell($cellWidths[1], $this->styles->tables->tripleimage->cell1)->addText(sprintf(' %1$s trees', number_format($healthcheckViewModel->calculateNumberOfTreesUsed())), "forestWaterFont", array('align' => 'center', 'valign' => 'center'));
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
 $imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/droplet.jpg", array('width' => $imageWidth, 'height' => $imageHeight));
-$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addText(sprintf(' %1$s gallons water', number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed()))), "forestWaterFont";
+$imageTable->addCell($cellWidths[0], $this->styles->tables->tripleimage->cell1)->addText(sprintf(' %1$s gallons water', number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed())), "forestWaterFont");
 
 
 $section->addTitle('Energy Consumption', 2);
