@@ -239,31 +239,65 @@ class Proposalgen_Model_Mapper_ReplacementDevice extends My_Model_Mapper_Abstrac
      */
     public function fetchCheapestForEachCategory ($dealerId)
     {
-        $replacementDevices                                                              = array();
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW]        = $this->fetch(array(
-                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW,
-                                                                                                        ), array(
-                                                                                                                "{$this->col_monthlyRate} ASC"
-                                                                                                           ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP]    = $this->fetch(array(
-                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP
-                                                                                                        ), array(
-                                                                                                                "{$this->col_monthlyRate} ASC"
-                                                                                                           ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR]     = $this->fetch(array(
-                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
-                                                                                                        ), array(
-                                                                                                                "{$this->col_monthlyRate} ASC"
-                                                                                                           ));
-        $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP] = $this->fetch(array(
-                                                                                                             "{$this->col_dealerId} = ?"            => $dealerId,
-                                                                                                             "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP
-                                                                                                        ), array(
-                                                                                                                "{$this->col_monthlyRate} ASC"
-                                                                                                           ));
+        $replacementDevices = array();
+
+        /**
+         * Monocrome
+         */
+        $bwDevice = $this->fetch(array(
+                                      "{$this->col_dealerId} = ?"            => $dealerId,
+                                      "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW,
+                                 ), array(
+                                         "{$this->col_monthlyRate} ASC"
+                                    ));
+        if ($bwDevice instanceof Proposalgen_Model_ReplacementDevice)
+        {
+            $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW] = $bwDevice;
+        }
+
+        /**
+         * Monocrome MFP
+         */
+        $bwMfpDevice
+            = $this->fetch(array(
+                                "{$this->col_dealerId} = ?"            => $dealerId,
+                                "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP
+                           ), array(
+                                   "{$this->col_monthlyRate} ASC"
+                              ));
+
+        if ($bwMfpDevice instanceof Proposalgen_Model_ReplacementDevice)
+        {
+            $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP] = $bwMfpDevice;
+        }
+
+        /**
+         * Color
+         */
+        $colorDevice = $this->fetch(array(
+                                         "{$this->col_dealerId} = ?"            => $dealerId,
+                                         "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR
+                                    ), array(
+                                            "{$this->col_monthlyRate} ASC"
+                                       ));
+        if ($colorDevice instanceof Proposalgen_Model_ReplacementDevice)
+        {
+            $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR] = $colorDevice;
+        }
+
+        /**
+         * Color MFP
+         */
+        $colorMfpDevice = $this->fetch(array(
+                                            "{$this->col_dealerId} = ?"            => $dealerId,
+                                            "{$this->col_replacementCategory} = ?" => Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP
+                                       ), array(
+                                               "{$this->col_monthlyRate} ASC"
+                                          ));
+        if ($colorMfpDevice instanceof Proposalgen_Model_ReplacementDevice)
+        {
+            $replacementDevices [Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP] = $colorMfpDevice;
+        }
 
         return $replacementDevices;
     }
