@@ -165,14 +165,7 @@ class Admin_Service_Client
      */
     public function delete ($clientId)
     {
-        try
-        {
-            return Quotegen_Model_Mapper_Client::getInstance()->delete($clientId);
-        }
-        catch (Exception $e)
-        {
-            return false;
-        }
+        return Quotegen_Model_Mapper_Client::getInstance()->delete($clientId);
     }
 
     /**

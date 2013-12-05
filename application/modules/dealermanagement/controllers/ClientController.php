@@ -87,15 +87,12 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
                     }
                     catch (Exception $e)
                     {
-                        $this->_flashMessenger->addMessage(array(
-                                                                'danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."
-                                                           ));
+                        throw new Exception("Passing exception up the chain.", 0, $e);
+                        $this->_flashMessenger->addMessage(array('danger' => "Client {$client->companyName} cannot be deleted since there are  quote(s) attached."));
                         $this->redirector('index');
                     }
 
-                    $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Client  {$client->companyName} was deleted successfully."
-                                                       ));
+                    $this->_flashMessenger->addMessage(array('success' => "Client  {$client->companyName} was deleted successfully."));
                     $this->redirector('index');
                 }
             }
