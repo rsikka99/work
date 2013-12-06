@@ -55,8 +55,6 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
         {
             throw new Exception("Assessment could not be generated.", 0, $e);
         }
-
-//        $this->_helper->layout->setLayout('htmlreport');
     }
 
     /**
