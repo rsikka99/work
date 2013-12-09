@@ -1,9 +1,5 @@
-<?php
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
-?>
-<div class="container" id="htmlReportContainer">
+<?php $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+<div class="container solution" id="htmlReportContainer">
     <?php echo $this->render('report/solution/html/01_Title.phtml'); ?>
     <?php echo $this->render('report/solution/html/02_Description.phtml'); ?>
     <?php echo $this->render('report/solution/html/03_PrintIQ.phtml'); ?>

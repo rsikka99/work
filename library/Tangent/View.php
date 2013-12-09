@@ -39,4 +39,20 @@ class Tangent_View extends Zend_View
 
         return $helper->currency($value, $currency);
     }
+
+    /**
+     * @see      Zend_View_Helper_HeadTitle
+     *
+     * @param null $title
+     * @param null $setType
+     *
+     * @return string
+     */
+    public function headTitle ($title = null, $setType = null)
+    {
+        /* @var $helper Zend_View_Helper_HeadTitle */
+        $helper = $this->getHelper('headTitle');
+
+        return $helper->headTitle($title, $setType);
+    }
 }

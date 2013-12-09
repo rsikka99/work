@@ -8,12 +8,12 @@ $graphs = $healthcheckViewModel->getGraphs();
 <p>Did you know that it takes one average-sized tree to produce <?php echo number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE, 0, '.', ','); ?> pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for <?php echo $healthcheckViewModel->healthcheck->getClient()->companyName ?>:</p>
 <table>
     <tr>
-        <td><img style="width:95px;" src="/themes/default/proposalgenerator/reports/images/tree.jpg" /></td>
-        <td><img style="width:95px;" src="/themes/default/proposalgenerator/reports/images/tree.jpg" /></td>
+        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" /></td>
+        <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" /></td>
         <td style="font-size:25px;text-align:center"><strong><?php echo number_format($healthcheckViewModel->calculateNumberOfTreesUsed()) ?></strong> <br />trees
         </td>
-        <td><img style="width:87px;" src="/themes/default/proposalgenerator/reports/images/droplet.jpg" /></td>
-        <td><img style="width:87px;" src="/themes/default/proposalgenerator/reports/images/droplet.jpg" /></td>
+        <td><img style="width:87px;" src="/img/reports/health-check/droplet.jpg" /></td>
+        <td><img style="width:87px;" src="/img/reports/health-check/droplet.jpg" /></td>
         <td style="font-size:25px;text-align:center"><strong><?php echo number_format($healthcheckViewModel->calculateNumberOfGallonsWaterUsed()) ?></strong>
             <br />gallons water
         </td>

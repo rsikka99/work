@@ -1,4 +1,4 @@
-<div class="container" id="htmlReportContainer">
+<div class="container health-check" id="htmlReportContainer">
     <?php
     $this->reportName = My_Brand::$brandName;
     $this->jit = My_Brand::$jit;
@@ -6,9 +6,7 @@
     $this->jitFullName = My_Brand::$jitFullName;
 
 
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-    $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/healthcheck/healthcheck_html.css"));
+    $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
     echo $this->render('report/healthcheck/html/01_Title.phtml');
     echo $this->render('report/healthcheck/html/02_Scorecard.phtml');
     echo $this->render('report/healthcheck/html/03_ServiceAndSuppliesLogistics.phtml');

@@ -1,9 +1,5 @@
-<?php
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/solution/solution_html.css"));
-?>
-<div class="container" id="htmlReportContainer">
+<?php $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+<div class="container full-width" id="htmlReportContainer">
     <?php echo $this->render('report/printingdevicelist/html/01_Appendix.phtml'); ?>
     <?php echo $this->render('report/printingdevicelist/html/02_ExcludedDevices.phtml'); ?>
 </div>

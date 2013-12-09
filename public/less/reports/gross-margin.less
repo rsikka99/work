@@ -1,0 +1,81 @@
+#htmlReportContainer.gross-margin {
+    font-size   : 9.5pt;
+    font-family : arial, verdana, arial, tahoma, verdana, serif;
+    margin      : auto auto 500px auto;
+
+    .right {
+        text-align : right;
+    }
+
+    .center {
+        text-align : center;
+    }
+
+    h2.reportTitle {
+        color           : #0096d6;
+        margin-bottom   : 0;
+        letter-spacing  : 2px;
+        font-style      : italic;
+        text-decoration : underline;
+    }
+
+    #grossMarginDeviceSummary {
+        border-collapse : collapse;
+        border          : 1px solid #cccccc;
+
+        tr.nonCompliantMono td.mono, tr.nonCompliantColor td.color {
+            background-color : #f6ff8f;
+        }
+
+        thead, tfoot {
+            font-weight : bold;
+        }
+
+        td {
+            border  : 1px solid #cccccc;
+            padding : 0 3px;
+        }
+
+        th {
+            border           : 1px solid #cccccc;
+            padding          : 2px;
+            background-color : #f2f2f2;
+        }
+
+        tr.totals {
+            font-weight      : bold;
+            background-color : #f2f2f2;
+        }
+    }
+
+    #grossMarginInformation {
+        margin         : auto;
+        border-spacing : 0;
+
+        tr td {
+            padding : 2px;
+        }
+
+        .heading {
+            text-align    : right;
+            padding-right : 10px;
+            font-weight   : bold;
+        }
+
+        td.column1 div {
+            width : 200px;
+        }
+
+        td.column2 div {
+            width : 70px;
+        }
+
+        td.column3 div {
+            width : 200px;
+        }
+
+        td.column4 div {
+            width : 70px;
+        }
+    }
+}

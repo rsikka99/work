@@ -1,11 +1,8 @@
-<?php
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/essentials/essentials_html.css"));
+<?php $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 ?>
-<div class="container" id="htmlReportContainer">
+<div class="container full-width lease-buyback" id="htmlReportContainer">
     <h2 class="reportTitle">Lease Buyback</h2><br />
     <table class="mainTable">
         <tbody>

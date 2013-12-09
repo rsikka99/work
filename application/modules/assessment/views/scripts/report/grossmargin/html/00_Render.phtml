@@ -3,9 +3,8 @@
 $assessmentViewModel = $this->assessmentViewModel;
 $brandName = My_Brand::$brandName;
 $companyName = My_Brand::$companyName;
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
-?>
-<div class="container" id="htmlReportContainer">
+$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+<div class="container landscape gross-margin" id="htmlReportContainer">
 <div>
     <h2 class="reportTitle">Gross Margin Report</h2><br />
     <em>AMPV = Average Monthly Page Volume</em>

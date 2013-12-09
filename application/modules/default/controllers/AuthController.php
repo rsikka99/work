@@ -36,6 +36,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function loginAction ()
     {
+        $this->view->headTitle('Login');
         $this->view->layout()->setLayout('auth');
         $request = $this->getRequest();
         $form    = new Default_Form_Login();

@@ -25,26 +25,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected function _initBrand ()
     {
         $options = $this->getOptions();
-        if (isset($options['app']['brand']))
-        {
-            // FIXME lrobert: Replace hard coded array with brand file loaded from the options
-            $brandVariables = array(
-                "reportTitlePageBackgroundColor"  => "#0094B3",
-                "reportTitlePageBackgroundColor2" => "#0094B3",
-                "reportHeadingColor"              => "#0094B3",
-                "reportHeadingColor2"             => "#FFFFFF",
-                "reportHeadingBackgroundColor"    => "#0094B3",
-                "reportHeadingBackgroundColor2"   => "#0094B3",
-                "reportWhiteTitlePageTextColor"   => "#0094B3",
-                "brandName"                       => "PrintIQ",
-                "companyName"                     => "Office Depot",
-                "companyNameFull"                 => "Office Depot Print IQ Essentials",
-                "jit"                             => "ATR",
-                "jitName"                         => "Office Depot ATR",
-                "jitFullName"                     => "Office Depot At The Ready (ATR)"
-            );
 
-            My_Brand::populate($brandVariables);
+        if (isset($options['app']['theme']))
+        {
+            $includeBrandFile = PUBLIC_PATH . '/themes/' . $options['app']['theme'] . '/brand.php';
+            if (file_exists($includeBrandFile))
+            {
+                $brandVariables = include($includeBrandFile);
+                My_Brand::populate($brandVariables);
+            }
         }
     }
 
@@ -113,7 +102,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initViewSettings ()
     {
+        $options  = $this->getOptions();
+        $theme    = $options['app']['theme'];
+        $themeDir = PUBLIC_PATH . '/themes/' . $theme;
+
+
         $this->bootstrap('view');
+        $this->bootstrap('brand');
         $view = $this->getResource('view');
 
         // Set the doctype to HTML5 so components know how to render items
@@ -122,13 +117,32 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Initialize the twitter bootstrap menu plugin
         $view->registerHelper(new My_View_Helper_Navigation_Menu(), 'menu');
 
-        // Setup default styles
 
-        $view->headLink()->prependStylesheet($view->theme("/css/styles.css"));
-        $view->headLink()->prependStylesheet($view->baseUrl("/css/styles.css"));
+        /**
+         * Setup LESS
+         */
+        My_Less::setLessVariables(My_Brand::toArray());
+
+        $forceRecompile = (isset($_REQUEST['recompile_less']));
+
+        /**
+         * Site Styles
+         */
+        My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, $forceRecompile);
+        My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, $forceRecompile);
+        My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, $forceRecompile);
+
+        /**
+         * Theme specific styles
+         */
+        My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, $forceRecompile);
+
+
+        $view->headLink()->prependStylesheet($view->theme("/css/site/styles.css"));
+        $view->headLink()->prependStylesheet($view->baseUrl("/css/site/styles.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/grid/ui.jqgrid.css"));
         $view->headLink()->prependStylesheet($view->theme("/jquery/ui/jquery-ui-1.10.3.custom.min.css"));
-        $view->headLink()->prependStylesheet($view->baseUrl("/css/bootstrap.css"));
+        $view->headLink()->prependStylesheet($view->baseUrl("/css/site/bootstrap.css"));
 
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));

@@ -1,16 +1,18 @@
 <?php
 
-class Zend_View_Helper_Theme extends Zend_View_Helper_Abstract
+class My_View_Helper_Theme extends Zend_View_Helper_Abstract
 {
-
     protected $theme;
 
     /**
-     * Returns the path to a theme resource that includes baseurl
+     * Returns the path to a theme resource that includes base url
      *
-     * @param $resource string
+     * @param string $resource
+     * @param bool   $returnFilesystemPath
+     *
+     * @return string
      */
-    public function Theme ($resource)
+    public function Theme ($resource, $returnFilesystemPath = false)
     {
         if (is_null($this->theme))
         {
@@ -18,6 +20,16 @@ class Zend_View_Helper_Theme extends Zend_View_Helper_Abstract
         }
         $resource = trim($resource, "/");
 
-        return $this->view->baseUrl("/themes/" . $this->theme . "/$resource");
+        $path = "/themes/" . $this->theme . "/$resource";
+
+        /**
+         * If we asked for just the filesystem path then return it instead of the url version
+         */
+        if ($returnFilesystemPath)
+        {
+            return PUBLIC_PATH . $path;
+        }
+
+        return $this->view->baseUrl($path);
     }
 }

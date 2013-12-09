@@ -7,7 +7,7 @@
 <!--<![endif]-->
 <head>
     <meta charset="utf-8" />
-    <?php echo $this->headTitle($this->App()->title, Zend_View_Helper_Placeholder_Container_Abstract::PREPEND)->setSeparator(' - '); ?>
+    <?php echo $this->headTitle($this->App()->title)->setSeparator(' - '); ?>
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -88,7 +88,7 @@
         <!-- Footer -->
         <footer>
             <div class="row">
-                <div class="span6">Copyright Tangent MTW &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
+                <div class="span6">Copyright <?php echo $this->App()->title; ?> &copy; <?php echo date("Y"); ?>. All Rights Reserved.</div>
                 <div class="span6" id="footerLinks">
                     <?php echo $this->Footermenu(); ?>
                 </div>

@@ -45,6 +45,7 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Dashboard');
         $this->view->userId = $this->_userId;
 
         $availableReports               = array();

@@ -1,9 +1,5 @@
-<?php
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));
-$this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/assessment/assessment_html.css"));
-?>
-<div class="container" id="htmlReportContainer">
+<?php $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
+<div class="container assessment" id="htmlReportContainer">
     <?php
     $this->brandName = My_Brand::$brandName;
     $this->companyName = My_Brand::$companyName;

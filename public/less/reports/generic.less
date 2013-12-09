@@ -1,0 +1,225 @@
+#htmlReportContainer {
+    width          : 595px;
+    font-family    : Arial, sans-serif;
+    padding-bottom : 150px;
+
+    &.landscape {
+        width : 842px;
+    }
+
+    &.full-width {
+        width : 100%;
+    }
+
+    table.genericTable td, th {
+        padding   : 5px;
+        font-size : 9pt;
+    }
+
+    .noborder {
+        border : 0px;
+    }
+
+    .topborder {
+        border-top : 1px solid black;
+    }
+
+    .bottomborder {
+        border-bottom : 1px solid black;
+    }
+
+    .left {
+        text-align : left;
+    }
+
+    .right {
+        text-align : right;
+    }
+
+    .center {
+        text-align : center;
+    }
+
+    .graphs {
+        margin-left : -30px;
+        text-align  : center;
+        width       : 100%;
+    }
+
+    .fontChange {
+        font-size : 13px;
+    }
+
+    em {
+        font-size   : 9pt;
+        line-height : 8pt;
+    }
+
+    th {
+        vertical-align : top;
+    }
+
+    img {
+        margin : 0px;
+    }
+
+    td {
+        padding : 5px;
+    }
+
+    h3 {
+        font-size : 14pt;
+    }
+
+    p {
+        padding     : 0;
+        margin      : 5px;
+        line-height : 12pt;
+    }
+
+    li {
+        padding-left   : 8px;
+        padding-bottom : 8px;
+    }
+
+    p, span, li {
+        font-size : 12px;
+    }
+
+    div.center {
+        padding : 5px;
+    }
+
+    .nopadding {
+        padding-top    : 0px;
+        padding-bottom : 0px;
+    }
+
+    .red {
+        color : red;
+    }
+
+    .bold {
+        font-weight : bold;
+    }
+
+    .title-page-logo-box-wrapper {
+        display : table;
+        width   : 100%;
+    }
+
+    .title-page-logo-box {
+        display        : table-cell;
+        vertical-align : middle;
+        height         : 300px;
+        width          : 100%;
+        text-align     : center;
+    }
+
+    .title-page-logo {
+        display : block;
+        margin  : auto;
+    }
+
+    .title-page-report-title {
+        background-color : @reportTitlePageTitleBackgroundColor;
+        color            : @reportTitlePageTitleColor;
+        margin-bottom    : 20px;
+        padding          : 5px 5px 5px 30px;
+    }
+
+    .title-page-customer-details {
+        background-color : @reportTitlePageInformationBackgroundColor;
+        color            : @reportTitlePageInformationColor;
+        min-height       : 300px;
+        padding          : 10px;
+    }
+
+    table.gradesTable {
+        background-color : #f0f0f0;
+        border-left      : 1px solid #000000;
+        border-top       : 1px solid #000000;
+
+        td {
+            border-bottom : 1px solid #000000;
+            border-right  : 1px solid #000000;
+        }
+
+        td.gradeDescription {
+            width        : 570px;
+            padding-left : 10px;
+
+            h4 {
+                margin  : 0px;
+                padding : 0px;
+            }
+        }
+
+        td.gradeNumber {
+            padding     : 0px;
+            font-size   : 20pt;
+            font-weight : bold;
+            text-align  : center;
+            width       : 75px;
+        }
+    }
+
+    table.footertable td {
+        width : 240px;
+    }
+
+    table.footertable td.col2 {
+        vertical-align : middle;
+        text-align     : center;
+    }
+
+    div.h1 {
+        border-bottom : 1px solid #000000;
+        color         : @reportHeadingColor;
+        font-size     : 14.5pt;
+        font-weight   : bold;
+        margin-top    : 20px;
+        margin-bottom : 15px;
+    }
+
+    div.pheader {
+        background-color : @reportSubHeadingBackgroundColor;
+        padding          : 2px;
+        margin-top       : 5px;
+        margin-bottom    : 5px;
+        color            : @reportSubHeadingColor;
+        font-size        : 12.5pt;
+        font-style       : italic;
+        font-weight      : bold;
+    }
+
+    table.genericTable {
+        font-size       : 9pt;
+        line-height     : 12pt;
+        border-collapse : collapse;
+        width           : 100%;
+
+        th {
+            font-weight : bold;
+        }
+    }
+
+    div.annualSavings {
+        background-color : #f0f0f0;
+        border           : 1pt solid #999999;
+        font-weight      : bold;
+        font-size        : 15px;
+        text-align       : center;
+        vertical-align   : middle;
+        strong {
+            color : #0096d6;
+        }
+    }
+}
+
+#copyright {
+    color      : #666666;
+    font-size  : 8pt;
+    font-style : italic;
+}
+

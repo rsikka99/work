@@ -259,7 +259,7 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
 
         if ($logoFile == false)
         {
-            $logoFile = $this->view->theme("proposalgenerator/reports/images/mpstoolbox_logo.jpg");
+            $logoFile = $this->view->theme("img/report_logo.png");
         }
 
         return $logoFile;

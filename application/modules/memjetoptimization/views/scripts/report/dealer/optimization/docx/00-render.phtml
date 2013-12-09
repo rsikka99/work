@@ -40,13 +40,13 @@ $odd_color        = "FCFCFC";
 $footer_color     = "b8cce3";
 $highlight_color  = "ebc7a4";
 
-$titlePageBackgroundColor  = My_Brand::$reportTitlePageBackgroundColor;
-$titlePageBackgroundColor2 = My_Brand::$reportTitlePageBackgroundColor2;
-$titlePageTextColor        = My_Brand::$reportTitlePageTextColor;
-$titlePageTextColor2       = My_Brand::$reportTitlePageTextColor2;
+$titlePageBackgroundColor  = My_Brand::$reportTitlePageTitleBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::$reportTitlePageInformationBackgroundColor;
+$titlePageTextColor        = My_Brand::$reportTitlePageTitleColor;
+$titlePageTextColor2       = My_Brand::$reportTitlePageInformationColor;
 $headingColor              = My_Brand::$reportHeadingColor;
 $h2Background              = My_Brand::$reportHeadingBackgroundColor;
-$h2Color                   = My_Brand::$reportHeadingColor2;
+$h2Color                   = My_Brand::$reportSubHeadingColor;
 $h3Color                   = My_Brand::$reportHeadingColor;
 
 $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12));
@@ -54,7 +54,7 @@ $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
 $phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
 $phpWord->addTitleStyle(2, array(
                                 'size'   => 12,
-                                'color'  => My_Brand::$reportHeadingColor2,
+                                'color'  => My_Brand::$reportSubHeadingColor,
                                 'bold'   => true,
                                 'italic' => true
                            ), array(
