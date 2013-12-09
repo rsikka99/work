@@ -106,7 +106,7 @@ $tableData = array();
 <p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
     <strong><?php echo count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels()); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels()) ?>
-    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.
+    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
 </p>
 <br />
 <div class="center">
@@ -123,5 +123,5 @@ $tableData = array();
 </div>
 
 <div class="pheader">Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs</div>
-<p>You are saving money by moving to private brand toner for the machines that are on your JIT Program.</p>
+<p>You are saving money by moving to private brand toner for the machines that are on your <?php echo $this->jit; ?> Program.</p>
 <p>MPSToolbox.com analyzed your usage on your ink and toner spend and you can save an additional <?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)) ?> over the next 6 months by moving to the suggested items on the attached analysis.</p>

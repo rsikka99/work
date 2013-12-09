@@ -2125,19 +2125,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- PagesPrintedJITPieGraph
              */
             $deviceAges = array(
-                "Pages Printed on JIT devices"     => 0,
-                "Pages Printed on non-JIT devices" => 0
+                "Pages Printed on " . My_Brand::$jit . " devices" => 0,
+                "Pages Printed on non-" . My_Brand::$jit . " devices" => 0
             );
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->isCapableOfReportingTonerLevels())
                 {
-                    $deviceAges ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $deviceAges ["Pages Printed on " . My_Brand::$jit . " devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $deviceAges ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $deviceAges ["Pages Printed on non-" . My_Brand::$jit . " devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
             $dataSet     = array();
@@ -2163,16 +2163,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                             "0094cf"
                                        ));
             $deviceAgeGraph->setLegendPosition("bv");
-            $deviceAgeGraph->setTitle("Pages printed on JIT");
+            $deviceAgeGraph->setTitle("Pages printed on " . My_Brand::$jit);
 
             // PagesPrintedJITPieGraph
             $healthcheckGraphs['PagesPrintedJITPieGraph'] = $deviceAgeGraph->getUrl();
-
-            $deviceAgeGraph->setTitle("Pages printed on ATR");
-            $deviceAgeGraph->setLegend(array("Pages Printed on ATR devices", "Pages Printed on non-ATR devices"));
-
-            // PagesPrintedATRPieGraph
-            $healthcheckGraphs['PagesPrintedATRPieGraph'] = $deviceAgeGraph->getUrl();
 
             /**
              * -- HardwareUtilizationCapacityBar
@@ -2337,8 +2331,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                       "E21736"
                                  ));
             $barGraph->setLegend(array(
-                                      "Printers Compatible with JIT",
-                                      "Printers Not compatible with JIT"
+                                      "Printers Compatible with " . My_Brand::$jit,
+                                      "Printers Not compatible with " . My_Brand::$jit
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -2346,18 +2340,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             // CompatibleJITBarGraph
             $healthcheckGraphs['CompatibleJITBarGraph'] = $barGraph->getUrl();
-
-            /**
-             * -- CompatibleATRBarGraph
-             */
-            $barGraph->setLegend(array(
-                                      "Printers Compatible with ATR",
-                                      "Printers Not Compatible with ATR"
-                                 ));
-            $barGraph->setTitle("");
-
-            // CompatibleATRBarGraph
-            $healthcheckGraphs['CompatibleATRBarGraph'] = $barGraph->getUrl();
 
             $oemCost  = ($this->calculateAverageOemOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
             $compCost = ($this->calculateAverageCompatibleOnlyCostPerPage()->colorCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() + ($this->calculateAverageCompatibleOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly())) * 12;
@@ -2793,35 +2775,37 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
+            $pagesPrintedOnJitText = "Pages Printed on " . My_Brand::$jit . " devices";
+            $pagesPrintedOnNonJitText = "Pages Printed on non-" . My_Brand::$jit . " devices";
             $pagesPrinted = array(
-                "Pages Printed on JIT devices"     => 0,
-                "Pages Printed on non-JIT devices" => 0
+                $pagesPrintedOnJitText     => 0,
+                $pagesPrintedOnNonJitText => 0
             );
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->isManaged)
                 {
-                    $pagesPrinted ["Pages Printed on JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $pagesPrinted [$pagesPrintedOnJitText] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $pagesPrinted ["Pages Printed on non-JIT devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $pagesPrinted [$pagesPrintedOnNonJitText] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
 
-            $highest = max($pagesPrinted["Pages Printed on JIT devices"], $pagesPrinted ["Pages Printed on non-JIT devices"]);
+            $highest = max($pagesPrinted[$pagesPrintedOnJitText], $pagesPrinted [$pagesPrintedOnNonJitText]);
             $barGraph->setVisibleAxes(array(
                                            'y'
                                       ));
             $barGraph->addDataSet(array(
-                                       round($pagesPrinted["Pages Printed on non-JIT devices"])
+                                       round($pagesPrinted[$pagesPrintedOnNonJitText])
                                   ));
             $barGraph->addColors(array(
                                       "E21736"
                                  ));
             $barGraph->addDataSet(array(
-                                       round($pagesPrinted["Pages Printed on JIT devices"])
+                                       round($pagesPrinted[$pagesPrintedOnJitText])
                                   ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -2831,8 +2815,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                       "0194D2"
                                  ));
             $barGraph->setLegend(array(
-                                      "Pages not on JIT program",
-                                      "Pages on JIT program"
+                                      "Pages not on " . My_Brand::$jit . " program",
+                                      "Pages on " . My_Brand::$jit . " program"
                                  ));
             $barGraph->setTitle("Total pages printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
@@ -2840,14 +2824,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[LeasedVsPurchasedPageCountBarGraph]
             $healthcheckGraphs['PagesWithOrWithoutJIT'] = $barGraph->getUrl();
-
-            $barGraph->setLegend(array(
-                                      "Pages not on ATR program",
-                                      "Pages on ATR program"
-                                 ));
-
-            // Graphs[PagesWithOrWithoutATR]
-            $healthcheckGraphs['PagesWithOrWithoutATR'] = $barGraph->getUrl();
 
             /**
              * -- UniqueDevicesGraph

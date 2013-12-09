@@ -1,8 +1,8 @@
 <div class="container" id="htmlReportContainer">
     <?php
-    $this->reportName = "Office Depot";
-    $this->jitName = "Office Depot ATR";
-    $this->jitFullName = "Office Depot(ATR)";
+    $this->reportName = My_Brand::$companyName;
+    $this->jitName = My_Brand::$jitName;
+    $this->jitFullName = My_Brand::$jitFullName;
 
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_html.css"));

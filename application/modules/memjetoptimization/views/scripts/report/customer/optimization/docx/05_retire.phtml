@@ -21,12 +21,12 @@ $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Age (Years)', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
-$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('JIT Compatible', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+$table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText(sprintf('%1$s Compatible', My_Brand::$jit), $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
 foreach ($profitabiltyDevices->retired as $device)
 {
-    $cycle   = ($this->cycle(array(true, false))->next()->current());
+    $cycle = ($this->cycle(array(true, false))->next()->current());
     if ($cycle)
     {
         $ampvStyle = $tcStyle->body->cell3->even;
@@ -53,7 +53,7 @@ foreach ($profitabiltyDevices->retired as $device)
     $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }
 $section->addTextBreak();
-$tcStyle = $this->twocenter;
+$tcStyle    = $this->twocenter;
 $imageTable = $section->addTable($tcStyle->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell($tcStyle->col1Width, $tcStyle->body->cell1)->addImage($this->graphs [10], $tcStyle->image->cell1);

@@ -2,8 +2,9 @@
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
 
-$this->brandName = "MPSToolbox.com";
-$this->companyName = "MPSToolbox.com";
+$this->brandName = My_Brand::$brandName;
+$this->companyName = My_Brand::$companyName;
+$this->jit = My_Brand::$jit;
 ?>
 <div class="h1">Printing Device List</div>
 <p>Below is a list of your printing device models and whether or not they are qualified for just-in-time supplies fulfillment. For devices not qualified for
@@ -23,7 +24,7 @@ $this->companyName = "MPSToolbox.com";
         <th>Serial No.</th>
         <th>Purchased <br />or Leased</th>
         <th>AMPV</th>
-        <th>JIT <br />Comp.</th>
+        <th><?php echo $this->jit; ?> <br />Comp.</th>
     </tr>
     </thead>
     <tbody>

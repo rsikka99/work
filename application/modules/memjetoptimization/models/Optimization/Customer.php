@@ -262,7 +262,7 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
             $highest                = ($jitCompatible > $nonJitCompatible) ? $jitCompatible : $nonJitCompatible;
             $highest                = ($highest > $optimizedJitCompatible) ? $highest : $optimizedJitCompatible;
             $barGraph               = new gchart\gBarChart(200, 300);
-            $barGraph->setTitle(" JIT compatibility");
+            $barGraph->setTitle(" " . My_Brand::$jit . " compatibility");
             $barGraph->setVisibleAxes(array('y'));
             $barGraph->addDataSet(array($jitCompatible));
             $barGraph->addColors(array("E21736"));
@@ -276,8 +276,8 @@ class Memjetoptimization_Model_Optimization_Customer extends Memjetoptimization_
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->setLegend(array(
-                                      "JIT compatible",
-                                      "Non JIT compatible",
+                                      My_Brand::$jit . " compatible",
+                                      "Non " . My_Brand::$jit . " compatible",
                                       "Optimized",
                                  ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");

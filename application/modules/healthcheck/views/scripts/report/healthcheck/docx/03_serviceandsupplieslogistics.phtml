@@ -112,7 +112,7 @@ foreach ($tableData as $row)
 }
 
 $section->addTextBreak(1);
-$section->addText('By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. MPSToolbox.com can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.');
+$section->addText(sprintf('By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.'), $this->brandName);
 $section->addTextBreak(2);
 // END TABLE
 
@@ -126,11 +126,12 @@ $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
 
 $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', $this->jitName), 2);
-$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their JIT compatibility can be found in the Appendix.'
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their %5$s compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels())
     , count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels())
     , $this->jitFullName
+    , $this->jit
 ));
 
 $section->addTextBreak(2);
@@ -144,7 +145,7 @@ $cellWidths = array(
 );
 $section->addTextBreak(2);
 $section->addTitle('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs', 2);
-$section->addText('You are saving money by moving to Private Brand Toner for the machines that are on your JIT Program.');
+$section->addText(sprintf('You are saving money by moving to Private Brand Toner for the machines that are on your %1$s Program.'), $this->jit);
 $section->addText(sprintf('%1$s analyzed your usage on your ink and toner spend and you can save an additional %2$s over the next 6 months by moving to the suggested items on the attached analysis. ',
         $this->brandName,
         $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)))

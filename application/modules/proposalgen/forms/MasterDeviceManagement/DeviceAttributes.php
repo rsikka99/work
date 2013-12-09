@@ -67,7 +67,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         }
 
         $jitCompatibleElement = $this->createElement('checkbox', 'jitCompatibleMasterDevice', array(
-                                                                                                   'label' => 'JIT Compatible'
+                                                                                                   'label' => My_Brand::$jit . ' Compatible'
                                                                                               ));
 
         /*

@@ -1,8 +1,9 @@
 <div class="container" id="htmlReportContainer">
     <?php
-    $this->reportName = "MPSToolbox.com";
-    $this->jitName = "MPSToolbox.com JIT";
-    $this->jitFullName = "MPSToolbox.com Just In Time(JIT)";
+    $this->reportName = My_Brand::$brandName;
+    $this->jit = My_Brand::$jit;
+    $this->jitName = My_Brand::$jitName;
+    $this->jitFullName = My_Brand::$jitFullName;
 
 
     $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/common_all.css"));

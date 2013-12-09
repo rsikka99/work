@@ -107,7 +107,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->assessmentViewModel = $assessmentViewModel;
         // Define our field titles
 
-        $justInTimeCompatibleTitle = 'JIT Compatible';
+        $justInTimeCompatibleTitle = My_Brand::$jit . ' Compatible';
 
         $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Purchased or Leased,AMPV,{$justInTimeCompatibleTitle}";
 

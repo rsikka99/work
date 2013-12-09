@@ -26,7 +26,7 @@ $cell->addImage(PUBLIC_PATH . "/themes/default/proposalgenerator/reports/images/
 $titlePage->addTextBreak();
 // Assessment Title
 $titlePage->addText('', null, 'titleStyle2');
-$titlePage->addText('  MPSToolbox.com Hardware Quote', 'titlepage_title', 'titleStyle2');
+$titlePage->addText(sprintf('  %1$s Hardware Quote', 'titlepage_title', 'titleStyle2'), My_Brand::$brandName);
 $titlePage->addText('', null, 'titleStyle2');
 
 

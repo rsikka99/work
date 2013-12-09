@@ -7,10 +7,15 @@ $assessmentViewModel = $this->assessmentViewModel;
 /**
  * Styles
  */
-$h1Color       = $this->wordStyles->default->sectionHeaderFontColor;
-$h1BorderColor = $this->wordStyles->default->sectionHeaderBorderColor;
-$h2Background  = $this->wordStyles->default->subSectionBackgroundColor;
-$h2Color       = $this->wordStyles->default->subSectionFontColor;
+$h1Color                   = My_Brand::$reportHeadingColor;
+$titlePageBackgroundColor1 = My_Brand::$reportTitlePageBackgroundColor;
+$titlePageBackgroundColor2 = My_Brand::$reportTitlePageBackgroundColor2;
+$titlePageTextColor1       = My_Brand::$reportTitlePageTextColor;
+$titlePageTextColor2       = My_Brand::$reportTitlePageTextColor2;
+$h1BorderColor             = $this->wordStyles->default->sectionHeaderBorderColor;
+$h2Background              = My_Brand::$reportHeadingBackgroundColor;
+$h2Color                   = My_Brand::$reportHeadingColor2;
+$h3Color                   = "000000";
 
 $textHighlightColor = "0096D6";
 
@@ -53,32 +58,32 @@ $section          = $phpword->createSection();
 $phpword->addParagraphStyle('titleStyle1', array(
                                                 'align'      => 'center',
                                                 'spaceAfter' => 100,
-                                                'bgColor'    => '004990'
+                                                'bgColor'    => $titlePageBackgroundColor1
                                            ));
 $phpword->addParagraphStyle('titleStyle2', array(
                                                 'spaceAfter'  => 50,
                                                 'spaceBefore' => 50,
-                                                'bgColor'     => '4C4C4C'
+                                                'bgColor'     => $titlePageBackgroundColor2
                                            ));
 $phpword->addParagraphStyle('titleStyle3', array(
                                                 'spaceAfter' => 100,
-                                                'bgColor'    => '7F7F7F'
+                                                'bgColor'    => $titlePageBackgroundColor2
                                            ));
 $phpword->addFontStyle('titlepage_title', array(
                                                'size'  => 24,
                                                'bold'  => true,
-                                               'color' => 'FFFFFF'
+                                               'color' => $titlePageTextColor1
                                           ));
 
 $phpword->addFontStyle('titlepage_subtitle', array(
                                                   'size'  => 16,
                                                   'bold'  => true,
-                                                  'color' => 'FFFFFF'
+                                                  'color' => $titlePageTextColor2
                                              ));
 
 $phpword->addFontStyle('titlepage_address', array(
                                                  'size'  => 12,
-                                                 'color' => 'FFFFFF'
+                                                 'color' => $titlePageTextColor2
                                             ));
 $phpword->addParagraphStyle('titlepageHeaderParagraph', array(
                                                              'spaceAfter' => 200
@@ -216,91 +221,91 @@ $addtionalReplacementsTable = (object)array(
     "col3Width"  => 1825,
     "col4Width"  => 1825,
     "header"     => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         )
-    )
 );
 
 /**
@@ -317,74 +322,74 @@ $trueCostsTable = (object)array(
     "col2Width"  => 3611.2,
     "col3Width"  => 3811.2,
     "header"     => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => array(
-                'color' => '000000',
-                'bold'  => true
-            ),
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => array(
+                        'color' => '000000',
+                        'bold'  => true
+                    ),
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                )
         )
-    )
 );
 
 /**
@@ -400,66 +405,66 @@ $printiqpluscostsTable = (object)array(
     "col1Width"  => 7020,
     "col2Width"  => 2008,
     "row"        => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_rightalign'
-        )
-    ),
     "boldRow"    => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => array(
-                'bold' => true
-            ),
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => array(
+                        'bold' => true
+                    ),
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => array(
+                        'bold' => true
+                    ),
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => array(
-                'bold' => true
-            ),
-            "paragraphStyle" => 'nospacing_rightalign'
-        )
-    ),
     "footer"     => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => array(
-                "color" => '000000',
-                'bold'  => true
-            ),
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "valign" => "center"
-            ),
-            "fontStyle"      => array(
-                "color" => '000000',
-                'bold'  => true
-            ),
-            "paragraphStyle" => 'nospacing_rightalign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => array(
+                        "color" => '000000',
+                        'bold'  => true
+                    ),
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "valign" => "center"
+                    ),
+                    "fontStyle"      => array(
+                        "color" => '000000',
+                        'bold'  => true
+                    ),
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         )
-    )
 );
 
 /**
@@ -478,151 +483,151 @@ $printiqplussummaryTable = (object)array(
     "col3Width"  => 1369,
     "col4Width"  => 1369,
     "header"     => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        )
-    ),
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => array(
+                        'color' => '000000'
+                    ),
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => array(
-                'color' => '000000'
-            ),
-            "paragraphStyle" => 'nospacing_rightalign'
-        )
-    ),
     "footer"     => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => array(
-                'color' => '000000',
-                'bold'  => true
-            ),
-            "paragraphStyle" => 'nospacing_rightalign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => array(
+                        'color' => '000000',
+                        'bold'  => true
+                    ),
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         )
-    )
 );
 
 /**
@@ -639,40 +644,40 @@ $totalAnnualSavingsTable = (object)array(
     "col1Width"  => 6020,
     "col2Width"  => 3008,
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "bgColor"          => "F0F0F0",
-                "borderColor"      => "999999",
-                "borderTopSize"    => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => array(
-                "color" => '000000',
-                'bold'  => true,
-                'size'  => 12
-            ),
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "bgColor"          => "F0F0F0",
-                "borderColor"      => "999999",
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => array(
-                "color" => '000000',
-                'bold'  => true,
-                'size'  => 12
-            ),
-            "paragraphStyle" => 'nospacing_rightalign'
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "bgColor"          => "F0F0F0",
+                        "borderColor"      => "999999",
+                        "borderTopSize"    => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => array(
+                        "color" => '000000',
+                        'bold'  => true,
+                        'size'  => 12
+                    ),
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "bgColor"          => "F0F0F0",
+                        "borderColor"      => "999999",
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => array(
+                        "color" => '000000',
+                        'bold'  => true,
+                        'size'  => 12
+                    ),
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         )
-    )
 );
 
 /**
@@ -692,116 +697,116 @@ $estimatedAnnualSavingsTable = (object)array(
     "col3Width"       => 3308,
     "col4Width"       => 1304,
     "header"          => (object)array(
-        "rowheight" => 400,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => 400,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
     "body"            => (object)array(
-        "rowheight" => 200,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => 200,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_rightalign'
-        )
-    ),
     "footer"          => (object)array(
-        "rowheight" => 200,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_rightalign'
+            "rowheight" => 200,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_rightalign'
+                )
         )
-    )
 );
 
 /**
@@ -826,179 +831,179 @@ $printiqplusdevicesTable = (object)array(
     "footerCol3Width" => 1000,
     "footerCol4Width" => 1000,
     "header"          => (object)array(
-        "rowheight" => 400,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => 400,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell5"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell6"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell5"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell6"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
     "body"            => (object)array(
-        "rowheight" => 200,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing'
+            "rowheight" => 200,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell5"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell6"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => array(
+                        'color' => '000000'
+                    ),
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell5"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell6"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => array(
-                'color' => '000000'
-            ),
-            "paragraphStyle" => 'nospacing_centeralign'
-        )
-    ),
     "footer"          => (object)array(
-        "rowheight" => 200,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell3"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing_centeralign'
-        ),
-        "cell4"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1
-            ),
-            "fontStyle"      => array(
-                'color' => '000000',
-                'bold'  => true
-            ),
-            "paragraphStyle" => 'nospacing_centeralign'
+            "rowheight" => 200,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell3"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing_centeralign'
+                ),
+            "cell4"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1
+                    ),
+                    "fontStyle"      => array(
+                        'color' => '000000',
+                        'bold'  => true
+                    ),
+                    "paragraphStyle" => 'nospacing_centeralign'
+                )
         )
-    )
 );
 
 /**
@@ -1015,31 +1020,31 @@ $nextStepsTable = (object)array(
     "col1Width"  => 2000,
     "col2Width"  => 7300,
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => 'bold_text',
-            "paragraphStyle" => 'nospacing'
-        ),
-        "cell2"     => (object)array(
-            "cellStyle"      => array(
-                "borderTopSize"    => 1,
-                "borderRightSize"  => 1,
-                "borderBottomSize" => 1,
-                "borderLeftSize"   => 1,
-                "valign"           => "center"
-            ),
-            "fontStyle"      => null,
-            "paragraphStyle" => null,
-            "listStyle"      => null
+            "rowheight" => null,
+            "cell1"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => 'bold_text',
+                    "paragraphStyle" => 'nospacing'
+                ),
+            "cell2"     => (object)array(
+                    "cellStyle"      => array(
+                        "borderTopSize"    => 1,
+                        "borderRightSize"  => 1,
+                        "borderBottomSize" => 1,
+                        "borderLeftSize"   => 1,
+                        "valign"           => "center"
+                    ),
+                    "fontStyle"      => null,
+                    "paragraphStyle" => null,
+                    "listStyle"      => null
+                )
         )
-    )
 );
 
 /**
@@ -1047,15 +1052,15 @@ $nextStepsTable = (object)array(
  */
 $styles = (object)array(
     "tables" => (object)array(
-        "truecosts"              => $trueCostsTable,
-        "estimatedAnnualSavings" => $estimatedAnnualSavingsTable,
-        "totalAnnualSavings"     => $totalAnnualSavingsTable,
-        "printiqplusdevices"     => $printiqplusdevicesTable,
-        "printiqpluscosts"       => $printiqpluscostsTable,
-        "printiqplussummary"     => $printiqplussummaryTable,
-        "addtionalReplacements"  => $addtionalReplacementsTable,
-        "nextsteps"              => $nextStepsTable
-    )
+            "truecosts"              => $trueCostsTable,
+            "estimatedAnnualSavings" => $estimatedAnnualSavingsTable,
+            "totalAnnualSavings"     => $totalAnnualSavingsTable,
+            "printiqplusdevices"     => $printiqplusdevicesTable,
+            "printiqpluscosts"       => $printiqpluscostsTable,
+            "printiqplussummary"     => $printiqplussummaryTable,
+            "addtionalReplacements"  => $addtionalReplacementsTable,
+            "nextsteps"              => $nextStepsTable
+        )
 );
 
 $titledata = array(
@@ -1071,8 +1076,8 @@ $data = array(
     "section"             => $section,
     "assessmentViewModel" => $this->assessmentViewModel,
     "styles"              => $styles,
-    "brandName"           => 'MPSToolbox.com',
-    "companyName"         => 'MPSToolbox.com'
+    "brandName"           => My_Brand::$brandName,
+    "companyName"         => My_Brand::$companyName
 );
 // Actual document pages
 $this->partial("report/solution/docx/01_titlepage.phtml", $titledata);

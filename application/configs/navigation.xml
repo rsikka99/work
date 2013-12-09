@@ -372,6 +372,13 @@
                             <action>index</action>
                             <resource>healthcheck__report_healthcheck__index</resource>
                         </report>
+                        <printiqreport>
+                            <label>PrintIQ Healthcheck Report</label>
+                            <module>healthcheck</module>
+                            <controller>report_printiq_healthcheck</controller>
+                            <action>index</action>
+                            <resource>healthcheck__report_printiq_healthcheck__index</resource>
+                        </printiqreport>
                     </pages>
                 </healthcheck>
                 <quotemenu>

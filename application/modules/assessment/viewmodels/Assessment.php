@@ -2054,7 +2054,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                                   ));
             $barGraph->setLegend(array(
                                       "Current",
-                                      "MPSToolbox"
+                                      My_Brand::$brandName
                                  ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);

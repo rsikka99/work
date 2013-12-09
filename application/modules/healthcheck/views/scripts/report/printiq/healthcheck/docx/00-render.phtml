@@ -5,14 +5,16 @@ $phpWord = $this->phpword;
 /**
  * Styles
  */
-
-$headingColor = "0093B2";
-$textColor    = "6D6D72";
-
-$h1Color      = $headingColor;
-$h2Background = $headingColor;
-$h2Color      = "FFFFFF";
-$h3Color      = $textColor;
+$headingColor                  = My_Brand::$reportHeadingColor;
+$h2Background                  = My_Brand::$reportHeadingBackgroundColor;
+$titleBackgroundColor1         = My_Brand::$reportTitlePageBackgroundColor;
+$titleBackgroundColor2         = My_Brand::$reportTitlePageBackgroundColor2;
+$titleTextColor                = My_Brand::$reportTitlePageTextColor;
+$titleTextColor2               = My_Brand::$reportTitlePageTextColor2;
+$titleWhiteBackgroundTextColor = My_Brand::$reportWhiteTitlePageTextColor;
+$h2Background                  = My_Brand::$reportHeadingBackgroundColor;
+$h2Color                       = My_Brand::$reportHeadingColor2;
+$h3Color                       = My_Brand::$reportHeadingColor;
 
 $paragraphFont = "Arial";
 
@@ -54,58 +56,52 @@ $section          = $phpWord->createSection();
 $phpWord->addParagraphStyle('titleStyle1', array(
                                                 'align'      => 'center',
                                                 'spaceAfter' => 100,
-                                                'bgColor'    => $headingColor
+                                                'bgColor'    => $titleBackgroundColor2
                                            ));
 $phpWord->addParagraphStyle('titleStyle2', array(
                                                 'spaceAfter'  => 50,
                                                 'spaceBefore' => 50,
-                                                'bgColor'     => $headingColor
+                                                'bgColor'     => $titleBackgroundColor2
                                            ));
 $phpWord->addParagraphStyle('titleStyle3', array(
                                                 'spaceAfter' => 100,
-                                                'bgColor'    => $headingColor
+                                                'bgColor'    => $titleBackgroundColor2
                                            ));
 $phpWord->addParagraphStyle('titleTextStyle1', array(
-                                                    'spaceAfter' => 100,
-                                                    'bgColor'    => $headingColor
+                                                    'spaceAfter' => 25,
+                                                    'bgColor'    => $titleBackgroundColor2
                                                ));
 $phpWord->addFontStyle('titlepage_title', array(
                                                'family' => $paragraphFont,
                                                'size'   => 20,
-                                               'color'  => $headingColor,
+                                               'color'  => $titleWhiteBackgroundTextColor,
                                           ));
 $phpWord->addFontStyle('titlepage_text', array(
                                               'family' => $paragraphFont,
                                               'size'   => 20,
-                                              'color'  => $h2Color,
+                                              'color'  => $titleTextColor2,
                                          ));
 $phpWord->addFontStyle('titlepage_listtext', array(
                                                   'family' => $paragraphFont,
-                                                  'size'   => 15,
-                                                  'color'  => $h2Color,
+                                                  'size'   => 14,
+                                                  'color'  => $titleTextColor2,
                                              ));
-$phpWord->addFontStyle('titlepage_title', array(
-                                               'family' => $paragraphFont,
-                                               'size'   => 20,
-                                               'color'  => $headingColor,
-                                          ));
-
 $phpWord->addFontStyle('titlepage_subtitle', array(
                                                   'family' => $paragraphFont,
-                                                  'size'   => 16,
-                                                  'color'  => $headingColor,
+                                                  'size'   => 14,
+                                                  'color'  => $titleWhiteBackgroundTextColor,
                                              ));
 $phpWord->addFontStyle('titlepage_company_name', array(
                                                       'bold'    => true,
                                                       'size'    => 14,
-                                                      'color'   => $headingColor,
+                                                      'color'   => $titleTextColor2,
                                                       'spacing' => 648,
                                                  ));
 $phpWord->addFontStyle('titlepage_subtitle_italic', array(
                                                          'family' => $paragraphFont,
                                                          'italic' => true,
                                                          'size'   => 16,
-                                                         'color'  => $headingColor,
+                                                         'color'  => $titleWhiteBackgroundTextColor,
                                                     ));
 
 $phpWord->addFontStyle('titlepage_address', array(
@@ -215,7 +211,7 @@ $phpWord->addFontStyle('small_italic_text', array(
 // H1 Style
 $phpWord->addTitleStyle(1, array(
                                 'size'  => 15,
-                                'color' => $h1Color,
+                                'color' => $headingColor,
                                 'bold'  => true
                            ), array(
                                    'borderBottomSize' => 1
@@ -728,11 +724,12 @@ $data = array(
     "section"              => $section,
     "healthcheckViewModel" => $this->healthcheckViewModel,
     "styles"               => $styles,
-    "brandName"            => "PrintIQ",
-    "companyName"          => "Office Depot",
-    "companyNameFull"      => "Office Depot Print IQ Essentials",
-    "jitName"              => "Office Depot ATR",
-    "jitFullName"          => "Office Depot At The Ready (ATR)"
+    "brandName"            => My_Brand::$brandName,
+    "companyName"          => My_Brand::$companyName,
+    "companyNameFull"      => My_Brand::$companyNameFull,
+    "jit"                  => My_Brand::$jit,
+    "jitName"              => My_Brand::$jitName,
+    "jitFullName"          => My_Brand::$jitFullName
 );
 // Actual document pages
 $this->partial("report/printiq/healthcheck/docx/01_titlepage.phtml", $titledata);

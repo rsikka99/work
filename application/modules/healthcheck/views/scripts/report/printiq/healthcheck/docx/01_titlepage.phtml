@@ -15,7 +15,7 @@ $titlePage = $this->section;
  * Right aligned logo
  */
 $detailsTable = $titlePage->addTable(array('cellMarginRight' => 900));
-$detailsTable->addRow(4920);
+$detailsTable->addRow(5490);
 $imageCell = $detailsTable->addCell(12240);
 $imageCell->addImage(ASSETS_PATH . "/printiq/titlepage_logo.png", array(
                                                                        'align' => 'right'
@@ -24,7 +24,7 @@ $imageCell->addImage(ASSETS_PATH . "/printiq/titlepage_logo.png", array(
 /**
  * Report Title + Client Name
  */
-$detailsTable->addRow(3070);
+$detailsTable->addRow(4070);
 $textCell = $detailsTable->addCell(12240);
 $textCell->addText('Health Check', 'titlepage_title', 'nospacing_rightalign');
 $textCell->addText('Prepared For: ', 'titlepage_subtitle_italic', 'rightalign');
@@ -36,7 +36,9 @@ $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode), 'titlepage_subtitle', 'rightalign');
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry())), 'titlepage_subtitle', 'rightalign');
 
-$titlePage->addTextBreak(4);
+$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText("      Together, we'll identify how our world-class", 'titlepage_text', 'titleTextStyle1');
@@ -45,9 +47,11 @@ $titlePage->addText("      requirements, create a cost-efficient print environme
 $titlePage->addText("      impact your bottom line. We can offer:", 'titlepage_text', 'titleTextStyle1');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
-$titlePage->addText("          - A dedicated account team ready to help", 'titlepage_listtext', 'titleTextStyle1');
-$titlePage->addText("          - Highly trained, managed print specialists to help ensure maximum productivity", 'titlepage_listtext', 'titleTextStyle1');
-$titlePage->addText("          - Professional partnerships with OEM brands", 'titlepage_listtext', 'titleTextStyle1');
-$titlePage->addText("          - Best-in-class solutions to save you time and money", 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText("                - A dedicated account team ready to help", 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText("                - Highly trained, managed print specialists to help ensure maximum productivity", 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText("                - Professional partnerships with OEM brands", 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText("                - Best-in-class solutions to save you time and money", 'titlepage_listtext', 'titleTextStyle1');
+$titlePage->addText('', null, 'titleStyle2');
+$titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');
 $titlePage->addText('', null, 'titleStyle2');

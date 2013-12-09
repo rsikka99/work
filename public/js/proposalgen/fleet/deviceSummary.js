@@ -52,7 +52,7 @@ $(function ()
                 },
                 {
                     align   : 'center',
-                    name    : 'compatibleWithJitProgram', index: 'compatibleWithJitProgram', label: 'Compatible with JIT Program',
+                    name    : 'compatibleWithJitProgram', index: 'compatibleWithJitProgram', label: 'Compatible with ' + jit + ' Program',
                     sortable: false,
                     width   : 35
                 },

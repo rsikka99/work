@@ -207,7 +207,7 @@ $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInsta
             <th>Serial<br />IP Address</th>
             <th>Life Page Count</th>
             <th>Age (Years)</th>
-            <th>JIT Compatible</th>
+            <th><?php echo My_Brand::$jit; ?> Compatible</th>
         </tr>
         </thead>
 
@@ -296,7 +296,7 @@ $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInsta
     </tr>
 </table>
 <p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
-    required. MPSToolbox.com can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply
+    required. <?php echo My_Brand::$brandName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply
     orders.</p>
 
 <div class="pheader">
@@ -314,6 +314,6 @@ $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInsta
 </table>
 <p>Overall, printing in color is more expensive than printing in monochrome. The ideal amount of color usage depends on your printing needs, but the use of
     color in important documents can enhance your company's professional image, improve comprehension and increase readership.
-    MPSToolbox.com can help you track your color printing and provide low-cost color hardware options.</p>
+    <?php echo My_Brand::$brandName; ?> can help you track your color printing and provide low-cost color hardware options.</p>
 <br />
 </div>

@@ -25,15 +25,15 @@ $cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
 
 $section->addTextBreak();
 // Assessment Title
-$section->addText('', null, 'titleStyle2');
-$section->addText('  Hardware Optimization', 'titlepage_title', 'titleStyle2');
-$section->addText('', null, 'titleStyle2');
+$section->addText('', null, 'titleStyle1');
+$section->addText('  Hardware Optimization', 'titlepage_title', 'titleStyle1');
+$section->addText('', null, 'titleStyle1');
 
 
 $section->addTextBreak();
 
 $section->addText(' ', 'titlepage_address', 'titleStyle3');
-$section->addText(sprintf('Prepared For: %1$s', $this->proposal->Report->CustomerCompanyName), 'titlepage_subtitle', 'titleStyle3');
+$section->addText(sprintf('Prepared For: %1$s', $this->hardwareOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 
 // Parse the address

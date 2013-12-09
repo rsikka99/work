@@ -141,7 +141,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
         {
             $availableReportsArray["JITSupplyAndTonerSku"] = array(
-                "pagetitle" => "JIT Supply and Toner SKU Report",
+                "pagetitle" => My_Brand::$jit . " Supply and Toner SKU Report",
                 "active"    => false,
                 "url"       => $this->view->baseUrl('/assessment/report_toners/index')
             );

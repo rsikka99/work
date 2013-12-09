@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$brandName = 'MPSToolbox.com';
-$companyName = 'MPSToolbox.com';
+$brandName = My_Brand::$brandName;
+$companyName = My_Brand::$companyName;
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
 ?>
 <div class="container" id="htmlReportContainer">

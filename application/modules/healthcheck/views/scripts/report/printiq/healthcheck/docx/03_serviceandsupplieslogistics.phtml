@@ -20,7 +20,7 @@ $section->addText('See below for results in your environment:');
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs["UnmanagedVsManagedDevices"]);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutATR']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutJIT']);
 $section->addTextBreak(2);
 
 $section->addTitle('Number of Printing Device Models and Supply Types', 2); //
@@ -139,8 +139,8 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['CompatibleATRBarGraph']);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedATRPieGraph']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['CompatibleJITBarGraph']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedJITPieGraph']);
 $cellWidths = array(
     1528,
     1800

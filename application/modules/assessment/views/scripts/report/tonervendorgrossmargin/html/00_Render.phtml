@@ -1,8 +1,8 @@
 <?php
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
-$brandName = 'MPSToolbox.com';
-$companyName = 'MPSToolbox.com';
+$brandName = My_Brand::$brandName;
+$companyName = My_Brand::$companyName;
 $this->headLink()->appendStylesheet($this->theme("proposalgenerator/reports/grossmargin/grossmargin_html.css"));
 ?>
 <div class="container" id="htmlReportContainer" style="width:100%;">
@@ -81,10 +81,10 @@ foreach ($this->vendorSeperatedData as $vendorData)
                 <tbody>
                 <tr>
                     <td class="column1">
-                        <div class="heading">MPSToolbox.com Monochrome CPP:</div>
+                        <div class="heading"><?php echo My_Brand::$brandName; ?> Monochrome CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left']['MPSToolbox.com Monochrome CPP'] ?></div>
+                        <div><?= $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Monochrome CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Cost:</div>
@@ -95,10 +95,10 @@ foreach ($this->vendorSeperatedData as $vendorData)
                 </tr>
                 <tr>
                     <td class="column1">
-                        <div class="heading">MPSToolbox.com Color CPP:</div>
+                        <div class="heading"><?php echo My_Brand::$brandName; ?> Color CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left']['MPSToolbox.com Color CPP'] ?></div>
+                        <div><?= $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Color CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Revenue:</div>

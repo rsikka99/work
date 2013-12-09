@@ -29,8 +29,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         {
             // FIXME lrobert: Replace hard coded array with brand file loaded from the options
             $brandVariables = array(
-                "reportHeadingColor"           => "#000",
-                "reportHeadingBackgroundColor" => "#FFF",
+                "reportTitlePageBackgroundColor"  => "#0094B3",
+                "reportTitlePageBackgroundColor2" => "#0094B3",
+                "reportHeadingColor"              => "#0094B3",
+                "reportHeadingColor2"             => "#FFFFFF",
+                "reportHeadingBackgroundColor"    => "#0094B3",
+                "reportHeadingBackgroundColor2"   => "#0094B3",
+                "reportWhiteTitlePageTextColor"   => "#0094B3",
+                "brandName"                       => "PrintIQ",
+                "companyName"                     => "Office Depot",
+                "companyNameFull"                 => "Office Depot Print IQ Essentials",
+                "jit"                             => "ATR",
+                "jitName"                         => "Office Depot ATR",
+                "jitFullName"                     => "Office Depot At The Ready (ATR)"
             );
 
             My_Brand::populate($brandVariables);

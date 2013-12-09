@@ -890,12 +890,12 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 {
                                     $db->rollBack();
                                     Tangent_Log::logException($e);
-                                    $errorMessage = "The system encountered an error while trying to toggle the JIT Compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
+                                    $errorMessage = "The system encountered an error while trying to toggle the " . My_Brand::$jit . " compatibility of the device. Reference #" . Tangent_Log::getUniqueId();
                                 }
                             }
                             else
                             {
-                                $errorMessage = "You can only change the JIT Compatibility of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
+                                $errorMessage = "You can only change the " . My_Brand::$jit . " compatibility of device instances that belong to the same assessment." . $rmsUpload->id . " - " . $rmsUploadId;
                             }
                         }
                         else
@@ -927,11 +927,11 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             if ($isJitCompatible)
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now JIT Compatible."));
+                $this->sendJson(array("success" => true, "message" => "Device is now " . My_Brand::$jit . " Compatible."));
             }
             else
             {
-                $this->sendJson(array("success" => true, "message" => "Device is now no longer JIT Compatible. "));
+                $this->sendJson(array("success" => true, "message" => "Device is now no longer " . My_Brand::$jit . " Compatible. "));
             }
         }
         else
