@@ -14,7 +14,7 @@ class My_Feature
     const HEALTHCHECK                                = "healthcheck";
     const HEALTHCHECK_PRINTIQ                        = "healthcheck_printiq";
     const ASSESSMENT                                 = "assessment";
-    const ASSESSMENT_CUSTOMER_COST_ANALYSYS          = "assessment_customer_cost_analysis";
+    const ASSESSMENT_CUSTOMER_COST_ANALYSIS          = "assessment_customer_cost_analysis";
     const ASSESSMENT_GROSS_MARGIN                    = "assessment_gross_margin";
     const ASSESSMENT_TONER_VENDOR_GROSS_MARGIN       = "assessment_toner_vendor_gross_margin";
     const ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT = "assessment_jit_supply_and_toner_sku_report";
@@ -42,11 +42,6 @@ class My_Feature
      */
     public static function canAccess ($feature)
     {
-        if (Zend_Auth::getInstance()->getIdentity()->id === 1)
-        {
-            return true;
-        }
-
         return in_array($feature, self::getFeatures());
     }
 

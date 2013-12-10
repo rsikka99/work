@@ -111,7 +111,7 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
         );
 
-        if (My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSYS))
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {
             $availableReportsArray["CustomerCostAnalysis"] = array(
                 "pagetitle" => "Customer Cost Analysis",

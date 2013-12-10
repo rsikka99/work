@@ -2,6 +2,21 @@
 
 class My_FeatureTest extends PHPUnit_Framework_TestCase
 {
+    protected $validFeatures = array(
+        'my_random_feature',
+    );
+
+    public function setUp(){
+        $mockAdapter = $this->getMock('My_Feature_AdapterInterface', array('getFeatures'));
+        $mockAdapter->expects($this->any())->method('getFeatures')->will($this->returnValue($this->validFeatures));
+        My_Feature::setAdapter($mockAdapter);
+
+        parent::setUp();
+    }
+
+    /**
+     * Test the get and set adapter
+     */
     public function testGetAdapterCanBeSet ()
     {
         $testArray     = array('mapperClassName' => 'test');
@@ -19,5 +34,22 @@ class My_FeatureTest extends PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($mapperAdapter, $adapter, "Failed to get the correct mapperAdapter");
+    }
+
+    /**
+     *   Test whether a given feature is allowed to be accessed
+     */
+    public function testCanAccess ()
+    {
+        $feature = $this->validFeatures[0];
+        $this->assertTrue(My_Feature::canAccess($feature));
+    }
+
+    /**
+     *   Test to ensure getFeatures in base class can access adapter features
+     */
+    public function testGetFeatures ()
+    {
+        $this->assertEquals(My_Feature::getFeatures(), $this->validFeatures);
     }
 }

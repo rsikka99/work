@@ -10,7 +10,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
      */
     public function init ()
     {
-        if (!My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSYS))
+        if (!My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {
             $this->_flashMessenger->addMessage(array(
                                                     "error" => "You do not have permission to access this."
