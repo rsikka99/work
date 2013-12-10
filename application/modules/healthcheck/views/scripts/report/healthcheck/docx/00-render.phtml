@@ -18,16 +18,14 @@ $h3Color                   = My_Brand::$reportHeadingColor;
  * Document Properties
  */
 $properties = $phpword->getProperties();
-$properties->setCreator('Demo Report');
-$properties->setCompany('Demo Report');
-$properties->setTitle('Demo Report');
-$properties->setDescription('Demo Report');
-$properties->setCategory('Demo Report');
-$properties->setLastModifiedBy('Demo Report');
+$properties->setCreator('MPS Assessment Software');
+$properties->setCompany('MPS Assessment Software');
+$properties->setTitle('Healthcheck');
+$properties->setCategory('Dealer Report');
+$properties->setLastModifiedBy('MPS Assessment Software');
 $properties->setCreated(time());
 $properties->setModified(time());
-$properties->setSubject('Demo Report');
-$properties->setKeywords('demo, assessment, report');
+$properties->setSubject('MPS Assessment Software');
 $pageWidth        = 9428;
 $titlepageSection = $phpword->createSection(array(
                                                  'orientation'  => null,

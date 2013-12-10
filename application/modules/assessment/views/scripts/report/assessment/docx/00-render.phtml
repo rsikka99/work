@@ -22,16 +22,14 @@ $h3Color                   = "000000";
  * Document Properties
  */
 $properties = $phpWord->getProperties();
-$properties->setCreator('Demo Report');
-$properties->setCompany('Demo Report');
-$properties->setTitle('Demo Report');
-$properties->setDescription('Demo Report');
-$properties->setCategory('Demo Report');
-$properties->setLastModifiedBy('Demo Report');
+$properties->setCreator('MPS Assessment Software');
+$properties->setCompany('MPS Assessment Software');
+$properties->setCategory('Customer Report');
+$properties->setTitle('Assessment');
+$properties->setLastModifiedBy('MPS Assessment Software');
 $properties->setCreated(time());
 $properties->setModified(time());
-$properties->setSubject('Demo Report');
-$properties->setKeywords('demo, assessment, report');
+$properties->setSubject('MPS Assessment Software');
 
 $titlePageSection = $phpWord->createSection(array(
                                                  'orientation'  => null,
