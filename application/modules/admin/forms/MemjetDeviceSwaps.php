@@ -67,7 +67,6 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         );
 
         $dealerMaxPageCountElement = $this->createElement("text", "dealerMaximumPageCount", array(
-                                                                                                 "required"   => !$isAdmin,
                                                                                                  "label"      => "Dealer Max Page Volume",
                                                                                                  "class"      => "span4",
                                                                                                  "filters"    => array(
@@ -89,7 +88,6 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         );
 
         $dealerMinPageCountElement = $this->createElement("text", "dealerMinimumPageCount", array(
-                                                                                                 "required"   => !$isAdmin,
                                                                                                  "label"      => "Dealer Min Page Volume",
                                                                                                  "class"      => "span4",
                                                                                                  "filters"    => array(

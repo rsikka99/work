@@ -25,7 +25,7 @@ class Memjetoptimization_Report_Customer_OptimizationController extends Memjetop
         }
         catch (Exception $e)
         {
-            throw new Exception("Couldn't generate memjet optimization.", 0, $e);
+            throw new Exception("Couldn't generate Memjet optimization.", 0, $e);
         }
     }
 

@@ -243,7 +243,7 @@ class Memjetoptimization_Model_Mapper_Memjet_Optimization extends My_Model_Mappe
     }
 
     /**
-     * Fetches all the memjet optimizations for a client
+     * Fetches all the Memjet optimizations for a client
      *
      * @param      $clientId
      * @param null $order

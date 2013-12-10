@@ -58,7 +58,7 @@ class Memjetoptimization_Report_IndexController extends Memjetoptimization_Libra
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("danger" => "Error creating quote from device list. All memjet replacement devices must be set as a quote device."));
+                        $this->_flashMessenger->addMessage(array("danger" => "Error creating quote from device list. All Memjet replacement devices must be set as a quote device."));
                     }
                 }
                 else

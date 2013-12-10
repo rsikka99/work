@@ -28,7 +28,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
     }
 
     /**
-     * Fetchs all the memjet device swaps
+     *  Fetches all the Memjet device swaps
      */
     public function deviceSwapListAction ()
     {
@@ -189,7 +189,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
     }
 
     /**
-     * Updates a memjet device swap
+     * Updates a Memjet device swap
      */
     public function updateDeviceAction ()
     {
@@ -371,7 +371,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
     }
 
     /**
-     * deletes a memjet device swap
+     *  Deletes a Memjet device swap
      */
     public function deleteDeviceAction ()
     {
