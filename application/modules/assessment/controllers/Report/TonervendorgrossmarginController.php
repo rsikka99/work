@@ -26,6 +26,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Toner Vendor Gross Margin');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

@@ -27,6 +27,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
      */
     public function selectUploadAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Select Upload');
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FLEET_UPLOAD);
 
         if ($this->getRequest()->isPost())
@@ -68,6 +70,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function settingsAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Settings');
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_SETTINGS);
 
         $user = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
@@ -104,6 +108,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
     public function optimizeAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Optimize');
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_OPTIMIZE);
 

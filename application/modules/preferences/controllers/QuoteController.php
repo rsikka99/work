@@ -8,6 +8,8 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function systemAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('System Hardware Quote');
         $quoteService = new Preferences_Service_QuoteSetting();
         $form         = $quoteService->getForm();
         $request      = $this->getRequest();
@@ -38,6 +40,8 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function userAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('User Hardware Quote');
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getQuoteSettings();
@@ -76,6 +80,8 @@ class Preferences_QuoteController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('Dealer Hardware Quote');
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 

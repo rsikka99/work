@@ -18,6 +18,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
 
     public function indexAction ()
     {
+        $this->view->headTitle('Device Swaps');
         $form           = new Hardwareoptimization_Form_DeviceSwaps();
         $deviceSwapForm = new Hardwareoptimization_Form_DeviceSwapReasons();
 

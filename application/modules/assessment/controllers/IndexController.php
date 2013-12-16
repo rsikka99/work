@@ -17,6 +17,8 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Select Upload');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FLEET_UPLOAD);
 
         if ($this->getRequest()->isPost())
@@ -62,6 +64,8 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function surveyAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Survey');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SURVEY);
 
         /**
@@ -147,6 +151,8 @@ class Assessment_IndexController extends Assessment_Library_Controller_Action
      */
     public function settingsAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Settings');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_SETTINGS);
 
         $assessment                = $this->getAssessment();

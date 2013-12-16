@@ -8,6 +8,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function indexAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Leasing Rates');
         // Display all of the leasing schema rates in a grid
         $leasingSchemas             = Quotegen_Model_Mapper_LeasingSchema::getInstance()->getSchemasForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $this->view->leasingSchemas = $leasingSchemas;
@@ -15,6 +17,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function viewAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Leasing Rates');
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
@@ -39,6 +43,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function editAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Lease Management');
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
@@ -103,6 +109,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function createAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Create New');
         $form             = new  Admin_Form_LeasingSchema(true);
         $this->view->form = $form;
         // Postback
@@ -180,6 +188,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function deleteAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Delete');
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         if (!$leasingSchemaId)
         {
@@ -238,6 +248,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function addtermAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Add Term');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -369,6 +381,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function edittermAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Edit Term');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -556,6 +570,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function deletetermAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Delete Term');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -644,6 +660,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function addrangeAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Add Range');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -776,6 +794,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function editrangeAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Edit Range');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -958,6 +978,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function deleterangeAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Delete Range');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 
@@ -1047,6 +1069,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function importAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Import');
         $leasingSchemaId = $this->_getParam('leasingSchemaId', false);
         $leasingSchema   = null;
         // Get db adapter
@@ -1222,6 +1246,8 @@ class Dealermanagement_LeasingschemaController extends Tangent_Controller_Action
 
     public function resetschemaAction ()
     {
+        $this->view->headTitle('Leasing Rates');
+        $this->view->headTitle('Clear Schema');
         // Get db adapter
         $db = Zend_Db_Table::getDefaultAdapter();
 

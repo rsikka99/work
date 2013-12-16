@@ -21,6 +21,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Memjet Device Swaps');
         $this->view->memjetDeviceSwap = new Admin_ViewModel_MemjetDeviceSwap();
         $this->view->reasons          = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllReasonByDealerId($this->_identity->dealerId);
         $this->view->form             = new Admin_Form_MemjetDeviceSwaps();
@@ -193,6 +194,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
      */
     public function updateDeviceAction ()
     {
+        $this->view->headTitle('Update Memjet Device Swap');
         $postData = array(
             "maximumPageCount"       => $this->getParam("maximumPageCount"),
             "minimumPageCount"       => $this->getParam("minimumPageCount"),
@@ -253,6 +255,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
 
     public function updateDeviceReasonAction ()
     {
+        $this->view->headTitle('Update Memjet Swap Reason');
         $postData = array(
             "reasonCategory" => $this->getParam('reasonCategory'),
             "reason"         => $this->getParam('reason'),
@@ -323,6 +326,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
      */
     public function deleteReasonAction ()
     {
+        $this->view->headTitle('Delete Memjet Swap Reason');
         $reasonId = $this->_getParam('reasonId');
 
         $swapMapper        = Memjetoptimization_Model_Mapper_Device_Swap_Reason::getInstance();

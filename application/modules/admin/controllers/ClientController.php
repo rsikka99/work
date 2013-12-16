@@ -20,6 +20,9 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Client Management');
         // Display all of the clients
         $mapper    = Quotegen_Model_Mapper_Client::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
@@ -39,6 +42,9 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Delete Client');
         $clientId = $this->_getParam('id', false);
 
         if (!$clientId)
@@ -108,6 +114,9 @@ class Admin_ClientController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Create Client');
         $clientService = new Admin_Service_Client();
         if ($this->getRequest()->isPost())
         {
@@ -150,6 +159,9 @@ class Admin_ClientController extends Tangent_Controller_Action
 
     public function editAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Edit Client');
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         // Get the client object from the database

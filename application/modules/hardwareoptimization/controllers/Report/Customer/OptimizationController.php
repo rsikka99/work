@@ -6,6 +6,8 @@ class Hardwareoptimization_Report_Customer_OptimizationController extends Hardwa
 {
     public function indexAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Customer');
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
         $this->initHtmlReport();
         $this->initReportList();

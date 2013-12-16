@@ -23,6 +23,8 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
 
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Toner');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

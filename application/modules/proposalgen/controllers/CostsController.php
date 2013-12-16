@@ -62,6 +62,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
     public function bulkdevicepricingAction ()
     {
+        $this->view->headTitle('Bulk Hardware/Pricing Updates');
         $this->view->title       = "Update Pricing";
         $this->view->parts_list  = array();
         $this->view->device_list = array();

@@ -6,6 +6,8 @@ class Hardwareoptimization_Report_Dealer_OptimizationController extends Hardware
 {
     public function indexAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Dealer');
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
 
         $this->initHtmlReport();

@@ -157,6 +157,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function logoutAction ()
     {
+        $this->view->headTitle('Logout');
         $this->logout();
         $this->redirector('login');
     } // end logoutAction
@@ -179,6 +180,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function forgotpasswordAction ()
     {
+        $this->view->headTitle('Forgot Password');
         // check if this page has been posted to
         $request = $this->getRequest();
         $email   = $request->getParam('email', false);
@@ -265,6 +267,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function changepasswordAction ()
     {
+        $this->view->headTitle('Change Password');
         $auth     = Zend_Auth::getInstance();
         $identity = $auth->getIdentity();
 
@@ -346,6 +349,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function resetpasswordAction ()
     {
+        $this->view->headTitle('Reset Password');
         $this->logout();
         $form = new Default_Form_ResetPassword();
         // Step 1. Get the reset id

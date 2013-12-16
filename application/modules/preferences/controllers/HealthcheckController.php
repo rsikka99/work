@@ -8,6 +8,8 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('Dealer Health Check');
         // Initialize and get the form
         $dealer                        = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $healthcheckSettingFormService = new Preferences_Service_HealthcheckSetting($dealer->getDealerSettings()->getHealthcheckSettings());
@@ -45,6 +47,8 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
      */
     public function systemAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('System Health Check');
         // Initialize and get the form
         $HealthcheckSettingFormService = new Preferences_Service_HealthcheckSetting();
         $form                          = $HealthcheckSettingFormService->getForm();
@@ -79,6 +83,8 @@ class Preferences_HealthcheckController extends Tangent_Controller_Action
 
     public function userAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('User Health Check');
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getHealthcheckSettings()->toArray();

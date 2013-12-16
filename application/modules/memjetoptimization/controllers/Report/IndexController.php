@@ -6,6 +6,8 @@ class Memjetoptimization_Report_IndexController extends Memjetoptimization_Libra
 {
     public function indexAction ()
     {
+        $this->view->headTitle('Memjet Optimization');
+        $this->view->headTitle('Report');
         $this->_navigation->setActiveStep(Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FINISHED);
         $this->initReportList();
 

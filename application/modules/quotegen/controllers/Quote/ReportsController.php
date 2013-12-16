@@ -36,6 +36,8 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Quote');
+        $this->view->headTitle('Reports');
         $request = $this->getRequest();
 
         $form = new Quotegen_Form_Quote_General($this->_quote);

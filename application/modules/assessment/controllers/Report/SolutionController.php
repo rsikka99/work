@@ -28,6 +28,8 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Solution');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

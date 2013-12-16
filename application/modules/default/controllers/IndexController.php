@@ -329,6 +329,7 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function createClientAction ()
     {
+        $this->view->headTitle('Create Client');
         $clientService = new Admin_Service_Client();
 
         if ($this->getRequest()->isPost())
@@ -378,6 +379,7 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function editClientAction ()
     {
+        $this->view->headTitle('Edit Client');
         // Get the passed client id
         $clientId = $this->_selectedClientId;
         // Get the client object from the database
@@ -437,6 +439,8 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function searchForClientAction ()
     {
+
+        $this->view->headTitle('Client Search');
         $searchTerm = $this->getParam('query', false);
         $results    = array();
         if ($searchTerm !== false)
@@ -459,6 +463,8 @@ class Default_IndexController extends Tangent_Controller_Action
      */
     public function viewAllClientsAction ()
     {
+
+        $this->view->headTitle('All Clients');
         $this->view->clients = Quotegen_Model_Mapper_Client::getInstance()->fetchClientListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
     }
 }

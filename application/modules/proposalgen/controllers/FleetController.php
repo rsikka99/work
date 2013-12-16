@@ -54,6 +54,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('RMS Upload');
+        $this->view->headTitle('Upload');
         $time        = -microtime(true);
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
@@ -124,6 +126,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
     public function rmsUploadListAction ()
     {
+        $this->view->headTitle('RMS Upload');
         $clientId     = $this->_mpsSession->selectedClientId;
         $jqGrid       = new Tangent_Service_JQGrid();
         $uploadMapper = Proposalgen_Model_Mapper_Rms_Upload::getInstance();
@@ -194,6 +197,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function mappingAction ()
     {
+        $this->view->headTitle('RMS Upload');
+        $this->view->headTitle('Map Devices');
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
         $rmsUpload = null;
@@ -456,6 +461,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     public function summaryAction ()
     {
+        $this->view->headTitle('RMS Upload');
+        $this->view->headTitle('Summary');
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
         $rmsUpload = null;

@@ -29,6 +29,8 @@ class Healthcheck_Report_IndexController extends Healthcheck_Library_Controller_
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Healthcheck');
+        $this->view->headTitle('Report');
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED);
 
         if ($this->getRequest()->isPost())

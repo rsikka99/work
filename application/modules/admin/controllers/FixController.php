@@ -34,6 +34,7 @@ class Admin_FixController extends Tangent_Controller_Action
      */
     public function tonersAction ()
     {
+        $this->view->headTitle('Fix Toners');
         $fixTonerService = new Admin_Service_Fix_Toner();
         $form            = $fixTonerService->getForm();
 

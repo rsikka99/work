@@ -26,6 +26,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Gross Margin');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

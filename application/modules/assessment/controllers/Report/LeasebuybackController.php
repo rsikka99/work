@@ -23,6 +23,8 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Lease Buyback');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();
@@ -51,6 +53,7 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
      */
     public function generateAction ()
     {
+        $this->view->headTitle('Generate Lease Buyback');
         $format = $this->_getParam("format", "excel");
 
         switch ($format)

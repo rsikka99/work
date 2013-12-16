@@ -17,6 +17,8 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Quote');
+        $this->view->headTitle('Group Devices');
         $form = new Quotegen_Form_Quote_Group($this->_quote);
 
         $request = $this->getRequest();

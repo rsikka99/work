@@ -10,6 +10,9 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Dealers');
+        $this->view->headTitle('Dealer Management');
         $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
         $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
 
@@ -27,6 +30,9 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Dealers');
+        $this->view->headTitle('Edit Dealer');
         $dealerId = $this->_getParam('id', false);
 
         if ($dealerId === false)
@@ -211,7 +217,9 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
-
+        $this->view->headTitle('System');
+        $this->view->headTitle('Dealers');
+        $this->view->headTitle('Create Dealer');
         $form = new Admin_Form_Dealer();
 
         $request = $this->getRequest();
@@ -309,6 +317,9 @@ class Admin_DealerController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Dealers');
+        $this->view->headTitle('Delete Dealer');
         $dealerId = $this->_getParam('id');
         $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
 

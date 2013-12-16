@@ -41,6 +41,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Admin Console');
         $this->view->title    = "Admin Console";
         $config               = Zend_Registry::get('config');
         $this->MPSProgramName = $config->app->MPSProgramName;
@@ -988,7 +989,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
     public function managematchupsAction ()
     {
-
+        $this->view->headTitle('Manage Printer Matchups');
         $this->view->source = "PrintFleet";
 
         // Fill manufacturers drop down

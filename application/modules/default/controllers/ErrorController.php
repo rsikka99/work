@@ -12,6 +12,7 @@ class Default_ErrorController extends Tangent_Controller_Action
 
     public function errorAction ()
     {
+        $this->view->headTitle('Error');
         $errors = $this->_getParam('error_handler');
 
         $forwardToAction = 'four-oh-four';

@@ -17,6 +17,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function selectUploadAction ()
     {
+        $this->view->headTitle('Healthcheck');
+        $this->view->headTitle('Select Upload');
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SELECT_UPLOAD);
         $healthcheck = $this->getHealthcheck();
@@ -64,6 +66,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
      */
     public function settingsAction ()
     {
+        $this->view->headTitle('Healthcheck');
+        $this->view->headTitle('Settings');
 //      Mark the step we're on as active
         $this->_navigation->setActiveStep(Healthcheck_Model_Healthcheck_Steps::STEP_SETTINGS);
 

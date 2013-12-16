@@ -18,6 +18,8 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Quote');
+        $this->view->headTitle('Add Hardware');
         $buildConfigurationsService = new Quotegen_Service_BuildConfiguration();
         $addDeviceForm              = $buildConfigurationsService->getAddDeviceForm();
         $addFavoriteDeviceForm      = $buildConfigurationsService->getAddFavoriteDeviceForm();

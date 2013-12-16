@@ -8,6 +8,8 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
     public function dealerAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('Dealer Report');
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
@@ -51,6 +53,8 @@ class Preferences_ProposalController extends Tangent_Controller_Action
      */
     public function systemAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('System Report');
         // Initialize and get the form
         $reportSettingFormService = new Preferences_Service_ReportSetting();
         $form                     = $reportSettingFormService->getForm();
@@ -84,6 +88,8 @@ class Preferences_ProposalController extends Tangent_Controller_Action
 
     public function userAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('User Report');
         // Initialize and get the form
 
         // Dealer

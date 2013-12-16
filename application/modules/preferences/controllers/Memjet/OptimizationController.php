@@ -8,6 +8,8 @@ class Preferences_Memjet_OptimizationController extends Tangent_Controller_Actio
 
     public function dealerAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('Dealer Memjet Swaps');
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
@@ -47,6 +49,8 @@ class Preferences_Memjet_OptimizationController extends Tangent_Controller_Actio
      */
     public function systemAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('System Memjet Swaps');
         // Initialize and get the form
         $memjetOptimizationSettingFormService = new Preferences_Service_Memjet_OptimizationSetting();
         $form                                 = $memjetOptimizationSettingFormService->getForm();
@@ -80,6 +84,8 @@ class Preferences_Memjet_OptimizationController extends Tangent_Controller_Actio
 
     public function userAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('User Memjet Swaps');
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getMemjetoptimizationSettings()->toArray();

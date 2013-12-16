@@ -24,6 +24,8 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
 
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Old Device List');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

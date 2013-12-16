@@ -17,6 +17,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Client Management');
         // Display all of the clients
         $mapper    = Quotegen_Model_Mapper_Client::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper, Application_Model_Mapper_User::getInstance()->getWhereDealerId(Zend_Auth::getInstance()->getIdentity()->dealerId)));
@@ -35,6 +37,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Delete Client');
         $clientId = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$clientId)
@@ -109,6 +113,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Create Client');
         $clientService = new Admin_Service_Client();
         if ($this->getRequest()->isPost())
         {
@@ -153,6 +159,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
 
     public function editAction ()
     {
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('Edit Client');
         // Get the passed client id
         $clientId = $this->_getParam('id', false);
         $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
@@ -218,6 +226,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
      */
     public function viewAction ()
     {
+        $this->view->headTitle('Clients');
+        $this->view->headTitle('View Client');
         $this->view->client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_getParam('id', false));
         $dealerId           = Zend_Auth::getInstance()->getIdentity()->dealerId;
         if (!$this->view->client)

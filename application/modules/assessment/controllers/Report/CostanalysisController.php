@@ -24,6 +24,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
 
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Cost Analysis');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

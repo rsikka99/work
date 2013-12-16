@@ -27,6 +27,8 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
      */
     public function selectUploadAction ()
     {
+        $this->view->headTitle('Memjet Optimization');
+        $this->view->headTitle('Select Upload');
         $this->_navigation->setActiveStep(Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_FLEET_UPLOAD);
 
         if ($this->getRequest()->isPost())
@@ -69,6 +71,8 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
     public function settingsAction ()
     {
+        $this->view->headTitle('Memjet Optimization');
+        $this->view->headTitle('Settings');
         $this->_navigation->setActiveStep(Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_SETTINGS);
 
         $user = Application_Model_Mapper_User::getInstance()->find($this->_identity->id);
@@ -108,6 +112,8 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
      */
     public function optimizeAction ()
     {
+        $this->view->headTitle('Memjet Optimization');
+        $this->view->headTitle('Optimize');
         // Mark the step we're on as active
         $this->_navigation->setActiveStep(Memjetoptimization_Model_Memjet_Optimization_Steps::STEP_OPTIMIZE);
 

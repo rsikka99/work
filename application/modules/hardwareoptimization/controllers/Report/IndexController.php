@@ -6,6 +6,8 @@ class Hardwareoptimization_Report_IndexController extends Hardwareoptimization_L
 {
     public function indexAction ()
     {
+        $this->view->headTitle('Hardware Optimization');
+        $this->view->headTitle('Report');
         $this->_navigation->setActiveStep(Hardwareoptimization_Model_Hardware_Optimization_Steps::STEP_FINISHED);
         $this->initReportList();
 

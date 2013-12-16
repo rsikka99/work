@@ -13,6 +13,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
 
     public function indexAction ()
     {
+        $this->view->headTitle('Hardware Library');
+        $this->view->headTitle('All Devices');
         // Display all of the masterDevices
         $mapper    = Proposalgen_Model_Mapper_MasterDevice::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));

@@ -12,6 +12,7 @@ class Assessment_Report_AssessmentController extends Assessment_Library_Controll
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
 

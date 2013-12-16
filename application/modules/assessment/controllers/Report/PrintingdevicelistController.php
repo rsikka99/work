@@ -24,6 +24,8 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
     public function indexAction ()
     {
+        $this->view->headTitle('Assessment');
+        $this->view->headTitle('Printing Device List');
         $this->_navigation->setActiveStep(Assessment_Model_Assessment_Steps::STEP_FINISHED);
 
         $this->initReportList();

@@ -10,6 +10,7 @@ class Default_InfoController extends Tangent_Controller_Action
      */
     public function termsandconditionsAction ()
     {
+        $this->view->headTitle('Terms and Conditions');
         $file = APPLICATION_PATH . "/../data/info/termsandconditions.txt";
         $text = 'Not Available';
 
@@ -26,6 +27,7 @@ class Default_InfoController extends Tangent_Controller_Action
      */
     public function eulaAction ()
     {
+        $this->view->headTitle('End User License Agreement');
         $file = APPLICATION_PATH . "/../data/info/eula.txt";
         $text = 'Not Available';
 
@@ -42,6 +44,7 @@ class Default_InfoController extends Tangent_Controller_Action
      */
     public function aboutAction ()
     {
+        $this->view->headTitle('About');
         // These things could be moved into a view helper....
         $this->view->buildinfo       = $this->getBuildInfo()->build;
         $this->view->changelog       = $this->getChangelog();

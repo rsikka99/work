@@ -8,6 +8,8 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
 
     public function dealerAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('Dealer Hardware Optimization');
         // Initialize and get the form
         $dealer = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
 
@@ -47,6 +49,8 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
      */
     public function systemAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('System Hardware Optimization');
         // Initialize and get the form
         $HardwareoptimizationSettingFormService = new Preferences_Service_HardwareoptimizationSetting();
         $form                                   = $HardwareoptimizationSettingFormService->getForm();
@@ -80,6 +84,8 @@ class Preferences_HardwareoptimizationController extends Tangent_Controller_Acti
 
     public function userAction ()
     {
+        $this->view->headTitle('Settings');
+        $this->view->headTitle('User Hardware Optimization');
         // Dealer
         $dealer                 = Admin_Model_Mapper_Dealer::getInstance()->find(Zend_Auth::getInstance()->getIdentity()->dealerId);
         $combinedDealerSettings = $dealer->getDealerSettings()->getHardwareoptimizationSettings()->toArray();

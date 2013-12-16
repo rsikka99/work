@@ -17,6 +17,8 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
      */
     public function indexAction ()
     {
+        $this->view->headTitle('Quote');
+        $this->view->headTitle('Hardware Financing');
 
         $selectedLeasingSchemaId = $this->_getParam('leasingSchemaId', null);
         $form                    = new Quotegen_Form_Quote_Profitability($this->_quote, $selectedLeasingSchemaId);

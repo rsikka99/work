@@ -13,6 +13,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 
     public function indexAction ()
     {
+        $this->view->headTitle('Hardware Library');
+        $this->view->headTitle('Manufacturers');
         // Display all of the manufacturers
         $mapper    = Proposalgen_Model_Mapper_Manufacturer::getInstance();
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter($mapper));
@@ -30,6 +32,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 
     public function deleteAction ()
     {
+        $this->view->headTitle('Hardware Quote Devices');
+        $this->view->headTitle('Delete Manufacturer');
         $manufacturerId = $this->_getParam('id', false);
 
         if (!$manufacturerId)
@@ -80,6 +84,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 
     public function createAction ()
     {
+        $this->view->headTitle('Hardware Quote Devices');
+        $this->view->headTitle('Create Manufacturer');
         $request = $this->getRequest();
         $form    = new Proposalgen_Form_Manufacturer();
 
@@ -164,6 +170,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
 
     public function editAction ()
     {
+        $this->view->headTitle('Hardware Quote Devices');
+        $this->view->headTitle('Edit Manufacturer');
         $manufacturerId = $this->_getParam('id', false);
 
         // If they haven't provided an id, send them back to the view all manufacturer

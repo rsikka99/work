@@ -22,6 +22,9 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function indexAction ()
     {
+        $this->view->headTitle('System');
+        $this->view->headTitle('Users');
+        $this->view->headTitle('User Management');
         // Fetch all the users
         $userMapper = new Application_Model_Mapper_User();
         $users      = $userMapper->fetchUserList($this->_currentUserIsRoot);
@@ -35,6 +38,8 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function createAction ()
     {
+        $this->view->headTitle('Users');
+        $this->view->headTitle('Create User');
         $db      = Zend_Db_Table_Abstract::getDefaultAdapter();
         $form    = new Admin_Form_User(Admin_Form_User::MODE_CREATE);
         $request = $this->getRequest();
@@ -166,6 +171,8 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
+        $this->view->headTitle('Users');
+        $this->view->headTitle('Delete User');
         $userId = $this->_getParam('id', false);
 
         // If they haven't provided an id, send them back to the view all users page
@@ -231,6 +238,8 @@ class Admin_UserController extends Tangent_Controller_Action
      */
     public function editAction ()
     {
+        $this->view->headTitle('Users');
+        $this->view->headTitle('Edit User');
         $userId = $this->_getParam('id', false);
 
         // If they haven't provided an id, send them back to the view all users page
@@ -440,6 +449,8 @@ class Admin_UserController extends Tangent_Controller_Action
 
     public function profileAction ()
     {
+        $this->view->headTitle('Users');
+        $this->view->headTitle('Profile');
         $userId = Zend_Auth::getInstance()->getIdentity()->id;
 
         if (!$userId)
