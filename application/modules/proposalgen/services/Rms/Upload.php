@@ -377,7 +377,7 @@ class Proposalgen_Service_Rms_Upload
                                     $meter->endMeterPrintA3Color   = $defaultDatabaseField;
                                 }
 
-                                Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->insert($meter);
+                                $deviceInstanceMeterMapper->insert($meter);
                             }
 
                             /**
