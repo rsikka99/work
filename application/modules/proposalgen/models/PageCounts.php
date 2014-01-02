@@ -332,12 +332,6 @@ class Proposalgen_Model_PageCounts
      */
     public function getLifePageCount ()
     {
-        if (!isset($this->_lifePageCount))
-        {
-            $this->_lifePageCount = new Proposalgen_Model_PageCount();
-            $this->_lifePageCount->add($this->_lifePageCount);
-        }
-
         return $this->_lifePageCount;
     }
 

@@ -554,51 +554,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @return int
-     */
-    public function getLifePageCount ()
-    {
-        if (!isset($this->lifePageCount))
-        {
-            $lifeCount = 0;
-            $lifeCount += $this->getLifeBlackAndWhitePageCount();
-            $lifeCount += $this->getLifeColorPageCount();
-            $this->lifePageCount = $lifeCount;
-        }
-
-        return $this->lifePageCount;
-    }
-
-    /**
-     * @return int
-     * @throws Exception
-     */
-    public function getLifeBlackAndWhitePageCount ()
-    {
-        if (!isset($this->_lifeBlackAndWhitePageCount))
-        {
-            $meter                             = $this->getMeter();
-            $this->_lifeBlackAndWhitePageCount = $meter->endMeterPrintBlack;
-        }
-
-        return $this->_lifeBlackAndWhitePageCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLifeColorPageCount ()
-    {
-        if (!isset($this->_lifeColorPageCount))
-        {
-            $meter                     = $this->getMeter();
-            $this->_lifeColorPageCount = $meter->endMeterPrintColor;
-        }
-
-        return $this->_lifeColorPageCount;
-    }
-
-    /**
      * @return float
      */
     public function getAge ()
@@ -814,7 +769,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 36;
             if ($maximumLifeCount > 0)
             {
-                $this->_lifeUsage = $this->getLifePageCount() / $maximumLifeCount;
+                $this->_lifeUsage = $this->getMeter()->endMeterLife / $maximumLifeCount;
             }
         }
 
@@ -1380,6 +1335,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                 $pageCounts->getPrintA3BlackPageCount()->add($meter->getPrintA3BlackPageCount());
                 $pageCounts->getPrintA3ColorPageCount()->add($meter->getPrintA3ColorPageCount());
                 $pageCounts->getScanPageCount()->add($meter->getScanPageCount());
+                $pageCounts->getLifePageCount()->add($meter->getLifePageCount());
 
                 if ($blackToColorRatio > 0)
                 {

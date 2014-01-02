@@ -306,7 +306,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "ipAddress"             => $deviceInstance->ipAddress,
                 "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"          => $deviceInstance->serialNumber,
-                "lifePageCount"         => number_format($deviceInstance->getLifePageCount()),
+                "lifePageCount"         => number_format($deviceInstance->getMeter()->endMeterLife),
                 "monoAmpv"              => number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
                 "colorAmpv"             => number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
                 "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, array("precision" => 4)),

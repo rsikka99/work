@@ -53,7 +53,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column5">
-                <div class=" center"><?php echo number_format($deviceInstance->getLifePageCount()); ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getMeter()->endMeterLife); ?></div>
             </td>
             <td class="column6">
                 <div class=" center"><?php echo number_format($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>

@@ -242,6 +242,23 @@ class Proposalgen_Service_Rms_Upload
 
                                 $defaultDatabaseField = new Zend_Db_Expr('NULL');
 
+                                // Life Meter
+                                if ($line->endMeterLife > 0)
+                                {
+                                    $meter->startMeterLife = $line->startMeterLife;
+                                    $meter->endMeterLife   = $line->endMeterLife;
+                                }
+                                else if ($line->endMeterBlack > 0 || $line->endMeterColor > 0)
+                                {
+                                    $meter->startMeterLife = $line->startMeterBlack + $line->startMeterColor;
+                                    $meter->endMeterLife   = $line->endMeterBlack + $line->endMeterColor;
+                                }
+                                else
+                                {
+                                    $meter->startMeterLife = $defaultDatabaseField;
+                                    $meter->endMeterLife   = $defaultDatabaseField;
+                                }
+
                                 //  Black
                                 if ($line->endMeterBlack > 0)
                                 {
