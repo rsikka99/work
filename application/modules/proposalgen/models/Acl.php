@@ -40,7 +40,7 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_INDEX                   = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING                 = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG      = "proposalgen__fleet__toggle-excluded-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITCOMPATIBLEFLAG = "proposalgen__fleet__toggle-jit-compatibility-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITCOMPATIBLEFLAG = "proposalgen__fleet__toggle-jit-flag";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG        = "proposalgen__fleet__toggle-leased-flag";
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE     = "proposalgen__fleet__remove-unknown-device";
     const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO             = "proposalgen__fleet__set-mapped-to";
