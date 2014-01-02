@@ -4,30 +4,66 @@
  */
 class Hardwareoptimization_ViewModel_Optimization
 {
-    /** @var Hardwareoptimization_Model_Hardware_Optimization */
+    /**
+     * @var Hardwareoptimization_Model_Hardware_Optimization
+     */
     protected $_optimization;
-    /** @var float */
+
+    /**
+     * @var float
+     */
     protected $_cashHeldInInventory;
-    /** @var Proposalgen_Model_MasterDevice [] */
+
+    /**
+     * @var Proposalgen_Model_MasterDevice[]
+     */
     protected $_uniqueDeviceList;
-    /** @var Proposalgen_Model_MasterDevice [] */
+
+    /**
+     * @var Proposalgen_Model_MasterDevice[]
+     */
     protected $_uniquePurchasedDeviceList;
-    /** @var Proposalgen_Model_Toner [] */
+
+    /**
+     * @var Proposalgen_Model_Toner[]
+     */
     protected $_uniquePurchasedTonerList;
-    /** @var int */
+
+    /**
+     * @var int
+     */
     protected $_numberOfUniqueModels;
-    /** @var int */
+
+    /**
+     * @var int
+     */
     protected $_numberOfColorCapableDevices;
-    /** @var int */
+
+    /**
+     * @var int
+     */
     protected $_numberOfUniquePurchasedModels;
-    /** @var int */
+
+    /**
+     * @var int
+     */
     protected $_numberOfUniquePurchasedToners;
-    /** @var int */
+
+    /**
+     * @var int
+     */
     protected $_maximumMonthlyPrintVolume;
-    /** @var  Proposalgen_Model_PageCounts */
+
+    /**
+     * @var  Proposalgen_Model_PageCounts
+     */
     protected $_pageCounts;
-    /** @var Hardwareoptimization_ViewModel_Devices */
+
+    /**
+     * @var Hardwareoptimization_ViewModel_Devices
+     */
     protected $_devices;
+
     /**
      * The weighted average monthly cost per page when using replacements
      *
