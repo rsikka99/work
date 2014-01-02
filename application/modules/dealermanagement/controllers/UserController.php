@@ -69,7 +69,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
                         $db->beginTransaction();
                         if ($userService->create($postData))
                         {
-                            $this->_flashMessenger->addMessage(array('success' => 'User created.'));
+                            $this->_flashMessenger->addMessage(array('success' => 'User created. An email will be sent out to the user with instructions on how to proceed.'));
                             $db->commit();
                         }
                         else
@@ -269,7 +269,7 @@ class Dealermanagement_UserController extends Tangent_Controller_Action
 
                     if ($userService->update($postData, $userId))
                     {
-                        $this->_flashMessenger->addMessage(array('success' => 'User saved.'));
+                        $this->_flashMessenger->addMessage(array('success' => 'User saved. If you changed the password then an email will be sent out to the user with the new password and instructions on how to proceed.'));
                         $db->commit();
                     }
                     else

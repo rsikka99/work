@@ -59,7 +59,8 @@ class Admin_UserController extends Tangent_Controller_Action
                         {
                             $db->beginTransaction();
                             $mapper = new Application_Model_Mapper_User();
-                            $user   = new Application_Model_User();
+
+                            $user = new Application_Model_User();
                             $user->populate($values);
                             $user->password = Application_Model_User::cryptPassword($user->password);
                             $userId         = $mapper->insert($user);
@@ -110,6 +111,8 @@ class Admin_UserController extends Tangent_Controller_Action
                                 $form->populate(array('dealerId' => $values['dealerId']));
                             }
                             $db->commit();
+
+                            Dealermanagement_Service_User::sendNewUserEmail($user, $values['password']);
                         }
                         catch (Zend_Db_Statement_Mysqli_Exception $e)
                         {
@@ -305,6 +308,8 @@ class Admin_UserController extends Tangent_Controller_Action
                     // Validate the form
                     if ($form->isValid($postData))
                     {
+                        $passwordChanged = false;
+
                         $formValues = $form->getValues();
                         // Validate the roles
                         if (isset($formValues ["userRoles"]))
@@ -335,6 +340,7 @@ class Admin_UserController extends Tangent_Controller_Action
                         {
                             unset($formValues ["passwordconfirm"]);
                             $formValues ["password"] = Application_Model_User::cryptPassword($formValues ["password"]);
+                            $passwordChanged         = true;
                         }
                         else
                         {
@@ -420,9 +426,19 @@ class Admin_UserController extends Tangent_Controller_Action
                             }
                         }
 
-                        $this->_flashMessenger->addMessage(array(
-                                                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
-                                                           ));
+                        if ($passwordChanged)
+                        {
+                            Dealermanagement_Service_User::sendPasswordChangedEmail($user, $values['password']);
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully. An email with the new password will be sent to the user."
+                                                               ));
+                        }
+                        else
+                        {
+                            $this->_flashMessenger->addMessage(array(
+                                                                    'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
+                                                               ));
+                        }
                     }
                     else
                     {

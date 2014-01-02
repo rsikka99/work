@@ -113,6 +113,8 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                     }
 
                     $success = true;
+
+                    Dealermanagement_Service_User::sendNewUserEmail($user, $filteredData['password']);
                 }
             }
             else
@@ -139,11 +141,12 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
      */
     public function update ($data, $id)
     {
-        $success        = false;
-        $userMapper     = Application_Model_Mapper_User::getInstance();
-        $userRoleMapper = Admin_Model_Mapper_UserRole::getInstance();
-        $roleMapper     = Admin_Model_Mapper_Role::getInstance();
-        $user           = $userMapper->find($id);
+        $success         = false;
+        $userMapper      = Application_Model_Mapper_User::getInstance();
+        $userRoleMapper  = Admin_Model_Mapper_UserRole::getInstance();
+        $roleMapper      = Admin_Model_Mapper_Role::getInstance();
+        $user            = $userMapper->find($id);
+        $passwordChanged = false;
 
         if ($user)
         {
@@ -166,7 +169,8 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                 if ($filteredData['reset_password'])
                 {
                     // Make sure the users password is encrypted.
-                    $user->password = $user->cryptPassword($filteredData['password']);
+                    $user->password  = $user->cryptPassword($filteredData['password']);
+                    $passwordChanged = true;
                 }
 
                 if (!isset($filteredData['userRoles']))
@@ -227,6 +231,11 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
                 }
 
                 $success = true;
+
+                if ($passwordChanged)
+                {
+                    Dealermanagement_Service_User::sendPasswordChangedEmail($user, $filteredData['password']);
+                }
             }
         }
         else
@@ -279,5 +288,155 @@ class Dealermanagement_Service_User extends Tangent_Service_Abstract
         }
 
         return false;
+    }
+
+    protected static function _initMailTransport ()
+    {
+        $config = Zend_Registry::get('config');
+
+        $emailConfig = array(
+            'auth'     => 'login',
+            'username' => $config->email->username,
+            'password' => $config->email->password,
+            'ssl'      => $config->email->ssl,
+            'port'     => $config->email->port,
+            'host'     => $config->email->host
+        );
+
+        Zend_Mail::setDefaultTransport(new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig));
+        Zend_Mail::setDefaultFrom($emailConfig['username'], $config->app->name);
+    }
+
+    /**
+     * Gets the application url
+     *
+     * @return string
+     */
+    protected static function _getAppUrl ()
+    {
+        $urlHelper     = new Zend_View_Helper_ServerUrl();
+        $baseUrlHelper = new Zend_View_Helper_BaseUrl();
+
+        return $urlHelper->serverUrl($baseUrlHelper->baseUrl("/"));
+    }
+
+    /**
+     * Sends an email to a new user
+     *
+     * @param Application_Model_User $user
+     * @param string                 $plainTextPassword
+     */
+    public static function sendNewUserEmail ($user, $plainTextPassword)
+    {
+        // FIXME: Should this be done on bootstrap?
+        self::_initMailTransport();
+
+        $config  = Zend_Registry::get('config');
+        $appName = $config->app->title;
+        $appUrl  = self::_getAppUrl();
+
+        $mail = new Zend_Mail();
+        $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
+        $mail->setSubject("{$appName} - Your new account");
+
+        /**
+         * Plain Text Version
+         */
+        $textBody = "{$appName} - New Account\n";
+        $textBody .= "Your {$appName} credentials:\n";
+        $textBody .= str_pad("", strlen("Your {$appName} credentials:"), '-');
+        $textBody .= "Username: {$user->email}\n";
+        $textBody .= "Password: {$plainTextPassword}\n";
+        $textBody .= "Application URL: {$appUrl}\n";
+
+        if ($user->resetPasswordOnNextLogin)
+        {
+            $textBody .= "* You will be required to change your password on your first login.\n";
+        }
+
+        $mail->setBodyText($textBody);
+
+        /**
+         * HTML Version
+         */
+        $htmlBody = "<body>\n";
+        $htmlBody .= "<h2>{$appName} - New Account</h2>\n";
+        $htmlBody .= "<p>Your {$appName} credentials:</p>\n";
+        $htmlBody .= "<p>Username: {$user->email}</p>\n";
+        $htmlBody .= "<p>Password: {$plainTextPassword}</p>\n";
+        $htmlBody .= "<p>Application URL: {$appUrl}</p>\n";
+
+        if ($user->resetPasswordOnNextLogin)
+        {
+            $htmlBody .= "<p><small><strong>*</strong> You will be required to change your password on your first login.</small></p>\n";
+        }
+
+        $htmlBody .= "</body>";
+        $mail->setBodyHtml($htmlBody);
+
+        /**
+         * Send it!
+         */
+        $mail->send();
+    }
+
+    /**
+     * Send an email about password updates
+     *
+     * @param Application_Model_User $user
+     * @param string                 $plainTextPassword
+     */
+    public static function sendPasswordChangedEmail ($user, $plainTextPassword)
+    {
+        // FIXME: Should this be done on bootstrap?
+        self::_initMailTransport();
+
+        $config  = Zend_Registry::get('config');
+        $appName = $config->app->title;
+        $appUrl  = self::_getAppUrl();
+
+        $mail = new Zend_Mail();
+        $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
+        $mail->setSubject("{$appName} - Your new account");
+
+        /**
+         * Plain Text Version
+         */
+        $textBody = "{$appName} - Your password has been reset\n";
+        $textBody .= "Your {$appName} credentials:\n";
+        $textBody .= str_pad("", strlen("Your {$appName} credentials:"), '-');
+        $textBody .= "Username: {$user->email}\n";
+        $textBody .= "Password: {$plainTextPassword}\n";
+        $textBody .= "Application URL: {$appUrl}\n";
+
+        if ($user->resetPasswordOnNextLogin)
+        {
+            $textBody .= "* You will be required to change your password on your next login.\n";
+        }
+
+        $mail->setBodyText($textBody);
+
+        /**
+         * HTML Version
+         */
+        $htmlBody = "<body>\n";
+        $htmlBody .= "<h2>{$appName} - Your password has been reset</h2>\n";
+        $htmlBody .= "<p>Your {$appName} credentials:</p>\n";
+        $htmlBody .= "<p>Username: {$user->email}</p>\n";
+        $htmlBody .= "<p>Password: {$plainTextPassword}</p>\n";
+        $htmlBody .= "<p>Application URL: {$appUrl}</p>\n";
+
+        if ($user->resetPasswordOnNextLogin)
+        {
+            $htmlBody .= "<p><small><strong>*</strong> You will be required to change your password on your first login.</small></p>\n";
+        }
+
+        $htmlBody .= "</body>";
+        $mail->setBodyHtml($htmlBody);
+
+        /**
+         * Send it!
+         */
+        $mail->send();
     }
 }
