@@ -494,7 +494,7 @@ class Default_AuthController extends Tangent_Controller_Action
         );
 
         //grab the email host from application.ini
-        $mailTransport = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $emailConfig);
+        $mailTransport = new Zend_Mail_Transport_Smtp($emailConfig['host'], $emailConfig);
         Zend_Mail::setDefaultTransport($mailTransport);
 
         $mail = new Zend_Mail ();
