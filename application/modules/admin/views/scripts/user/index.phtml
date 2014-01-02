@@ -30,7 +30,7 @@
                 <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
                 <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
                 <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
-                <td><?php echo $user->lastSeen; ?></td>
+                <td><?php echo ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></td>
                 <td>
                     <div class="btn-group">
                         <?php if ($user->id == 1) : ?>

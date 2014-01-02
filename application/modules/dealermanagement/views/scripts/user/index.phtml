@@ -41,7 +41,7 @@
                 <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
                 <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
                 <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
-                <td><?php echo $user->lastSeen; ?></td>
+                <td><?php echo ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></td>
                 <td>
                     <div class="btn-group">
                         <a class="btn btn-warning btn-mini" title="Edit User" href="<?php echo $this->url(array('action' => 'edit', 'id' => $user->id)) ?>" ?><i class="icon-pencil"></i></a>
