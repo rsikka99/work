@@ -16,7 +16,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      * All devices that have ages older than this are considered old/
      */
     const OLD_DEVICE_THRESHHOLD  = 10;
-    const GALLONS_WATER_PER_PAGE = 0.121675; // Number of pages * this gives amount of gallons
+    const GALLONS_WATER_PER_PAGE = 2.6; // Number of pages * this gives amount of gallons
     const PAGES_PER_TREE = 7800; //Number of pages divided by this, gives amount of trees
     public static $Proposal;
 
