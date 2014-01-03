@@ -164,9 +164,12 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             'isManaged'        => array(
                 'StringTrim',
                 array(
-                    'filter'  => 'Boolean',
+                    'filter'  => 'Callback',
                     'options' => array(
-                        'type' => Zend_Filter_Boolean::ALL
+                        'callback' => function ($value)
+                            {
+                                return ($value == "Managed");
+                            },
                     ),
                 ),
                 'Int',
