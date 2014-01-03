@@ -823,6 +823,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "isColor"                => $this->isColor,
             "isCopier"               => $this->isCopier,
             "isFax"                  => $this->isFax,
+            "isManaged"              => $this->isManaged,
             "manufacturer"           => $this->manufacturer,
             "modelName"              => $this->modelName,
             "ppmBlack"               => $this->ppmBlack,

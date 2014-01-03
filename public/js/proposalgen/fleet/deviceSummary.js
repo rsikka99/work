@@ -46,6 +46,12 @@ $(function ()
                 },
                 {
                     align   : 'center',
+                    name    : 'isManaged', index: 'isManaged', label: 'Managed',
+                    sortable: false,
+                    width   : 40
+                },
+                {
+                    align   : 'center',
                     name    : 'isExcluded', index: 'isExcluded', label: 'Excluded',
                     sortable: false,
                     width   : 35
@@ -102,6 +108,12 @@ $(function ()
                         isLeased = 'checked="checked"';
                     }
 
+                    var isManaged = "";
+                    if (row.isManaged == 1)
+                    {
+                        isManaged = 'checked="checked"';
+                    }
+
                     var validToners = '';
                     if (row.validToners == false)
                     {
@@ -109,6 +121,7 @@ $(function ()
                     }
 
                     row.isLeased = '<input type="checkbox" class="toggleLeasedButton" data-device-instance-id="' + row.id + '" ' + isLeased + " " + validToners + ' />';
+                    row.isManaged = '<input type="checkbox" class="toggleManagedButton" data-device-instance-id="' + row.id + '" ' + isManaged + ' />';
 
                     // Put our new data back into the grid
                     summaryGrid.setRowData(ids[i], row);
@@ -310,6 +323,23 @@ $(function ()
                 {
                     checkbox.prop('checked', true);
                 }
+            }
+        });
+    });
+
+    /**
+     * Toggles whether or not a device is managed
+     */
+    $(document).on("click", ".toggleManagedButton", function (eventObject)
+    {
+        var checkbox = $(this);
+        $.ajax({
+            url     : TMTW_BASEURL + '/proposalgen/fleet/toggle-managed-flag',
+            dataType: 'json',
+            data    : {
+                rmsUploadId     : rmsUploadId,
+                deviceInstanceId: checkbox.data("device-instance-id"),
+                isManaged       : (checkbox.is(':checked')) ? true : false
             }
         });
     });
