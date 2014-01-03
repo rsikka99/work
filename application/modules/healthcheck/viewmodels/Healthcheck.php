@@ -2125,19 +2125,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              * -- PagesPrintedJITPieGraph
              */
             $deviceAges = array(
-                "Pages Printed on " . My_Brand::$jit . " devices" => 0,
-                "Pages Printed on non-" . My_Brand::$jit . " devices" => 0
+                "Pages Printed on " . My_Brand::$jit . " compatible devices" => 0,
+                "Pages Printed on non-" . My_Brand::$jit . " compatible devices" => 0
             );
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
                 if ($device->isCapableOfReportingTonerLevels())
                 {
-                    $deviceAges ["Pages Printed on " . My_Brand::$jit . " devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $deviceAges ["Pages Printed on " . My_Brand::$jit . " compatible devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $deviceAges ["Pages Printed on non-" . My_Brand::$jit . " devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                    $deviceAges ["Pages Printed on non-" . My_Brand::$jit . " compatible devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
             $dataSet     = array();

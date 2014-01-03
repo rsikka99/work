@@ -402,11 +402,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->rmsUploadRowId = $params->rmsUploadRowId;
         }
 
-        if (isset($params->compatibleWithJitProgram) && !is_null($params->compatibleWithJitProgram))
-        {
-            $this->compatibleWithJitProgram = $params->compatibleWithJitProgram;
-        }
-
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
         {
             $this->ipAddress = $params->ipAddress;
@@ -486,7 +481,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "id"                       => $this->id,
             "rmsUploadId"              => $this->rmsUploadId,
             "rmsUploadRowId"           => $this->rmsUploadRowId,
-            "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
             "ipAddress"                => $this->ipAddress,
             "isExcluded"               => $this->isExcluded,
             "isLeased"                 => $this->isLeased,

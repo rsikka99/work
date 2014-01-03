@@ -40,7 +40,6 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_FLEET_INDEX                   = "proposalgen__fleet__index";
     const RESOURCE_PROPOSALGEN_FLEET_MAPPING                 = "proposalgen__fleet__mapping";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG      = "proposalgen__fleet__toggle-excluded-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITCOMPATIBLEFLAG = "proposalgen__fleet__toggle-jit-flag";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG        = "proposalgen__fleet__toggle-leased-flag";
     const RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG        = "proposalgen__fleet__toggle-managed-flag";
     const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE     = "proposalgen__fleet__remove-unknown-device";
@@ -125,7 +124,6 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_SUMMARY);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITCOMPATIBLEFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG);
 
@@ -189,7 +187,6 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITCOMPATIBLEFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);

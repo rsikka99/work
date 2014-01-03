@@ -60,7 +60,7 @@ $(function ()
                     align   : 'center',
                     name    : 'compatibleWithJitProgram', index: 'compatibleWithJitProgram', label: 'Compatible with ' + jit + ' Program',
                     sortable: false,
-                    width   : 35
+                    width   : 40
                 },
                 {
                     name    : 'validToners', index: 'validToners', label: 'Valid Toners',
@@ -89,18 +89,12 @@ $(function ()
 
                     row.mappedToDeviceName = "<a style='text-decoration: underline;' href='javascript:void(0);' class='viewDeviceDetails' data-device-instance-id='" + row.id + "'>" + row.mappedToDeviceName + "</a>";
 
-                    var checked = "";
+                    var excludedChecked = "";
                     if (row.isExcluded == 1)
                     {
-                        checked = 'checked="checked"';
+                        excludedChecked = 'checked="checked"';
                     }
-                    row.isExcluded = '<input type="checkbox" class="toggleDeviceInstanceExcludedButton" data-device-instance-id="' + row.id + '" ' + checked + ' />';
-                    var jitChecked = "";
-                    if (row.compatibleWithJitProgram == 1)
-                    {
-                        jitChecked = 'checked="checked"';
-                    }
-                    row.compatibleWithJitProgram = '<input type="checkbox" class="toggleJitCompatibilityButton" data-device-instance-id="' + row.id + '" ' + jitChecked + ' />';
+                    row.isExcluded = '<input type="checkbox" class="toggleDeviceInstanceExcludedButton" data-device-instance-id="' + row.id + '" ' + excludedChecked + ' />';
 
                     var isLeased = "";
                     if (row.isLeased == 1)
