@@ -27,7 +27,9 @@ class RemoveDatabaseSessions extends AbstractMigration
                             PRIMARY KEY (`id`)
                         );
         ');
+
         $this->execute("SET foreign_key_checks = 0; ALTER TABLE user_sessions ADD CONSTRAINT `user_sessions_ibfk_2` FOREIGN KEY(`sessionId`) REFERENCES `sessions` (`id`); SET foreign_key_checks = 1;");
+
         $this->execute("ALTER TABLE user_sessions DROP INDEX `user_sessions_unique_sessions`;");
     }
 }
