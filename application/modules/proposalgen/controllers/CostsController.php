@@ -397,6 +397,23 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     {
                                         Proposalgen_Model_Mapper_MasterDevice::getInstance()->save($masterDevice);
                                     }
+
+                                    $jitCompatibleMasterDevice                 = new Proposalgen_Model_JitCompatibleMasterDevice();
+                                    $jitCompatibleMasterDevice->dealerId       = $this->_dealerId;
+                                    $jitCompatibleMasterDevice->masterDeviceId = $masterDevice->id;
+
+                                    // If we are not a JIT compatible device
+                                    if (!$masterDevice->isJitCompatible($this->_dealerId))
+                                    {
+                                        if ($validData[$deviceFeaturesService::DEVICE_FEATURES_JIT_COMPATIBILITY] === '1')
+                                        {
+                                            Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->insert($jitCompatibleMasterDevice);
+                                        }
+                                    }
+                                    else if ($validData[$deviceFeaturesService::DEVICE_FEATURES_JIT_COMPATIBILITY] === '0')
+                                    {
+                                        Proposalgen_Model_Mapper_JitCompatibleMasterDevice::getInstance()->delete($jitCompatibleMasterDevice);
+                                    }
                                 }
                             }
                             else
@@ -778,7 +795,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 $filename             = "system_printer_features_" . date('m_d_Y') . ".csv";
                 $deviceFeatureService = new Proposalgen_Service_Import_Device_Features();
                 $fieldTitles          = $deviceFeatureService->csvHeaders;
-                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterFeaturesForExport();
+                $fieldList            = Proposalgen_Model_Mapper_MasterDevice::getInstance()->getPrinterFeaturesForExport($this->_dealerId);
             }
             else if ($importType == 'toner')
             {

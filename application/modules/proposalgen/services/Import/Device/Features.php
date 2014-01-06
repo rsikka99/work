@@ -15,6 +15,7 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
     const DEVICE_FEATURES_DUTY_CYCLE           = "Duty Cycle";
     const DEVICE_FEATURES_OPERATING_WATTAGE    = "Operating Wattage";
     const DEVICE_FEATURES_IDLE_WATTAGE         = "Idle Wattage";
+    const DEVICE_FEATURES_JIT_COMPATIBILITY    = "JIT Compatibility";
 
     public $csvHeaders = array(
         self::DEVICE_FEATURES_MASTER_PRINTER_ID,
@@ -28,6 +29,7 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
         self::DEVICE_FEATURES_DUTY_CYCLE,
         self::DEVICE_FEATURES_OPERATING_WATTAGE,
         self::DEVICE_FEATURES_IDLE_WATTAGE,
+        self::DEVICE_FEATURES_JIT_COMPATIBILITY,
     );
 
     public function __construct ()
@@ -77,6 +79,10 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
                  self::DEVICE_FEATURES_IDLE_WATTAGE         => array(
                      new Zend_Validate_Float(),
                      array('Between', 0, 10000, true),
+                 ),
+                 self::DEVICE_FEATURES_JIT_COMPATIBILITY    => array(
+                     new Zend_Validate_Int(),
+                     array('Between', 0, 1, true),
                  ),
             )
         );

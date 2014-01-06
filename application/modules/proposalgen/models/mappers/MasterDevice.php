@@ -752,13 +752,15 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
     /**
      * Gets a list of all master devices inside the system and their features.
      *
+     * @param $dealerId
+     *
      * @return array
      */
-    public function getPrinterFeaturesForExport ()
+    public function getPrinterFeaturesForExport ($dealerId)
     {
         $db = Zend_Db_Table::getDefaultAdapter();
         $db->beginTransaction();
-
+        $dealerId  = $db->quote($dealerId, 'INT');
         $select    = $db->select()
                         ->from(array(
                                     'md' => 'master_devices'
@@ -773,12 +775,16 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                                        'dutyCycle',
                                        'wattsPowerNormal',
                                        'wattsPowerIdle',
+                                       'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
                                   ))
                         ->joinLeft(array(
                                         'm' => 'manufacturers'
                                    ), 'm.id = md.manufacturerId', array(
                                                                        'fullname'
                                                                   ))
+                        ->joinLeft(array(
+                                        'jcmd' => 'jit_compatible_master_devices'
+                                   ), "jcmd.dealerId = {$dealerId} AND jcmd.masterDeviceId = md.id", array())
                         ->order(array(
                                      'm.fullname',
                                      'md.modelName',
@@ -800,7 +806,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                 $value ['ppmColor'],
                 $value ['dutyCycle'],
                 $value ['wattsPowerNormal'],
-                $value ['wattsPowerIdle']
+                $value ['wattsPowerIdle'],
+                $value ['jitCompatible']
             );
         }
 
