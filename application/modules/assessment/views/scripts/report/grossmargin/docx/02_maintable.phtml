@@ -9,6 +9,7 @@ $section = $this->section;
 
 /* @var $assessmentViewModel Assessment_ViewModel_Assessment */
 $assessmentViewModel = $this->assessmentViewModel;
+$dealerId            = Zend_Auth::getInstance()->getIdentity()->dealerId;
 
 /**
  * Variables
@@ -30,6 +31,7 @@ $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->nobottomborder)->addText(null, $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Black And White', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 5)->addText('Color', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->colSpanWidth, $tcStyle->header->cell, 2)->addText('Toner SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 $table->addRow($tcStyle->header->rowheight, $tcStyle->header->fontStyle);
 
@@ -47,6 +49,8 @@ $table->addCell($tcStyle->col8Width, $tcStyle->header->cell)->addText('Toner Cos
 $table->addCell($tcStyle->col9Width, $tcStyle->header->cell)->addText('Toner Yield', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText('CPP', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('Total Printing Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('Dealer SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('System SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 
 foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
@@ -57,25 +61,49 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $blackToner                = null;
     $colorToner                = null;
     $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
-
+    $tonerSkus                 = array();
     foreach ($toners as $toner)
     {
+        $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
+        $dealerSku            = null;
+
+        if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+        {
+            $dealerSku = $dealerTonerAttribute->dealerSku;
+        }
+
         switch ($toner->tonerColorId)
         {
             case Proposalgen_Model_TonerColor::BLACK:
-                $blackToner = $toner;
+                $blackToner                      = $toner;
+                $tonerSkus['black']['sku']       = $toner->sku;
+                $tonerSkus['black']['dealerSku'] = $dealerSku;
                 break;
             case Proposalgen_Model_TonerColor::CYAN:
+                $colorToner                     = $toner;
+                $tonerSkus['cyan']['sku']       = $toner->sku;
+                $tonerSkus['cyan']['dealerSku'] = $dealerSku;
+                break;
             case Proposalgen_Model_TonerColor::MAGENTA:
+                $tonerSkus['magenta']['sku']       = $toner->sku;
+                $tonerSkus['magenta']['dealerSku'] = $dealerSku;
+                $colorToner                        = $toner;
+                break;
             case Proposalgen_Model_TonerColor::YELLOW:
-                $colorToner = $toner;
+                $tonerSkus['yellow']['sku']       = $toner->sku;
+                $tonerSkus['yellow']['dealerSku'] = $dealerSku;
+                $colorToner                       = $toner;
                 break;
             case Proposalgen_Model_TonerColor::THREE_COLOR:
-                $colorToner = $toner;
+                $tonerSkus['threeColor']['sku']       = $toner->sku;
+                $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
+                $colorToner                           = $toner;
                 break;
             case Proposalgen_Model_TonerColor::FOUR_COLOR:
-                $blackToner = $toner;
-                $colorToner = $toner;
+                $tonerSkus['fourColor']['sku']       = $toner->sku;
+                $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
+                $blackToner                          = $toner;
+                $colorToner                          = $toner;
                 break;
             default:
                 break;
@@ -122,6 +150,24 @@ foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDevice
     $table->addCell($tcStyle->col10Width, $color_toner_class)->addText(($isColor) ? number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
     $table->addCell($tcStyle->col11Width, $color_toner_class)->addText(($isColor) ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2) : "-", $tcStyle->row->fontStyle, ($isColor ? $tcStyle->rightalign : $tcStyle->centeralign));
 
+    $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
+    foreach ($tonerSkus as $tonerSku)
+    {
+        if (isset($tonerSku['dealerSku']))
+        {
+            $column1->addText($tonerSku['dealerSku'], $tcStyle->row->fontStyle, $tcStyle->rightalign);
+        }
+        else
+        {
+            $column1->addText('-', $tcStyle->row->fontStyle, $tcStyle->rightalign);
+        }
+    }
+
+    $column1 = $table->addCell($tcStyle->col1Width, $tcStyle->row->cell);
+    foreach ($tonerSkus as $tonerSku)
+    {
+        $column1->addText($tonerSku['sku'], $tcStyle->row->fontStyle, $tcStyle->rightalign);
+    }
 }
 
 // Table footer (totals row)
@@ -137,3 +183,5 @@ $table->addCell($tcStyle->col8Width, $tcStyle->footer->cell)->addText(null, $tcS
 $table->addCell($tcStyle->col9Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
 $table->addCell($tcStyle->col11Width, $tcStyle->footer->cell)->addText('$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2), $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);
+$table->addCell($tcStyle->col10Width, $tcStyle->footer->cell)->addText(null, $tcStyle->footer->fontStyle, $tcStyle->rightalign);

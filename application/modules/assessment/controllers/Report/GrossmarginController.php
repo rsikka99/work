@@ -109,7 +109,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             $this->view->Weighted_Color_CPP           = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4, '.', '');
             $this->view->Black_And_White_Margin       = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
 
-            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->combined, 2, '.', '');
+            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
             $this->view->Total_Revenue  = number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
             $this->view->Monthly_Profit = number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2, '.', '');
             $this->view->Overall_Margin = number_format($assessmentViewModel->getGrossMarginOverallMargin(), 0, '.', '');
@@ -132,7 +132,14 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             '',
             '',
             '',
-            ''
+            '',
+            'Dealer SKUs',
+            '',
+            '',
+            '',
+            '',
+            '',
+            'System SKUs',
         );
 
         $fieldTitlesLvl2 = array(
@@ -146,11 +153,24 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             'Toner Cost',
             'Toner Yield',
             'CPP',
-            'Total Printing Cost'
+            'Total Printing Cost',
+            'Black',
+            'Cyan',
+            'Magenta',
+            'Yellow',
+            'Three Color',
+            'Four Color',
+            'Black',
+            'Cyan',
+            'Magenta',
+            'Yellow',
+            'Three Color',
+            'Four Color',
         );
 
         try
         {
+            $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
             $fieldList_Values = "";
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
@@ -158,26 +178,51 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $blackToner = null;
                 $colorToner = null;
 
-                $toners = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+                $toners    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
+                $tonerSkus = array();
 
                 foreach ($toners as $toner)
                 {
+                    $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
+                    $dealerSku            = null;
+
+                    if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                    {
+                        $dealerSku = $dealerTonerAttribute->dealerSku;
+                    }
+
                     switch ($toner->tonerColorId)
                     {
                         case Proposalgen_Model_TonerColor::BLACK:
-                            $blackToner = $toner;
+                            $blackToner                      = $toner;
+                            $tonerSkus['black']['sku']       = $toner->sku;
+                            $tonerSkus['black']['dealerSku'] = $dealerSku;
                             break;
                         case Proposalgen_Model_TonerColor::CYAN:
+                            $colorToner                     = $toner;
+                            $tonerSkus['cyan']['sku']       = $toner->sku;
+                            $tonerSkus['cyan']['dealerSku'] = $dealerSku;
+                            break;
                         case Proposalgen_Model_TonerColor::MAGENTA:
+                            $tonerSkus['magenta']['sku']       = $toner->sku;
+                            $tonerSkus['magenta']['dealerSku'] = $dealerSku;
+                            $colorToner                        = $toner;
+                            break;
                         case Proposalgen_Model_TonerColor::YELLOW:
-                            $colorToner = $toner;
+                            $tonerSkus['yellow']['sku']       = $toner->sku;
+                            $tonerSkus['yellow']['dealerSku'] = $dealerSku;
+                            $colorToner                       = $toner;
                             break;
                         case Proposalgen_Model_TonerColor::THREE_COLOR:
-                            $colorToner = $toner;
+                            $tonerSkus['threeColor']['sku']       = $toner->sku;
+                            $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
+                            $colorToner                           = $toner;
                             break;
                         case Proposalgen_Model_TonerColor::FOUR_COLOR:
-                            $blackToner = $toner;
-                            $colorToner = $toner;
+                            $tonerSkus['fourColor']['sku']       = $toner->sku;
+                            $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
+                            $blackToner                          = $toner;
+                            $colorToner                          = $toner;
                             break;
                         default:
                             break;
@@ -213,6 +258,19 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList [] = $colorYield;
                 $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
                 $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
+                $fieldList [] = isset($tonerSkus['black']['dealerSku']) ? $tonerSkus['black']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['cyan']['dealerSku']) ? $tonerSkus['cyan']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['magenta']['dealerSku']) ? $tonerSkus['magenta']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['yellow']['dealerSku']) ? $tonerSkus['yellow']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['threeColor']['dealerSku']) ? $tonerSkus['threeColor']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['fourColor']['dealerSku']) ? $tonerSkus['fourColor']['dealerSku'] : '-';
+                $fieldList [] = isset($tonerSkus['black']['sku']) ? $tonerSkus['black']['sku'] : '-';
+                $fieldList [] = isset($tonerSkus['cyan']['sku']) ? $tonerSkus['cyan']['sku'] : '-';
+                $fieldList [] = isset($tonerSkus['magenta']['sku']) ? $tonerSkus['magenta']['sku'] : '-';
+                $fieldList [] = isset($tonerSkus['yellow']['sku']) ? $tonerSkus['yellow']['sku'] : '-';
+                $fieldList [] = isset($tonerSkus['threeColor']['sku']) ? $tonerSkus['threeColor']['sku'] : '-';
+                $fieldList [] = isset($tonerSkus['fourColor']['sku']) ? $tonerSkus['fourColor']['sku'] : '-';
+
                 $fieldList_Values .= implode(",", $fieldList) . "\n";
             }
 
@@ -225,7 +283,6 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             $fieldTotals [] = '';
             $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
             $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '');
-            $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2, '.', '');

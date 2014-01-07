@@ -2775,10 +2775,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnJitText = "Pages Printed on " . My_Brand::$jit . " devices";
+            $pagesPrintedOnJitText    = "Pages Printed on " . My_Brand::$jit . " devices";
             $pagesPrintedOnNonJitText = "Pages Printed on non-" . My_Brand::$jit . " devices";
-            $pagesPrinted = array(
-                $pagesPrintedOnJitText     => 0,
+            $pagesPrinted             = array(
+                $pagesPrintedOnJitText    => 0,
                 $pagesPrintedOnNonJitText => 0
             );
 

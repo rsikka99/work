@@ -3,8 +3,9 @@
 $assessmentViewModel = $this->assessmentViewModel;
 $brandName = My_Brand::$brandName;
 $companyName = My_Brand::$companyName;
+$dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
 $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); ?>
-<div class="container landscape gross-margin" id="htmlReportContainer">
+<div class="container full-width gross-margin" id="htmlReportContainer">
 <div>
     <h2 class="reportTitle">Gross Margin Report</h2><br />
     <em>AMPV = Average Monthly Page Volume</em>
@@ -99,6 +100,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         <th class="column1" rowspan="2">Device Name<br />(IP Address - Serial Number)</th>
         <th colspan="5">Black And White</th>
         <th colspan="5">Color</th>
+        <th colspan="2">Toner SKUs</th>
     </tr>
     <tr class="center">
         <th class="column2">AMPV</th>
@@ -111,6 +113,8 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         <th class="column9">Toner Yield</th>
         <th class="column10">CPP</th>
         <th class="column11">Total Printing Cost</th>
+        <th class="column12">Dealer SKUs</th>
+        <th class="column13">System SKUs</th>
     </tr>
     </thead>
     <tbody>
@@ -123,25 +127,49 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         $blackToner                = null;
         $colorToner                = null;
         $toners                    = $deviceInstance->getMasterDevice()->getCheapestTonerSetByVendor($assessmentViewModel->getCostPerPageSettingForDealer());
-
+        $tonerSkus                 = array();
         foreach ($toners as $toner)
         {
+            $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->findTonerAttributeByTonerId($toner->id, $dealerId);
+            $dealerSku            = null;
+
+            if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+            {
+                $dealerSku = $dealerTonerAttribute->dealerSku;
+            }
+
             switch ($toner->tonerColorId)
             {
                 case Proposalgen_Model_TonerColor::BLACK:
-                    $blackToner = $toner;
+                    $blackToner                      = $toner;
+                    $tonerSkus['black']['sku']       = $toner->sku;
+                    $tonerSkus['black']['dealerSku'] = $dealerSku;
                     break;
                 case Proposalgen_Model_TonerColor::CYAN:
+                    $colorToner                     = $toner;
+                    $tonerSkus['cyan']['sku']       = $toner->sku;
+                    $tonerSkus['cyan']['dealerSku'] = $dealerSku;
+                    break;
                 case Proposalgen_Model_TonerColor::MAGENTA:
+                    $tonerSkus['magenta']['sku']       = $toner->sku;
+                    $tonerSkus['magenta']['dealerSku'] = $dealerSku;
+                    $colorToner                        = $toner;
+                    break;
                 case Proposalgen_Model_TonerColor::YELLOW:
-                    $colorToner = $toner;
+                    $tonerSkus['yellow']['sku']       = $toner->sku;
+                    $tonerSkus['yellow']['dealerSku'] = $dealerSku;
+                    $colorToner                       = $toner;
                     break;
                 case Proposalgen_Model_TonerColor::THREE_COLOR:
-                    $colorToner = $toner;
+                    $tonerSkus['threeColor']['sku']       = $toner->sku;
+                    $tonerSkus['threeColor']['dealerSku'] = $dealerSku;
+                    $colorToner                           = $toner;
                     break;
                 case Proposalgen_Model_TonerColor::FOUR_COLOR:
-                    $blackToner = $toner;
-                    $colorToner = $toner;
+                    $tonerSkus['fourColor']['sku']       = $toner->sku;
+                    $tonerSkus['fourColor']['dealerSku'] = $dealerSku;
+                    $blackToner                          = $toner;
+                    $colorToner                          = $toner;
                     break;
                 default:
                     break;
@@ -154,14 +182,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
 
         // Color Toner
         $colorCost  = "-";
-        $colorStyle = "style='text-align: center;'";
+        $colorStyle = "right";
         $colorYield = "-";
         $isColor    = false;
         if ($colorToner instanceof Proposalgen_Model_Toner)
         {
             $colorCost  = "$" . number_format($colorToner->cost, 2);
             $colorYield = number_format($colorToner->yield);
-            $colorStyle = 'right';
             $isColor    = true;
         }
         ?>
@@ -198,13 +225,39 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <td class="column9 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo $colorYield ?></div>
             </td>
-
             <td class="column10 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4) : "-"; ?></div>
             </td>
 
             <td class="column11 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2) : "-"; ?></div>
+            </td>
+            <td class="column12">
+                <div class="<?php echo $colorStyle; ?>">
+                    <?php
+                    foreach ($tonerSkus as $tonerSku)
+                    {
+                        if (isset($tonerSku['dealerSku']))
+                        {
+                            echo $tonerSku['dealerSku'] . '<br />';
+                        }
+                        else
+                        {
+                            echo "-" . "<br />";
+                        }
+                    }
+                    ?>
+                </div>
+            </td>
+            <td class="column12">
+                <div class="<?php echo $colorStyle; ?>">
+                    <?php
+                    foreach ($tonerSkus as $tonerSku)
+                    {
+                        echo $tonerSku['sku'] . '<br />';
+                    }
+                    ?>
+                </div>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -226,6 +279,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         <td>
             <div class="right">$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2); ?></div>
         </td>
+        <td colspan="2"></td>
     </tr>
     </tbody>
 </table>
