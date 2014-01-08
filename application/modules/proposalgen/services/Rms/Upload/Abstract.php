@@ -44,6 +44,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'isCopier'               => false,
         'isFax'                  => false,
         'manufacturer'           => true,
+        'rawDeviceName'          => false,
         'modelName'              => true,
         'ppmBlack'               => false,
         'ppmColor'               => false,

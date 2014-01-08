@@ -74,7 +74,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width         : 80,
+                    width         : 70,
                     name          : 'deviceCount',
                     index         : 'deviceCount',
                     label         : 'Count',
@@ -85,7 +85,16 @@ $(function ()
                     firstsortorder: 'desc'
                 },
                 {
-                    width   : 150,
+                    width   : 220,
+                    name    : 'rawDeviceName',
+                    index   : 'rawDeviceName',
+                    label   : 'Raw Device Name',
+                    title   : false,
+                    sortable: false,
+                    hidden  : true
+                },
+                {
+                    width   : 160,
                     name    : 'manufacturer',
                     index   : 'manufacturer',
                     label   : 'Device Manu.',
@@ -94,7 +103,7 @@ $(function ()
                     hidden  : true
                 },
                 {
-                    width   : 200,
+                    width   : 160,
                     name    : 'modelName',
                     index   : 'modleName',
                     label   : 'Model Name',
@@ -103,7 +112,7 @@ $(function ()
                     hidden  : true
                 },
                 {
-                    width   : 340,
+                    width   : 500,
                     name    : 'deviceName',
                     index   : 'manufacturer',
                     label   : 'Device Name',
@@ -135,7 +144,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 340,
+                    width   : 240,
                     name    : 'mapToMasterDevice',
                     index   : 'mapToMasterDevice',
                     label   : 'Select Master Device',
@@ -152,7 +161,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 85,
+                    width   : 65,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',
@@ -188,7 +197,16 @@ $(function ()
                     }
                     row.manufacturer = row.manufacturer.replace('"', '&quot;');
 
-                    row.deviceName = row.manufacturer + ' ' + row.modelName;
+                    row.deviceName = '<strong>RMS</strong> Name: ' + row.manufacturer + ' ' + row.modelName + '<br/><em><strong>Raw</strong> Name: ';
+                    if (row.rawDeviceName.length > 0)
+                    {
+                        row.deviceName = row.deviceName + row.rawDeviceName;
+                    }
+                    else
+                    {
+                        row.deviceName = row.deviceName + 'N/A';
+                    }
+                    row.deviceName = row.deviceName + '</em>';
                     // This is what toggles the 'master printer
                     // name' field between the auto complete text
                     // box and the 'Click to Remove' text
@@ -401,6 +419,6 @@ $("#masterDeviceManagement").bind("saveSuccess", function (e, masterDeviceId)
 {
     var loadingDiv = $("#loadingDiv");
     loadingDiv.show();
-    loadingDiv.modal({width:"150px"});
+    loadingDiv.modal({width: "150px"});
     set_mapped(deviceInstanceIdList, masterDeviceId);
 });

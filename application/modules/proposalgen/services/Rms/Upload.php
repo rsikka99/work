@@ -194,7 +194,15 @@ class Proposalgen_Service_Rms_Upload
                                 if ($line->rmsModelId > 0)
                                 {
                                     $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
-                                    if (!$rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                    if ($rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                    {
+                                        if ($rmsDevice->isGeneric)
+                                        {
+                                            $line->rmsModelId = null;
+                                        }
+                                        $lineArray = $line->toArray();
+                                    }
+                                    else
                                     {
                                         $rmsDevice                = new Proposalgen_Model_Rms_Device($lineArray);
                                         $rmsDevice->rmsProviderId = $uploadProviderId;
@@ -202,6 +210,7 @@ class Proposalgen_Service_Rms_Upload
                                         $rmsDevice->userId        = $this->_userId;
                                         $rmsDeviceMapper->insert($rmsDevice);
                                     }
+
                                 }
 
                                 /*
@@ -433,8 +442,8 @@ class Proposalgen_Service_Rms_Upload
 
                                 if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
                                 {
-                                    $masterDevice                             = $deviceInstanceMasterDevice->getMasterDevice();
-                                    $deviceInstance->isLeased                 = $masterDevice->isLeased;
+                                    $masterDevice             = $deviceInstanceMasterDevice->getMasterDevice();
+                                    $deviceInstance->isLeased = $masterDevice->isLeased;
                                     Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
                                 }
                             }

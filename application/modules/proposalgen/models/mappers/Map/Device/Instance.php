@@ -166,6 +166,7 @@ class Proposalgen_Model_Mapper_Map_Device_Instance extends My_Model_Mapper_Abstr
      */
     public function fetchAllForRmsUpload ($rmsUploadId, $sortColumn, $sortDirection, $limit = null, $offset = null, $justCount = false)
     {
+        $groupBy = "GROUP BY groupField";
 
         $db          = $this->getDbTable()->getAdapter();
         $rmsUploadId = $db->quote($rmsUploadId, 'INTEGER');
@@ -179,8 +180,10 @@ SELECT
     rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
+    IFNULL(rms_upload_rows.rmsModelId,UUID()) as groupField,
     rms_upload_rows.manufacturer,
     rms_upload_rows.modelName,
+    device_instances.rawDeviceName,
     device_instances.useUserData,
     device_instances.rmsUploadId,
     device_instance_master_devices.masterDeviceId,
@@ -192,11 +195,13 @@ SELECT
     GROUP_CONCAT(device_instances.id) AS deviceInstanceIds
 FROM device_instances
 JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
+LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId and rms_upload_rows.rmsModelId = rms_devices.rmsModelId
 LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
 LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
 LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
 WHERE device_instances.rmsUploadId = {$rmsUploadId}
-GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)
+{$groupBy}
+
 ) AS countTable";
             $justCountQuery = $db->query($justCountSql);
 
@@ -249,8 +254,10 @@ GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)
     rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
+    IF(rms_devices.isGeneric = 1, UUID(), IFNULL(rms_upload_rows.rmsModelId,UUID())) as groupField,
     rms_upload_rows.manufacturer,
     rms_upload_rows.modelName,
+    device_instances.rawDeviceName,
     device_instances.useUserData,
     device_instances.rmsUploadId,
     device_instance_master_devices.masterDeviceId,
@@ -262,11 +269,12 @@ GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)
     GROUP_CONCAT(device_instances.id)                         AS deviceInstanceIds
 FROM device_instances
     JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
+    LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId and rms_upload_rows.rmsModelId = rms_devices.rmsModelId
     LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
     LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
     LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
 WHERE device_instances.rmsUploadId = ?
-GROUP BY CONCAT(rms_upload_rows.manufacturer, ' ', rms_upload_rows.modelName)";
+{$groupBy}";
 
             $sql = $db->quoteInto($sql, $rmsUploadId);
             $sql .= " ORDER BY {$orderBy} {$limitStatement}";

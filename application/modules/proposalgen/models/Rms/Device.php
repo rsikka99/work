@@ -34,6 +34,11 @@ class Proposalgen_Model_Rms_Device extends My_Model_Abstract
      */
     public $userId;
 
+    /**
+     * @var bool
+     */
+    public $isGeneric;
+
 
     /**
      * @param array $params An array of data to populate the model with
@@ -75,6 +80,11 @@ class Proposalgen_Model_Rms_Device extends My_Model_Abstract
             $this->userId = $params->userId;
         }
 
+        if (isset($params->isGeneric) && !is_null($params->isGeneric))
+        {
+            $this->isGeneric = $params->isGeneric;
+        }
+
     }
 
     /**
@@ -89,6 +99,7 @@ class Proposalgen_Model_Rms_Device extends My_Model_Abstract
             "modelName"     => $this->modelName,
             "dateCreated"   => $this->dateCreated,
             "userId"        => $this->userId,
+            "isGeneric"     => $this->isGeneric,
         );
     }
 }

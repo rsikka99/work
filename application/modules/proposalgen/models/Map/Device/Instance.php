@@ -20,12 +20,17 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     public $rmsModelId;
 
     /**
-     * @var int
+     * @var string
      */
     public $manufacturer;
 
     /**
-     * @var int
+     * @var string
+     */
+    public $rawDeviceName;
+
+    /**
+     * @var string
      */
     public $modelName;
 
@@ -55,12 +60,12 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     public $isSystemDevice;
 
     /**
-     * @var int
+     * @var string
      */
     public $mappedManufacturer;
 
     /**
-     * @var int
+     * @var string
      */
     public $mappedModelName;
 
@@ -103,6 +108,11 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
         if (isset($params->manufacturer) && !is_null($params->manufacturer))
         {
             $this->manufacturer = $params->manufacturer;
+        }
+
+        if (isset($params->rawDeviceName) && !is_null($params->rawDeviceName))
+        {
+            $this->rawDeviceName = $params->rawDeviceName;
         }
 
         if (isset($params->modelName) && !is_null($params->modelName))
@@ -167,6 +177,7 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
             "rmsUploadRowId"     => $this->rmsUploadRowId,
             "rmsModelId"         => $this->rmsModelId,
             "manufacturer"       => $this->manufacturer,
+            "rawDeviceName"      => $this->rawDeviceName,
             "modelName"          => $this->modelName,
             "useUserData"        => $this->useUserData,
             "reportId"           => $this->reportId,

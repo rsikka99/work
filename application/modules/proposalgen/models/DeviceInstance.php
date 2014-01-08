@@ -138,6 +138,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $compatibleWithJitProgram;
 
+    /**
+     * @var string
+     */
+    public $rawDeviceName;
+
     /*
      * ********************************************************************************
      * Related Objects
@@ -466,9 +471,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->rmsDeviceId = $params->rmsDeviceId;
         }
+
         if (isset($params->deviceSwapReasonId) && !is_null($params->deviceSwapReasonId))
         {
             $this->deviceSwapReasonId = $params->deviceSwapReasonId;
+        }
+
+        if (isset($params->rawDeviceName) && !is_null($params->rawDeviceName))
+        {
+            $this->rawDeviceName = $params->rawDeviceName;
         }
     }
 
@@ -495,6 +506,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "isManaged"                => $this->isManaged,
             "rmsDeviceId"              => $this->rmsDeviceId,
             "deviceSwapReasonId"       => $this->deviceSwapReasonId,
+            "rawDeviceName"            => $this->rawDeviceName,
         );
     }
 

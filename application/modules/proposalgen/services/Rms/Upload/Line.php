@@ -107,6 +107,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     /**
      * @var string
      */
+    public $rawDeviceName;
+
+    /**
+     * @var string
+     */
     public $modelName;
 
     /**
@@ -477,6 +482,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->manufacturer = $params->manufacturer;
         }
 
+        if (isset($params->rawDeviceName) && !is_null($params->rawDeviceName))
+        {
+            $this->rawDeviceName = $params->rawDeviceName;
+        }
+
         if (isset($params->modelName) && !is_null($params->modelName))
         {
             $this->modelName = $params->modelName;
@@ -814,6 +824,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "isFax"                  => $this->isFax,
             "isManaged"              => $this->isManaged,
             "manufacturer"           => $this->manufacturer,
+            "rawDeviceName"          => $this->rawDeviceName,
             "modelName"              => $this->modelName,
             "ppmBlack"               => $this->ppmBlack,
             "ppmColor"               => $this->ppmColor,
