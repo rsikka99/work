@@ -44,7 +44,6 @@ class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upl
         'yellow_prodcodeoem'   => 'oemTonerYellowSku',
         'yellow_yield'         => 'oemTonerYellowYield',
         'yellow_prodcostoem'   => 'oemTonerYellowCost',
-        'duty_cycle'           => 'dutyCycle',
         'wattspowernormal'     => 'wattsOperating',
         'wattspoweridle'       => 'wattsIdle',
         'startmeterlife'       => 'startMeterLife',

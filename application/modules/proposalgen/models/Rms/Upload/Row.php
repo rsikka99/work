@@ -50,11 +50,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $cost;
 
     /**
-     * @var int
-     */
-    public $dutyCycle;
-
-    /**
      * @var bool
      */
     public $isColor;
@@ -385,11 +380,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->cost = $params->cost;
         }
 
-        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
-        {
-            $this->dutyCycle = $params->dutyCycle;
-        }
-
         if (isset($params->isColor) && !is_null($params->isColor))
         {
             $this->isColor = $params->isColor;
@@ -678,7 +668,6 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "manufacturer"             => $this->manufacturer,
             "manufacturerId"           => $this->manufacturerId,
             "cost"                     => $this->cost,
-            "dutyCycle"                => $this->dutyCycle,
             "isColor"                  => $this->isColor,
             "isCopier"                 => $this->isCopier,
             "isFax"                    => $this->isFax,

@@ -80,11 +80,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $launchDate;
 
     /**
-     * @var int
-     */
-    public $dutyCycle;
-
-    /**
      * @var string
      */
     public $ipAddress;
@@ -457,11 +452,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->launchDate = $params->launchDate;
         }
 
-        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
-        {
-            $this->dutyCycle = $params->dutyCycle;
-        }
-
         if (isset($params->ipAddress) && !is_null($params->ipAddress))
         {
             $this->ipAddress = $params->ipAddress;
@@ -818,7 +808,6 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "cost"                   => $this->cost,
             "discoveryDate"          => $this->discoveryDate,
             "launchDate"             => $this->launchDate,
-            "dutyCycle"              => $this->dutyCycle,
             "ipAddress"              => $this->ipAddress,
             "isColor"                => $this->isColor,
             "isCopier"               => $this->isCopier,

@@ -106,11 +106,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var int
      */
-    public $dutyCycle;
-
-    /**
-     * @var int
-     */
     public $ppmBlack;
 
     /**
@@ -375,11 +370,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->dateCreated = $params->dateCreated;
         }
 
-        if (isset($params->dutyCycle) && !is_null($params->dutyCycle))
-        {
-            $this->dutyCycle = $params->dutyCycle;
-        }
-
         if (isset($params->ppmBlack) && !is_null($params->ppmBlack))
         {
             $this->ppmBlack = $params->ppmBlack;
@@ -475,7 +465,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "wattsPowerIdle"      => $this->wattsPowerIdle,
             "launchDate"          => $this->launchDate,
             "dateCreated"         => $this->dateCreated,
-            "dutyCycle"           => $this->dutyCycle,
             "ppmBlack"            => $this->ppmBlack,
             "ppmColor"            => $this->ppmColor,
             "isLeased"            => $this->isLeased,

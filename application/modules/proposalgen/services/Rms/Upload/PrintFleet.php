@@ -29,7 +29,6 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'dateadoption'         => 'adoptionDate',
         'discoverydate'        => 'discoveryDate',
         'dateintroduction'     => 'launchDate',
-        'duty_cycle'           => 'dutyCycle',
         'ipaddress'            => 'ipAddress',
         'is_color'             => 'isColor',
         'is_copier'            => 'isCopier',

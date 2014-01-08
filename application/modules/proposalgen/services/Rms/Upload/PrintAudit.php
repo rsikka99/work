@@ -29,7 +29,6 @@ class Proposalgen_Service_Rms_Upload_PrintAudit extends Proposalgen_Service_Rms_
 //        'adoptionDate'           => 'adoptionDate',
         'discoverydate'          => 'discoveryDate',
         'launchdate'             => 'launchDate',
-        'dutycycle'              => 'dutyCycle',
         'ipaddress'              => 'ipAddress',
         'iscolor'                => 'isColor',
 //        'isCopier'               => 'isCopier',

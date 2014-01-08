@@ -569,47 +569,6 @@ class Proposalgen_Form_Device extends Zend_Form
         array_push($elements, $element);
         $elementCounter++;
 
-        // Duty cycle
-        $element = new Zend_Form_Element_Text('duty_cycle');
-        $element->setLabel('Duty Cycle:')
-                ->setAttrib('maxlength', 8)
-                ->setAttrib('class', 'span1')
-                ->addValidator(new Zend_Validate_Float())
-                ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
-                ->setAttrib('style', 'text-align: right')
-                ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
-                ->setOrder($elementCounter)
-                ->setDecorators(array(
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'ViewHelper',
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'duty_cycle-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
-        $element->getValidator('Float')->setMessage('Please enter a number.');
-        array_push($elements, $element);
-        $elementCounter++;
-
         // Watts normal
         $watts_power_normal = new Zend_Form_Element_Text('watts_power_normal');
         $watts_power_normal->setLabel('* Power Consumption Normal:')

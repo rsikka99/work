@@ -772,7 +772,6 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                                        'reportsTonerLevels',
                                        'ppmBlack',
                                        'ppmColor',
-                                       'dutyCycle',
                                        'wattsPowerNormal',
                                        'wattsPowerIdle',
                                        'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
@@ -804,7 +803,6 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                 $value ['reportsTonerLevels'],
                 $value ['ppmBlack'],
                 $value ['ppmColor'],
-                $value ['dutyCycle'],
                 $value ['wattsPowerNormal'],
                 $value ['wattsPowerIdle'],
                 $value ['jitCompatible']

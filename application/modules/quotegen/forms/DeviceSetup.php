@@ -339,28 +339,6 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                                      'StripTags'
                                 ));
         $this->addElement($launchDate);
-        /*
-         * Duty Cycle
-         */
-        $this->addElement('text', 'dutyCycle', array(
-                                                    'label'      => 'Duty Cycle:',
-                                                    'class'      => 'span1',
-                                                    'maxlength'  => 6,
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validators' => array(
-                                                        'Int',
-                                                        array(
-                                                            'validator' => 'Between',
-                                                            'options'   => array(
-                                                                'min' => 0,
-                                                                'max' => 999999
-                                                            )
-                                                        )
-                                                    )
-                                               ));
 
         /*
          * Print Speed (Monochrome)

@@ -282,28 +282,17 @@ $form = $this->form;
 			<?php echo trim($element->renderDescription()); ?>
 		</div>
 	</div>
-	<?php $element = $this->element->getElement("dutyCycle"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("ppmBlack"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
+    <?php $element = $this->element->getElement("ppmBlack"); ?>
+    <div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
+        <?php echo $element->renderLabel(); ?>
+        <div class="controls">
+            <?php if ( $element->hasErrors() ) {
+                $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+            } ?>
+            <?php echo trim($element->renderViewHelper()); ?>
+            <?php echo $element->renderErrors(); ?>
+        </div>
+    </div>
 	<?php $element = $this->element->getElement("ppmColor"); ?>
 	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
 		<?php echo $element->renderLabel(); ?>

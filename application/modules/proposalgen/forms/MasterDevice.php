@@ -215,27 +215,6 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         $this->addElement($launchDate);
 
         /*
-         * Duty Cycle
-         */
-        $this->addElement('text', 'duty_cycle', array(
-                                                     'label'      => 'Duty Cycle:',
-                                                     'filters'    => array(
-                                                         'StringTrim',
-                                                         'StripTags'
-                                                     ),
-                                                     'validators' => array(
-                                                         'Int',
-                                                         array(
-                                                             'validator' => 'Between',
-                                                             'options'   => array(
-                                                                 'min' => 0,
-                                                                 'max' => 50000
-                                                             )
-                                                         )
-                                                     )
-                                                ));
-
-        /*
          * Print Speed (Monochrome)
          */
         $this->addElement('text', 'ppm_black', array(

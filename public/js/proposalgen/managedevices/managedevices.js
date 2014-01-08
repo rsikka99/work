@@ -708,7 +708,6 @@ $(document).ready(function ()
                     $("#leased_toner_yield").val(data.leased_toner_yield);
                     $("#ppm_black").val(data.ppm_black);
                     $("#ppm_color").val(data.ppm_color);
-                    $("#duty_cycle").val(data.duty_cycle);
                     $("#partsCostPerPage").val(data.partsCostPerPage);
                     $("#laborCostPerPage").val(data.laborCostPerPage);
                 }
@@ -1027,7 +1026,6 @@ function empty_form()
     $("#is_duplex").removeAttr('checked');
     $("#ppm_black").val('');
     $("#ppm_color").val('');
-    $("#duty_cycle").val('');
     $("#watts_power_normal").val('');
     $("#watts_power_idle").val('');
     $("#is_leased").removeAttr('checked');
@@ -1063,7 +1061,6 @@ function disable_form()
     $("#is_duplex").attr('disabled', 'disabled');
     $("#ppm_black").attr('disabled', 'disabled');
     $("#ppm_color").attr('disabled', 'disabled');
-    $("#duty_cycle").attr('disabled', 'disabled');
     $("#watts_power_normal").attr('disabled', 'disabled');
     $("#watts_power_idle").attr('disabled', 'disabled');
     $("#is_leased").attr('disabled', 'disabled');
@@ -1098,7 +1095,6 @@ function enable_form()
     $("#is_duplex").removeAttr('disabled');
     $("#ppm_black").removeAttr('disabled');
     $("#ppm_color").removeAttr('disabled');
-    $("#duty_cycle").removeAttr('disabled');
     $("#watts_power_normal").removeAttr('disabled');
     $("#watts_power_idle").removeAttr('disabled');
     $("#is_leased").removeAttr('disabled');

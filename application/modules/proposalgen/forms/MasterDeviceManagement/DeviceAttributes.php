@@ -185,36 +185,6 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         }
 
         /*
-         * Duty Cycle
-         */
-        $dutyCycleElement = $this->createElement('text', 'dutyCycle', array(
-                                                                           'label'   => 'Duty Cycle',
-                                                                           'class'   => 'span4',
-                                                                           'filters' => array(
-                                                                               'StringTrim',
-                                                                               'StripTags'
-                                                                           ),
-                                                                      ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
-        if (!$this->_isAllowedToEditFields)
-        {
-            $dutyCycleElement->setAttrib('readonly', 'readonly');
-        }
-        else
-        {
-            $dutyCycleElement->addValidators(
-                             array(
-                                  'Int',
-                                  array(
-                                      'validator' => 'greaterThan',
-                                      'options'   => array(
-                                          0
-                                      )
-                                  )
-                             )
-            );
-        }
-
-        /*
          * Idle/Sleep Wattage
          */
         $wattsPowerIdleElement = $this->createElement(
@@ -253,7 +223,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
             );
         }
 
-        $this->addDisplayGroup(array($isCopierElement, $isDuplexElement, $isA3Element, $ppmBlackElement, $ppmColorElement, $dutyCycleElement), 'leftSide');
+        $this->addDisplayGroup(array($isCopierElement, $isDuplexElement, $isA3Element, $ppmBlackElement, $ppmColorElement), 'leftSide');
         $this->addDisplayGroup(array($isFaxElement, $reportsTonerLevelsElement, $jitCompatibleElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
 
         $this->getElement("isCopier")->setDecorators(

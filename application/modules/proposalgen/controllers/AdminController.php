@@ -146,7 +146,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     'leased_toner_yield'    => $row [0] ['leasedTonerYield'],
                     'ppm_black'             => $row [0] ['ppmBlack'],
                     'ppm_color'             => $row [0] ['ppmColor'],
-                    'duty_cycle'            => $row [0] ['dutyCycle'],
                     'partsCostPerPage'      => $row [0] ['partsCostPerPage'],
                     'laborCostPerPage'      => $row [0] ['laborCostPerPage'],
                 );

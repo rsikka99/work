@@ -12,7 +12,6 @@
             <ppmColor>55</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>
             <wattsPowerNormal>123</wattsPowerNormal>
-            <dutyCycle>1</dutyCycle>
             <wattsPowerIdle>55</wattsPowerIdle>
         </data>
     </deviceAttribute>
@@ -28,7 +27,6 @@
             <ppmColor>100</ppmColor>
             <launchDate>2001-01-10</launchDate>
             <wattsPowerNormal>1</wattsPowerNormal>
-            <dutyCycle>99999</dutyCycle>
             <wattsPowerIdle>555</wattsPowerIdle>
         </data>
     </deviceAttribute>
@@ -44,7 +42,6 @@
             <ppmColor>25</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>
             <wattsPowerNormal>4242</wattsPowerNormal>
-            <dutyCycle>13456</dutyCycle>
             <wattsPowerIdle>5555</wattsPowerIdle>
         </data>
     </deviceAttribute>
@@ -60,7 +57,6 @@
             <ppmColor>1</ppmColor>
             <launchDate>2007-06-20 00:00:00</launchDate>
             <wattsPowerNormal>4242</wattsPowerNormal>
-            <dutyCycle>13456</dutyCycle>
             <wattsPowerIdle>5555</wattsPowerIdle>
         </data>
     </deviceAttribute>

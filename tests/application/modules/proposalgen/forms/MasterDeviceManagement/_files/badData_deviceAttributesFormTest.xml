@@ -12,7 +12,6 @@
             <ppmColor>1</ppmColor>
             <launchDate>222222-06-20 00:00:00</launchDate>
             <wattsPowerNormal>123</wattsPowerNormal>
-            <dutyCycle>12</dutyCycle>
             <wattsPowerIdle>55</wattsPowerIdle>
         </data>
     </deviceAttribute>

@@ -26,7 +26,6 @@ class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upl
         'date adoption'            => 'adoptionDate',
         'discovery date'           => 'discoveryDate',
         'launch date'              => 'launchDate',
-        'duty cycle'               => 'dutyCycle',
         'device ip address'        => 'ipAddress',
         'is color'                 => 'isColor',
         'is copier'                => 'isCopier',

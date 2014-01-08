@@ -39,7 +39,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'cost'                   => false,
         'discoveryDate'          => false,
         'launchDate'             => false,
-        'dutyCycle'              => false,
         'ipAddress'              => false,
         'isColor'                => false,
         'isCopier'               => false,
@@ -209,10 +208,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 'Int'
             ),
             'ppm_color'        => array(
-                'StringTrim',
-                'Int'
-            ),
-            'duty_cycle'       => array(
                 'StringTrim',
                 'Int'
             ),

@@ -20,7 +20,6 @@
         <dt>Labor Cost Per Page</dt><dd><?php echo ($masterDevice->getDealerAttributes()->laborCostPerPage) ? $this->currency($masterDevice->getDealerAttributes()->laborCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
         <dt>Launch Date</dt><dd><?php echo ($masterDevice->launchDate) ?: 'Not Set'; ?></dd>
         <dt>Date Created</dt><dd><?php echo ($masterDevice->dateCreated) ?: 'Not Set'; ?></dd>
-        <dt>Duty Cycle</dt><dd><?php echo ($masterDevice->dutyCycle) ?: 'Not Set'; ?></dd>
         <dt>PPM Black</dt><dd><?php echo ($masterDevice->ppmBlack) ?: 'Not Set'; ?></dd>
         <dt>PPM Color</dt><dd><?php echo ($masterDevice->ppmColor) ?: 'Not Set'; ?></dd>
         <dt>Is Leased</dt><dd><?php echo ($masterDevice->isLeased) ? "Yes" : "No"; ?></dd>

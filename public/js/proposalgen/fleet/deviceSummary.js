@@ -147,8 +147,6 @@ $(function ()
                 $('#deviceDetails_reportsToners').empty().html((data.masterDevice.reportsTonerLevels == 1) ? 'YES' : 'NO');
                 $('#deviceDetails_ppmBlack').empty().html(data.masterDevice.ppmBlack);
                 $('#deviceDetails_ppmColor').empty().html(data.masterDevice.ppmColor);
-                $('#deviceDetails_dutyCycle').empty().html(data.masterDevice.dutyCycle);
-
                 $('#deviceDetails_wattsPowerNormal').empty().html(data.masterDevice.wattsPowerNormal);
                 $('#deviceDetails_wattsPowerIdle').empty().html(data.masterDevice.wattsPowerIdle);
                 $('#deviceDetails_cost').empty().html(data.masterDevice.cost);

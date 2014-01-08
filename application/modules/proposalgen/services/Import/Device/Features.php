@@ -12,7 +12,6 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
     const DEVICE_FEATURES_REPORTS_TONER_LEVELS = "Reports Toner Levels";
     const DEVICE_FEATURES_PPM_MONOCHROME       = "PPM Monochrome";
     const DEVICE_FEATURES_PPM_COLOR            = "PPM Color";
-    const DEVICE_FEATURES_DUTY_CYCLE           = "Duty Cycle";
     const DEVICE_FEATURES_OPERATING_WATTAGE    = "Operating Wattage";
     const DEVICE_FEATURES_IDLE_WATTAGE         = "Idle Wattage";
     const DEVICE_FEATURES_JIT_COMPATIBILITY    = "JIT Compatibility";
@@ -26,7 +25,6 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
         self::DEVICE_FEATURES_REPORTS_TONER_LEVELS,
         self::DEVICE_FEATURES_PPM_MONOCHROME,
         self::DEVICE_FEATURES_PPM_COLOR,
-        self::DEVICE_FEATURES_DUTY_CYCLE,
         self::DEVICE_FEATURES_OPERATING_WATTAGE,
         self::DEVICE_FEATURES_IDLE_WATTAGE,
         self::DEVICE_FEATURES_JIT_COMPATIBILITY,
@@ -66,11 +64,6 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
                      'allowEmpty' => true,
                      new Zend_Validate_Float(),
                      array('Between', 0, 1000, true),
-                 ),
-                 self::DEVICE_FEATURES_DUTY_CYCLE           => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('GreaterThan', 0)
                  ),
                  self::DEVICE_FEATURES_OPERATING_WATTAGE    => array(
                      new Zend_Validate_Float(),

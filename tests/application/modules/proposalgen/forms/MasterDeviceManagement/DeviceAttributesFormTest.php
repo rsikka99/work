@@ -123,7 +123,6 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends Z
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('ppmColor'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('launchDate'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('wattsPowerNormal'));
-        $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('dutyCycle'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('wattsPowerIdle'));
     }
 
@@ -141,7 +140,6 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends Z
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('ppmColor'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('launchDate'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('wattsPowerNormal'));
-        $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('dutyCycle'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('wattsPowerIdle'));
     }
 }

@@ -19,7 +19,6 @@
             <partsCostPerPage>2</partsCostPerPage>
             <laborCostPerPage>2</laborCostPerPage>
             <launchDate>2008-09-18</launchDate>
-            <dutyCycle>100</dutyCycle>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
             <isLeased>false</isLeased>
@@ -45,7 +44,6 @@
             <partsCostPerPage>2</partsCostPerPage>
             <laborCostPerPage>2</laborCostPerPage>
             <launchDate>2008-09-18</launchDate>
-            <dutyCycle>100</dutyCycle>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
             <isLeased></isLeased>
@@ -71,7 +69,6 @@
             <partsCostPerPage>2</partsCostPerPage>
             <laborCostPerPage>2</laborCostPerPage>
             <launchDate>2008-09-18</launchDate>
-            <dutyCycle>100</dutyCycle>
             <ppmBlack>100</ppmBlack>
             <ppmColor>100</ppmColor>
             <isLeased></isLeased>
