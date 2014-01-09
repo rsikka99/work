@@ -30,6 +30,8 @@ class Proposalgen_Service_Rms_Upload_FmAudit extends Proposalgen_Service_Rms_Upl
         'is color'                 => 'isColor',
         'is copier'                => 'isCopier',
         'is fax'                   => 'isFax',
+        'is a3'                    => 'isA3',
+        'is duplex'                => 'isDuplex',
         'manufacturer'             => 'manufacturer',
         'model name'               => 'modelName',
         'ppm black'                => 'ppmBlack',

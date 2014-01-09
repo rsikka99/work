@@ -80,6 +80,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $isLeased;
 
     /**
+     * @var bool
+     */
+    public $isA3;
+
+    /**
      * @var string
      */
     public $launchDate;
@@ -325,6 +330,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $tonerLevelYellow;
 
     /**
+     * @var bool
+     */
+    public $reportsTonerLevels;
+
+    /**
      * @var Proposalgen_Model_Manufacturer
      */
     protected $_manufacturer;
@@ -410,10 +420,14 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->isDuplex = $params->isDuplex;
         }
 
-
         if (isset($params->isLeased) && !is_null($params->isLeased))
         {
             $this->isLeased = $params->isLeased;
+        }
+
+        if (isset($params->isA3) && !is_null($params->isA3))
+        {
+            $this->isA3 = $params->isA3;
         }
 
         if (isset($params->launchDate) && !is_null($params->launchDate))
@@ -661,6 +675,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->tonerLevelYellow = $params->tonerLevelYellow;
         }
 
+        if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
+        {
+            $this->reportsTonerLevels = $params->reportsTonerLevels;
+        }
+
     }
 
     /**
@@ -684,6 +703,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "isFax"                    => $this->isFax,
             "isLeased"                 => $this->isLeased,
             "isDuplex"                 => $this->isDuplex,
+            "isA3"                     => $this->isA3,
             "launchDate"               => $this->launchDate,
             "leasedTonerYield"         => $this->leasedTonerYield,
             "ppmBlack"                 => $this->ppmBlack,
@@ -733,6 +753,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "tonerLevelCyan"           => $this->tonerLevelCyan,
             "tonerLevelMagenta"        => $this->tonerLevelMagenta,
             "tonerLevelYellow"         => $this->tonerLevelYellow,
+            "reportsTonerLevels"       => $this->reportsTonerLevels,
         );
     }
 

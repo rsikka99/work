@@ -33,6 +33,8 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'is_color'             => 'isColor',
         'is_copier'            => 'isCopier',
         'is_fax'               => 'isFax',
+        'is_a3'                => 'isA3',
+        'is_duplex'            => 'isDuplex',
         'manufacturer'         => 'manufacturer',
         'devicename'           => 'rawDeviceName',
         'modelname'            => 'modelName',

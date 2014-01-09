@@ -27,6 +27,8 @@ class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upl
         'is_color'             => 'isColor',
         'is_copier'            => 'isCopier',
         'is_fax'               => 'isFax',
+        'is_a3'                => 'isA3',
+        'is_duplex'            => 'isDuplex',
         'ppm_black'            => 'ppmBlack',
         'ppm_color'            => 'ppmColor',
         'dateintroduction'     => 'introductionDate',

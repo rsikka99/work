@@ -43,6 +43,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'isColor'                => false,
         'isCopier'               => false,
         'isFax'                  => false,
+        'isA3'                   => false,
+        'isDuplex'               => false,
         'manufacturer'           => true,
         'rawDeviceName'          => false,
         'modelName'              => true,
@@ -195,6 +197,26 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 'Int'
             ),
             'isFax'            => array(
+                'StringTrim',
+                array(
+                    'filter'  => 'Boolean',
+                    'options' => array(
+                        'type' => Zend_Filter_Boolean::ALL
+                    )
+                ),
+                'Int'
+            ),
+            'isA3'             => array(
+                'StringTrim',
+                array(
+                    'filter'  => 'Boolean',
+                    'options' => array(
+                        'type' => Zend_Filter_Boolean::ALL
+                    )
+                ),
+                'Int'
+            ),
+            'isDuplex'         => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',

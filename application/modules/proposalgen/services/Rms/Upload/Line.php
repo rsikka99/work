@@ -100,6 +100,16 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $isFax;
 
     /**
+     * @var bool
+     */
+    public $isA3;
+
+    /**
+     * @var bool
+     */
+    public $isDuplex;
+
+    /**
      * @var string
      */
     public $manufacturer;
@@ -477,6 +487,16 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->isFax = $params->isFax;
         }
 
+        if (isset($params->isA3) && !is_null($params->isA3))
+        {
+            $this->isA3 = $params->isA3;
+        }
+
+        if (isset($params->isDuplex) && !is_null($params->isDuplex))
+        {
+            $this->isDuplex = $params->isDuplex;
+        }
+
         if (isset($params->manufacturer) && !is_null($params->manufacturer))
         {
             $this->manufacturer = $params->manufacturer;
@@ -822,6 +842,8 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "isColor"                => $this->isColor,
             "isCopier"               => $this->isCopier,
             "isFax"                  => $this->isFax,
+            "isA3"                   => $this->isA3,
+            "isDuplex"               => $this->isDuplex,
             "isManaged"              => $this->isManaged,
             "manufacturer"           => $this->manufacturer,
             "rawDeviceName"          => $this->rawDeviceName,
@@ -997,6 +1019,24 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $this->discoveryDate    = (!$discoveryDate) ? null : $discoveryDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
         $this->launchDate       = (!$introductionDate) ? null : $introductionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
         $this->adoptionDate     = (!$adoptionDate) ? null : $adoptionDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);
+
+        /**
+         * Figure out if the device is a3
+         */
+        if ($this->isA3 == false)
+        {
+            if ($this->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            {
+                if ($this->endMeterPrintA3Black > 0)
+                {
+                    $this->isA3 = true;
+                }
+            }
+            else if ($this->endMeterPrintA3Color > 0)
+            {
+                $this->isA3 = true;
+            }
+        }
 
 
         /*
