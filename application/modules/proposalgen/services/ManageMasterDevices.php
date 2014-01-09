@@ -399,6 +399,16 @@ class Proposalgen_Service_ManageMasterDevices
                     $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
                 }
 
+                if ($validatedData['ppmBlack'] == '')
+                {
+                    $validatedData['ppmBlack'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['ppmColor'] == '')
+                {
+                    $validatedData['ppmColor'] = new Zend_Db_Expr("NULL");
+                }
+
                 if (isset($validatedData['wattsPowerNormal']))
                 {
                     $validatedData['wattsPowerNormal'] = ceil($validatedData['wattsPowerNormal']);

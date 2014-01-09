@@ -87,7 +87,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
                                                                              array(
                                                                                  'validator' => 'Between',
                                                                                  'options'   => array(
-                                                                                     'min' => 0,
+                                                                                     'min' => 1,
                                                                                      'max' => 1000
                                                                                  )
                                                                              )
@@ -114,7 +114,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
                                                                              array(
                                                                                  'validator' => 'Between',
                                                                                  'options'   => array(
-                                                                                     'min' => 0,
+                                                                                     'min' => 1,
                                                                                      'max' => 1000
                                                                                  )
                                                                              )
@@ -215,7 +215,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
                                        array(
                                            'validator' => 'Between',
                                            'options'   => array(
-                                               'min' => 0,
+                                               'min' => 1,
                                                'max' => 10000
                                            )
                                        )
