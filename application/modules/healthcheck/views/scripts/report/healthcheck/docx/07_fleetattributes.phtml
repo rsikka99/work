@@ -38,7 +38,7 @@ $optimizedDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText(
 $optimizedDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Total Page Volume', 'bold_text', 'nospacing_centeralign');
-$optimizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$optimizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $optimizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
 foreach ($healthcheckViewModel->getOptimizedDevices() as $device)
@@ -81,7 +81,7 @@ $UnderutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addT
 $UnderutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Suggested Max. Volume', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Percent of Suggested Max. Volume', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Percent of Monthly Cost', 'bold_text', 'nospacing_centeralign');
-$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$UnderutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 $UnderutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Suggested Action', 'bold_text', 'nospacing_centeralign');
 
@@ -118,7 +118,7 @@ $OverutilizedDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addTe
 $OverutilizedDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Suggested Max. Volume', 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Percent of Suggested Max. Volume', 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText('Percent of Monthly Cost', 'bold_text', 'nospacing_centeralign');
-$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$OverutilizedDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 $OverutilizedDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Suggested Action', 'bold_text', 'nospacing_centeralign');
 
@@ -164,7 +164,7 @@ $oldDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Devic
 $oldDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Total Volume', 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Percent of Monthly Cost', 'bold_text', 'nospacing_centeralign');
-$oldDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$oldDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 $oldDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Suggested Action', 'bold_text', 'nospacing_centeralign');
 
@@ -200,7 +200,7 @@ $notReportingTonerDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->
 $notReportingTonerDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Total Volume', 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [4], $tcStyle->cellHeader)->addText('Percent of Monthly Cost', 'bold_text', 'nospacing_centeralign');
-$notReportingTonerDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$notReportingTonerDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText('Reports Toner Levels', 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 $notReportingTonerDevicesTable->addCell($cellWidths [7], $tcStyle->cellHeader)->addText('Suggested Action', 'bold_text', 'nospacing_centeralign');
 

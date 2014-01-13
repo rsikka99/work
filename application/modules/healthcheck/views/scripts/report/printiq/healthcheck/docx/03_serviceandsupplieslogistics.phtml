@@ -131,8 +131,8 @@ $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage(
 $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s (ATR)', $this->companyNameFull), 2);
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s (ATR) and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their ATR compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
-    , count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels())
-    , count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels())
+    , count($healthcheckViewModel->getIncludedDevicesJitCompatible())
+    , count($healthcheckViewModel->getIncludedDevicesNotJitCompatible())
     , $this->companyNameFull
 ));
 

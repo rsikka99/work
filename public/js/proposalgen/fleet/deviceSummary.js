@@ -114,8 +114,15 @@ $(function ()
                         validToners = 'disabled="disabled"';
                     }
 
+                    var isCompatibleWithJit = "";
+                    if (row.compatibleWithJitProgram == 1)
+                    {
+                        isCompatibleWithJit = 'checked="checked"';
+                    }
+
                     row.isLeased = '<input type="checkbox" class="toggleLeasedButton" data-device-instance-id="' + row.id + '" ' + isLeased + " " + validToners + ' />';
                     row.isManaged = '<input type="checkbox" class="toggleManagedButton" data-device-instance-id="' + row.id + '" ' + isManaged + ' />';
+                    row.compatibleWithJitProgram = '<input type="checkbox" class="toggleJitCompatibilityButton" data-device-instance-id="' + row.id + '" ' + isCompatibleWithJit + ' />';
 
                     // Put our new data back into the grid
                     summaryGrid.setRowData(ids[i], row);

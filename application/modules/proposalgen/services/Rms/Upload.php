@@ -444,6 +444,7 @@ class Proposalgen_Service_Rms_Upload
                                 {
                                     $masterDevice             = $deviceInstanceMasterDevice->getMasterDevice();
                                     $deviceInstance->isLeased = $masterDevice->isLeased;
+                                    $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($dealerId);
                                     Proposalgen_Model_Mapper_DeviceInstance::getInstance()->save($deviceInstance);
                                 }
                             }

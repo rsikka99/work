@@ -125,20 +125,18 @@ $imageTable = $section->addTable($this->styles->tables->singleimage->tablestyle)
 $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
 
-$section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', $this->jitName), 2);
-$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are compatible with %4$s and %3$s devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their %5$s compatibility can be found in the Appendix.'
+$section->addTitle('Number of Printing Devices Reporting Toner Levels', 2);
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are reporting toner levels and %3$s devices that are not. These devices not reporting toner levels are shown in the fleet attributes section below. A complete list of all devices and their ability to report toner levels can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels())
     , count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels())
-    , $this->jitFullName
-    , $this->jit
 ));
 
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['CompatibleJITBarGraph']);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedJITPieGraph']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['reportingTonerLevelsBarGraph']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedReportingTonerLevelsPieGraph']);
 $cellWidths = array(
     1528,
     1800

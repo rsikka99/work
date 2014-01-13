@@ -165,6 +165,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $_deviceVendorCount;
     protected $_includedDevicesReportingTonerLevels;
     protected $_includedDevicesNotReportingTonerLevels;
+    protected $_includedDevicesJitCompatible;
+    protected $_includedDevicesNotJitCompatible;
     protected $_pageCounts;
     public $highCostPurchasedDevices;
     public static $COLOR_ARRAY = array(
@@ -2122,16 +2124,63 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfIncludedDevices = $this->getDeviceCount();
 
             /**
+             * -- PagesPrintedReportingTonerLevelsPieGraph
+             */
+            $deviceAges = array(
+                "Pages Printed on Devices Reporting Toner Levels"     => 0,
+                "Pages Printed on Devices Not Reporting Toner Levels" => 0
+            );
+
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if ($device->reportsTonerLevels)
+                {
+                    $deviceAges ["Pages Printed on Devices Reporting Toner Levels"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                }
+                else
+                {
+                    $deviceAges ["Pages Printed on Devices Not Reporting Toner Levels"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                }
+            }
+            $dataSet     = array();
+            $legendItems = array();
+            $labels      = array();
+
+            foreach ($deviceAges as $legendItem => $count)
+            {
+                if ($count > 0)
+                {
+                    $dataSet []     = $count;
+                    $legendItems [] = $legendItem;
+                    $percentage     = round(($count / $this->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100, 2);
+                    $labels []      = "$percentage%";
+                }
+            }
+            $deviceAgeGraph = new gchart\gPie3DChart(350, 200);
+            $deviceAgeGraph->addDataSet($dataSet);
+            $deviceAgeGraph->setLegend($legendItems);
+            $deviceAgeGraph->setLabels($labels);
+            $deviceAgeGraph->addColors(array(
+                                            "E21736",
+                                            "0094cf"
+                                       ));
+            $deviceAgeGraph->setLegendPosition("bv");
+            $deviceAgeGraph->setTitle("Pages printed on Devices Reporting Toner Levels");
+
+            // PagesPrintedReportingTonerLevelsPieGraph
+            $healthcheckGraphs['PagesPrintedReportingTonerLevelsPieGraph'] = $deviceAgeGraph->getUrl();
+
+            /**
              * -- PagesPrintedJITPieGraph
              */
             $deviceAges = array(
-                "Pages Printed on " . My_Brand::$jit . " compatible devices" => 0,
+                "Pages Printed on " . My_Brand::$jit . " compatible devices"     => 0,
                 "Pages Printed on non-" . My_Brand::$jit . " compatible devices" => 0
             );
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->isCapableOfReportingTonerLevels())
+                if ($device->compatibleWithJitProgram)
                 {
                     $deviceAges ["Pages Printed on " . My_Brand::$jit . " compatible devices"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
@@ -2305,9 +2354,46 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $healthcheckGraphs['colorCapablePieChart'] = $colorCapableGraph->getUrl();
 
             /**
-             * -- CompatibleJITBarGraph
+             * -- reportingTonerLevelsBarGraph
              */
             $numberOfDevicesReportingTonerLevels = count($this->getIncludedDevicesReportingTonerLevels());
+            $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
+            $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
+            $barGraph                            = new gchart\gBarChart(220, 220);
+            $barGraph->setVisibleAxes(array(
+                                           'y'
+                                      ));
+            $barGraph->addDataSet(array(
+                                       $numberOfDevicesReportingTonerLevels
+                                  ));
+            $barGraph->addColors(array(
+                                      "0194D2"
+                                 ));
+            $barGraph->addDataSet(array(
+                                       ($numberOfIncompatibleDevices)
+                                  ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+            $barGraph->setBarScale(70, 10);
+            $barGraph->setLegendPosition("b");
+            $barGraph->addColors(array(
+                                      "E21736"
+                                 ));
+            $barGraph->setLegend(array(
+                                      "Printers Reporting Toner Levels",
+                                      "Printers Not Reporting Toner Levels"
+                                 ));
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->setTitle($this->healthcheck->getClient()->companyName);
+
+            // reportingTonerLevelsBarGraph
+            $healthcheckGraphs['reportingTonerLevelsBarGraph'] = $barGraph->getUrl();
+
+            /**
+             * -- CompatibleJITBarGraph
+             */
+            $numberOfDevicesReportingTonerLevels = count($this->getIncludedDevicesJitCompatible());
             $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
             $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
             $barGraph                            = new gchart\gBarChart(220, 220);
@@ -2775,8 +2861,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnJitText    = "Pages Printed on " . My_Brand::$jit . " devices";
-            $pagesPrintedOnNonJitText = "Pages Printed on non-" . My_Brand::$jit . " devices";
+            $pagesPrintedOnJitText    = "Pages Printed on managed devices";
+            $pagesPrintedOnNonJitText = "Pages Printed on non-managed devices";
             $pagesPrinted             = array(
                 $pagesPrintedOnJitText    => 0,
                 $pagesPrintedOnNonJitText => 0
@@ -3107,6 +3193,50 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->_includedDevicesReportingTonerLevels;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getIncludedDevicesJitCompatible ()
+    {
+        if (!isset($this->_includedDevicesJitCompatible))
+        {
+            $devicesThatAreJitCompatible = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if ($device->compatibleWithJitProgram)
+                {
+                    $devicesThatAreJitCompatible[] = $device;
+                }
+            }
+
+            $this->_includedDevicesJitCompatible = $devicesThatAreJitCompatible;
+        }
+
+        return $this->_includedDevicesJitCompatible;
+    }
+
+    /**
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getIncludedDevicesNotJitCompatible ()
+    {
+        if (!isset($this->_includedDevicesNotJitCompatible))
+        {
+            $devicesNotJitCompatible = array();
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if (!$device->compatibleWithJitProgram)
+                {
+                    $devicesNotJitCompatible[] = $device;
+                }
+            }
+
+            $this->_includedDevicesNotJitCompatible = $devicesNotJitCompatible;
+        }
+
+        return $this->_includedDevicesNotJitCompatible;
     }
 
     /**

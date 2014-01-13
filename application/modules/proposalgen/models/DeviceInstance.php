@@ -481,6 +481,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->rawDeviceName = $params->rawDeviceName;
         }
+
+        if (isset($params->compatibleWithJitProgram) && !is_null($params->compatibleWithJitProgram))
+        {
+            $this->compatibleWithJitProgram = $params->compatibleWithJitProgram;
+        }
     }
 
     /**
@@ -507,6 +512,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "rmsDeviceId"              => $this->rmsDeviceId,
             "deviceSwapReasonId"       => $this->deviceSwapReasonId,
             "rawDeviceName"            => $this->rawDeviceName,
+            "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
         );
     }
 

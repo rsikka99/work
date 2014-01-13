@@ -30,21 +30,22 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEPRICNG   = "proposalgen__costs__bulk-file-device-pricing";
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES = "proposalgen__costs__bulk-file-device-features";
 
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST       = "proposalgen__fleet__device-summary-list";
-    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST            = "proposalgen__fleet__excluded-list";
-    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS          = "proposalgen__fleet__reportsettings";
-    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES      = "proposalgen__fleet__edit-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST       = "proposalgen__fleet__device-mapping-list";
-    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS   = "proposalgen__fleet__device-instance-details";
-    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST           = "proposalgen__fleet__rms-upload-list";
-    const RESOURCE_PROPOSALGEN_FLEET_INDEX                   = "proposalgen__fleet__index";
-    const RESOURCE_PROPOSALGEN_FLEET_MAPPING                 = "proposalgen__fleet__mapping";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG      = "proposalgen__fleet__toggle-excluded-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG        = "proposalgen__fleet__toggle-leased-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG        = "proposalgen__fleet__toggle-managed-flag";
-    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE     = "proposalgen__fleet__remove-unknown-device";
-    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO             = "proposalgen__fleet__set-mapped-to";
-    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY                 = "proposalgen__fleet__summary";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICESUMMARYLIST     = "proposalgen__fleet__device-summary-list";
+    const RESOURCE_PROPOSALGEN_FLEET_EXCLUDEDLIST          = "proposalgen__fleet__excluded-list";
+    const RESOURCE_PROPOSALGEN_FLEET_REPORTSETTINGS        = "proposalgen__fleet__reportsettings";
+    const RESOURCE_PROPOSALGEN_FLEET_EDITUNKNOWNDEVICES    = "proposalgen__fleet__edit-unknown-device";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEMAPPINGLIST     = "proposalgen__fleet__device-mapping-list";
+    const RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS = "proposalgen__fleet__device-instance-details";
+    const RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST         = "proposalgen__fleet__rms-upload-list";
+    const RESOURCE_PROPOSALGEN_FLEET_INDEX                 = "proposalgen__fleet__index";
+    const RESOURCE_PROPOSALGEN_FLEET_MAPPING               = "proposalgen__fleet__mapping";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG    = "proposalgen__fleet__toggle-excluded-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG      = "proposalgen__fleet__toggle-leased-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG     = "proposalgen__fleet__toggle-managed-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG         = "proposalgen__fleet__toggle-jit-flag";
+    const RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE   = "proposalgen__fleet__remove-unknown-device";
+    const RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO           = "proposalgen__fleet__set-mapped-to";
+    const RESOURCE_PROPOSALGEN_FLEET_SUMMARY               = "proposalgen__fleet__summary";
 
     const RESOURCE_PROPOSALGEN_INDEX_INDEX            = "proposalgen__index__index";
     const RESOURCE_PROPOSALGEN_MANUFACTURER_WILDCARD  = "proposalgen__manufacturer__%";
@@ -126,6 +127,7 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_INDEX_INDEX);
 
@@ -189,6 +191,7 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEEXCLUDEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLELEASEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEMANAGEDFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_TOGGLEJITFLAG, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_REMOVEUNKNOWNDEVICE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_MANAGEDEVICES_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);

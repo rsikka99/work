@@ -12,7 +12,7 @@ class My_Brand
     public static $reportTitlePageTitleColor = "#FFFFFF";
     public static $reportTitlePageInformationColor = "#FFFFFF";
     public static $reportHeadingColor = "#0096D6";
-    public static $reportHeadingBackgroundColor = "#FFFFFF";
+    public static $reportHeadingBackgroundColor = "#0096D6";
     public static $reportSubHeadingColor = "#FFFFFF";
     public static $reportSubHeadingBackgroundColor = "#0096D6";
 

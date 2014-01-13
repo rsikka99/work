@@ -102,21 +102,19 @@ $tableData = array();
     <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
 </div>
 
-<div class="pheader">Number of Printing Devices Compatible with <?php echo $this->jitName ?></div>
+<div class="pheader">Number of Printing Devices Reporting Toner Levels</div>
 <p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
-    <strong><?php echo count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels()); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels()) ?>
-    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit; ?> compatibility can be found in the Appendix.
+    <strong><?php echo count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels()); ?></strong> that are reporting toner levels and <?php echo count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels()) ?>
+    devices that are not. These devices not reporting toner levels are shown in the fleet attributes section below. A complete list of all devices and their ability to report toner levels can be found in the Appendix.
 </p>
 <br />
 <div class="center">
     <table>
         <tbody>
         <tr>
-            <td><img src="<?php echo $graphs['CompatibleJITBarGraph']; ?>" /></td>
-            <!-- Devices leased/Devices Purchased -->
-            <td><img src="<?php echo $graphs['PagesPrintedJITPieGraph']; ?>" /></td>
-            <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
+            <td><img src="<?php echo $graphs['reportingTonerLevelsBarGraph']; ?>" /></td>
+            <td><img src="<?php echo $graphs['PagesPrintedReportingTonerLevelsPieGraph']; ?>" /></td>
         </tr>
         </tbody>
     </table>
