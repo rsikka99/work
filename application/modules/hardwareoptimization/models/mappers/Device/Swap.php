@@ -335,7 +335,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_BW])
                 {
                     $this->_blackReplacementDevices [] = $replacementDevice;
                 }
@@ -364,11 +364,11 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_BW_MFP])
                 {
                     $this->_blackMfpReplacementDevices [] = $replacementDevice;
                 }
-                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_blackMfpReplacementDevices [] = $replacementDevice;
                 }
@@ -393,11 +393,11 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_COLOR])
                 {
                     $this->_colorReplacementDevices [] = $replacementDevice;
                 }
-                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_colorReplacementDevices [] = $replacementDevice;
                 }
@@ -421,7 +421,7 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $replacementDevices = $this->fetchAllReplacementsForDealer($dealerId);
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                if ($replacementDevice->getReplacementCategory() === Hardwareoptimization_Model_Device_Swap::$replacementTypes[Hardwareoptimization_Model_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_colorMfpReplacementDevices [] = $replacementDevice;
                 }

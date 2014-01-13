@@ -5,4 +5,6 @@ Version 1.4.8
 [ADDED]   toner SKUs to gross margin report
 [ADDED]   isA3, isDuplex, reportsTonerLevels into rms upload
 [CHANGED] health check water per value from 0.121675 to 2.6 gallons of water per page
-[REMOVED] JIT Compatibility checkbox on rms upload as it can only be set on master devices. Shows Yes/No instead now[REMOVED] duty cycle from the system
+[REMOVED] JIT Compatibility checkbox on rms upload as it can only be set on master devices. Shows Yes/No instead now
+[REMOVED] duty cycle from the system
+[REMOVED] the hybrid solution from the solution report

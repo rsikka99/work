@@ -21,8 +21,3 @@
     <a class="btn" href="<?php echo $this->url(array("action" => "bulkdevicepricing", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-money icon-4x"></i><br /><br />
         Bulk Pricing Updates<br /> <br /> </a>
 <?php endif; ?>
-
-<?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS)) : ?>
-    <a class="btn" href="<?php echo $this->url(array("action" => "managereplacements", "controller" => "admin", "module" => "proposalgen")); ?>"><i class="icon-print icon-4x"></i><br /><br />
-        Replacement Devices<br /> <br /> </a>
-<?php endif; ?>

@@ -15,9 +15,6 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS      = "proposalgen__admin__managereplacements";
     const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST       = "proposalgen__admin__masterdeviceslist";
     const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS           = "proposalgen__admin__printermodels";
-    const RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTDETAILS      = "proposalgen__admin__replacementdetails";
-    const RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTPRINTERSLIST = "proposalgen__admin__replacementprinterslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER  = "proposalgen__admin__savereplacementprinter";
     const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE         = "proposalgen__admin__search-for-device";
     const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST              = "proposalgen__admin__tonerslist";
     const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE          = "proposalgen__admin__saveandapprove";
@@ -98,9 +95,6 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTDETAILS);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTPRINTERSLIST);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE);
@@ -216,10 +210,7 @@ class Proposalgen_Model_Acl
          */
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTPRINTERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACEMENTDETAILS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEREPLACEMENTPRINTER, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);

@@ -335,7 +335,7 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
             $replacementDevices = $this->fetchAllReplacements();
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW])
+                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_BW])
                 {
                     $this->_blackReplacementDevices [] = $replacementDevice;
                 }
@@ -363,11 +363,11 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
             $replacementDevices = $this->fetchAllReplacements();
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_BW_MFP])
+                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_BW_MFP])
                 {
                     $this->_blackMfpReplacementDevices [] = $replacementDevice;
                 }
-                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_blackMfpReplacementDevices [] = $replacementDevice;
                 }
@@ -391,11 +391,11 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
             $replacementDevices = $this->fetchAllReplacements();
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR])
+                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_COLOR])
                 {
                     $this->_colorReplacementDevices [] = $replacementDevice;
                 }
-                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                else if ($allowUpgrades && $replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_colorReplacementDevices [] = $replacementDevice;
                 }
@@ -417,7 +417,7 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
             $replacementDevices = $this->fetchAllReplacements();
             foreach ($replacementDevices as $replacementDevice)
             {
-                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Proposalgen_Model_ReplacementDevice::REPLACEMENT_COLOR_MFP])
+                if ($replacementDevice->getReplacementCategory() === Admin_Model_Memjet_Device_Swap::$replacementTypes[Admin_Model_Memjet_Device_Swap::REPLACEMENT_COLOR_MFP])
                 {
                     $this->_colorMfpReplacementDevices [] = $replacementDevice;
                 }

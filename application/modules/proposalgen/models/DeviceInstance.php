@@ -905,33 +905,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $this;
     }
 
-    /**
-     * @return Proposalgen_Model_ReplacementDevice
-     */
-    public function getReplacementDevice ()
-    {
-        if (!isset($this->_replacementDevice))
-        {
-
-            $this->_replacementDevice = null;
-        }
-
-        return $this->_replacementDevice;
-    }
-
-    /**
-     * @param Proposalgen_Model_ReplacementDevice $ReplacementDevice
-     *
-     * @return Proposalgen_Model_DeviceInstance
-     */
-    public function setReplacementDevice ($ReplacementDevice)
-    {
-        $this->_replacementDevice = $ReplacementDevice;
-
-        return $this;
-    }
-
-    /**
+        /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float

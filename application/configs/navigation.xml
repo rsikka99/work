@@ -623,14 +623,6 @@
                             <action>managematchups</action>
                             <resource>proposalgen__admin__managematchups</resource>
                         </managematchups>
-                        <managereplacements>
-                            <label>Manage Replacement Printers</label>
-                            <module>proposalgen</module>
-                            <controller>admin</controller>
-                            <action>managereplacements</action>
-                            <resource>proposalgen__admin__managereplacements</resource>
-                            <visible>0</visible>
-                        </managereplacements>
                         <manufacturers>
                             <label>Manufacturers</label>
                             <module>proposalgen</module>
