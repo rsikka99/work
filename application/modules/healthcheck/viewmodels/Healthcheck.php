@@ -15,7 +15,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * All devices that have ages older than this are considered old/
      */
-    const OLD_DEVICE_THRESHOLD  = 10;
+    const OLD_DEVICE_THRESHOLD   = 10;
     const GALLONS_WATER_PER_PAGE = 2.6; // Number of pages * this gives amount of gallons
     const PAGES_PER_TREE = 7800; //Number of pages divided by this, gives amount of trees
     public static $Proposal;
@@ -1627,7 +1627,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                               "Not scan capable"
                                          ));
             $scanCapableGraph->setLabels(array(
-                                              "$scanPercentage%"
+                                              number_format($this->getNumberOfScanCapableDevices()),
+                                              number_format($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getNumberOfScanCapableDevices())
                                          ));
             $scanCapableGraph->addColors(array(
                                               "E21736",
@@ -2967,7 +2968,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                                         "Not fax capable"
                                    ));
             $faxCapable->setLabels(array(
-                                        "$faxPercentage%"
+                                        number_format($this->getNumberOfFaxCapableDevices()),
+                                        number_format($numberOfIncludedDevices - $this->getNumberOfFaxCapableDevices())
                                    ));
             $faxCapable->addColors(array(
                                         "E21736",
