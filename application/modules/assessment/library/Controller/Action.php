@@ -183,6 +183,15 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             );
         }
 
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_FLEET_ATTRIBUTES))
+        {
+            $availableReportsArray["FleetAttributes"] = array(
+                "pagetitle" => "Fleet Attributes",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/assessment/report_fleetattributes/index')
+            );
+        }
+
         $this->view->availableReports = $availableReportsArray;
     }
 

@@ -22,6 +22,7 @@ class My_Feature
     const ASSESSMENT_PRINTING_DEVICE_LIST            = "assessment_printing_device_list";
     const ASSESSMENT_SOLUTION                        = "assessment_solution";
     const ASSESSMENT_LEASE_BUYBACK                   = "assessment_lease_buyback";
+    const ASSESSMENT_FLEET_ATTRIBUTES                = "assessment_fleet_attributes";
 
     /**
      * @var My_Feature_AdapterInterface
