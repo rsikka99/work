@@ -560,6 +560,13 @@
                             <action>index</action>
                             <resource>quotegen__devicesetup__index</resource>
                         </viewalldevices>
+                        <viewalltoners>
+                            <label>All Toners</label>
+                            <module>hardwarelibrary</module>
+                            <controller>toner</controller>
+                            <action>index</action>
+                            <resource>hardwarelibrary__toner__index</resource>
+                        </viewalltoners>
                         <updatepricing>
                             <label>Bulk Hardware/Pricing Updates</label>
                             <module>proposalgen</module>

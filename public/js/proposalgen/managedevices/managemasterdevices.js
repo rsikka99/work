@@ -133,15 +133,12 @@ function createOrEdit(formName, shouldAssign)
             // Reload our grid
             $("#" + formName.substr(0, formName.length - 4)).trigger('reloadGrid');
 
-            // Special Case, We want to reload more than one grid when available toners is changed
-            if (xhr.id > 0 && shouldAssign && isAllowed == true && masterDeviceId > 0)
-            {
-                $("#availableTonersForm").trigger("createTonerSuccess", xhr.id);
-            }
-            else if (formName.substr(0, formName.length - 4) == 'availableToners')
+            if (formName.substr(0, formName.length - 4) == 'availableToners')
             {
                 $("#assignedToners").trigger('reloadGrid');
             }
+
+            $("#availableTonersForm").trigger("createTonerSuccess", xhr.id);
         },
         error   : function (xhr)
         {

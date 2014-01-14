@@ -564,9 +564,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         $db          = Zend_Db_Table::getDefaultAdapter();
 
         $replace_mode = $this->_getParam('replace_mode', '');
-        $replace_id   = $this->_getParam('replace_toner_id', 0);
-        $with_id      = $this->_getParam('with_toner_id', 0);
+        $replace_id   = (int)$this->_getParam('replace_toner_id', 0);
+        $with_id      = (int)$this->_getParam('with_toner_id', 0);
         $apply_all    = $this->_getParam('chkAllToners', 0);
+
+        if ($apply_all == 'true')
+        {
+            $apply_all = true;
+        }
 
         // GET TONER
         $toner          = Proposalgen_Model_Mapper_Toner::getInstance()->find($replace_id);
@@ -590,7 +595,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     // REPLACEMENT TONER (with_id)
                     $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $deviceToner->master_device_id));
                     $device_toner->toner_id = $with_id;
-                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
+                    Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
                     $toner_count += 1;
                 }
                 $message = "The toner has been replaced and deleted successfully.";
@@ -600,7 +605,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             {
                 if ($with_id > 0)
                 {
-
                     // LOOP THROUGH ALL DEVICES AND UPDATE TO REPLACEMENT TONER
                     // ID ($with_id)
                     foreach ($deviceToners as $deviceToner)
@@ -609,12 +613,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                         if ($apply_all == 1)
                         {
-
                             // UPDATE ALL DEVICES WITH THIS TONER (replace_id)
                             // TO REPLACEMENT TONER (with_id)
                             $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
                             $device_toner->toner_id = $with_id;
-                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
+                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
                             $toner_count += 1;
                         }
                         else
@@ -638,11 +641,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                                 // (with_id)
                                 $device_toner           = Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($replace_id, $master_device_id));
                                 $device_toner->toner_id = $with_id;
-                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($device_toner);
+                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($device_toner);
                                 $toner_count += 1;
                             }
                         }
                     }
+
                     $this->_flashMessenger->addMessage(array(
                                                             "success" => "The toner has been replaced and deleted successfully."
                                                        ));

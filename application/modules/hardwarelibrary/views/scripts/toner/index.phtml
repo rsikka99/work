@@ -1,0 +1,132 @@
+<?php
+$this->headScript()->appendFile($this->baseUrl('js/hardwarelibrary/toner/toners.js'))
+     ->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
+     ->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'));
+$this->headScript()->captureStart('append', 'text/javascript'); ?>
+var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false');?>
+<?php
+$this->headScript()->captureEnd();
+?>
+<div class="page-header">
+    <h1>Hardware Library -
+        <small>All Toners</small>
+    </h1>
+</div>
+<div id="toners_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+    Manufacturer:
+    <input id="tonersSelectManufacturer" type="text" name="tonersSelectManufacturer" class="input-large" />
+    <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='tonersClearManSearch' style="margin-left:4px" />
+    Filter:
+    <select id="tonersFilter" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
+        <option value="dealerSku">SKU</option>
+        <option value="tonerColorId">Color</option>
+        <option value="isSystemDevice">Unapproved</option>
+    </select>
+    <input type="text" id="tonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
+    <select id="tonersCriteriaList" name="tonersCriteriaList" class="input-medium criteriaList" style="display:none;margin-bottom:0px">
+        <?php
+        foreach ($this->tonerColors as $tonerColor)
+        {
+            ?>
+            <option value="<?php echo $tonerColor->tonerColorId; ?>"><?php echo $tonerColor->tonerColorName; ?></option>
+        <?php
+        }
+        ?>
+    </select>
+    <input id="tonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
+    <input id="tonersReset" type="button" value="Reset" class="btn btn-mini btn-inverse" />
+</div>
+<table id="availableToners"></table>
+<div id='availableTonersPager'></div>
+<div class="modal hide" id="tonersModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center"><span id="tonersTitle"></span></h3>
+    </div>
+    <div class="modal-body">
+        <div class="model-header">
+            <h3 class="text-center"><span id="availableTonersTitle"></span></h3>
+        </div>
+        <form id="availableTonersForm" class="form-horizontal form-center-actions">
+            <?php echo $this->availableTonersForm; ?>
+        </form>
+        <div style="text-align: center;padding-bottom:10px">
+            <input type="button" class="btn btn-primary" value="Save" id="availableTonersFormBtn" onclick="javascript: createOrEdit('availableTonersForm', true);" />
+            <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
+        </div>
+        <div id="deleteColorId"></div>
+    </div>
+</div>
+<div id="deleteId"></div>
+
+<div class="modal hide masterDeviceModal" id="replacementTonersModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+
+        <h3 style="text-align: center"><span id="aTitle"></span></h3>
+    </div>
+    <div class="modal-body">
+        <h3 class="text-center">Affected Devices</h3>
+
+        <div class="form-horizontal">
+            <span id="affectedDevicesText"></span>
+            <table id="affectedReplacementToners"></table>
+            <div id="affectedReplacementToners_Pager"></div>
+            <h3 id="selectReplacementText" class="text-center"></h3>
+
+            <div id="replacementToners_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+                Manufacturer:
+                <input id="replacementTonersSelectManufacturer" type="text" name="replacementTonersSelectManufacturer" class="input-large" />
+                <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='replacementTonersClearManSearch' style="margin-left:4px" />
+                Filter:
+                <select id="replacementTonersFilter" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
+                    <option value="dealerSku">Your SKU</option>
+                    <option value="sku">MFG. Part #</option>
+                </select>
+                <input type="text" id="replacementTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
+                <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
+                <input id="replacementTonersReset" type="button" value="Reset" class="btn btn-mini btn-inverse" />
+            </div>
+            <table id="replacementToners"></table>
+            <div id="replacementToners_Pager"></div>
+            <div style="text-align: center">
+                <span class="text-center">Apply to all devices using this toner?</span>
+                </br>
+                <div class="switch" data-on-label="Yes" data-off-label="No" data-off="danger" data-on="success">
+                    <input type="checkbox" id="replacementTonersApplyToAll" />
+                </div>
+            </div>
+            <br />
+
+            <div style="text-align: center">
+                <input type="button" class="btn btn-primary" value="Save" id="replacementTonersFormBtn" onclick="javascript: replaceToner();" />
+                <input type="button" class="btn" value="Cancel" data-dismiss='modal' " />
+            </div>
+            <input type="hidden" id="replacementTonersTotalCount" />
+            <input type="hidden" id="replacementTonersDeviceCount" />
+        </div>
+    </div>
+</div>
+<div class="modal hide" id="alertCannotDelete">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h4 style="text-align: center">You do not have permission to delete this toner.</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div style="text-align:center">
+                <input type="button" class="btn btn-primary" value="Ok" data-dismiss="modal" style="margin-bottom: 4px" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hide" id="deleteModal">
+    <div class="modal-body">
+        <div class="text-center">
+            <form id="deleteForm" class="form-horizontal form-center-actions">
+                <?php echo $this->delete; ?>
+            </form>
+        </div>
+    </div>
+</div>

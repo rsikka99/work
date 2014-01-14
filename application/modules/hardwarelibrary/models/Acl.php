@@ -7,6 +7,7 @@ class Hardwarelibrary_Model_Acl
 
     const RESOURCE_HARDWARELIBRARY_INDEX_INDEX      = "hardwarelibrary__index__index";
     const RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX = "hardwarelibrary__quote_index__index";
+    const RESOURCE_HARDWARELIBRARY_TONER_WILDCARD   = "hardwarelibrary__toner__%";
 
     /**
      * Sets up ACL resources and access for a module
@@ -28,6 +29,7 @@ class Hardwarelibrary_Model_Acl
     {
         $acl->addResource(self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX);
         $acl->addResource(self::RESOURCE_HARDWARELIBRARY_QUOTEINDEX_INDEX);
+        $acl->addResource(self::RESOURCE_HARDWARELIBRARY_TONER_WILDCARD);
     }
 
     /**
@@ -45,5 +47,6 @@ class Hardwarelibrary_Model_Acl
          * Quote User
          */
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HARDWARELIBRARY_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_HARDWARELIBRARY_TONER_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
     }
 }

@@ -862,4 +862,105 @@ WHERE `toners`.`id` IN ({$tonerIdList})
 
         return new Zend_Validate_Db_NoRecordExists($noRecordExistsArray);
     }
+
+    /**
+     * Fetches a list of toners with machine compatibility for a certain color
+     *
+     * @param null     $order
+     * @param int      $count
+     * @param int|null $offset
+     * @param          $filter
+     * @param          $criteria
+     * @param int      $manufacturerId
+     *
+     * @return Proposalgen_Model_Toner []
+     */
+    public function fetchAllTonersWithMachineCompatibility ($order = null, $count = 25, $offset = 0, $filter, $criteria, $manufacturerId = 0)
+    {
+        $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+        $db       = $this->getDbTable()->getAdapter();
+        $sql      = "SELECT
+    DISTINCT
+    toners.id                           AS id,
+    toners.isSystemDevice               AS isSystemDevice,
+    manufacturers.id                    AS manufacturerId,
+    manufacturers.fullname              AS manufacturer,
+    toners.sku                          AS systemSku,
+    dealer_toner_attributes.dealerSku   AS dealerSku,
+    toners.cost                         AS systemCost,
+    dealer_toner_attributes.cost        AS dealerCost,
+    toners.yield,
+    toners.tonerColorId,
+    (SELECT
+    GROUP_CONCAT(CONCAT(manufacturers.fullname, ' ', master_devices.modelName) SEPARATOR ';,')
+     FROM device_toners AS dt2
+         LEFT JOIN master_devices ON master_devices.id = dt2.master_device_id
+         LEFT JOIN manufacturers ON manufacturers.id = master_devices.manufacturerId
+     WHERE dt2.toner_id = dt1.toner_id) AS device_list
+FROM toners
+    LEFT JOIN device_toners dt1 ON toners.id = dt1.toner_id
+    LEFT JOIN manufacturers ON manufacturers.id = toners.manufacturerId
+    LEFT JOIN dealer_toner_attributes ON (dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = {$dealerId})";
+
+        $filterWhere = false;
+
+        if ($filter && $criteria)
+        {
+            if (($filter == 'sku' || $filter == 'dealerSku') && $criteria)
+            {
+                if (!$filterWhere)
+                {
+                    $filterWhere = " WHERE ";
+                }
+                else
+                {
+                    $filterWhere .= " AND ";
+                }
+
+                $filterWhere .= " (toners.sku LIKE '%{$criteria}%' OR dealer_toner_attributes.dealerSku LIKE '%{$criteria}%')";
+            }
+        }
+
+        if ($filter == 'isSystemDevice')
+        {
+            if (!$filterWhere)
+            {
+                $filterWhere = " WHERE ";
+            }
+            else
+            {
+                $filterWhere .= " AND ";
+            }
+
+            $filterWhere .= " toners.isSystemDevice = 0";
+        }
+
+
+        if ($manufacturerId > 0)
+        {
+            if (!$filterWhere)
+            {
+                $filterWhere .= " WHERE ";
+            }
+            else
+            {
+                $filterWhere .= " AND ";
+            }
+
+            $filterWhere .= " toners.manufacturerId = {$manufacturerId}";
+        }
+
+        $sql .= $filterWhere;
+
+        if ($order)
+        {
+            $sql .= " ORDER BY " . $order[0] . " " . $order[1];
+        }
+
+        $sql .= " LIMIT " . $offset . ", " . $count . " ";
+        $stmt   = $db->query($sql);
+        $result = $stmt->fetchAll();
+
+        return $result;
+    }
 }

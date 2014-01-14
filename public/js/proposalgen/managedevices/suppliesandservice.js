@@ -857,6 +857,291 @@ function loadSuppliesAndService()
     });
 
 
+    loadReplacementGrids();
+    var availableTonersSelectManufacturer = $("#availableTonersSelectManufacturer");
+    /**
+     * Available Toners Manufacturer search
+     */
+    availableTonersSelectManufacturer.select2({
+        placeholder       : "Search for manufacturer",
+        minimumInputLength: 1,
+        ajax              : { // instead of writing the function to execute the request we use Select2's convenient helper
+            url     : TMTW_BASEURL + 'proposalgen/managedevices/search-for-manufacturer',
+            dataType: 'json',
+            data    : function (term, page)
+            {
+                return {
+                    manufacturerName: term, // search term
+                    page_limit      : 10
+                };
+            },
+            results : function (data, page)
+            { // parse the results into the format expected by Select2.
+                // since we are using custom formatting functions we do not need to alter remote JSON data
+                return {results: data};
+            }
+        },
+
+        dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+        escapeMarkup    : function (m)
+        {
+            return m;
+        } // we do not want to escape markup since we are displaying html in results
+    });
+
+    availableTonersSelectManufacturer.on("change", function (e)
+    {
+        reloadTonersGrids();
+    });
+
+    var leasedTonerYield = document.getElementById("leasedTonerYield");
+    var leasedTonerControlGroupElement = leasedTonerYield.parentNode.parentNode;
+
+    if (!document.getElementById("isLeased").checked)
+    {
+        leasedTonerControlGroupElement.setAttribute("style", "display:none");
+    }
+
+    $("#isLeased").on("change", function ()
+    {
+        if (document.getElementById("isLeased").checked)
+        {
+            leasedTonerControlGroupElement.setAttribute("style", "display:block");
+        }
+        else
+        {
+            leasedTonerControlGroupElement.setAttribute("style", "display:none");
+        }
+    });
+
+    var availableTonersFilter = $("#availableTonersFilter");
+    var availableTonersCriteria = $("#availableTonersCriteria");
+    var availableTonersCriteriaList = $("#availableTonersCriteriaList");
+
+    availableTonersFilter.change(function ()
+    {
+        if (availableTonersFilter.val() == 'tonerColorId')
+        {
+            availableTonersCriteriaList.css({"display": 'initial'});
+            availableTonersCriteria.css({"display": 'none'});
+        }
+        else if (availableTonersFilter.val() == 'isSystemDevice')
+        {
+            availableTonersCriteriaList.css({"display": 'none'});
+            availableTonersCriteria.css({"display": 'none'});
+        }
+        else
+        {
+            availableTonersCriteriaList.css({"display": 'none'});
+            availableTonersCriteria.css({"display": 'initial'});
+        }
+    });
+
+    $("#availableTonersForm").bind("createTonerSuccess", function (e, masterDeviceId)
+    {
+        assignToner(masterDeviceId);
+    });
+}
+/**
+ * Adds a toner to tonersList
+ * This is used when creating a new Master Device
+ * @param tonerId
+ */
+function assignToner(tonerId)
+{
+    tonersList.push(tonerId);
+    jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
+    reloadTonersGrids();
+
+}
+/**
+ * Removes a toner from tonersList
+ * This is used when creating a new Master Device
+ * @param tonerId
+ */
+function removeToner(tonerId)
+{
+    var index = jQuery.inArray(tonerId + "", tonersList);
+    tonersList.splice(index, 1);
+    jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
+    reloadTonersGrids();
+}
+
+/**
+ * Reloads assigned and unassigned toner jqgrids in Supplies & Service
+ */
+function reloadTonersGrids()
+{
+    var assignedToners = jQuery("#assignedToners").jqGrid();
+    assignedToners.trigger("reloadGrid");
+    var availableTonersGrid = jQuery("#availableToners");
+    availableTonersGrid.trigger("reloadGrid");
+}
+
+/**
+ * Reloads both jqgrids in Supplies & Service
+ */
+function reloadReplacementTonersGrids()
+{
+    jQuery("#affectedReplacementToners").jqGrid().trigger("reloadGrid");
+    jQuery("#replacementToners").jqGrid().trigger("reloadGrid");
+}
+
+/**
+ * Handles toggling the collapsed "Machine Compatibility" Column within the jqgrid
+ * @param type
+ * @param id
+ */
+function view_device_list(type, id)
+{
+    if (document.getElementById(type + '_inner_' + id).style.display == 'none')
+    {
+        document.getElementById(type + '_inner_' + id).style.display = 'block';
+        document.getElementById(type + '_view_link_' + id).innerHTML = 'Collapse...';
+    }
+    else
+    {
+        document.getElementById(type + '_inner_' + id).style.display = 'none';
+        document.getElementById(type + '_view_link_' + id).innerHTML = 'View All...';
+    }
+}
+
+/**
+ * Makes the assign toners modal show
+ */
+function showAssignTonersModal()
+{
+    reloadTonersGrids();
+    var screenWidth = ($(this).width());
+    var assignTonersModal = $('#assignTonersModal');
+    assignTonersModal.modal('show');
+    assignTonersModal.css('width', 960);
+    assignTonersModal.css('left', function ()
+    {
+        var addedLeft = 280;
+        var contentWidth = 960;
+        var left = screenWidth - contentWidth;
+        if (left < 0)
+        {
+            left = 0;
+        }
+        left = left / 2;
+        left += addedLeft;
+        return left;
+    });
+}
+
+/**
+ * Makes the replacement toners modal show
+ */
+function showReplacementTonersModal()
+{
+    var screenWidth = ($(this).width());
+    var replacementTonersModal = $('#replacementTonersModal');
+    replacementTonersModal.modal('show');
+    replacementTonersModal.css('width', 960);
+    replacementTonersModal.css('left', function ()
+    {
+        var addedLeft = 280;
+        var contentWidth = 960;
+        var left = screenWidth - contentWidth;
+        if (left < 0)
+        {
+            left = 0;
+        }
+        left = left / 2;
+        left += addedLeft;
+        return left;
+    });
+}
+/**
+ * deletes a toner and replaces it if needed
+ */
+function replaceToner()
+{
+    // The total amount of devices using this toner
+    var totalCount = $("#replacementTonersTotalCount").val();
+    // The amount of devices that use this toner as the last of their color
+    var deviceCount = $("#replacementTonersDeviceCount").val();
+    // This is the toner we are deleting
+    var replaceId = $("#deleteId").val();
+    // This is the replacement toner we selected
+    var withId = jQuery("#replacementToners").jqGrid('getGridParam', 'selrow');
+    // optional_replace is when the the toner isn't the last of its color, we don't need to choose a replacement toner, but you can
+    // require_replace is when it's last toner of that color is the one we are deleting, we need a replacement toner
+    var replaceMode = ((deviceCount > 0) ? 'require_replace' : 'optional_replace');
+    // Apply to all devices using this toner
+    var applyAll = document.getElementById("replacementTonersApplyToAll").checked;
+
+    // If we require a replacement device and a replacement is not selected then
+    if (!withId && deviceCount > 0)
+    {
+        $("#alertMessageModal").modal().show()
+    }
+    else
+    {
+        $.ajax({
+            url     : TMTW_BASEURL + 'proposalgen/admin/replacetoner?replace_mode=' + replaceMode + '&replace_toner_id=' + replaceId + '&with_toner_id=' + withId + '&chkAllToners=' + applyAll,
+            type    : "post",
+            dataType: "json",
+            success : function ()
+            {
+                $("#replacementTonersModal").modal('hide');
+                reloadTonersGrids();
+            },
+            error   : function (xhr)
+            {
+            }
+        });
+    }
+}
+
+$(document).on("click", "#availableTonersClearManSearch", function ()
+{
+    $("#availableTonersSelectManufacturer").select2("data", null);
+});
+
+$(document).on("click", "#availableTonersSearch", function ()
+{
+    reloadTonersGrids();
+});
+
+$(document).on("click", "#availableTonersReset", function ()
+{
+    var availableTonersCriteria = $("#availableTonersCriteria");
+    $("#availableTonersFilter").val('dealerSku');
+    availableTonersCriteria.val('');
+    $("#availableTonersCriteriaList").css({"display": 'none'});
+    availableTonersCriteria.css({"display": 'initial'});
+    reloadTonersGrids();
+});
+
+$(document).on("click", "#replacementTonersClearManSearch", function ()
+{
+    $("#replacementTonersSelectManufacturer").select2("data", null);
+});
+
+$(document).on("click", "#replacementTonersSearch", function ()
+{
+    reloadReplacementTonersGrids();
+});
+
+$(document).on("click", "#replacementTonersReset", function ()
+{
+    $("#replacementTonersFilter").val('dealerSku');
+    $("#replacementTonersCriteria").val('');
+    reloadReplacementTonersGrids();
+});
+
+function tonerSaveAndApprove()
+{
+    document.getElementById('availableTonerssaveAndApproveHdn').value = 1;
+    createOrEdit('availableTonersForm', false);
+    document.getElementById('availableTonerssaveAndApproveHdn').value = 0;
+}
+
+function loadReplacementGrids()
+{
     /**
      * Affected Toners Grid
      */
@@ -1235,41 +1520,6 @@ function loadSuppliesAndService()
     );
 // Hide the top paging!
     $('#replacementToners_toppager_center').hide();
-    var availableTonersSelectManufacturer = $("#availableTonersSelectManufacturer");
-    /**
-     * Available Toners Manufacturer search
-     */
-    availableTonersSelectManufacturer.select2({
-        placeholder       : "Search for manufacturer",
-        minimumInputLength: 1,
-        ajax              : { // instead of writing the function to execute the request we use Select2's convenient helper
-            url     : TMTW_BASEURL + 'proposalgen/managedevices/search-for-manufacturer',
-            dataType: 'json',
-            data    : function (term, page)
-            {
-                return {
-                    manufacturerName: term, // search term
-                    page_limit      : 10
-                };
-            },
-            results : function (data, page)
-            { // parse the results into the format expected by Select2.
-                // since we are using custom formatting functions we do not need to alter remote JSON data
-                return {results: data};
-            }
-        },
-
-        dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-        escapeMarkup    : function (m)
-        {
-            return m;
-        } // we do not want to escape markup since we are displaying html in results
-    });
-
-    availableTonersSelectManufacturer.on("change", function (e)
-    {
-        reloadTonersGrids();
-    });
 
     var replaceTonersSelectManufacturer = $("#replacementTonersSelectManufacturer");
 
@@ -1286,7 +1536,7 @@ function loadSuppliesAndService()
             data    : function (term, page)
             {
                 return {
-                    q         : term, // search term
+                    manufacturerName         : term, // search term
                     page_limit: 10
                 };
             },
@@ -1309,250 +1559,4 @@ function loadSuppliesAndService()
     {
         reloadReplacementTonersGrids();
     });
-    var leasedTonerYield = document.getElementById("leasedTonerYield");
-    var leasedTonerControlGroupElement = leasedTonerYield.parentNode.parentNode;
-
-    if (!document.getElementById("isLeased").checked)
-    {
-        leasedTonerControlGroupElement.setAttribute("style", "display:none");
-    }
-
-    $("#isLeased").on("change", function ()
-    {
-        if (document.getElementById("isLeased").checked)
-        {
-            leasedTonerControlGroupElement.setAttribute("style", "display:block");
-        }
-        else
-        {
-            leasedTonerControlGroupElement.setAttribute("style", "display:none");
-        }
-    });
-
-    var availableTonersFilter = $("#availableTonersFilter");
-    var availableTonersCriteria = $("#availableTonersCriteria");
-    var availableTonersCriteriaList = $("#availableTonersCriteriaList");
-
-    availableTonersFilter.change(function ()
-    {
-        if (availableTonersFilter.val() == 'tonerColorId')
-        {
-            availableTonersCriteriaList.css({"display": 'initial'});
-            availableTonersCriteria.css({"display": 'none'});
-        }
-        else if (availableTonersFilter.val() == 'isSystemDevice')
-        {
-            availableTonersCriteriaList.css({"display": 'none'});
-            availableTonersCriteria.css({"display": 'none'});
-        }
-        else
-        {
-            availableTonersCriteriaList.css({"display": 'none'});
-            availableTonersCriteria.css({"display": 'initial'});
-        }
-    });
-
-    $("#availableTonersForm").bind("createTonerSuccess", function (e, masterDeviceId)
-    {
-        assignToner(masterDeviceId);
-    });
-}
-/**
- * Adds a toner to tonersList
- * This is used when creating a new Master Device
- * @param tonerId
- */
-function assignToner(tonerId)
-{
-    tonersList.push(tonerId);
-    jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
-    reloadTonersGrids();
-
-}
-/**
- * Removes a toner from tonersList
- * This is used when creating a new Master Device
- * @param tonerId
- */
-function removeToner(tonerId)
-{
-    var index = jQuery.inArray(tonerId + "", tonersList);
-    tonersList.splice(index, 1);
-    jQuery("#assignedToners").jqGrid().setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
-    reloadTonersGrids();
-}
-
-/**
- * Reloads assigned and unassigned toner jqgrids in Supplies & Service
- */
-function reloadTonersGrids()
-{
-    var assignedToners = jQuery("#assignedToners").jqGrid();
-    assignedToners.setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/assigned-toner-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",")});
-    assignedToners.trigger("reloadGrid");
-    var availableTonersGrid = jQuery("#availableToners");
-    availableTonersGrid.setGridParam({url: TMTW_BASEURL + 'proposalgen/managedevices/available-toners-list?masterDeviceId=' + masterDeviceId + "&tonersList=" + tonersList.join(",") + "&tonerColorConfigId=" + $("#tonerConfigId").val()});
-    availableTonersGrid.trigger("reloadGrid");
-}
-
-/**
- * Reloads both jqgrids in Supplies & Service
- */
-function reloadReplacementTonersGrids()
-{
-    jQuery("#affectedReplacementToners").jqGrid().trigger("reloadGrid");
-    jQuery("#replacementToners").jqGrid().trigger("reloadGrid");
-}
-
-/**
- * Handles toggling the collapsed "Machine Compatibility" Column within the jqgrid
- * @param type
- * @param id
- */
-function view_device_list(type, id)
-{
-    if (document.getElementById(type + '_inner_' + id).style.display == 'none')
-    {
-        document.getElementById(type + '_inner_' + id).style.display = 'block';
-        document.getElementById(type + '_view_link_' + id).innerHTML = 'Collapse...';
-    }
-    else
-    {
-        document.getElementById(type + '_inner_' + id).style.display = 'none';
-        document.getElementById(type + '_view_link_' + id).innerHTML = 'View All...';
-    }
-}
-
-/**
- * Makes the assign toners modal show
- */
-function showAssignTonersModal()
-{
-    reloadTonersGrids();
-    var screenWidth = ($(this).width());
-    var assignTonersModal = $('#assignTonersModal');
-    assignTonersModal.modal('show');
-    assignTonersModal.css('width', 960);
-    assignTonersModal.css('left', function ()
-    {
-        var addedLeft = 280;
-        var contentWidth = 960;
-        var left = screenWidth - contentWidth;
-        if (left < 0)
-        {
-            left = 0;
-        }
-        left = left / 2;
-        left += addedLeft;
-        return left;
-    });
-}
-
-/**
- * Makes the replacement toners modal show
- */
-function showReplacementTonersModal()
-{
-    var screenWidth = ($(this).width());
-    var replacementTonersModal = $('#replacementTonersModal');
-    replacementTonersModal.modal('show');
-    replacementTonersModal.css('width', 960);
-    replacementTonersModal.css('left', function ()
-    {
-        var addedLeft = 280;
-        var contentWidth = 960;
-        var left = screenWidth - contentWidth;
-        if (left < 0)
-        {
-            left = 0;
-        }
-        left = left / 2;
-        left += addedLeft;
-        return left;
-    });
-}
-/**
- * deletes a toner and replaces it if needed
- */
-function replaceToner()
-{
-    // The total amount of devices using this toner
-    var totalCount = $("#replacementTonersTotalCount").val();
-    // The amount of devices that use this toner as the last of their color
-    var deviceCount = $("#replacementTonersDeviceCount").val();
-    // This is the toner we are deleting
-    var replaceId = $("#deleteId").val();
-    // This is the replacement toner we selected
-    var withId = jQuery("#replacementToners").jqGrid('getGridParam', 'selrow');
-    // optional_replace is when the the toner isn't the last of its color, we don't need to choose a replacement toner, but you can
-    // require_replace is when it's last toner of that color is the one we are deleting, we need a replacement toner
-    var replaceMode = ((deviceCount > 0) ? 'require_replace' : 'optional_replace');
-    // Apply to all devices using this toner
-    var applyAll = document.getElementById("replacementTonersApplyToAll").checked;
-
-    // If we require a replacement device and a replacement is not selected then
-    if (!withId && deviceCount > 0)
-    {
-        $("#alertMessageModal").modal().show()
-    }
-    else
-    {
-        $.ajax({
-            url     : TMTW_BASEURL + 'proposalgen/admin/replacetoner?replace_mode=' + replaceMode + '&replace_toner_id=' + replaceId + '&with_toner_id=' + withId + '&chkAlLToners=' + applyAll,
-            type    : "post",
-            dataType: "json",
-            success : function ()
-            {
-                $("#replacementTonersModal").modal('hide');
-                reloadTonersGrids();
-            },
-            error   : function (xhr)
-            {
-            }
-        });
-    }
-}
-
-$(document).on("click", "#availableTonersClearManSearch", function ()
-{
-    $("#availableTonersSelectManufacturer").select2("data", null);
-});
-
-$(document).on("click", "#availableTonersSearch", function ()
-{
-    reloadTonersGrids();
-});
-
-$(document).on("click", "#availableTonersReset", function ()
-{
-    var availableTonersCriteria = $("#availableTonersCriteria");
-    $("#availableTonersFilter").val('dealerSku');
-    availableTonersCriteria.val('');
-    $("#availableTonersCriteriaList").css({"display": 'none'});
-    availableTonersCriteria.css({"display": 'initial'});
-    reloadTonersGrids();
-});
-
-$(document).on("click", "#replacementTonersClearManSearch", function ()
-{
-    $("#replacementTonersSelectManufacturer").select2("data", null);
-});
-
-$(document).on("click", "#replacementTonersSearch", function ()
-{
-    reloadReplacementTonersGrids();
-});
-
-$(document).on("click", "#replacementTonersReset", function ()
-{
-    $("#replacementTonersFilter").val('dealerSku');
-    $("#replacementTonersCriteria").val('');
-    reloadReplacementTonersGrids();
-});
-
-function tonerSaveAndApprove()
-{
-    document.getElementById('availableTonerssaveAndApproveHdn').value = 1;
-    createOrEdit('availableTonersForm', false);
-    document.getElementById('availableTonerssaveAndApproveHdn').value = 0;
 }
