@@ -11,11 +11,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * All devices printing less than this are considered underutilized.
      */
-    const UNDERUTILIZED_THRESHHOLD_PERCENTAGE = 0.05;
+    const UNDERUTILIZED_THRESHOLD_PERCENTAGE = 0.05;
     /**
      * All devices that have ages older than this are considered old/
      */
-    const OLD_DEVICE_THRESHHOLD  = 10;
+    const OLD_DEVICE_THRESHOLD  = 10;
     const GALLONS_WATER_PER_PAGE = 2.6; // Number of pages * this gives amount of gallons
     const PAGES_PER_TREE = 7800; //Number of pages divided by this, gives amount of trees
     public static $Proposal;
@@ -587,7 +587,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesUnderusedCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesUnderusedCount++;
                 }
@@ -629,7 +629,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesArray = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE))
+                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE))
                 {
                     $devicesArray[] = $deviceInstance;
                 }
@@ -752,14 +752,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
 
                 //Check to see if it is not underutilized
-                if (($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHHOLD_PERCENTAGE)) == false)
+                if (($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < ($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer()) * self::UNDERUTILIZED_THRESHOLD_PERCENTAGE)) == false)
                 {
                     //Check to see if it is not overUtilized
                     if ($deviceInstance->getUsage($this->getCostPerPageSettingForCustomer()) < 1)
                     {
 
                         //Check to see if it is under the age requirements
-                        if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHHOLD)
+                        if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHOLD)
                         {
                             //Check to see if it is reporting toner levels
                             if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->isLeased)
@@ -1252,7 +1252,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devices = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->getAge() > self::OLD_DEVICE_THRESHHOLD)
+                if ($device->getAge() > self::OLD_DEVICE_THRESHOLD)
                 {
                     $devices[] = $device;
                 }
