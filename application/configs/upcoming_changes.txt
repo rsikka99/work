@@ -1,13 +1,2 @@
-Version 1.4.8
+Version 1.4.9
 -------------
-[ADDED]   JIT Compatibility flag on device features export
-[ADDED]   Managed checkbox on the device summary page
-[ADDED]   toner SKUs to gross margin report
-[ADDED]   isA3, isDuplex, reportsTonerLevels into rms upload
-[ADDED]   assessment fleet attributes report
-[CHANGED] health check green features graphs to show number of devices instead of a percentage
-[ADDED]   toner management in the hardware library
-[CHANGED] health check water per page value from 0.121675 to 2.6 gallons
-[REMOVED] duty cycle from the system
-[REMOVED] JIT Compatibility checkbox on rms upload as it can only be set on master devices. Shows Yes/No instead now
-[REMOVED] the hybrid solution from the solution report
