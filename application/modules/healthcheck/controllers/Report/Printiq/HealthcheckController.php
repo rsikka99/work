@@ -89,7 +89,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
                 break;
         }
 
-        $filename = "healthcheck.$format";
+        $filename = $this->generateReportFilename($this->getHealthcheck()->getClient(), 'Healthcheck') . ".$format";
 
         $this->initReportVariables($filename);
 
