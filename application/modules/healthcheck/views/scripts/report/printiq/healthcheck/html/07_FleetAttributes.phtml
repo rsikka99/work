@@ -13,9 +13,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo $this->jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
     </tr>
     </thead>
     <tbody>
@@ -34,8 +33,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
-            <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
             <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
         </tr>
     <?php endforeach; ?>
@@ -51,8 +49,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo $this->jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
         <th style="vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
@@ -75,9 +73,9 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
             <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo $this->jit; ?> compatible device.</td>
+            <td>Migrate all page volume to <?php echo My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -92,8 +90,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Suggested Max. Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Suggested Max. Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo $this->jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
         <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
@@ -115,9 +113,9 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
             <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate excess page volume to an <?php echo $this->jit; ?> compatible device.</td>
+            <td>Migrate excess page volume to an <?php echo My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -131,8 +129,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo $this->jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
         <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
@@ -152,9 +150,9 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
             <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to a newer <?php echo $this->jit; ?> compatible device.</td>
+            <td>Migrate all page volume to a newer <?php echo My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>
@@ -168,8 +166,8 @@ $healthcheckViewModel = $this->healthcheckViewModel;
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Volume</strong></th>
         <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Monthly Cost</strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo $this->jit; ?></strong></th>
-        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo $this->jit; ?> Program</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
         <th style="width: 220px;vertical-align: middle" class="center"><strong>Suggested Action</strong></th>
     </tr>
     </thead>
@@ -190,9 +188,9 @@ $healthcheckViewModel = $this->healthcheckViewModel;
             <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>%</td>
-            <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
             <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
-            <td>Migrate all page volume to <?php echo $this->jit; ?> compatible device.</td>
+            <td>Migrate all page volume to <?php echo My_Brand::$jit; ?> compatible device.</td>
         </tr>
     <?php endforeach; ?>
     </tbody>

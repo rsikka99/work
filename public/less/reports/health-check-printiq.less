@@ -1,0 +1,43 @@
+#htmlReportContainer.health-check {
+
+    .printiq-title-page-logo {
+        float : right;
+    }
+
+    .printiq-title-page-text {
+        line-height : 30px;
+        font-size   : 20px;
+        margin-top  : 40px;
+        color       : @reportWhiteTitlePageTextColor
+    }
+
+    .printiq-title-page-header {
+        line-height : 35px;
+        font-size   : 25px;
+    }
+
+    .printiq-description {
+        padding-top      : 70px;
+        padding-left     : 40px;
+        background-color : @reportTitlePageTitleBackgroundColor;
+        height           : 300px;
+        width            : 100%;
+        color            : white;
+    }
+
+    .printiq-large-description {
+        font-size   : 22px;
+        line-height : 26px;
+    }
+
+    .printiq-small-description {
+        padding-top     : 40px;
+        li:before { content : "-"; position : relative; left : -5px; }
+        li {
+            padding-bottom : 0px;
+            font-size      : 15px;
+        }
+
+        list-style-type : none;
+    }
+}

@@ -12,7 +12,7 @@ return array(
 
     "brandName"                                 => "Print IQ",
     "companyName"                               => "Office Depot",
-    "companyNameFull"                           => "Office Depot Print IQ Essentials",
+    "companyNameFull"                           => "Office Depot Print IQ Essentials (ATR)",
     "jit"                                       => "ATR",
     "jitName"                                   => "Office Depot ATR",
     "jitFullName"                               => "Office Depot At The Ready (ATR)",

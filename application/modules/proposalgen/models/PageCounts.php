@@ -214,6 +214,8 @@ class Proposalgen_Model_PageCounts
             $this->_combinedPageCount = new Proposalgen_Model_PageCount();
             $this->_combinedPageCount->add($this->_blackPageCount);
             $this->_combinedPageCount->add($this->_colorPageCount);
+            $this->_combinedPageCount->add($this->_printA3BlackPageCount);
+            $this->_combinedPageCount->add($this->_printA3ColorPageCount);
         }
 
         return $this->_combinedPageCount;

@@ -10,7 +10,6 @@ class Healthcheck_ViewModel_Devices
      */
     public $allDeviceInstances;
 
-
     /**
      * @var Proposalgen_Model_DeviceInstancesGroup
      */
@@ -36,6 +35,10 @@ class Healthcheck_ViewModel_Devices
      */
     public $unmappedDeviceInstances;
 
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $a3DeviceInstances;
 
     /**
      * @var Healthcheck_Model_Healthcheck
@@ -84,6 +87,7 @@ class Healthcheck_ViewModel_Devices
             $this->leasedDeviceInstances      = new Proposalgen_Model_DeviceInstancesGroup();
             $this->purchasedDeviceInstances   = new Proposalgen_Model_DeviceInstancesGroup();
             $this->unmappedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
+            $this->a3DeviceInstances          = new Proposalgen_Model_DeviceInstancesGroup();
 
             /*
              * Sort our devices into their categories
@@ -116,6 +120,11 @@ class Healthcheck_ViewModel_Devices
                         else
                         {
                             $this->purchasedDeviceInstances->add($deviceInstance);
+                        }
+
+                        if ($masterDevice->isA3)
+                        {
+                            $this->a3DeviceInstances->add($deviceInstance);
                         }
 
                         // Might as well process the overrides now too

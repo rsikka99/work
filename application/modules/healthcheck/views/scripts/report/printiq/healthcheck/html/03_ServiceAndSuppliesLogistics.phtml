@@ -5,8 +5,9 @@ $graphs = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Service and Supplies Logistics</div>
 <div class="pheader">Printing Device Management Breakdown</div>
-<p>Different types of printing devices are managed in different ways: newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>
+<p>Printing devices can be managed in different ways; networked printers can be managed with remote monitoring software; leased multifunction devices can be managed by a dealer who sold the machine; and devices not connected to the network, such as inkjets and some older printers, are difficult to manage because they may not be capable for remote monitoring.</p>
 <br />
+<p>See below for results in your environment:</p>
 <div class="center">
     <table>
         <tbody>
@@ -22,7 +23,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="pheader">Number of Printing Device Models and Supply Types</div>
 <p>Out of your
     <strong><?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
-    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type. Models with less than or equal to 0.7% of the total device count are put into the "Other" group.
+    <strong><?php echo $healthcheckViewModel->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
 </p>
 <div class="center">
     <img src="<?php echo $graphs['UniqueDevicesGraph'] ?>" /> <!--  Giant pie chart -->
@@ -90,9 +91,9 @@ $tableData = array();
         </tr>
     <?php endforeach; ?>
 </table>
-<p>By using printing devices that use the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. <?php echo $this->reportName ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
+<p>By using printing devices that use the same supplies, you can reduce the amount of cash tied up in supplies inventory and the amount of storage space required. <?php echo My_Brand::$companyName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.</p>
 
-<div class="pheader">Number of Printing Device Vendors</div>
+<div class="pheader">Number of Printing Vendors</div>
 <p>Out of your <?php echo count($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances()) ?>
     networked printing devices, you have <strong>
         <?php echo count($healthcheckViewModel->getDeviceVendorCount());
@@ -102,26 +103,24 @@ $tableData = array();
     <img src="<?php echo $graphs['PercentPerDeviceBrand']; ?>" />
 </div>
 
-<div class="pheader">Number of Printing Devices Compatible with <?php echo $this->jitName ?></div>
+<div class="pheader">Number of Printing Devices Compatible with <?php echo My_Brand::$companyNameFull; ?></div>
 <p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
-    <strong><?php echo count($healthcheckViewModel->getIncludedDevicesReportingTonerLevels()); ?></strong> that are compatible with <?php echo $this->jitFullName ?> and <?php echo count($healthcheckViewModel->getIncludedDevicesNotReportingTonerLevels()) ?>
-    devices that are not compatible. These non-compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
+    <strong><?php echo count($healthcheckViewModel->getIsManagedDevices()); ?></strong> devices that are managed,  <?php echo count($healthcheckViewModel->getUnManagedDevices()); ?> devices that are unmanaged and <?php echo count($healthcheckViewModel->getUnmanagedJitCompatibleDevices()) ?> devices compatible with <?php echo $this->jitFullName ?>. These unmanaged devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
 </p>
 <br />
 <div class="center">
     <table>
         <tbody>
         <tr>
-            <td><img src="<?php echo $graphs['CompatibleJITBarGraph']; ?>" /></td>
+            <td><img src="<?php echo $graphs['UnmanagedVsManagedDevices']; ?>" /></td>
             <!-- Devices leased/Devices Purchased -->
-            <td><img src="<?php echo $graphs['PagesPrintedJITPieGraph']; ?>" /></td>
+            <td><img src="<?php echo $graphs['PagesWithOrWithoutJIT']; ?>" /></td>
             <!-- Monthly pages on leased MFPs/Monthly pages on devices not leased -->
         </tr>
         </tbody>
     </table>
 </div>
 
-<div class="pheader">Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs</div>
-<p>You are saving money by moving to private brand toner for the machines that are on your <?php echo $this->jit; ?> Program.</p>
-<p>MPSToolbox.com analyzed your usage on your ink and toner spend and you can save an additional <?php echo $this->currency($healthcheckViewModel->calculateHalfDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually(), array('precision' => 2)) ?> over the next 6 months by moving to the suggested items on the attached analysis.</p>
+<div class="pheader">Estimated OEM Toner Costs vs. Compatible Toner Costs</div>
+<p>From the review of your toner purchases, you are saving <?php echo $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostMonthlyAndCompMonthly());?> a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately <?php echo $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually())?>. That is a <?php echo number_format($healthcheckViewModel->calculateDifferencePercentageBetweenOemTotalCostAnnuallyAndCompAnnually() * 100);?>% savings for that time period.</p>

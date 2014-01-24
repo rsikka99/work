@@ -145,8 +145,8 @@ foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthc
     $expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber) ? : "Unknown"), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) . '%', null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), null, 'nospacing_centeralign');
-    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->calculateCostPerPage($healthcheckViewModel->getCostPerPageSettingForCustomer())->colorCostPerPage, array('precision' => 4)), null, 'nospacing_centeralign');
-    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->calculateMonthlyColorCost($healthcheckViewModel->getCostPerPageSettingForCustomer()), array('precision' => 2)), null, 'nospacing_centeralign');
+    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin()), array('precision' => 4)), null, 'nospacing_centeralign');
+    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin()), array('precision' => 2)), null, 'nospacing_centeralign');
     $ctr++;
     if ($ctr > 2)
     {

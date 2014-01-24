@@ -6,27 +6,37 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <div class="header">
         <div class="title-page-logo-box-wrapper">
             <div class="title-page-logo-box">
-                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
+                <img class="printiq-title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
             </div>
         </div>
     </div>
-    <div class="title-page-report-title">
-        <h2>Health Check</h2>
-    </div>
-    <div class="title-page-customer-details">
-        <h3>Prepared for:
+    <div class="right printiq-title-page-text">
+        <div class="printiq-title-page-header">Health Check</div>
+        <div><i>Prepared for:</i></div>
+        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->companyName; ?></div>
+        <div>
             <?php
-            if (strlen($healthcheckViewModel->healthcheck->getClient()->companyName) > 26)
-            {
-                echo "<br/>";
-            }
-
-            echo $healthcheckViewModel->healthcheck->getClient()->companyName;
+            echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine1 . ((strlen($healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2)) > 0 ? ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2 : "");
             ?>
-        </h3>
+        </div>
+        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode ?></div>
+        <div><?php echo $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry()) ?></div>
+    </div>
+    <br />
 
-        <h3><?php echo $healthcheckViewModel->getDateReportPrepared(); ?></h3>
+    <div class="printiq-description">
+        <p class="printiq-large-description">
+            Together, we'll identify how our world-class<br />
+            Managed Print Services can meet all of your print<br />
+            requirements, create a cost-efficient print environment and<br />
+            impact your bottom line. We can offer:
+        </p>
 
-        <p><?php echo nl2br($healthcheckViewModel->healthcheck->getClient()->getAddress()); ?></p>
+        <ul class="printiq-small-description">
+            <li>A dedicated account team ready to help</li>
+            <li>Highly trained, managed print specialists to help ensure maximum productivity</li>
+            <li>Professional partnerships with OEM brands</li>
+            <li>Best-in-class solutions to save you time and money</li>
+        </ul>
     </div>
 </div>
