@@ -1,0 +1,44 @@
+<?php
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+$section->addPageBreak();
+$section->addTitle('Survey Assumptions', 1);
+
+$section->addText("Q: How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?", "bold_text");
+$section->addText(sprintf('A: %1$s / year', $this->currency($assessmentViewModel->getCostOfInkAndToner($customerCostPerPageSetting), array('precision' => 2))));
+
+$section->addText("Q: How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)?", "bold_text");
+$section->addText(sprintf('A: %1$s / year',$this->currency($assessmentViewModel->getEstimatedAnnualCostOfService(), array('precision' => 2))  ));
+
+$section->addText("Q: What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?", "bold_text");
+$section->addText(sprintf('A: %1$s / order', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder, array('precision' => 2))  ));
+
+$section->addText("Q: What is the average hourly rate for IT personnel involved in managing printing devices?", "bold_text");
+$section->addText(sprintf('A: %1$s / hour',$this->currency($assessmentViewModel->getAverageITRate(), array('precision' => 2))   ));
+
+$section->addText("Q: How many times per month does your organization order printer supplies?", "bold_text");
+$section->addText(sprintf('A: %1$s / month', $assessmentViewModel->getNumberOfOrdersPerMonth()  ));
+
+$section->addText("Q: How many hours per week do IT personnel spend servicing and supporting printers?", "bold_text");
+$section->addText(sprintf('A: %1$s / hours',$assessmentViewModel->getWeeklyITHours()   ));
+
+$section->addText("Q: How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet?", "bold_text");
+$section->addText(sprintf('A: %1$s repairs / month', $assessmentViewModel->getNumberOfRepairs()   ));
+
+$section->addText("Q: Monochrome Page Coverage", "bold_text");
+$section->addText(sprintf('A: %1$s%%',  $assessmentViewModel->getPageCoverageBlackAndWhite() ));
+
+$section->addText("Q: Color Page Coverage", "bold_text");
+$section->addText(sprintf('A: %1$s%%', $assessmentViewModel->getPageCoverageColor()  ));
+
+$section->addText("Q: What percent of your print volume is done on inkjet and other desktop printers?", "bold_text");
+$section->addText(sprintf('A: %1$s%%', $assessmentViewModel->getPercentPrintingDoneOnInkjet()  ));
+
+$section->addText("Q: How long does it take, on average, for a printer to be fixed after it has broken down?", "bold_text");
+$section->addText(sprintf('A: %1$s hours', $assessmentViewModel->getAverageTimeBetweenBreakdownAndFix()  ));

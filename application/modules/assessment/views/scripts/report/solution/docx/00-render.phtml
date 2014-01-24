@@ -1004,6 +1004,75 @@ $printiqplusdevicesTable = (object)array(
         )
 );
 
+$assumptionsTable = (object)array(
+    "tablestyle"  => array(
+        'cellMarginTop'    => 50,
+        'cellMarginRight'  => 50,
+        'cellMarginBottom' => 50,
+        'cellMarginLeft'   => 50
+    ),
+    "leftalign"   => "nospacing",
+    "centeralign" => "nospacing_centeralign",
+    "rightalign"  => "nospacing_rightalign",
+    "col1Width"   => 10200,
+    "col2Width"   => 1600,
+    "header"      => (object)array(
+            "rowheight"      => null,
+            "fontStyle"      => "table_header",
+            "cell"           => array(
+                "borderTopSize"   => 1,
+                "borderRightSize" => 1,
+                "borderLeftSize"  => 1,
+                "bgColor"         => $header_color,
+                "valign"          => "center"
+            ),
+            "nobottomborder" => array(
+                "borderTopSize"   => 1,
+                "borderRightSize" => 1,
+                "borderLeftSize"  => 1,
+                "bgColor"         => $header_color,
+                "valign"          => "center"
+            ),
+            "notopborder"    => array(
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $header_color,
+                "valign"           => "center"
+            )
+        ),
+    "row"         => (object)array(
+            "rowheight"     => null,
+            "fontStyle"     => 'table_body',
+            "cell"          => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            ),
+            "highlightcell" => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "bgColor"          => $highlight_color,
+                "valign"           => "center"
+            )
+        ),
+    "footer"      => (object)array(
+            "rowheight" => null,
+            "fontStyle" => 'table_footer',
+            "cell"      => array(
+                "borderTopSize"    => 1,
+                "borderRightSize"  => 1,
+                "borderBottomSize" => 1,
+                "borderLeftSize"   => 1,
+                "valign"           => "center"
+            )
+        )
+);
+
 /**
  * Next Steps Table
  */
@@ -1050,6 +1119,7 @@ $nextStepsTable = (object)array(
  */
 $styles = (object)array(
     "tables" => (object)array(
+            "assumptions"            => $assumptionsTable,
             "truecosts"              => $trueCostsTable,
             "estimatedAnnualSavings" => $estimatedAnnualSavingsTable,
             "totalAnnualSavings"     => $totalAnnualSavingsTable,
@@ -1057,7 +1127,7 @@ $styles = (object)array(
             "printiqpluscosts"       => $printiqpluscostsTable,
             "printiqplussummary"     => $printiqplussummaryTable,
             "addtionalReplacements"  => $addtionalReplacementsTable,
-            "nextsteps"              => $nextStepsTable
+            "nextsteps"              => $nextStepsTable,
         )
 );
 
@@ -1082,6 +1152,7 @@ $this->partial("report/solution/docx/01_titlepage.phtml", $titledata);
 $this->partial("report/solution/docx/02_yourprintiq.phtml", $data);
 $this->partial("report/solution/docx/03_evaluatingthetruecost.phtml", $data);
 $this->partial("report/solution/docx/04_solution1.phtml", $data);
+$this->partial("report/solution/docx/05_assumptions.phtml", $data);
 $this->partial("report/solution/docx/06_additionalreplacements.phtml", $data);
 $this->partial("report/solution/docx/07_businessprint.phtml", $data);
 $this->partial("report/solution/docx/08_nextsteps.phtml", $data);

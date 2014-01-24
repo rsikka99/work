@@ -100,17 +100,21 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
     public function initReportList ()
     {
         // This is a list of reports that we can view.
-        $availableReportsArray               = array();
-        $availableReportsArray["Reports"]    = array(
+        $availableReportsArray            = array();
+        $availableReportsArray["Reports"] = array(
             "pagetitle" => "Select a report...",
             "active"    => false,
             "url"       => $this->view->baseUrl('/assessment/report_index/index')
         );
-        $availableReportsArray["Assessment"] = array(
-            "pagetitle" => "Assessment",
-            "active"    => false,
-            "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
-        );
+
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT))
+        {
+            $availableReportsArray["Assessment"] = array(
+                "pagetitle" => "Assessment",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/assessment/report_assessment/index')
+            );
+        }
 
         if (My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {

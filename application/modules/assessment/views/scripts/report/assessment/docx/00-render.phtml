@@ -465,7 +465,7 @@ $styles = (object)array(
                         "borderLeftSize"   => 1,
                         "valign"           => "center"
                     )
-                )
+                ),
         )
 );
 
@@ -495,6 +495,7 @@ $this->partial("report/assessment/docx/05_techandproductivity.phtml", $data);
 $this->partial("report/assessment/docx/06_environmental.phtml", $data);
 $this->partial("report/assessment/docx/07_expense.phtml", $data);
 $this->partial("report/assessment/docx/08_summary.phtml", $data);
+$this->partial("report/assessment/docx/09_assumptions.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);

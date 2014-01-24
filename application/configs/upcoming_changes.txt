@@ -2,4 +2,4 @@ Version Pending Changes
 #######################
 Version 1.4.9
 -------------
-[ADDED]   assessment utilization report
+[ADDED]   assumption inside the solution

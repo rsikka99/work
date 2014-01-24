@@ -1,0 +1,42 @@
+<?php
+/* @var $assessmentViewModel Assessment_ViewModel_Assessment */
+$assessmentViewModel = $this->assessmentViewModel;
+?>
+<div class="pheader" style="margin: 10pt 0pt;">Survey Assumptions</div>
+<div><strong>Q: How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?</strong></div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer()), array('precision' => 2)); ?> / year</div>
+<br />
+<div>
+    <strong>Q: How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)?</strong>
+</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getEstimatedAnnualCostOfService(), array('precision' => 2)) ?> / year</div>
+<br />
+<div><strong>Q: What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?</strong>
+</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder, array('precision' => 2)); ?> / order</div>
+<br />
+<div><strong>Q: What is the average hourly rate for IT personnel involved in managing printing devices?</strong></div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getAverageITRate(), array('precision' => 2)); ?> / hour</div>
+<br />
+<div><strong>Q: How many times per month does your organization order printer supplies?</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getNumberOfOrdersPerMonth() ?> / month</div>
+<br />
+<div><strong>Q: How many hours per week do IT personnel spend servicing and supporting printers?</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getWeeklyITHours() ?> hours</div>
+<br />
+<div>
+    <strong>Q: How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet?</strong>
+</div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getNumberOfRepairs(); ?> repairs / month</div>
+<br />
+<div><strong>Q: Monochrome Page Coverage</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getPageCoverageBlackAndWhite(); ?>%</div>
+<br />
+<div><strong>Q: Color Page Coverage</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getPageCoverageColor(); ?>%</div>
+<br />
+<div><strong>Q: What percent of your print volume is done on inkjet and other desktop printers?</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getPercentPrintingDoneOnInkjet(); ?>%</div>
+<br />
+<div><strong>Q: How long does it take, on average, for a printer to be fixed after it has broken down?</strong></div>
+<div><strong>A:</strong> <?php echo $assessmentViewModel->getAverageTimeBetweenBreakdownAndFix(); ?> hours</div>
