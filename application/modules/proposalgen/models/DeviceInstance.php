@@ -1420,13 +1420,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             // DO MATH
             if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
             {
-
                 $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting, $this));
-
-                $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->calculatedLaborCostPerPage + $masterDevice->calculatedPartsCostPerPage + $costPerPageSetting->adminCostPerPage;
-                if ($masterDevice->isColor())
+                if (!$this->isManaged)
                 {
-                    $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
+                    $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->calculatedLaborCostPerPage + $masterDevice->calculatedPartsCostPerPage + $costPerPageSetting->adminCostPerPage;
+                    if ($masterDevice->isColor())
+                    {
+                        $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
+                    }
                 }
             }
 
@@ -1480,7 +1481,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
         $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
-
         if ($blackToColorRatio != null)
         {
             return $monoCostPerPage * $this->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly();

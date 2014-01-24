@@ -851,18 +851,27 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
             // Initialize the CPP object
-            $costPerPage                        = new Proposalgen_Model_CostPerPage();
-            $costPerPage->monochromeCostPerPage = 0;
-            $costPerPage->colorCostPerPage      = 0;
+            $costPerPage = new Proposalgen_Model_CostPerPage();
 
-            /* @var $toner Proposalgen_Model_Toner */
-            foreach ($this->getCheapestTonerSetByVendor($costPerPageSetting) as $toner)
+            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance && $deviceInstance->isManaged && $costPerPageSetting->customerColorCostPerPage != null && $costPerPageSetting->customerColorCostPerPage != null)
             {
-                if ($toner)
-                {
-                    $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
+                $costPerPage->monochromeCostPerPage = $costPerPageSetting->customerMonochromeCostPerPage;
+                $costPerPage->colorCostPerPage      = $costPerPageSetting->customerColorCostPerPage;
+            }
+            else
+            {
+                $costPerPage->monochromeCostPerPage = 0;
+                $costPerPage->colorCostPerPage      = 0;
 
-                    $costPerPage->add($tonerCostPerPage);
+                /* @var $toner Proposalgen_Model_Toner */
+                foreach ($this->getCheapestTonerSetByVendor($costPerPageSetting) as $toner)
+                {
+                    if ($toner)
+                    {
+                        $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
+
+                        $costPerPage->add($tonerCostPerPage);
+                    }
                 }
             }
 

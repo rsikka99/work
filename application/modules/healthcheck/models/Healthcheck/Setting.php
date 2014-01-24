@@ -142,6 +142,20 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $numberOfSupplyOrdersPerMonth;
 
     /**
+     * The MPS monochrome cost per page
+     *
+     * @var float
+     */
+    public $customerMonochromeCostPerPage;
+
+    /**
+     * The MPS color cost per page
+     *
+     * @var float
+     */
+    public $customerColorCostPerPage;
+
+    /**
      * @var int
      */
     public $customerMonochromeRankSetId;
@@ -242,6 +256,14 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->mpsColorCostPerPage = $params->mpsColorCostPerPage;
         }
+        if (isset($params->customerMonochromeCostPerPage) && !is_null($params->customerMonochromeCostPerPage))
+        {
+            $this->customerMonochromeCostPerPage = $params->customerMonochromeCostPerPage;
+        }
+        if (isset($params->customerColorCostPerPage) && !is_null($params->customerColorCostPerPage))
+        {
+            $this->customerColorCostPerPage = $params->customerColorCostPerPage;
+        }
         if (isset($params->kilowattsPerHour) && !is_null($params->kilowattsPerHour))
         {
             $this->kilowattsPerHour = $params->kilowattsPerHour;
@@ -282,28 +304,30 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                           => $this->id,
-            "pageCoverageMonochrome"       => $this->pageCoverageMonochrome,
-            "pageCoverageColor"            => $this->pageCoverageColor,
-            "useDevicePageCoverages"       => $this->useDevicePageCoverages,
-            "laborCostPerPage"             => $this->laborCostPerPage,
-            "partsCostPerPage"             => $this->partsCostPerPage,
-            "adminCostPerPage"             => $this->adminCostPerPage,
-            "healthcheckMargin"            => $this->healthcheckMargin,
-            "monthlyLeasePayment"          => $this->monthlyLeasePayment,
-            "defaultPrinterCost"           => $this->defaultPrinterCost,
-            "leasedBwCostPerPage"          => $this->leasedBwCostPerPage,
-            "leasedColorCostPerPage"       => $this->leasedColorCostPerPage,
-            "mpsBwCostPerPage"             => $this->mpsBwCostPerPage,
-            "mpsColorCostPerPage"          => $this->mpsColorCostPerPage,
-            "kilowattsPerHour"             => $this->kilowattsPerHour,
-            "averageItHourlyRate"          => $this->averageItHourlyRate,
-            "hoursSpentOnIt"               => $this->hoursSpentOnIt,
-            "costOfLabor"                  => $this->costOfLabor,
-            "costToExecuteSuppliesOrder"   => $this->costToExecuteSuppliesOrder,
-            "numberOfSupplyOrdersPerMonth" => $this->numberOfSupplyOrdersPerMonth,
-            "customerMonochromeRankSetId"  => $this->customerMonochromeRankSetId,
-            "customerColorRankSetId"       => $this->customerColorRankSetId,
+            "id"                            => $this->id,
+            "pageCoverageMonochrome"        => $this->pageCoverageMonochrome,
+            "pageCoverageColor"             => $this->pageCoverageColor,
+            "useDevicePageCoverages"        => $this->useDevicePageCoverages,
+            "laborCostPerPage"              => $this->laborCostPerPage,
+            "partsCostPerPage"              => $this->partsCostPerPage,
+            "adminCostPerPage"              => $this->adminCostPerPage,
+            "healthcheckMargin"             => $this->healthcheckMargin,
+            "monthlyLeasePayment"           => $this->monthlyLeasePayment,
+            "defaultPrinterCost"            => $this->defaultPrinterCost,
+            "leasedBwCostPerPage"           => $this->leasedBwCostPerPage,
+            "leasedColorCostPerPage"        => $this->leasedColorCostPerPage,
+            "mpsBwCostPerPage"              => $this->mpsBwCostPerPage,
+            "mpsColorCostPerPage"           => $this->mpsColorCostPerPage,
+            "customerMonochromeCostPerPage" => $this->customerMonochromeCostPerPage,
+            "customerColorCostPerPage"      => $this->customerColorCostPerPage,
+            "kilowattsPerHour"              => $this->kilowattsPerHour,
+            "averageItHourlyRate"           => $this->averageItHourlyRate,
+            "hoursSpentOnIt"                => $this->hoursSpentOnIt,
+            "costOfLabor"                   => $this->costOfLabor,
+            "costToExecuteSuppliesOrder"    => $this->costToExecuteSuppliesOrder,
+            "numberOfSupplyOrdersPerMonth"  => $this->numberOfSupplyOrdersPerMonth,
+            "customerMonochromeRankSetId"   => $this->customerMonochromeRankSetId,
+            "customerColorRankSetId"        => $this->customerColorRankSetId,
         );
     }
 

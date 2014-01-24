@@ -122,6 +122,20 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
             'append'     => '$ / page',
             'validators' => $cppValidator
         ));
+        if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+        {
+            $this->addElement('text', 'customerMonochromeCostPerPage', array(
+                                                                            'label'      => 'Customer Monochrome Cost Per Page',
+                                                                            'append'     => '$ / page',
+                                                                            'validators' => $cppValidator
+                                                                       ));
+            $this->addElement('text', 'customerColorCostPerPage', array(
+                                                                       'label'      => 'Customer Color Cost Per Page',
+                                                                       'append'     => '$ / page',
+                                                                       'validators' => $cppValidator
+                                                                  ));
+        }
+
         $this->addElement('text', 'kilowattsPerHour', array(
             'label'      => 'Energy Cost',
             'append'     => '$ / KWh',
@@ -206,6 +220,8 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
                                      'adminCostPerPage',
                                      'laborCostPerPage',
                                      'partsCostPerPage',
+                                     'customerMonochromeCostPerPage',
+                                     'customerColorCostPerPage',
                                      'averageItHourlyRate',
                                      $hoursSpentOnIt,
                                      $annualCostOfLabor,

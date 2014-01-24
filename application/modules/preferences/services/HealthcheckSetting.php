@@ -63,6 +63,13 @@ class Preferences_Service_HealthcheckSetting
                 $this->_form->getElement("leasedColorCostPerPage")->setDescription($populateSettings["leasedColorCostPerPage"]);
                 $this->_form->getElement("mpsBwCostPerPage")->setDescription($populateSettings["mpsBwCostPerPage"]);
                 $this->_form->getElement("mpsColorCostPerPage")->setDescription($populateSettings["mpsColorCostPerPage"]);
+
+                if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+                {
+                    $this->_form->getElement("customerMonochromeCostPerPage")->setDescription($populateSettings["customerMonochromeCostPerPage"]);
+                    $this->_form->getElement("customerColorCostPerPage")->setDescription($populateSettings["customerColorCostPerPage"]);
+                }
+                
                 $this->_form->getElement("kilowattsPerHour")->setDescription(number_Format($populateSettings["kilowattsPerHour"], 4));
                 $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"], 4));
                 $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"], 4));

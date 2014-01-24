@@ -387,6 +387,49 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
         $this->addElement($parts_cost);
         $proposalGroup->elements [] = $parts_cost;
 
+        if (My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+        {
+            // Customer Mono CPP
+            $customerMonoCostPerPage = new Zend_Form_Element_Text('customerMonochromeCostPerPage');
+            $customerMonoCostPerPage->setLabel('Customer Monochrome Cost Per Page')
+                                    ->addValidator(new Zend_Validate_Float())
+                                    ->setAttrib('class', 'span2')
+                                    ->setAttrib('maxlength', 10)
+                                    ->setAttrib('style', 'text-align: right')
+                                    ->setDescription('$')
+                                    ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->customerMonochromeCostPerPage, 4))
+                                    ->setAttrib('inputprepend', '$')
+                                    ->setAttrib('inputappend', ' / page')
+                                    ->addValidator(new Zend_Validate_Between(array(
+                                        'min' => 0,
+                                        'max' => 5
+                                    )));
+            $customerMonoCostPerPage->getValidator('Float')->setMessage('Please enter a number.');
+
+            $this->addElement($customerMonoCostPerPage);
+            $proposalGroup->elements [] = $customerMonoCostPerPage;
+
+            // Customer Color CPP
+            $customerColorCostPerPage = new Zend_Form_Element_Text('customerColorCostPerPage');
+            $customerColorCostPerPage->setLabel('Customer Color Cost Per Page')
+                                     ->addValidator(new Zend_Validate_Float())
+                                     ->setAttrib('class', 'span2')
+                                     ->setAttrib('maxlength', 10)
+                                     ->setAttrib('style', 'text-align: right')
+                                     ->setDescription('$')
+                                     ->setAttrib('data-defaultvalue', number_format($this->_defaultSettings->customerColorCostPerPage, 4))
+                                     ->setAttrib('inputprepend', '$')
+                                     ->setAttrib('inputappend', ' / page')
+                                     ->addValidator(new Zend_Validate_Between(array(
+                                         'min' => 0,
+                                         'max' => 5
+                                     )));
+            $customerColorCostPerPage->getValidator('Float')->setMessage('Please enter a number.');
+
+            $this->addElement($customerColorCostPerPage);
+            $proposalGroup->elements [] = $customerColorCostPerPage;
+        }
+
         // Average IT Hourly Rate
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
         $averageItHourlyRate->setLabel('Estimated Average It Hourly Rate')

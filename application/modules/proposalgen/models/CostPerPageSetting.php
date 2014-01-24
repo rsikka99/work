@@ -59,6 +59,20 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      * @var bool
      */
     public $useDevicePageCoverages;
+    
+    /**
+     * The monochrome page coverage
+     *
+     * @var float
+     */
+    public $customerMonochromeCostPerPage;
+
+    /**
+     * The color page coverage
+     *
+     * @var float
+     */
+    public $customerColorCostPerPage;
 
 
     /**
@@ -119,7 +133,16 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         {
             $this->useDevicePageCoverages = $params->useDevicePageCoverages;
         }
+        
+        if (isset($params->customerMonochromeCostPerPage) && !is_null($params->customerMonochromeCostPerPage))
+        {
+            $this->customerMonochromeCostPerPage = $params->customerMonochromeCostPerPage;
+        }
 
+        if (isset($params->customerColorCostPerPage) && !is_null($params->customerColorCostPerPage))
+        {
+            $this->customerColorCostPerPage = $params->customerColorCostPerPage;
+        }
     }
 
     /**
@@ -128,14 +151,16 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "adminCostPerPage"       => $this->adminCostPerPage,
-            "partsCostPerPage"       => $this->partsCostPerPage,
-            "laborCostPerPage"       => $this->laborCostPerPage,
-            "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
-            "pageCoverageColor"      => $this->pageCoverageColor,
-            "monochromeTonerRankSet" => $this->monochromeTonerRankSet,
-            "colorTonerRankSet"      => $this->colorTonerRankSet,
+            "adminCostPerPage"              => $this->adminCostPerPage,
+            "partsCostPerPage"              => $this->partsCostPerPage,
+            "laborCostPerPage"              => $this->laborCostPerPage,
+            "pageCoverageMonochrome"        => $this->pageCoverageMonochrome,
+            "pageCoverageColor"             => $this->pageCoverageColor,
+            "monochromeTonerRankSet"        => $this->monochromeTonerRankSet,
+            "colorTonerRankSet"             => $this->colorTonerRankSet,
             "useDevicePageCoverages" => $this->useDevicePageCoverages,
+            "customerMonochromeCostPerPage" => $this->customerMonochromeCostPerPage,
+            "customerColorCostPerPage"      => $this->customerColorCostPerPage,
         );
     }
 
@@ -149,6 +174,6 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         $monochromeRanks = implode("_", $this->monochromeTonerRankSet->getRanksAsArray());
         $colorRanks      = implode("_", $this->colorTonerRankSet->getRanksAsArray());
 
-        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->useDevicePageCoverages}_monoranks_{$monochromeRanks}_colorranks_{$colorRanks}";
+        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->useDevicePageCoverages}_monoranks_{$monochromeRanks}_colorranks_{$colorRanks}_{$this->customerMonochromeCostPerPage}_{$this->customerColorCostPerPage}";
     }
 }

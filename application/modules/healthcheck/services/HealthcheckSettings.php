@@ -179,9 +179,17 @@ class Healthcheck_Service_HealthcheckSettings
             // Override the setting so the id doesn't get overwritten when we populate
             $this->_defaultSettings->customerMonochromeRankSetId = $this->_healthcheckSettings->customerMonochromeRankSetId;
             $this->_defaultSettings->customerColorRankSetId      = $this->_healthcheckSettings->customerColorRankSetId;
+            $oldCustomerMonochromeCostPerPage                    = $this->_healthcheckSettings->customerMonochromeCostPerPage;
+            $oldCustomerColorCostPerPage                         = $this->_healthcheckSettings->customerColorCostPerPage;
 
             $this->_healthcheckSettings->populate($this->_defaultSettings->toArray());
             $this->_healthcheckSettings->populate($validData);
+
+            if (!My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+            {
+                $this->_healthcheckSettings->customerMonochromeCostPerPage = $oldCustomerMonochromeCostPerPage;
+                $this->_healthcheckSettings->customerColorCostPerPage      = $oldCustomerColorCostPerPage;
+            }
 
             // Restore the Id
             $this->_healthcheckSettings->id = $healthcheckSettingsId;
