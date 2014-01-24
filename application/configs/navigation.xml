@@ -235,8 +235,29 @@
                             <module>assessment</module>
                             <controller>report_solution</controller>
                             <action>index</action>
-                            <resource>assessment__report_solutioncelist__index</resource>
+                            <resource>assessment__report_solution__index</resource>
                         </solution>
+                        <leasebuyback>
+                            <label>Lease Buyback</label>
+                            <module>assessment</module>
+                            <controller>report_leasebuyback</controller>
+                            <action>index</action>
+                            <resource>assessment__report_leasebuyback__index</resource>
+                        </leasebuyback>
+                        <fleetattributes>
+                            <label>Fleet Attributes</label>
+                            <module>assessment</module>
+                            <controller>report_fleetattributes</controller>
+                            <action>index</action>
+                            <resource>assessment__report_fleetattributes__index</resource>
+                        </fleetattributes>
+                        <utilization>
+                            <label>Utilization</label>
+                            <module>assessment</module>
+                            <controller>report_utilization</controller>
+                            <action>index</action>
+                            <resource>assessment__report_utilization__index</resource>
+                        </utilization>
                     </pages>
                 </assessment>
                 <hardwareoptimization>

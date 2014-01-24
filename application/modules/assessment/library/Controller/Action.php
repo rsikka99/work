@@ -192,6 +192,15 @@ class Assessment_Library_Controller_Action extends My_Controller_Report
             );
         }
 
+        if (My_Feature::canAccess(My_Feature::ASSESSMENT_UTILIZATION))
+        {
+            $availableReportsArray["Utilization"] = array(
+                "pagetitle" => "Utilization",
+                "active"    => false,
+                "url"       => $this->view->baseUrl('/assessment/report_utilization/index')
+            );
+        }
+
         $this->view->availableReports = $availableReportsArray;
     }
 

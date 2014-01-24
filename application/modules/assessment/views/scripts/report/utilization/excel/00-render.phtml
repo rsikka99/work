@@ -1,0 +1,67 @@
+<?php
+
+$filename = 'Utilization.xlsx';
+$savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/";
+
+if (!is_dir($savePath))
+{
+    if (!mkdir($savePath, 0777, true))
+    {
+        throw new Exception("Could not open cache folder! PATH:" . $savePath, 0);
+    }
+}
+
+$savePath   = $savePath . $filename;
+$linkToFile = $this->baseUrl("/downloads/client/{$this->clientId}/orderlist/{$this->quoteId}/{$filename}");
+
+// Create a new PHPExcel Object * New PHPExcel objects will have one attached worksheet by default
+/* @var $objPHPExcel PHPExcel */
+$objPHPExcel = $this->phpexcel;
+
+// Objects in memory are held in php memory as serialized objects, reduces memory footprint with little performance hit
+PHPExcel_CachedObjectStorageFactory::cache_in_memory_serialized;
+
+/**
+ * Start of the summary Page
+ */
+
+$sheetCounter = 0;
+$activeSheet  = $objPHPExcel->getActiveSheet();
+$objPHPExcel->setActiveSheetIndex(0);
+$activeSheet->setTitle("Utilization");
+// Start building the document
+if (isset($this->utilizationData[0]))
+{
+    $fieldTitleCounter = 0;
+    foreach ($this->utilizationData[0] as $fieldTitle => $value)
+    {
+        $activeSheet->setCellValueExplicitByColumnAndRow($fieldTitleCounter, 1, $fieldTitle);
+        $activeSheet->getColumnDimensionByColumn($fieldTitleCounter)->setAutoSize(true);
+        $fieldTitleCounter++;
+    }
+}
+
+foreach ($this->utilizationData as $deviceData)
+{
+    $currentRow = $activeSheet->getHighestRow() + 1;
+    $activeSheet->setCellValueByColumnAndRow(0, $currentRow, $deviceData['Manufacturer']);
+    $activeSheet->setCellValueByColumnAndRow(1, $currentRow, $deviceData['Model']);
+    $activeSheet->setCellValueByColumnAndRow(2, $currentRow, $deviceData['IP Address']);
+    $activeSheet->setCellValueByColumnAndRow(3, $currentRow, $deviceData['Serial Number']);
+    $activeSheet->setCellValueByColumnAndRow(4, $currentRow, $deviceData['Monthly Page Volume']);
+    $activeSheet->setCellValueByColumnAndRow(5, $currentRow, $deviceData['Maximum Monthly Recommended Volume']);
+    $activeSheet->setCellValueByColumnAndRow(6, $currentRow, $deviceData['Utilization Percent']);
+
+    $activeSheet->getStyleByColumnAndRow(4, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyleByColumnAndRow(5, $currentRow)->getNumberFormat()->setFormatCode('#,##0');
+    $activeSheet->getStyleByColumnAndRow(6, $currentRow)->getNumberFormat()->applyFromArray(array('code' => PHPExcel_Style_NumberFormat::FORMAT_PERCENTAGE_00));
+}
+
+// Save Excel 2007 file
+$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+$objWriter->save($savePath);
+
+//Clear the workbook from php's memory
+$objPHPExcel->disconnectWorksheets();
+
+echo $this->baseUrl($linkToFile);
