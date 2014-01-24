@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_ViewModel_Devices
  */

@@ -2,35 +2,36 @@
     <h1>Master Device Management</h1>
 </div>
 <div class="clearfix">
-    <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
+    <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
+        <i class="icon-white icon-plus-sign"></i> Create new</a>
 </div>
 <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-<table class="table table-striped table-condensed table-bordered">
-    <thead>
+    <table class="table table-striped table-condensed table-bordered">
+        <thead>
         <tr>
             <th style="width: 30px;">ID</th>
             <th>Device Name</th>
             <th style="width: 120px;">Action</th>
         </tr>
-    </thead>
-    <tbody>
-    	
+        </thead>
+        <tbody>
+
         <?php foreach ($this->paginator->getCurrentItems() as $masterDevice) : /* @var $masterDevice Proposalgen_Model_MasterDevice */ ?>
-        <tr>
-            <td><?php echo $masterDevice->id; ?></td>
-            <td><?php echo $masterDevice->getFullDeviceName(); ?></td>
-            <td>
-                <div class="btn-group">
-	                <a class="btn btn-info" title="View Master Device" href="<?php echo $this->url( array ( 'action' => 'view', 'id' => $masterDevice->id)); ?>"><i class="icon-eye-open"></i></a>
-                    <a class="btn btn-warning" title="Edit Master Device" href="<?php echo $this->url( array ( 'action' => 'edit', 'id' => $masterDevice->id)); ?>"><i class="icon-pencil"></i></a>
-                    <a class="btn btn-danger" title="Delete Master Device" href="<?php echo $this->url(array ( 'action' => 'delete', 'id' => $masterDevice->id)); ?>"><i class="icon-trash"></i></a>
-                </div>
-            </td>
-        </tr>
+            <tr>
+                <td><?php echo $masterDevice->id; ?></td>
+                <td><?php echo $masterDevice->getFullDeviceName(); ?></td>
+                <td>
+                    <div class="btn-group">
+                        <a class="btn btn-info" title="View Master Device" href="<?php echo $this->url(array('action' => 'view', 'id' => $masterDevice->id)); ?>"><i class="icon-eye-open"></i></a>
+                        <a class="btn btn-warning" title="Edit Master Device" href="<?php echo $this->url(array('action' => 'edit', 'id' => $masterDevice->id)); ?>"><i class="icon-pencil"></i></a>
+                        <a class="btn btn-danger" title="Delete Master Device" href="<?php echo $this->url(array('action' => 'delete', 'id' => $masterDevice->id)); ?>"><i class="icon-trash"></i></a>
+                    </div>
+                </td>
+            </tr>
         <?php endforeach; ?>
-    </tbody>
-</table>
-<?php echo $this->paginationControl($this->paginator); ?>
+        </tbody>
+    </table>
+    <?php echo $this->paginationControl($this->paginator); ?>
 <?php else : ?>
     <h1>There are no Master Devices</h1>
 <?php endif; ?>

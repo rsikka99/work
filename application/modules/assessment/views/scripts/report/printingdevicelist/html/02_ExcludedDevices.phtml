@@ -39,10 +39,12 @@ $assessmentViewModel = $this->assessmentViewModel;
                     <div class=" center"><?php echo $SerialNumber; ?></div>
                 </td>
                 <td>
-                    <div class=" left"><?php if ($device->ipAddress) {
+                    <div class=" left"><?php if ($device->ipAddress)
+                        {
                             echo $device->ipAddress;
                         }
-                        else {
+                        else
+                        {
                             echo 'Unknown IP';
                         } ?></div>
                 </td>

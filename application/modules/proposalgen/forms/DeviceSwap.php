@@ -16,35 +16,35 @@ class Proposalgen_Form_DeviceSwap extends Zend_Form
 
         // Manufacturer of the device
         $manufacturerElement = $this->createElement('select', 'manufacturer', array(
-                                                                                   'label'   => 'Manufacturer: ',
-                                                                                   'class'   => 'manufacturerId',
-                                                                                   'attribs' => $attribs
-                                                                              ));
+            'label'   => 'Manufacturer: ',
+            'class'   => 'manufacturerId',
+            'attribs' => $attribs
+        ));
 
         // Device list per manufacturer
         $deviceElement = $this->createElement('select', 'masterDevice', array(
-                                                                             'label'   => 'Device: ',
-                                                                             'attribs' => $attribs
-                                                                        ));
+            'label'   => 'Device: ',
+            'attribs' => $attribs
+        ));
 
         // Add button(s) to form
         $submitButton = $this->createElement('submit', 'addDevice', array(
-                                                                         'label' => 'Add Device'
-                                                                    ));
+            'label' => 'Add Device'
+        ));
         $deleteButton = $this->createElement('submit', 'deleteDevice', array(
-                                                                            'label' => 'Remove Device'
-                                                                       ));
+            'label' => 'Remove Device'
+        ));
         $cancelButton = $this->createElement('submit', 'done', array(
-                                                                    'label' => 'Done'
-                                                               ));
+            'label' => 'Done'
+        ));
 
         $this->addElements(array(
-                                $manufacturerElement,
-                                $deviceElement,
-                                $submitButton,
-                                $deleteButton,
-                                $cancelButton
-                           ));
+            $manufacturerElement,
+            $deviceElement,
+            $submitButton,
+            $deleteButton,
+            $cancelButton
+        ));
 
         $manufacturerMapper       = Proposalgen_Model_Mapper_Manufacturer::getInstance();
         $manufacturers            = $manufacturerMapper->fetchAll();
@@ -64,30 +64,30 @@ class Proposalgen_Form_DeviceSwap extends Zend_Form
          * Form element decorators
          */
         $submitButton->setDecorators(array(
-                                          'ViewHelper',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag'       => 'div',
-                                                  'class'     => 'form-actions',
-                                                  'openOnly'  => true,
-                                                  'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                                              )
-                                          )
-                                     ));
+            'ViewHelper',
+            array(
+                'HtmlTag',
+                array(
+                    'tag'       => 'div',
+                    'class'     => 'form-actions',
+                    'openOnly'  => true,
+                    'placement' => Zend_Form_Decorator_Abstract::PREPEND
+                )
+            )
+        ));
         $deleteButton->setDecorators(array(
-                                          'ViewHelper',
-                                     ));
+            'ViewHelper',
+        ));
         $cancelButton->setDecorators(array(
-                                          'ViewHelper',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag'       => 'div',
-                                                  'closeOnly' => true,
-                                                  'placement' => Zend_Form_Decorator_Abstract::APPEND
-                                              )
-                                          )
-                                     ));
+            'ViewHelper',
+            array(
+                'HtmlTag',
+                array(
+                    'tag'       => 'div',
+                    'closeOnly' => true,
+                    'placement' => Zend_Form_Decorator_Abstract::APPEND
+                )
+            )
+        ));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_DeviceMapping
  */

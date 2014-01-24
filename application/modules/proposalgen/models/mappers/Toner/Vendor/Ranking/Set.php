@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set
  */
@@ -76,8 +77,8 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set extends My_Model_Mapper_
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -96,7 +97,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set extends My_Model_Mapper_
      */
     public function delete ($object)
     {
-        if ($object instanceof  Proposalgen_Model_Toner_Vendor_Ranking_Set)
+        if ($object instanceof Proposalgen_Model_Toner_Vendor_Ranking_Set)
         {
             $whereClause = array(
                 "{$this->col_id} = ?" => $object->id
@@ -126,7 +127,7 @@ class Proposalgen_Model_Mapper_Toner_Vendor_Ranking_Set extends My_Model_Mapper_
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof  Proposalgen_Model_Toner_Vendor_Ranking_Set)
+        if ($result instanceof Proposalgen_Model_Toner_Vendor_Ranking_Set)
         {
             return $result;
         }

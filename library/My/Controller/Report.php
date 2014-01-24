@@ -1,4 +1,5 @@
 <?php
+
 abstract class My_Controller_Report extends Tangent_Controller_Action
 {
     /**
@@ -306,14 +307,15 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      *  Generates a filename for a report
      *
      * @param $clientModel Quotegen_Model_Client
-     * @param $reportName string
+     * @param $reportName  string
      *
      * @return string
      */
     public function generateReportFilename ($clientModel, $reportName)
     {
-        $filter = new Tangent_Filter_Filename();
+        $filter      = new Tangent_Filter_Filename();
         $companyName = $filter->filter($clientModel->companyName);
+
         return $companyName . "_" . $reportName;
     }
 

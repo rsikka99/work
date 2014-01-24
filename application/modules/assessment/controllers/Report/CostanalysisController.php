@@ -13,8 +13,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_CUSTOMER_COST_ANALYSIS))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

@@ -39,7 +39,8 @@ var isAdmin = <?php echo($this->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJET
 
 <div class="well">
     <?php if ($this->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN))
-    { ?>
+    {
+        ?>
         <button id="createNewBtn" class="btn btn-success" style="float:right">Create new</button>
         <br /><br />
     <?php } ?>

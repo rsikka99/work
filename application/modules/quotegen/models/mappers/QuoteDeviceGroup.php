@@ -97,9 +97,9 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     public function findDefaultGroupId ($quoteId)
     {
         return $this->fetch(array(
-                                 "{$this->col_quoteId} = ?" => $quoteId,
-                                 "{$this->col_default} = ?" => 1
-                            ));
+            "{$this->col_quoteId} = ?" => $quoteId,
+            "{$this->col_default} = ?" => 1
+        ));
     }
 
     /**
@@ -123,8 +123,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -287,8 +287,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroup extends My_Model_Mapper_Abstract
     public function fetchDeviceGroupsForQuote ($quoteId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_quoteId} = ?" => $quoteId
-                               ));
+            "{$this->col_quoteId} = ?" => $quoteId
+        ));
     }
 }
 

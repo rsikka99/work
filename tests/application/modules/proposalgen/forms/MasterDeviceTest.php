@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Form_MasterDeviceTest
  */

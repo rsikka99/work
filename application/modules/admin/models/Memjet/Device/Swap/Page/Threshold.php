@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Model_Memjet_Device_Swap_Page_Threshold
  */

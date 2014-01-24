@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_LeasebuybackController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_LEASE_BUYBACK))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

@@ -56,12 +56,12 @@ class Quotegen_View_Helper_Quotemenu extends Zend_View_Helper_Abstract
 
             // Render the menu
             $html = $this->view->MyNavigation()
-                ->menu()
-                ->renderMenu($container, array(
-                                              'minDepth' => 0,
-                                              'maxDepth' => 0,
-                                              'ulClass'  => 'nav nav-pills'
-                                         ));
+                               ->menu()
+                               ->renderMenu($container, array(
+                    'minDepth' => 0,
+                    'maxDepth' => 0,
+                    'ulClass'  => 'nav nav-pills'
+                ));
 
 
             // Bring back it's original visibility

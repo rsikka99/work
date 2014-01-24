@@ -25,8 +25,8 @@ defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV
 
 // Create application, bootstrap, and run
 $application = new Zend_Application('production', array(
-                                                       'config' => array(
-                                                           APPLICATION_PATH . '/configs/global.php',
-                                                           APPLICATION_PATH . '/configs/local.php',
-                                                       )));
+    'config' => array(
+        APPLICATION_PATH . '/configs/global.php',
+        APPLICATION_PATH . '/configs/local.php',
+    )));
 $application->bootstrap();

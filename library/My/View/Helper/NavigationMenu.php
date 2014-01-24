@@ -1,4 +1,5 @@
 <?php
+
 class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 {
 
@@ -32,9 +33,9 @@ class My_View_Helper_NavigationMenu extends Zend_View_Helper_Abstract
 
                 // Get the url and name
                 $url  = $this->view->url(array(
-                                              'controller' => $step->controller,
-                                              'action'     => $step->action
-                                         ));
+                    'controller' => $step->controller,
+                    'action'     => $step->action
+                ));
                 $name = $step->name;
 
                 if ($step->canAccess)

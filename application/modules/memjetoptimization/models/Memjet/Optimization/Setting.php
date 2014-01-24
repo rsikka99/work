@@ -212,7 +212,7 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
             "partsCostPerPage"               => $this->partsCostPerPage,
             "pageCoverageMonochrome"         => $this->pageCoverageMonochrome,
             "pageCoverageColor"              => $this->pageCoverageColor,
-            "useDevicePageCoverages"          => $this->useDevicePageCoverages,
+            "useDevicePageCoverages"         => $this->useDevicePageCoverages,
             "lossThreshold"                  => $this->lossThreshold,
             "blackToColorRatio"              => $this->blackToColorRatio,
             "replacementColorRankSetId"      => $this->replacementColorRankSetId,

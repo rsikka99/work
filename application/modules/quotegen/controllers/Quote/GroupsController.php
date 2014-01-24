@@ -29,8 +29,8 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
             if (isset($values ['goBack']))
             {
                 $this->redirector('index', 'quote_devices', null, array(
-                                                                       'quoteId' => $this->_quoteId
-                                                                  ));
+                    'quoteId' => $this->_quoteId
+                ));
             }
             else
             {
@@ -51,45 +51,45 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->insert($quoteDeviceGroup);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Group '{$quoteDeviceGroup->name}' successfully created."
-                                                           ));
+                            'success' => "Group '{$quoteDeviceGroup->name}' successfully created."
+                        ));
 
                         // Redirect to ourselves
                         $this->redirector(null, null, null, array(
-                                                                 'quoteId' => $this->_quoteId
-                                                            ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below:'
-                                                           ));
+                            'danger' => 'Please correct the errors below:'
+                        ));
                     }
                 }
                 else if (isset($values ['deleteGroup']))
                 {
                     if ($form->isValidPartial(array(
-                                                   'deleteGroup' => $values ['deleteGroup']
-                                              ))
+                        'deleteGroup' => $values ['deleteGroup']
+                    ))
                     )
                     {
                         Quotegen_Model_Mapper_QuoteDeviceGroup::getInstance()->delete($form->getSubForm('deviceQuantity')
                                                                                            ->getValue('deleteGroup'));
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => 'Group Deleted.'
-                                                           ));
+                            'success' => 'Group Deleted.'
+                        ));
 
                         // Redirect to ourselves
                         $this->redirector(null, null, null, array(
-                                                                 'quoteId' => $this->_quoteId
-                                                            ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'You cannot delete this group.'
-                                                           ));
+                            'danger' => 'You cannot delete this group.'
+                        ));
                     }
                 }
                 else if (isset($values ['addDevice']))
@@ -104,9 +104,9 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
 
                         $quoteDeviceGroupDeviceMapper = Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance();
                         $quoteDeviceGroupDevice       = $quoteDeviceGroupDeviceMapper->find(array(
-                                                                                                 $quoteDeviceId,
-                                                                                                 $quoteDeviceGroupId
-                                                                                            ));
+                            $quoteDeviceId,
+                            $quoteDeviceGroupId
+                        ));
 
                         // If we found one, update it, otherwise insert a new one
                         if ($quoteDeviceGroupDevice)
@@ -133,19 +133,19 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         }
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Added the devices successfully."
-                                                           ));
+                            'success' => "Added the devices successfully."
+                        ));
 
                         // Redirect to ourselves
                         $this->redirector(null, null, null, array(
-                                                                 'quoteId' => $this->_quoteId
-                                                            ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below:'
-                                                           ));
+                            'danger' => 'Please correct the errors below:'
+                        ));
                     }
                 }
                 else if (isset($values ['deleteDeviceFromGroup']))
@@ -158,19 +158,19 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                         Quotegen_Model_Mapper_QuoteDeviceGroupDevice::getInstance()->delete($keyPair);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => 'Device deleted successfully.'
-                                                           ));
+                            'success' => 'Device deleted successfully.'
+                        ));
 
                         // Redirect to ourselves
                         $this->redirector(null, null, null, array(
-                                                                 'quoteId' => $this->_quoteId
-                                                            ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'You cannot delete this device.'
-                                                           ));
+                            'danger' => 'You cannot delete this device.'
+                        ));
                     }
                 }
                 else
@@ -218,16 +218,16 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             if ($quantityUpdates > 0)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'success' => 'Your changes to the device quantities have been saved.'
-                                                                   ));
+                                    'success' => 'Your changes to the device quantities have been saved.'
+                                ));
                             }
 
                             // Redirect?
                             if (isset($values ['saveAndContinue']))
                             {
                                 $this->redirector('index', 'quote_pages', null, array(
-                                                                                     'quoteId' => $this->_quoteId
-                                                                                ));
+                                    'quoteId' => $this->_quoteId
+                                ));
                             }
                             else
                             {
@@ -242,15 +242,15 @@ class Quotegen_Quote_GroupsController extends Quotegen_Library_Controller_Quote
                             Tangent_Log::logException($e);
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.'
-                                                               ));
+                                'danger' => 'There was an error saving your changes. Please try again or contact your system administrator.'
+                            ));
                         }
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below:'
-                                                           ));
+                            'danger' => 'Please correct the errors below:'
+                        ));
                     }
                 }
             }

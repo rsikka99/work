@@ -72,8 +72,8 @@ $activeSheet->setCellValue('A1', 'Hardware Device List');
 $activeSheet->mergeCells('A1:E1');
 // Centre the title
 $activeSheet->getStyle("A1:E1:")
-    ->getAlignment()
-    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
 $activeSheet->getRowDimension('1')->setRowHeight(25);
 

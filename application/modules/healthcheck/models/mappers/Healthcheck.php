@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_Model_Mapper_Healthcheck
  */
@@ -83,8 +84,8 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -222,9 +223,9 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
     public function fetchAllUnfinishedHealthchecksForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"  => $clientId,
-                                    "{$this->col_stepName} <> ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
-                               ));
+            "{$this->col_clientId} = ?"  => $clientId,
+            "{$this->col_stepName} <> ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
+        ));
     }
 
     /**
@@ -237,9 +238,9 @@ class Healthcheck_Model_Mapper_Healthcheck extends My_Model_Mapper_Abstract
     public function fetchAllFinishedHealthchecksForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?" => $clientId,
-                                    "{$this->col_stepName} = ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
-                               ));
+            "{$this->col_clientId} = ?" => $clientId,
+            "{$this->col_stepName} = ?" => Healthcheck_Model_Healthcheck_Steps::STEP_FINISHED
+        ));
     }
 
     /**

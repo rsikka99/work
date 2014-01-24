@@ -81,7 +81,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
         <?php
         $totalBlackPages += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly();
         $totalColorPages += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly();
-        $totalMonthlyInkAndToner += $deviceInstance->getCostOfInkAndToner($costPerPageSettings,$reportMargin);
+        $totalMonthlyInkAndToner += $deviceInstance->getCostOfInkAndToner($costPerPageSettings, $reportMargin);
         ?>
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>

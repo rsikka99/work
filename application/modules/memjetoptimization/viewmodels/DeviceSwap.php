@@ -1,4 +1,5 @@
 <?php
+
 class Memjetoptimization_ViewModel_DeviceSwap
 {
     /**

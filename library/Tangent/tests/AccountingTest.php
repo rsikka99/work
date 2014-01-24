@@ -1,5 +1,6 @@
 <?php
 require_once('Tangent/Accounting.php');
+
 class Library_Tangent_AccountingTest extends PHPUnit_Framework_TestCase
 {
     /**

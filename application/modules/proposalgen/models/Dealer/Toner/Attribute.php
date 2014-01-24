@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Dealer_Toner_Attribute
  */

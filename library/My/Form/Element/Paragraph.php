@@ -8,7 +8,6 @@
  * @package    My_Form
  * @subpackage Element
  */
-
 class My_Form_Element_Paragraph extends Zend_Form_Element
 {
     /**

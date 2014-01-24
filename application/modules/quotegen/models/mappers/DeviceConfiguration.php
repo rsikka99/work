@@ -39,8 +39,8 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     public function countByDeviceId ($masterDeviceId)
     {
         return $this->count(array(
-                                 'masterDeviceId = ?' => $masterDeviceId
-                            ));
+            'masterDeviceId = ?' => $masterDeviceId
+        ));
     }
 
     /**
@@ -92,8 +92,8 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -150,8 +150,8 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
 
         // Delete all device configurations
         return $this->getDbTable()->delete(array(
-                                                "masterDeviceId = ?" => $deviceId
-                                           ));
+            "masterDeviceId = ?" => $deviceId
+        ));
     }
 
     /**
@@ -256,9 +256,9 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         $deviceConfigurations = array();
         $resultSet            = $this->getDbTable()->fetchAll(array(
-                                                                   'masterDeviceId = ?' => $masterDeviceId,
-                                                                   'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
-                                                              ));
+            'masterDeviceId = ?' => $masterDeviceId,
+            'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
+        ));
 
         foreach ($resultSet as $row)
         {
@@ -283,8 +283,8 @@ class Quotegen_Model_Mapper_DeviceConfiguration extends My_Model_Mapper_Abstract
     {
         $deviceConfigurations = array();
         $resultSet            = $this->getDbTable()->fetchAll(array(
-                                                                   'masterDeviceId = ?' => $masterDeviceId
-                                                              ));
+            'masterDeviceId = ?' => $masterDeviceId
+        ));
 
         foreach ($resultSet as $row)
         {

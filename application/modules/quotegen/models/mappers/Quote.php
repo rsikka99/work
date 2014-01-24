@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Quotegen_Model_Mapper_Quote
  */
@@ -79,8 +80,8 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -218,8 +219,8 @@ class Quotegen_Model_Mapper_Quote extends My_Model_Mapper_Abstract
     public function fetchAllForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?" => $clientId
-                               ),
+                "{$this->col_clientId} = ?" => $clientId
+            ),
             "{$this->col_dateCreated} DESC",
             100
         );

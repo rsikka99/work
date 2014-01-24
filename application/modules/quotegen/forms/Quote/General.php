@@ -45,26 +45,26 @@ class Quotegen_Form_Quote_General extends Twitter_Bootstrap_Form_Vertical
                   ->addValidator(new My_Validate_DateTime())
                   ->setRequired(false);
         $quoteDate->addFilters(array(
-                                    'StringTrim',
-                                    'StripTags'
-                               ));
+            'StringTrim',
+            'StripTags'
+        ));
         $this->addElement($quoteDate);
 
         $quoteName = $this->createElement('text', 'name');
         $quoteName->setLabel('Quote Name')->setValue($this->getQuote()->name);
         $quoteName->addFilters(array(
-                                    'StringTrim',
-                                    'StripTags'
-                               ));
+            'StringTrim',
+            'StripTags'
+        ));
         $this->addElement($quoteName);
 
         $this->addElement('button', 'submit', array(
-                                                   'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS,
-                                                   'label'      => 'Update',
-                                                   'type'       => 'submit',
-                                                   'icon'       => 'check',
-                                                   'whiteIcon'  => true
-                                              ));
+            'buttonType' => Twitter_Bootstrap_Form_Element_Button::BUTTON_SUCCESS,
+            'label'      => 'Update',
+            'type'       => 'submit',
+            'icon'       => 'check',
+            'whiteIcon'  => true
+        ));
     }
 
     /**

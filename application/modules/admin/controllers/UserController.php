@@ -77,8 +77,8 @@ class Admin_UserController extends Tangent_Controller_Action
                                 $userRole->userId = $userId;
                                 $userRoleMapper   = new Admin_Model_Mapper_UserRole();
                                 $userRoles        = $userRoleMapper->fetchAll(array(
-                                                                                   'userId = ?' => $userId
-                                                                              ));
+                                    'userId = ?' => $userId
+                                ));
                                 // Loop through our new roles
                                 foreach ($values ["userRoles"] as $roleId)
                                 {
@@ -101,8 +101,8 @@ class Admin_UserController extends Tangent_Controller_Action
                                     }
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
-                                                                   ));
+                                    'success' => "User '" . $this->view->escape($values ["email"]) . "' saved successfully."
+                                ));
 
                                 // Reset the form after everything is saved successfully
                                 $form->reset();
@@ -123,13 +123,13 @@ class Admin_UserController extends Tangent_Controller_Action
                                 // Duplicate column
                                 case 1062 :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Username already exists.'
-                                                                       ));
+                                        'danger' => 'Username already exists.'
+                                    ));
                                     break;
                                 default :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Error saving to database.  Please try again.'
-                                                                       ));
+                                        'danger' => 'Error saving to database.  Please try again.'
+                                    ));
                                     break;
                             }
 
@@ -140,23 +140,23 @@ class Admin_UserController extends Tangent_Controller_Action
                             $db->rollBack();
                             Tangent_Log::logException($e);
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error processing this request.  Please try again.'
-                                                               ));
+                                'danger' => 'There was an error processing this request.  Please try again.'
+                            ));
                             $form->populate($request->getPost());
                         }
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
-                                                           ));
+                            'danger' => "This dealer has reached its maxiumum user licenses of {$dealer->userLicenses}"
+                        ));
                     }
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below'
-                                                       ));
+                        'danger' => 'Please correct the errors below'
+                    ));
                     $form->populate($request->getPost());
                 }
             }
@@ -430,14 +430,14 @@ class Admin_UserController extends Tangent_Controller_Action
                         {
                             Dealermanagement_Service_User::sendPasswordChangedEmail($user, $values['password']);
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully. An email with the new password will be sent to the user."
-                                                               ));
+                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully. An email with the new password will be sent to the user."
+                            ));
                         }
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
-                                                               ));
+                                'success' => "User '" . $this->view->escape($formValues ["email"]) . "' saved successfully."
+                            ));
                         }
                     }
                     else
@@ -448,8 +448,8 @@ class Admin_UserController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else
@@ -472,8 +472,8 @@ class Admin_UserController extends Tangent_Controller_Action
         if (!$userId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a user to delete first.'
-                                               ));
+                'warning' => 'Please select a user to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -513,15 +513,15 @@ class Admin_UserController extends Tangent_Controller_Action
                             $userMapper->save($user, $userId);
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Your profile has been updated successfully."
-                                                               ));
+                                'success' => "Your profile has been updated successfully."
+                            ));
                         }
                         else
                         {
                             $form->getElement('email')->addError("Email already exists");
                             $this->_flashMessenger->addMessage(array(
-                                                                    'warning' => "Your profile was not updated successfully please try again."
-                                                               ));
+                                'warning' => "Your profile was not updated successfully please try again."
+                            ));
                         }
                     }
                 }
@@ -529,8 +529,8 @@ class Admin_UserController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'warning' => "Your profile was not updated successfully please try again."
-                                                       ));
+                        'warning' => "Your profile was not updated successfully please try again."
+                    ));
                 }
             }
             else

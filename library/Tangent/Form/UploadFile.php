@@ -10,7 +10,6 @@
  * @author    Lee Robert
  * @version   v1.0
  */
-
 class Tangent_Form_UploadFile extends Zend_Form
 {
 
@@ -34,19 +33,19 @@ class Tangent_Form_UploadFile extends Zend_Form
         if (isset($viewScript))
         {
             $this->setDecorators(array(
-                                      array(
-                                          'ViewScript',
-                                          array(
-                                              'viewScript' => $viewScript))));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => $viewScript))));
 
             $this->setElementDecorators(array(
-                                             'ViewHelper',
-                                             array(
-                                                 'Errors'),
-                                             array(
-                                                 'Label'),
-                                             array(
-                                                 'HtmlTag')));
+                'ViewHelper',
+                array(
+                    'Errors'),
+                array(
+                    'Label'),
+                array(
+                    'HtmlTag')));
         }
         parent::__construct($options);
     }
@@ -75,16 +74,16 @@ class Tangent_Form_UploadFile extends Zend_Form
 
         }
         $file->setDecorators(array(
-                                  array(
-                                      'File'),
-                                  array(
-                                      'Errors')));
+            array(
+                'File'),
+            array(
+                'Errors')));
 
         $submitButton = new Zend_Form_Element_Submit('Upload');
 
         $this->addElements(array(
-                                $file,
-                                $submitButton));
+            $file,
+            $submitButton));
     }
 
     /**

@@ -36,8 +36,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to delete first.'
-                                               ));
+                'warning' => 'Please select a master device to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -47,8 +47,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the master device to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the master device to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -66,8 +66,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                 {
                     $mapper->delete($masterDevice);
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Master device  '{$masterDevice->getFullDeviceName()}' was deleted successfully."
-                                                       ));
+                        'success' => "Master device  '{$masterDevice->getFullDeviceName()}' was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }
@@ -117,8 +117,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                             $mapper->insert($masterDevice);
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "MasterDevice " . $this->view->escape($masterDevice->getFullDeviceName()) . " was added successfully."
-                                                               ));
+                                'success' => "MasterDevice " . $this->view->escape($masterDevice->getFullDeviceName()) . " was added successfully."
+                            ));
 
                             // Reset the form after everything is saved successfully
                             $form->reset();
@@ -127,8 +127,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         {
                             Tangent_Log::logException($e);
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error processing this request.  Please try again.'
-                                                               ));
+                                'danger' => 'There was an error processing this request.  Please try again.'
+                            ));
                             $form->populate($request->getPost());
                         }
                     }
@@ -160,8 +160,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to edit first.'
-                                               ));
+                'warning' => 'Please select a master device to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -173,8 +173,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the master device to edit.'
-                                               ));
+                'danger' => 'There was an error selecting the master device to edit.'
+            ));
             $this->redirector('index');
         }
 
@@ -215,8 +215,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                         $mapper->save($masterDevice, $masterDeviceId);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated successfully."
-                                                           ));
+                            'success' => "MasterDevice '{$masterDevice->getFullDeviceName()}' was updated successfully."
+                        ));
                     }
                     else
                     {
@@ -226,8 +226,8 @@ class Proposalgen_MasterdeviceController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else

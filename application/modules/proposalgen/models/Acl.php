@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Acl
  */
@@ -6,18 +7,18 @@ class Proposalgen_Model_Acl
 {
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
-    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS            = "proposalgen__admin__devicetoners";
-    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT        = "proposalgen__admin__devicetonercount";
-    const RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER            = "proposalgen__admin__replacetoner";
-    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS         = "proposalgen__admin__filterlistitems";
-    const RESOURCE_PROPOSALGEN_ADMIN_INDEX                   = "proposalgen__admin__index";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS          = "proposalgen__admin__managematchups";
-    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS      = "proposalgen__admin__managereplacements";
-    const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST       = "proposalgen__admin__masterdeviceslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS           = "proposalgen__admin__printermodels";
-    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE         = "proposalgen__admin__search-for-device";
-    const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST              = "proposalgen__admin__tonerslist";
-    const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE          = "proposalgen__admin__saveandapprove";
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS       = "proposalgen__admin__devicetoners";
+    const RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT   = "proposalgen__admin__devicetonercount";
+    const RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER       = "proposalgen__admin__replacetoner";
+    const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS    = "proposalgen__admin__filterlistitems";
+    const RESOURCE_PROPOSALGEN_ADMIN_INDEX              = "proposalgen__admin__index";
+    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS     = "proposalgen__admin__managematchups";
+    const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS = "proposalgen__admin__managereplacements";
+    const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST  = "proposalgen__admin__masterdeviceslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS      = "proposalgen__admin__printermodels";
+    const RESOURCE_PROPOSALGEN_ADMIN_SEARCHFORDEVICE    = "proposalgen__admin__search-for-device";
+    const RESOURCE_PROPOSALGEN_ADMIN_TONERSLIST         = "proposalgen__admin__tonerslist";
+    const RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE     = "proposalgen__admin__saveandapprove";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
     const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__exportpricing";

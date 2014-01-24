@@ -6,6 +6,7 @@
  * @author     Chris Garrah
  * @version    v1.0
  */
+
 /**
  * Validates a phone number (very basic).
  */

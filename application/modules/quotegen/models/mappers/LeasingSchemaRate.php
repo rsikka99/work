@@ -71,9 +71,9 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_leasingSchemaTermId} = ?"  => $primaryKey [0],
-                                                                "{$this->col_leasingSchemaRangeId} = ?" => $primaryKey [1]
-                                                           ));
+            "{$this->col_leasingSchemaTermId} = ?"  => $primaryKey [0],
+            "{$this->col_leasingSchemaRangeId} = ?" => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -239,14 +239,14 @@ class Quotegen_Model_Mapper_LeasingSchemaRate extends My_Model_Mapper_Abstract
         // Create a select statement
         $select = Quotegen_Model_Mapper_LeasingSchema::getInstance()->getDbTable()->select(true);
         $select->joinRight(array(
-                                'terms' => $termTableName
-                           ), "terms.leasingSchemaId = {$schemaTableName}.id");
+            'terms' => $termTableName
+        ), "terms.leasingSchemaId = {$schemaTableName}.id");
         $select->join(array(
-                           'rates' => $rateTableName
-                      ), "terms.id = rates.leasingSchemaTermId");
+            'rates' => $rateTableName
+        ), "terms.id = rates.leasingSchemaTermId");
         $select->joinRight(array(
-                                'ranges' => $rangeTableName
-                           ), "ranges.id = rates.leasingSchemaRangeId");
+            'ranges' => $rangeTableName
+        ), "ranges.id = rates.leasingSchemaRangeId");
 
         $select->where("{$schemaTableName}.id = ?", $leasingSchemaId);
         $select->setIntegrityCheck(false);

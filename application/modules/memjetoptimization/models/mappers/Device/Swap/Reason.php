@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Mapper_Device_Swap_Reason
  */
@@ -78,8 +79,8 @@ class Memjetoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapper
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -292,9 +293,9 @@ class Memjetoptimization_Model_Mapper_Device_Swap_Reason extends My_Model_Mapper
     public function fetchAllByCategoryId ($categoryId, $dealerId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_categoryId} = ?" => $categoryId,
-                                    "{$this->col_dealerId} = ?"   => $dealerId
-                               ));
+            "{$this->col_categoryId} = ?" => $categoryId,
+            "{$this->col_dealerId} = ?"   => $dealerId
+        ));
     }
 
     /**

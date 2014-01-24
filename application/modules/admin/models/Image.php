@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Model_Image
  */

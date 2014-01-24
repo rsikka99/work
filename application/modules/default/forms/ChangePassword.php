@@ -28,80 +28,80 @@ class Default_Form_ChangePassword extends EasyBib_Form
 
         // Add the password element
         $currentPassword = new Zend_Form_Element_Password('current_password', array(
-                                                                                   'label'      => 'Current Password:',
-                                                                                   'required'   => true,
-                                                                                   'filters'    => array(
-                                                                                       'StringTrim'
-                                                                                   ),
-                                                                                   'validators' => array(
-                                                                                       array(
-                                                                                           'validator' => 'StringLength',
-                                                                                           'options'   => array(
-                                                                                               6,
-                                                                                               255
-                                                                                           )
-                                                                                       )
-                                                                                   )
-                                                                              ));
+            'label'      => 'Current Password:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        6,
+                        255
+                    )
+                )
+            )
+        ));
 
         $this->addElement($currentPassword);
 
         $newPassword = new Zend_Form_Element_Password('password', array(
-                                                                       'label'      => 'New Password:',
-                                                                       'required'   => true,
-                                                                       'filters'    => array(
-                                                                           'StringTrim'
-                                                                       ),
-                                                                       'validators' => array(
-                                                                           array(
-                                                                               'validator' => 'StringLength',
-                                                                               'options'   => array(
-                                                                                   6,
-                                                                                   80
-                                                                               )
-                                                                           )
-                                                                       )
-                                                                  )
+                'label'      => 'New Password:',
+                'required'   => true,
+                'filters'    => array(
+                    'StringTrim'
+                ),
+                'validators' => array(
+                    array(
+                        'validator' => 'StringLength',
+                        'options'   => array(
+                            6,
+                            80
+                        )
+                    )
+                )
+            )
         );
         $this->addElement($newPassword);
 
         $newPasswordConfirm = new Zend_Form_Element_Password('password_confirm', array(
-                                                                                      'label'         => 'Confirm New Password:',
-                                                                                      'required'      => true,
-                                                                                      'filters'       => array(
-                                                                                          'StringTrim'
-                                                                                      ),
-                                                                                      'validators'    => array(
-                                                                                          array(
-                                                                                              'validator' => 'StringLength',
-                                                                                              'options'   => array(
-                                                                                                  6,
-                                                                                                  255
-                                                                                              )
-                                                                                          ),
-                                                                                          array(
-                                                                                              'validator' => 'Identical',
-                                                                                              'options'   => array(
-                                                                                                  'token' => 'password'
-                                                                                              )
-                                                                                          )
-                                                                                      ),
-                                                                                      'errorMessages' => array(
-                                                                                          'Identical' => 'Passwords must match.'
-                                                                                      )
-                                                                                 ));
+            'label'         => 'Confirm New Password:',
+            'required'      => true,
+            'filters'       => array(
+                'StringTrim'
+            ),
+            'validators'    => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        6,
+                        255
+                    )
+                ),
+                array(
+                    'validator' => 'Identical',
+                    'options'   => array(
+                        'token' => 'password'
+                    )
+                )
+            ),
+            'errorMessages' => array(
+                'Identical' => 'Passwords must match.'
+            )
+        ));
         $this->addElement($newPasswordConfirm);
 
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

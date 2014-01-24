@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_DbTable_Device_Instance_Replacement_Master_Device
  */

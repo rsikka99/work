@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Dealermanagement_Model_Acl
  */

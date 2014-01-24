@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_DbTable_Dealer_Master_Device_Attribute
  */

@@ -32,13 +32,13 @@ if (!$loader)
         }
         else
         {
-            include ($zendFrameworkPath . '/Zend/Loader/Autoloader.php');
+            include($zendFrameworkPath . '/Zend/Loader/Autoloader.php');
             $autoLoader = Zend_Loader_Autoloader::getInstance();
         }
     }
     else
     {
-        include ('Zend/Loader/Autoloader.php');
+        include('Zend/Loader/Autoloader.php');
         $autoLoader = Zend_Loader_Autoloader::getInstance();
     }
 }

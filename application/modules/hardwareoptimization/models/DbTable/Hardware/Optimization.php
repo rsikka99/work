@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_DbTable_Hardware_Optimization
  */

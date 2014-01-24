@@ -25,7 +25,6 @@
  *  system may support such names, the Windows shell and user interface does not. However, it is
  *  acceptable to specify a period as the first character of a name. For example, ".temp"
  */
-
 class Tangent_Filter_Filename implements Zend_Filter_Interface
 {
     /**

@@ -97,8 +97,8 @@ class Hardwarelibrary_TonerController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
     }
 }

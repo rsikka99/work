@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_View_Helper_AssessmentMenu
  */

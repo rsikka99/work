@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Application_Model_User_Session
  */
@@ -6,12 +7,14 @@ class Application_Model_User_Session extends My_Model_Abstract
 {
     /**
      * Id of the session
+     *
      * @var int
      */
     public $sessionId;
 
     /**
      * User id from the represent and id of user
+     *
      * @var string
      */
     public $userId;
@@ -42,7 +45,7 @@ class Application_Model_User_Session extends My_Model_Abstract
     {
         return array(
             "sessionId" => $this->sessionId,
-            "userId" => $this->userId,
+            "userId"    => $this->userId,
         );
     }
 }

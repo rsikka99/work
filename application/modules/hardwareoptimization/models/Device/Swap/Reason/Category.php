@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_Device_Swap_Reason_Category
  */

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
@@ -6,22 +6,22 @@ $quote = $this->quote;
 /* @var $section PHPWord_Section */
 $section = $this->section;
 
-$tableSpan = array (
-        "span1" => 1413.5,
-        "span2" => 2827,
-        "span3" => 4240.5,
-        "span4" => 5654,
-        "span6" => 8481,
-        "span8" => 11306
+$tableSpan = array(
+    "span1" => 1413.5,
+    "span2" => 2827,
+    "span3" => 4240.5,
+    "span4" => 5654,
+    "span6" => 8481,
+    "span8" => 11306
 );
 
 $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
 // Title of the document
-$section->addText($this->translate($this->header->pageHeader), array (
-        'size' => '18',
-        'color' => $this->style->mainColor
+$section->addText($this->translate($this->header->pageHeader), array(
+    'size'  => '18',
+    'color' => $this->style->mainColor
 ));
 
 // Change this section to render header file

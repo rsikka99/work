@@ -74,9 +74,9 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_categoryId} = ?" => $primaryKey [0],
-                                                                "{$this->col_optionId} = ?"   => $primaryKey [1]
-                                                           ));
+            "{$this->col_categoryId} = ?" => $primaryKey [0],
+            "{$this->col_optionId} = ?"   => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -296,8 +296,8 @@ class Quotegen_Model_Mapper_OptionCategory extends My_Model_Mapper_Abstract
 
             $categoryMapper   = Quotegen_Model_Mapper_Category::getInstance();
             $optionCategories = $this->fetchAll(array(
-                                                     "{$this->col_optionId} = ?" => $optionId
-                                                ));
+                "{$this->col_optionId} = ?" => $optionId
+            ));
 
             foreach ($optionCategories as $optionCategory)
             {

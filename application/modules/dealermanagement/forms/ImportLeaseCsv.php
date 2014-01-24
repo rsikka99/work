@@ -33,27 +33,27 @@ class Dealermanagement_Form_ImportLeaseCsv extends Twitter_Bootstrap_Form_Horizo
         $this->setMethod('POST');
 
         $this->addElement('file', 'uploadFile', array(
-                                                     'label'       => 'Choose a file to upload',
-                                                     'destination' => $this->getView()->App()->uploadPath,
-                                                     'required'    => true,
-                                                     'validators'  => array(
-                                                         'Extension' => array('extension' => 'csv'),
-                                                         'Count'     => array('count' => 1),
-                                                         'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
-                                                     )
-                                                ));
+            'label'       => 'Choose a file to upload',
+            'destination' => $this->getView()->App()->uploadPath,
+            'required'    => true,
+            'validators'  => array(
+                'Extension' => array('extension' => 'csv'),
+                'Count'     => array('count' => 1),
+                'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
+            )
+        ));
 
         $this->addElement('button', 'performUpload', array(
-                                                          'label' => 'Upload File',
-                                                          'type'  => 'submit',
-                                                     ));
+            'label' => 'Upload File',
+            'type'  => 'submit',
+        ));
         // Add the buttons the the form actions
         $this->addDisplayGroup(array('performUpload'), 'actions', array(
-                                                                       'disableLoadDefaultDecorators' => true,
-                                                                       'decorators'                   => array(
-                                                                           'Actions'
-                                                                       )
-                                                                  ));
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions'
+            )
+        ));
     }
 
     /**

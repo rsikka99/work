@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_MasterDevice
  */
@@ -78,8 +79,8 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -284,7 +285,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         $sql = "SELECT * FROM {$this->getTableName()} AS md
         LEFT JOIN {$qdTableName} AS qd ON qd.masterDeviceId = md.id
-        WHERE qd.masterDeviceId IS null
+        WHERE qd.masterDeviceId IS NULL
         ORDER BY  md.manufacturer_id ASC, md.printer_model ASC
         ";
 
@@ -661,18 +662,18 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $dealerId                = $db->quote($dealerId, 'INT');
         $select                  = $db->select()
                                       ->from(array('pmd' => 'master_devices'), array(
-                                                                                    'pmd.*',
-                                                                               ))
+                'pmd.*',
+            ))
                                       ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
-                                                                                                                                                                          "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
-                                                                                                                                                                          "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
-                                                                                                                                                                          "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
-                                                                                                                                                                          "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                                                                                                                                                                          "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                                                                          "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
-                                                                                                                                                                          "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
-                                                                                                                                                                          "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
-                                                                                                                                                                     ))
+                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
+                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
+                "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
+                "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
+                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
+                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
+                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
+                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
+            ))
                                       ->where("pmd.id = ? ", $masterDeviceId);
 
         $stmt = $db->query($select);
@@ -704,27 +705,27 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
 
         $select = $db->select()
                      ->from(array(
-                                 'md' => 'master_devices'
-                            ), array(
-                                    'id AS master_id',
-                                    'modelName',
-                               ))
+                'md' => 'master_devices'
+            ), array(
+                'id AS master_id',
+                'modelName',
+            ))
                      ->joinLeft(array(
-                                     'm' => 'manufacturers'
-                                ), 'm.id = md.manufacturerId', array(
-                                                                    'fullname'
-                                                               ))
+                'm' => 'manufacturers'
+            ), 'm.id = md.manufacturerId', array(
+                'fullname'
+            ))
                      ->joinLeft(array(
-                                     'dmda' => 'dealer_master_device_attributes'
-                                ), "dmda.masterDeviceId = md.id AND dmda.dealerId = {$dealerId}",
+                    'dmda' => 'dealer_master_device_attributes'
+                ), "dmda.masterDeviceId = md.id AND dmda.dealerId = {$dealerId}",
                 array(
-                     'laborCostPerPage',
-                     'partsCostPerPage',
+                    'laborCostPerPage',
+                    'partsCostPerPage',
                 ))
                      ->order(array(
-                                  'm.fullname',
-                                  'md.modelName',
-                             ));
+                'm.fullname',
+                'md.modelName',
+            ));
 
         if ($manufacturerId > 0)
         {
@@ -763,31 +764,31 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         $dealerId  = $db->quote($dealerId, 'INT');
         $select    = $db->select()
                         ->from(array(
-                                    'md' => 'master_devices'
-                               ), array(
-                                       'id AS master_id',
-                                       'modelName',
-                                       'isDuplex',
-                                       'isCopier',
-                                       'reportsTonerLevels',
-                                       'ppmBlack',
-                                       'ppmColor',
-                                       'wattsPowerNormal',
-                                       'wattsPowerIdle',
-                                       'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
-                                  ))
+                'md' => 'master_devices'
+            ), array(
+                'id AS master_id',
+                'modelName',
+                'isDuplex',
+                'isCopier',
+                'reportsTonerLevels',
+                'ppmBlack',
+                'ppmColor',
+                'wattsPowerNormal',
+                'wattsPowerIdle',
+                'IF(jcmd.masterDeviceId IS NULL,0,1) AS jitCompatible',
+            ))
                         ->joinLeft(array(
-                                        'm' => 'manufacturers'
-                                   ), 'm.id = md.manufacturerId', array(
-                                                                       'fullname'
-                                                                  ))
+                'm' => 'manufacturers'
+            ), 'm.id = md.manufacturerId', array(
+                'fullname'
+            ))
                         ->joinLeft(array(
-                                        'jcmd' => 'jit_compatible_master_devices'
-                                   ), "jcmd.dealerId = {$dealerId} AND jcmd.masterDeviceId = md.id", array())
+                'jcmd' => 'jit_compatible_master_devices'
+            ), "jcmd.dealerId = {$dealerId} AND jcmd.masterDeviceId = md.id", array())
                         ->order(array(
-                                     'm.fullname',
-                                     'md.modelName',
-                                ));
+                'm.fullname',
+                'md.modelName',
+            ));
         $stmt      = $db->query($select);
         $result    = $stmt->fetchAll();
         $fieldList = array();

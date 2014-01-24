@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Bootstrap
  * This class prepares the application with all the needed settings before anything is routed

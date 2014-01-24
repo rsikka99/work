@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_ManagedevicesController
  */
@@ -107,8 +108,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -194,8 +195,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -233,8 +234,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $searchValue    = $this->_getParam('criteria', null);
 
             $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                                                                      'haystack' => $sortColumns
-                                                                 ));
+                'haystack' => $sortColumns
+            ));
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
@@ -281,8 +282,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -686,9 +687,9 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
             $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                                                                      'haystack' => $sortColumns
+                'haystack' => $sortColumns
 
-                                                                 ));
+            ));
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
@@ -859,8 +860,8 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             $jqGridService->parseJQGridPagingRequest($jqGridParameters);
 
             $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                                                                      'haystack' => $sortColumns
-                                                                 ));
+                'haystack' => $sortColumns
+            ));
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))

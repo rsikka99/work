@@ -1,4 +1,5 @@
 <?php
+
 class Tangent_Http_Client_Curl_MultiManager
 {
     /**

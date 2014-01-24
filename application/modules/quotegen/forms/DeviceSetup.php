@@ -36,132 +36,132 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         }
 
         $this->addElement('select', 'manufacturerId', array(
-                                                           'label'        => 'Manufacturer:',
-                                                           'class'        => 'span3',
-                                                           'multiOptions' => $manufacturers
-                                                      ));
+            'label'        => 'Manufacturer:',
+            'class'        => 'span3',
+            'multiOptions' => $manufacturers
+        ));
 
         /*
          * Printer Model Name
          */
         $this->addElement('text', 'modelName', array(
-                                                    'label'      => 'Model Name:',
-                                                    'class'      => 'span3',
-                                                    'required'   => true,
-                                                    'maxlength'  => 255,
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validators' => array(
-                                                        array(
-                                                            'validator' => 'StringLength',
-                                                            'options'   => array(
-                                                                1,
-                                                                255
-                                                            )
-                                                        )
-                                                    )
-                                               ));
+            'label'      => 'Model Name:',
+            'class'      => 'span3',
+            'required'   => true,
+            'maxlength'  => 255,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         /*
          * Is Quote Gen Device
          */
         $this->addElement('checkbox', 'can_sell', array(
-                                                       'label'       => 'Can Sell Device:',
-                                                       'description' => 'Note: SKU is required when checked.',
-                                                       'filters'     => array(
-                                                           'Boolean'
-                                                       )
-                                                  ));
+            'label'       => 'Can Sell Device:',
+            'description' => 'Note: SKU is required when checked.',
+            'filters'     => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * SKU
          */
         $this->addElement('text', 'oemSku', array(
-                                                 'label'      => 'OEM SKU:',
-                                                 'class'      => 'span2',
-                                                 'maxlength'  => 255,
-                                                 'required'   => false,
-                                                 'filters'    => array(
-                                                     'StringTrim',
-                                                     'StripTags'
-                                                 ),
-                                                 'allowEmpty' => false,
-                                                 'validators' => array(
-                                                     new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                    new Zend_Validate_NotEmpty()
-                                                                                                               ), array(
-                                                                                                                       'validator' => 'StringLength',
-                                                                                                                       'options'   => array(
-                                                                                                                           1,
-                                                                                                                           255
-                                                                                                                       )
-                                                                                                                  ))
-                                                 )
-                                            ));
+            'label'      => 'OEM SKU:',
+            'class'      => 'span2',
+            'maxlength'  => 255,
+            'required'   => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'allowEmpty' => false,
+            'validators' => array(
+                new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
+                    new Zend_Validate_NotEmpty()
+                ), array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                ))
+            )
+        ));
 
         $this->addElement('text', 'dealerSku', array(
-                                                    'label'      => 'Dealer SKU:',
-                                                    'class'      => 'span2',
-                                                    'maxlength'  => 255,
-                                                    'required'   => false,
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validators' => array(
-                                                        new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                       new Zend_Validate_NotEmpty()
-                                                                                                                  ), array(
-                                                                                                                          'validator' => 'StringLength',
-                                                                                                                          'options'   => array(
-                                                                                                                              1,
-                                                                                                                              255
-                                                                                                                          )
-                                                                                                                     ))
-                                                    )
-                                               ));
+            'label'      => 'Dealer SKU:',
+            'class'      => 'span2',
+            'maxlength'  => 255,
+            'required'   => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
+                    new Zend_Validate_NotEmpty()
+                ), array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                ))
+            )
+        ));
 
         /*
          * Description of standard features
          */
         $this->addElement('textarea', 'description', array(
-                                                          'label'    => 'Standard Features:',
-                                                          'style'    => 'height: 100px',
-                                                          'required' => false,
-                                                          'filters'  => array(
-                                                              'StringTrim',
-                                                              'StripTags'
-                                                          )
-                                                     ));
+            'label'    => 'Standard Features:',
+            'style'    => 'height: 100px',
+            'required' => false,
+            'filters'  => array(
+                'StringTrim',
+                'StripTags'
+            )
+        ));
 
         /*
          * Device Price
          */
         $this->addElement('text', 'cost', array(
-                                               'label'      => 'Device Cost:',
-                                               'class'      => 'span1',
-                                               'prepend'    => '$',
-                                               'dimension'  => 1,
-                                               'maxlength'  => 8,
-                                               'required'   => false,
-                                               'allowEmpty' => false,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                  new Zend_Validate_NotEmpty(),
-                                                                                                                  new Zend_Validate_Float(),
-                                                                                                                  new Zend_Validate_Between(array(
-                                                                                                                                                 'min' => 1,
-                                                                                                                                                 'max' => 30000
-                                                                                                                                            ))
-                                                                                                             ))
-                                               )
-                                          ));
+            'label'      => 'Device Cost:',
+            'class'      => 'span1',
+            'prepend'    => '$',
+            'dimension'  => 1,
+            'maxlength'  => 8,
+            'required'   => false,
+            'allowEmpty' => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Float(),
+                    new Zend_Validate_Between(array(
+                        'min' => 1,
+                        'max' => 30000
+                    ))
+                ))
+            )
+        ));
 
         /*
          * Toner Configuration
@@ -174,11 +174,11 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         }
 
         $this->addElement('select', 'tonerConfigId', array(
-                                                          'label'        => 'Toner Configuration:',
-                                                          'class'        => 'span3',
-                                                          'required'     => true,
-                                                          'multiOptions' => $tonerConfigs
-                                                     ));
+            'label'        => 'Toner Configuration:',
+            'class'        => 'span3',
+            'required'     => true,
+            'multiOptions' => $tonerConfigs
+        ));
 
         /*
          * Hidden Toner Configuration This will be used when editing to hold the toner config id when the dropdown is
@@ -189,133 +189,133 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
          * Is copier
          */
         $this->addElement('checkbox', 'isCopier', array(
-                                                       'label'   => 'Is Copier:',
-                                                       'filters' => array(
-                                                           'Boolean'
-                                                       )
-                                                  ));
+            'label'   => 'Is Copier:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Is fax
          */
         $this->addElement('checkbox', 'isFax', array(
-                                                    'label'   => 'Is Fax:',
-                                                    'filters' => array(
-                                                        'Boolean'
-                                                    )
-                                               ));
+            'label'   => 'Is Fax:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Is duplex
          */
         $this->addElement('checkbox', 'isDuplex', array(
-                                                       'label'   => 'Is Duplex:',
-                                                       'filters' => array(
-                                                           'Boolean'
-                                                       )
-                                                  ));
+            'label'   => 'Is Duplex:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Reports toner levels (JIT Compatible)
          */
         $this->addElement('checkbox', 'reportsTonerLevels', array(
-                                                                 'label'   => 'Reports toner levels:',
-                                                                 'filters' => array(
-                                                                     'Boolean'
-                                                                 )
-                                                            ));
+            'label'   => 'Reports toner levels:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Printer Wattage (Running)
          */
         $this->addElement('text', 'wattsPowerNormal', array(
-                                                           'label'      => 'Watts Power Normal:',
-                                                           'class'      => 'span1',
-                                                           'maxlength'  => 4,
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'validators' => array(
-                                                               'Int',
-                                                               array(
-                                                                   'validator' => 'Between',
-                                                                   'options'   => array(
-                                                                       'min' => 1,
-                                                                       'max' => 5000
-                                                                   )
-                                                               )
-                                                           )
-                                                      ));
+            'label'      => 'Watts Power Normal:',
+            'class'      => 'span1',
+            'maxlength'  => 4,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 1,
+                        'max' => 5000
+                    )
+                )
+            )
+        ));
 
         /*
          * Printer Wattage (Idle)
          */
         $this->addElement('text', 'wattsPowerIdle', array(
-                                                         'label'      => 'Watts Power Idle:',
-                                                         'class'      => 'span1',
-                                                         'maxlength'  => 4,
-                                                         'filters'    => array(
-                                                             'StringTrim',
-                                                             'StripTags'
-                                                         ),
-                                                         'append'     => 'watts',
-                                                         'dimension'  => 1,
-                                                         'validators' => array(
-                                                             'Int',
-                                                             array(
-                                                                 'validator' => 'Between',
-                                                                 'options'   => array(
-                                                                     'min' => 1,
-                                                                     'max' => 5000
-                                                                 )
-                                                             )
-                                                         )
-                                                    ));
+            'label'      => 'Watts Power Idle:',
+            'class'      => 'span1',
+            'maxlength'  => 4,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'append'     => 'watts',
+            'dimension'  => 1,
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 1,
+                        'max' => 5000
+                    )
+                )
+            )
+        ));
 
         /*
          * Parts Cost Per Page
          */
         $this->addElement('text', 'partsCostPerPage', array(
-                                                           'label'      => 'Parts Cost Per Page:',
-                                                           'class'      => 'span1',
-                                                           'maxlength'  => 8,
-                                                           'allowEmpty' => false,
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                                new Zend_Validate_NotEmpty(),
-                                                                                                                                                new Zend_Validate_Float(),
-                                                                                                                                                new Zend_Validate_Between(array(
-                                                                                                                                                                               'min' => 0,
-                                                                                                                                                                               'max' => 5,
-                                                                                                                                                                          ))
-                                                                                                                                           )))
-                                                      ));
+            'label'      => 'Parts Cost Per Page:',
+            'class'      => 'span1',
+            'maxlength'  => 8,
+            'allowEmpty' => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
+                new Zend_Validate_NotEmpty(),
+                new Zend_Validate_Float(),
+                new Zend_Validate_Between(array(
+                    'min' => 0,
+                    'max' => 5,
+                ))
+            )))
+        ));
 
         /*
         * Labor Cost Per Page
         */
         $this->addElement('text', 'laborCostPerPage', array(
-                                                           'label'      => 'Labor Cost Per Page:',
-                                                           'class'      => 'span1',
-                                                           'maxlength'  => 8,
-                                                           'allowEmpty' => false,
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
-                                                                                                                                                new Zend_Validate_NotEmpty(),
-                                                                                                                                                new Zend_Validate_Float(),
-                                                                                                                                                new Zend_Validate_Between(array(
-                                                                                                                                                                               'min' => 0,
-                                                                                                                                                                               'max' => 5,
-                                                                                                                                                                          ))
-                                                                                                                                           )))
-                                                      ));
+            'label'      => 'Labor Cost Per Page:',
+            'class'      => 'span1',
+            'maxlength'  => 8,
+            'allowEmpty' => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(new Tangent_Validate_FieldDependsOnValue('can_sell', '1', array(
+                new Zend_Validate_NotEmpty(),
+                new Zend_Validate_Float(),
+                new Zend_Validate_Between(array(
+                    'min' => 0,
+                    'max' => 5,
+                ))
+            )))
+        ));
 
         /*
          * Launch Date /
@@ -335,103 +335,103 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
                    ->setRequired(true)
                    ->setAttrib('maxlength', 10)
                    ->addFilters(array(
-                                     'StringTrim',
-                                     'StripTags'
-                                ));
+                       'StringTrim',
+                       'StripTags'
+                   ));
         $this->addElement($launchDate);
 
         /*
          * Print Speed (Monochrome)
          */
         $this->addElement('text', 'ppmBlack', array(
-                                                   'label'      => 'Print Speed (Mono):',
-                                                   'class'      => 'span1',
-                                                   'maxlength'  => 4,
-                                                   'filters'    => array(
-                                                       'StringTrim',
-                                                       'StripTags'
-                                                   ),
-                                                   'validators' => array(
-                                                       'Int',
-                                                       array(
-                                                           'validator' => 'Between',
-                                                           'options'   => array(
-                                                               'min' => 0,
-                                                               'max' => 1000
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'label'      => 'Print Speed (Mono):',
+            'class'      => 'span1',
+            'maxlength'  => 4,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 0,
+                        'max' => 1000
+                    )
+                )
+            )
+        ));
 
         /*
          * Print Speed (Color)
          */
         $this->addElement('text', 'ppmColor', array(
-                                                   'label'      => 'Print Speed (Color):',
-                                                   'class'      => 'span1',
-                                                   'maxlength'  => 4,
-                                                   'filters'    => array(
-                                                       'StringTrim',
-                                                       'StripTags'
-                                                   ),
-                                                   'validators' => array(
-                                                       'Int',
-                                                       array(
-                                                           'validator' => 'Between',
-                                                           'options'   => array(
-                                                               'min' => 0,
-                                                               'max' => 1000
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'label'      => 'Print Speed (Color):',
+            'class'      => 'span1',
+            'maxlength'  => 4,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 0,
+                        'max' => 1000
+                    )
+                )
+            )
+        ));
 
         /*
          * Is leased
          */
         $this->addElement('checkbox', 'isLeased', array(
-                                                       'label'       => 'Is Leased:',
-                                                       'description' => 'Note: Leased Toner Yield is required when checked.',
-                                                       'filters'     => array(
-                                                           'Boolean'
-                                                       )
-                                                  ));
+            'label'       => 'Is Leased:',
+            'description' => 'Note: Leased Toner Yield is required when checked.',
+            'filters'     => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Leased Toner Yield
          */
         $this->addElement('text', 'leasedTonerYield', array(
-                                                           'label'      => 'Leased Toner Yield:',
-                                                           'class'      => 'span1',
-                                                           'maxlength'  => 6,
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'allowEmpty' => false,
-                                                           'validators' => array(
-                                                               new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
-                                                                                                                              new Zend_Validate_NotEmpty(),
-                                                                                                                              new Zend_Validate_Int(),
-                                                                                                                              new Zend_Validate_Between(array(
-                                                                                                                                                             'min' => 0,
-                                                                                                                                                             'max' => 100000
-                                                                                                                                                        ))
-                                                                                                                         ))
-                                                           )
-                                                      ));
+            'label'      => 'Leased Toner Yield:',
+            'class'      => 'span1',
+            'maxlength'  => 6,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'allowEmpty' => false,
+            'validators' => array(
+                new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Int(),
+                    new Zend_Validate_Between(array(
+                        'min' => 0,
+                        'max' => 100000
+                    ))
+                ))
+            )
+        ));
 
         $this->addElement('hidden', 'toner_array');
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'label' => 'Save'
-                                              ));
+            'label' => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'label' => 'Cancel'
-                                              ));
+            'label' => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

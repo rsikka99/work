@@ -127,31 +127,31 @@ class Quotegen_Quote_PagesController extends Quotegen_Library_Controller_Quote
                     if (isset($values ['saveAndContinue']))
                     {
                         $this->redirector('index', 'quote_profitability', null, array(
-                                                                                     'quoteId' => $this->_quoteId
-                                                                                ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                     else
                     {
                         // Refresh the page
                         $this->redirector(null, null, null, array(
-                                                                 'quoteId' => $this->_quoteId
-                                                            ));
+                            'quoteId' => $this->_quoteId
+                        ));
                     }
                 }
                 // form invalid : show error messages 
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
+                        'danger' => 'Please correct the errors below.'
+                    ));
                 }
             }
             // Go back button is clicked : got back to quote_groups
             else
             {
                 $this->redirector('index', 'quote_groups', null, array(
-                                                                      'quoteId' => $this->_quoteId
-                                                                 ));
+                    'quoteId' => $this->_quoteId
+                ));
             }
         }
 

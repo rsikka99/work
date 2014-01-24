@@ -34,8 +34,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         if (!$categoryId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a category to delete first.'
-                                               ));
+                'warning' => 'Please select a category to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -45,16 +45,16 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         if (!$category)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the category to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the category to delete.'
+            ));
             $this->redirector('index');
         }
         // If we are trying to access a category from another dealer, kick them back to index
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'You do not have permission to access this.'
-                                               ));
+                'danger' => 'You do not have permission to access this.'
+            ));
             // Redirect
             $this->redirector('index');
         }
@@ -77,8 +77,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         Quotegen_Model_Mapper_Category::getInstance()->delete($category);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Category  {$this->view->escape($category->name)} was deleted successfully."
-                                                           ));
+                            'success' => "Category  {$this->view->escape($category->name)} was deleted successfully."
+                        ));
 
                         // Redirect the user back to index action of this controller.
                         $this->redirector('index');
@@ -87,8 +87,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'There was an error deleting this category.  Please try again.'
-                                                       ));
+                        'danger' => 'There was an error deleting this category.  Please try again.'
+                    ));
                 }
             }
             else
@@ -127,15 +127,15 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below.'
-                                                           ));
+                            'danger' => 'Please correct the errors below.'
+                        ));
                     }
                 }
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'There was an error creating this category.  Please try again..'
-                                                       ));
+                        'danger' => 'There was an error creating this category.  Please try again..'
+                    ));
                 }
             }
             else // If user has selected cancel send user back to the index pages of this Controller
@@ -153,8 +153,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         if (!$categoryId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a category first.'
-                                               ));
+                'warning' => 'Please select a category first.'
+            ));
             $this->redirector('index');
         }
 
@@ -166,8 +166,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'You do not have permission to access this.'
-                                               ));
+                'danger' => 'You do not have permission to access this.'
+            ));
             // Redirect
             $this->redirector('index');
         }
@@ -190,23 +190,23 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
                         Quotegen_Model_Mapper_Category::getInstance()->save($category, $categoryId);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Category was updated successfully."
-                                                           ));
+                            'success' => "Category was updated successfully."
+                        ));
 
                         $this->redirector('index');
                     }
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below'
-                                                           ));
+                            'danger' => 'Please correct the errors below'
+                        ));
                     }
                 }
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'There was an error updating this category.  Please try again'
-                                                       ));
+                        'danger' => 'There was an error updating this category.  Please try again'
+                    ));
                 }
             }
             else
@@ -229,8 +229,8 @@ class Quotegen_CategoryController extends Tangent_Controller_Action
         if ($category && $category->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'You do not have permission to access this.'
-                                               ));
+                'danger' => 'You do not have permission to access this.'
+            ));
             // Redirect
             $this->redirector('index');
         }

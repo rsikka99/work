@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_UtilizationController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_UTILIZATION))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }
@@ -107,13 +108,13 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
          */
         foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
-            $utilizationData[$deviceCounter]['Manufacturer']                            = $deviceInstance->getMasterDevice()->getManufacturer()->displayname;
-            $utilizationData[$deviceCounter]['Model']                                   = $deviceInstance->getMasterDevice()->modelName;
-            $utilizationData[$deviceCounter]['IP Address']                              = $deviceInstance->ipAddress;
-            $utilizationData[$deviceCounter]['Serial Number']                           = $deviceInstance->serialNumber;
-            $utilizationData[$deviceCounter]['Monthly Page Volume']                     = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $utilizationData[$deviceCounter]['Manufacturer']                       = $deviceInstance->getMasterDevice()->getManufacturer()->displayname;
+            $utilizationData[$deviceCounter]['Model']                              = $deviceInstance->getMasterDevice()->modelName;
+            $utilizationData[$deviceCounter]['IP Address']                         = $deviceInstance->ipAddress;
+            $utilizationData[$deviceCounter]['Serial Number']                      = $deviceInstance->serialNumber;
+            $utilizationData[$deviceCounter]['Monthly Page Volume']                = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();
             $utilizationData[$deviceCounter]['Maximum Monthly Recommended Volume'] = $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer());
-            $utilizationData[$deviceCounter]['Utilization Percent']                     = $deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($assessmentViewModel->getCostPerPageSettingForDealer()) / 100;
+            $utilizationData[$deviceCounter]['Utilization Percent']                = $deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($assessmentViewModel->getCostPerPageSettingForDealer()) / 100;
             $deviceCounter++;
         }
 

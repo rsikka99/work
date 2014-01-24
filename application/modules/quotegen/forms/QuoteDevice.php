@@ -67,50 +67,50 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
             $this->addElement($deviceName);
 
             $this->addElement('text', 'name', array(
-                                                   'label'    => 'Device Name:',
-                                                   'disabled' => true,
-                                                   'ignore'   => true
-                                              ));
+                'label'    => 'Device Name:',
+                'disabled' => true,
+                'ignore'   => true
+            ));
 
             $this->addElement('text', 'oemSku', array(
-                                                     'label'    => 'OEM SKU:',
-                                                     'disabled' => true,
-                                                     'ignore'   => true
-                                                ));
+                'label'    => 'OEM SKU:',
+                'disabled' => true,
+                'ignore'   => true
+            ));
 
             $this->addElement('text', 'dealerSku', array(
-                                                        'label'    => 'Dealer SKU:',
-                                                        'disabled' => true,
-                                                        'ignore'   => true
-                                                   ));
+                'label'    => 'Dealer SKU:',
+                'disabled' => true,
+                'ignore'   => true
+            ));
 
             $this->addElement('text', 'totalPrice', array(
-                                                         'label'    => 'Total Package Price',
-                                                         'disabled' => true,
-                                                         'ignore'   => true
-                                                    ));
+                'label'    => 'Total Package Price',
+                'disabled' => true,
+                'ignore'   => true
+            ));
 
             $this->addElement('text', 'margin', array(
-                                                     'label'      => 'Margin:',
-                                                     'class'      => 'span1',
-                                                     'validators' => array(
-                                                         'Float',
-                                                         array(
-                                                             'validator' => 'Between',
-                                                             'options'   => array(
-                                                                 'min'       => -100,
-                                                                 'max'       => 100,
-                                                                 'inclusive' => false
-                                                             )
-                                                         )
-                                                     )
-                                                ));
+                'label'      => 'Margin:',
+                'class'      => 'span1',
+                'validators' => array(
+                    'Float',
+                    array(
+                        'validator' => 'Between',
+                        'options'   => array(
+                            'min'       => -100,
+                            'max'       => 100,
+                            'inclusive' => false
+                        )
+                    )
+                )
+            ));
 
             $this->addElement('text', 'cost', array(
-                                                   'label'    => 'Cost:',
-                                                   'disabled' => true,
-                                                   'ignore'   => true
-                                              ));
+                'label'    => 'Cost:',
+                'disabled' => true,
+                'ignore'   => true
+            ));
 
             // For each option that is linked with the device
             /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
@@ -121,10 +121,10 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
 
                 // Create and text element with its name as option-{id}-quantity
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-quantity", array(
-                                                                                                               'label'       => $quoteDeviceOption->name,
-                                                                                                               'value'       => $quoteDeviceOption->quantity,
-                                                                                                               'description' => $quoteDeviceOption->id
-                                                                                                          ));
+                    'label'       => $quoteDeviceOption->name,
+                    'value'       => $quoteDeviceOption->quantity,
+                    'description' => $quoteDeviceOption->id
+                ));
                 $optionElement->setAttrib('class', 'span1');
 
                 // Add the optionElement to the form
@@ -134,10 +134,10 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                 $object->quantity = $optionElement;
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
                 $optionElement = $this->createElement('text', "option-{$quoteDeviceOption->id}-cost", array(
-                                                                                                           'label'       => $quoteDeviceOption->name,
-                                                                                                           'value'       => $quoteDeviceOption->cost,
-                                                                                                           'description' => $quoteDeviceOption->id
-                                                                                                      ));
+                    'label'       => $quoteDeviceOption->name,
+                    'value'       => $quoteDeviceOption->cost,
+                    'description' => $quoteDeviceOption->id
+                ));
                 $optionElement->setAttrib('class', 'span1');
                 $this->addElement($optionElement);
 
@@ -149,10 +149,10 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
 
             // Add the add option
             $this->addElement('submit', 'add', array(
-                                                    'ignore' => true,
-                                                    'label'  => 'Add',
-                                                    'class'  => 'btn btn-success btn-mini'
-                                               ));
+                'ignore' => true,
+                'label'  => 'Add',
+                'class'  => 'btn btn-success btn-mini'
+            ));
         }
         else
         {
@@ -163,9 +163,9 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                 $quoteDeviceList [$quoteDevice->masterDeviceId] = $quoteDevice->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array(
-                                                               'label'        => 'Available Devices:',
-                                                               'multiOptions' => $quoteDeviceList
-                                                          ));
+                'label'        => 'Available Devices:',
+                'multiOptions' => $quoteDeviceList
+            ));
         }
     }
 
@@ -175,13 +175,13 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
         if ($this->_id)
         {
             $this->setDecorators(array(
-                                      array(
-                                          'ViewScript',
-                                          array(
-                                              'viewScript' => 'quote/devices/form/quotedevice.phtml'
-                                          )
-                                      )
-                                 ));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => 'quote/devices/form/quotedevice.phtml'
+                    )
+                )
+            ));
         }
     }
 

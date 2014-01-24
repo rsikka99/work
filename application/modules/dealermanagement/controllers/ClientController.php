@@ -44,16 +44,16 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
         if (!$clientId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a client to delete first.'
-                                               ));
+                'warning' => 'Please select a client to delete first.'
+            ));
             $this->redirector('index');
         }
         $client = Quotegen_Model_Mapper_Client::getInstance()->find($clientId);
         if ($client && $client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'Insufficient Privilege: You cannot delete this client.'
-                                               ));
+                'danger' => 'Insufficient Privilege: You cannot delete this client.'
+            ));
             $this->redirector('index');
         }
 
@@ -62,8 +62,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
         if (!$client)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the client to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the client to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -139,18 +139,18 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client successfully created."
-                                                   ));
+                    'success' => "Client successfully created."
+                ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
-                                                            'clientId' => $clientId
-                                                       ));
+                    'clientId' => $clientId
+                ));
             }
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "Please correct the errors below."
-                                                   ));
+                    'danger' => "Please correct the errors below."
+                ));
             }
         }
 
@@ -169,8 +169,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
         if ($client && $client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'Insufficient Privilege: You cannot edit this client.'
-                                               ));
+                'danger' => 'Insufficient Privilege: You cannot edit this client.'
+            ));
             $this->redirector('index');
         }
         // Start the client service
@@ -204,18 +204,18 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client {$client->companyName} successfully updated."
-                                                   ));
+                    'success' => "Client {$client->companyName} successfully updated."
+                ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
-                                                            'clientId' => $clientId
-                                                       ));
+                    'clientId' => $clientId
+                ));
             }
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "Please correct the errors below."
-                                                   ));
+                    'danger' => "Please correct the errors below."
+                ));
             }
         }
         $this->view->form = $clientService->getForm();
@@ -237,8 +237,8 @@ class Dealermanagement_ClientController extends Tangent_Controller_Action
         if ($this->view->client && $this->view->client->dealerId != $dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'Insufficient Privilege: You cannot view this client.'
-                                               ));
+                'danger' => 'Insufficient Privilege: You cannot view this client.'
+            ));
             $this->redirector('index');
         }
         $this->view->address = Quotegen_Model_Mapper_Address::getInstance()->find($this->_getParam('id', false));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwarelibrary_Model_Acl
  */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Memjet_Optimization_Quote
  */

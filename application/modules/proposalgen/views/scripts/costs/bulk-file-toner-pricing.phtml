@@ -1,13 +1,19 @@
 <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/cost/importExport.js')); ?>
-<br/>
+<br />
 <div class="tabbable">
     <ul class="nav nav-tabs">
-        <li><a href="<?php echo $this->url(array('action' => 'bulk-file-device-pricing', 'controller' => 'costs', 'module' => 'proposalgen'));?>" title='Device Price'> Device Price </a></li>
-        <?php if($this->canApprove) : ?>
-            <li><a href="<?php echo $this->url(array('action' => 'bulk-file-device-features', 'controller' => 'costs', 'module' => 'proposalgen'));?>" title='Device Features'> Device Features </a></li>
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'bulk-file-device-pricing', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title='Device Price'> Device Price </a>
+        </li>
+        <?php if ($this->canApprove) : ?>
+            <li>
+                <a href="<?php echo $this->url(array('action' => 'bulk-file-device-features', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title='Device Features'> Device Features </a>
+            </li>
         <?php endif; ?>
         <li class="active"><a href="#" title="Toner Pricing"> Toner Pricing</a></li>
-        <li><a href="<?php echo $this->url(array('action' => 'bulk-file-toner-matchup', 'controller' => 'costs', 'module' => 'proposalgen'));?>"  title='Toner Matchup'> Toner Matchup </a></li>
+        <li>
+            <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-matchup', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title='Toner Matchup'> Toner Matchup </a>
+        </li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="deviceFeaturesTabPane">
@@ -25,16 +31,16 @@
                 <a href="#" id="importLink" onclick="do_action('import')" class="btn btn-primary"><i class="icon-upload"></i> Import</a>
                 <a href="#" id="exportLink" onclick="do_action('export')" data-type="toner" class="btn btn-primary"><i class="icon-download"></i> Export</a>
 
-                <input class="manufacturerMultiSelect" type="text" name="manufacturers" id="manufacturers"/>
+                <input class="manufacturerMultiSelect" type="text" name="manufacturers" id="manufacturers" />
             </form>
         </div>
     </div>
 </div>
-<br/>
+<br />
 <input type="button" name="btnUpload" value="Back" onclick="do_action('cancel');" class="btn btn-inverse" />
 
-<br/>
-<br/>
+<br />
+<br />
 <?php if ($this->errorMessages != null): ?>
     <div class="well">
         <table class="table">

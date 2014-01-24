@@ -23,30 +23,30 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         }
 
         $this->addElement('select', 'manufacturer_id', array(
-                                                            'label'        => 'Manufacturer:',
-                                                            'multiOptions' => $manufacturers
-                                                       ));
+            'label'        => 'Manufacturer:',
+            'multiOptions' => $manufacturers
+        ));
 
         /*
          * Printer Model Name
          */
         $this->addElement('text', 'printer_model', array(
-                                                        'label'      => 'Model Name:',
-                                                        'required'   => true,
-                                                        'filters'    => array(
-                                                            'StringTrim',
-                                                            'StripTags'
-                                                        ),
-                                                        'validators' => array(
-                                                            array(
-                                                                'validator' => 'StringLength',
-                                                                'options'   => array(
-                                                                    1,
-                                                                    255
-                                                                )
-                                                            )
-                                                        )
-                                                   ));
+            'label'      => 'Model Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         /*
          * Toner Configuration
@@ -59,138 +59,138 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
         }
 
         $this->addElement('select', 'toner_config_id', array(
-                                                            'label'        => 'Toner Configuration:',
-                                                            'required'     => true,
-                                                            'multiOptions' => $tonerConfigs
-                                                       ));
+            'label'        => 'Toner Configuration:',
+            'required'     => true,
+            'multiOptions' => $tonerConfigs
+        ));
 
         /*
          * Is copier
          */
         $this->addElement('checkbox', 'is_copier', array(
-                                                        'label'   => 'Is copier:',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
+            'label'   => 'Is copier:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Is fax
          */
         $this->addElement('checkbox', 'is_fax', array(
-                                                     'label'   => 'Is fax:',
-                                                     'filters' => array(
-                                                         'Boolean'
-                                                     )
-                                                ));
+            'label'   => 'Is fax:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Is scanner
          */
         $this->addElement('checkbox', 'is_scanner', array(
-                                                         'label'   => 'Is scanner:',
-                                                         'filters' => array(
-                                                             'Boolean'
-                                                         )
-                                                    ));
+            'label'   => 'Is scanner:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Is duplex
          */
         $this->addElement('checkbox', 'is_duplex', array(
-                                                        'label'   => 'Is duplex:',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
+            'label'   => 'Is duplex:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Printer Wattage (Running)
          */
         $this->addElement('text', 'watts_power_normal', array(
-                                                             'label'      => 'Watts Power Normal:',
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'validators' => array(
-                                                                 'Int',
-                                                                 array(
-                                                                     'validator' => 'Between',
-                                                                     'options'   => array(
-                                                                         'min' => 1,
-                                                                         'max' => 5000
-                                                                     )
-                                                                 )
-                                                             )
-                                                        ));
+            'label'      => 'Watts Power Normal:',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 1,
+                        'max' => 5000
+                    )
+                )
+            )
+        ));
 
         /*
          * Printer Wattage (Idle)
          */
         $this->addElement('text', 'watts_power_idle', array(
-                                                           'label'      => 'Watts Power Idle:',
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'append'     => 'watts',
-                                                           'dimension'  => 1,
-                                                           'validators' => array(
-                                                               'Int',
-                                                               array(
-                                                                   'validator' => 'Between',
-                                                                   'options'   => array(
-                                                                       'min' => 1,
-                                                                       'max' => 5000
-                                                                   )
-                                                               )
-                                                           )
-                                                      ));
+            'label'      => 'Watts Power Idle:',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'append'     => 'watts',
+            'dimension'  => 1,
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 1,
+                        'max' => 5000
+                    )
+                )
+            )
+        ));
 
         /*
          * Device Price
          */
         $this->addElement('text', 'cost', array(
-                                               'label'      => 'Device Cost:',
-                                               'prepend'    => '$',
-                                               'dimension'  => 1,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   'Float',
-                                                   array(
-                                                       'validator' => 'Between',
-                                                       'options'   => array(
-                                                           'min' => 1,
-                                                           'max' => 5000
-                                                       )
-                                                   )
-                                               )
-                                          ));
+            'label'      => 'Device Cost:',
+            'prepend'    => '$',
+            'dimension'  => 1,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Float',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 1,
+                        'max' => 5000
+                    )
+                )
+            )
+        ));
 
         /*
          * Service Cost Per Page
          */
         $this->addElement('text', 'service_cost_per_page', array(
-                                                                'label'      => 'Service Cost Per Page:',
-                                                                'filters'    => array(
-                                                                    'StringTrim',
-                                                                    'StripTags'
-                                                                ),
-                                                                'validators' => array(
-                                                                    'Float',
-                                                                    array(
-                                                                        'validator' => 'Between',
-                                                                        'options'   => array(
-                                                                            'min' => 0.0001,
-                                                                            'max' => 5
-                                                                        )
-                                                                    )
-                                                                )
-                                                           ));
+            'label'      => 'Service Cost Per Page:',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Float',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 0.0001,
+                        'max' => 5
+                    )
+                )
+            )
+        ));
 
         /*
          * Launch Date
@@ -208,9 +208,9 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
                    ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
                    ->setRequired(true)->setLabel('Launch Date:');
         $launchDate->addFilters(array(
-                                     'StringTrim',
-                                     'StripTags'
-                                ));
+            'StringTrim',
+            'StripTags'
+        ));
 
         $this->addElement($launchDate);
 
@@ -218,84 +218,84 @@ class Proposalgen_Form_MasterDevice extends EasyBib_Form
          * Print Speed (Monochrome)
          */
         $this->addElement('text', 'ppm_black', array(
-                                                    'label'      => 'Print Speed (Monochrome):',
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validators' => array(
-                                                        'Int',
-                                                        array(
-                                                            'validator' => 'Between',
-                                                            'options'   => array(
-                                                                'min' => 0,
-                                                                'max' => 1000
-                                                            )
-                                                        )
-                                                    )
-                                               ));
+            'label'      => 'Print Speed (Monochrome):',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 0,
+                        'max' => 1000
+                    )
+                )
+            )
+        ));
 
         /*
          * Print Speed (Color)
          */
         $this->addElement('text', 'ppm_color', array(
-                                                    'label'      => 'Print Speed (Color):',
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validators' => array(
-                                                        'Int',
-                                                        array(
-                                                            'validator' => 'Between',
-                                                            'options'   => array(
-                                                                'min' => 0,
-                                                                'max' => 1000
-                                                            )
-                                                        )
-                                                    )
-                                               ));
+            'label'      => 'Print Speed (Color):',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min' => 0,
+                        'max' => 1000
+                    )
+                )
+            )
+        ));
 
         /*
          * Is leased
          */
         $this->addElement('checkbox', 'is_leased', array(
-                                                        'label'   => 'Is leased:',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
+            'label'   => 'Is leased:',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         /*
          * Leased Toner Yield
          */
         $this->addElement('text', 'leased_toner_yield', array(
-                                                             'label'      => 'Leased Toner Yield',
-                                                             'filters'    => array(
-                                                                 'StringTrim',
-                                                                 'StripTags'
-                                                             ),
-                                                             'allowEmpty' => false,
-                                                             'validators' => array(
-                                                                 new Tangent_Validate_FieldDependsOnValue('is_leased', '1', array(
-                                                                                                                                 new Zend_Validate_NotEmpty(),
-                                                                                                                                 new Zend_Validate_Int(),
-                                                                                                                                 new Zend_Validate_Between(array(
-                                                                                                                                                                'min' => 0,
-                                                                                                                                                                'max' => 1000
-                                                                                                                                                           ))
-                                                                                                                            ))
-                                                             )
-                                                        ));
+            'label'      => 'Leased Toner Yield',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'allowEmpty' => false,
+            'validators' => array(
+                new Tangent_Validate_FieldDependsOnValue('is_leased', '1', array(
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Int(),
+                    new Zend_Validate_Between(array(
+                        'min' => 0,
+                        'max' => 1000
+                    ))
+                ))
+            )
+        ));
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'label' => 'Save'
-                                              ));
+            'label' => 'Save'
+        ));
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'label' => 'Cancel'
-                                              ));
+            'label' => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

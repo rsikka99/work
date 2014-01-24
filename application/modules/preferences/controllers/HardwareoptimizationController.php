@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Preferences_HardwareoptimizationController
  */

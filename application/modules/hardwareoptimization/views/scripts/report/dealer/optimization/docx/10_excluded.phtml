@@ -16,8 +16,8 @@ $hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun(array("spaceAfter" => 0));
-$headerTextRun->addText('Excluded Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->excluded).  ')');
+$headerTextRun->addText('Excluded Devices', 'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->excluded) . ')');
 $section->addText("Devices that have either been manually excluded or haven't been mapped during previous steps.");
 
 // Table with values
@@ -38,7 +38,7 @@ foreach ($hardwareOptimizationDevices->excluded as $device)
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
     $table->addRow($tcStyle->body->rowheight);
-    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);

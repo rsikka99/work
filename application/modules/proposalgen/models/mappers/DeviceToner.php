@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_DeviceToner
  */
@@ -69,9 +70,9 @@ class Proposalgen_Model_Mapper_DeviceToner extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_tonerId} = ?"        => $primaryKey[0],
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey[1]
-                                                           ));
+            "{$this->col_tonerId} = ?"        => $primaryKey[0],
+            "{$this->col_masterDeviceId} = ?" => $primaryKey[1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

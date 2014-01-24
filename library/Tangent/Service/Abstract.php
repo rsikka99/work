@@ -1,4 +1,5 @@
 <?php
+
 abstract class Tangent_Service_Abstract
 {
     protected $_errorMessages = array();

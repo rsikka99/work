@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Default_AuthController
  */
@@ -306,8 +307,8 @@ class Default_AuthController extends Tangent_Controller_Action
                         $auth->getStorage()->write($identity);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => 'Password Changed Successfully'
-                                                           ));
+                            'success' => 'Password Changed Successfully'
+                        ));
 
                         // Redirects user to logout screen to login again
                         $r = new Zend_Controller_Action_Helper_Redirector();
@@ -316,8 +317,8 @@ class Default_AuthController extends Tangent_Controller_Action
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'You entered the incorrect current password!'
-                                                           ));
+                            'danger' => 'You entered the incorrect current password!'
+                        ));
                     }
                 }
                 else
@@ -390,8 +391,8 @@ class Default_AuthController extends Tangent_Controller_Action
                                 Application_Model_Mapper_User::getInstance()->save($user);
                                 Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
                                 $this->_flashMessenger->addMessage(array(
-                                                                        "success" => 'Password has been updated'
-                                                                   ));
+                                    "success" => 'Password has been updated'
+                                ));
                                 $this->redirector('index', 'index');
 
                             }
@@ -432,8 +433,8 @@ class Default_AuthController extends Tangent_Controller_Action
         {
             // Step 2. Verify the reset id and update the request
             $passwordResetRequest = Application_Model_Mapper_User_PasswordResetRequest::getInstance()->fetch(array(
-                                                                                                                  "resetToken = ?" => $resetUid
-                                                                                                             ));
+                "resetToken = ?" => $resetUid
+            ));
             if ($passwordResetRequest)
             {
                 // If we already reset our password with this hash, then it should no longer be valid
@@ -502,11 +503,11 @@ class Default_AuthController extends Tangent_Controller_Action
         $mail->addTo($user->email, $user->firstname . ' ' . $user->lastname);
         $mail->setSubject('Password Reset Request');
         $link = $this->view->serverUrl($this->view->url(array(
-                                                             'action'     => 'resetpassword',
-                                                             'controller' => 'auth',
-                                                             'module'     => 'default',
-                                                             'verify'     => $token
-                                                        )));
+            'action'     => 'resetpassword',
+            'controller' => 'auth',
+            'module'     => 'default',
+            'verify'     => $token
+        )));
 
 
         $body = "<body>";

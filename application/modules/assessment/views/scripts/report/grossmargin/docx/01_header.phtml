@@ -27,16 +27,16 @@ $textRun->addText('AMPV = Average Monthly Page Volume', 'italic_text');
 
 // Table with values
 $tcStyle = $this->styles->tables->settings;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 
 $table->addRow($tcStyle->row->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText(sprintf('%1$s Black And White CPP:',$this->brandName), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
-$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle );
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText(sprintf('%1$s Black And White CPP:', $this->brandName), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText('Total Cost:', $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 
 $table->addRow($tcStyle->row->rowheight);
-$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText(sprintf('%1$s Color CPP:',$this->brandName), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
+$table->addCell($tcStyle->col1Width, $tcStyle->row->labelcell->cellStyle)->addText(sprintf('%1$s Color CPP:', $this->brandName), $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col2Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSColorCPP(), 4), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);
 $table->addCell($tcStyle->col3Width, $tcStyle->row->labelcell->cellStyle)->addText('Total Revenue:', $tcStyle->row->labelcell->fontStyle, $tcStyle->row->labelcell->paragraphStyle);
 $table->addCell($tcStyle->col4Width, $tcStyle->row->valuecell->cellStyle)->addText('$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2), $tcStyle->row->valuecell->fontStyle, $tcStyle->row->valuecell->paragraphStyle);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_SolutionController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_SolutionController extends Assessment_Library_Controller
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_SOLUTION))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

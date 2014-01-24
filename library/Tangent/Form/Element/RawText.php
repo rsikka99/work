@@ -10,6 +10,7 @@
  *       'value' => '<p>'."TEXT TO INSERT INTO FORM".'</p><br />',
  *       ));
  */
+
 class Tangent_Form_Element_RawText extends Zend_Form_Element
 {
 

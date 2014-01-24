@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_IndexController
  */
@@ -87,8 +88,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                     $this->updateHealthcheckStepName();
                     $this->saveHealthcheck();
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => 'Settings saved.'
-                                                       ));
+                        'success' => 'Settings saved.'
+                    ));
 
 
                     if (isset($values ['saveAndContinue']))
@@ -99,8 +100,8 @@ class Healthcheck_IndexController extends Healthcheck_Library_Controller_Action
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
+                        'danger' => 'Please correct the errors below.'
+                    ));
                 }
             }
         }

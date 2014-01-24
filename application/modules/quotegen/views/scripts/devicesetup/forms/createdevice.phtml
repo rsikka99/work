@@ -6,327 +6,409 @@ $form = $this->form;
 ?>
 
 <?php $this->headScript()->appendFile($this->baseUrl('/js/quotegen/devicesetup/createDevice.js')); ?>
-<?php $this->headScript()->captureStart('append','text/javascript') ?>
+<?php $this->headScript()->captureStart('append', 'text/javascript') ?>
 
-    $(document).ready(function() {
-    	// Set up info popups
-    	$('i').popover();
+$(document).ready(function() {
+// Set up info popups
+$('i').popover();
 
-    	// Toggle the filter field
-		$("#criteria_filter").change(function() {
-			var url = '';
+// Toggle the filter field
+$("#criteria_filter").change(function() {
+var url = '';
 
-			//clear searches
-			$("#txtCriteria").val('');
-			$("#cboCriteria").val('');
+//clear searches
+$("#txtCriteria").val('');
+$("#cboCriteria").val('');
 
-			switch (this.value) {
-				case "manufacturer":
-					$("#text_criteria").hide();
-					$("#list_criteria").show();
-					break;
-				case "sku":
-					$("#list_criteria").hide();
-					$("#text_criteria").show();
-					break;
-				default:
-					break;
-			}
-    	});
+switch (this.value) {
+case "manufacturer":
+$("#text_criteria").hide();
+$("#list_criteria").show();
+break;
+case "sku":
+$("#list_criteria").hide();
+$("#text_criteria").show();
+break;
+default:
+break;
+}
+});
 
-    	// Set up filter values
-    	<?php if ( $this->search_filter == "manufacturer" ) { ?>
-			$("#text_criteria").hide();
-			$("#list_criteria").show();
-			$("#cboCriteria").val(<?php echo $this->cboCriteria; ?>);
-    	<?php } else { ?>
-			$("#list_criteria").hide();
-			$("#text_criteria").show();
-    		$("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
-   		<?php } ?>
-    });
+// Set up filter values
+<?php if ($this->search_filter == "manufacturer")
+{ ?>
+    $("#text_criteria").hide();
+    $("#list_criteria").show();
+    $("#cboCriteria").val(<?php echo $this->cboCriteria; ?>);
+<?php }
+else
+{ ?>
+    $("#list_criteria").hide();
+    $("#text_criteria").show();
+    $("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
+<?php } ?>
+});
 
-    function update_leased()
-    {
-        if ($('#isLeased').is(":checked"))
-        {
-            $('#leasedTonerYield').removeAttr('disabled');
-        }
-        else
-        {
-            $('#leasedTonerYield').attr('disabled','disabled');
-        }
-    }
+function update_leased()
+{
+if ($('#isLeased').is(":checked"))
+{
+$('#leasedTonerYield').removeAttr('disabled');
+}
+else
+{
+$('#leasedTonerYield').attr('disabled','disabled');
+}
+}
 
 
-    $(isLeased).change(function(){
-        update_leased();
-    });
-    update_leased();
+$(isLeased).change(function(){
+update_leased();
+});
+update_leased();
 
-    function removeA(arr) {
-	    var what, a= arguments, L= a.length, ax;
-	    while(L> 1 && arr.length){
-	        what= a[--L];
-	        while((ax= arr.indexOf(what))!= -1){
-	            arr.splice(ax, 1);
-	        }
-	    }
-	    return arr;
-	}
+function removeA(arr) {
+var what, a= arguments, L= a.length, ax;
+while(L> 1 && arr.length){
+what= a[--L];
+while((ax= arr.indexOf(what))!= -1){
+arr.splice(ax, 1);
+}
+}
+return arr;
+}
 
-    function update_toner(id) {
-    	var ids = $("#hdnToners").val();
-    	var idsArray = ids.split(',');
+function update_toner(id) {
+var ids = $("#hdnToners").val();
+var idsArray = ids.split(',');
 
-    	if ( jQuery.inArray(id.toString(), idsArray) > -1 ) {
-    		// remove from array
-    		idsArray.splice(jQuery.inArray(id.toString(), idsArray), 1);
+if ( jQuery.inArray(id.toString(), idsArray) > -1 ) {
+// remove from array
+idsArray.splice(jQuery.inArray(id.toString(), idsArray), 1);
 
-    		// toggle button to assign
-    		$("#btnAssign"+id).attr('class','btn btn-success btn-mini');
-    		$("#btnAssign"+id).html('<i class="icon-plus-sign icon-white"></i> Assign');
+// toggle button to assign
+$("#btnAssign"+id).attr('class','btn btn-success btn-mini');
+$("#btnAssign"+id).html('<i class="icon-plus-sign icon-white"></i> Assign');
 
-    	} else {
-    		// add to array
-    		if ( ids.length > 0 ) {
-    			idsArray.push(id);
-    		} else {
-    			idsArray = id;
-    		}
+} else {
+// add to array
+if ( ids.length > 0 ) {
+idsArray.push(id);
+} else {
+idsArray = id;
+}
 
-    		// toggle button to remove
-    		$("#btnAssign"+id).attr('class','btn btn-danger btn-mini');
-    		$("#btnAssign"+id).html('<i class="icon-minus-sign icon-white"></i> Unassign');
-    	}
-    	$("#hdnToners").val(idsArray.toString());
-    }
+// toggle button to remove
+$("#btnAssign"+id).attr('class','btn btn-danger btn-mini');
+$("#btnAssign"+id).html('<i class="icon-minus-sign icon-white"></i> Unassign');
+}
+$("#hdnToners").val(idsArray.toString());
+}
 
 <?php $this->headScript()->captureEnd() ?>
 
 
 <form name="createdevice" id="createdevice" class="form-horizontal" action="<?php echo $this->element->getAction() ?>" method="<?php echo $this->element->getMethod() ?>">
 <div class="well">
-	<?php $element = $this->element->getElement("manufacturerId"); /* @var $element Zend_Form_Element */ ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("modelName"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("can_sell"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo trim($element->renderDescription()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("oemSku"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-		<?php $element = $this->element->getElement("dealerSku"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("description"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("tonerConfigId"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("isCopier"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("isFax"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("isDuplex"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("wattsPowerNormal"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("wattsPowerIdle"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("cost"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("partsCostPerPage"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-    <?php $element = $this->element->getElement("laborCostPerPage"); ?>
-    <div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-        <?php echo $element->renderLabel(); ?>
-        <div class="controls">
-            <?php if ( $element->hasErrors() ) {
-                $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-            } ?>
-            <?php echo trim($element->renderViewHelper()); ?>
-            <?php echo $element->renderErrors(); ?>
-        </div>
+<?php $element = $this->element->getElement("manufacturerId"); /* @var $element Zend_Form_Element */ ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
     </div>
-	<?php $element = $this->element->getElement("launchDate"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-		    <?php echo $element->renderUiWidgetElement(); ?>
-			<?php echo trim($element->renderErrors()); ?>
-			<?php echo trim($element->renderDescription()); ?>
-		</div>
-	</div>
-    <?php $element = $this->element->getElement("ppmBlack"); ?>
-    <div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-        <?php echo $element->renderLabel(); ?>
-        <div class="controls">
-            <?php if ( $element->hasErrors() ) {
-                $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-            } ?>
-            <?php echo trim($element->renderViewHelper()); ?>
-            <?php echo $element->renderErrors(); ?>
-        </div>
+</div>
+<?php $element = $this->element->getElement("modelName"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
     </div>
-	<?php $element = $this->element->getElement("ppmColor"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("isLeased"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo trim($element->renderDescription()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
-	<?php $element = $this->element->getElement("leasedTonerYield"); ?>
-	<div class="control-group<?php if ( $element->hasErrors() ) { echo " error"; } ?>">
-		<?php echo $element->renderLabel(); ?>
-		<div class="controls">
-			<?php if ( $element->hasErrors() ) {
-				$element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
-			} ?>
-			<?php echo trim($element->renderViewHelper()); ?>
-			<?php echo $element->renderErrors(); ?>
-		</div>
-	</div>
+</div>
+<?php $element = $this->element->getElement("can_sell"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo trim($element->renderDescription()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("oemSku"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("dealerSku"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("description"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'height: 100px; border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("tonerConfigId"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("isCopier"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("isFax"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("isDuplex"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("wattsPowerNormal"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("wattsPowerIdle"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("cost"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("partsCostPerPage"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("laborCostPerPage"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("launchDate"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php echo $element->renderUiWidgetElement(); ?>
+        <?php echo trim($element->renderErrors()); ?>
+        <?php echo trim($element->renderDescription()); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("ppmBlack"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("ppmColor"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("isLeased"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo trim($element->renderDescription()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
+<?php $element = $this->element->getElement("leasedTonerYield"); ?>
+<div class="control-group<?php if ($element->hasErrors())
+{
+    echo " error";
+} ?>">
+    <?php echo $element->renderLabel(); ?>
+    <div class="controls">
+        <?php if ($element->hasErrors())
+        {
+            $element->setAttrib('style', 'border-color: #B94A48; color: #B94A48;');
+        } ?>
+        <?php echo trim($element->renderViewHelper()); ?>
+        <?php echo $element->renderErrors(); ?>
+    </div>
+</div>
 </div>
 
 
@@ -336,7 +418,7 @@ $form = $this->form;
 
 <h3> Applied Toners </h3>
 <table id='appliedToners'></table>
-<br/>
+<br />
 
 <h3> Available Toner</h3>
 <table id='availableToners'></table>

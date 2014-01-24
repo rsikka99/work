@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_Import_Toner_Matchup
  */
@@ -34,47 +35,47 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
     {
         $this->_inputFilter = new Zend_Filter_Input(
             array(
-                 '*'                                        => array(
-                     'StringTrim',
-                     'StripTags',
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_DEALER_COST => array(
-                     new My_Filter_StringReplace(array("find" => "$",))
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_YIELD       => array(
-                     'Alnum'
-                 ),
+                '*'                                        => array(
+                    'StringTrim',
+                    'StripTags',
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_DEALER_COST => array(
+                    new My_Filter_StringReplace(array("find" => "$",))
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_YIELD       => array(
+                    'Alnum'
+                ),
             ),
             array(
-                 '*'                                        => array(
-                     'allowEmpty' => true,
-                 ),
-                 self::TONER_MATCHUP_MANUFACTURER           => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_OEM_TONER_SKU          => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_COLOR                  => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU  => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU  => array(
-                     'allowEmpty' => false,
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_YIELD       => array(
-                     new Zend_Validate_Int(),
-                     array('GreaterThan', 0),
-                 ),
-                 self::TONER_MATCHUP_COMPATIBLE_DEALER_COST => array(
-                     new Zend_Validate_Float(),
-                     array('GreaterThan', 0)
-                 ),
+                '*'                                        => array(
+                    'allowEmpty' => true,
+                ),
+                self::TONER_MATCHUP_MANUFACTURER           => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_OEM_TONER_SKU          => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_COLOR                  => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU  => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU  => array(
+                    'allowEmpty' => false,
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_YIELD       => array(
+                    new Zend_Validate_Int(),
+                    array('GreaterThan', 0),
+                ),
+                self::TONER_MATCHUP_COMPATIBLE_DEALER_COST => array(
+                    new Zend_Validate_Float(),
+                    array('GreaterThan', 0)
+                ),
             )
         );
     }

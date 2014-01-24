@@ -1,4 +1,5 @@
 <?php
+
 class My_Navigation_Step extends My_Model_Abstract
 {
     /**

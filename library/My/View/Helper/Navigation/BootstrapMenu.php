@@ -403,12 +403,12 @@ class My_View_Helper_Navigation_BootstrapMenu extends Zend_View_Helper_Navigatio
                                    $indent = null)
     {
         return $this->renderMenu($container, array(
-                                                  'indent'           => $indent,
-                                                  'ulClass'          => $ulClass,
-                                                  'minDepth'         => null,
-                                                  'maxDepth'         => null,
-                                                  'onlyActiveBranch' => true,
-                                                  'renderParents'    => false
-                                             ));
+            'indent'           => $indent,
+            'ulClass'          => $ulClass,
+            'minDepth'         => null,
+            'maxDepth'         => null,
+            'onlyActiveBranch' => true,
+            'renderParents'    => false
+        ));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Custom_Validate_FieldDependsOnValue
  * Requires field presence based on provided value of radio element.

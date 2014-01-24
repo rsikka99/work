@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Jit_Compatible_Master_Device
  */

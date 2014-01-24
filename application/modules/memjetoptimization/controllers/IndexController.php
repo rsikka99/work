@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_IndexController
  */
@@ -205,10 +206,10 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
             $memjetDeviceReplacement = new Memjetoptimization_Model_Optimization_MemjetDeviceReplacement(
                 array(
-                     'black'    => $blackReplacementDevices,
-                     'blackmfp' => $blackMfpReplacementDevices,
-                     'color'    => $colorReplacementDevices,
-                     'colormfp' => $colorMfpReplacementDevices
+                    'black'    => $blackReplacementDevices,
+                    'blackmfp' => $blackMfpReplacementDevices,
+                    'color'    => $colorReplacementDevices,
+                    'colormfp' => $colorMfpReplacementDevices
                 ),
                 $this->_dealerId,
                 $this->_memjetOptimization->getMemjetOptimizationSetting()->lossThreshold,
@@ -438,37 +439,37 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
          */
         $this->sendJson(
              array(
-                  "summary" => array(
-                      /**
-                       * Summary page Page Data
-                       */
-                      "monochromeCpp"               => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage, array("precision" => 4)),
-                      "colorCpp"                    => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage, array("precision" => 4)),
-                      "totalRevenue"                => $this->view->currency((float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio), array('precision' => 2)),
-                      "monoVolume"                  => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly()),
-                      "monoVolumePercent"           => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getMonochromePagePercentage()),
-                      "colorVolume"                 => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly()),
-                      "colorVolumePercent"          => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPagePercentage()),
-                      "totalCost"                   => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements($blackToColorRatio)),
-                      "marginDollar"                => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio)),
-                      "marginPercent"               => number_format(Tangent_Accounting::reverseEngineerMargin((float)$memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements(), (float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2),
-                      "grossMarginDelta"            => $this->view->currency($grossMarginDelta),
-                      "grossMarginDeltaIsPositive"  => ($grossMarginDeltaIsPositive) ? true : false,
-                      "customerCostDelta"           => $this->view->currency($customerCostDelta),
-                      "customerCostDeltaIsPositive" => ($customerCostDeltaPositive) ? true : false,
-                      "numberOfDevicesReplaced"     => number_format($memjetOptimizationViewModel->getNumberOfDevicesWithReplacements()),
-                  ),
-                  "device"  => array(
-                      /**
-                       * Device Data
-                       */
+                 "summary" => array(
+                     /**
+                      * Summary page Page Data
+                      */
+                     "monochromeCpp"               => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage, array("precision" => 4)),
+                     "colorCpp"                    => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage, array("precision" => 4)),
+                     "totalRevenue"                => $this->view->currency((float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio), array('precision' => 2)),
+                     "monoVolume"                  => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly()),
+                     "monoVolumePercent"           => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getMonochromePagePercentage()),
+                     "colorVolume"                 => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly()),
+                     "colorVolumePercent"          => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPagePercentage()),
+                     "totalCost"                   => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements($blackToColorRatio)),
+                     "marginDollar"                => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio)),
+                     "marginPercent"               => number_format(Tangent_Accounting::reverseEngineerMargin((float)$memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements(), (float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2),
+                     "grossMarginDelta"            => $this->view->currency($grossMarginDelta),
+                     "grossMarginDeltaIsPositive"  => ($grossMarginDeltaIsPositive) ? true : false,
+                     "customerCostDelta"           => $this->view->currency($customerCostDelta),
+                     "customerCostDeltaIsPositive" => ($customerCostDeltaPositive) ? true : false,
+                     "numberOfDevicesReplaced"     => number_format($memjetOptimizationViewModel->getNumberOfDevicesWithReplacements()),
+                 ),
+                 "device"  => array(
+                     /**
+                      * Device Data
+                      */
 
-                      "costDelta"          => $this->view->currency($costDelta),
-                      "rawCostDelta"       => (float)$costDelta,
-                      "estimatedMonoAmpv"  => number_format($estimatedPageCounts->getBlackPageCount()->getMonthly()),
-                      "estimatedColorAmpv" => number_format($estimatedPageCounts->getColorPageCount()->getMonthly()),
-                      "replaceReason"      => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
-                  ),
+                     "costDelta"          => $this->view->currency($costDelta),
+                     "rawCostDelta"       => (float)$costDelta,
+                     "estimatedMonoAmpv"  => number_format($estimatedPageCounts->getBlackPageCount()->getMonthly()),
+                     "estimatedColorAmpv" => number_format($estimatedPageCounts->getColorPageCount()->getMonthly()),
+                     "replaceReason"      => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
+                 ),
              )
         );
     }

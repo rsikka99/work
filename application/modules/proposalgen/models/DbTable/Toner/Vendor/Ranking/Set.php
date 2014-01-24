@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_DbTable_Toner_Vendor_Ranking_Set
  */

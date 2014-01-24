@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_Mapper_Hardware_Optimization
  */
@@ -79,8 +80,8 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

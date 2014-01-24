@@ -18,8 +18,8 @@ $detailsTable = $titlePage->addTable(array('cellMarginRight' => 900));
 $detailsTable->addRow(5490);
 $imageCell = $detailsTable->addCell(12240);
 $imageCell->addImage(ASSETS_PATH . "/printiq/titlepage_logo.png", array(
-                                                                       'align' => 'right'
-                                                                  ));
+    'align' => 'right'
+));
 
 /**
  * Report Title + Client Name
@@ -29,9 +29,9 @@ $textCell = $detailsTable->addCell(12240);
 $textCell->addText('Health Check', 'titlepage_title', 'nospacing_rightalign');
 $textCell->addText('Prepared For: ', 'titlepage_subtitle_italic', 'rightalign');
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->companyName), 'titlepage_subtitle', array(
-                                                                                                                                               'align'       => 'right',
-                                                                                                                                               'spaceBefore' => 200,
-                                                                                                                                          ));
+    'align'       => 'right',
+    'spaceBefore' => 200,
+));
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine1 . ((strlen($healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2)) > 0 ? ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->addressLine2 : "")), 'titlepage_subtitle', 'rightalign');
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->city . " " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->getRegionName() . ", " . $healthcheckViewModel->healthcheck->getClient()->getAddress()->postCode), 'titlepage_subtitle', 'rightalign');
 $textCell->addText(sprintf('%1$s', $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "United States" ? "USA" : ($healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry() == "Canada" ? "CAN" : $healthcheckViewModel->healthcheck->getClient()->getAddress()->getCountry())), 'titlepage_subtitle', 'rightalign');

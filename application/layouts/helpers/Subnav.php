@@ -39,10 +39,10 @@ class Application_View_Helper_Subnav extends Zend_View_Helper_Abstract
         if ($container && $container->hasPages())
         {
             $html = $this->view->MyNavigation()
-                ->menu()
-                ->setUlClass($navClass)
-                ->setMaxDepth($maxDepth)
-                ->render($container);
+                               ->menu()
+                               ->setUlClass($navClass)
+                               ->setMaxDepth($maxDepth)
+                               ->render($container);
         }
 
         return $html;

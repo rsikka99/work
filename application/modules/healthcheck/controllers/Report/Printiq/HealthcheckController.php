@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_Report_Printiq_HealthcheckController
  */
@@ -17,7 +18,7 @@ class Healthcheck_Report_Printiq_HealthcheckController extends Healthcheck_Libra
         /**
          * If we don't have access to PrintIQ Health Check, switch to normal Health Check
          */
-        if(!My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
+        if (!My_Feature::canAccess(My_Feature::HEALTHCHECK_PRINTIQ))
         {
             $this->redirector('index', 'report_healthcheck', 'healthcheck');
         }

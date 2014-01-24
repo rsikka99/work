@@ -1,6 +1,6 @@
 <?php
 /* @var $section PHPWord_Section */
-$section = $this->section;
+$section   = $this->section;
 $tableSpan = $this->tableStyle->gridSpan;
 $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
@@ -97,7 +97,7 @@ $leaseDetailsTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackgr
 
 $leaseDetailsTable->addRow();
 
-$cell = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
+$cell    = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('AGREEMENT ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section1}", $this->fontStyle->finePrint);
@@ -117,7 +117,7 @@ $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('DEVICE USAGE PAYMENTS ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section4}", $this->fontStyle->finePrint);
 
-$cell = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
+$cell    = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
 $textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
 $textRun->addText('REMOTE MONITORING ', $this->fontStyle->boldFinePrint);
 $textRun->addText("{$this->agreement->section5}", $this->fontStyle->finePrint);

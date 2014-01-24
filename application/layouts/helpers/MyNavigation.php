@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application_View_Helper_MyNavigation
  *

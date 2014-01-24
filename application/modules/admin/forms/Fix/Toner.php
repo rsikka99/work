@@ -33,7 +33,7 @@ class Admin_Form_Fix_Toner extends Twitter_Bootstrap_Form_Horizontal
         // Set the method for the display form to POST
         $this->setMethod('POST');
 
-        $dealers = Admin_Model_Mapper_Dealer::getInstance()->fetchAll();
+        $dealers    = Admin_Model_Mapper_Dealer::getInstance()->fetchAll();
         $dealerList = array(
             0 => "Select Company..."
         );
@@ -43,34 +43,34 @@ class Admin_Form_Fix_Toner extends Twitter_Bootstrap_Form_Horizontal
         }
 
         $this->addElement('select', 'dealerId', array(
-                                                          'label'        => 'Owner Of Dealer SKU',
-                                                          'required'     => true,
-                                                          'multiOptions' => $dealerList
-                                                     ));
+            'label'        => 'Owner Of Dealer SKU',
+            'required'     => true,
+            'multiOptions' => $dealerList
+        ));
 
         $this->addElement('file', 'uploadFile', array(
-                                                     'label'       => 'Choose a file to upload',
-                                                     'destination' => $this->getView()->App()->uploadPath,
-                                                     'required'    => true,
-                                                     'accept'      => '.csv',
-                                                     'validators'  => array(
-                                                         'Extension' => array('extension' => 'csv'),
-                                                         'Count'     => array('count' => 1),
-                                                         'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
-                                                     )
-                                                ));
+            'label'       => 'Choose a file to upload',
+            'destination' => $this->getView()->App()->uploadPath,
+            'required'    => true,
+            'accept'      => '.csv',
+            'validators'  => array(
+                'Extension' => array('extension' => 'csv'),
+                'Count'     => array('count' => 1),
+                'File_Size' => array('min' => $this->_minFileSize, 'max' => $this->_maxFileSize)
+            )
+        ));
 
         $this->addElement('button', 'performUpload', array(
-                                                          'label' => 'Upload File',
-                                                          'type'  => 'submit',
-                                                     ));
+            'label' => 'Upload File',
+            'type'  => 'submit',
+        ));
         // Add the buttons the the form actions
         $this->addDisplayGroup(array('performUpload'), 'actions', array(
-                                                                       'disableLoadDefaultDecorators' => true,
-                                                                       'decorators'                   => array(
-                                                                           'Actions'
-                                                                       )
-                                                                  ));
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions'
+            )
+        ));
     }
 
     /**

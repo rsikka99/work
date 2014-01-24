@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_MemjetdeviceswapsController
  */
@@ -105,8 +106,8 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -181,8 +182,8 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -334,7 +335,7 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
         $reason            = $swapMapper->find($reasonId);
 
         // Delete defaults if they exist
-        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof  Memjetoptimization_Model_Device_Swap_Reason_Default)
+        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof Memjetoptimization_Model_Device_Swap_Reason_Default)
         {
             $reasonsByCategory = $swapMapper->fetchAllByCategoryId($reason->deviceSwapReasonCategoryId, $reason->dealerId);
             // is this the last device in this category?
@@ -399,8 +400,8 @@ class Admin_MemjetdeviceswapsController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'You do not have permission to delete a device'
-                            ));
+                'error' => 'You do not have permission to delete a device'
+            ));
         }
     }
 }

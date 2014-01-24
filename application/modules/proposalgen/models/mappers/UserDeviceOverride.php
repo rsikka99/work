@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_UserDeviceOverride
  */
@@ -83,8 +84,8 @@ class Proposalgen_Model_Mapper_UserDeviceOverride extends Tangent_Model_Mapper_A
     public function findOverrideForMasterDevice ($userId, $masterDeviceId)
     {
         return $this->fetchRow(array(
-                                    "master_device_id = ?" => $masterDeviceId,
-                                    "user_id = ?"          => $userId
-                               ));
+            "master_device_id = ?" => $masterDeviceId,
+            "user_id = ?"          => $userId
+        ));
     }
 }

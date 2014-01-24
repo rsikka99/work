@@ -13,8 +13,8 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_OLD_DEVICE_LIST))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

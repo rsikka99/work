@@ -28,7 +28,7 @@
                     <div class="btn-group">
                         <?php $canDelete = $this->IsAllowed(Dealermanagement_Model_Acl::RESOURCE_DEALERMANAGEMENT_CLIENT_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
                         $width = 35;
-                        if($canDelete)
+                        if ($canDelete)
                         {
                             $width = 13;
                         }
@@ -36,12 +36,12 @@
                         <a class="btn btn-info" title="View" style="width:<?php echo $width; ?>px" href="<?php echo $this->url(array('action' => 'view', 'id' => $client->id)); ?>"><i class="icon-eye-open"></i></a>
                         <a class="btn btn-warning" title="Edit" style="width:<?php echo $width; ?>px" href="<?php echo $this->url(array('action' => 'edit', 'id' => $client->id)); ?>"><i class="icon-pencil"></i></a>
                         <?php
-                        if($canDelete)
+                        if ($canDelete)
                         {
                             ?>
-                        <a class="btn btn-danger" title = "Delete" href = "<?php echo $this->url(array ( 'action' => 'delete', 'id' => $client->id)); ?>" ><i class="icon-trash" ></i ></a >
+                            <a class="btn btn-danger" title="Delete" href="<?php echo $this->url(array('action' => 'delete', 'id' => $client->id)); ?>"><i class="icon-trash"></i></a>
                         <?php
-                            }
+                        }
                         ?>
                     </div>
                 </td>

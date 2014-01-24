@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_View_Helper_ProposalMenu
  */
@@ -34,9 +35,9 @@ class Proposalgen_View_Helper_ProposalMenu extends Zend_View_Helper_Abstract
 
                 // Get the URL and name
                 $url  = $this->view->url(array(
-                                              'controller' => $step->controller,
-                                              'action'     => $step->action
-                                         ));
+                    'controller' => $step->controller,
+                    'action'     => $step->action
+                ));
                 $name = $step->name;
 
                 if ($step->canAccess)

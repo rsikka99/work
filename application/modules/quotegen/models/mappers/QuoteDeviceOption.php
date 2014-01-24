@@ -76,8 +76,8 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -258,8 +258,8 @@ class Quotegen_Model_Mapper_QuoteDeviceOption extends My_Model_Mapper_Abstract
     public function fetchAllOptionsForQuoteDevice ($id)
     {
         return $this->fetchAll(array(
-                                    'quoteDeviceId = ?' => (int)$id
-                               ));
+            'quoteDeviceId = ?' => (int)$id
+        ));
     }
 }
 

@@ -10,9 +10,9 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
     {
         $this->_helper->contextSwitch()
                       ->addActionContext('get-reports-for-client', array(
-                                                                        'xml',
-                                                                        'json'
-                                                                   ))
+                          'xml',
+                          'json'
+                      ))
                       ->setAutoJsonSerialization(true)
                       ->initContext();
 
@@ -110,14 +110,14 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
                 {
                     // Redirect to the build controller
                     $this->redirector('index', 'quote_devices', null, array(
-                                                                           'quoteId' => $values ['quoteId']
-                                                                      ));
+                        'quoteId' => $values ['quoteId']
+                    ));
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => "There was an error selecting your quote. Please try again."
-                                                       ));
+                        'danger' => "There was an error selecting your quote. Please try again."
+                    ));
                 }
             }
         }
@@ -186,13 +186,13 @@ class Quotegen_IndexController extends Quotegen_Library_Controller_Quote
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client was successfully created."
-                                                   ));
+                    'success' => "Client was successfully created."
+                ));
 
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
-                                                            'clientId' => $clientId
-                                                       ));
+                    'clientId' => $clientId
+                ));
             }
         }
 

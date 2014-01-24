@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Form_DeviceSwapChoice
  */
@@ -109,12 +110,12 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
             $memjetReplacementDevices[0] = $deviceInstance->getAction();
             // Create an element for each device Device list per manufacturer
             $deviceElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                                                                                                     'label'   => 'Device: ',
-                                                                                                     'attribs' => array(
-                                                                                                         'style' => 'width: 100%'
-                                                                                                     ),
-                                                                                                     'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
-                                                                                                ));
+                'label'   => 'Device: ',
+                'attribs' => array(
+                    'style' => 'width: 100%'
+                ),
+                'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+            ));
 
             $this->addElement($deviceElement);
 
@@ -136,24 +137,24 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 }
 
                 $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                                                                                                               'label'   => ': ',
-                                                                                                               'attribs' => array(
-                                                                                                                   'style' => 'width: 100%'
-                                                                                                               ),
-                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
-                                                                                                          ));
+                    'label'   => ': ',
+                    'attribs' => array(
+                        'style' => 'width: 100%'
+                    ),
+                    'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
+                ));
                 $this->addElement($deviceReasonElement);
                 $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory($reasonCategory));
             }
             else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
             {
                 $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                                                                                                               'label'   => ': ',
-                                                                                                               'attribs' => array(
-                                                                                                                   'style' => 'width: 100%'
-                                                                                                               ),
-                                                                                                               'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
-                                                                                                          ));
+                    'label'   => ': ',
+                    'attribs' => array(
+                        'style' => 'width: 100%'
+                    ),
+                    'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
+                ));
                 $this->addElement($deviceReasonElement);
                 $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Memjetoptimization_Model_Device_Swap_Reason_Category::FLAGGED));
             }

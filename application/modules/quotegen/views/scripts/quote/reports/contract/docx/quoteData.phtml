@@ -3,26 +3,26 @@
 $quote = $this->quote;
 
 // Equipment and payment terms section
-$this->leaseDetails = new stdClass();
-$this->leaseDetails->monthlyCharge = $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal());
+$this->leaseDetails                      = new stdClass();
+$this->leaseDetails->monthlyCharge       = $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal());
 $this->leaseDetails->monochromeAllowance = number_format($quote->calculateTotalMonochromePages());
-$this->leaseDetails->colorAllowance = number_format($quote->calculateTotalColorPages());
-$this->leaseDetails->monochromeCPP = number_format($quote->calculateMonochromeOverageRatePerPage(), 3);
-$this->leaseDetails->colorCPP = number_format($quote->calculateColorOverageRatePerPage(), 3);
+$this->leaseDetails->colorAllowance      = number_format($quote->calculateTotalColorPages());
+$this->leaseDetails->monochromeCPP       = number_format($quote->calculateMonochromeOverageRatePerPage(), 3);
+$this->leaseDetails->colorCPP            = number_format($quote->calculateColorOverageRatePerPage(), 3);
 // FIXME: Not Dynamic
-$this->leaseDetails->programFee = '99.99';
-$this->leaseDetails->termInMonths = $quote->leaseTerm;
+$this->leaseDetails->programFee      = '99.99';
+$this->leaseDetails->termInMonths    = $quote->leaseTerm;
 $this->leaseDetails->securityDeposit = $this->currency(0);
 // TODO: Should be blank if it's monthly.
 $this->leaseDetails->meterFrequency = '';
 
 // Information specific for the company
-$this->company = new stdClass();
-$this->company->name = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
+$this->company          = new stdClass();
+$this->company->name    = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
 $this->company->address = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";
 
 // Dealer company details
-$this->dealerCompany = new stdClass();
-$this->dealerCompany->companyName = 'COMPANY NAME, INC.';
-$this->dealerCompany->companyOwner = 'BUGS BUNNY, CARROT CONNOISSEUR';
+$this->dealerCompany                 = new stdClass();
+$this->dealerCompany->companyName    = 'COMPANY NAME, INC.';
+$this->dealerCompany->companyOwner   = 'BUGS BUNNY, CARROT CONNOISSEUR';
 $this->dealerCompany->companyAddress = '231 LOONEY PLACE, Albuquerque, 90210';

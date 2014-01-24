@@ -1,4 +1,5 @@
 <?php
+
 class Memjetoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form_Horizontal
 {
     public function init ()
@@ -8,9 +9,9 @@ class Memjetoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form_H
         $this->setAttrib('id', 'deviceSwapReason');
 
         $reasonCategoryElement = $this->createElement("select", "reasonCategory", array(
-                                                                                       "label" => "Reason category",
-                                                                                       "class" => "input-xlarge"
-                                                                                  ));
+            "label" => "Reason category",
+            "class" => "input-xlarge"
+        ));
 
         $this->addElement($reasonCategoryElement);
 
@@ -24,14 +25,14 @@ class Memjetoptimization_Form_DeviceSwapReasons extends Twitter_Bootstrap_Form_H
         $reasonCategoryElement->setMultiOptions($reasons);
 
         $reasonElement = $this->createElement("text", "reason", array(
-                                                                     "label" => "Reason",
-                                                                     "class" => "input-xlarge"
-                                                                ));
+            "label" => "Reason",
+            "class" => "input-xlarge"
+        ));
         $this->addElement($reasonElement);
 
         $this->addElement('checkbox', 'isDefault', array(
-                                                        "label" => "Default Reason"
-                                                   ));
+            "label" => "Default Reason"
+        ));
 
         $this->addElement('hidden', 'deviceSwapReasonId');
 

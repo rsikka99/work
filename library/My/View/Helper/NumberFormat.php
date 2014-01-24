@@ -1,4 +1,5 @@
 <?php
+
 /**
  * View Helper to Format Numbers.
  *

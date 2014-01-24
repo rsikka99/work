@@ -45,67 +45,67 @@ class Admin_Form_User extends EasyBib_Form
         $datetimeValidator = new My_Validate_DateTime();
 
         $this->addElement('text', 'firstname', array(
-                                                    'label'      => 'First Name:',
-                                                    'required'   => true,
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags',
-                                                        $alphaNumericWithSpaces
-                                                    ),
-                                                    'validators' => array(
-                                                        array(
-                                                            'validator' => 'StringLength',
-                                                            'options'   => array(
-                                                                2,
-                                                                30
-                                                            )
-                                                        )
-                                                    )
-                                               ));
+            'label'      => 'First Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags',
+                $alphaNumericWithSpaces
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        2,
+                        30
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'lastname', array(
-                                                   'label'      => 'Last Name:',
-                                                   'required'   => true,
-                                                   'filters'    => array(
-                                                       'StringTrim',
-                                                       'StripTags',
-                                                       $alphaNumericWithSpaces
-                                                   ),
-                                                   'validators' => array(
-                                                       array(
-                                                           'validator' => 'StringLength',
-                                                           'options'   => array(
-                                                               2,
-                                                               30
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'label'      => 'Last Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags',
+                $alphaNumericWithSpaces
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        2,
+                        30
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'email', array(
-                                                'label'         => 'Email:',
-                                                'required'      => true,
-                                                'filters'       => array(
-                                                    'StringTrim',
-                                                    'StripTags'
-                                                ),
-                                                'validators'    => array(
-                                                    array(
-                                                        'validator' => 'StringLength',
-                                                        'options'   => array(
-                                                            4,
-                                                            200
-                                                        )
-                                                    ),
-                                                    array(
-                                                        'validator' => 'EmailAddress',
-                                                        'allow'     => Zend_Validate_Hostname::ALLOW_DNS
-                                                    )
-                                                ),
-                                                'errorMessages' => array(
-                                                    'EmailAddress' => 'Invalid Email Address'
-                                                )
-                                           ));
+            'label'         => 'Email:',
+            'required'      => true,
+            'filters'       => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators'    => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        4,
+                        200
+                    )
+                ),
+                array(
+                    'validator' => 'EmailAddress',
+                    'allow'     => Zend_Validate_Hostname::ALLOW_DNS
+                )
+            ),
+            'errorMessages' => array(
+                'EmailAddress' => 'Invalid Email Address'
+            )
+        ));
 
         $roles = Admin_Model_Mapper_Role::getInstance()->fetchAll();
         if (count($roles) > 0)
@@ -139,11 +139,11 @@ class Admin_Form_User extends EasyBib_Form
         if ($dealers)
         {
             $this->addElement('select', 'dealerId', array(
-                                                         'label'        => 'Dealer:',
-                                                         'class'        => 'input-medium',
-                                                         'multiOptions' => $dealers,
-                                                         'required'     => true,
-                                                         'value'        => $firstDealerId)
+                    'label'        => 'Dealer:',
+                    'class'        => 'input-medium',
+                    'multiOptions' => $dealers,
+                    'required'     => true,
+                    'value'        => $firstDealerId)
             );
         }
 
@@ -152,14 +152,14 @@ class Admin_Form_User extends EasyBib_Form
         {
 
             $this->addElement('text', 'loginAttempts', array(
-                                                            'label'    => 'Login Attempts:',
-                                                            'disabled' => true
-                                                       ));
+                'label'    => 'Login Attempts:',
+                'disabled' => true
+            ));
 
             $this->addElement('checkbox', 'resetLoginAttempts', array(
-                                                                     'label'    => 'Reset Login Attempts:',
-                                                                     'required' => true
-                                                                ));
+                'label'    => 'Reset Login Attempts:',
+                'required' => true
+            ));
 
 
             $minYear     = (int)date('Y') - 2;
@@ -175,78 +175,78 @@ class Admin_Form_User extends EasyBib_Form
                         ->addValidator($datetimeValidator)
                         ->setRequired(false);
             $frozenUntil->addFilters(array(
-                                          'StringTrim',
-                                          'StripTags'
-                                     ));
+                'StringTrim',
+                'StripTags'
+            ));
 
             $this->addElement($frozenUntil);
 
             $this->addElement('checkbox', 'locked', array(
-                                                         'label'    => 'Locked:',
-                                                         'filters'  => array(
-                                                             new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)
-                                                         ),
-                                                         'required' => false
-                                                    ));
+                'label'    => 'Locked:',
+                'filters'  => array(
+                    new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)
+                ),
+                'required' => false
+            ));
 
             $this->addElement('checkbox', 'reset_password', array(
-                                                                 'label'    => 'Reset Password:',
-                                                                 'required' => true
-                                                            ));
+                'label'    => 'Reset Password:',
+                'required' => true
+            ));
         }
 
         if ($this->getFormMode() !== self::MODE_USER_EDIT)
         {
 
             $password = new Zend_Form_Element_Password('password', array(
-                                                                        'label'      => 'Password:',
-                                                                        'required'   => true,
-                                                                        'filters'    => array(
-                                                                            'StringTrim'
-                                                                        ),
-                                                                        'validators' => array(
-                                                                            array(
-                                                                                'validator' => 'StringLength',
-                                                                                'options'   => array(
-                                                                                    6,
-                                                                                    255
-                                                                                )
-                                                                            )
-                                                                        )
-                                                                   ));
+                'label'      => 'Password:',
+                'required'   => true,
+                'filters'    => array(
+                    'StringTrim'
+                ),
+                'validators' => array(
+                    array(
+                        'validator' => 'StringLength',
+                        'options'   => array(
+                            6,
+                            255
+                        )
+                    )
+                )
+            ));
 
             $passwordConfirm = new Zend_Form_Element_Password('password_confirm', array(
-                                                                                       'label'         => 'Confirm Password:',
-                                                                                       'required'      => true,
-                                                                                       'filters'       => array(
-                                                                                           'StringTrim'
-                                                                                       ),
-                                                                                       'validators'    => array(
-                                                                                           array(
-                                                                                               'validator' => 'StringLength',
-                                                                                               'options'   => array(
-                                                                                                   6,
-                                                                                                   255
-                                                                                               )
-                                                                                           ),
-                                                                                           array(
-                                                                                               'validator' => 'Identical',
-                                                                                               'options'   => array(
-                                                                                                   'token' => 'password'
-                                                                                               )
-                                                                                           )
-                                                                                       ),
-                                                                                       'errorMessages' => array(
-                                                                                           'Identical' => 'Passwords must match.'
-                                                                                       )
-                                                                                  ));
+                'label'         => 'Confirm Password:',
+                'required'      => true,
+                'filters'       => array(
+                    'StringTrim'
+                ),
+                'validators'    => array(
+                    array(
+                        'validator' => 'StringLength',
+                        'options'   => array(
+                            6,
+                            255
+                        )
+                    ),
+                    array(
+                        'validator' => 'Identical',
+                        'options'   => array(
+                            'token' => 'password'
+                        )
+                    )
+                ),
+                'errorMessages' => array(
+                    'Identical' => 'Passwords must match.'
+                )
+            ));
 
             if ($this->getFormMode() === self::MODE_CREATE)
             {
                 $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
-                                                                               'label'    => 'Require Password Change On Next Login:',
-                                                                               'required' => true
-                                                                          ));
+                    'label'    => 'Require Password Change On Next Login:',
+                    'required' => true
+                ));
             }
             else
             {
@@ -258,21 +258,21 @@ class Admin_Form_User extends EasyBib_Form
             $this->addElement($passwordConfirm);
 
             $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
-                                                                           'label' => 'Require Password Change On Next Login:'
-                                                                      ));
+                'label' => 'Require Password Change On Next Login:'
+            ));
         }
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit');
     }

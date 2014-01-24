@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_IndexController
  */
@@ -214,10 +215,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
             $standardDeviceReplacement = new Hardwareoptimization_Model_Optimization_StandardDeviceReplacement(
                 array(
-                     'black'    => $blackReplacementDevices,
-                     'blackmfp' => $blackMfpReplacementDevices,
-                     'color'    => $colorReplacementDevices,
-                     'colormfp' => $colorMfpReplacementDevices
+                    'black'    => $blackReplacementDevices,
+                    'blackmfp' => $blackMfpReplacementDevices,
+                    'color'    => $colorReplacementDevices,
+                    'colormfp' => $colorMfpReplacementDevices
                 ),
                 $this->_dealerId,
                 $this->_hardwareOptimization->getHardwareOptimizationSetting()->costThreshold,
@@ -422,16 +423,16 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         // Add calculated amounts to JSON
         // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
         $this->sendJson(array(
-                             "monochromeCpp"           => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
-                             "colorCpp"                => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
-                             "totalCost"               => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
-                             "replaceReason"           => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
-                             "marginDollar"            => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
-                             "costDelta"               => $this->view->currency($costDelta),
-                             "rawCostDelta"            => (float)$costDelta,
-                             "marginPercent"           => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
-                             "numberOfDevicesReplaced" => number_format($optimization->getNumberOfDevicesWithReplacements()),
-                        ));
+            "monochromeCpp"           => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
+            "colorCpp"                => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
+            "totalCost"               => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
+            "replaceReason"           => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
+            "marginDollar"            => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
+            "costDelta"               => $this->view->currency($costDelta),
+            "rawCostDelta"            => (float)$costDelta,
+            "marginPercent"           => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
+            "numberOfDevicesReplaced" => number_format($optimization->getNumberOfDevicesWithReplacements()),
+        ));
     }
 
     public function summaryTableAction ()

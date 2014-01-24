@@ -69,8 +69,8 @@ class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
         // Quotes element setup vars
         $quotes->addMultiOptions($quoteList);
         $quotes->addValidator('InArray', false, array(
-                                                     $quoteListValidator
-                                                ));
+            $quoteListValidator
+        ));
         $quotes->setLabel('Quote Date');
 
         // Add the quote element to the form
@@ -78,19 +78,19 @@ class Quotegen_Form_SelectQuote extends Twitter_Bootstrap_Form_Inline
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-                                                   'ignore'     => true,
-                                                   'label'      => 'Continue',
-                                                   'decorators' => array(
-                                                       'ViewHelper',
-                                                       array(
-                                                           'HtmlTag',
-                                                           array(
-                                                               'tag'   => 'div',
-                                                               'class' => 'form-actions'
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+            'ignore'     => true,
+            'label'      => 'Continue',
+            'decorators' => array(
+                'ViewHelper',
+                array(
+                    'HtmlTag',
+                    array(
+                        'tag'   => 'div',
+                        'class' => 'form-actions'
+                    )
+                )
+            )
+        ));
     }
 }

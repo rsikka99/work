@@ -4,7 +4,7 @@
  * Quotegen_View_Helper_Quote
  *
  * @author Lee Robert
- *        
+ *
  */
 class Quotegen_View_Helper_Quote extends My_View_Helper_Abstract
 {
@@ -17,7 +17,7 @@ class Quotegen_View_Helper_Quote extends My_View_Helper_Abstract
      */
     public function Quote ()
     {
-        if (! isset($this->_quote))
+        if (!isset($this->_quote))
         {
             $quoteId = $this->getRequestVariable('quoteId');
             if ($quoteId)
@@ -25,6 +25,7 @@ class Quotegen_View_Helper_Quote extends My_View_Helper_Abstract
                 $this->_quote = Quotegen_Model_Mapper_Quote::getInstance()->find($quoteId);
             }
         }
+
         return $this->_quote;
     }
 }

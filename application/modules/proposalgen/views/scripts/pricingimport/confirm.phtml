@@ -1,122 +1,130 @@
 <script>
-	$(function(){
-		$("#commitChanges").click(function() {
-			var answer = confirm ("This will clear all database information and insert data from the import CSV. Are you sure you want to do this?");
-			if (answer)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-			
-		});
-	});
+    $(function ()
+    {
+        $("#commitChanges").click(function ()
+        {
+            var answer = confirm("This will clear all database information and insert data from the import CSV. Are you sure you want to do this?");
+            if (answer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        });
+    });
 </script>
 <div class="span-24 center">
-	<h1>Pricing Import</h1>
+    <h1>Pricing Import</h1>
 </div>
-<hr/>
+<hr />
 <div class="span-24">
-<!-- Navigation Buttons -->
+    <!-- Navigation Buttons -->
     <div class="span-8 border">
-        <form action="<?php echo $this->baseUrl('/pricingimport/commit');?>" method="POST">
-            <?php if(count($this->csv->getData()) > 0) : ?>
-            	<input type="submit" id="commitChanges" value="Commit Upload" />
+        <form action="<?php echo $this->baseUrl('/pricingimport/commit'); ?>" method="POST">
+            <?php if (count($this->csv->getData()) > 0) : ?>
+                <input type="submit" id="commitChanges" value="Commit Upload" />
             <?php endif; ?>
         </form>
-        <form action="<?php echo $this->baseUrl('/pricingimport/');?>" method="POST">
-        	<input type="submit" value="Back" />
+        <form action="<?php echo $this->baseUrl('/pricingimport/'); ?>" method="POST">
+            <input type="submit" value="Back" />
         </form>
         <a href="<?php echo $this->baseUrl('/pricingimport/dumpvalidimport'); ?>" target="_blank">DUMP VALIDATED ROWS ONLY</a>
     </div>
-<!-- Title -->
+    <!-- Title -->
     <div class="span-16 last">
         <?php
-            $rowCount = count($this->csv->getData()) + count($this->csv->getBadData());
+        $rowCount = count($this->csv->getData()) + count($this->csv->getBadData());
         ?>
-    	<h3><?=count($this->csv->getData())?> out of <?=$rowCount?> Results to be Imported:</h3><br />
+        <h3><?= count($this->csv->getData()) ?> out of <?= $rowCount ?> Results to be Imported:</h3><br />
     </div>
 </div>
 <hr>
 <div class="span-24">
     <div id="validResults">
-    	<table>
-    		<tr>
-    		<?php foreach($this->csv->getHeaders() as $value) : ?>
-    			<th nowrap="nowrap">&nbsp;&nbsp;<?=$value?>&nbsp;&nbsp;</th>
-    		<?php endforeach; ?>
-    		</tr>
-    		<?php
-    		// Loop through the array and build the preview
-    		foreach ($this->csv->getData() as $row) : ?>
-    			<tr>
-    			<?php foreach ($row as $column) : ?>
-    				<td nowrap="nowrap"><?=$column?></td>
-    			<?php endforeach; ?>
-    			</tr>
-    		<?php endforeach; ?>
-    	</table>
-    	<br />
-        <?php if(count($this->csv->getData()) < 1) { ?>
-    	<div id="no_results_container">
-    		<p>The file contains no valid data. Please correct your file and try again.</p>
-    	</div>
-    	<br />
-    	<?php } ?>
+        <table>
+            <tr>
+                <?php foreach ($this->csv->getHeaders() as $value) : ?>
+                    <th nowrap="nowrap">&nbsp;&nbsp;<?= $value ?>&nbsp;&nbsp;</th>
+                <?php endforeach; ?>
+            </tr>
+            <?php
+            // Loop through the array and build the preview
+            foreach ($this->csv->getData() as $row) : ?>
+                <tr>
+                    <?php foreach ($row as $column) : ?>
+                        <td nowrap="nowrap"><?= $column ?></td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <br />
+        <?php if (count($this->csv->getData()) < 1)
+        { ?>
+            <div id="no_results_container">
+                <p>The file contains no valid data. Please correct your file and try again.</p>
+            </div>
+            <br />
+        <?php } ?>
     </div>
 </div>
 <hr>
 
-<?php if(count($this->csv->getBaddata()) > 0) { ?>
-<div class="span-24">
-	<h3><?=count($this->csv->getBaddata())?> Excluded Rows:</h3>
-	<p>Records below have invalid or missing data.</p>
-</div>
-<hr>
-<div class="span-24">
-    <div id="excludedResults">
+<?php if (count($this->csv->getBaddata()) > 0)
+{ ?>
+    <div class="span-24">
+        <h3><?= count($this->csv->getBaddata()) ?> Excluded Rows:</h3>
+
+        <p>Records below have invalid or missing data.</p>
+    </div>
+    <hr>
+    <div class="span-24">
+        <div id="excludedResults">
             <table>
                 <tr>
-            		<th>Error</th>
-            		<th>Device Name</th>
+                    <th>Error</th>
+                    <th>Device Name</th>
                 </tr>
-                <?php foreach($this->csv->getBaddata() as $row) { ?>
-                <tr>
-                	<td><?php echo $row[0]; ?></td>
-                   	<td><?=$row[1]["modelname"]?></td>
-                </tr>
+                <?php foreach ($this->csv->getBaddata() as $row)
+                { ?>
+                    <tr>
+                        <td><?php echo $row[0]; ?></td>
+                        <td><?= $row[1]["modelname"] ?></td>
+                    </tr>
                 <?php } ?>
             </table>
             <br />
+        </div>
     </div>
-</div>
-<hr>
+    <hr>
 <?php } ?>
 
-<?php if(count($this->csv->test["rows"]) > 0) { ?>
-<div class="span-24">
-	<h3><?=count($this->csv->test["rows"])?> Excluded Row with toner data:</h3>
-</div>
-<hr>
-<div class="span-24">
-    <div id="invalidResults">
+<?php if (count($this->csv->test["rows"]) > 0)
+{ ?>
+    <div class="span-24">
+        <h3><?= count($this->csv->test["rows"]) ?> Excluded Row with toner data:</h3>
+    </div>
+    <hr>
+    <div class="span-24">
+        <div id="invalidResults">
             <table>
                 <tr>
-            		<th>Printfleet ModelId</th>
-            		<th>Device Name</th>
-            		<th>Error</th>
+                    <th>Printfleet ModelId</th>
+                    <th>Device Name</th>
+                    <th>Error</th>
                 </tr>
-                <?php foreach($this->csv->test["rows"] as $key => $row) { ?>
-                <tr>
-                   	<td><?=$row["printermodelid"]?></td>
-                   	<td><?=$row["modelname"]?></td>
-                   	<td><?=$this->csv->test["errors"][$key]?></td>
-                </tr>
+                <?php foreach ($this->csv->test["rows"] as $key => $row)
+                { ?>
+                    <tr>
+                        <td><?= $row["printermodelid"] ?></td>
+                        <td><?= $row["modelname"] ?></td>
+                        <td><?= $this->csv->test["errors"][$key] ?></td>
+                    </tr>
                 <?php } ?>
             </table>
             <br />
+        </div>
     </div>
-</div>
 <?php } ?>

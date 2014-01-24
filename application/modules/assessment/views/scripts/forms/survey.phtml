@@ -1,24 +1,24 @@
 <?php
 /* @var $form Proposalgen_Form_Assessment_Survey */
-$form                       = $this->element;
-$tonerCostRadio             = $form->getElement('toner_cost_radio');
-$tonerCost                  = $form->getElement('toner_cost');
-$laborCostRadio             = $form->getElement('labor_cost_radio');
-$laborCost                  = $form->getElement('labor_cost');
-$averagePurchase            = $form->getElement('avg_purchase');
-$itHourlyRate               = $form->getElement('it_hourlyRate');
+$form = $this->element;
+$tonerCostRadio = $form->getElement('toner_cost_radio');
+$tonerCost = $form->getElement('toner_cost');
+$laborCostRadio = $form->getElement('labor_cost_radio');
+$laborCost = $form->getElement('labor_cost');
+$averagePurchase = $form->getElement('avg_purchase');
+$itHourlyRate = $form->getElement('it_hourlyRate');
 $numberOfMonthlyOrdersRadio = $form->getElement('inkTonerOrderRadio');
-$numberOfMonthlyOrders      = $form->getElement('numb_monthlyOrders');
-$numberOfVendors            = $form->getElement('numb_vendors');
-$itHoursRadio               = $form->getElement('itHoursRadio');
-$ithours                    = $form->getElement('itHours');
-$monthlyBreakdownRadio      = $form->getElement('monthlyBreakdownRadio');
-$monthlyBreakdown           = $form->getElement('monthlyBreakdown');
-$pageCoverageQuestion       = $form->getElement('pageCoverageQuestion');
-$pageCoverageMonochrome     = $form->getElement('pageCoverage_BW');
-$pageCoverageColor          = $form->getElement('pageCoverage_Color');
-$printVolume                = $form->getElement('printVolume');
-$repairTime                 = $form->getElement('repairTime');
+$numberOfMonthlyOrders = $form->getElement('numb_monthlyOrders');
+$numberOfVendors = $form->getElement('numb_vendors');
+$itHoursRadio = $form->getElement('itHoursRadio');
+$ithours = $form->getElement('itHours');
+$monthlyBreakdownRadio = $form->getElement('monthlyBreakdownRadio');
+$monthlyBreakdown = $form->getElement('monthlyBreakdown');
+$pageCoverageQuestion = $form->getElement('pageCoverageQuestion');
+$pageCoverageMonochrome = $form->getElement('pageCoverage_BW');
+$pageCoverageColor = $form->getElement('pageCoverage_Color');
+$printVolume = $form->getElement('printVolume');
+$repairTime = $form->getElement('repairTime');
 
 $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/survey/survey/surveyForm.js'));
 

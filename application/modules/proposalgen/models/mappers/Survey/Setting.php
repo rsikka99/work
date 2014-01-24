@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_Survey_Setting
  */
@@ -64,8 +65,8 @@ class Proposalgen_Model_Mapper_Survey_Setting extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                'id = ?' => $primaryKey
-                                                           ));
+            'id = ?' => $primaryKey
+        ));
 
         return $rowsAffected;
     }

@@ -2,8 +2,8 @@
 /* @var $quote Quotegen_Model_Quote */
 /* @var $section PHPWord_Section */
 /* @var $quoteDevice Quotegen_Model_QuoteDevice */
-$quote = $this->quote;
-$section = $this->section;
+$quote     = $this->quote;
+$section   = $this->section;
 $tableSpan = $tableSpan = $this->tableStyle->gridSpan;
 $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
@@ -19,9 +19,9 @@ $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorderBA
 $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText('SERIAL NO.', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 $deviceTable->addCell($tableSpan ['span1'], $this->cellStyle->bottomRightBorderBAlign, 2)->addText('ADDRESS', $this->fontStyle->label, $this->paragraphStyle->noSpacingCentered);
 // Devices Row(s)
-foreach ( $quote->getQuoteDevices() as $quoteDevice )
+foreach ($quote->getQuoteDevices() as $quoteDevice)
 {
-    for($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i ++)
+    for ($i = 0; $i < $quoteDevice->calculateTotalQuantity(); $i++)
     {
         $deviceTable->addRow(600);
         $deviceTable->addCell($tableSpan ['span2'], $this->cellStyle->bottomLeftBorder, 4)->addText($quoteDevice->name, null, $this->paragraphStyle->noSpacing);

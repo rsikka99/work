@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_GrossmarginController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_GROSS_MARGIN))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

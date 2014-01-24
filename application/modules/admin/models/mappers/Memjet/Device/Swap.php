@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Model_Mapper_Memjet_Device_Swap
  */
@@ -96,8 +97,8 @@ class Admin_Model_Mapper_Memjet_Device_Swap extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_masterDeviceId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

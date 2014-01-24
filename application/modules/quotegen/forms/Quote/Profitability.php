@@ -34,12 +34,12 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
 
         // Setup the element decorators
         $this->setElementDecorators(array(
-                                         'FieldSize',
-                                         'ViewHelper',
-                                         'Addon',
-                                         'PopoverElementErrors',
-                                         'Wrapper'
-                                    ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            'PopoverElementErrors',
+            'Wrapper'
+        ));
 
         if ($this->_quote->isLeased())
         {
@@ -73,11 +73,11 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             }
 
             $this->addElement('select', 'leasingSchemaId', array(
-                                                                'label'        => 'Leasing Schema:',
-                                                                'class'        => 'input-medium',
-                                                                'multiOptions' => $leasingSchemas,
-                                                                'required'     => true,
-                                                                'value'        => $leasingSchemaId));
+                'label'        => 'Leasing Schema:',
+                'class'        => 'input-medium',
+                'multiOptions' => $leasingSchemas,
+                'required'     => true,
+                'value'        => $leasingSchemaId));
 
             $leasingSchema      = Quotegen_Model_Mapper_LeasingSchema::getInstance()->find($leasingSchemaId);
             $leasingSchemaTerms = array();
@@ -104,12 +104,12 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
                 $termId = $this->getQuote()->getLeasingSchemaTerm()->id;
             }
             $this->addElement('select', 'leasingSchemaTermId', array(
-                                                                    'label'        => 'Lease Term:',
-                                                                    'class'        => 'input-medium',
-                                                                    'multiOptions' => $leasingSchemaTerms,
-                                                                    'required'     => true,
-                                                                    'value'        => $termId
-                                                               ));
+                'label'        => 'Lease Term:',
+                'class'        => 'input-medium',
+                'multiOptions' => $leasingSchemaTerms,
+                'required'     => true,
+                'value'        => $termId
+            ));
         }
 
         // ----------------------------------------------------------------------
@@ -122,61 +122,61 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
             {
                 // Package Markup
                 $this->addElement('text', "packageMarkup_{$quoteDevice->id}", array(
-                                                                                   'label'      => 'Markup',
-                                                                                   'required'   => true,
-                                                                                   'class'      => 'input-mini rightAlign',
-                                                                                   'value'      => $quoteDevice->packageMarkup,
-                                                                                   'validators' => array(
-                                                                                       'Float',
-                                                                                       array(
-                                                                                           'validator' => 'Between',
-                                                                                           'options'   => array(
-                                                                                               'min' => 0,
-                                                                                               'max' => 99999
-                                                                                           )
-                                                                                       )
-                                                                                   )
-                                                                              ));
+                    'label'      => 'Markup',
+                    'required'   => true,
+                    'class'      => 'input-mini rightAlign',
+                    'value'      => $quoteDevice->packageMarkup,
+                    'validators' => array(
+                        'Float',
+                        array(
+                            'validator' => 'Between',
+                            'options'   => array(
+                                'min' => 0,
+                                'max' => 99999
+                            )
+                        )
+                    )
+                ));
 
                 // Margin
                 $this->addElement('text', "margin_{$quoteDevice->id}", array(
-                                                                            'label'      => 'Margin',
-                                                                            'required'   => true,
-                                                                            'class'      => 'input-mini rightAlign',
-                                                                            'value'      => $quoteDevice->margin,
-                                                                            'validators' => array(
-                                                                                'Float',
-                                                                                array(
-                                                                                    'validator' => 'Between',
-                                                                                    'options'   => array(
-                                                                                        'min'       => -100,
-                                                                                        'max'       => 100,
-                                                                                        'inclusive' => false
-                                                                                    )
-                                                                                )
-                                                                            )
-                                                                       ));
+                    'label'      => 'Margin',
+                    'required'   => true,
+                    'class'      => 'input-mini rightAlign',
+                    'value'      => $quoteDevice->margin,
+                    'validators' => array(
+                        'Float',
+                        array(
+                            'validator' => 'Between',
+                            'options'   => array(
+                                'min'       => -100,
+                                'max'       => 100,
+                                'inclusive' => false
+                            )
+                        )
+                    )
+                ));
 
                 if ($this->_quote->isLeased())
                 {
                     // Residual
                     $this->addElement('text', "residual_{$quoteDevice->id}", array(
-                                                                                  'label'      => 'Residual',
-                                                                                  'required'   => true,
-                                                                                  'class'      => 'input-mini rightAlign',
-                                                                                  'value'      => $quoteDevice->buyoutValue,
-                                                                                  'validators' => array(
-                                                                                      'Float',
-                                                                                      array(
-                                                                                          'validator' => 'Between',
-                                                                                          'options'   => array(
-                                                                                              'min'       => 0,
-                                                                                              'max'       => 30000,
-                                                                                              'inclusive' => true
-                                                                                          )
-                                                                                      )
-                                                                                  )
-                                                                             ));
+                        'label'      => 'Residual',
+                        'required'   => true,
+                        'class'      => 'input-mini rightAlign',
+                        'value'      => $quoteDevice->buyoutValue,
+                        'validators' => array(
+                            'Float',
+                            array(
+                                'validator' => 'Between',
+                                'options'   => array(
+                                    'min'       => 0,
+                                    'max'       => 30000,
+                                    'inclusive' => true
+                                )
+                            )
+                        )
+                    ));
                 }
             }
         }
@@ -190,14 +190,14 @@ class Quotegen_Form_Quote_Profitability extends Twitter_Bootstrap_Form_Inline
     public function loadDefaultDecorators ()
     {
         $this->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript' => 'quote/profitability/form/profitability.phtml'
-                                      )
-                                  ),
-                                  'Form'
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'quote/profitability/form/profitability.phtml'
+                )
+            ),
+            'Form'
+        ));
     }
 
     /**

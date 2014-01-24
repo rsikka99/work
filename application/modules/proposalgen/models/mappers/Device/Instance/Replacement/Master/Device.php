@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device
  */
@@ -72,9 +73,9 @@ class Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device extends
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceInstanceId} = ?"       => $primaryKey[0],
-                                                                "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[1]
-                                                           ));
+            "{$this->col_deviceInstanceId} = ?"       => $primaryKey[0],
+            "{$this->col_hardwareOptimizationId} = ?" => $primaryKey[1]
+        ));
         // Save the object into the cache
         $this->saveItemToCache($object);
 

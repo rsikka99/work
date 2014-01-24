@@ -31,12 +31,12 @@ class Application_View_Helper_Usermenu extends Zend_View_Helper_Abstract
 
             // Render the menu
             $html = $this->view->MyNavigation()
-                ->menu()
-                ->renderMenu($container, array(
-                                              'minDepth' => 0,
-                                              'maxDepth' => 0,
-                                              'ulClass'  => 'dropdown-menu'
-                                         ));
+                               ->menu()
+                               ->renderMenu($container, array(
+                    'minDepth' => 0,
+                    'maxDepth' => 0,
+                    'ulClass'  => 'dropdown-menu'
+                ));
 
             // Bring back it's original visibility
             if ($wasInvisible)

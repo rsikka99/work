@@ -13,10 +13,10 @@ class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
 
         // An add configuration button for the favorite devices
         $submitButton = $this->createElement('submit', 'addDeviceConfiguration', array(
-                                                                                      'ignore' => true,
-                                                                                      'label'  => 'Add',
-                                                                                      'class'  => 'btn btn-success'
-                                                                                 ));
+            'ignore' => true,
+            'label'  => 'Add',
+            'class'  => 'btn btn-success'
+        ));
 
         // Get configurations from database
         $deviceConfigurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchDeviceConfigurationListForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
@@ -33,9 +33,9 @@ class Quotegen_Form_AddFavoriteDevice extends Twitter_Bootstrap_Form_Inline
 
         // This is a list of favorite devices that the user can add
         $this->addElement('select', 'deviceConfigurationId', array(
-                                                                  'label'        => 'Device Configuration',
-                                                                  'multiOptions' => $data,
-                                                                  'prepend'      => $submitButton
-                                                             ));
+            'label'        => 'Device Configuration',
+            'multiOptions' => $data,
+            'prepend'      => $submitButton
+        ));
     }
 }

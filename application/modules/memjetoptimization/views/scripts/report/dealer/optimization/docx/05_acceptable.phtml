@@ -12,12 +12,12 @@ $section = $this->section;
 $optimization = $this->optimization;
 /* @var $memjetOptimizationDevices Memjetoptimization_Model_Optimization_Dealer */
 $memjetOptimizationDevices = $this->memjetOptimizationDevices;
-$costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
+$costPerPageSetting        = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Acceptable Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($memjetOptimizationDevices->kept). ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText('Acceptable Devices', 'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($memjetOptimizationDevices->kept) . ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
@@ -40,7 +40,7 @@ foreach ($memjetOptimizationDevices->kept as $device)
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
     $table->addRow($tcStyle->body->rowheight);
-    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $cell = $table->addCell($tcStyle->collWidth, $style);
     $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);

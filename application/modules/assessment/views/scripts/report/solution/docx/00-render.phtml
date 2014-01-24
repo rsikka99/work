@@ -33,12 +33,12 @@ $properties->setModified(time());
 $properties->setSubject('MPS Assessment Software');
 
 $titlePageSection = $phpword->createSection(array(
-                                                 'orientation'  => null,
-                                                 'marginLeft'   => 1420,
-                                                 'marginRight'  => 720,
-                                                 'marginTop'    => 720,
-                                                 'marginBottom' => 720
-                                            ));
+    'orientation'  => null,
+    'marginLeft'   => 1420,
+    'marginRight'  => 720,
+    'marginTop'    => 720,
+    'marginBottom' => 720
+));
 $section          = $phpword->createSection();
 /**
  * Footer
@@ -54,115 +54,115 @@ $section          = $phpword->createSection();
  */
 // Title page
 $phpword->addParagraphStyle('titleStyle1', array(
-                                                'align'      => 'center',
-                                                'spaceAfter' => 100,
-                                                'bgColor'    => $titlePageBackgroundColor1
-                                           ));
+    'align'      => 'center',
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor1
+));
 $phpword->addParagraphStyle('titleStyle2', array(
-                                                'spaceAfter'  => 50,
-                                                'spaceBefore' => 50,
-                                                'bgColor'     => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter'  => 50,
+    'spaceBefore' => 50,
+    'bgColor'     => $titlePageBackgroundColor2
+));
 $phpword->addParagraphStyle('titleStyle3', array(
-                                                'spaceAfter' => 100,
-                                                'bgColor'    => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor2
+));
 $phpword->addFontStyle('titlepage_title', array(
-                                               'size'  => 24,
-                                               'bold'  => true,
-                                               'color' => $titlePageTextColor1
-                                          ));
+    'size'  => 24,
+    'bold'  => true,
+    'color' => $titlePageTextColor1
+));
 
 $phpword->addFontStyle('titlepage_subtitle', array(
-                                                  'size'  => 16,
-                                                  'bold'  => true,
-                                                  'color' => $titlePageTextColor2
-                                             ));
+    'size'  => 16,
+    'bold'  => true,
+    'color' => $titlePageTextColor2
+));
 
 $phpword->addFontStyle('titlepage_address', array(
-                                                 'size'  => 12,
-                                                 'color' => $titlePageTextColor2
-                                            ));
+    'size'  => 12,
+    'color' => $titlePageTextColor2
+));
 $phpword->addParagraphStyle('titlepageHeaderParagraph', array(
-                                                             'spaceAfter' => 200
-                                                        ));
+    'spaceAfter' => 200
+));
 
 $phpword->addParagraphStyle('nospacing', array(
-                                              'spaceBefore' => 0,
-                                              'spaceAfter'  => 0
-                                         ));
+    'spaceBefore' => 0,
+    'spaceAfter'  => 0
+));
 
 $phpword->addParagraphStyle('nospacing_rightalign', array(
-                                                         'align'       => 'right',
-                                                         'spaceBefore' => 0,
-                                                         'spaceAfter'  => 0
-                                                    ));
+    'align'       => 'right',
+    'spaceBefore' => 0,
+    'spaceAfter'  => 0
+));
 
 $phpword->addParagraphStyle('nospacing_centeralign', array(
-                                                          'align'       => 'center',
-                                                          'spaceBefore' => 0,
-                                                          'spaceAfter'  => 0
-                                                     ));
+    'align'       => 'center',
+    'spaceBefore' => 0,
+    'spaceAfter'  => 0
+));
 
 $phpword->addParagraphStyle('rightalign', array(
-                                               'align' => 'right'
-                                          ));
+    'align' => 'right'
+));
 
 $phpword->addParagraphStyle('gradeParagraph', array(
-                                                   'align'       => 'center',
-                                                   'spaceBefore' => 0,
-                                                   'spaceAfter'  => 0
-                                              ));
+    'align'       => 'center',
+    'spaceBefore' => 0,
+    'spaceAfter'  => 0
+));
 
 $phpword->addParagraphStyle('savingsParagraph', array(
-                                                     'align'       => 'center',
-                                                     'spaceBefore' => 0,
-                                                     'spaceAfter'  => 0
-                                                ));
+    'align'       => 'center',
+    'spaceBefore' => 0,
+    'spaceAfter'  => 0
+));
 
 /**
  * Font Styles
  */
 $phpword->addFontStyle('titlepageHeaderFont', array(
-                                                   'bold' => true,
-                                                   'size' => 16
-                                              ));
+    'bold' => true,
+    'size' => 16
+));
 
 $phpword->addFontStyle('bold_text', array(
-                                         'bold' => true
-                                    ));
+    'bold' => true
+));
 
 $phpword->addFontStyle('bold_highlight_text', array(
-                                                   'bold'  => true,
-                                                   'color' => $h3Color
-                                              ));
+    'bold'  => true,
+    'color' => $h3Color
+));
 
 $phpword->addFontStyle('gradeFont', array(
-                                         'bold' => true,
-                                         'size' => 18
-                                    ));
+    'bold' => true,
+    'size' => 18
+));
 
 $phpword->addFontStyle('gradeTitleFont', array(
-                                              'bold' => true,
-                                              'size' => 12
-                                         ));
+    'bold' => true,
+    'size' => 12
+));
 
 $phpword->addFontStyle('savingsFont', array(
-                                           'bold' => true,
-                                           'size' => 11
-                                      ));
+    'bold' => true,
+    'size' => 11
+));
 
 $phpword->addFontStyle('savingsAmountFont', array(
-                                                 'color' => 'F0003C',
-                                                 'bold'  => true,
-                                                 'size'  => 11
-                                            ));
+    'color' => 'F0003C',
+    'bold'  => true,
+    'size'  => 11
+));
 
 $phpword->addFontStyle('small_italic_text', array(
-                                                 'color'  => '333333',
-                                                 'italic' => true,
-                                                 'size'   => 9
-                                            ));
+    'color'  => '333333',
+    'italic' => true,
+    'size'   => 9
+));
 
 /**
  * Header/Title Styles
@@ -172,37 +172,37 @@ $phpword->addFontStyle('small_italic_text', array(
  */
 // H1 Style
 $phpword->addTitleStyle(1, array(
-                                'size'  => 15,
-                                'color' => $h1Color,
-                                'bold'  => true
-                           ), array(
-                                   'borderBottomSize' => 1
-                              ));
+    'size'  => 15,
+    'color' => $h1Color,
+    'bold'  => true
+), array(
+    'borderBottomSize' => 1
+));
 // H2 Style #5881BC
 $phpword->addTitleStyle(2, array(
-                                'size'   => 12,
-                                'color'  => $h2Color,
-                                'bold'   => true,
-                                'italic' => true
-                           ), array(
-                                   'bgColor' => $h2Background
-                              ));
+    'size'   => 12,
+    'color'  => $h2Color,
+    'bold'   => true,
+    'italic' => true
+), array(
+    'bgColor' => $h2Background
+));
 // H3 Style #5881BC
 $phpword->addTitleStyle(3, array(
-                                'size'  => 10,
-                                'color' => $h3Color,
-                                'bold'  => true
-                           ), array(
-                                   'spaceBefore' => 100,
-                                   'spaceAfter'  => 100
-                              ));
+    'size'  => 10,
+    'color' => $h3Color,
+    'bold'  => true
+), array(
+    'spaceBefore' => 100,
+    'spaceAfter'  => 100
+));
 
 // H3 Style #5881BC
 $phpword->addFontStyle('heading3', array(
-                                        'size'  => 10,
-                                        'color' => $h3Color,
-                                        'bold'  => true
-                                   ));
+    'size'  => 10,
+    'color' => $h3Color,
+    'bold'  => true
+));
 
 /**
  * Addtional replacements table

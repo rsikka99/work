@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Model_Mapper_Assessment
  */
@@ -83,8 +84,8 @@ class Assessment_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -222,9 +223,9 @@ class Assessment_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     public function fetchAllUnfinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?"  => $clientId,
-                                    "{$this->col_stepName} <> ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
-                               ));
+            "{$this->col_clientId} = ?"  => $clientId,
+            "{$this->col_stepName} <> ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
+        ));
     }
 
     /**
@@ -237,9 +238,9 @@ class Assessment_Model_Mapper_Assessment extends My_Model_Mapper_Abstract
     public function fetchAllFinishedAssessmentsForClient ($clientId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_clientId} = ?" => $clientId,
-                                    "{$this->col_stepName} = ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
-                               ));
+            "{$this->col_clientId} = ?" => $clientId,
+            "{$this->col_stepName} = ?" => Assessment_Model_Assessment_Steps::STEP_FINISHED
+        ));
     }
 
     /**

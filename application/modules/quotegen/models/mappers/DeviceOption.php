@@ -75,9 +75,9 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
-                                                                "{$this->col_optionId} = ?"       => $primaryKey [1]
-                                                           ));
+            "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
+            "{$this->col_optionId} = ?"       => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -126,8 +126,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function deleteOptionsByDeviceId ($deviceId)
     {
         return $this->getDbTable()->delete(array(
-                                                "{$this->col_masterDeviceId} = ?" => $deviceId
-                                           ));
+            "{$this->col_masterDeviceId} = ?" => $deviceId
+        ));
     }
 
     /**
@@ -302,8 +302,8 @@ class Quotegen_Model_Mapper_DeviceOption extends My_Model_Mapper_Abstract
     public function fetchDeviceOptionListForDealerAndDevice ($masterDeviceId, $dealerId)
     {
         $options = $this->fetchAll(array(
-                                        "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
-                                        "{$this->col_dealerId} = ?"       => $dealerId)
+                "{$this->col_masterDeviceId} = ?" => $masterDeviceId,
+                "{$this->col_dealerId} = ?"       => $dealerId)
         );
 
         return $options;

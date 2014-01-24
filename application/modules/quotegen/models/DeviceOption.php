@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Quotegen_Model_DeviceOption
  */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_TonerVendorGrossmarginController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_TONER_VENDOR_GROSS_MARGIN))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }
@@ -167,12 +168,12 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
      */
     function getStatistics ($assessmentViewModel, $costPerPageSetting)
     {
-        $statisticsGroup                                          = array();
+        $statisticsGroup                                                   = array();
         $statisticsGroup['left'][My_Brand::$brandName . ' Monochrome CPP'] = "$" . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4, '.', '');
         $statisticsGroup['left'][My_Brand::$brandName . ' Color CPP']      = "$" . number_format($assessmentViewModel->getMPSColorCPP(), 4, '.', '');
-        $statisticsGroup['left']['Weighted Monochrome CPP']       = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite, 4, '.', '');
-        $statisticsGroup['left']['Weighted Color CPP']            = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color, 4, '.', '');
-        $statisticsGroup['left']['Monochrome Margin']             = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting), 0, '.', '') . "%";
+        $statisticsGroup['left']['Weighted Monochrome CPP']                = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite, 4, '.', '');
+        $statisticsGroup['left']['Weighted Color CPP']                     = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color, 4, '.', '');
+        $statisticsGroup['left']['Monochrome Margin']                      = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting), 0, '.', '') . "%";
 
         $statisticsGroup['right']['Total Cost']     = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined, 2, '.', '');
         $statisticsGroup['right']['Total Revenue']  = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');

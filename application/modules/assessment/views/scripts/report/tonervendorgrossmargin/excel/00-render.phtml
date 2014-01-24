@@ -87,8 +87,8 @@ $activeSheet->setCellValue('A1', 'Toner Vendor Gross Margin Report');
 $activeSheet->mergeCells('A1:E1');
 // Centre the title
 $activeSheet->getStyle("A1:E1:")
-->getAlignment()
-->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
 $activeSheet->getRowDimension('1')->setRowHeight(25);
 
@@ -96,8 +96,8 @@ $activeSheet->setCellValue('A2', "Summary");
 $activeSheet->mergeCells('A2:E2');
 // Centre the sub title
 $activeSheet->getStyle("A2:E2:")
-->getAlignment()
-->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            ->getAlignment()
+            ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $activeSheet->getStyle('A2:E2')->applyFromArray($styleSubHeader);
 $activeSheet->getRowDimension('1')->setRowHeight(25);
 
@@ -159,8 +159,8 @@ foreach ($this->vendorSeperatedData as $vendorData)
     $activeSheet->mergeCells('A1:E1');
     // Centre the title
     $activeSheet->getStyle("A1:E1:")
-    ->getAlignment()
-    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $activeSheet->getStyle('A1:E1')->applyFromArray($styleHeader);
     $activeSheet->getRowDimension('1')->setRowHeight(25);
 
@@ -168,8 +168,8 @@ foreach ($this->vendorSeperatedData as $vendorData)
     $activeSheet->mergeCells('A2:E2');
     // Centre the sub title
     $activeSheet->getStyle("A2:E2:")
-    ->getAlignment()
-    ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                ->getAlignment()
+                ->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
     $activeSheet->getStyle('A2:E2')->applyFromArray($styleSubHeader);
     $activeSheet->getRowDimension('1')->setRowHeight(25);
 

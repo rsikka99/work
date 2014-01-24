@@ -21,7 +21,8 @@ $graphs = $healthcheckViewModel->getGraphs();
 </table>
 <div class="pheader">Energy Consumption</div>
 <?php if ($healthcheckViewModel->getPercentageOfDevicesReportingPower() > $healthcheckViewModel->getDevicesReportingPowerThreshold())
-{ ?>
+{
+    ?>
     <p>You are currently using an estimated average of
         <strong><?php echo number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()); ?> </strong>kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of
         <strong>$<?php echo number_format($healthcheckViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2); ?> per kWh.
@@ -63,7 +64,8 @@ $graphs = $healthcheckViewModel->getGraphs();
         </tbody>
     </table>
     <br />
-<?php }
+<?php
+}
 else
 {
     echo "<p>" . $healthcheckViewModel->getNumberOfDevicesReportingPower() . " of your " . $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount() . " printer(s) report power usage.  Not enough information is available to accurately calculate energy consumption for your fleet.</p>";

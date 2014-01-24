@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_UserTonerOverride
  */
@@ -81,8 +82,8 @@ class Proposalgen_Model_Mapper_UserTonerOverride extends Tangent_Model_Mapper_Ab
     public function findOverrideForToner ($userId, $tonerId)
     {
         return $this->fetchRow(array(
-                                    "toner_id = ?" => $tonerId,
-                                    "user_id = ?"  => $userId
-                               ));
+            "toner_id = ?" => $tonerId,
+            "user_id = ?"  => $userId
+        ));
     }
 }

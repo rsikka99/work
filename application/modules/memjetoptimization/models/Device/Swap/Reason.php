@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Device_Swap
  */

@@ -26,36 +26,36 @@ class Quotegen_Form_Category extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         $this->addElement('text', 'name', array(
-                                               'label'    => 'Name:',
-                                               'required' => true,
+            'label'    => 'Name:',
+            'required' => true,
 
-                                               'filters'  => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               )
-                                          ));
+            'filters'  => array(
+                'StringTrim',
+                'StripTags'
+            )
+        ));
 
         $this->addElement('textarea', 'description', array(
-                                                          'label'    => 'Description:',
-                                                          'required' => true,
-                                                          'style'    => 'height: 100px',
-                                                          'filters'  => array(
-                                                              'StringTrim',
-                                                              'StripTags'
-                                                          )
-                                                     ));
+            'label'    => 'Description:',
+            'required' => true,
+            'style'    => 'height: 100px',
+            'filters'  => array(
+                'StringTrim',
+                'StripTags'
+            )
+        ));
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

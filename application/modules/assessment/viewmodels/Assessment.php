@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_ViewModel_Assessment
  */
@@ -955,9 +956,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
-                                     $this,
-                                     "ascendingSortDevicesByUsage"
-                                ));
+                $this,
+                "ascendingSortDevicesByUsage"
+            ));
             $numberOfDevices = count($deviceArray);
             if ($numberOfDevices > 1)
             {
@@ -1068,9 +1069,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
-                                     $this,
-                                     "descendingSortDevicesByUsage"
-                                ));
+                $this,
+                "descendingSortDevicesByUsage"
+            ));
 
             $numberOfDevices = count($deviceArray);
             if ($numberOfDevices > 1)
@@ -1136,9 +1137,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         {
             $deviceArray = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
-                                     $this,
-                                     "ascendingSortDevicesByPowerConsumption"
-                                ));
+                $this,
+                "ascendingSortDevicesByPowerConsumption"
+            ));
             $this->HighPowerConsumptionDevices = $deviceArray;
         }
 
@@ -1166,9 +1167,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             }
 
             usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
+                $this,
+                "descendingSortDevicesByColorCost"
+            ));
             $highCostDevices = array();
             foreach ($costArray as $costs)
             {
@@ -1199,9 +1200,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             }
 
             usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
+                $this,
+                "descendingSortDevicesByColorCost"
+            ));
             $highCostDevices = array();
 
             foreach ($costArray as $costs)
@@ -1237,9 +1238,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             }
 
             usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
+                $this,
+                "descendingSortDevicesByColorCost"
+            ));
             $highCostDevices = array();
             foreach ($costArray as $costs)
             {
@@ -1269,9 +1270,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             }
 
             usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
+                $this,
+                "descendingSortDevicesByColorCost"
+            ));
             $highCostDevices = array();
             foreach ($costArray as $costs)
             {
@@ -1331,9 +1332,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             $deviceArray = $this->getDevices()->purchasedDeviceInstances->getDeviceInstances();
             usort($deviceArray, array(
-                                     $this,
-                                     "ascendingSortDevicesByMonthlyCost"
-                                ));
+                $this,
+                "ascendingSortDevicesByMonthlyCost"
+            ));
             $this->MostExpensiveDevices = $deviceArray;
         }
 
@@ -1772,13 +1773,13 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $deviceArraySortedByAge         = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             $deviceArraySortedByRiskRanking = $this->getDevices()->allIncludedDeviceInstances->getDeviceInstances();
             usort($deviceArraySortedByUsage, array(
-                                                  $this,
-                                                  "sortDevicesByLifeUsage"
-                                             ));
+                $this,
+                "sortDevicesByLifeUsage"
+            ));
             usort($deviceArraySortedByAge, array(
-                                                $this,
-                                                "sortDevicesByAge"
-                                           ));
+                $this,
+                "sortDevicesByAge"
+            ));
             // setting the age rank for each device
             $ctr = 1;
             foreach ($deviceArraySortedByAge as $deviceInstance)
@@ -1802,9 +1803,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
 
             // sorting devices based on risk ranking
             usort($deviceArraySortedByRiskRanking, array(
-                                                        $this,
-                                                        "sortDevicesByRiskRanking"
-                                                   ));
+                $this,
+                "sortDevicesByRiskRanking"
+            ));
             $this->HighRiskDevices = $deviceArraySortedByRiskRanking;
         }
 
@@ -1883,9 +1884,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 }
             }
             usort($devices, array(
-                                 $this,
-                                 "sortDevicesByAge"
-                            ));
+                $this,
+                "sortDevicesByAge"
+            ));
             $this->_oldDevices = $devices;
         }
 
@@ -1908,9 +1909,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 }
             }
             usort($devices, array(
-                                 $this,
-                                 "sortDevicesByAge"
-                            ));
+                $this,
+                "sortDevicesByAge"
+            ));
             $this->_includedDevicesSortedAscendingByAge = $devices;
         }
 
@@ -1933,9 +1934,9 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                 }
             }
             usort($devices, array(
-                                 $this,
-                                 "sortDevicesByAge"
-                            ));
+                $this,
+                "sortDevicesByAge"
+            ));
             $this->_includedDevicesSortedDescendingByAge = $devices;
         }
 
@@ -2021,28 +2022,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph->setHorizontal(true);
             $barGraph->setTitle("Annual Printing Costs for Purchased Hardware");
             $barGraph->setVisibleAxes(array(
-                                           'x'
-                                      ));
+                'x'
+            ));
             $barGraph->addDataSet(array(
-                                       $this->getTotalPurchasedAnnualCost()
-                                  ));
+                $this->getTotalPurchasedAnnualCost()
+            ));
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->addDataSet(array(
-                                       $this->getPrintIQTotalCost()
-                                  ));
+                $this->getPrintIQTotalCost()
+            ));
             $barGraph->setLegend(array(
-                                      "Current",
-                                      My_Brand::$brandName
-                                 ));
+                "Current",
+                My_Brand::$brandName
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.3);
             $barGraph->setDataRange(0, $highest * 1.3);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("b");
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($PrintIQSavingsBarGraph_currencyValueMarker, "000000", "1", "-1", "11");
@@ -2055,28 +2056,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $highest  = ($this->getDevices()->leasedDeviceInstances->getCount() > $this->getDevices()->purchasedDeviceInstances->getCount()) ? $this->getDevices()->leasedDeviceInstances->getCount() : $this->getDevices()->purchasedDeviceInstances->getCount();
             $barGraph = new gchart\gBarChart(225, 265);
             $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
+                'y'
+            ));
             $barGraph->addDataSet(array(
-                                       $this->getDevices()->leasedDeviceInstances->getCount()
-                                  ));
+                $this->getDevices()->leasedDeviceInstances->getCount()
+            ));
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->addDataSet(array(
-                                       $this->getDevices()->purchasedDeviceInstances->getCount()
-                                  ));
+                $this->getDevices()->purchasedDeviceInstances->getCount()
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->setLegend(array(
-                                      "Number of leased devices",
-                                      "Number of purchased devices"
-                                 ));
+                "Number of leased devices",
+                "Number of purchased devices"
+            ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[1]
@@ -2089,28 +2090,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph = new gchart\gBarChart(225, 265);
 
             $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
+                'y'
+            ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
-                                  ));
+                round($this->getDevices()->leasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
+            ));
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->addDataSet(array(
-                                       round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
-                                  ));
+                round($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(50, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->setLegend(array(
-                                      "Monthly pages on leased devices",
-                                      "Monthly pages on purchased devices"
-                                 ));
+                "Monthly pages on leased devices",
+                "Monthly pages on purchased devices"
+            ));
 
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2137,21 +2138,21 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $uniqueDevicesGraph = new gchart\gPie3DChart(700, 270);
             $uniqueDevicesGraph->addDataSet($uniqueModelArray);
             $uniqueDevicesGraph->addColors(array(
-                                                "E21736",
-                                                "b0bb21",
-                                                "5c3f9b",
-                                                "0191d3",
-                                                "f89428",
-                                                "e4858f",
-                                                "fcc223",
-                                                "B3C6FF",
-                                                "ECFFB3",
-                                                "386AFF",
-                                                "FFB3EC",
-                                                "cccccc",
-                                                "00ff00",
-                                                "000000"
-                                           ));
+                "E21736",
+                "b0bb21",
+                "5c3f9b",
+                "0191d3",
+                "f89428",
+                "e4858f",
+                "fcc223",
+                "B3C6FF",
+                "ECFFB3",
+                "386AFF",
+                "FFB3EC",
+                "cccccc",
+                "00ff00",
+                "000000"
+            ));
 //             $uniqueDevicesGraph->setLegend($labels);
 //            $uniqueDevicesGraph->setLabels($labels);
             // Graphs[3]
@@ -2165,28 +2166,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per networked printer");
             $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
+                'y'
+            ));
             $barGraph->addDataSet(array(
-                                       $averagePageCount
-                                  ));
+                $averagePageCount
+            ));
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->addDataSet(array(
-                                       self::AVERAGE_MONTHLY_PAGES_PER_DEVICE
-                                  ));
+                self::AVERAGE_MONTHLY_PAGES_PER_DEVICE
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->setLegend(array(
-                                      $companyName,
-                                      "Average"
-                                 ));
+                $companyName,
+                "Average"
+            ));
 
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2202,28 +2203,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph         = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Average monthly pages|per employee");
             $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
+                'y'
+            ));
             $barGraph->addDataSet(array(
-                                       $pagesPerEmployee
-                                  ));
+                $pagesPerEmployee
+            ));
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->addDataSet(array(
-                                       Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
-                                  ));
+                Assessment_ViewModel_Assessment::AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->setLegend(array(
-                                      $companyName,
-                                      "Average"
-                                 ));
+                $companyName,
+                "Average"
+            ));
             $barGraph->setProperty('chxs', '0N*sz0*');
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
@@ -2238,28 +2239,28 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $barGraph           = new gchart\gBarChart(175, 300);
             $barGraph->setTitle("Employees per|printing device");
             $barGraph->setVisibleAxes(array(
-                                           'y'
-                                      ));
+                'y'
+            ));
             $barGraph->addDataSet(array(
-                                       $devicesPerEmployee
-                                  ));
+                $devicesPerEmployee
+            ));
             $barGraph->addColors(array(
-                                      "E21736"
-                                 ));
+                "E21736"
+            ));
             $barGraph->addDataSet(array(
-                                       self::AVERAGE_EMPLOYEES_PER_DEVICE
-                                  ));
+                self::AVERAGE_EMPLOYEES_PER_DEVICE
+            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
             $barGraph->setBarScale(40, 10);
             $barGraph->setLegendPosition("bv");
             $barGraph->addColors(array(
-                                      "0194D2"
-                                 ));
+                "0194D2"
+            ));
             $barGraph->setLegend(array(
-                                      $companyName,
-                                      "Average"
-                                 ));
+                $companyName,
+                "Average"
+            ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             // Graphs[6]
@@ -2278,20 +2279,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $colorCapableGraph  = new gchart\gPie3DChart(305, 210);
             $colorCapableGraph->setTitle("Color-Capable Printing Devices");
             $colorCapableGraph->addDataSet(array(
-                                                $colorPercentage,
-                                                $notColorPercentage
-                                           ));
+                $colorPercentage,
+                $notColorPercentage
+            ));
             $colorCapableGraph->setLegend(array(
-                                               "Color-capable",
-                                               "Black-and-white only"
-                                          ));
+                "Color-capable",
+                "Black-and-white only"
+            ));
             $colorCapableGraph->setLabels(array(
-                                               "$colorPercentage%"
-                                          ));
+                "$colorPercentage%"
+            ));
             $colorCapableGraph->addColors(array(
-                                               "E21736",
-                                               "0194D2"
-                                          ));
+                "E21736",
+                "0194D2"
+            ));
             $colorCapableGraph->setLegendPosition("bv");
             // Graphs[7]
             $this->Graphs [] = $colorCapableGraph->getUrl();
@@ -2309,21 +2310,21 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $colorVSBWPagesGraph = new gchart\gPie3DChart(305, 210);
             $colorVSBWPagesGraph->setTitle("Color vs Black/White Pages");
             $colorVSBWPagesGraph->addDataSet(array(
-                                                  $colorPercentage,
-                                                  $bwPercentage
-                                             ));
+                $colorPercentage,
+                $bwPercentage
+            ));
             $colorVSBWPagesGraph->setLegend(array(
-                                                 "Color pages printed",
-                                                 "Black-and-white pages printed"
-                                            ));
+                "Color pages printed",
+                "Black-and-white pages printed"
+            ));
             $colorVSBWPagesGraph->setLabels(array(
-                                                 "$colorPercentage%",
-                                                 "$bwPercentage%"
-                                            ));
+                "$colorPercentage%",
+                "$bwPercentage%"
+            ));
             $colorVSBWPagesGraph->addColors(array(
-                                                 "E21736",
-                                                 "0194D2"
-                                            ));
+                "E21736",
+                "0194D2"
+            ));
             $colorVSBWPagesGraph->setLegendPosition("bv");
             // Graphs[8]
             $this->Graphs [] = $colorVSBWPagesGraph->getUrl();
@@ -2375,11 +2376,11 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $deviceAgeGraph->setLegend($legendItems);
             $deviceAgeGraph->setLabels($labels);
             $deviceAgeGraph->addColors(array(
-                                            "E21736",
-                                            "0094cf",
-                                            "5c3f9b",
-                                            "adba1d"
-                                       ));
+                "E21736",
+                "0094cf",
+                "5c3f9b",
+                "adba1d"
+            ));
             $deviceAgeGraph->setLegendPosition("bv");
             // Graphs[9]
             $this->Graphs [] = $deviceAgeGraph->getUrl();
@@ -2399,20 +2400,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $scanCapableGraph  = new gchart\gPie3DChart(200, 160);
             $scanCapableGraph->setTitle("Scan-Capable Printing Devices");
             $scanCapableGraph->addDataSet(array(
-                                               $scanPercentage,
-                                               $notScanPercentage
-                                          ));
+                $scanPercentage,
+                $notScanPercentage
+            ));
             $scanCapableGraph->setLegend(array(
-                                              "Scan capable",
-                                              "Not scan capable"
-                                         ));
+                "Scan capable",
+                "Not scan capable"
+            ));
             $scanCapableGraph->setLabels(array(
-                                              "$scanPercentage%"
-                                         ));
+                "$scanPercentage%"
+            ));
             $scanCapableGraph->addColors(array(
-                                              "E21736",
-                                              "0194D2"
-                                         ));
+                "E21736",
+                "0194D2"
+            ));
             $scanCapableGraph->setLegendPosition("bv");
             // Graphs[10]
             $this->Graphs [] = $scanCapableGraph->getUrl();
@@ -2430,20 +2431,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $faxCapable       = new gchart\gPie3DChart(200, 160);
             $faxCapable->setTitle("Fax-Capable Printing Devices");
             $faxCapable->addDataSet(array(
-                                         $faxPercentage,
-                                         $notFaxPercentage
-                                    ));
+                $faxPercentage,
+                $notFaxPercentage
+            ));
             $faxCapable->setLegend(array(
-                                        "Fax capable",
-                                        "Not fax capable"
-                                   ));
+                "Fax capable",
+                "Not fax capable"
+            ));
             $faxCapable->setLabels(array(
-                                        "$faxPercentage%"
-                                   ));
+                "$faxPercentage%"
+            ));
             $faxCapable->addColors(array(
-                                        "E21736",
-                                        "0194D2"
-                                   ));
+                "E21736",
+                "0194D2"
+            ));
             $faxCapable->setLegendPosition("bv");
             // Graphs[11]
             $this->Graphs [] = $faxCapable->getUrl();
@@ -2468,20 +2469,20 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $duplexCapableGraph  = new gchart\gPie3DChart(305, 210);
             $duplexCapableGraph->setTitle("Duplex-Capable Printing Devices");
             $duplexCapableGraph->addDataSet(array(
-                                                 $duplexPercentage,
-                                                 $notDuplexPercentage
-                                            ));
+                $duplexPercentage,
+                $notDuplexPercentage
+            ));
             $duplexCapableGraph->setLegend(array(
-                                                "Duplex capable",
-                                                "Not duplex capable"
-                                           ));
+                "Duplex capable",
+                "Not duplex capable"
+            ));
             $duplexCapableGraph->setLabels(array(
-                                                "$duplexPercentage%"
-                                           ));
+                "$duplexPercentage%"
+            ));
             $duplexCapableGraph->addColors(array(
-                                                "E21736",
-                                                "0194D2"
-                                           ));
+                "E21736",
+                "0194D2"
+            ));
             $duplexCapableGraph->setLegendPosition("bv");
             // Graphs[13]
             $this->Graphs [] = $duplexCapableGraph->getUrl();

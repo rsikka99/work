@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold
  */
@@ -73,9 +74,9 @@ class Admin_Model_Mapper_Memjet_Device_Swap_Page_Threshold extends My_Model_Mapp
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
-                                                                "{$this->col_dealerId} = ?"       => $primaryKey [1],
-                                                           ));
+            "{$this->col_masterDeviceId} = ?" => $primaryKey [0],
+            "{$this->col_dealerId} = ?"       => $primaryKey [1],
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

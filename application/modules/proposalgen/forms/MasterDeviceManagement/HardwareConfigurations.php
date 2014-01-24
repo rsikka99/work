@@ -45,35 +45,35 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations extends Twi
         $this->setMethod('post');
 
         $this->addElement('text', 'hardwareConfigurationsname', array(
-                                                                     'label'     => 'Name:',
-                                                                     'required'  => true,
-                                                                     'maxlength' => 255,
-                                                                     'filters'   => array(
-                                                                         'StringTrim',
-                                                                         'StripTags'
-                                                                     ),
-                                                                     'validator' => 'StringLength',
-                                                                     'options'   => array(
-                                                                         1,
-                                                                         255
-                                                                     )
-                                                                ));
+            'label'     => 'Name:',
+            'required'  => true,
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
 
         $this->addElement('textarea', 'hardwareConfigurationsdescription', array(
-                                                                                'label'     => 'Description:',
-                                                                                'required'  => true,
-                                                                                'style'     => 'height: 100px',
-                                                                                'maxlength' => 255,
-                                                                                'filters'   => array(
-                                                                                    'StringTrim',
-                                                                                    'StripTags'
-                                                                                ),
-                                                                                'validator' => 'StringLength',
-                                                                                'options'   => array(
-                                                                                    1,
-                                                                                    255
-                                                                                )
-                                                                           ));
+            'label'     => 'Description:',
+            'required'  => true,
+            'style'     => 'height: 100px',
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
         /**
          * Options
          */
@@ -91,24 +91,24 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations extends Twi
                     $deviceConfigurationOption = $deviceConfigurationOptionMapper->find(array($this->_deviceConfigurationId, $deviceOption->getOption()->id));
 
                     $optionElement = $this->createElement('text', "hardwareConfigurationsoption{$deviceOption->optionId}", array(
-                                                                                                                                'label'      => $deviceOption->getOption()->name,
-                                                                                                                                'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
-                                                                                                                                'class'      => 'span4',
-                                                                                                                                'maxlength'  => 8,
-                                                                                                                                'required'   => false,
-                                                                                                                                'allowEmpty' => true,
-                                                                                                                                'filters'    => array(
-                                                                                                                                    'StringTrim',
-                                                                                                                                    'StripTags'
-                                                                                                                                ),
-                                                                                                                                'validators' => array(
-                                                                                                                                    array(
-                                                                                                                                        'validator' => 'Between',
-                                                                                                                                        'options'   => array('min' => 0, 'max' => 1000),
-                                                                                                                                    ),
-                                                                                                                                    'int'
-                                                                                                                                ),
-                                                                                                                           )
+                            'label'      => $deviceOption->getOption()->name,
+                            'value'      => ($deviceConfigurationOption ? $deviceConfigurationOption->quantity : 0),
+                            'class'      => 'span4',
+                            'maxlength'  => 8,
+                            'required'   => false,
+                            'allowEmpty' => true,
+                            'filters'    => array(
+                                'StringTrim',
+                                'StripTags'
+                            ),
+                            'validators' => array(
+                                array(
+                                    'validator' => 'Between',
+                                    'options'   => array('min' => 0, 'max' => 1000),
+                                ),
+                                'int'
+                            ),
+                        )
                     );
                     $optionElement->setAttrib('class', 'span1');
                     $optionElement->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
@@ -121,10 +121,10 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareConfigurations extends Twi
                     $optionsGroup = $this->getDisplayGroup("optionsGroup");
                     $optionsGroup->setDescription("Quantity");
                     $optionsGroup->setDecorators(array(
-                                                      'FormElements',
-                                                      array('HtmlTag', array('tag' => 'div', 'class' => 'myClass')),
-                                                      array('Description', array('tag' => 'h3', 'placement' => 'prepend', 'class' => 'text-center'))
-                                                 ));
+                        'FormElements',
+                        array('HtmlTag', array('tag' => 'div', 'class' => 'myClass')),
+                        array('Description', array('tag' => 'h3', 'placement' => 'prepend', 'class' => 'text-center'))
+                    ));
                 }
             }
         }

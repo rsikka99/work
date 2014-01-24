@@ -1,4 +1,5 @@
 <?php
+
 class Proposalgen_Model_DeviceInstanceMeterTest extends PHPUnit_Framework_TestCase
 {
     /**

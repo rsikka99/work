@@ -26,112 +26,112 @@ class Quotegen_Form_QuoteDeviceGroupPage extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         $this->addElement('text', 'name', array(
-                                               'label'      => 'Name:',
-                                               'required'   => true,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   array(
-                                                       'validator' => 'StringLength',
-                                                       'options'   => array(
-                                                           1,
-                                                           255
-                                                       )
-                                                   )
-                                               )
-                                          ));
+            'label'      => 'Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'oemSku', array(
-                                                 'label'      => 'OEM SKU	:',
-                                                 'required'   => true,
-                                                 'filters'    => array(
-                                                     'StringTrim',
-                                                     'StripTags'
-                                                 ),
-                                                 'validators' => array(
-                                                     array(
-                                                         'validator' => 'StringLength',
-                                                         'options'   => array(
-                                                             1,
-                                                             255
-                                                         )
-                                                     )
-                                                 )
-                                            ));
+            'label'      => 'OEM SKU	:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'pricePerPage', array(
-                                                       'label'      => 'Price Per Page:',
-                                                       'required'   => true,
-                                                       'filters'    => array(
-                                                           'StringTrim',
-                                                           'StripTags'
-                                                       ),
-                                                       'validators' => array(
-                                                           'Float',
-                                                           array(
-                                                               'validator' => 'Between',
-                                                               'options'   => array(
-                                                                   'min'       => 0,
-                                                                   'max'       => 5,
-                                                                   'inclusive' => false
-                                                               )
-                                                           )
-                                                       )
-                                                  ));
+            'label'      => 'Price Per Page:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Float',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min'       => 0,
+                        'max'       => 5,
+                        'inclusive' => false
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'includedPrice', array(
-                                                        'label'      => 'Included Price:',
-                                                        'required'   => true,
-                                                        'filters'    => array(
-                                                            'StringTrim',
-                                                            'StripTags'
-                                                        ),
-                                                        'validators' => array(
-                                                            'Float',
-                                                            array(
-                                                                'validator' => 'Between',
-                                                                'options'   => array(
-                                                                    'min'       => 0,
-                                                                    'max'       => 5000,
-                                                                    'inclusive' => true
-                                                                )
-                                                            )
-                                                        )
-                                                   ));
+            'label'      => 'Included Price:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Float',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min'       => 0,
+                        'max'       => 5000,
+                        'inclusive' => true
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'includedQuantity', array(
-                                                           'label'      => 'Included Quantity:',
-                                                           'required'   => true,
-                                                           'filters'    => array(
-                                                               'StringTrim',
-                                                               'StripTags'
-                                                           ),
-                                                           'validators' => array(
-                                                               'Int',
-                                                               array(
-                                                                   'validator' => 'Between',
-                                                                   'options'   => array(
-                                                                       'min'       => 0,
-                                                                       'max'       => 50000,
-                                                                       'inclusive' => true
-                                                                   )
-                                                               )
-                                                           )
-                                                      ));
+            'label'      => 'Included Quantity:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Int',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array(
+                        'min'       => 0,
+                        'max'       => 50000,
+                        'inclusive' => true
+                    )
+                )
+            )
+        ));
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

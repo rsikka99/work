@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Rms_Master_Matchup
  */

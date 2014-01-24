@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_Map_Device_Instance
  */
@@ -180,7 +181,7 @@ SELECT
     rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
-    IFNULL(rms_upload_rows.rmsModelId,UUID()) as groupField,
+    IFNULL(rms_upload_rows.rmsModelId,UUID()) AS groupField,
     rms_upload_rows.manufacturer,
     rms_upload_rows.modelName,
     device_instances.rawDeviceName,
@@ -195,7 +196,7 @@ SELECT
     GROUP_CONCAT(device_instances.id) AS deviceInstanceIds
 FROM device_instances
 JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
-LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId and rms_upload_rows.rmsModelId = rms_devices.rmsModelId
+LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId AND rms_upload_rows.rmsModelId = rms_devices.rmsModelId
 LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
 LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
 LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id
@@ -254,7 +255,7 @@ WHERE device_instances.rmsUploadId = {$rmsUploadId}
     rms_upload_rows.id AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
-    IF(rms_devices.isGeneric = 1, UUID(), IFNULL(rms_upload_rows.rmsModelId,UUID())) as groupField,
+    IF(rms_devices.isGeneric = 1, UUID(), IFNULL(rms_upload_rows.rmsModelId,UUID())) AS groupField,
     rms_upload_rows.manufacturer,
     rms_upload_rows.modelName,
     device_instances.rawDeviceName,
@@ -269,7 +270,7 @@ WHERE device_instances.rmsUploadId = {$rmsUploadId}
     GROUP_CONCAT(device_instances.id)                         AS deviceInstanceIds
 FROM device_instances
     JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
-    LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId and rms_upload_rows.rmsModelId = rms_devices.rmsModelId
+    LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId AND rms_upload_rows.rmsModelId = rms_devices.rmsModelId
     LEFT JOIN device_instance_master_devices ON device_instance_master_devices.deviceInstanceId = device_instances.id
     LEFT JOIN master_devices ON device_instance_master_devices.masterDeviceId = master_devices.id
     LEFT JOIN manufacturers ON master_devices.manufacturerId = manufacturers.id

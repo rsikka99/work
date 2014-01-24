@@ -55,14 +55,14 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
     {
         // Validate the button mode
         if (!in_array($buttonMode, array(
-                                        self::BUTTONS_ALL,
-                                        self::BUTTONS_SAVE_NEXT,
-                                        self::BUTTONS_BACK_NEXT,
-                                        self::BUTTONS_BACK_SAVE,
-                                        self::BUTTONS_BACK,
-                                        self::BUTTONS_SAVE,
-                                        self::BUTTONS_NEXT
-                                   ))
+            self::BUTTONS_ALL,
+            self::BUTTONS_SAVE_NEXT,
+            self::BUTTONS_BACK_NEXT,
+            self::BUTTONS_BACK_SAVE,
+            self::BUTTONS_BACK,
+            self::BUTTONS_SAVE,
+            self::BUTTONS_NEXT
+        ))
         )
         {
             throw new InvalidArgumentException('Invalid Button Mode!');
@@ -107,13 +107,13 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
         if ($goBackButton)
         {
             $form->addElement('button', 'goBack', array(
-                                                       'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_INVERSE,
-                                                       'label'      => 'Go Back',
-                                                       'type'       => 'submit',
-                                                       'class'      => 'pull-left',
-                                                       'icon'       => 'arrow-left',
-                                                       'whiteIcon'  => true
-                                                  ));
+                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_INVERSE,
+                'label'      => 'Go Back',
+                'type'       => 'submit',
+                'class'      => 'pull-left',
+                'icon'       => 'arrow-left',
+                'whiteIcon'  => true
+            ));
             $addedButtons [] = 'goBack';
         }
 
@@ -121,12 +121,12 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
         if ($saveButton)
         {
             $form->addElement('button', 'save', array(
-                                                     'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_SUCCESS,
-                                                     'label'      => 'Save',
-                                                     'type'       => 'submit',
-                                                     'icon'       => 'ok',
-                                                     'whiteIcon'  => true
-                                                ));
+                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_SUCCESS,
+                'label'      => 'Save',
+                'type'       => 'submit',
+                'icon'       => 'ok',
+                'whiteIcon'  => true
+            ));
             $addedButtons [] = 'save';
         }
 
@@ -134,26 +134,26 @@ class Proposalgen_Form_Assessment_Navigation extends Twitter_Bootstrap_Form
         if ($nextButton)
         {
             $form->addElement('button', 'saveAndContinue', array(
-                                                                'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-                                                                'label'        => 'Save & Continue',
-                                                                'type'         => 'submit',
-                                                                'class'        => 'pull-right',
-                                                                'icon'         => 'arrow-right',
-                                                                'whiteIcon'    => true,
-                                                                'iconPosition' => Twitter_Bootstrap_Form_Element_Button::ICON_POSITION_RIGHT
-                                                           ));
+                'buttonType'   => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+                'label'        => 'Save & Continue',
+                'type'         => 'submit',
+                'class'        => 'pull-right',
+                'icon'         => 'arrow-right',
+                'whiteIcon'    => true,
+                'iconPosition' => Twitter_Bootstrap_Form_Element_Button::ICON_POSITION_RIGHT
+            ));
             $addedButtons [] = 'saveAndContinue';
         }
 
         // Add the buttons the the form actions
         $form->addDisplayGroup($addedButtons, 'actions', array(
-                                                              'disableLoadDefaultDecorators' => true,
-                                                              'decorators'                   => array(
-                                                                  'Actions', 'FieldSize',
-                                                                  'ViewHelper',
-                                                                  'Addon',
-                                                                  'ElementErrors',
-                                                              )
-                                                         ));
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions', 'FieldSize',
+                'ViewHelper',
+                'Addon',
+                'ElementErrors',
+            )
+        ));
     }
 }

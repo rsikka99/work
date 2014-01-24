@@ -21,12 +21,12 @@ $properties->setLastModifiedBy('MPS Assessment Software');
 
 // This section is landscape with 0.5" margins insead of 1"
 $mainSection = $phpWord->createSection(array(
-                                            'orientation'  => 'landscape',
-                                            'marginLeft'   => 720,
-                                            'marginRight'  => 720,
-                                            'marginTop'    => 720,
-                                            'marginBottom' => 720
-                                       ));
+    'orientation'  => 'landscape',
+    'marginLeft'   => 720,
+    'marginRight'  => 720,
+    'marginTop'    => 720,
+    'marginBottom' => 720
+));
 
 /**
  * Define Table Styles here
@@ -52,43 +52,43 @@ $phpWord->addFontStyle('titlepageHeaderFont', array('bold' => true, 'size' => 12
 $phpWord->addFontStyle('documentHeader', array('bold' => true, 'size' => 16));
 $phpWord->addParagraphStyle('documentHeader', array('align' => 'center'));
 $this->phpword->addParagraphStyle('titleStyle1', array(
-                                                      'align'      => 'center',
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => $titlePageBackgroundColor
-                                                 ));
+    'align'      => 'center',
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor
+));
 $phpWord->addParagraphStyle('titleStyle2', array(
-                                                'spaceAfter'  => 50,
-                                                'spaceBefore' => 50,
-                                                'bgColor'     => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter'  => 50,
+    'spaceBefore' => 50,
+    'bgColor'     => $titlePageBackgroundColor2
+));
 $phpWord->addParagraphStyle('titleStyle3', array(
-                                                'spaceAfter' => 100,
-                                                'bgColor'    => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor2
+));
 $phpWord->addFontStyle('titlepage_title', array(
-                                               'size'  => 24,
-                                               'bold'  => true,
-                                               'color' => $titlePageTextColor
-                                          ));
+    'size'  => 24,
+    'bold'  => true,
+    'color' => $titlePageTextColor
+));
 
 $phpWord->addFontStyle('titlepage_subtitle', array(
-                                                  'size'  => 16,
-                                                  'bold'  => true,
-                                                  'color' => $titlePageTextColor2
-                                             ));
+    'size'  => 16,
+    'bold'  => true,
+    'color' => $titlePageTextColor2
+));
 
 $phpWord->addFontStyle('titlepage_address', array(
-                                                 'size'  => 12,
-                                                 'color' => $titlePageTextColor2
-                                            ));
+    'size'  => 12,
+    'color' => $titlePageTextColor2
+));
 $phpWord->addTitleStyle(2, array(
-                                'size'   => 12,
-                                'color'  => $this->wordStyles->default->subSectionFontColor,
-                                'bold'   => true,
-                                'italic' => true
-                           ), array(
-                                   'bgColor' => My_Brand::$reportHeadingBackgroundColor,
-                              ));
+    'size'   => 12,
+    'color'  => $this->wordStyles->default->subSectionFontColor,
+    'bold'   => true,
+    'italic' => true
+), array(
+    'bgColor' => My_Brand::$reportHeadingBackgroundColor,
+));
 
 // Classes that describe standard cells
 $standard_cell                  = (object)array(

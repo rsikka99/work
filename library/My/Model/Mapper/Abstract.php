@@ -132,8 +132,8 @@ abstract class My_Model_Mapper_Abstract
 
         $select = $dbTable->select();
         $select->from($dbTable, array(
-                                     'COUNT(*) as count'
-                                ));
+            'COUNT(*) as count'
+        ));
 
         // If we have a where, apply all the where bindings.
         if ($where !== null)

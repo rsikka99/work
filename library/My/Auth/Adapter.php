@@ -146,11 +146,11 @@ class My_Auth_Adapter extends Zend_Auth_Adapter_DbTable
         {
             $newLockedDate = date('Y-m-d H:i:s', time() + $this->_lockoutTime);
             $this->_zendDb->update($this->_tableName, array(
-                                                           $this->_loginAttemptsColumn => 0,
-                                                           $this->_frozenColumn        => $newLockedDate
-                                                      ), array(
-                                                              "{$this->_identityColumn} = ?" => $this->_identity
-                                                         ));
+                $this->_loginAttemptsColumn => 0,
+                $this->_frozenColumn        => $newLockedDate
+            ), array(
+                "{$this->_identityColumn} = ?" => $this->_identity
+            ));
             $frozenDate = new DateTime($newLockedDate);
         }
 
@@ -181,10 +181,10 @@ class My_Auth_Adapter extends Zend_Auth_Adapter_DbTable
             if ($loginAttempts > 0)
             {
                 $this->_zendDb->update($this->_tableName, array(
-                                                               $this->_loginAttemptsColumn => 0
-                                                          ), array(
-                                                                  "{$this->_identityColumn} = ?" => $this->_identity
-                                                             ));
+                    $this->_loginAttemptsColumn => 0
+                ), array(
+                    "{$this->_identityColumn} = ?" => $this->_identity
+                ));
             }
         }
         else
@@ -192,10 +192,10 @@ class My_Auth_Adapter extends Zend_Auth_Adapter_DbTable
             // The user has made a bad attempt so we increment our counter
             $loginAttempts++;
             $this->_zendDb->update($this->_tableName, array(
-                                                           $this->_loginAttemptsColumn => $loginAttempts
-                                                      ), array(
-                                                              "{$this->_identityColumn} = ?" => $this->_identity
-                                                         ));
+                $this->_loginAttemptsColumn => $loginAttempts
+            ), array(
+                "{$this->_identityColumn} = ?" => $this->_identity
+            ));
 
         }
 

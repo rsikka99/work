@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_Hardware_Optimization_Quote
  */

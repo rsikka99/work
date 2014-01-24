@@ -8,9 +8,9 @@
 
 /* @var $optimization Memjetoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
-/* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization*/
+/* @var $memjetOptimization Memjetoptimization_Model_Memjet_Optimization */
 $memjetOptimization = $this->memjetOptimization;
-$blackToColorRatio = $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio;
+$blackToColorRatio  = $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio;
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
@@ -20,7 +20,7 @@ $section->addText('Cost Analyst Summary', array('bold' => true, 'size' => 12));
 
 // Table with values
 $tcStyle = $this->styles->tables->compare;
-$table = $section->addTable($tcStyle->tablestyle);
+$table   = $section->addTable($tcStyle->tablestyle);
 
 
 $table->addRow($tcStyle->body->rowheight);

@@ -1,30 +1,40 @@
-<?php 
+<?php
 $id = $this->id;
 ?>
 
 <div class="clearfix">
-	<div class="page-header">
-        <h1>Hardware Quote Devices - <small><?php echo $this->devicename; ?></small></h1>
+    <div class="page-header">
+        <h1>Hardware Quote Devices -
+            <small><?php echo $this->devicename; ?></small>
+        </h1>
     </div>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-    	<li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
+        <li class="active"><a href="#tab1" data-toggle="tab">Details</a></li>
 
         <?php
         $isAdmin = $this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ( $isAdmin) {
+        if ($isAdmin)
+        {
             ?>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
+            <li>
+                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id), null, true); ?>">Toners</a>
+            </li>
         <?php } ?>
 
-    	<?php if ( $this->quotegendevice ) { ?>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id ), null, true ); ?>">Available Options</a></li>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Hardware Configurations</a></li>
-    	<?php } ?>
+        <?php if ($this->quotegendevice)
+        { ?>
+            <li>
+                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id), null, true); ?>">Available Options</a>
+            </li>
+            <li>
+                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id), null, true); ?>">Hardware Configurations</a>
+            </li>
+        <?php } ?>
     </ul>
     <div class="tab-content">
-    	<?php echo $this->form; ?>
+        <?php echo $this->form; ?>
     </div>
 </div>

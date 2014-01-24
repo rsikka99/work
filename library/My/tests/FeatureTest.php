@@ -6,7 +6,8 @@ class My_FeatureTest extends PHPUnit_Framework_TestCase
         'my_random_feature',
     );
 
-    public function setUp(){
+    public function setUp ()
+    {
         $mockAdapter = $this->getMock('My_Feature_AdapterInterface', array('getFeatures'));
         $mockAdapter->expects($this->any())->method('getFeatures')->will($this->returnValue($this->validFeatures));
         My_Feature::setAdapter($mockAdapter);

@@ -1,7 +1,8 @@
-<?php $device = $this->device; /* @var $deviceConfiguration Quotegen_Model_Device */?>
-<?php 
-	$quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */
-	$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
+<?php $device = $this->device; /* @var $deviceConfiguration Quotegen_Model_Device */ ?>
+<?php
+$quote = $this->Quote();
+/* @var $quote Quotegen_Model_Quote */
+$this->placeholder('ProgressionNav')->set($this->render('_partials/quoteHeading.phtml'));
 ?>
 <div class="well">
     <?php echo $this->form; ?>

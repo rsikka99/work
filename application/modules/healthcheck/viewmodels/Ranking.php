@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_ViewModel_Ranking
  */

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_View_Helper_ProposalMenu
  */

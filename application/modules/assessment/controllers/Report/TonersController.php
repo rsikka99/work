@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Report_TonersController
  */
@@ -12,8 +13,8 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
         if (!My_Feature::canAccess(My_Feature::ASSESSMENT_JIT_SUPPLY_AND_TONER_SKU_REPORT))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }

@@ -1,5 +1,7 @@
 <div class="page-header">
-    <h1>System Administration<small> - Menu</small></h1>
+    <h1>System Administration
+        <small> - Menu</small>
+    </h1>
 </div>
-<?php $page = $this->navigation()->findOneBy('label','System Administration'); ?>
+<?php $page = $this->navigation()->findOneBy('label', 'System Administration'); ?>
 <?php echo $this->navigation()->menu()->setUlClass('nav nav-list')->renderMenu($page); ?>

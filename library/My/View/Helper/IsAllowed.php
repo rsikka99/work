@@ -1,4 +1,5 @@
 <?php
+
 class My_View_Helper_IsAllowed extends Zend_View_Helper_Abstract
 {
     /**

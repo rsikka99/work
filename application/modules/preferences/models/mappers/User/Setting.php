@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Preferences_Model_Mapper_User_Setting
  */
@@ -73,8 +74,8 @@ class Preferences_Model_Mapper_User_Setting extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_userId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_userId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

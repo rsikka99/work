@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Device_Instance_Replacement_Master_Device
  */

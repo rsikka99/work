@@ -28,22 +28,22 @@ class Admin_Form_LeasingSchema extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal');
 
         $this->addElement('text', 'name', array(
-                                               'label'      => 'Name:',
-                                               'required'   => true,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   array(
-                                                       'validator' => 'StringLength',
-                                                       'options'   => array(
-                                                           1,
-                                                           255
-                                                       )
-                                                   )
-                                               )
-                                          ));
+            'label'      => 'Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         $dealerSelect = null;
         $isAdmin      = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
@@ -63,25 +63,25 @@ class Admin_Form_LeasingSchema extends EasyBib_Form
             if ($dealers)
             {
                 $this->addElement('select', 'dealerId', array(
-                                                             'label'        => 'Dealer:',
-                                                             'class'        => 'input-medium',
-                                                             'multiOptions' => $dealers,
-                                                             'required'     => true,
-                                                             'value'        => $firstDealerId));
+                    'label'        => 'Dealer:',
+                    'class'        => 'input-medium',
+                    'multiOptions' => $dealers,
+                    'required'     => true,
+                    'value'        => $firstDealerId));
             }
         }
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

@@ -1,18 +1,26 @@
-<?php /* @var $option Quotegen_Model_Option */ $option = $this->option; ?>
+<?php /* @var $option Quotegen_Model_Option */
+$option = $this->option; ?>
 <div class="page-header">
-        <h1>Hardware Quote Devices - <small>View Option</small></h1>
+    <h1>Hardware Quote Devices -
+        <small>View Option</small>
+    </h1>
 </div>
 <div class="well">
     <dl class="dl-horizontal">
-        <dt>Name</dt><dd><?php echo $option->name; ?></dd>
-        <dt>Description</dt><dd><?php echo $option->description; ?></dd>
-        <dt>SKU</dt><dd><?php echo $option->oemSku ?></dd>
-        <dt>Price</dt><dd><?php echo $option->cost ?></dd>
+        <dt>Name</dt>
+        <dd><?php echo $option->name; ?></dd>
+        <dt>Description</dt>
+        <dd><?php echo $option->description; ?></dd>
+        <dt>SKU</dt>
+        <dd><?php echo $option->oemSku ?></dd>
+        <dt>Price</dt>
+        <dd><?php echo $option->cost ?></dd>
         <dt>Options</dt>
-        
-        <?php /* @var $category Quotegen_Model_Category */ foreach ($option->getCategories() as $category) : ?>
-        	<dd><?php echo $category->name ?></dd>
+
+        <?php /* @var $category Quotegen_Model_Category */
+        foreach ($option->getCategories() as $category) : ?>
+            <dd><?php echo $category->name ?></dd>
         <?php endforeach ?>
-        
+
     </dl>
 </div>

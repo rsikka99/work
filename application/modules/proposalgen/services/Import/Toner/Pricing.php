@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_Import_Toner_Pricing
  */
@@ -28,27 +29,27 @@ class Proposalgen_Service_Import_Toner_Pricing extends Proposalgen_Service_Impor
     {
         $this->_inputFilter = new Zend_Filter_Input(
             array(
-                 '*'                           => array(
-                     'StripTags',
-                     'StringTrim',
-                 ),
-                 self::TONER_PRICING_NEW_PRICE => array(
-                     new My_Filter_StringReplace(
-                         array(
-                              "find" => "$"
-                         )
-                     )
-                 )
+                '*'                           => array(
+                    'StripTags',
+                    'StringTrim',
+                ),
+                self::TONER_PRICING_NEW_PRICE => array(
+                    new My_Filter_StringReplace(
+                        array(
+                            "find" => "$"
+                        )
+                    )
+                )
             ),
             array(
-                 '*'                           => array(
-                     'allowEmpty' => true,
-                 ),
-                 self::TONER_PRICING_NEW_PRICE => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('GreaterThan', 0)
-                 )
+                '*'                           => array(
+                    'allowEmpty' => true,
+                ),
+                self::TONER_PRICING_NEW_PRICE => array(
+                    'allowEmpty' => true,
+                    new Zend_Validate_Float(),
+                    array('GreaterThan', 0)
+                )
             )
         );
 

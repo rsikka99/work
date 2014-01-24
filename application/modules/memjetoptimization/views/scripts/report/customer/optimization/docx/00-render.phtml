@@ -15,12 +15,12 @@ $properties->setCategory('Customer Report');
 $properties->setLastModifiedBy('MPS Assessment Software');
 
 $section          = $phpWord->createSection(array(
-                                                 'orientation'  => null,
-                                                 'marginLeft'   => 375,
-                                                 'marginRight'  => 375,
-                                                 'marginTop'    => 375,
-                                                 'marginBottom' => 375
-                                            ));
+    'orientation'  => null,
+    'marginLeft'   => 375,
+    'marginRight'  => 375,
+    'marginTop'    => 375,
+    'marginBottom' => 375
+));
 $titlepageSection = $section;
 
 $titlePageBackgroundColor  = My_Brand::$reportTitlePageTitleBackgroundColor;
@@ -47,43 +47,43 @@ $highlight_color  = "ebc7a4";
  */
 // H2 Style #5881BC
 $phpWord->addTitleStyle(2, array(
-                                'size'   => 12,
-                                'color'  => My_Brand::$reportSubHeadingColor,
-                                'bold'   => true,
-                                'italic' => true
-                           ), array(
-                                   'bgColor' => My_Brand::$reportHeadingBackgroundColor,
-                              ));
+    'size'   => 12,
+    'color'  => My_Brand::$reportSubHeadingColor,
+    'bold'   => true,
+    'italic' => true
+), array(
+    'bgColor' => My_Brand::$reportHeadingBackgroundColor,
+));
 $this->phpword->addParagraphStyle('titleStyle1', array(
-                                                      'align'      => 'center',
-                                                      'spaceAfter' => 100,
-                                                      'bgColor'    => $titlePageBackgroundColor
-                                                 ));
+    'align'      => 'center',
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor
+));
 $phpWord->addParagraphStyle('titleStyle2', array(
-                                                'spaceAfter'  => 50,
-                                                'spaceBefore' => 50,
-                                                'bgColor'     => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter'  => 50,
+    'spaceBefore' => 50,
+    'bgColor'     => $titlePageBackgroundColor2
+));
 $phpWord->addParagraphStyle('titleStyle3', array(
-                                                'spaceAfter' => 100,
-                                                'bgColor'    => $titlePageBackgroundColor2
-                                           ));
+    'spaceAfter' => 100,
+    'bgColor'    => $titlePageBackgroundColor2
+));
 $phpWord->addFontStyle('titlepage_title', array(
-                                               'size'  => 24,
-                                               'bold'  => true,
-                                               'color' => $titlePageTextColor
-                                          ));
+    'size'  => 24,
+    'bold'  => true,
+    'color' => $titlePageTextColor
+));
 
 $phpWord->addFontStyle('titlepage_subtitle', array(
-                                                  'size'  => 16,
-                                                  'bold'  => true,
-                                                  'color' => $titlePageTextColor2
-                                             ));
+    'size'  => 16,
+    'bold'  => true,
+    'color' => $titlePageTextColor2
+));
 
 $phpWord->addFontStyle('titlepage_address', array(
-                                                 'size'  => 12,
-                                                 'color' => $titlePageTextColor2
-                                            ));
+    'size'  => 12,
+    'color' => $titlePageTextColor2
+));
 $styles = (object)array(
     "tables" => (object)array(
             "singleimage"        => (object)array(

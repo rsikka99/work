@@ -1,4 +1,5 @@
 <?php
+
 abstract class My_Navigation_Abstract
 {
     /**

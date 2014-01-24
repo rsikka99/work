@@ -88,8 +88,8 @@ class Quotegen_Model_Mapper_QuoteLeaseTerm extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_quoteId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_quoteId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

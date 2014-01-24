@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_DeviceswapsController
  */
@@ -104,8 +105,8 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -180,8 +181,8 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
 
         $json = json_encode($jsonArray);
@@ -318,7 +319,7 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         $reason            = $swapMapper->find($reasonId);
 
         // Delete defaults if they exist
-        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof  Hardwareoptimization_Model_Device_Swap_Reason_Default)
+        if ($swapDefaultMapper->findDefaultByReasonId($reasonId) instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
         {
             $reasonsByCategory = $swapMapper->fetchAllByCategoryId($reason->deviceSwapReasonCategoryId, $reason->dealerId);
             // is this the last device in this category?

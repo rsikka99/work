@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Model_Mapper_Assessment_Survey
  */
@@ -71,8 +72,8 @@ class Assessment_Model_Mapper_Assessment_Survey extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_reportId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_reportId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

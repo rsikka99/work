@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default
  */
@@ -73,9 +74,9 @@ class Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default extends My_Mode
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceSwapReasonCategoryId} = ?" => $primaryKey[0],
-                                                                "{$this->col_dealerId} = ?"                   => $primaryKey[1]
-                                                           ));
+            "{$this->col_deviceSwapReasonCategoryId} = ?" => $primaryKey[0],
+            "{$this->col_dealerId} = ?"                   => $primaryKey[1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

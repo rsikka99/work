@@ -73,11 +73,11 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
             if ($dealers)
             {
                 $dealerSelect = $this->createElement('select', 'dealerId', array(
-                                                                                'label'        => 'Dealer:',
-                                                                                'class'        => 'input-medium',
-                                                                                'multiOptions' => $dealers,
-                                                                                'required'     => true,
-                                                                                'value'        => $firstDealerId));
+                    'label'        => 'Dealer:',
+                    'class'        => 'input-medium',
+                    'multiOptions' => $dealers,
+                    'required'     => true,
+                    'value'        => $firstDealerId));
             }
         }
 
@@ -87,11 +87,11 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                             ->setAttrib('class', 'input-country-code')
                             ->clearDecorators()
                             ->addDecorator('Label', array(
-                                                         'class' => 'label-phone-number-country control-label'
-                                                    ))
+                'class' => 'label-phone-number-country control-label'
+            ))
                             ->addValidator('regex', true, array(
-                                                               '/^\d{1,4}$/'
-                                                          ))
+                '/^\d{1,4}$/'
+            ))
                             ->setDescription("")
                             ->setLabel("Phone Number:")
                             ->addErrorMessage("Invalid country code");
@@ -102,12 +102,12 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                          ->clearDecorators()
                          ->addDecorator('ViewHelper')
                          ->addDecorator('Label', array(
-                                                      'class' => 'label-phone-number'
-                                                 ))
+                'class' => 'label-phone-number'
+            ))
                          ->setAttrib('class', 'input-area-code')
                          ->addValidator('regex', true, array(
-                                                            '/^\d{3}$/'
-                                                       ))
+                '/^\d{3}$/'
+            ))
                          ->setLabel("(")
                          ->addErrorMessage("Invalid Area code");
 
@@ -117,11 +117,11 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                              ->clearDecorators()
                              ->addDecorator('ViewHelper')
                              ->addDecorator('Label', array(
-                                                          'class' => 'label-phone-number'
-                                                     ))
+                'class' => 'label-phone-number'
+            ))
                              ->addValidator('regex', true, array(
-                                                                '/^\d{3}$/'
-                                                           ))
+                '/^\d{3}$/'
+            ))
                              ->setLabel(")")
                              ->addErrorMessage("Invalid Exchange code");
 
@@ -131,24 +131,24 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
                        ->clearDecorators()
                        ->addDecorator('ViewHelper')
                        ->addDecorator('Label', array(
-                                                    'class' => 'label-phone-number'
-                                               ))
+                'class' => 'label-phone-number'
+            ))
                        ->addValidator('regex', true, array(
-                                                          '/^\d{4}$/'
-                                                     ))
+                '/^\d{4}$/'
+            ))
                        ->setLabel("-")
                        ->addErrorMessage("Invalid phone number");
 
         //Extension
         $extension   = $this->createElement('text', 'extension')
                             ->addValidator('regex', true, array(
-                                                               '/^\d{0,4}$/'
-                                                          ))
+                '/^\d{0,4}$/'
+            ))
                             ->clearDecorators()
                             ->addDecorator('ViewHelper')
                             ->addDecorator('Label', array(
-                                                         'class' => 'label-phone-number'
-                                                    ))
+                'class' => 'label-phone-number'
+            ))
                             ->setLabel("Ext")
                             ->setAttrib('class', 'input-extension-code')
                             ->addErrorMessage("Invalid extension number");
@@ -197,122 +197,122 @@ class Admin_Form_Client extends Twitter_Bootstrap_Form_Horizontal
 
         //setup country
         $countryId = $this->createElement('select', 'countryId', array(
-                                                                      'required'     => true,
-                                                                      'multiOptions' => $countries,
-                                                                      'value'        => Quotegen_Model_Country::COUNTRY_UNITED_STATES
-                                                                 ))->setLabel("Country:");
+            'required'     => true,
+            'multiOptions' => $countries,
+            'value'        => Quotegen_Model_Country::COUNTRY_UNITED_STATES
+        ))->setLabel("Country:");
 
         //setup cancel button
         $cancel = $this->createElement('submit', 'Cancel', array(
-                                                                'ignore' => true,
-                                                                'label'  => 'Cancel'
-                                                           ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
         //setup submit button
         $submit = $this->createElement('submit', 'Save', array(
-                                                              'ignore'     => true,
-                                                              'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
-                                                         ));
+            'ignore'     => true,
+            'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY
+        ));
         //Groups the Company Information onto the left side of the screen
         if ($dealerSelect && $this->_dealerManagement == false)
         {
             $this->addDisplayGroup(array(
-                                        $accountNumber,
-                                        $companyName,
-                                        $legalName,
-                                        $employeeCount,
-                                        $countryId,
-                                        $region,
-                                        $city,
-                                        $addressLine1,
-                                        $addressLine2,
-                                        $postCode,
-                                        $dealerSelect
-                                   ), 'company', array(
-                                                      'legend' => 'Company Information'
-                                                 ));
+                $accountNumber,
+                $companyName,
+                $legalName,
+                $employeeCount,
+                $countryId,
+                $region,
+                $city,
+                $addressLine1,
+                $addressLine2,
+                $postCode,
+                $dealerSelect
+            ), 'company', array(
+                'legend' => 'Company Information'
+            ));
         }
         else
         {
             $this->addDisplayGroup(array(
-                                        $accountNumber,
-                                        $companyName,
-                                        $legalName,
-                                        $employeeCount,
-                                        $countryId,
-                                        $region,
-                                        $city,
-                                        $addressLine1,
-                                        $addressLine2,
-                                        $postCode
-                                   ), 'company', array(
-                                                      'legend' => 'Company Information'
-                                                 ));
+                $accountNumber,
+                $companyName,
+                $legalName,
+                $employeeCount,
+                $countryId,
+                $region,
+                $city,
+                $addressLine1,
+                $addressLine2,
+                $postCode
+            ), 'company', array(
+                'legend' => 'Company Information'
+            ));
         }
         $company = $this->getDisplayGroup('company');
         $company->setDecorators(array(
 
-                                     'FormElements',
-                                     array(
-                                         'Fieldset',
-                                         array(
-                                             'class' => 'pull-left half-width'
-                                         )
-                                     ),
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag'       => 'div',
-                                             'openOnly'  => true,
-                                             'class'     => 'clearfix',
-                                             'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                                         )
-                                     )
-                                ));
+            'FormElements',
+            array(
+                'Fieldset',
+                array(
+                    'class' => 'pull-left half-width'
+                )
+            ),
+            array(
+                'HtmlTag',
+                array(
+                    'tag'       => 'div',
+                    'openOnly'  => true,
+                    'class'     => 'clearfix',
+                    'placement' => Zend_Form_Decorator_Abstract::PREPEND
+                )
+            )
+        ));
 
         //Groups the contact information onto the right side of the screen
         $this->addDisplayGroup(array(
-                                    $firstName,
-                                    $lastName,
-                                    $countryCode,
-                                    $areaCode,
-                                    $exchangeCode,
-                                    $number,
-                                    $extension,
-                                    $phoneErrors
-                               ), 'contact', array(
-                                                  'legend' => 'Contact Information'
-                                             ));
+            $firstName,
+            $lastName,
+            $countryCode,
+            $areaCode,
+            $exchangeCode,
+            $number,
+            $extension,
+            $phoneErrors
+        ), 'contact', array(
+            'legend' => 'Contact Information'
+        ));
         $contact = $this->getDisplayGroup('contact');
         $contact->setDecorators(array(
-                                     'FormElements',
+            'FormElements',
 
-                                     array(
-                                         'Fieldset',
-                                         array(
-                                             'class' => 'pull-right half-width'
-                                         )
-                                     ),
-                                     array(
-                                         'HtmlTag',
+            array(
+                'Fieldset',
+                array(
+                    'class' => 'pull-right half-width'
+                )
+            ),
+            array(
+                'HtmlTag',
 
-                                         array(
-                                             'tag'       => 'div',
-                                             'closeOnly' => true,
-                                             'class'     => 'clearfix',
-                                             'placement' => Zend_Form_Decorator_Abstract::APPEND
-                                         )
-                                     )
-                                ));
+                array(
+                    'tag'       => 'div',
+                    'closeOnly' => true,
+                    'class'     => 'clearfix',
+                    'placement' => Zend_Form_Decorator_Abstract::APPEND
+                )
+            )
+        ));
 
         $this->addDisplayGroup(array(
-                                    $submit,
-                                    $cancel
-                               ), 'actions', array(
-                                                  'disableLoadDefaultDecorators' => true,
-                                                  'decorators'                   => array(
-                                                      'Actions'
-                                                  ),
-                                                  'class'                        => 'form-actions-center'
-                                             ));
+            $submit,
+            $cancel
+        ), 'actions', array(
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions'
+            ),
+            'class'                        => 'form-actions-center'
+        ));
     }
 }

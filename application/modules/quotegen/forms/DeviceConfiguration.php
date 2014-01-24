@@ -49,11 +49,11 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
             foreach ($device->getOptions() as $deviceConfigurationOption)
             {
                 $optionElement = $this->createElement('text', "option-{$deviceConfigurationOption->optionId}", array(
-                                                                                                                    'label'       => $deviceConfigurationOption->getOption()
-                                                                                                                            ->name,
-                                                                                                                    'value'       => $deviceConfigurationOption->quantity,
-                                                                                                                    'description' => $deviceConfigurationOption->optionId
-                                                                                                               )
+                        'label'       => $deviceConfigurationOption->getOption()
+                                ->name,
+                        'value'       => $deviceConfigurationOption->quantity,
+                        'description' => $deviceConfigurationOption->optionId
+                    )
                 );
                 $optionElement->setAttrib('class', 'span1');
                 $this->_optionElements [] = $optionElement;
@@ -63,10 +63,10 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
 
             // Add the add option
             $this->addElement('submit', 'add', array(
-                                                    'ignore' => true,
-                                                    'label'  => 'Add',
-                                                    'class'  => 'btn btn-success btn-mini'
-                                               ));
+                'ignore' => true,
+                'label'  => 'Add',
+                'class'  => 'btn btn-success btn-mini'
+            ));
         }
         else
         {
@@ -77,22 +77,22 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
                 $quoteDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array(
-                                                               'label'        => 'Available Devices:',
-                                                               'multiOptions' => $quoteDeviceList
-                                                          ));
+                'label'        => 'Available Devices:',
+                'multiOptions' => $quoteDeviceList
+            ));
         }
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
@@ -104,13 +104,13 @@ class Quotegen_Form_DeviceConfiguration extends EasyBib_Form
         if ($this->_id)
         {
             $this->setDecorators(array(
-                                      array(
-                                          'ViewScript',
-                                          array(
-                                              'viewScript' => 'deviceconfiguration/form/editdeviceconfiguration.phtml'
-                                          )
-                                      )
-                                 ));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => 'deviceconfiguration/form/editdeviceconfiguration.phtml'
+                    )
+                )
+            ));
         }
     }
 

@@ -22,22 +22,22 @@ $properties->setSubject('MPS Assessment Software');
 
 // This section is landscape with 0.5" margins insead of 1"
 $mainSection = $phpWord->createSection(array(
-                                            'orientation'  => 'portrait',
-                                            'marginLeft'   => 720,
-                                            'marginRight'  => 720,
-                                            'marginTop'    => 720,
-                                            'marginBottom' => 720
-                                       ));
+    'orientation'  => 'portrait',
+    'marginLeft'   => 720,
+    'marginRight'  => 720,
+    'marginTop'    => 720,
+    'marginBottom' => 720
+));
 
 
 $phpWord->addTitleStyle(1, array(
-                                "bold"  => true,
-                                "size"  => 15,
-                                "color" => My_Brand::$reportHeadingColor,
-                                array(
-                                    'borderBottomSize' => 1,
-                                )
-                           ));
+    "bold"  => true,
+    "size"  => 15,
+    "color" => My_Brand::$reportHeadingColor,
+    array(
+        'borderBottomSize' => 1,
+    )
+));
 
 
 /* Tables for the device layouts */
@@ -84,19 +84,19 @@ $standard_cell_left = (object)array(
         'align'      => 'left'
     ),
     "manufacturerName" => (object)array(
-        "fontStyle"      => array('italic' => true),
-        "paragraphStyle" => array(
-            'spaceAfter' => 0,
-            'align'      => 'left'
+            "fontStyle"      => array('italic' => true),
+            "paragraphStyle" => array(
+                'spaceAfter' => 0,
+                'align'      => 'left'
+            ),
         ),
-    ),
     "modelName"        => (object)array(
-        "fontStyle"      => array('bold' => true),
-        "paragraphStyle" => array(
-            'spaceAfter' => 0,
-            'align'      => 'left'
+            "fontStyle"      => array('bold' => true),
+            "paragraphStyle" => array(
+                'spaceAfter' => 0,
+                'align'      => 'left'
+            ),
         ),
-    ),
 );
 
 $standard_cell_no_right_border = (object)array(
@@ -141,19 +141,19 @@ $costAnalysis = (object)array(
     "col6Width"  => $widthTwips * 0.1333,
     "col7Width"  => $widthTwips * 0.1333,
     "body"       => (object)array(
-        "rowheight" => null,
-        "cell1"     => $standard_cell_left,
-        "cell2"     => $standard_cell,
-        "cell3"     => $standard_cell,
-        "cell4"     => $standard_cell,
-        "cell5"     => $standard_cell,
-        "cell6"     => $standard_cell,
-        "cell7"     => $standard_cell_no_right_border
-    ),
+            "rowheight" => null,
+            "cell1"     => $standard_cell_left,
+            "cell2"     => $standard_cell,
+            "cell3"     => $standard_cell,
+            "cell4"     => $standard_cell,
+            "cell5"     => $standard_cell,
+            "cell6"     => $standard_cell,
+            "cell7"     => $standard_cell_no_right_border
+        ),
     "header"     => (object)array(
-        'header'     => $standard_header,
-        'sub_header' => $standard_sub_header,
-    ),
+            'header'     => $standard_header,
+            'sub_header' => $standard_sub_header,
+        ),
 );
 
 /**
@@ -161,18 +161,18 @@ $costAnalysis = (object)array(
  */
 $styles = (object)array(
     "tables" => (object)array(
-        "costanalysis" => $costAnalysis,
-    )
+            "costanalysis" => $costAnalysis,
+        )
 );
 
 /**
  * An array of view variables to pass to the partial scripts
  */
 $data = array(
-    "phpword"  => $this->phpword,
+    "phpword"             => $this->phpword,
     "assessmentViewModel" => $assessmentViewModel,
-    "section"  => $mainSection,
-    "styles"   => $styles,
+    "section"             => $mainSection,
+    "styles"              => $styles,
 );
 
 /**

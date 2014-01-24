@@ -26,87 +26,87 @@ class Quotegen_Form_Option extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal form-center-actions');
 
         $this->addElement('text', 'name', array(
-                                               'label'     => 'Name:',
-                                               'class'     => 'span3',
-                                               'required'  => true,
-                                               'maxlength' => 255,
-                                               'filters'   => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validator' => 'StringLength',
-                                               'options'   => array(
-                                                   1,
-                                                   255
-                                               )
-                                          ));
+            'label'     => 'Name:',
+            'class'     => 'span3',
+            'required'  => true,
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
 
         $this->addElement('textarea', 'description', array(
-                                                          'label'     => 'Description:',
-                                                          'class'     => 'span3',
-                                                          'required'  => true,
-                                                          'style'     => 'height: 100px',
-                                                          'maxlength' => 255,
-                                                          'filters'   => array(
-                                                              'StringTrim',
-                                                              'StripTags'
-                                                          ),
-                                                          'validator' => 'StringLength',
-                                                          'options'   => array(
-                                                              1,
-                                                              255
-                                                          )
-                                                     ));
+            'label'     => 'Description:',
+            'class'     => 'span3',
+            'required'  => true,
+            'style'     => 'height: 100px',
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
 
         $this->addElement('text', 'cost', array(
-                                               'label'      => 'Price:',
-                                               'class'      => 'span1',
-                                               'required'   => true,
-                                               'maxlength'  => 8,
-                                               'filters'    => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               ),
-                                               'validators' => array(
-                                                   'Float'
-                                               )
-                                          ));
+            'label'      => 'Price:',
+            'class'      => 'span1',
+            'required'   => true,
+            'maxlength'  => 8,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'Float'
+            )
+        ));
 
         $this->addElement('text', 'oemSku', array(
-                                                 'label'     => 'OEM SKU:',
-                                                 'class'     => 'span3',
-                                                 'required'  => true,
-                                                 'maxlength' => 255,
-                                                 'filters'   => array(
-                                                     'StringTrim',
-                                                     'StripTags'
-                                                 ),
-                                                 'validator' => 'StringLength',
-                                                 'options'   => array(
-                                                     1,
-                                                     255
-                                                 )
-                                            ));
+            'label'     => 'OEM SKU:',
+            'class'     => 'span3',
+            'required'  => true,
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
 
         $this->addElement('text', 'dealerSku', array(
-                                                    'label'     => 'Dealer SKU:',
-                                                    'class'     => 'span3',
-                                                    'maxlength' => 255,
-                                                    'filters'   => array(
-                                                        'StringTrim',
-                                                        'StripTags'
-                                                    ),
-                                                    'validator' => 'StringLength',
-                                                    'options'   => array(
-                                                        1,
-                                                        255
-                                                    )
-                                               ));
+            'label'     => 'Dealer SKU:',
+            'class'     => 'span3',
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validator' => 'StringLength',
+            'options'   => array(
+                1,
+                255
+            )
+        ));
 
 
         $optionCategoryCheckBox = new Zend_Form_Element_MultiCheckbox('categories', array(
-                                                                                         'label' => 'Categories:'
-                                                                                    ));
+            'label' => 'Categories:'
+        ));
 
         $categories = Quotegen_Model_Mapper_Category::getInstance()->fetchAllForDealer(Zend_Auth::getInstance()->getIdentity()->dealerId);
         /* @var $category Quotegen_Model_Category */
@@ -122,15 +122,15 @@ class Quotegen_Form_Option extends EasyBib_Form
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

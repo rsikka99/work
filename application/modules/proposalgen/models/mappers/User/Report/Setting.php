@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_User_Report_Setting
  */
@@ -74,8 +75,8 @@ class Proposalgen_Model_Mapper_User_Report_Setting extends My_Model_Mapper_Abstr
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_userId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_userId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

@@ -302,7 +302,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
                          'data-off-label' => 'No',
                          'data-off'       => 'danger',
                          'data-on'        => 'success',
-                         'style' =>'text-align:left'
+                         'style'          => 'text-align:left'
                      )
                  ),
                  array(

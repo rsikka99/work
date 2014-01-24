@@ -38,34 +38,34 @@ class Quotegen_Form_Quote extends Twitter_Bootstrap_Form_Horizontal
         $clients->setLabel('Select Client:');
         $clients->addMultiOptions($clientList);
         $clients->addValidator('InArray', false, array(
-                                                      $clientListValidator
-                                                 ));
+            $clientListValidator
+        ));
         $this->addElement($clients);
 
         $this->addElement('radio', 'quoteType', array(
-                                                     'label'        => 'Type Of Quote:',
-                                                     'filters'      => array(
-                                                         'StringTrim',
-                                                         'StripTags'
-                                                     ),
-                                                     'multiOptions' => array(
-                                                         'purchased' => 'Purchased',
-                                                         'leased'    => 'Leased'
-                                                     ),
-                                                     'required'     => true
-                                                ));
+            'label'        => 'Type Of Quote:',
+            'filters'      => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'multiOptions' => array(
+                'purchased' => 'Purchased',
+                'leased'    => 'Leased'
+            ),
+            'required'     => true
+        ));
 
     }
 
     public function loadDefaultDecorators ()
     {
         $this->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript' => 'index/form/quote.phtml'
-                                      )
-                                  )
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'index/form/quote.phtml'
+                )
+            )
+        ));
     }
 }

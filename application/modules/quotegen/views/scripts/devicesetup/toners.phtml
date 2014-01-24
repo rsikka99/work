@@ -31,13 +31,16 @@ break;
 
 // Set up filter values
 <?php if ($this->search_filter == "manufacturer")
-{ ?>
+{
+    ?>
     $("#text_criteria").hide();
     $("#list_criteria").show();
     $("#cboCriteria").val(<?php echo $this->cboCriteria; ?>);
-<?php }
+<?php
+}
 else
-{ ?>
+{
+    ?>
     $("#list_criteria").hide();
     $("#text_criteria").show();
     $("#txtCriteria").val("<?php echo $this->txtCriteria; ?>");
@@ -57,11 +60,13 @@ else
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-        <li><a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id), null, true); ?>">Details</a>
+        <li>
+            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id), null, true); ?>">Details</a>
         </li>
         <li class="active"><a href="#tab2" data-toggle="tab">Toners</a></li>
         <?php if ($this->quotegendevice)
-        { ?>
+        {
+            ?>
             <li>
                 <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'options', 'id' => $id), null, true); ?>">Available
                     Options</a></li>
@@ -118,7 +123,8 @@ else
 						<select name="cboCriteria" id="cboCriteria" style="width: 160px; margin: 0px 10px 0px 0px;">
                             <?php foreach ($manufacturers as $manufacturer)
                             {
-                                /* @var $manufacturer Proposalgen_Model_Manufacturer */ ?>
+                                /* @var $manufacturer Proposalgen_Model_Manufacturer */
+                                ?>
                                 <option value="<?php echo $manufacturer->id; ?>"><?php echo $manufacturer->displayname; ?></option>
                             <?php } ?>
                         </select>
@@ -152,13 +158,16 @@ else
                                 <td>
                                     <div class="" style="text-align: center;">
                                         <?php if (in_array($toner->id, $this->assignedToners))
-                                        { ?>
+                                        {
+                                            ?>
                                             <button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);">
                                                 <i class="icon-minus-sign icon-white"></i> Unassign
                                             </button>
-                                        <?php }
+                                        <?php
+                                        }
                                         else
-                                        { ?>
+                                        {
+                                            ?>
                                             <button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#tonerid').val(<?php echo $toner->id; ?>);">
                                                 <i class="icon-plus-sign icon-white"></i> Assign
                                             </button>

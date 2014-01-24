@@ -13,12 +13,12 @@ $section = $this->section;
 $optimization = $this->optimization;
 /* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
 $hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
-$costPerPageSetting  = $optimization->getCostPerPageSettingForDealer();
+$costPerPageSetting          = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Leased Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased). ' of ' . $hardwareOptimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText('Leased Devices', 'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased) . ' of ' . $hardwareOptimizationDevices->getDeviceCount() . ')');
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
@@ -39,7 +39,7 @@ foreach ($hardwareOptimizationDevices->leased as $device)
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
     $table->addRow($tcStyle->body->rowheight);
-    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Report_Customer_OptimizationController
  */

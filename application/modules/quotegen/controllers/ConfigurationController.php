@@ -42,8 +42,8 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfigurationId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a device configuration to delete first.'
-                                               ));
+                'warning' => 'Please select a device configuration to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -53,8 +53,8 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfiguration)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the device configuration to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the device configuration to delete.'
+            ));
 
             if ($page == "configurations")
             {
@@ -82,8 +82,8 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                 {
                     $mapper->delete($deviceConfiguration);
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Device configuration \"{$deviceConfiguration->name}\" was deleted successfully."
-                                                       ));
+                        'success' => "Device configuration \"{$deviceConfiguration->name}\" was deleted successfully."
+                    ));
 
                     if ($page == "configurations")
                     {
@@ -252,14 +252,14 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
         }
         // Add form to page
         $form->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript'    => 'configuration/forms/createdeviceconfiguration.phtml',
-                                          'deviceOptions' => $deviceOptions
-                                      )
-                                  )
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript'    => 'configuration/forms/createdeviceconfiguration.phtml',
+                    'deviceOptions' => $deviceOptions
+                )
+            )
+        ));
 
         $this->view->form = $form;
     }
@@ -424,8 +424,8 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
                     else
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below.'
-                                                           ));
+                            'danger' => 'Please correct the errors below.'
+                        ));
                     }
                 }
                 catch (InvalidArgumentException $e)
@@ -437,15 +437,15 @@ class Quotegen_ConfigurationController extends Tangent_Controller_Action
 
         // Add form to page
         $form->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript'            => 'configuration/forms/editdeviceconfiguration.phtml',
-                                          'deviceOptions'         => $deviceOptions,
-                                          'deviceConfigurationId' => $deviceConfigurationId
-                                      )
-                                  )
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript'            => 'configuration/forms/editdeviceconfiguration.phtml',
+                    'deviceOptions'         => $deviceOptions,
+                    'deviceConfigurationId' => $deviceConfigurationId
+                )
+            )
+        ));
         $this->view->form = $form;
     }
 

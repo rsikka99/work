@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_Import_Device_Features
  */
@@ -34,49 +35,49 @@ class Proposalgen_Service_Import_Device_Features extends Proposalgen_Service_Imp
     {
         $this->_inputFilter = new Zend_Filter_Input(
             array(
-                 '*' => array(
-                     'StringTrim',
-                     'StripTags',
-                 )
+                '*' => array(
+                    'StringTrim',
+                    'StripTags',
+                )
             ),
             array(
-                 '*'                                        => array(
-                     'allowEmpty' => true,
-                 ),
-                 self::DEVICE_FEATURES_DUPLEX               => array(
-                     new Zend_Validate_Int(),
-                     array('Between', 0, 1, true),
-                 ),
-                 self::DEVICE_FEATURES_SCAN                 => array(
-                     new Zend_Validate_Int(),
-                     array('Between', 0, 1, true),
-                 ),
-                 self::DEVICE_FEATURES_REPORTS_TONER_LEVELS => array(
-                     new Zend_Validate_Int(),
-                     array('Between', 0, 1, true),
-                 ),
-                 self::DEVICE_FEATURES_PPM_MONOCHROME       => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 1000, true),
-                 ),
-                 self::DEVICE_FEATURES_PPM_COLOR            => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 1000, true),
-                 ),
-                 self::DEVICE_FEATURES_OPERATING_WATTAGE    => array(
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 10000, true),
-                 ),
-                 self::DEVICE_FEATURES_IDLE_WATTAGE         => array(
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 10000, true),
-                 ),
-                 self::DEVICE_FEATURES_JIT_COMPATIBILITY    => array(
-                     new Zend_Validate_Int(),
-                     array('Between', 0, 1, true),
-                 ),
+                '*'                                        => array(
+                    'allowEmpty' => true,
+                ),
+                self::DEVICE_FEATURES_DUPLEX               => array(
+                    new Zend_Validate_Int(),
+                    array('Between', 0, 1, true),
+                ),
+                self::DEVICE_FEATURES_SCAN                 => array(
+                    new Zend_Validate_Int(),
+                    array('Between', 0, 1, true),
+                ),
+                self::DEVICE_FEATURES_REPORTS_TONER_LEVELS => array(
+                    new Zend_Validate_Int(),
+                    array('Between', 0, 1, true),
+                ),
+                self::DEVICE_FEATURES_PPM_MONOCHROME       => array(
+                    'allowEmpty' => true,
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 1000, true),
+                ),
+                self::DEVICE_FEATURES_PPM_COLOR            => array(
+                    'allowEmpty' => true,
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 1000, true),
+                ),
+                self::DEVICE_FEATURES_OPERATING_WATTAGE    => array(
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 10000, true),
+                ),
+                self::DEVICE_FEATURES_IDLE_WATTAGE         => array(
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 10000, true),
+                ),
+                self::DEVICE_FEATURES_JIT_COMPATIBILITY    => array(
+                    new Zend_Validate_Int(),
+                    array('Between', 0, 1, true),
+                ),
             )
         );
     }

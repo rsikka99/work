@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Model_Acl
  */

@@ -51,39 +51,39 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
         if (!My_Feature::canAccess(My_Feature::HARDWARE_QUOTE))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }
 
         $this->_helper->contextSwitch()
                       ->addContext('docx', array(
-                                                'suffix'    => 'docx',
-                                                'callbacks' => array(
-                                                    'init' => array(
-                                                        $this,
-                                                        'initDocxContext'
-                                                    ),
-                                                    'post' => array(
-                                                        $this,
-                                                        'postDocxContext'
-                                                    )
-                                                )
-                                           ))
+                          'suffix'    => 'docx',
+                          'callbacks' => array(
+                              'init' => array(
+                                  $this,
+                                  'initDocxContext'
+                              ),
+                              'post' => array(
+                                  $this,
+                                  'postDocxContext'
+                              )
+                          )
+                      ))
                       ->addContext('xlsx', array(
-                                                'suffix'    => 'xlsx',
-                                                'callbacks' => array(
-                                                    'init' => array(
-                                                        $this,
-                                                        'initXlsxContext'
-                                                    ),
-                                                    'post' => array(
-                                                        $this,
-                                                        'postXlsxContext'
-                                                    )
-                                                )
-                                           ));
+                          'suffix'    => 'xlsx',
+                          'callbacks' => array(
+                              'init' => array(
+                                  $this,
+                                  'initXlsxContext'
+                              ),
+                              'post' => array(
+                                  $this,
+                                  'postXlsxContext'
+                              )
+                          )
+                      ));
 
         $this->_userId       = Zend_Auth::getInstance()->getIdentity()->id;
         $this->_quoteSession = new Zend_Session_Namespace(Quotegen_Library_Controller_Quote::QUOTE_SESSION_NAMESPACE);
@@ -99,8 +99,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             if (!$this->_quote)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'danger' => 'Could not find the selected quote.'
-                                                   ));
+                    'danger' => 'Could not find the selected quote.'
+                ));
                 $this->redirector('index', 'index');
             }
         }
@@ -343,9 +343,9 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             {
                 // Get the device option
                 $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array(
-                                                                                             $favoriteDevice->masterDeviceId,
-                                                                                             $option->optionId
-                                                                                        ));
+                    $favoriteDevice->masterDeviceId,
+                    $option->optionId
+                ));
 
                 // Insert quote device option
                 $quoteDeviceOption = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);

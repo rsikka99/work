@@ -1,4 +1,5 @@
 <?php
+
 abstract class Tangent_Model_Mapper_Abstract
 {
 

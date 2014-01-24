@@ -15,25 +15,25 @@ $section->addTitle($this->translate($this->docStrings->quoteHeader), 1);
 $section->addText('Below is a quote for the requested hardware:');
 
 $groupCount = 0;
-$tcStyle = $this->styles->tables->quoteTable;
+$tcStyle    = $this->styles->tables->quoteTable;
 /* @var $quote Quotegen_Model_Quote */
 $quote = $this->quote;
 
 /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
+foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup)
 {
     if ($quoteDeviceGroup->calculateTotalQuantity() > 0)
     {
         $table = $section->addTable($tcStyle->tablestyle);
-        
+
         $table->addRow($tcStyle->header->rowheight);
         $table->addCell($tcStyle->col1Width, $tcStyle->header->cell1->cellStyle)->addText('Item', $tcStyle->header->cell1->fontStyle, $tcStyle->header->cell1->paragraphStyle);
         $table->addCell($tcStyle->col2Width, $tcStyle->header->cell2->cellStyle)->addText('SKU', $tcStyle->header->cell2->fontStyle, $tcStyle->header->cell2->paragraphStyle);
         $table->addCell($tcStyle->col3Width, $tcStyle->header->cell3->cellStyle)->addText('Description and Features', $tcStyle->header->cell3->fontStyle, $tcStyle->header->cell3->paragraphStyle);
         $table->addCell($tcStyle->col4Width, $tcStyle->header->cell4->cellStyle)->addText('Quantity', $tcStyle->header->cell4->fontStyle, $tcStyle->header->cell4->paragraphStyle);
-        
+
         /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-        foreach ( $quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice )
+        foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice)
         {
             if ($quoteDeviceGroupDevice->quantity > 0)
             {
@@ -49,9 +49,9 @@ foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 $table->addCell($tcStyle->col4Width, $tcStyle->device->cell4->cellStyle)->addText(number_format($quoteDeviceGroupDevice->quantity), $tcStyle->device->cell4->fontStyle, $tcStyle->device->cell4->paragraphStyle);
                 // Get quote device options
                 $quoteDeviceOptions = $quoteDeviceGroupDevice->getQuoteDevice()->getQuoteDeviceOptions();
-                
+
                 /* @var $quoteDeviceOption Quotegen_Model_QuoteDeviceOption */
-                foreach ( $quoteDeviceOptions as $quoteDeviceOption )
+                foreach ($quoteDeviceOptions as $quoteDeviceOption)
                 {
                     $table->addRow($tcStyle->option->rowheight);
                     $table->addCell($tcStyle->col1Width, $tcStyle->option->cell1->cellStyle)->addText($quoteDeviceOption->name . ' (' . number_format($quoteDeviceOption->quantity) . 'x)', $tcStyle->option->cell1->fontStyle, $tcStyle->option->cell1->paragraphStyle);
@@ -61,14 +61,14 @@ foreach ( $quote->getQuoteDeviceGroups() as $quoteDeviceGroup )
                 }
             }
         }
-        
+
         // Show subtotal line
-        $groupCount ++;
+        $groupCount++;
         $table->addRow($tcStyle->subtotal->rowheight);
         $table->addCell($tcStyle->cell1Width, $tcStyle->subtotal->cell1->cellStyle)->addText('');
         $table->addCell($tcStyle->span23Width, $tcStyle->subtotal->cell2->cellStyle, 2)->addText(sprintf('Subtotal for group %1$s', number_format($groupCount)), $tcStyle->subtotal->cell2->fontStyle, $tcStyle->subtotal->cell2->paragraphStyle);
         $table->addCell($tcStyle->cell4Width, $tcStyle->subtotal->cell3->cellStyle)->addText($this->currency($quoteDeviceGroup->calculateGroupSubtotal()), $tcStyle->subtotal->cell3->fontStyle, $tcStyle->subtotal->cell3->paragraphStyle);
-        
+
         $section->addTextBreak();
     }
 }
@@ -78,13 +78,13 @@ $table = $section->addTable($tcStyle->tablestyle);
 // Show page overage rate for monochrome and color
 $table->addRow($tcStyle->pages->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText('Monochrome Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->calculateMonochromeOverageRatePerPage(), array (
-        'precision' => '3' 
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->calculateMonochromeOverageRatePerPage(), array(
+    'precision' => '3'
 )), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 $table->addRow($tcStyle->pages->rowheight);
 $table->addCell($tcStyle->span123Width, $tcStyle->pages->cell1->cellStyle, 3)->addText('Color Page Overage Rate', $tcStyle->pages->cell1->fontStyle, $tcStyle->pages->cell1->paragraphStyle);
-$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->calculateColorOverageRatePerPage(), array (
-        'precision' => '3' 
+$table->addCell($tcStyle->col4Width, $tcStyle->pages->cell2->cellStyle)->addText($this->currency($quote->calculateColorOverageRatePerPage(), array(
+    'precision' => '3'
 )), $tcStyle->pages->cell2->fontStyle, $tcStyle->pages->cell2->paragraphStyle);
 
 // Show monthly total

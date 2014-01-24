@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Assessment_Step
  */

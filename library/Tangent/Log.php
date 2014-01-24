@@ -1,4 +1,5 @@
 <?php
+
 class Tangent_Log
 {
     const SOURCE_ZEND_LOG      = 1;

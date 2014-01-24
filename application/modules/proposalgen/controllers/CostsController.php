@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_CostsController
  */
@@ -116,16 +117,16 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 {
                                     $hasErrors = 1;
                                     $this->_flashMessenger->addMessage(array(
-                                                                            "error" => "All values must be greater than 0. Please correct it and try again."
-                                                                       ));
+                                        "error" => "All values must be greater than 0. Please correct it and try again."
+                                    ));
                                     break;
                                 }
                                 else if ($price != '' && !is_numeric($price))
                                 {
                                     $hasErrors = 1;
                                     $this->_flashMessenger->addMessage(array(
-                                                                            "error" => "All values must be numeric. Please correct it and try again."
-                                                                       ));
+                                        "error" => "All values must be numeric. Please correct it and try again."
+                                    ));
                                     break;
                                 }
                                 else if ($price != '' && $price > 0)
@@ -181,8 +182,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         if ($hasErrors == 0)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    "success" => "The toner pricing updates have been applied successfully."
-                                                               ));
+                                "success" => "The toner pricing updates have been applied successfully."
+                            ));
                         }
                         else
                         {
@@ -314,8 +315,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         if ($hasErrors == 0)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    "success" => "The device pricing updates have been applied successfully."
-                                                               ));
+                                "success" => "The device pricing updates have been applied successfully."
+                            ));
                         }
                         else
                         {

@@ -60,12 +60,12 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
             $searchValue    = $this->_getParam('criteria', null);
 
             $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                                                                      'haystack' => array(
-                                                                          'deviceName',
-                                                                          'oemSku',
-                                                                          'dealerSku'
-                                                                      )
-                                                                 ));
+                'haystack' => array(
+                    'deviceName',
+                    'oemSku',
+                    'dealerSku'
+                )
+            ));
 
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria === null || $searchValue === null || !$filterCriteriaValidator->isValid($searchCriteria))
@@ -140,14 +140,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($filter == 'sku')
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
-                                                                ));
+                                'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
+                            ));
                         }
                         else
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'manufacturerid = ?' => $cboCriteria
-                                                                ));
+                                'manufacturerid = ?' => $cboCriteria
+                            ));
                         }
 
                         $form->populate($values);
@@ -252,8 +252,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             if ($exists)
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
-                                                                   ));
+                                    'danger' => "Your new device was not created because a device named {$masterDevice->getFullDeviceName()} already exists."
+                                ));
                             }
                             else
                             {
@@ -290,20 +290,20 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                     $devicemapper->insert($device);
                                 }
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "The {$masterDevice->getFullDeviceName()} device has been updated successfully."
-                                                                   ));
+                                    'success' => "The {$masterDevice->getFullDeviceName()} device has been updated successfully."
+                                ));
 
                                 // Redirect them here so that the form reloads
                                 $this->redirector('edit', null, null, array(
-                                                                           'id' => $masterDeviceId
-                                                                      ));
+                                    'id' => $masterDeviceId
+                                ));
                             }
                         }
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => $tonerErrorMessage
-                                                               ));
+                                'danger' => $tonerErrorMessage
+                            ));
                         }
                     }
 
@@ -316,8 +316,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else
@@ -338,20 +338,20 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Add form to page
         $form->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript'     => 'devicesetup/forms/createdevice.phtml',
-                                          'manufacturers'  => $manufacturers,
-                                          'assignedToners' => $assignedToners,
-                                          'paginator'      => $paginator,
-                                          'viewfilter'     => $view_filter,
-                                          'search_filter'  => $filter,
-                                          'cboCriteria'    => $cboCriteria,
-                                          'txtCriteria'    => $txtCriteria
-                                      )
-                                  )
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript'     => 'devicesetup/forms/createdevice.phtml',
+                    'manufacturers'  => $manufacturers,
+                    'assignedToners' => $assignedToners,
+                    'paginator'      => $paginator,
+                    'viewfilter'     => $view_filter,
+                    'search_filter'  => $filter,
+                    'cboCriteria'    => $cboCriteria,
+                    'txtCriteria'    => $txtCriteria
+                )
+            )
+        ));
         $this->view->form = $form;
     }
 
@@ -528,8 +528,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$deviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a device to delete first.'
-                                               ));
+                'warning' => 'Please select a device to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -537,8 +537,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$device)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the device to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the device to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -564,8 +564,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
                     // Display Message and return
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "{$deviceName} was deleted successfully."
-                                                       ));
+                        'success' => "{$deviceName} was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }
@@ -595,8 +595,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to edit first.'
-                                               ));
+                'warning' => 'Please select a master device to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -609,8 +609,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDevice)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the master device to edit.'
-                                               ));
+                'danger' => 'There was an error selecting the master device to edit.'
+            ));
             $this->redirector('index');
         }
         $tonerConfig = $masterDevice->getTonerConfig()->tonerConfigName;
@@ -681,14 +681,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                                 Proposalgen_Model_Mapper_DeviceToner::getInstance()->save($deviceToner);
 
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'success' => "The toner was assigned successfully."
-                                                                   ));
+                                    'success' => "The toner was assigned successfully."
+                                ));
                             }
                             else
                             {
                                 $this->_flashMessenger->addMessage(array(
-                                                                        'danger' => "The toner is an invalid toner for this device."
-                                                                   ));
+                                    'danger' => "The toner is an invalid toner for this device."
+                                ));
                             }
                         }
                     }
@@ -730,9 +730,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         if ($safeToDelete)
                         {
                             Proposalgen_Model_Mapper_DeviceToner::getInstance()->delete(array(
-                                                                                             'toner_id = ?'         => $tonerId,
-                                                                                             'master_device_id = ?' => $masterDeviceId
-                                                                                        ));
+                                'toner_id = ?'         => $tonerId,
+                                'master_device_id = ?' => $masterDeviceId
+                            ));
 
                             $this->_flashMessenger->addMessage(array('success' => "The toner was unassigned successfully."));
                         }
@@ -771,14 +771,14 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         else if ($filter == 'sku')
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
-                                                                ));
+                                'sku LIKE ( ? )' => '%' . $txtCriteria . '%'
+                            ));
                         }
                         else
                         {
                             $where = array_merge((array)$where, array(
-                                                                     'manufacturerId = ?' => $cboCriteria
-                                                                ));
+                                'manufacturerId = ?' => $cboCriteria
+                            ));
                         }
                     }
 
@@ -791,8 +791,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else
@@ -840,8 +840,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         }
 
         $where = array_merge((array)$where, array(
-                                                 'tonerColorId IN ( ? )' => $validTonerColors
-                                            ));
+            'tonerColorId IN ( ? )' => $validTonerColors
+        ));
 
         $paginator = new Zend_Paginator(new My_Paginator_MapperAdapter(Proposalgen_Model_Mapper_Toner::getInstance(), $where));
 
@@ -879,8 +879,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to edit first.'
-                                               ));
+                'warning' => 'Please select a master device to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -931,8 +931,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             $assignedOptions [] = $deviceOption->optionId;
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The option was assigned successfully."
-                                                               ));
+                                'success' => "The option was assigned successfully."
+                            ));
                         }
 
                         // Unassign Option
@@ -949,8 +949,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                             }
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "The option was unassigned successfully."
-                                                               ));
+                                'success' => "The option was unassigned successfully."
+                            ));
                         }
                     }
 
@@ -1072,8 +1072,8 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
         if (!$masterDeviceId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a master device to edit first.'
-                                               ));
+                'warning' => 'Please select a master device to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -1083,9 +1083,9 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
 
         // Get device configurations list
         $deviceConfiguration    = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAll(array(
-                                                                                                          'masterDeviceId = ?' => $masterDeviceId,
-                                                                                                          'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
-                                                                                                     ));
+            'masterDeviceId = ?' => $masterDeviceId,
+            'dealerId = ?'       => Zend_Auth::getInstance()->getIdentity()->dealerId
+        ));
         $assignedConfigurations = array();
         foreach ($deviceConfiguration as $configuration)
         {

@@ -40,15 +40,15 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
             }
 
             $this->addElement('multiCheckbox', 'options', array(
-                                                               'label'        => 'Options',
-                                                               'multiOptions' => $optionList
-                                                          ));
+                'label'        => 'Options',
+                'multiOptions' => $optionList
+            ));
 
             // Add the submit button
             $this->addElement('submit', 'submit', array(
-                                                       'ignore' => true,
-                                                       'label'  => 'Save'
-                                                  ));
+                'ignore' => true,
+                'label'  => 'Save'
+            ));
         }
         else
         {
@@ -58,9 +58,9 @@ class Quotegen_Form_SelectOptions extends EasyBib_Form
         }
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

@@ -6,6 +6,7 @@
  * @author     Mike Christie
  * @version    v1.0
  */
+
 /**
  * Validates a number range.
  */

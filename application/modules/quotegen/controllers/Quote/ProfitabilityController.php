@@ -31,8 +31,8 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
             if (isset($values ['goBack']))
             {
                 $this->redirector('index', 'quote_pages', null, array(
-                                                                     'quoteId' => $this->_quoteId
-                                                                ));
+                    'quoteId' => $this->_quoteId
+                ));
             }
             else
             {
@@ -130,29 +130,29 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                         {
                             $this->saveQuote();
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => 'Changes saved successfully.'
-                                                               ));
+                                'success' => 'Changes saved successfully.'
+                            ));
                         }
 
                         if (!$changesMade && isset($values ['save']))
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'info' => 'There were no changes to save.'
-                                                               ));
+                                'info' => 'There were no changes to save.'
+                            ));
                         }
 
                         if (isset($values ['saveAndContinue']))
                         {
                             $this->redirector('index', 'quote_reports', null, array(
-                                                                                   'quoteId' => $this->_quoteId
-                                                                              ));
+                                'quoteId' => $this->_quoteId
+                            ));
                         }
                         else
                         {
                             // Refresh the page
                             $this->redirector(null, null, null, array(
-                                                                     'quoteId' => $this->_quoteId
-                                                                ));
+                                'quoteId' => $this->_quoteId
+                            ));
                         }
                     }
                     catch (Exception $e)
@@ -166,15 +166,15 @@ class Quotegen_Quote_ProfitabilityController extends Quotegen_Library_Controller
                     if (!isset($values['leasingSchemaId']))
                     {
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Select a Lease Term'
-                                                           ));
+                            'danger' => 'Select a Lease Term'
+                        ));
                     }
                     else
                     {
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'danger' => 'Please correct the errors below.'
-                                                           ));
+                            'danger' => 'Please correct the errors below.'
+                        ));
                     }
                 }
             }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Application_Model_Mapper_Dealer_Feature
  */
@@ -73,9 +74,9 @@ class Application_Model_Mapper_Dealer_Feature extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_featureId} = ?" => $primaryKey [0],
-                                                                "{$this->col_dealerId} = ?"  => $primaryKey [1],
-                                                           ));
+            "{$this->col_featureId} = ?" => $primaryKey [0],
+            "{$this->col_dealerId} = ?"  => $primaryKey [1],
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

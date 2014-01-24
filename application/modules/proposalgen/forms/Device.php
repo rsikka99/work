@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Form_Device
  */
@@ -33,64 +34,64 @@ class Proposalgen_Form_Device extends Zend_Form
         $hiddenMode = new Zend_Form_Element_Hidden('form_mode');
         $hiddenMode->setValue("edit");
         $hiddenMode->setDecorators(array(
-                                        'ViewHelper'
-                                   ));
+            'ViewHelper'
+        ));
         array_push($elements, $hiddenMode);
         $elementCounter++;
 
         // Hidden field for hdnID
         $element = new Zend_Form_Element_Hidden('hdnID');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for hdnItem
         $element = new Zend_Form_Element_Hidden('hdnItem');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for ticket_id when in ticket mode
         $element = new Zend_Form_Element_Hidden('ticket_id');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for devices_pf_id when in request mode
         $element = new Zend_Form_Element_Hidden('devices_pf_id');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for unknown_device_instance_id when in request mode
         $element = new Zend_Form_Element_Hidden('unknown_device_instance_id');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for saving
         $element = new Zend_Form_Element_Hidden('save_flag');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
         // Hidden field for toners_array
         $element = new Zend_Form_Element_Hidden('toner_array');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -103,30 +104,30 @@ class Proposalgen_Form_Device extends Zend_Form
                         ->setAttrib('id', 'manufacturer_id')
                         ->setAttrib('onchange', 'javascript: if(repop != 1) {empty_form();}')
                         ->setDecorators(array(
-                                             'ViewHelper',
-                                             array(
-                                                 'Description',
-                                                 array(
-                                                     'escape' => false,
-                                                     'tag'    => false
-                                                 )
-                                             ),
-                                             'Errors',
-                                             array(
-                                                 'HtmlTag',
-                                                 array(
-                                                     'tag' => 'dd',
-                                                     'id'  => 'printer_manufacturer-element'
-                                                 )
-                                             ),
-                                             array(
-                                                 'Label',
-                                                 array(
-                                                     'tag'   => 'dt',
-                                                     'class' => 'forms_label'
-                                                 )
-                                             )
-                                        ));
+                            'ViewHelper',
+                            array(
+                                'Description',
+                                array(
+                                    'escape' => false,
+                                    'tag'    => false
+                                )
+                            ),
+                            'Errors',
+                            array(
+                                'HtmlTag',
+                                array(
+                                    'tag' => 'dd',
+                                    'id'  => 'printer_manufacturer-element'
+                                )
+                            ),
+                            array(
+                                'Label',
+                                array(
+                                    'tag'   => 'dt',
+                                    'class' => 'forms_label'
+                                )
+                            )
+                        ));
         array_push($elements, $manufacturer_id);
         $elementCounter++;
 
@@ -140,30 +141,30 @@ class Proposalgen_Form_Device extends Zend_Form
                       ->setAttrib('onchange', 'javascript: if(repop != 1) {empty_form();}')
                       ->setDescription('<a id="add_link" href="javascript: add_printer(true);" onclick="$(\'#message_container\').html(\'\');">Add New Printer Model</a>')
                       ->setDecorators(array(
-                                           'ViewHelper',
-                                           array(
-                                               'Description',
-                                               array(
-                                                   'escape' => false,
-                                                   'tag'    => false
-                                               )
-                                           ),
-                                           'Errors',
-                                           array(
-                                               'HtmlTag',
-                                               array(
-                                                   'tag' => 'dd',
-                                                   'id'  => 'printer_model-element'
-                                               )
-                                           ),
-                                           array(
-                                               'Label',
-                                               array(
-                                                   'tag'   => 'dt',
-                                                   'class' => 'forms_label'
-                                               )
-                                           )
-                                      ));
+                          'ViewHelper',
+                          array(
+                              'Description',
+                              array(
+                                  'escape' => false,
+                                  'tag'    => false
+                              )
+                          ),
+                          'Errors',
+                          array(
+                              'HtmlTag',
+                              array(
+                                  'tag' => 'dd',
+                                  'id'  => 'printer_model-element'
+                              )
+                          ),
+                          array(
+                              'Label',
+                              array(
+                                  'tag'   => 'dt',
+                                  'class' => 'forms_label'
+                              )
+                          )
+                      ));
         array_push($elements, $printer_model);
         $elementCounter++;
 
@@ -175,30 +176,30 @@ class Proposalgen_Form_Device extends Zend_Form
                     ->setAttrib('id', 'new_printer')
                     ->setDescription('<a id="edit_link" href="javascript: add_printer(false);" onclick="$(\'#message_container\').html(\'\');">Edit Existing Model</a>')
                     ->setDecorators(array(
-                                         'ViewHelper',
-                                         array(
-                                             'Description',
-                                             array(
-                                                 'escape' => false,
-                                                 'tag'    => false
-                                             )
-                                         ),
-                                         'Errors',
-                                         array(
-                                             'HtmlTag',
-                                             array(
-                                                 'tag' => 'dd',
-                                                 'id'  => 'new_printer-element'
-                                             )
-                                         ),
-                                         array(
-                                             'Label',
-                                             array(
-                                                 'tag'   => 'dt',
-                                                 'class' => 'forms_label'
-                                             )
-                                         )
-                                    ))
+                        'ViewHelper',
+                        array(
+                            'Description',
+                            array(
+                                'escape' => false,
+                                'tag'    => false
+                            )
+                        ),
+                        'Errors',
+                        array(
+                            'HtmlTag',
+                            array(
+                                'tag' => 'dd',
+                                'id'  => 'new_printer-element'
+                            )
+                        ),
+                        array(
+                            'Label',
+                            array(
+                                'tag'   => 'dt',
+                                'class' => 'forms_label'
+                            )
+                        )
+                    ))
                     ->setOrder($elementCounter);
         array_push($elements, $add_printer);
         $elementCounter++;
@@ -222,30 +223,30 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('id', 'launch_date')
                 ->setDescription('mm/dd/yyyy')
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'launch_date-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ))
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'launch_date-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ))
                 ->setOrder($elementCounter);
         array_push($elements, $element);
         $elementCounter++;
@@ -258,39 +259,39 @@ class Proposalgen_Form_Device extends Zend_Form
                        ->setAttrib('id', 'override_price')
                        ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                        ->addValidator('regex', false, array(
-                                                           'pattern'  => $currencyRegex,
-                                                           'messages' => array(
-                                                               'regexNotMatch' => "Must be a dollar value."
-                                                           )
-                                                      ))
+                           'pattern'  => $currencyRegex,
+                           'messages' => array(
+                               'regexNotMatch' => "Must be a dollar value."
+                           )
+                       ))
                        ->setAttrib('style', 'text-align: right')
                        ->setOrder($elementCounter)
                        ->setDescription('$')
                        ->setDecorators(array(
-                                            array(
-                                                'Description',
-                                                array(
-                                                    'escape' => false,
-                                                    'tag'    => false
-                                                )
-                                            ),
-                                            'ViewHelper',
-                                            'Errors',
-                                            array(
-                                                'HtmlTag',
-                                                array(
-                                                    'tag' => 'dd',
-                                                    'id'  => 'override_price-element'
-                                                )
-                                            ),
-                                            array(
-                                                'Label',
-                                                array(
-                                                    'tag'   => 'dt',
-                                                    'class' => 'forms_label'
-                                                )
-                                            )
-                                       ));
+                           array(
+                               'Description',
+                               array(
+                                   'escape' => false,
+                                   'tag'    => false
+                               )
+                           ),
+                           'ViewHelper',
+                           'Errors',
+                           array(
+                               'HtmlTag',
+                               array(
+                                   'tag' => 'dd',
+                                   'id'  => 'override_price-element'
+                               )
+                           ),
+                           array(
+                               'Label',
+                               array(
+                                   'tag'   => 'dt',
+                                   'class' => 'forms_label'
+                               )
+                           )
+                       ));
         array_push($elements, $override_price);
         $elementCounter++;
 
@@ -301,30 +302,30 @@ class Proposalgen_Form_Device extends Zend_Form
                      ->setOrder($elementCounter)
                      ->setAttrib('id', 'toner_config_id')
                      ->setDecorators(array(
-                                          array(
-                                              'Description',
-                                              array(
-                                                  'escape' => false,
-                                                  'tag'    => false
-                                              )
-                                          ),
-                                          'ViewHelper',
-                                          'Errors',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag' => 'dd',
-                                                  'id'  => 'toner_config_id-element'
-                                              )
-                                          ),
-                                          array(
-                                              'Label',
-                                              array(
-                                                  'tag'   => 'dt',
-                                                  'class' => 'forms_label'
-                                              )
-                                          )
-                                     ));
+                         array(
+                             'Description',
+                             array(
+                                 'escape' => false,
+                                 'tag'    => false
+                             )
+                         ),
+                         'ViewHelper',
+                         'Errors',
+                         array(
+                             'HtmlTag',
+                             array(
+                                 'tag' => 'dd',
+                                 'id'  => 'toner_config_id-element'
+                             )
+                         ),
+                         array(
+                             'Label',
+                             array(
+                                 'tag'   => 'dt',
+                                 'class' => 'forms_label'
+                             )
+                         )
+                     ));
         array_push($elements, $toner_config);
         $elementCounter++;
 
@@ -333,30 +334,30 @@ class Proposalgen_Form_Device extends Zend_Form
         $is_copier->setLabel('Copier:')
                   ->setOrder($elementCounter)
                   ->setDecorators(array(
-                                       array(
-                                           'Description',
-                                           array(
-                                               'escape' => false,
-                                               'tag'    => false
-                                           )
-                                       ),
-                                       'ViewHelper',
-                                       'Errors',
-                                       array(
-                                           'HtmlTag',
-                                           array(
-                                               'tag' => 'dd',
-                                               'id'  => 'is_copier-element'
-                                           )
-                                       ),
-                                       array(
-                                           'Label',
-                                           array(
-                                               'tag'   => 'dt',
-                                               'class' => 'forms_label'
-                                           )
-                                       )
-                                  ));
+                      array(
+                          'Description',
+                          array(
+                              'escape' => false,
+                              'tag'    => false
+                          )
+                      ),
+                      'ViewHelper',
+                      'Errors',
+                      array(
+                          'HtmlTag',
+                          array(
+                              'tag' => 'dd',
+                              'id'  => 'is_copier-element'
+                          )
+                      ),
+                      array(
+                          'Label',
+                          array(
+                              'tag'   => 'dt',
+                              'class' => 'forms_label'
+                          )
+                      )
+                  ));
         array_push($elements, $is_copier);
         $elementCounter++;
 
@@ -365,30 +366,30 @@ class Proposalgen_Form_Device extends Zend_Form
         $is_scanner->setLabel('Scanner:')
                    ->setOrder($elementCounter)
                    ->setDecorators(array(
-                                        array(
-                                            'Description',
-                                            array(
-                                                'escape' => false,
-                                                'tag'    => false
-                                            )
-                                        ),
-                                        'ViewHelper',
-                                        'Errors',
-                                        array(
-                                            'HtmlTag',
-                                            array(
-                                                'tag' => 'dd',
-                                                'id'  => 'is_scanner-element'
-                                            )
-                                        ),
-                                        array(
-                                            'Label',
-                                            array(
-                                                'tag'   => 'dt',
-                                                'class' => 'forms_label'
-                                            )
-                                        )
-                                   ));
+                       array(
+                           'Description',
+                           array(
+                               'escape' => false,
+                               'tag'    => false
+                           )
+                       ),
+                       'ViewHelper',
+                       'Errors',
+                       array(
+                           'HtmlTag',
+                           array(
+                               'tag' => 'dd',
+                               'id'  => 'is_scanner-element'
+                           )
+                       ),
+                       array(
+                           'Label',
+                           array(
+                               'tag'   => 'dt',
+                               'class' => 'forms_label'
+                           )
+                       )
+                   ));
         array_push($elements, $is_scanner);
         $elementCounter++;
 
@@ -396,30 +397,30 @@ class Proposalgen_Form_Device extends Zend_Form
         $reportsTonerLevels->setLabel('Reports toner levels:')
                            ->setOrder($elementCounter)
                            ->setDecorators(array(
-                                                array(
-                                                    'Description',
-                                                    array(
-                                                        'escape' => false,
-                                                        'tag'    => false
-                                                    )
-                                                ),
-                                                'ViewHelper',
-                                                'Errors',
-                                                array(
-                                                    'HtmlTag',
-                                                    array(
-                                                        'tag' => 'dd',
-                                                        'id'  => 'reportsTonerLevels-element'
-                                                    )
-                                                ),
-                                                array(
-                                                    'Label',
-                                                    array(
-                                                        'tag'   => 'dt',
-                                                        'class' => 'forms_label'
-                                                    )
-                                                )
-                                           ));
+                               array(
+                                   'Description',
+                                   array(
+                                       'escape' => false,
+                                       'tag'    => false
+                                   )
+                               ),
+                               'ViewHelper',
+                               'Errors',
+                               array(
+                                   'HtmlTag',
+                                   array(
+                                       'tag' => 'dd',
+                                       'id'  => 'reportsTonerLevels-element'
+                                   )
+                               ),
+                               array(
+                                   'Label',
+                                   array(
+                                       'tag'   => 'dt',
+                                       'class' => 'forms_label'
+                                   )
+                               )
+                           ));
         array_push($elements, $reportsTonerLevels);
         $elementCounter++;
 
@@ -428,30 +429,30 @@ class Proposalgen_Form_Device extends Zend_Form
         $is_fax->setLabel('Fax:')
                ->setOrder($elementCounter)
                ->setDecorators(array(
-                                    array(
-                                        'Description',
-                                        array(
-                                            'escape' => false,
-                                            'tag'    => false
-                                        )
-                                    ),
-                                    'ViewHelper',
-                                    'Errors',
-                                    array(
-                                        'HtmlTag',
-                                        array(
-                                            'tag' => 'dd',
-                                            'id'  => 'is_fax-element'
-                                        )
-                                    ),
-                                    array(
-                                        'Label',
-                                        array(
-                                            'tag'   => 'dt',
-                                            'class' => 'forms_label'
-                                        )
-                                    )
-                               ));
+                   array(
+                       'Description',
+                       array(
+                           'escape' => false,
+                           'tag'    => false
+                       )
+                   ),
+                   'ViewHelper',
+                   'Errors',
+                   array(
+                       'HtmlTag',
+                       array(
+                           'tag' => 'dd',
+                           'id'  => 'is_fax-element'
+                       )
+                   ),
+                   array(
+                       'Label',
+                       array(
+                           'tag'   => 'dt',
+                           'class' => 'forms_label'
+                       )
+                   )
+               ));
         array_push($elements, $is_fax);
         $elementCounter++;
 
@@ -460,30 +461,30 @@ class Proposalgen_Form_Device extends Zend_Form
         $is_duplex->setLabel('Duplex:')
                   ->setOrder($elementCounter)
                   ->setDecorators(array(
-                                       array(
-                                           'Description',
-                                           array(
-                                               'escape' => false,
-                                               'tag'    => false
-                                           )
-                                       ),
-                                       'ViewHelper',
-                                       'Errors',
-                                       array(
-                                           'HtmlTag',
-                                           array(
-                                               'tag' => 'dd',
-                                               'id'  => 'is_duplex-element'
-                                           )
-                                       ),
-                                       array(
-                                           'Label',
-                                           array(
-                                               'tag'   => 'dt',
-                                               'class' => 'forms_label'
-                                           )
-                                       )
-                                  ));
+                      array(
+                          'Description',
+                          array(
+                              'escape' => false,
+                              'tag'    => false
+                          )
+                      ),
+                      'ViewHelper',
+                      'Errors',
+                      array(
+                          'HtmlTag',
+                          array(
+                              'tag' => 'dd',
+                              'id'  => 'is_duplex-element'
+                          )
+                      ),
+                      array(
+                          'Label',
+                          array(
+                              'tag'   => 'dt',
+                              'class' => 'forms_label'
+                          )
+                      )
+                  ));
         array_push($elements, $is_duplex);
         $elementCounter++;
 
@@ -494,36 +495,36 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('class', 'span1')
                 ->addValidator(new Zend_Validate_Float())
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
+                    'min' => 1
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'ViewHelper',
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'ppm_black-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'ViewHelper',
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'ppm_black-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
         $elementCounter++;
@@ -535,36 +536,36 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('class', 'span1')
                 ->addValidator(new Zend_Validate_Float())
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
+                    'min' => 1
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'ViewHelper',
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'ppm_color-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'ViewHelper',
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'ppm_color-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
         array_push($elements, $element);
         $elementCounter++;
@@ -576,37 +577,37 @@ class Proposalgen_Form_Device extends Zend_Form
                            ->setAttrib('class', 'span1')
                            ->addValidator(new Zend_Validate_Float())
                            ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                             'min' => 1
-                                                                        )))
+                               'min' => 1
+                           )))
                            ->setAttrib('style', 'text-align: right')
                            ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                            ->setDescription('Watts')
                            ->setOrder($elementCounter)
                            ->setDecorators(array(
-                                                'ViewHelper',
-                                                array(
-                                                    'Description',
-                                                    array(
-                                                        'escape' => false,
-                                                        'tag'    => false
-                                                    )
-                                                ),
-                                                'Errors',
-                                                array(
-                                                    'HtmlTag',
-                                                    array(
-                                                        'tag' => 'dd',
-                                                        'id'  => 'page_coverage-element'
-                                                    )
-                                                ),
-                                                array(
-                                                    'Label',
-                                                    array(
-                                                        'tag'   => 'dt',
-                                                        'class' => 'forms_label'
-                                                    )
-                                                )
-                                           ));
+                               'ViewHelper',
+                               array(
+                                   'Description',
+                                   array(
+                                       'escape' => false,
+                                       'tag'    => false
+                                   )
+                               ),
+                               'Errors',
+                               array(
+                                   'HtmlTag',
+                                   array(
+                                       'tag' => 'dd',
+                                       'id'  => 'page_coverage-element'
+                                   )
+                               ),
+                               array(
+                                   'Label',
+                                   array(
+                                       'tag'   => 'dt',
+                                       'class' => 'forms_label'
+                                   )
+                               )
+                           ));
         $watts_power_normal->getValidator('Float')->setMessage('Please enter a number.');
         $watts_power_normal->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $watts_power_normal);
@@ -619,37 +620,37 @@ class Proposalgen_Form_Device extends Zend_Form
                          ->setAttrib('class', 'span1')
                          ->addValidator(new Zend_Validate_Float())
                          ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                           'min' => 1
-                                                                      )))
+                             'min' => 1
+                         )))
                          ->setAttrib('style', 'text-align: right')
                          ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                          ->setDescription('Watts')
                          ->setOrder($elementCounter)
                          ->setDecorators(array(
-                                              'ViewHelper',
-                                              array(
-                                                  'Description',
-                                                  array(
-                                                      'escape' => false,
-                                                      'tag'    => false
-                                                  )
-                                              ),
-                                              'Errors',
-                                              array(
-                                                  'HtmlTag',
-                                                  array(
-                                                      'tag' => 'dd',
-                                                      'id'  => 'page_coverage-element'
-                                                  )
-                                              ),
-                                              array(
-                                                  'Label',
-                                                  array(
-                                                      'tag'   => 'dt',
-                                                      'class' => 'forms_label'
-                                                  )
-                                              )
-                                         ));
+                             'ViewHelper',
+                             array(
+                                 'Description',
+                                 array(
+                                     'escape' => false,
+                                     'tag'    => false
+                                 )
+                             ),
+                             'Errors',
+                             array(
+                                 'HtmlTag',
+                                 array(
+                                     'tag' => 'dd',
+                                     'id'  => 'page_coverage-element'
+                                 )
+                             ),
+                             array(
+                                 'Label',
+                                 array(
+                                     'tag'   => 'dt',
+                                     'class' => 'forms_label'
+                                 )
+                             )
+                         ));
         $watts_power_idle->getValidator('Float')->setMessage('Please enter a number.');
         $watts_power_idle->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $watts_power_idle);
@@ -665,36 +666,36 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('maxlength', 6)
                 ->setAttrib('class', 'span1')
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
+                    'min' => 1
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'leased_toner_yield-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'leased_toner_yield-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
         $elementCounter++;
@@ -708,30 +709,30 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'leased_toner_yield-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'leased_toner_yield-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -744,30 +745,30 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'leased_toner_yield-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'leased_toner_yield-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -777,30 +778,30 @@ class Proposalgen_Form_Device extends Zend_Form
                 ->setAttrib('onclick', 'javascript: toggle_leased(this.checked)')
                 ->setOrder($elementCounter)
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'is_leased-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'forms_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'is_leased-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'forms_label'
+                        )
+                    )
+                ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -810,47 +811,47 @@ class Proposalgen_Form_Device extends Zend_Form
         //  BUTTONS
         //*********************************************************************
         $update = new Zend_Form_Element_Submit('save_device', array(
-                                                                   'disableLoadDefaultDecorators' => true
-                                                              ));
+            'disableLoadDefaultDecorators' => true
+        ));
         $update->setLabel('Save')
                ->setAttrib('class', 'btn btn-primary')
                ->setOrder($elementCounter)
                ->setDecorators(array(
-                                    'ViewHelper',
-                                    'Errors',
-                                    array(
-                                        array(
-                                            'dd' => 'HtmlTag'
-                                        ),
-                                        array(
-                                            'tag'   => 'dd',
-                                            'class' => 'botMenu'
-                                        )
-                                    )
-                               ));
+                   'ViewHelper',
+                   'Errors',
+                   array(
+                       array(
+                           'dd' => 'HtmlTag'
+                       ),
+                       array(
+                           'tag'   => 'dd',
+                           'class' => 'botMenu'
+                       )
+                   )
+               ));
         array_push($elements, $update);
         $elementCounter++;
 
         $element = new Zend_Form_Element_Submit('delete_device', array(
-                                                                      'disableLoadDefaultDecorators' => true
-                                                                 ));
+            'disableLoadDefaultDecorators' => true
+        ));
         $element->setLabel('Delete')
                 ->setOrder($elementCounter)
                 ->setAttrib('class', 'btn btn-primary')
                 ->setAttrib('onclick', 'javascript: return confirm("Are you sure you want to delete this printer?");')
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     'Errors',
-                                     array(
-                                         array(
-                                             'dd' => 'HtmlTag'
-                                         ),
-                                         array(
-                                             'tag'   => 'dd',
-                                             'class' => 'botMenu'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    'Errors',
+                    array(
+                        array(
+                            'dd' => 'HtmlTag'
+                        ),
+                        array(
+                            'tag'   => 'dd',
+                            'class' => 'botMenu'
+                        )
+                    )
+                ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -860,18 +861,18 @@ class Proposalgen_Form_Device extends Zend_Form
              ->setAttrib('class', 'btn btn-primary')
              ->setAttrib('onClick', 'javascript: document.location.href="../admin";')
              ->setDecorators(array(
-                                  'ViewHelper',
-                                  'Errors',
-                                  array(
-                                      array(
-                                          'dd' => 'HtmlTag'
-                                      ),
-                                      array(
-                                          'tag'   => 'dd',
-                                          'class' => 'botMenu'
-                                      )
-                                  )
-                             ));
+                 'ViewHelper',
+                 'Errors',
+                 array(
+                     array(
+                         'dd' => 'HtmlTag'
+                     ),
+                     array(
+                         'tag'   => 'dd',
+                         'class' => 'botMenu'
+                     )
+                 )
+             ));
         array_push($elements, $back);
 
         $this->addElements($elements);

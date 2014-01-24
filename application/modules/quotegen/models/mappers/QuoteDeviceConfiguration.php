@@ -43,8 +43,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array(
-                                 'deviceConfigurationId = ?' => $deviceConfigurationId
-                            ));
+            'deviceConfigurationId = ?' => $deviceConfigurationId
+        ));
     }
 
     /**
@@ -92,9 +92,9 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_quoteDeviceId} = ?"  => $primaryKey [0],
-                                                                "{$this->col_masterDeviceId} = ?" => $primaryKey [1]
-                                                           ));
+            "{$this->col_quoteDeviceId} = ?"  => $primaryKey [0],
+            "{$this->col_masterDeviceId} = ?" => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -143,8 +143,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function deleteQuoteDeviceConfigurationById ($deviceConfigurationId)
     {
         return $this->getDbTable()->delete(array(
-                                                'deviceConfigurationId = ?' => $deviceConfigurationId
-                                           ));
+            'deviceConfigurationId = ?' => $deviceConfigurationId
+        ));
     }
 
     /**
@@ -190,8 +190,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function findByDeviceId ($id)
     {
         return $this->fetch(array(
-                                 "{$this->col_masterDeviceId} = ?" => $id
-                            ));
+            "{$this->col_masterDeviceId} = ?" => $id
+        ));
     }
 
     /**
@@ -205,8 +205,8 @@ class Quotegen_Model_Mapper_QuoteDeviceConfiguration extends My_Model_Mapper_Abs
     public function findByQuoteDeviceId ($id)
     {
         return $this->fetch(array(
-                                 "{$this->col_quoteDeviceId} = ?" => $id
-                            ));
+            "{$this->col_quoteDeviceId} = ?" => $id
+        ));
     }
 
     /**

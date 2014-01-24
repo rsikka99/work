@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class My_Feature_InvalidClassException
  */

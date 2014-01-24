@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Default_Model_Acl
  */

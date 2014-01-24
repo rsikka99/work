@@ -5,26 +5,28 @@ $contact = $client->getContact();
 $address = $client->getAddress();
 ?>
 <div class="page-header">
-        <h1>Clients - <small>View Client</small></h1>
+    <h1>Clients -
+        <small>View Client</small>
+    </h1>
 </div>
 <div class="well">
-	<dl class="dl-horizontal">
-		<dt>Name</dt>
-		<dd><?php echo $client->companyName; ?></dd>
-		<dt>Legal Name</dt>
-		<dd><?php echo nl2br($client->legalName)  . '&nbsp'; ?></dd>
-		<dt>Country</dt>
-		<dd><?php echo nl2br($address->getCountry()); ?></dd>
-		<dt>State or Province</dt>
-		<dd><?php echo nl2br($address->getRegionName()); ?></dd>
-		<dt>City</dt>
-		<dd><?php echo nl2br($address->city); ?></dd>
-		<dt>Address 1</dt>
-		<dd><?php echo nl2br($address->addressLine1); ?></dd>
-		<dt>Address 2</dt>
-		<dd><?php echo nl2br($address->addressLine2) . '&nbsp'; ?></dd>
-		<dt>Zip or Postal Code</dt>
-		<dd><?php echo nl2br($address->postCode); ?></dd>
+    <dl class="dl-horizontal">
+        <dt>Name</dt>
+        <dd><?php echo $client->companyName; ?></dd>
+        <dt>Legal Name</dt>
+        <dd><?php echo nl2br($client->legalName) . '&nbsp'; ?></dd>
+        <dt>Country</dt>
+        <dd><?php echo nl2br($address->getCountry()); ?></dd>
+        <dt>State or Province</dt>
+        <dd><?php echo nl2br($address->getRegionName()); ?></dd>
+        <dt>City</dt>
+        <dd><?php echo nl2br($address->city); ?></dd>
+        <dt>Address 1</dt>
+        <dd><?php echo nl2br($address->addressLine1); ?></dd>
+        <dt>Address 2</dt>
+        <dd><?php echo nl2br($address->addressLine2) . '&nbsp'; ?></dd>
+        <dt>Zip or Postal Code</dt>
+        <dd><?php echo nl2br($address->postCode); ?></dd>
         <dt>Contact First Name</dt>
         <dd><?php echo nl2br(isset($contact->firstName) ? $contact->firstName : '') . '&nbsp'; ?></dd>
         <dt>Contact Last Name</dt>
@@ -32,10 +34,11 @@ $address = $client->getAddress();
         <dt>Phone Number</dt>
         <dd>
             <?php
-            if(isset($contact->areaCode)){
+            if (isset($contact->areaCode))
+            {
                 echo nl2br("+" . $contact->countryCode . "(" . $contact->areaCode . ")" . $contact->exchangeCode . "-" . $contact->number . ($contact->extension ? " Ext {$contact->extension}" : ''));
             }
             ?>
-		</dd>
-	</dl>
+        </dd>
+    </dl>
 </div>

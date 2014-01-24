@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_Import_Device_Pricing
  */
@@ -22,39 +23,39 @@ class Proposalgen_Service_Import_Device_Pricing extends Proposalgen_Service_Impo
     {
         $this->_inputFilter = new Zend_Filter_Input(
             array(
-                 '*'                            => array(
-                     'StripTags',
-                     'StringTrim',
-                 ),
-                 self::DEVICE_PRICING_LABOR_CPP => array(
-                     new My_Filter_StringReplace(
-                         array(
-                              "find" => "$"
-                         )
-                     )
-                 ),
-                 self::DEVICE_PRICING_PARTS_CPP => array(
-                     new My_Filter_StringReplace(
-                         array(
-                              "find" => "$"
-                         )
-                     )
-                 ),
+                '*'                            => array(
+                    'StripTags',
+                    'StringTrim',
+                ),
+                self::DEVICE_PRICING_LABOR_CPP => array(
+                    new My_Filter_StringReplace(
+                        array(
+                            "find" => "$"
+                        )
+                    )
+                ),
+                self::DEVICE_PRICING_PARTS_CPP => array(
+                    new My_Filter_StringReplace(
+                        array(
+                            "find" => "$"
+                        )
+                    )
+                ),
             ),
             array(
-                 '*'                            => array(
-                     'allowEmpty' => true,
-                 ),
-                 self::DEVICE_PRICING_LABOR_CPP => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 5, true),
-                 ),
-                 self::DEVICE_PRICING_PARTS_CPP => array(
-                     'allowEmpty' => true,
-                     new Zend_Validate_Float(),
-                     array('Between', 0, 5, true),
-                 )
+                '*'                            => array(
+                    'allowEmpty' => true,
+                ),
+                self::DEVICE_PRICING_LABOR_CPP => array(
+                    'allowEmpty' => true,
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 5, true),
+                ),
+                self::DEVICE_PRICING_PARTS_CPP => array(
+                    'allowEmpty' => true,
+                    new Zend_Validate_Float(),
+                    array('Between', 0, 5, true),
+                )
             )
         );
     }

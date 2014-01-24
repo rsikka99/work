@@ -1,91 +1,135 @@
-<?php 
+<?php
 $id = $this->id;
 ?>
 
 <div class="clearfix">
-	<div class="page-header">
-        <h1>Hardware Quote Devices - <small><?php echo $this->devicename; ?></small></h1>
+    <div class="page-header">
+        <h1>Hardware Quote Devices -
+            <small><?php echo $this->devicename; ?></small>
+        </h1>
     </div>
 </div>
 
 <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id ), null, true ); ?>">Details</a></li>
+        <li>
+            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'edit', 'id' => $id), null, true); ?>">Details</a>
+        </li>
         <?php
         $isAdmin = $this->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
-        if ( $isAdmin) {
-        ?>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id ), null, true ); ?>">Toners</a></li>
+        if ($isAdmin)
+        {
+            ?>
+            <li>
+                <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'toners', 'id' => $id), null, true); ?>">Toners</a>
+            </li>
         <?php } ?>
-    	<li class="active"><a href="#tab3" data-toggle="tab">Available Options</a></li>
-    	<li><a href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id ), null, true ); ?>">Hardware Configurations</a></li>
+        <li class="active"><a href="#tab3" data-toggle="tab">Available Options</a></li>
+        <li>
+            <a href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'configurations', 'id' => $id), null, true); ?>">Hardware Configurations</a>
+        </li>
     </ul>
     <div class="tab-content">
-		<form name="frmOptions" id="frmOptions" action="" method="post">
-			<input type="hidden" name="optionid" id="optionid" value="" />
-			
-			<div id="filter" class="well">
-				<p id="view_filter">
-					<label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
-					<select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-						<option value="all" <?php if ($this->view_filter == "all") { echo "selected"; } ?>>All</option>
-						<option value="assigned" <?php if ($this->view_filter == "assigned") { echo "selected"; } ?>>Assigned</option>
-						<option value="unassigned" <?php if ($this->view_filter == "unassigned") { echo "selected"; } ?>>Unassigned</option>
-					</select>
-				</p>
-				<p id="search_filter">
-					<label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
-					<select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
-						<option value="oemSku" <?php if($this->search_filter == 'oemSku') { echo "selected"; } ?>>OEM SKU</option>
-						<option value="oemSku" <?php if($this->search_filter == 'oemSku') { echo "selected"; } ?>>Dealer SKU</option>
-						<option value="name" <?php if($this->search_filter == 'name') { echo "selected"; } ?>>Option</option>
-					</select>
-					<label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
-					<input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if($this->search_criteria != '') { echo 'value="' . $this->search_criteria . '"'; } ?> />
-				</p>
-				<input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
-				<input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
-			</div>
-			
-			<div class="clearfix">
-		    	<a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'option', 'action' => 'create', 'id' => $id, 'page' => 'options')) ?>"> <i class="icon-white icon-plus-sign"></i> Create new</a>
-			</div>
-			
-			<?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
-	            <table class="table table-bordered table-striped table-condensed">
-	                <tr>
-	                    <th style="width: 120px;">OEM SKU</th>
-	                    <th style="width: 120px;">Dealer SKU</th>
-	                    <th style="width: 220px;">Option</th>
-	                    <th>Description</th>
-						<th style="width: 85px; text-align: center;">Action</th>
-	                </tr>
-					<?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
-	                <tr>
-	                    <td><?php echo $option->oemSku; ?></td>
-	                    <td><?php echo $option->dealerSku; ?></td>
-	                    <td><?php echo $option->name; ?></td>
-	                    <td><?php echo $option->description; ?></td>
-	                    <td style="text-align: center;">
-							<div class="" style="text-align: center;">
-								<?php if ( in_array($option->id, $this->assignedOptions ) ) { ?>
-									<button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->id; ?>);"><i class="icon-minus-sign icon-white"></i> Unassign</button>
-								<?php } else { ?>
-									<button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->id; ?>);"><i class="icon-plus-sign icon-white"></i> Assign</button>
-								<?php } ?>
-							</div>
-						</td>
-	                </tr>
-	                <?php endforeach; ?>
-	            </table>
-				<?php echo $this->paginationControl($this->paginator); ?>
-	    	<?php else : ?>
-	            <h4>There are no options currently associated with this device.</h4>
-	    	<?php endif; ?>
-	    	
-			<div style="text-align: center;">
-				<a class="btn" title="Done" href="<?php echo $this->url( array ( 'module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index' ), null, true ); ?>">Done</a>
-			</div>
-		</form>
+        <form name="frmOptions" id="frmOptions" action="" method="post">
+            <input type="hidden" name="optionid" id="optionid" value="" />
+
+            <div id="filter" class="well">
+                <p id="view_filter">
+                    <label for="cboView" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">View:</label>
+                    <select name="cboView" id="cboView" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+                        <option value="all" <?php if ($this->view_filter == "all")
+                        {
+                            echo "selected";
+                        } ?>>All
+                        </option>
+                        <option value="assigned" <?php if ($this->view_filter == "assigned")
+                        {
+                            echo "selected";
+                        } ?>>Assigned
+                        </option>
+                        <option value="unassigned" <?php if ($this->view_filter == "unassigned")
+                        {
+                            echo "selected";
+                        } ?>>Unassigned
+                        </option>
+                    </select>
+                </p>
+                <p id="search_filter">
+                    <label for="criteria_filter" class="details_label" style="display: inline; padding: 0px 0px 0px 0px;">Filter:</label>
+                    <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 160px; margin: 0px 0px 0px 10px;">
+                        <option value="oemSku" <?php if ($this->search_filter == 'oemSku')
+                        {
+                            echo "selected";
+                        } ?>>OEM SKU
+                        </option>
+                        <option value="oemSku" <?php if ($this->search_filter == 'oemSku')
+                        {
+                            echo "selected";
+                        } ?>>Dealer SKU
+                        </option>
+                        <option value="name" <?php if ($this->search_filter == 'name')
+                        {
+                            echo "selected";
+                        } ?>>Option
+                        </option>
+                    </select>
+                    <label for="txtCriteria" class="details_label" style="display: inline; padding: 0px 10px 0px 10px;">for</label>
+                    <input type="text" name="txtCriteria" style="width: 152px; margin: 0px 10px 0px 0px;" id="txtCriteria" <?php if ($this->search_criteria != '')
+                    {
+                        echo 'value="' . $this->search_criteria . '"';
+                    } ?> />
+                </p>
+                <input type="submit" name="btnSearch" id="btnSearch" value="Search" class="btn" />
+                <input type="submit" name="btnClearSearch" id="btnClearSearch" value="Clear" class="btn" />
+            </div>
+
+            <div class="clearfix">
+                <a class="btn btn-success btn-small pull-right create-button" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'option', 'action' => 'create', 'id' => $id, 'page' => 'options')) ?>">
+                    <i class="icon-white icon-plus-sign"></i> Create new</a>
+            </div>
+
+            <?php if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
+                <table class="table table-bordered table-striped table-condensed">
+                    <tr>
+                        <th style="width: 120px;">OEM SKU</th>
+                        <th style="width: 120px;">Dealer SKU</th>
+                        <th style="width: 220px;">Option</th>
+                        <th>Description</th>
+                        <th style="width: 85px; text-align: center;">Action</th>
+                    </tr>
+                    <?php foreach ($this->paginator as $option) : /* @var $option Quotegen_Model_Option */ ?>
+                        <tr>
+                            <td><?php echo $option->oemSku; ?></td>
+                            <td><?php echo $option->dealerSku; ?></td>
+                            <td><?php echo $option->name; ?></td>
+                            <td><?php echo $option->description; ?></td>
+                            <td style="text-align: center;">
+                                <div class="" style="text-align: center;">
+                                    <?php if (in_array($option->id, $this->assignedOptions))
+                                    { ?>
+                                        <button type="submit" name="btnUnassign" id="btnUnassign" class="btn btn-danger btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->id; ?>);">
+                                            <i class="icon-minus-sign icon-white"></i> Unassign
+                                        </button>
+                                    <?php }
+                                    else
+                                    { ?>
+                                        <button type="submit" name="btnAssign" id="btnAssign" class="btn btn-success btn-mini" onclick="javascript: $('#optionid').val(<?php echo $option->id; ?>);">
+                                            <i class="icon-plus-sign icon-white"></i> Assign
+                                        </button>
+                                    <?php } ?>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </table>
+                <?php echo $this->paginationControl($this->paginator); ?>
+            <?php else : ?>
+                <h4>There are no options currently associated with this device.</h4>
+            <?php endif; ?>
+
+            <div style="text-align: center;">
+                <a class="btn" title="Done" href="<?php echo $this->url(array('module' => 'quotegen', 'controller' => 'devicesetup', 'action' => 'index'), null, true); ?>">Done</a>
+            </div>
+        </form>
     </div>
 </div>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Admin_Service_Fix_Toner
  */
@@ -131,7 +132,7 @@ class Admin_Service_Fix_Toner
                 foreach ($fixableToners as $csvToner)
                 {
                     $toner        = $tonerMapper->find($csvToner['id']);
-                    $oldSku = $toner->sku;
+                    $oldSku       = $toner->sku;
                     $toner->yield = $csvToner['yield'];
                     $toner->sku   = $csvToner['sku'];
 

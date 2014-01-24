@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Application_Model_Mapper_User_Session
  */
@@ -72,8 +73,8 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_sessionId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_sessionId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -206,7 +207,7 @@ class Application_Model_Mapper_User_Session extends My_Model_Mapper_Abstract
      *
      * @return Application_Model_User_Session[]
      */
-    public function fetchSessionsByUserId($userId)
+    public function fetchSessionsByUserId ($userId)
     {
         return $this->fetchAll(array("{$this->col_userId} = ?" => $userId));
     }

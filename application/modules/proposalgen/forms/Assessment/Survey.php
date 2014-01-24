@@ -79,10 +79,10 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                    ->setDescription($this->currency->getSymbol())
                    ->setAllowEmpty(false)
                    ->addValidator(new Tangent_Validate_FieldDependsOnValue('toner_cost_radio', 'exact', array(
-                                                                                                             new Zend_Validate_NotEmpty(),
-                                                                                                             new Zend_Validate_Float(),
-                                                                                                             new Zend_Validate_GreaterThan(0)
-                                                                                                        )), true);
+                       new Zend_Validate_NotEmpty(),
+                       new Zend_Validate_Float(),
+                       new Zend_Validate_GreaterThan(0)
+                   )), true);
 
         $tonerQst = "How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?";
         $toner_cost->setLabel($tonerQst);
@@ -103,10 +103,10 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                    ->setDescription($this->currency->getSymbol())
                    ->setAllowEmpty(false)
                    ->addValidator(new Tangent_Validate_FieldDependsOnValue('labor_cost_radio', 'exact', array(
-                                                                                                             new Zend_Validate_NotEmpty(),
-                                                                                                             new Zend_Validate_Float(),
-                                                                                                             new Zend_Validate_GreaterThan(0)
-                                                                                                        )), true);
+                       new Zend_Validate_NotEmpty(),
+                       new Zend_Validate_Float(),
+                       new Zend_Validate_GreaterThan(0)
+                   )), true);
         $laborQst = "How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)? If you select \"I don't know\", an average of $200 per printer per year will be used.";
         $labor_cost->setLabel($laborQst);
         $this->addElement($labor_cost);
@@ -120,15 +120,15 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                      ->setAttrib('placeholder', 'Enter Amount...')
                      ->setAttrib('maxlength', 7)
                      ->addValidator('float', false, array(
-                                                         'messages' => array(
-                                                             'notFloat' => 'Please enter a valid number.'
-                                                         )
-                                                    ))
+                         'messages' => array(
+                             'notFloat' => 'Please enter a valid number.'
+                         )
+                     ))
                      ->setValue(number_format(50, 2))
                      ->setDescription($this->currency->getSymbol())
                      ->addValidator('greaterThan', true, array(
-                                                              'min' => 0
-                                                         ));
+                         'min' => 0
+                     ));
 
         $purchaseQst = "What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel? The average cost is $50 per transaction.";
         $avg_purchase->setLabel($purchaseQst);
@@ -144,15 +144,15 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                       ->setAttrib('maxlength', 6)
                       ->setRequired(true)
                       ->addValidator('float', false, array(
-                                                          'messages' => array(
-                                                              'notFloat' => 'Please enter a valid number.'
-                                                          )
-                                                     ))
+                          'messages' => array(
+                              'notFloat' => 'Please enter a valid number.'
+                          )
+                      ))
                       ->setValue(number_format(40, 2))
                       ->setDescription($this->currency->getSymbol())
                       ->addValidator('greaterThan', true, array(
-                                                               'min' => 0
-                                                          ));
+                          'min' => 0
+                      ));
         $itQst = "What is the average hourly rate for IT personnel involved in managing printing devices? The average rate is $40/hour.";
         $it_hourlyRate->setLabel($itQst);
         $this->addElement($it_hourlyRate);
@@ -173,10 +173,10 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                         ->setAttrib('class', 'span1')
                         ->setAllowEmpty(false)
                         ->addValidator(new Tangent_Validate_FieldDependsOnValue('inkTonerOrderRadio', 'Times per month', array(
-                                                                                                                              new Zend_Validate_NotEmpty(),
-                                                                                                                              new Zend_Validate_Digits(),
-                                                                                                                              new Zend_Validate_GreaterThan(0)
-                                                                                                                         )), true)
+                            new Zend_Validate_NotEmpty(),
+                            new Zend_Validate_Digits(),
+                            new Zend_Validate_GreaterThan(0)
+                        )), true)
                         ->setDescription('times per month');
 
         $this->addElement($ink_toner_order);
@@ -186,9 +186,9 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
          */
         $itHoursRadio = $this->createElement('radio', 'itHoursRadio');
         $itHoursRadio->addMultiOptions(array(
-                                            'guess' => 'I don\'t know',
-                                            'exact' => 'I know the exact amount'
-                                       ))
+            'guess' => 'I don\'t know',
+            'exact' => 'I know the exact amount'
+        ))
                      ->setValue('exact');
 
         $this->addElement($itHoursRadio);
@@ -202,10 +202,10 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                 ->setDescription('hours')
                 ->setAllowEmpty(false)
                 ->addValidator(new Tangent_Validate_FieldDependsOnValue('itHoursRadio', 'exact', array(
-                                                                                                      new Zend_Validate_NotEmpty(),
-                                                                                                      new Zend_Validate_Digits(),
-                                                                                                      new Zend_Validate_GreaterThan(0)
-                                                                                                 )), true)
+                    new Zend_Validate_NotEmpty(),
+                    new Zend_Validate_Digits(),
+                    new Zend_Validate_GreaterThan(0)
+                )), true)
                 ->setLabel("How many hours per week do IT personnel spend servicing and supporting printers? If you select \"I don't know\", an average of 15 minutes per week per printer will be used.");
         $this->addElement($itHours);
 
@@ -218,10 +218,10 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                          ->setDescription('breakdowns per month')
                          ->setAllowEmpty(false)
                          ->addValidator(new Tangent_Validate_FieldDependsOnValue('monthlyBreakdownRadio', 'exact', array(
-                                                                                                                        new Zend_Validate_NotEmpty(),
-                                                                                                                        new Zend_Validate_Digits(),
-                                                                                                                        new Zend_Validate_GreaterThan(0)
-                                                                                                                   )), true)
+                             new Zend_Validate_NotEmpty(),
+                             new Zend_Validate_Digits(),
+                             new Zend_Validate_GreaterThan(0)
+                         )), true)
                          ->setLabel("How many times per month, on average, does your internal IT staff or an external service company need to be called to repair a broken printer in your fleet? If you select \"I don't know\", an average of 1 repair per month for every 20 printers will be used.");
         $this->addElement($monthlyBreakdown);
 
@@ -268,11 +268,11 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
          * Print Volume Question
          */
         $this->addElement('radio', 'printVolume', array(
-                                                       'label'        => "What percent of your print volume is done on inkjet and other desktop printers ?",
-                                                       'multiOptions' => self::$volumeOptions,
-                                                       'required'     => true,
-                                                       'filters'      => array('StringTrim')
-                                                  ));
+            'label'        => "What percent of your print volume is done on inkjet and other desktop printers ?",
+            'multiOptions' => self::$volumeOptions,
+            'required'     => true,
+            'filters'      => array('StringTrim')
+        ));
 
 
         /**
@@ -284,8 +284,8 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
                         ->setRequired(true)
                         ->addFilter('StringTrim')
                         ->addValidator('InArray', false, array(
-                                                              array_keys(self::$repairTimeOptions)
-                                                         ))
+                            array_keys(self::$repairTimeOptions)
+                        ))
                         ->setMultiOptions(self::$repairTimeOptions);
 
         $this->addElement($repairTimeRadio);
@@ -300,12 +300,12 @@ class Proposalgen_Form_Assessment_Survey extends Twitter_Bootstrap_Form_Horizont
     public function loadDefaultDecorators ()
     {
         $this->setDecorators(array(
-                                  array(
-                                      'ViewScript',
-                                      array(
-                                          'viewScript' => 'survey/form/survey.phtml'
-                                      )
-                                  )
-                             ));
+            array(
+                'ViewScript',
+                array(
+                    'viewScript' => 'survey/form/survey.phtml'
+                )
+            )
+        ));
     }
 }

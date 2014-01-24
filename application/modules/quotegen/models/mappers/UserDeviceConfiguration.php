@@ -39,8 +39,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array(
-                                 "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-                            ));
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+        ));
     }
 
     /**
@@ -87,9 +87,9 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0],
-                                                                "{$this->col_userId} = ?"                => $primaryKey [1]
-                                                           ));
+            "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0],
+            "{$this->col_userId} = ?"                => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -138,8 +138,8 @@ class Quotegen_Model_Mapper_UserDeviceConfiguration extends My_Model_Mapper_Abst
     public function deleteUserDeviceConfigurationByDeviceId ($deviceConfigurationId)
     {
         return $rowsAffected = $this->getDbTable()->delete(array(
-                                                                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-                                                           ));
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+        ));
     }
 
     /**

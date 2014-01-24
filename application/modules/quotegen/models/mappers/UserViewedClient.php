@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Quotegen_Model_Mapper_UserViewedClient
  */
@@ -74,9 +75,9 @@ class Quotegen_Model_Mapper_UserViewedClient extends My_Model_Mapper_Abstract
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_userId} = ?"   => $primaryKey [0],
-                                                                "{$this->col_clientId} = ?" => $primaryKey [1]
-                                                           ));
+            "{$this->col_userId} = ?"   => $primaryKey [0],
+            "{$this->col_clientId} = ?" => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

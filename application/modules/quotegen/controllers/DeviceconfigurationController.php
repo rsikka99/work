@@ -56,8 +56,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfigurationId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a device configuration to delete first.'
-                                               ));
+                'warning' => 'Please select a device configuration to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -67,8 +67,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfiguration)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the device configuration to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the device configuration to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -86,8 +86,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                 {
                     $mapper->delete($deviceConfiguration);
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Device configuration  {$deviceConfiguration->id} was deleted successfully."
-                                                       ));
+                        'success' => "Device configuration  {$deviceConfiguration->id} was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }
@@ -128,12 +128,12 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                             $deviceConfigurationId = $mapper->insert($deviceConfiguration);
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Device configuration {$deviceConfiguration->id} was added successfully."
-                                                               ));
+                                'success' => "Device configuration {$deviceConfiguration->id} was added successfully."
+                            ));
 
                             $this->redirector('edit', null, null, array(
-                                                                       'id' => $deviceConfigurationId
-                                                                  ));
+                                'id' => $deviceConfigurationId
+                            ));
                         }
                         catch (Zend_Db_Statement_Mysqli_Exception $e)
                         {
@@ -143,13 +143,13 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                                 // Duplicate column
                                 case 1062 :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Device configuration already exists.'
-                                                                       ));
+                                        'danger' => 'Device configuration already exists.'
+                                    ));
                                     break;
                                 default :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Error saving to database.  Please try again.'
-                                                                       ));
+                                        'danger' => 'Error saving to database.  Please try again.'
+                                    ));
                                     break;
                             }
 
@@ -158,8 +158,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         catch (Exception $e)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error processing this request.  Please try again.'
-                                                               ));
+                                'danger' => 'There was an error processing this request.  Please try again.'
+                            ));
                             $form->populate($request->getPost());
                         }
                     }
@@ -193,8 +193,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfigurationId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a device configuration to edit first.'
-                                               ));
+                'warning' => 'Please select a device configuration to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -206,8 +206,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
         if (!$deviceConfiguration)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the device configuration to edit.'
-                                               ));
+                'danger' => 'There was an error selecting the device configuration to edit.'
+            ));
             $this->redirector('index');
         }
 
@@ -255,19 +255,19 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         if (isset($values ['add']))
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Device configuration saved."
-                                                               ));
+                                'success' => "Device configuration saved."
+                            ));
 
                             // Send to the add options page like they asked
                             $this->redirector('addoptions', null, null, array(
-                                                                             'id' => $deviceConfigurationId
-                                                                        ));
+                                'id' => $deviceConfigurationId
+                            ));
                         }
                         else
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Device configuration '{$deviceConfiguration->id}' was updated successfully."
-                                                               ));
+                                'success' => "Device configuration '{$deviceConfiguration->id}' was updated successfully."
+                            ));
 
                             // Send back to the main list
                             $this->redirector('index');
@@ -281,8 +281,8 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
         }
@@ -300,11 +300,11 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
         if (count($availableOptions) < 1)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'info' => "There are no more options to add to this device."
-                                               ));
+                'info' => "There are no more options to add to this device."
+            ));
             $this->redirector('edit', null, null, array(
-                                                       'id' => $id
-                                                  ));
+                'id' => $id
+            ));
         }
 
         $form = new Quotegen_Form_SelectOptions($availableOptions);
@@ -349,11 +349,11 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                         }
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully."
-                                                           ));
+                            'success' => "Successfully added {$insertedOptions} options to {$deviceConfiguration->getDevice()->getMasterDevice()->getFullDeviceName()} successfully."
+                        ));
                         $this->redirector('edit', null, null, array(
-                                                                   'id' => $id
-                                                              ));
+                            'id' => $id
+                        ));
                     }
                     else
                     {
@@ -363,16 +363,16 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else
             {
                 // User has cancelled. Go back to the edit page
                 $this->redirector('edit', null, null, array(
-                                                           'id' => $id
-                                                      ));
+                    'id' => $id
+                ));
             }
         }
 
@@ -394,19 +394,19 @@ class Quotegen_DeviceConfigurationController extends Tangent_Controller_Action
             $deviceConfigurationOption->optionId              = $optionId;
             Quotegen_Model_Mapper_DeviceConfigurationOption::getInstance()->delete($deviceConfigurationOption);
             $this->_flashMessenger->addMessage(array(
-                                                    'success' => "Configuration Option deleted successfully."
-                                               ));
+                'success' => "Configuration Option deleted successfully."
+            ));
         }
         catch (Exception $e)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'error' => "Could not delete that configuration option."
-                                               ));
+                'error' => "Could not delete that configuration option."
+            ));
         }
 
         $this->redirector('edit', null, null, array(
-                                                   'id' => $id
-                                              ));
+            'id' => $id
+        ));
     }
 
     /**

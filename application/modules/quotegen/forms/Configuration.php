@@ -31,42 +31,42 @@ class Quotegen_Form_Configuration extends EasyBib_Form
             $masterDeviceList [$device->masterDeviceId] = $device->getMasterDevice()->getFullDeviceName();
         }
         $this->addElement('select', 'masterDeviceId', array(
-                                                           'label'        => 'Master Device',
-                                                           'multiOptions' => $masterDeviceList
-                                                      ));
+            'label'        => 'Master Device',
+            'multiOptions' => $masterDeviceList
+        ));
 
         $this->addElement('text', 'name', array(
-                                               'label'     => 'Name:',
-                                               'required'  => true,
-                                               'maxlength' => 255,
-                                               'filters'   => array(
-                                                   'StringTrim',
-                                                   'StripTags'
-                                               )
-                                          ));
+            'label'     => 'Name:',
+            'required'  => true,
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            )
+        ));
 
         $this->addElement('textarea', 'description', array(
-                                                          'label'     => 'Description:',
-                                                          'required'  => true,
-                                                          'style'     => 'height: 100px',
-                                                          'maxlength' => 255,
-                                                          'filters'   => array(
-                                                              'StringTrim',
-                                                              'StripTags'
-                                                          )
-                                                     ));
+            'label'     => 'Description:',
+            'required'  => true,
+            'style'     => 'height: 100px',
+            'maxlength' => 255,
+            'filters'   => array(
+                'StringTrim',
+                'StripTags'
+            )
+        ));
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

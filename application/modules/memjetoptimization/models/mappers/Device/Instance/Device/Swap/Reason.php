@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason
  */
@@ -73,9 +74,9 @@ class Memjetoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason extends
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_memjetOptimizationId} = ?" => $primaryKey[0],
-                                                                "{$this->col_deviceInstanceId} = ?"     => $primaryKey[1]
-                                                           ));
+            "{$this->col_memjetOptimizationId} = ?" => $primaryKey[0],
+            "{$this->col_deviceInstanceId} = ?"     => $primaryKey[1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

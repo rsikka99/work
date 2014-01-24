@@ -55,15 +55,15 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
                 else
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => 'Please correct the errors below.'
-                                                       ));
+                        'danger' => 'Please correct the errors below.'
+                    ));
                 }
             }
             else
             {
                 $this->redirector('index', 'quote_profitability', null, array(
-                                                                             'quoteId' => $this->_quoteId
-                                                                        ));
+                    'quoteId' => $this->_quoteId
+                ));
             }
         }
 

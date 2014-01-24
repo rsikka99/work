@@ -29,8 +29,8 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         if (!$quoteId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a quote to delete first.'
-                                               ));
+                'warning' => 'Please select a quote to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -40,8 +40,8 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
         if (!$quote->id)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the quote to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the quote to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -62,8 +62,8 @@ class Quotegen_QuoteController extends Quotegen_Library_Controller_Quote
                     $quoteMapper->delete($quote);
 
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Quote was deleted successfully."
-                                                       ));
+                        'success' => "Quote was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }

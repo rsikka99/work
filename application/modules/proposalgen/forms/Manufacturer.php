@@ -26,59 +26,59 @@ class Proposalgen_Form_Manufacturer extends EasyBib_Form
         $this->setAttrib('class', 'form-horizontal');
 
         $this->addElement('text', 'fullname', array(
-                                                   'label'      => 'Full Name:',
-                                                   'required'   => true,
-                                                   'filters'    => array(
-                                                       'StringTrim',
-                                                       'StripTags'
-                                                   ),
-                                                   'validators' => array(
-                                                       array(
-                                                           'validator' => 'StringLength',
-                                                           'options'   => array(
-                                                               1,
-                                                               255
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'label'      => 'Full Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'displayname', array(
-                                                      'label'      => 'Display Name:',
-                                                      'required'   => false,
-                                                      'filters'    => array(
-                                                          'StringTrim',
-                                                          'StripTags'
-                                                      ),
-                                                      'validators' => array(
-                                                          array(
-                                                              'validator' => 'StringLength',
-                                                              'options'   => array(
-                                                                  1,
-                                                                  255
-                                                              )
-                                                          )
-                                                      )
-                                                 ));
+            'label'      => 'Display Name:',
+            'required'   => false,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        1,
+                        255
+                    )
+                )
+            )
+        ));
 
         $this->addElement('checkbox', 'isDeleted', array(
-                                                        'label'   => 'Deleted',
-                                                        'filters' => array(
-                                                            'Boolean'
-                                                        )
-                                                   ));
+            'label'   => 'Deleted',
+            'filters' => array(
+                'Boolean'
+            )
+        ));
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }

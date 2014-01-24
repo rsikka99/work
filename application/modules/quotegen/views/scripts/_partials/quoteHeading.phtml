@@ -1,37 +1,49 @@
 <?php if ($this->Quote()): $quote = $this->Quote(); /* @var $quote Quotegen_Model_Quote */ ?>
-<div class="page-header">
-    <h1>Quote - <small><?php echo $quote->getClient()->companyName; ?></small></h1>
-</div>
-<?php $this->placeholder('ProgressionNav')->set($this->Quotemenu()); ?>
+    <div class="page-header">
+        <h1>Quote -
+            <small><?php echo $quote->getClient()->companyName; ?></small>
+        </h1>
+    </div>
+    <?php $this->placeholder('ProgressionNav')->set($this->Quotemenu()); ?>
 
-<?php if (false) : /* Disabling this so it does not appear in code */?>
-<div class="row">
-    <div class="span4">
-        <h3><?php echo $quote->getClient()->companyName; ?></h3>
-        <dl class="dl-horizontal">
-            <dt>Date Created:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->dateCreated)); ?></dd>
-            <dt>Last Modified:</dt><dd><?php echo date('m/d/Y H:i', strtotime($quote->dateModified)); ?></dd>
-        </dl>
-    </div>
-    <div class="span4">
-        <h3>Quote Details</h3>
-        <dl class="dl-horizontal">
-            <dt>Total Devices:</dt><dd><?php echo number_format($quote->countDevices()); ?></dd>
-            <dt>Purchase Subtotal:</dt><dd><?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></dd>
-            <dt>Overall Margin:</dt><dd><?php echo number_format($quote->calculateTotalMargin(), 2); ?>%</dd>
-        </dl>
-    </div>
-    <div class="span4">
-        <h3>Lease Specific Details</h3>
-        <dl class="dl-horizontal">
-            <dt>Quote Value:</dt><dd><?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?></dd>
-            <dt>Lease Term:</dt><dd><?php echo number_format($quote->leaseTerm); ?> months</dd>
-            <dt>Lease Factor:</dt><dd><?php echo number_format($quote->leaseRate, 4); ?></dd>
-            <dt>Total Residual:</dt><dd><?php echo $this->currency($quote->calculateTotalResidual()); ?></dd>
-            <dt>Monthly Payment:</dt><dd><?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></dd>
-        </dl>
-    </div>
-</div>
- <?php endif; ?> 
+    <?php if (false) : /* Disabling this so it does not appear in code */ ?>
+        <div class="row">
+            <div class="span4">
+                <h3><?php echo $quote->getClient()->companyName; ?></h3>
+                <dl class="dl-horizontal">
+                    <dt>Date Created:</dt>
+                    <dd><?php echo date('m/d/Y H:i', strtotime($quote->dateCreated)); ?></dd>
+                    <dt>Last Modified:</dt>
+                    <dd><?php echo date('m/d/Y H:i', strtotime($quote->dateModified)); ?></dd>
+                </dl>
+            </div>
+            <div class="span4">
+                <h3>Quote Details</h3>
+                <dl class="dl-horizontal">
+                    <dt>Total Devices:</dt>
+                    <dd><?php echo number_format($quote->countDevices()); ?></dd>
+                    <dt>Purchase Subtotal:</dt>
+                    <dd><?php echo $this->currency($quote->calculateQuoteSubtotal()); ?></dd>
+                    <dt>Overall Margin:</dt>
+                    <dd><?php echo number_format($quote->calculateTotalMargin(), 2); ?>%</dd>
+                </dl>
+            </div>
+            <div class="span4">
+                <h3>Lease Specific Details</h3>
+                <dl class="dl-horizontal">
+                    <dt>Quote Value:</dt>
+                    <dd><?php echo $this->currency($quote->calculateQuoteLeaseValue()); ?></dd>
+                    <dt>Lease Term:</dt>
+                    <dd><?php echo number_format($quote->leaseTerm); ?> months</dd>
+                    <dt>Lease Factor:</dt>
+                    <dd><?php echo number_format($quote->leaseRate, 4); ?></dd>
+                    <dt>Total Residual:</dt>
+                    <dd><?php echo $this->currency($quote->calculateTotalResidual()); ?></dd>
+                    <dt>Monthly Payment:</dt>
+                    <dd><?php echo $this->currency($quote->calculateQuoteMonthlyLeaseSubtotal()); ?></dd>
+                </dl>
+            </div>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 

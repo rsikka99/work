@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting
  */
@@ -76,8 +77,8 @@ class Memjetoptimization_Model_Mapper_Memjet_Optimization_Setting extends My_Mod
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_id} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_id} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

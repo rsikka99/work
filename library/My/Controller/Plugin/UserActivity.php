@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class My_Controller_Plugin_UserActivity
  */

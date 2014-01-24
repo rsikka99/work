@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Default_IndexController
  */
@@ -315,8 +316,8 @@ class Default_IndexController extends Tangent_Controller_Action
         if (!$this->view->isAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_QUOTE_INDEX, Application_Model_Acl::PRIVILEGE_VIEW))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
-                                               ));
+                'error' => "You do not have sufficient privileges to access this page. If you feel this is in error please contact your administrator."
+            ));
             $this->redirector('index', null, null);
         }
         $quote = new Quotegen_Model_Quote();
@@ -362,8 +363,8 @@ class Default_IndexController extends Tangent_Controller_Action
                 }
 
                 $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client was successfully created."
-                                                   ));
+                    'success' => "Client was successfully created."
+                ));
                 $this->_mpsSession->selectedClientId = $clientId;
 
                 // Redirect with client id so that the client is preselected
@@ -416,18 +417,18 @@ class Default_IndexController extends Tangent_Controller_Action
             if ($clientId)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'success' => "Client {$client->companyName} successfully updated."
-                                                   ));
+                    'success' => "Client {$client->companyName} successfully updated."
+                ));
                 // Redirect with client id so that the client is preselected
                 $this->redirector('index', null, null, array(
-                                                            'clientId' => $clientId
-                                                       ));
+                    'clientId' => $clientId
+                ));
             }
             else
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        'danger' => "Please correct the errors below."
-                                                   ));
+                    'danger' => "Please correct the errors below."
+                ));
             }
         }
         $this->view->form = $clientService->getForm();

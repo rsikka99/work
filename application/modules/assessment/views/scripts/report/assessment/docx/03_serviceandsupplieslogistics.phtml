@@ -48,8 +48,8 @@ else if ($assessmentViewModel->getPercentPrintingDoneOnInkjet() == 18)
 $textRun = $section->createTextRun();
 $textRun->addText('Based on your questionnaire, ');
 $textRun->addText(sprintf('%1$s of your printing is done on inkjet devices. ', $inkJetString), array(
-                                                                                                                      'bold' => true
-                                                                                                                 ));
+    'bold' => true
+));
 $textRun->addText('We did not monitor inkjet machines that are not connected to the network, and on average, pages printed to inkjet printers cost three times more than pages printed to laser devices. Without being on the network, users also cannot share these devices. There are some instances where desktop printers are appropriate, for instance, if a single user requires confidential, high-convenience printing. We can help you consolidate desktop hardware where appropriate, and where desktop printing is required, we can help you select network-capable equipment so your desktop printing can be managed with the rest of your office print.');
 $excludedDeviceCount = count($assessmentViewModel->getExcludedDevices());
 if ($excludedDeviceCount > 0)
@@ -109,15 +109,15 @@ $section->addTitle('Number of Printing Device Models and Supply Types', 2);
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have of %2$s different models. Each section of the chart below represents a single model type. We estimate that %3$s of your printing devices are leased machines, for which supplies are included in your contract. The %4$s remaining machines consist of %5$s different models and use %6$s different supply types. If you hold two of each supply in inventory, you have an estimated $%7$s in operating cash held in printer supplies inventory at any given time.', number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($assessmentViewModel->getNumberOfUniqueModels()), number_format(count($assessmentViewModel->getDevices()->leasedDeviceInstances->getDeviceInstances())), number_format(count($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances())), number_format($assessmentViewModel->getNumberOfUniquePurchasedModels()), number_format($assessmentViewModel->getNumberOfUniquePurchasedToners()), number_format($assessmentViewModel->getCashHeldInInventory())));
 
 $imageTable = $section->addTable(array(
-                                      'borderBottomSize' => 1
-                                 ));
+    'borderBottomSize' => 1
+));
 $imageTable->addRow();
 $cell = $imageTable->addCell(9028.8, array(
-                                          'valign' => 'center'
-                                     ));
+    'valign' => 'center'
+));
 
 $cell->addImage($graphs[3], array(
-                                 'align' => 'center'
-                            ));
+    'align' => 'center'
+));
 
 $section->addText(sprintf('By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space required. %1$s can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply orders.', $this->companyName));

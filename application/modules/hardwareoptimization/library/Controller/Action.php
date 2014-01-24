@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Library_Controller_Action
  */
@@ -57,8 +58,8 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
         if (!My_Feature::canAccess(My_Feature::HARDWARE_OPTIMIZATION))
         {
             $this->_flashMessenger->addMessage(array(
-                                                    "error" => "You do not have permission to access this."
-                                               ));
+                "error" => "You do not have permission to access this."
+            ));
 
             $this->redirector('index', 'index', 'index');
         }
@@ -69,8 +70,8 @@ class Hardwareoptimization_Library_Controller_Action extends My_Controller_Repor
             if (!$client instanceof Quotegen_Model_Client)
             {
                 $this->_flashMessenger->addMessage(array(
-                                                        "error" => "A client is not selected."
-                                                   ));
+                    "error" => "A client is not selected."
+                ));
 
                 $this->redirector('index', 'index', 'index');
             }

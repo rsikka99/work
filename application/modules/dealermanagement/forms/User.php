@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Dealermanagement_Form_User
  */
@@ -42,67 +43,67 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
 
 
         $this->addElement('text', 'firstname', array(
-                                                    'label'      => 'First Name:',
-                                                    'required'   => true,
-                                                    'filters'    => array(
-                                                        'StringTrim',
-                                                        'StripTags',
-                                                        $alphaNumericWithSpaces
-                                                    ),
-                                                    'validators' => array(
-                                                        array(
-                                                            'validator' => 'StringLength',
-                                                            'options'   => array(
-                                                                2,
-                                                                30
-                                                            )
-                                                        )
-                                                    )
-                                               ));
+            'label'      => 'First Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags',
+                $alphaNumericWithSpaces
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        2,
+                        30
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'lastname', array(
-                                                   'label'      => 'Last Name:',
-                                                   'required'   => true,
-                                                   'filters'    => array(
-                                                       'StringTrim',
-                                                       'StripTags',
-                                                       $alphaNumericWithSpaces
-                                                   ),
-                                                   'validators' => array(
-                                                       array(
-                                                           'validator' => 'StringLength',
-                                                           'options'   => array(
-                                                               2,
-                                                               30
-                                                           )
-                                                       )
-                                                   )
-                                              ));
+            'label'      => 'Last Name:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags',
+                $alphaNumericWithSpaces
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        2,
+                        30
+                    )
+                )
+            )
+        ));
 
         $this->addElement('text', 'email', array(
-                                                'label'         => 'Email:',
-                                                'required'      => true,
-                                                'filters'       => array(
-                                                    'StringTrim',
-                                                    'StripTags'
-                                                ),
-                                                'validators'    => array(
-                                                    array(
-                                                        'validator' => 'StringLength',
-                                                        'options'   => array(
-                                                            4,
-                                                            200
-                                                        )
-                                                    ),
-                                                    array(
-                                                        'validator' => 'EmailAddress',
-                                                        'allow'     => Zend_Validate_Hostname::ALLOW_DNS
-                                                    )
-                                                ),
-                                                'errorMessages' => array(
-                                                    'EmailAddress' => 'Invalid Email Address'
-                                                )
-                                           ));
+            'label'         => 'Email:',
+            'required'      => true,
+            'filters'       => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators'    => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        4,
+                        200
+                    )
+                ),
+                array(
+                    'validator' => 'EmailAddress',
+                    'allow'     => Zend_Validate_Hostname::ALLOW_DNS
+                )
+            ),
+            'errorMessages' => array(
+                'EmailAddress' => 'Invalid Email Address'
+            )
+        ));
 
         if (count($this->roles) > 0)
         {
@@ -113,9 +114,9 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
             }
 
             $this->addElement('multiCheckbox', 'userRoles', array(
-                                                                 'label'        => 'User Roles:',
-                                                                 'multiOptions' => $roleMultiOptions,
-                                                            ));
+                'label'        => 'User Roles:',
+                'multiOptions' => $roleMultiOptions,
+            ));
         }
 
         // No need to edit this when creating a user
@@ -123,14 +124,14 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
         {
 
             $this->addElement('text', 'loginAttempts', array(
-                                                            'label'    => 'Login Attempts:',
-                                                            'disabled' => true
-                                                       ));
+                'label'    => 'Login Attempts:',
+                'disabled' => true
+            ));
 
             $this->addElement('checkbox', 'resetLoginAttempts', array(
-                                                                     'label'    => 'Reset Login Attempts:',
-                                                                     'required' => true
-                                                                ));
+                'label'    => 'Reset Login Attempts:',
+                'required' => true
+            ));
 
             $minYear = (int)date('Y') - 2;
             $maxYear = $minYear + 4;
@@ -146,69 +147,69 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
                         ->setRequired(false)
                         ->setDescription('yyyy-mm-dd hh:mm')
                         ->addFilters(array(
-                                          'StringTrim',
-                                          'StripTags'
-                                     ));
+                            'StringTrim',
+                            'StripTags'
+                        ));
 
             $this->addElement($frozenUntil);
 
             $this->addElement('checkbox', 'locked', array(
-                                                         'label'    => 'Locked:',
-                                                         'filters'  => array(
-                                                             new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)
-                                                         ),
-                                                         'required' => false
-                                                    ));
+                'label'    => 'Locked:',
+                'filters'  => array(
+                    new Zend_Filter_Boolean(Zend_Filter_Boolean::ALL)
+                ),
+                'required' => false
+            ));
 
             $this->addElement('checkbox', 'reset_password', array(
-                                                                 'label'    => 'Reset Password:',
-                                                                 'required' => true
-                                                            ));
+                'label'    => 'Reset Password:',
+                'required' => true
+            ));
         }
 
 
         $password = $this->createElement('password', 'password', array(
-                                                                      'label'      => 'Password:',
-                                                                      'required'   => true,
-                                                                      'filters'    => array(
-                                                                          'StringTrim'
-                                                                      ),
-                                                                      'validators' => array(
-                                                                          array(
-                                                                              'validator' => 'StringLength',
-                                                                              'options'   => array(
-                                                                                  6,
-                                                                                  255
-                                                                              )
-                                                                          )
-                                                                      )
-                                                                 ));
+            'label'      => 'Password:',
+            'required'   => true,
+            'filters'    => array(
+                'StringTrim'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        6,
+                        255
+                    )
+                )
+            )
+        ));
 
         $passwordConfirm = $this->createElement('password', 'password_confirm', array(
-                                                                                     'label'         => 'Confirm Password:',
-                                                                                     'required'      => true,
-                                                                                     'filters'       => array(
-                                                                                         'StringTrim'
-                                                                                     ),
-                                                                                     'validators'    => array(
-                                                                                         array(
-                                                                                             'validator' => 'StringLength',
-                                                                                             'options'   => array(
-                                                                                                 6,
-                                                                                                 255
-                                                                                             )
-                                                                                         ),
-                                                                                         array(
-                                                                                             'validator' => 'Identical',
-                                                                                             'options'   => array(
-                                                                                                 'token' => 'password'
-                                                                                             )
-                                                                                         )
-                                                                                     ),
-                                                                                     'errorMessages' => array(
-                                                                                         'Identical' => 'Passwords must match.'
-                                                                                     )
-                                                                                ));
+            'label'         => 'Confirm Password:',
+            'required'      => true,
+            'filters'       => array(
+                'StringTrim'
+            ),
+            'validators'    => array(
+                array(
+                    'validator' => 'StringLength',
+                    'options'   => array(
+                        6,
+                        255
+                    )
+                ),
+                array(
+                    'validator' => 'Identical',
+                    'options'   => array(
+                        'token' => 'password'
+                    )
+                )
+            ),
+            'errorMessages' => array(
+                'Identical' => 'Passwords must match.'
+            )
+        ));
 
         if (!$this->_createMode)
         {
@@ -219,30 +220,30 @@ class Dealermanagement_Form_User extends Twitter_Bootstrap_Form_Horizontal
         $this->addElement($passwordConfirm);
 
         $this->addElement('checkbox', 'resetPasswordOnNextLogin', array(
-                                                                       'label' => 'Require Password Change On Next Login:'
-                                                                  ));
+            'label' => 'Require Password Change On Next Login:'
+        ));
 
         //setup cancel button
         $submit = $this->createElement('submit', 'cancel', array(
-                                                                'ignore' => true,
-                                                                'label'  => 'Cancel'
-                                                           ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
         //setup submit button
         $cancel = $this->createElement('submit', 'submit', array(
-                                                                'ignore'     => true,
-                                                                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-                                                                'label'      => 'Save'
-                                                           ));
+            'ignore'     => true,
+            'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+            'label'      => 'Save'
+        ));
 
         $this->addDisplayGroup(array(
-                                    $cancel,
-                                    $submit
-                               ), 'actions', array(
-                                                  'disableLoadDefaultDecorators' => true,
-                                                  'decorators'                   => array(
-                                                      'Actions'
-                                                  ),
-                                                  'class'                        => 'form-actions-center'
-                                             ));
+            $cancel,
+            $submit
+        ), 'actions', array(
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions'
+            ),
+            'class'                        => 'form-actions-center'
+        ));
     }
 }

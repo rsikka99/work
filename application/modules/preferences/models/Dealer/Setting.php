@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Preferences_Model_Dealer_Setting
  */

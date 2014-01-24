@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Report_Dealer_OptimizationController
  */

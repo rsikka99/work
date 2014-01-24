@@ -33,8 +33,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         if (!$optionId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select an option to delete first.'
-                                               ));
+                'warning' => 'Please select an option to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -44,16 +44,16 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         if (!$option)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error finding that option to delete.'
-                                               ));
+                'danger' => 'There was an error finding that option to delete.'
+            ));
             $this->redirector('index');
         }
         // If we are trying to access a option from another dealer, kick them back
         else if ($option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'You do not have permission to access this.'
-                                               ));
+                'danger' => 'You do not have permission to access this.'
+            ));
             // Redirect
             $this->redirector('index');
         }
@@ -74,8 +74,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                     $optionMapper->delete($option);
 
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Option  {$this->view->escape($option->name)} was deleted successfully."
-                                                       ));
+                        'success' => "Option  {$this->view->escape($option->name)} was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }
@@ -125,14 +125,14 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                             Quotegen_Model_Mapper_OptionCategory::getInstance()->insert($optionCategory);
                         }
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Option {$values['name']} Created"
-                                                           ));
+                            'success' => "Option {$values['name']} Created"
+                        ));
                         if ($page == "options")
                         {
                             // User has cancelled. Go back to the edit page
                             $this->redirector('options', 'devicesetup', 'quotegen', array(
-                                                                                         'id' => $id
-                                                                                    ));
+                                'id' => $id
+                            ));
                         }
                         else
                         {
@@ -148,8 +148,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else // Cancel was hit: redirect user
@@ -158,8 +158,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 {
                     // User has cancelled. Go back to the edit page
                     $this->redirector('options', 'devicesetup', 'quotegen', array(
-                                                                                 'id' => $id
-                                                                            ));
+                        'id' => $id
+                    ));
                 }
                 else
                 {
@@ -180,8 +180,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         if (!$optionId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select an option first.'
-                                               ));
+                'warning' => 'Please select an option first.'
+            ));
             // Redirect
             $this->redirector('index');
         }
@@ -197,8 +197,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
         if ($option && $option->dealerId != Zend_Auth::getInstance()->getIdentity()->dealerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'You do not have permission to access this.'
-                                               ));
+                'danger' => 'You do not have permission to access this.'
+            ));
             // Redirect
             $this->redirector('index');
         }
@@ -260,8 +260,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                         }
                         $optionMapper->save($option, $optionId);
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Category setting was updated successfully."
-                                                           ));
+                            'success' => "Category setting was updated successfully."
+                        ));
 
                         $this->redirector('index');
                     }
@@ -273,8 +273,8 @@ class Quotegen_OptionController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else // Client hit cancel, redirect

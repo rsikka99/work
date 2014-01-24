@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Form_ReplacementPrinter
  */
@@ -26,16 +27,16 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
         $hiddenMode = new Zend_Form_Element_Hidden('form_mode');
         $hiddenMode->setValue("edit");
         $hiddenMode->setDecorators(array(
-                                        'ViewHelper'
-                                   ));
+            'ViewHelper'
+        ));
         array_push($elements, $hiddenMode);
         $elementCounter++;
 
         //hidden field for replacement_id when in request mode
         $element = new Zend_Form_Element_Hidden('replacement_id');
         $element->setDecorators(array(
-                                     'ViewHelper'
-                                ));
+            'ViewHelper'
+        ));
         array_push($elements, $element);
         $elementCounter++;
 
@@ -48,30 +49,30 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                         ->setAttrib('id', 'manufacturer_id')
                         ->setDescription('<div class="replacement_field" id="manufacturer_html"></div>')
                         ->setDecorators(array(
-                                             'ViewHelper',
-                                             array(
-                                                 'Description',
-                                                 array(
-                                                     'escape' => false,
-                                                     'tag'    => false
-                                                 )
-                                             ),
-                                             'Errors',
-                                             array(
-                                                 'HtmlTag',
-                                                 array(
-                                                     'tag' => 'dd',
-                                                     'id'  => 'manufacturer_id-element'
-                                                 )
-                                             ),
-                                             array(
-                                                 'Label',
-                                                 array(
-                                                     'tag'   => 'dt',
-                                                     'class' => 'details_label'
-                                                 )
-                                             )
-                                        ));
+                            'ViewHelper',
+                            array(
+                                'Description',
+                                array(
+                                    'escape' => false,
+                                    'tag'    => false
+                                )
+                            ),
+                            'Errors',
+                            array(
+                                'HtmlTag',
+                                array(
+                                    'tag' => 'dd',
+                                    'id'  => 'manufacturer_id-element'
+                                )
+                            ),
+                            array(
+                                'Label',
+                                array(
+                                    'tag'   => 'dt',
+                                    'class' => 'details_label'
+                                )
+                            )
+                        ));
         array_push($elements, $manufacturer_id);
         $elementCounter++;
 
@@ -84,30 +85,30 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                         ->setAttrib('id', 'printer_model')
                         ->setDescription('<div class="replacement_field" id="printer_model_html"></div>')
                         ->setDecorators(array(
-                                             'ViewHelper',
-                                             array(
-                                                 'Description',
-                                                 array(
-                                                     'escape' => false,
-                                                     'tag'    => false
-                                                 )
-                                             ),
-                                             'Errors',
-                                             array(
-                                                 'HtmlTag',
-                                                 array(
-                                                     'tag' => 'dd',
-                                                     'id'  => 'printer_model-element'
-                                                 )
-                                             ),
-                                             array(
-                                                 'Label',
-                                                 array(
-                                                     'tag'   => 'dt',
-                                                     'class' => 'details_label'
-                                                 )
-                                             )
-                                        ));
+                            'ViewHelper',
+                            array(
+                                'Description',
+                                array(
+                                    'escape' => false,
+                                    'tag'    => false
+                                )
+                            ),
+                            'Errors',
+                            array(
+                                'HtmlTag',
+                                array(
+                                    'tag' => 'dd',
+                                    'id'  => 'printer_model-element'
+                                )
+                            ),
+                            array(
+                                'Label',
+                                array(
+                                    'tag'   => 'dt',
+                                    'class' => 'details_label'
+                                )
+                            )
+                        ));
         array_push($elements, $manufacturer_id);
         $elementCounter++;
 
@@ -118,30 +119,30 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                      ->setOrder($elementCounter)
                      ->setAttrib('id', 'replacement_category')
                      ->setDecorators(array(
-                                          'ViewHelper',
-                                          array(
-                                              'Description',
-                                              array(
-                                                  'escape' => false,
-                                                  'tag'    => false
-                                              )
-                                          ),
-                                          'Errors',
-                                          array(
-                                              'HtmlTag',
-                                              array(
-                                                  'tag' => 'dd',
-                                                  'id'  => 'replacement_category-element'
-                                              )
-                                          ),
-                                          array(
-                                              'Label',
-                                              array(
-                                                  'tag'   => 'dt',
-                                                  'class' => 'details_label'
-                                              )
-                                          )
-                                     ));
+                         'ViewHelper',
+                         array(
+                             'Description',
+                             array(
+                                 'escape' => false,
+                                 'tag'    => false
+                             )
+                         ),
+                         'Errors',
+                         array(
+                             'HtmlTag',
+                             array(
+                                 'tag' => 'dd',
+                                 'id'  => 'replacement_category-element'
+                             )
+                         ),
+                         array(
+                             'Label',
+                             array(
+                                 'tag'   => 'dt',
+                                 'class' => 'details_label'
+                             )
+                         )
+                     ));
         array_push($elements, $toner_config);
         $elementCounter++;
 
@@ -153,37 +154,37 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                 ->setAttrib('size', 6)
                 ->addValidator(new Zend_Validate_Float())
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
+                    'min' => 1
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDescription('ppm')
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'print_speed-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'details_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'print_speed-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'details_label'
+                        )
+                    )
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
@@ -197,37 +198,37 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                 ->setAttrib('size', 6)
                 ->addValidator(new Zend_Validate_Float())
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 1
-                                                             )))
+                    'min' => 1
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDescription('dpi')
                 ->setDecorators(array(
-                                     'ViewHelper',
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'resolution-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'details_label'
-                                         )
-                                     )
-                                ));
+                    'ViewHelper',
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'resolution-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'details_label'
+                        )
+                    )
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);
@@ -241,37 +242,37 @@ class Proposalgen_Form_ReplacementPrinter extends Zend_Form
                 ->setAttrib('size', 6)
                 ->addValidator(new Zend_Validate_Float())
                 ->addValidator(new Zend_Validate_GreaterThan(array(
-                                                                  'min' => 0
-                                                             )))
+                    'min' => 0
+                )))
                 ->setAttrib('style', 'text-align: right')
                 ->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)')
                 ->setOrder($elementCounter)
                 ->setDescription('$')
                 ->setDecorators(array(
-                                     array(
-                                         'Description',
-                                         array(
-                                             'escape' => false,
-                                             'tag'    => false
-                                         )
-                                     ),
-                                     'ViewHelper',
-                                     'Errors',
-                                     array(
-                                         'HtmlTag',
-                                         array(
-                                             'tag' => 'dd',
-                                             'id'  => 'monthly_rate-element'
-                                         )
-                                     ),
-                                     array(
-                                         'Label',
-                                         array(
-                                             'tag'   => 'dt',
-                                             'class' => 'details_label'
-                                         )
-                                     )
-                                ));
+                    array(
+                        'Description',
+                        array(
+                            'escape' => false,
+                            'tag'    => false
+                        )
+                    ),
+                    'ViewHelper',
+                    'Errors',
+                    array(
+                        'HtmlTag',
+                        array(
+                            'tag' => 'dd',
+                            'id'  => 'monthly_rate-element'
+                        )
+                    ),
+                    array(
+                        'Label',
+                        array(
+                            'tag'   => 'dt',
+                            'class' => 'details_label'
+                        )
+                    )
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
         $element->getValidator('GreaterThan')->setMessage('Must be greater than 0.');
         array_push($elements, $element);

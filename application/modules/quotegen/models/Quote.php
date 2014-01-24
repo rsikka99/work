@@ -8,8 +8,8 @@
  */
 /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
 /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-/* @var $quoteDevice Quotegen_Model_QuoteDevice */
 
+/* @var $quoteDevice Quotegen_Model_QuoteDevice */
 class Quotegen_Model_Quote extends My_Model_Abstract
 {
     const QUOTE_TYPE_LEASED    = 'leased';

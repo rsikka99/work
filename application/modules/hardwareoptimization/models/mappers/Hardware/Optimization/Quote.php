@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote
  */
@@ -74,8 +75,8 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote extends My_M
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_quoteId} = ?" => $primaryKey
-                                                           ));
+            "{$this->col_quoteId} = ?" => $primaryKey
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -246,7 +247,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization_Quote extends My_M
     {
         $hardwareOptimizationQuote = $this->fetch(array("{$this->col_quoteId} = ?" => $quoteId));
 
-        if ($hardwareOptimizationQuote  instanceof Hardwareoptimization_Model_Hardware_Optimization_Quote)
+        if ($hardwareOptimizationQuote instanceof Hardwareoptimization_Model_Hardware_Optimization_Quote)
         {
             return Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationQuote->hardwareOptimizationId);
         }

@@ -66,22 +66,22 @@ class Quotegen_Form_Device extends EasyBib_Form
             $this->addElement($deviceName);
 
             $this->addElement('text', 'oemSku', array(
-                                                     'label'      => 'OEM SKU:',
-                                                     'required'   => true,
-                                                     'filters'    => array(
-                                                         'StringTrim',
-                                                         'StripTags'
-                                                     ),
-                                                     'validators' => array(
-                                                         array(
-                                                             'validator' => 'StringLength',
-                                                             'options'   => array(
-                                                                 1,
-                                                                 255
-                                                             )
-                                                         )
-                                                     )
-                                                ));
+                'label'      => 'OEM SKU:',
+                'required'   => true,
+                'filters'    => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                'validators' => array(
+                    array(
+                        'validator' => 'StringLength',
+                        'options'   => array(
+                            1,
+                            255
+                        )
+                    )
+                )
+            ));
 
             /* @var $deviceOption Quotegen_Model_DeviceOption */
             foreach ($device->getDeviceOptions() as $deviceOption)
@@ -95,10 +95,10 @@ class Quotegen_Form_Device extends EasyBib_Form
                     $deviceOption->includedQuantity = 0;
                 }
                 $optionElement = $this->createElement('text', "option-{$deviceOption->getOption()->id}", array(
-                                                                                                              'label' => $deviceOption->getOption()->name,
-                                                                                                              'value' => $deviceOption->includedQuantity,
-                                                                                                              'class' => 'span1'
-                                                                                                         ));
+                    'label' => $deviceOption->getOption()->name,
+                    'value' => $deviceOption->includedQuantity,
+                    'class' => 'span1'
+                ));
 
                 // Add the elements to the table
                 $this->addElement($optionElement);
@@ -120,23 +120,23 @@ class Quotegen_Form_Device extends EasyBib_Form
                 $masterDeviceList [$masterDevice->id] = $masterDevice->getFullDeviceName();
             }
             $this->addElement('select', 'masterDeviceId', array(
-                                                               'label'        => 'Master Device',
-                                                               'multiOptions' => $masterDeviceList
-                                                          ));
+                'label'        => 'Master Device',
+                'multiOptions' => $masterDeviceList
+            ));
         }
 
 
         // Add the submit button
         $this->addElement('submit', 'submit', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Save'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Save'
+        ));
 
         // Add the cancel button
         $this->addElement('submit', 'cancel', array(
-                                                   'ignore' => true,
-                                                   'label'  => 'Cancel'
-                                              ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
 
         EasyBib_Form_Decorator::setFormDecorator($this, EasyBib_Form_Decorator::BOOTSTRAP, 'submit', 'cancel');
     }
@@ -146,13 +146,13 @@ class Quotegen_Form_Device extends EasyBib_Form
         if ($this->_deviceId)
         {
             $this->setDecorators(array(
-                                      array(
-                                          'ViewScript',
-                                          array(
-                                              'viewScript' => 'device/form/edit.phtml'
-                                          )
-                                      )
-                                 ));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => 'device/form/edit.phtml'
+                    )
+                )
+            ));
         }
     }
 

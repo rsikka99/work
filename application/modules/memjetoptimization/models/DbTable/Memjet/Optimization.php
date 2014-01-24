@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_DbTable_Memjet_Optimization
  */

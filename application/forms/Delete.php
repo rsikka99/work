@@ -33,26 +33,26 @@ class Application_Form_Delete extends Twitter_Bootstrap_Form_Horizontal
 
         //setup cancel button
         $submit = $this->createElement('submit', 'cancel', array(
-                                                                'ignore' => true,
-                                                                'label'  => 'Cancel'
-                                                           ));
+            'ignore' => true,
+            'label'  => 'Cancel'
+        ));
         //setup submit button
         $cancel = $this->createElement('submit', 'submit', array(
-                                                                'ignore'     => true,
-                                                                'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
-                                                                'label'      => 'Delete'
-                                                           ));
+            'ignore'     => true,
+            'buttonType' => Twitter_Bootstrap_Form_Element_Submit::BUTTON_PRIMARY,
+            'label'      => 'Delete'
+        ));
 
         $this->addDisplayGroup(array(
-                                    $submit,
-                                    $cancel
-                               ), 'actions', array(
-                                                  'disableLoadDefaultDecorators' => true,
-                                                  'decorators'                   => array(
-                                                      'Actions'
-                                                  ),
-                                                  'class'                        => 'form-actions-center'
-                                             ));
+            $submit,
+            $cancel
+        ), 'actions', array(
+            'disableLoadDefaultDecorators' => true,
+            'decorators'                   => array(
+                'Actions'
+            ),
+            'class'                        => 'form-actions-center'
+        ));
 
     }
 }

@@ -39,8 +39,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function countByDeviceId ($deviceConfigurationId)
     {
         return $this->count(array(
-                                 "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-                            ));
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+        ));
     }
 
     /**
@@ -101,9 +101,9 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0],
-                                                                "{$this->col_optionId} = ?"              => $primaryKey [1]
-                                                           ));
+            "{$this->col_deviceConfigurationId} = ?" => $primaryKey [0],
+            "{$this->col_optionId} = ?"              => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -152,8 +152,8 @@ class Quotegen_Model_Mapper_DeviceConfigurationOption extends My_Model_Mapper_Ab
     public function deleteDeviceConfigurationOptionById ($deviceConfigurationId)
     {
         return $this->getDbTable()->delete(array(
-                                                "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
-                                           ));
+            "{$this->col_deviceConfigurationId} = ?" => $deviceConfigurationId
+        ));
     }
 
     /**

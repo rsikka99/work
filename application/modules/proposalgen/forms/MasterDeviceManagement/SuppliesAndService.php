@@ -25,9 +25,9 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
 
         $this->setMethod('post');
         $tonerConfigurationElement = $this->createElement('select', 'tonerConfigId', array(
-                                                                                          'label'    => 'Toner Configuration: ',
-                                                                                          'required' => false
-                                                                                     ));
+            'label'    => 'Toner Configuration: ',
+            'required' => false
+        ));
         if (!$this->_isAllowed)
         {
             $tonerConfigurationElement->setAttrib('disabled', 'disabled');
@@ -35,8 +35,8 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
 
 
         $isLeasedElement = $this->createElement('checkbox', 'isLeased', array(
-                                                                             'label' => 'Is Leased: '
-                                                                        ));
+            'label' => 'Is Leased: '
+        ));
 
         if (!$this->_isAllowed)
         {
@@ -47,19 +47,19 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
          * Leased Toner Yield
          */
         $leasedTonerYieldElement = $this->createElement('text', 'leasedTonerYield', array(
-                                                                                         'label'      => 'Leased Toner Yield',
-                                                                                         'filters'    => array(
-                                                                                             'StringTrim',
-                                                                                             'StripTags'
-                                                                                         ),
-                                                                                         'allowEmpty' => false,
-                                                                                         'validators' => array(
-                                                                                             array(
-                                                                                                 'validator' => 'Between',
-                                                                                                 'options'   => array('min' => 0, 'max' => 100000),
-                                                                                             ),
-                                                                                         ),
-                                                                                    ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'Leased Toner Yield',
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'allowEmpty' => false,
+            'validators' => array(
+                array(
+                    'validator' => 'Between',
+                    'options'   => array('min' => 0, 'max' => 100000),
+                ),
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
         if (!$this->_isAllowed)
         {
             $leasedTonerYieldElement->setAttrib('disabled', 'disabled');
@@ -68,78 +68,78 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
          * Parts Cost Per Page
          */
         $dealerPartsCPPElement = $this->createElement('text', 'dealerPartsCostPerPage', array(
-                                                                                             'label'      => 'Dealer Parts CPP:',
-                                                                                             'class'      => 'span4',
-                                                                                             'maxlength'  => 8,
-                                                                                             'required'   => $this->_isQuoteDevice,
-                                                                                             'validators' => array(
-                                                                                                 array(
-                                                                                                     'validator' => 'Between',
-                                                                                                     'options'   => array('min' => 0, 'max' => 5),
-                                                                                                 ),
-                                                                                             ),
-                                                                                             'filters'    => array(
-                                                                                                 'StringTrim',
-                                                                                                 'StripTags'
-                                                                                             ),
-                                                                                        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'Dealer Parts CPP:',
+            'class'      => 'span4',
+            'maxlength'  => 8,
+            'required'   => $this->_isQuoteDevice,
+            'validators' => array(
+                array(
+                    'validator' => 'Between',
+                    'options'   => array('min' => 0, 'max' => 5),
+                ),
+            ),
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
         /*
         * Labor Cost Per Page
         */
         $dealerLaborCPPElement = $this->createElement('text', 'dealerLaborCostPerPage', array(
-                                                                                             'label'      => 'Dealer Labor CPP:',
-                                                                                             'class'      => 'span4',
-                                                                                             'maxlength'  => 8,
-                                                                                             'required'   => $this->_isQuoteDevice,
-                                                                                             'validators' => array(
-                                                                                                 'float',
-                                                                                             ),
-                                                                                             'filters'    => array(
-                                                                                                 'StringTrim',
-                                                                                                 'StripTags'
-                                                                                             ),
-                                                                                        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'Dealer Labor CPP:',
+            'class'      => 'span4',
+            'maxlength'  => 8,
+            'required'   => $this->_isQuoteDevice,
+            'validators' => array(
+                'float',
+            ),
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
         /*
          * Parts Cost Per Page
          */
         $systemPartsCPPElement = $this->createElement('text', 'partsCostPerPage', array(
-                                                                                       'label'      => 'System Parts CPP:',
-                                                                                       'class'      => 'span4',
-                                                                                       'maxlength'  => 8,
-                                                                                       'allowEmpty' => true,
-                                                                                       'filters'    => array(
-                                                                                           'StringTrim',
-                                                                                           'StripTags'
-                                                                                       ),
-                                                                                       'validators' => array(
-                                                                                           array(
-                                                                                               'validator' => 'Between',
-                                                                                               'options'   => array('min' => 0, 'max' => 5),
-                                                                                           ),
-                                                                                       ),
-                                                                                  ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'System Parts CPP:',
+            'class'      => 'span4',
+            'maxlength'  => 8,
+            'allowEmpty' => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                array(
+                    'validator' => 'Between',
+                    'options'   => array('min' => 0, 'max' => 5),
+                ),
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
         /*
         * Labor Cost Per Page
         */
         $systemLaborCPPElement = $this->createElement('text', 'laborCostPerPage', array(
-                                                                                       'label'      => 'System Labor CPP:',
-                                                                                       'class'      => 'span4',
-                                                                                       'maxlength'  => 8,
-                                                                                       'allowEmpty' => true,
-                                                                                       'filters'    => array(
-                                                                                           'StringTrim',
-                                                                                           'StripTags'
-                                                                                       ),
-                                                                                       'validators' => array(
-                                                                                           'float',
-                                                                                           array(
-                                                                                               'validator' => 'Between',
-                                                                                               'options'   => array('min' => 0, 'max' => 5),
-                                                                                           ),
-                                                                                       ),
-                                                                                  ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'System Labor CPP:',
+            'class'      => 'span4',
+            'maxlength'  => 8,
+            'allowEmpty' => true,
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+            'validators' => array(
+                'float',
+                array(
+                    'validator' => 'Between',
+                    'options'   => array('min' => 0, 'max' => 5),
+                ),
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
         if (!$this->_isAllowed)
         {
@@ -151,17 +151,17 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
         * Labor Cost Per Page
         */
         $leaseBuybackPriceElement = $this->createElement('text', 'leaseBuybackPrice', array(
-                                                                                           'label'      => 'Lease Buyback Price:',
-                                                                                           'class'      => 'span4',
-                                                                                           'maxlength'  => 8,
-                                                                                           'validators' => array(
-                                                                                               'float',
-                                                                                           ),
-                                                                                           'filters'    => array(
-                                                                                               'StringTrim',
-                                                                                               'StripTags'
-                                                                                           ),
-                                                                                      ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+            'label'      => 'Lease Buyback Price:',
+            'class'      => 'span4',
+            'maxlength'  => 8,
+            'validators' => array(
+                'float',
+            ),
+            'filters'    => array(
+                'StringTrim',
+                'StripTags'
+            ),
+        ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
 
         $this->addDisplayGroup(array($dealerPartsCPPElement, $systemPartsCPPElement, $tonerConfigurationElement, $leaseBuybackPriceElement), 'leftSide');
         $this->addDisplayGroup(array($dealerLaborCPPElement, $systemLaborCPPElement, $isLeasedElement, $leasedTonerYieldElement), 'rightSide');
@@ -173,44 +173,44 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
         $leftSide = $this->getDisplayGroup('leftSide');
         $leftSide->setDecorators(array(
 
-                                      'FormElements',
-                                      array(
-                                          'Fieldset',
-                                          array(
-                                              'class' => 'pull-left half-width'
-                                          )
-                                      ),
-                                      array(
-                                          'HtmlTag',
-                                          array(
-                                              'tag'       => 'div',
-                                              'openOnly'  => true,
-                                              'class'     => 'clearfix',
-                                              'placement' => Zend_Form_Decorator_Abstract::PREPEND
-                                          )
-                                      )
-                                 ));
+            'FormElements',
+            array(
+                'Fieldset',
+                array(
+                    'class' => 'pull-left half-width'
+                )
+            ),
+            array(
+                'HtmlTag',
+                array(
+                    'tag'       => 'div',
+                    'openOnly'  => true,
+                    'class'     => 'clearfix',
+                    'placement' => Zend_Form_Decorator_Abstract::PREPEND
+                )
+            )
+        ));
         $rightSide = $this->getDisplayGroup('rightSide');
         $rightSide->setDecorators(array(
-                                       'FormElements',
+            'FormElements',
 
-                                       array(
-                                           'Fieldset',
-                                           array(
-                                               'class' => 'pull-right half-width'
-                                           )
-                                       ),
-                                       array(
-                                           'HtmlTag',
+            array(
+                'Fieldset',
+                array(
+                    'class' => 'pull-right half-width'
+                )
+            ),
+            array(
+                'HtmlTag',
 
-                                           array(
-                                               'tag'       => 'div',
-                                               'closeOnly' => true,
-                                               'class'     => 'clearfix',
-                                               'placement' => Zend_Form_Decorator_Abstract::APPEND
-                                           )
-                                       )
-                                  ));
+                array(
+                    'tag'       => 'div',
+                    'closeOnly' => true,
+                    'class'     => 'clearfix',
+                    'placement' => Zend_Form_Decorator_Abstract::APPEND
+                )
+            )
+        ));
         $tonerConfigMapper       = Proposalgen_Model_Mapper_TonerConfig::getInstance();
         $tonerConfigs            = $tonerConfigMapper->fetchAll(null, 'id asc');
         $tonerConfigMultiOptions = array();
@@ -225,9 +225,9 @@ class Proposalgen_Form_MasterDeviceManagement_SuppliesAndService extends Twitter
         $tonerConfigurationElement->addMultiOptions($tonerConfigMultiOptions);
 
         $leasedTonerYieldElement->addValidators(array(new Tangent_Validate_FieldDependsOnValue('isLeased', '1', array(
-                                                                                                                     new Zend_Validate_NotEmpty(),
-                                                                                                                     new Zend_Validate_Int(),
-                                                                                                                ))));
+            new Zend_Validate_NotEmpty(),
+            new Zend_Validate_Int(),
+        ))));
 
     }
 }

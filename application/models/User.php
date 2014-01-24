@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Application_Model_User
  */

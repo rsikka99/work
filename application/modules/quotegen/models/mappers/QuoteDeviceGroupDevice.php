@@ -106,9 +106,9 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_quoteDeviceId} = ?"      => $primaryKey [0],
-                                                                "{$this->col_quoteDeviceGroupId} = ?" => $primaryKey [1]
-                                                           ));
+            "{$this->col_quoteDeviceId} = ?"      => $primaryKey [0],
+            "{$this->col_quoteDeviceGroupId} = ?" => $primaryKey [1]
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -275,8 +275,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     public function fetchDevicesForQuoteDeviceGroup ($quoteDeviceGroupId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId
-                               ));
+            "{$this->col_quoteDeviceGroupId} = ?" => $quoteDeviceGroupId
+        ));
     }
 
     /**
@@ -291,8 +291,8 @@ class Quotegen_Model_Mapper_QuoteDeviceGroupDevice extends My_Model_Mapper_Abstr
     public function fetchDevicesForQuoteDevice ($quoteDeviceId)
     {
         return $this->fetchAll(array(
-                                    "{$this->col_quoteDeviceId} = ?" => $quoteDeviceId
-                               ));
+            "{$this->col_quoteDeviceId} = ?" => $quoteDeviceId
+        ));
     }
 }
 

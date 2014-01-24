@@ -12,111 +12,111 @@ class Admin_Form_MemjetDeviceSwaps extends Twitter_Bootstrap_Form_Horizontal
         $this->setAttrib('id', 'deviceSwap');
         $isAdmin             = $this->getView()->IsAllowed(Admin_Model_Acl::RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         $masterDeviceElement = $this->createElement("text", "masterDeviceId", array(
-                                                                                   "required" => true,
-                                                                                   "label"    => "Device Name",
-                                                                                   "class"    => "input-xlarge",
-                                                                                   "filters"  => array(
-                                                                                       'StringTrim',
-                                                                                       'StripTags'
-                                                                                   ),
-                                                                              )
+                "required" => true,
+                "label"    => "Device Name",
+                "class"    => "input-xlarge",
+                "filters"  => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+            )
         );
 
         $maxPageCountElement = $this->createElement("text", "maximumPageCount", array(
-                                                                                     "required"   => $isAdmin,
-                                                                                     "label"      => "System Max Page Volume",
-                                                                                     "class"      => "span4",
-                                                                                     "filters"    => array(
-                                                                                         'StringTrim',
-                                                                                         'StripTags'
-                                                                                     ),
-                                                                                     "validators" => array(
-                                                                                         array(
-                                                                                             'validator' => 'Between',
-                                                                                             'options'   => array(
-                                                                                                 'min'       => 0,
-                                                                                                 'max'       => PHP_INT_MAX,
-                                                                                                 'inclusive' => true
-                                                                                             )
-                                                                                         ),
-                                                                                         'Int'
-                                                                                     ),
-                                                                                )
+                "required"   => $isAdmin,
+                "label"      => "System Max Page Volume",
+                "class"      => "span4",
+                "filters"    => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                "validators" => array(
+                    array(
+                        'validator' => 'Between',
+                        'options'   => array(
+                            'min'       => 0,
+                            'max'       => PHP_INT_MAX,
+                            'inclusive' => true
+                        )
+                    ),
+                    'Int'
+                ),
+            )
         );
 
         $minPageCountElement = $this->createElement("text", "minimumPageCount", array(
-                                                                                     "required"   => $isAdmin,
-                                                                                     "label"      => "System Min Page Volume",
-                                                                                     "class"      => "span4",
-                                                                                     "filters"    => array(
-                                                                                         'StringTrim',
-                                                                                         'StripTags'
-                                                                                     ),
-                                                                                     "validators" => array(
-                                                                                         array(
-                                                                                             'validator' => 'Between',
-                                                                                             'options'   => array(
-                                                                                                 'min'       => 0,
-                                                                                                 'max'       => PHP_INT_MAX,
-                                                                                                 'inclusive' => true
-                                                                                             )
-                                                                                         ),
-                                                                                         'Int',
-                                                                                     ),
-                                                                                )
+                "required"   => $isAdmin,
+                "label"      => "System Min Page Volume",
+                "class"      => "span4",
+                "filters"    => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                "validators" => array(
+                    array(
+                        'validator' => 'Between',
+                        'options'   => array(
+                            'min'       => 0,
+                            'max'       => PHP_INT_MAX,
+                            'inclusive' => true
+                        )
+                    ),
+                    'Int',
+                ),
+            )
         );
 
         $dealerMaxPageCountElement = $this->createElement("text", "dealerMaximumPageCount", array(
-                                                                                                 "label"      => "Dealer Max Page Volume",
-                                                                                                 "class"      => "span4",
-                                                                                                 "filters"    => array(
-                                                                                                     'StringTrim',
-                                                                                                     'StripTags'
-                                                                                                 ),
-                                                                                                 "validators" => array(
-                                                                                                     array(
-                                                                                                         'validator' => 'Between',
-                                                                                                         'options'   => array(
-                                                                                                             'min'       => 0,
-                                                                                                             'max'       => PHP_INT_MAX,
-                                                                                                             'inclusive' => true
-                                                                                                         )
-                                                                                                     ),
-                                                                                                     'Int'
-                                                                                                 ),
-                                                                                            )
+                "label"      => "Dealer Max Page Volume",
+                "class"      => "span4",
+                "filters"    => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                "validators" => array(
+                    array(
+                        'validator' => 'Between',
+                        'options'   => array(
+                            'min'       => 0,
+                            'max'       => PHP_INT_MAX,
+                            'inclusive' => true
+                        )
+                    ),
+                    'Int'
+                ),
+            )
         );
 
         $dealerMinPageCountElement = $this->createElement("text", "dealerMinimumPageCount", array(
-                                                                                                 "label"      => "Dealer Min Page Volume",
-                                                                                                 "class"      => "span4",
-                                                                                                 "filters"    => array(
-                                                                                                     'StringTrim',
-                                                                                                     'StripTags'
-                                                                                                 ),
-                                                                                                 "validators" => array(
-                                                                                                     array(
-                                                                                                         'validator' => 'Between',
-                                                                                                         'options'   => array(
-                                                                                                             'min'       => 0,
-                                                                                                             'max'       => PHP_INT_MAX,
-                                                                                                             'inclusive' => true
-                                                                                                         )
-                                                                                                     ),
-                                                                                                     'Int',
-                                                                                                 ),
-                                                                                            )
+                "label"      => "Dealer Min Page Volume",
+                "class"      => "span4",
+                "filters"    => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                "validators" => array(
+                    array(
+                        'validator' => 'Between',
+                        'options'   => array(
+                            'min'       => 0,
+                            'max'       => PHP_INT_MAX,
+                            'inclusive' => true
+                        )
+                    ),
+                    'Int',
+                ),
+            )
         );
 
         $deviceTypeElement = $this->createElement("text", "deviceType", array(
-                                                                             "label"   => "Device Type",
-                                                                             "class"   => "span4",
-                                                                             "filters" => array(
-                                                                                 'StringTrim',
-                                                                                 'StripTags'
-                                                                             ),
-                                                                             'attribs' => array('disabled' => 'disabled'),
-                                                                        )
+                "label"   => "Device Type",
+                "class"   => "span4",
+                "filters" => array(
+                    'StringTrim',
+                    'StripTags'
+                ),
+                'attribs' => array('disabled' => 'disabled'),
+            )
         );
 
         // If we are not an admin then disable masterDeviceElement

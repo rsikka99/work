@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_FleetController
  */
@@ -187,8 +188,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
     }
 
@@ -286,8 +287,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             {
                 $this->_response->setHttpResponseCode(500);
                 $this->sendJson(array(
-                                     'error' => 'Sorting parameters are invalid'
-                                ));
+                    'error' => 'Sorting parameters are invalid'
+                ));
             }
         }
         else

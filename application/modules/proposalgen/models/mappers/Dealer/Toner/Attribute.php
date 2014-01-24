@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_Mapper_Dealer_Toner_Attribute
  */
@@ -73,9 +74,9 @@ class Proposalgen_Model_Mapper_Dealer_Toner_Attribute extends My_Model_Mapper_Ab
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-                                                                "{$this->col_tonerId} = ?"  => $primaryKey [0],
-                                                                "{$this->col_dealerId} = ?" => $primaryKey [1],
-                                                           ));
+            "{$this->col_tonerId} = ?"  => $primaryKey [0],
+            "{$this->col_dealerId} = ?" => $primaryKey [1],
+        ));
 
         // Save the object into the cache
         $this->saveItemToCache($object);

@@ -16,8 +16,7 @@ $section->addText('Cost Analyst Summary', array('bold' => true, 'size' => 12));
 
 // Table with values
 $tcStyle = $this->styles->tables->compare;
-$table = $section->addTable($tcStyle->tablestyle);
-;
+$table   = $section->addTable($tcStyle->tablestyle);;
 
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->span2Width, $tcStyle->header->header->cellStyle, 2)->addText('Current Fleet', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);

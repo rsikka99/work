@@ -17,6 +17,7 @@
  *      $users->getElement('myElementId')->setDecorators(array(
  *                                                   'ViewHelper'));
  */
+
 class Tangent_Form_Element_Note extends Zend_Form_Element_Xhtml
 {
     /**

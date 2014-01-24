@@ -16,8 +16,8 @@ $memjetOptimizationDevices = $this->memjetOptimizationDevices;
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
-$headerTextRun->addText('Flagged Devices','titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($memjetOptimizationDevices->flagged). ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText('Flagged Devices', 'titlepageHeaderFont');
+$headerTextRun->addText(' (' . count($memjetOptimizationDevices->flagged) . ' of ' . $memjetOptimizationDevices->getDeviceCount() . ')');
 
 $section->addText("These devices have been flagged for replacement based on operation reliability and not financial consideration.");
 
@@ -42,7 +42,7 @@ foreach ($memjetOptimizationDevices->flagged as $device)
     $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
 
     $table->addRow($tcStyle->body->rowheight);
-    $style = ($this->cycle(array($tcStyle->body->cell1->odd,$tcStyle->body->cell1->even))->next()->current());
+    $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
     $table->addRow($tcStyle->body->rowheight);
     $cell = $table->addCell($tcStyle->collWidth, $style);
@@ -54,8 +54,8 @@ foreach ($memjetOptimizationDevices->flagged as $device)
     $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 
     $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()): 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->monochromeCostPerPage,array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage,array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->colorCostPerPage, array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
     $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
 }

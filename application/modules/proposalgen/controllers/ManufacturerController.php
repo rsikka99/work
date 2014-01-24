@@ -39,8 +39,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
         if (!$manufacturerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a manufacturer to delete first.'
-                                               ));
+                'warning' => 'Please select a manufacturer to delete first.'
+            ));
             $this->redirector('index');
         }
 
@@ -50,8 +50,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
         if (!$manufacturerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the manufacturer to delete.'
-                                               ));
+                'danger' => 'There was an error selecting the manufacturer to delete.'
+            ));
             $this->redirector('index');
         }
 
@@ -69,8 +69,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                 {
                     $mapper->delete($manufacturer);
                     $this->_flashMessenger->addMessage(array(
-                                                            'success' => "Manufacturer  {$this->view->escape($manufacturer->fullname)} was deleted successfully."
-                                                       ));
+                        'success' => "Manufacturer  {$this->view->escape($manufacturer->fullname)} was deleted successfully."
+                    ));
                     $this->redirector('index');
                 }
             }
@@ -115,8 +115,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                             $mapper->insert($manufacturer);
 
                             $this->_flashMessenger->addMessage(array(
-                                                                    'success' => "Manufacturer " . $this->view->escape($manufacturer->fullname) . " was added successfully."
-                                                               ));
+                                'success' => "Manufacturer " . $this->view->escape($manufacturer->fullname) . " was added successfully."
+                            ));
 
                             // Reset the form after everything is saved successfully
                             $form->reset();
@@ -129,13 +129,13 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                                 // Duplicate column
                                 case 1062 :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Manufacturer already exists.'
-                                                                       ));
+                                        'danger' => 'Manufacturer already exists.'
+                                    ));
                                     break;
                                 default :
                                     $this->_flashMessenger->addMessage(array(
-                                                                            'danger' => 'Error saving to database.  Please try again.'
-                                                                       ));
+                                        'danger' => 'Error saving to database.  Please try again.'
+                                    ));
                                     break;
                             }
 
@@ -144,8 +144,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                         catch (Exception $e)
                         {
                             $this->_flashMessenger->addMessage(array(
-                                                                    'danger' => 'There was an error processing this request.  Please try again.'
-                                                               ));
+                                'danger' => 'There was an error processing this request.  Please try again.'
+                            ));
                             $form->populate($request->getPost());
                         }
                     }
@@ -179,8 +179,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
         if (!$manufacturerId)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'warning' => 'Please select a manufacturer to edit first.'
-                                               ));
+                'warning' => 'Please select a manufacturer to edit first.'
+            ));
             $this->redirector('index');
         }
 
@@ -191,8 +191,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
         if (!$manufacturer)
         {
             $this->_flashMessenger->addMessage(array(
-                                                    'danger' => 'There was an error selecting the manufacturer to edit.'
-                                               ));
+                'danger' => 'There was an error selecting the manufacturer to edit.'
+            ));
             $this->redirector('index');
         }
 
@@ -226,8 +226,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                         $mapper->save($manufacturer, $manufacturerId);
 
                         $this->_flashMessenger->addMessage(array(
-                                                                'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated successfully."
-                                                           ));
+                            'success' => "Manufacturer '" . $this->view->escape($manufacturer->fullname) . "' was updated successfully."
+                        ));
                     }
                     else
                     {
@@ -237,8 +237,8 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                 catch (InvalidArgumentException $e)
                 {
                     $this->_flashMessenger->addMessage(array(
-                                                            'danger' => $e->getMessage()
-                                                       ));
+                        'danger' => $e->getMessage()
+                    ));
                 }
             }
             else

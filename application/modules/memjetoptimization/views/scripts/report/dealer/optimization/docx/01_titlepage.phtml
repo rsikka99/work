@@ -29,7 +29,7 @@ $section->addText(' ', 'titlepage_address', 'titleStyle3');
 $section->addText(sprintf('Prepared For: %1$s', $this->memjetOptimization->getClient()->companyName), 'titlepage_subtitle', 'titleStyle3');
 
 // Parse the address
-$addressLines = explode("\n",$memjetOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
+$addressLines = explode("\n", $memjetOptimization->getClient()->getAddress()->getFullAddressMultipleLines());
 $addressCount = 1;
 foreach ($addressLines as $line)
 {
