@@ -330,6 +330,26 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $tonerLevelYellow;
 
     /**
+     * @var float
+     */
+    public $pageCoverageMonochrome;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageCyan;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageMagenta;
+
+    /**
+     * @var float
+     */
+    public $pageCoverageYellow;
+
+    /**
      * @var bool
      */
     public $reportsTonerLevels;
@@ -675,6 +695,26 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->tonerLevelYellow = $params->tonerLevelYellow;
         }
 
+        if (isset($params->pageCoverageMonochrome) && !is_null($params->pageCoverageMonochrome))
+        {
+            $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
+        }
+
+        if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
+        {
+            $this->pageCoverageCyan = $params->pageCoverageCyan;
+        }
+
+        if (isset($params->pageCoverageMagenta) && !is_null($params->pageCoverageMagenta))
+        {
+            $this->pageCoverageMagenta = $params->pageCoverageMagenta;
+        }
+
+        if (isset($params->pageCoverageYellow) && !is_null($params->pageCoverageYellow))
+        {
+            $this->pageCoverageYellow = $params->pageCoverageYellow;
+        }
+
         if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
         {
             $this->reportsTonerLevels = $params->reportsTonerLevels;
@@ -753,6 +793,10 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "tonerLevelCyan"           => $this->tonerLevelCyan,
             "tonerLevelMagenta"        => $this->tonerLevelMagenta,
             "tonerLevelYellow"         => $this->tonerLevelYellow,
+            "pageCoverageMonochrome"   => $this->pageCoverageMonochrome,
+            "pageCoverageCyan"         => $this->pageCoverageCyan,
+            "pageCoverageMagenta"      => $this->pageCoverageMagenta,
+            "pageCoverageYellow"       => $this->pageCoverageYellow,
             "reportsTonerLevels"       => $this->reportsTonerLevels,
         );
     }

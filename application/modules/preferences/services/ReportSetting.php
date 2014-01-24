@@ -60,6 +60,7 @@ class Preferences_Service_ReportSetting
             {
                 $this->_form->getElement("pageCoverageMono")->setDescription($populateSettings["pageCoverageMono"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
+                $this->_form->getElement("useDevicePageCoverages")->setDescription(($populateSettings["useDevicePageCoverages"]) ? 'Yes' : 'No');
                 $this->_form->getElement("assessmentReportMargin")->setDescription($populateSettings["assessmentReportMargin"]);
                 $this->_form->getElement("monthlyLeasePayment")->setDescription($populateSettings["monthlyLeasePayment"]);
                 $this->_form->getElement("defaultPrinterCost")->setDescription($populateSettings["defaultPrinterCost"]);

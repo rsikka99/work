@@ -52,6 +52,7 @@ class Preferences_Service_HardwareoptimizationSetting
             {
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
+                $this->_form->getElement("useDevicePageCoverages")->setDescription(($populateSettings["useDevicePageCoverages"]) ? "Yes" : "No");
                 $this->_form->getElement("costThreshold")->setDescription($populateSettings["costThreshold"]);
                 $this->_form->getElement("adminCostPerPage")->setDescription(number_Format($populateSettings["adminCostPerPage"], 4));
                 $this->_form->getElement("laborCostPerPage")->setDescription(number_Format($populateSettings["laborCostPerPage"], 4));

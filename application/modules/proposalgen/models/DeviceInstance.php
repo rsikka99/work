@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_DeviceInstance
  */
@@ -665,7 +666,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly(), $margin);
+            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly(), $margin);
         }
 
         return $this->_costOfBlackAndWhiteInkAndToner;
@@ -681,7 +682,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly(), $margin);
+            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly(), $margin);
         }
 
         return $this->_costOfColorInkAndToner;
@@ -697,7 +698,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getColorCostPerPageWithMargin ($costPerPageSetting, $margin)
     {
-        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, $margin);
+        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->colorCostPerPage, $margin);
     }
 
     /**
@@ -710,7 +711,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getMonochromeCostPerPageWithMargin ($costPerPageSetting, $margin)
     {
-        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage, $margin);
+        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->monochromeCostPerPage, $margin);
     }
 
     /**
@@ -905,7 +906,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $this;
     }
 
-        /**
+    /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float
@@ -917,8 +918,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->_cachedMonthlyBlackAndWhiteCost = array();
         }
-
-        $cacheKey = $costPerPageSetting->createCacheKey();
+        $cacheKey = $costPerPageSetting->createCacheKey() . '_device_instance' . $this->id;
         if (!array_key_exists($cacheKey, $this->_cachedMonthlyBlackAndWhiteCost))
         {
             $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
@@ -1235,7 +1235,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function getAction ()
     {
-        if (true)
+        if (!isset($this->_deviceAction))
         {
             if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombinedPageCount()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
             {
@@ -1411,7 +1411,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $masterDevice = $this->getMasterDevice();
         }
 
-        $cacheKey = $costPerPageSetting->createCacheKey() . "_" . (int)$masterDevice->id;
+        $cacheKey = $costPerPageSetting->createCacheKey() . "_" . (int)$masterDevice->id . "_device_instance" . $this->id;
 
         if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
         {
@@ -1421,7 +1421,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
             {
 
-                $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting));
+                $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting, $this));
 
                 $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->calculatedLaborCostPerPage + $masterDevice->calculatedPartsCostPerPage + $costPerPageSetting->adminCostPerPage;
                 if ($masterDevice->isColor())

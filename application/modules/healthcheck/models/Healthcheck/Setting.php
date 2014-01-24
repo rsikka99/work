@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_Model_Healthcheck_Setting
  */
@@ -25,6 +26,11 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
      * @var int
      */
     public $pageCoverageColor;
+
+    /**
+     * @var bool
+     */
+    public $useDevicePageCoverages = 0;
 
     /**
      * The labor cost per page
@@ -192,6 +198,10 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
         {
             $this->pageCoverageColor = $params->pageCoverageColor;
         }
+        if (isset($params->useDevicePageCoverages) && !is_null($params->useDevicePageCoverages))
+        {
+            $this->useDevicePageCoverages = $params->useDevicePageCoverages;
+        }
         if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
         {
             $this->laborCostPerPage = $params->laborCostPerPage;
@@ -275,6 +285,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
             "id"                           => $this->id,
             "pageCoverageMonochrome"       => $this->pageCoverageMonochrome,
             "pageCoverageColor"            => $this->pageCoverageColor,
+            "useDevicePageCoverages"       => $this->useDevicePageCoverages,
             "laborCostPerPage"             => $this->laborCostPerPage,
             "partsCostPerPage"             => $this->partsCostPerPage,
             "adminCostPerPage"             => $this->adminCostPerPage,

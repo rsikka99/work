@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Memjetoptimization_Model_Memjet_Optimization_Setting
  */
@@ -48,6 +49,11 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
      * @var float
      */
     public $pageCoverageColor;
+
+    /**
+     * @var float
+     */
+    public $useDevicePageCoverages = 0;
 
     /**
      * @var float
@@ -155,6 +161,11 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
             $this->pageCoverageColor = $params->pageCoverageColor;
         }
 
+        if (isset($params->useDevicePageCoverages) && !is_null($params->useDevicePageCoverages))
+        {
+            $this->useDevicePageCoverages = $params->useDevicePageCoverages;
+        }
+
         if (isset($params->lossThreshold) && !is_null($params->lossThreshold))
         {
             $this->lossThreshold = $params->lossThreshold;
@@ -201,6 +212,7 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
             "partsCostPerPage"               => $this->partsCostPerPage,
             "pageCoverageMonochrome"         => $this->pageCoverageMonochrome,
             "pageCoverageColor"              => $this->pageCoverageColor,
+            "useDevicePageCoverages"          => $this->useDevicePageCoverages,
             "lossThreshold"                  => $this->lossThreshold,
             "blackToColorRatio"              => $this->blackToColorRatio,
             "replacementColorRankSetId"      => $this->replacementColorRankSetId,

@@ -74,6 +74,7 @@ class Hardwareoptimization_Service_Setting
             $this->_form->getElement("laborCostPerPage")->setDescription("$" . $this->_populateSettings->laborCostPerPage . " / page");
             $this->_form->getElement("adminCostPerPage")->setDescription("$" . $this->_populateSettings->adminCostPerPage . " / page");
             $this->_form->getElement("costThreshold")->setDescription("$" . $this->_populateSettings->costThreshold);
+            $this->_form->getElement("useDevicePageCoverages")->setDescription(($this->_populateSettings->useDevicePageCoverages) ? 'Yes' : 'No');
             $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->targetMonochromeCostPerPage . " / page");
             $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $this->_populateSettings->targetColorCostPerPage . " / page");
 

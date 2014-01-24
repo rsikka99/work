@@ -87,10 +87,10 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
             <td class="debugNumber"><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ""; ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, array("precision" => 4)); ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, $reportMargin), array("precision" => 4)); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, array("precision" => 4)) : ""; ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, $reportMargin), array("precision" => 4)) : ""; ?></td>
+            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings, $deviceInstance)->monochromeCostPerPage, array("precision" => 4)); ?></td>
+            <td class="debugNumber"><?php echo $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings, $deviceInstance)->monochromeCostPerPage, $reportMargin), array("precision" => 4)); ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)$deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings, $deviceInstance)->colorCostPerPage, array("precision" => 4)) : ""; ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSettings, $deviceInstance)->colorCostPerPage, $reportMargin), array("precision" => 4)) : ""; ?></td>
             <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings, $reportMargin), array("precision" => 2)); ?></td>
             <td>
                 <table class="table-bordered table-condensed debugTable">

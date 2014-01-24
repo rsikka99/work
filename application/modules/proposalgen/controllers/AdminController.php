@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_AdminController
  */
@@ -91,11 +92,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // get toners for device
                 $select = $db->select()
                              ->from(array(
-                                         't' => 'toners'
-                                    ))
+                        't' => 'toners'
+                    ))
                              ->join(array(
-                                         'td' => 'device_toners'
-                                    ), 't.id = td.toner_id')
+                        'td' => 'device_toners'
+                    ), 't.id = td.toner_id')
                              ->where('td.master_device_id = ?', $deviceID);
                 $stmt   = $db->query($select);
 
@@ -112,14 +113,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
                 $select      = $db->select()
                                   ->from(array(
-                                              'md' => 'master_devices'
-                                         ))
+                        'md' => 'master_devices'
+                    ))
                                   ->joinLeft(array(
-                                                  'm' => 'manufacturers'
-                                             ), 'm.id = md.manufacturerId')
+                        'm' => 'manufacturers'
+                    ), 'm.id = md.manufacturerId')
                                   ->joinLeft(array(
-                                                  'rd' => 'replacement_devices'
-                                             ), 'rd.masterDeviceId = md.id')
+                        'rd' => 'replacement_devices'
+                    ), 'rd.masterDeviceId = md.id')
                                   ->where('md.id = ?', $deviceID);
                 $stmt        = $db->query($select);
                 $row         = $stmt->fetchAll();
@@ -209,8 +210,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 case "man" :
                     $select = $db->select();
                     $select->from(array(
-                                       'm' => 'manufacturers'
-                                  ));
+                        'm' => 'manufacturers'
+                    ));
                     $select->where('isDeleted = 0');
                     $select->order('fullname');
                     $stmt   = $db->query($select);
@@ -240,8 +241,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 case "color" :
                     $select = $db->select();
                     $select->from(array(
-                                       'tc' => 'toner_colors'
-                                  ));
+                        'tc' => 'toner_colors'
+                    ));
                     $select->order('name');
                     $stmt   = $db->query($select);
                     $result = $stmt->fetchAll();
@@ -402,11 +403,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     // GET ALL SAME COLOR TONERS FOR DEVICE
                     $select = $db->select();
                     $select->from(array(
-                                       'dt' => 'device_toners'
-                                  ));
+                        'dt' => 'device_toners'
+                    ));
                     $select->joinLeft(array(
-                                           't' => 'toners'
-                                      ), 'dt.toner_id = t.id');
+                        't' => 'toners'
+                    ), 'dt.toner_id = t.id');
                     $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $deviceToner->master_device_id);
                     $stmt        = $db->query($select);
                     $num_devices = $stmt->fetchAll();
@@ -420,14 +421,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // GET SAME COLOR TONERS
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'toners'
-                              ));
+                    't' => 'toners'
+                ));
                 $select->joinLeft(array(
-                                       'tc' => 'toner_colors'
-                                  ), 'tc.id = t.tonerColorId');
+                    'tc' => 'toner_colors'
+                ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
-                                       'm' => 'manufacturers'
-                                  ), 'm.id = t.manufacturerId');
+                    'm' => 'manufacturers'
+                ), 'm.id = t.manufacturerId');
                 $select->where('t.id != ' . $toner_id . ' AND t.tonerColorId = ' . $toner_color_id . $where);
                 $stmt   = $db->query($select);
                 $result = $stmt->fetchAll();
@@ -450,14 +451,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 $start  = $limit * $page - $limit;
                 $select = $db->select();
                 $select->from(array(
-                                   't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
+                        't' => 'toners'), array('id AS toners_id', 'sku', 'yield', 'cost')
                 );
                 $select->joinLeft(array(
-                                       'tc' => 'toner_colors'
-                                  ), 'tc.id = t.tonerColorId');
+                    'tc' => 'toner_colors'
+                ), 'tc.id = t.tonerColorId');
                 $select->joinLeft(array(
-                                       'm' => 'manufacturers'
-                                  ), 'm.id = t.manufacturerId');
+                    'm' => 'manufacturers'
+                ), 'm.id = t.manufacturerId');
                 $select->where('t.id != ' . $toner_id . ' AND t.tonerColorId = ' . $toner_color_id . $where);
                 $select->order($sidx . ' ' . $sord);
                 $select->limit($limit, $start);
@@ -528,11 +529,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                 // GET ALL SAME COLOR TONERS FOR DEVICE
                 $select = $db->select();
                 $select->from(array(
-                                   'dt' => 'device_toners'
-                              ));
+                    'dt' => 'device_toners'
+                ));
                 $select->joinLeft(array(
-                                       't' => 'toners'
-                                  ), 'dt.toner_id = t.id');
+                    't' => 'toners'
+                ), 'dt.toner_id = t.id');
                 $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                 $stmt        = $db->query($select);
                 $num_devices = $stmt->fetchAll();
@@ -626,11 +627,11 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                             // IT'S COLOR ($toner_color_id)
                             $select = $db->select();
                             $select->from(array(
-                                               'dt' => 'device_toners'
-                                          ));
+                                'dt' => 'device_toners'
+                            ));
                             $select->joinLeft(array(
-                                                   't' => 'toners'
-                                              ), 'dt.toner_id = t.id');
+                                't' => 'toners'
+                            ), 'dt.toner_id = t.id');
                             $select->where('t.tonerColorId = ' . $toner_color_id . ' AND dt.master_device_id = ' . $master_device_id);
                             $stmt        = $db->query($select);
                             $num_devices = $stmt->fetchAll();
@@ -648,8 +649,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                     }
 
                     $this->_flashMessenger->addMessage(array(
-                                                            "success" => "The toner has been replaced and deleted successfully."
-                                                       ));
+                        "success" => "The toner has been replaced and deleted successfully."
+                    ));
                 }
                 else
                 {
@@ -891,34 +892,34 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             // Get count
             $select = $db->select()
                          ->from(array(
-                                     't' => 'toners'
-                                ), $toner_fields_list)
+                    't' => 'toners'
+                ), $toner_fields_list)
                          ->joinLeft(array(
-                                         'dt' => 'device_toners'
-                                    ), 'dt.toner_id = t.id', array(
-                                                                  'master_device_id'
-                                                             ))
+                    'dt' => 'device_toners'
+                ), 'dt.toner_id = t.id', array(
+                    'master_device_id'
+                ))
                          ->joinLeft(array(
-                                         'tm' => 'manufacturers'
-                                    ), 'tm.id = t.manufacturerId', array(
-                                                                        'tm.fullname AS toner_manufacturer'
-                                                                   ))
+                    'tm' => 'manufacturers'
+                ), 'tm.id = t.manufacturerId', array(
+                    'tm.fullname AS toner_manufacturer'
+                ))
                          ->joinLeft(array(
-                                         'md' => 'master_devices'
-                                    ), 'md.id = dt.master_device_id')
+                    'md' => 'master_devices'
+                ), 'md.id = dt.master_device_id')
                          ->joinLeft(array(
-                                         'mdm' => 'manufacturers'
-                                    ), 'mdm.id = md.manufacturerId', array(
-                                                                          'mdm.fullname AS manufacturer_name'
-                                                                     ))
+                    'mdm' => 'manufacturers'
+                ), 'mdm.id = md.manufacturerId', array(
+                    'mdm.fullname AS manufacturer_name'
+                ))
                          ->joinLeft(array(
-                                         'tc' => 'toner_colors'
-                                    ), 'tc.id = t.tonerColorId', array(
-                                                                      'name AS toner_color_name'
-                                                                 ))
+                    'tc' => 'toner_colors'
+                ), 'tc.id = t.tonerColorId', array(
+                    'name AS toner_color_name'
+                ))
                          ->joinLeft(array(
-                                         'dta' => 'dealer_toner_attributes'
-                                    ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
+                    'dta' => 'dealer_toner_attributes'
+                ), "t.id = dta.tonerId AND dealerId = {$dealerId}", array('cost AS toner_dealer_price', 'dealerSku'))
                          ->where('t.id > 0' . $where);
 
             if ($where_compatible)
@@ -1084,14 +1085,14 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => $errorMessage
-                            ));
+                'error' => $errorMessage
+            ));
         }
         else
         {
             $this->sendJson(array(
-                                 'success' => true
-                            ));
+                'success' => true
+            ));
         }
     }
 
@@ -1135,12 +1136,12 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
             // Validate filtering parameters
             $filterCriteriaValidator = new Zend_Validate_InArray(array(
-                                                                      'haystack' => array(
-                                                                          'printer',
-                                                                          'model',
-                                                                          'onlyUnmapped'
-                                                                      )
-                                                                 ));
+                'haystack' => array(
+                    'printer',
+                    'model',
+                    'onlyUnmapped'
+                )
+            ));
             // If search criteria or value is null then we don't need either one of them. Same goes if our criteria is invalid.
             if ($searchCriteria != 'onlyUnmapped' && ($searchCriteria === '' || $searchValue === '' || !$filterCriteriaValidator->isValid($searchCriteria)))
             {
@@ -1172,8 +1173,8 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $this->_response->setHttpResponseCode(500);
             $this->sendJson(array(
-                                 'error' => 'Sorting parameters are invalid'
-                            ));
+                'error' => 'Sorting parameters are invalid'
+            ));
         }
     }
 

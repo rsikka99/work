@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_ViewModel_Optimization
  */
@@ -159,6 +160,7 @@ class Hardwareoptimization_ViewModel_Optimization
             $this->_costPerPageSettingForDealer->partsCostPerPage       = $reportSettings->partsCostPerPage;
             $this->_costPerPageSettingForDealer->monochromeTonerRankSet = $reportSettings->getDealerMonochromeRankSet();
             $this->_costPerPageSettingForDealer->colorTonerRankSet      = $reportSettings->getDealerColorRankSet();
+            $this->_costPerPageSettingForDealer->useDevicePageCoverages = $reportSettings->useDevicePageCoverages;
         }
 
         return $this->_costPerPageSettingForDealer;
@@ -183,6 +185,7 @@ class Hardwareoptimization_ViewModel_Optimization
             $this->_costPerPageSettingForReplacements->partsCostPerPage       = $reportSettings->partsCostPerPage;
             $this->_costPerPageSettingForReplacements->monochromeTonerRankSet = $reportSettings->getReplacementMonochromeRankSet();
             $this->_costPerPageSettingForReplacements->colorTonerRankSet      = $reportSettings->getReplacementColorRankSet();
+            $this->_costPerPageSettingForReplacements->useDevicePageCoverages = $reportSettings->useDevicePageCoverages;
         }
 
         return $this->_costPerPageSettingForReplacements;
@@ -271,9 +274,9 @@ class Hardwareoptimization_ViewModel_Optimization
             }
 
             usort($costArray, array(
-                                   $this,
-                                   "descendingSortDevicesByColorCost"
-                              ));
+                $this,
+                "descendingSortDevicesByColorCost"
+            ));
             $highCostDevices = array();
 
             foreach ($costArray as $costs)

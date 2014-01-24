@@ -89,17 +89,17 @@ class Healthcheck_Service_HealthcheckSettings
             $this->_form->populate(array_merge($this->_populateSettings->toArray(), $this->_populateSettings->getTonerRankSets()));
             $reportDate = date('m/d/Y', strtotime($this->_healthcheck->reportDate));
             $this->_form->populate(array(
-                                        'reportDate' => $reportDate,
-                                        'name'       => $this->_healthcheck->name,
-                                   ));
+                'reportDate' => $reportDate,
+                'name'       => $this->_healthcheck->name,
+            ));
             $this->_form->setDecorators(array(
-                                             array(
-                                                 'ViewScript',
-                                                 array(
-                                                     'viewScript' => 'forms/settings/healthcheck.phtml'
-                                                 )
-                                             )
-                                        ));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => 'forms/settings/healthcheck.phtml'
+                    )
+                )
+            ));
         }
 
         return $this->_form;
@@ -143,7 +143,7 @@ class Healthcheck_Service_HealthcheckSettings
 
             foreach ($validData as $key => $value)
             {
-                if (empty($value))
+                if (empty($value) && $value != 0)
                 {
                     unset($validData [$key]);
                 }
@@ -176,21 +176,21 @@ class Healthcheck_Service_HealthcheckSettings
                 Proposalgen_Model_Mapper_Toner_Vendor_Ranking::getInstance()->deleteByTonerVendorRankingId($this->_healthcheckSettings->customerMonochromeRankSetId);
             }
 
-
             // Override the setting so the id doesn't get overwritten when we populate
             $this->_defaultSettings->customerMonochromeRankSetId = $this->_healthcheckSettings->customerMonochromeRankSetId;
             $this->_defaultSettings->customerColorRankSetId      = $this->_healthcheckSettings->customerColorRankSetId;
 
             $this->_healthcheckSettings->populate($this->_defaultSettings->toArray());
             $this->_healthcheckSettings->populate($validData);
+
             // Restore the Id
             $this->_healthcheckSettings->id = $healthcheckSettingsId;
 
             // Populate before the other values are set since these fields are a calculated field.
             $this->getForm()->populate($this->_healthcheckSettings->toArray());
             $this->getForm()->populate(array(
-                                            'name' => $this->_healthcheck->name
-                                       ));
+                'name' => $this->_healthcheck->name
+            ));
             $this->_healthcheckSettings->costOfLabor    = ($this->_healthcheckSettings->costOfLabor != null) ? $this->_healthcheckSettings->costOfLabor : new Zend_Db_Expr('NULL');
             $this->_healthcheckSettings->hoursSpentOnIt = ($this->_healthcheckSettings->hoursSpentOnIt != null) ? $this->_healthcheckSettings->hoursSpentOnIt : new Zend_Db_Expr('NULL');
 

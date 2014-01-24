@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Service_Rms_Upload_Line
  */
@@ -408,10 +409,12 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
      * @var float
      */
     public $pageCoverageCyan;
+
     /**
      * @var float
      */
     public $pageCoverageMagenta;
+
     /**
      * @var float
      */
@@ -1069,6 +1072,14 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
                 }
             }
         }
+
+        /*
+         * Sanitize Coverages
+         */
+        $this->pageCoverageMonochrome = ($this->pageCoverageMonochrome == 5) ? null : $this->pageCoverageMonochrome;
+        $this->pageCoverageCyan       = ($this->pageCoverageCyan == 5) ? null : $this->pageCoverageCyan;
+        $this->pageCoverageMagenta    = ($this->pageCoverageMagenta == 5) ? null : $this->pageCoverageMagenta;
+        $this->pageCoverageYellow     = ($this->pageCoverageYellow == 5) ? null : $this->pageCoverageYellow;
 
         return true;
     }

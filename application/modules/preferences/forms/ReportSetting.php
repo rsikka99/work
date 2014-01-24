@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Preferences_Form_ReportSetting
  */
@@ -89,102 +90,105 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
 
         // Survey Elements
         $this->addElement('text', 'pageCoverageMono', array(
-                                                           'label'      => 'Page Coverage Monochrome',
-                                                           'append'     => '%',
-                                                           'validators' => $coverageValidator
-                                                      ));
+            'label'      => 'Page Coverage Monochrome',
+            'append'     => '%',
+            'validators' => $coverageValidator
+        ));
         $this->addElement('text', 'pageCoverageColor', array(
-                                                            'label'      => 'Page Coverage Color',
-                                                            'append'     => '%',
-                                                            'validators' => $coverageValidator
-                                                       ));
+            'label'      => 'Page Coverage Color',
+            'append'     => '%',
+            'validators' => $coverageValidator
+        ));
         // Assessment Elements
         $this->addElement('text', 'assessmentReportMargin', array(
-                                                                 'label'      => 'Pricing Margin',
-                                                                 'append'     => '%',
-                                                                 'validators' => $marginValidator
-                                                            ));
+            'label'      => 'Pricing Margin',
+            'append'     => '%',
+            'validators' => $marginValidator
+        ));
         $this->addElement('text', 'monthlyLeasePayment', array(
-                                                              'label'      => 'Monthly Lease Payment',
-                                                              'append'     => '$ / device',
-                                                              'validators' => $costValidator
-                                                         ));
+            'label'      => 'Monthly Lease Payment',
+            'append'     => '$ / device',
+            'validators' => $costValidator
+        ));
 
         $this->addElement('text', 'defaultPrinterCost', array(
-                                                             'label'      => 'Default Printer Cost',
-                                                             'append'     => '$ / device',
-                                                             'validators' => $costValidator
-                                                        ));
+            'label'      => 'Default Printer Cost',
+            'append'     => '$ / device',
+            'validators' => $costValidator
+        ));
         $this->addElement('text', 'leasedBwCostPerPage', array(
-                                                              'label'      => 'Leased Monochrome Cost',
-                                                              'append'     => '$ / page',
-                                                              'validators' => $cppValidator
-                                                         ));
+            'label'      => 'Leased Monochrome Cost',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'leasedColorCostPerPage', array(
-                                                                 'label'      => 'Leased Color Cost',
-                                                                 'append'     => '$ / page',
-                                                                 'validators' => $cppValidator
-                                                            ));
+            'label'      => 'Leased Color Cost',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'mpsBwCostPerPage', array(
-                                                           'label'      => 'Monochrome Cost',
-                                                           'append'     => '$ / page',
-                                                           'validators' => $cppValidator
-                                                      ));
+            'label'      => 'Monochrome Cost',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'mpsColorCostPerPage', array(
-                                                              'label'      => 'Color Cost',
-                                                              'append'     => '$ / page',
-                                                              'validators' => $cppValidator
-                                                         ));
+            'label'      => 'Color Cost',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'kilowattsPerHour', array(
-                                                           'label'      => 'Energy Cost',
-                                                           'append'     => '/ KWh',
-                                                           'validators' => $energyCostValidator
-                                                      ));
+            'label'      => 'Energy Cost',
+            'append'     => '/ KWh',
+            'validators' => $energyCostValidator
+        ));
 
 
         // Gross margin elements
         $this->addElement('text', 'actualPageCoverageMono', array(
-                                                                 'label'      => 'Page Coverage Monochrome',
-                                                                 'append'     => '%',
-                                                                 'validators' => $coverageValidator
-                                                            ));
+            'label'      => 'Page Coverage Monochrome',
+            'append'     => '%',
+            'validators' => $coverageValidator
+        ));
         $this->addElement('text', 'actualPageCoverageColor', array(
-                                                                  'label'      => 'Page Coverage Color',
-                                                                  'append'     => '%',
-                                                                  'validators' => $coverageValidator
-                                                             ));
+            'label'      => 'Page Coverage Color',
+            'append'     => '%',
+            'validators' => $coverageValidator
+        ));
+        $this->addElement('checkbox', 'useDevicePageCoverages', array(
+            'label' => 'Use Device Page Coverages',
+        ));
         $this->addElement('text', 'adminCostPerPage', array(
-                                                           'label'      => 'Admin Cost Per Page',
-                                                           'append'     => '$ / page',
-                                                           'validators' => $cppValidator
-                                                      ));
+            'label'      => 'Admin Cost Per Page',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'laborCostPerPage', array(
-                                                           'label'      => 'Labor Cost Per Page',
-                                                           'append'     => '$ / page',
-                                                           'validators' => $cppValidator
-                                                      ));
+            'label'      => 'Labor Cost Per Page',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
         $this->addElement('text', 'partsCostPerPage', array(
-                                                           'label'      => 'Parts Cost Per Page',
-                                                           'append'     => '$ / page',
-                                                           'validators' => $cppValidator
-                                                      ));
+            'label'      => 'Parts Cost Per Page',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
 
         $customerMonochromeVendor = $this->createElement('multiselect', 'customerMonochromeRankSetArray',
             array(
-                 "class" => "tonerMultiselect",
+                "class" => "tonerMultiselect",
             ));
         $customerColorVendor      = $this->createElement('multiselect', 'customerColorRankSetArray',
             array(
-                 "class" => "tonerMultiselect",
+                "class" => "tonerMultiselect",
             ));
 
         $dealerMonochromeVendor = $this->createElement('multiselect', 'dealerMonochromeRankSetArray',
             array(
-                 "class" => "tonerMultiselect",
+                "class" => "tonerMultiselect",
             ));
         $dealerColorVendor      = $this->createElement('multiselect', 'dealerColorRankSetArray',
             array(
-                 "class" => "tonerMultiselect",
+                "class" => "tonerMultiselect",
             ));
 
         // Set a span 2 to all elements that do not have a class
@@ -210,61 +214,76 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
                                      'kilowattsPerHour',
                                      $customerMonochromeVendor,
                                      $customerColorVendor,
-                               ), 'assessment', array('legend' => 'Assessment Settings',));
+        ), 'assessment', array('legend' => 'Assessment Settings',));
 
-        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $dealerMonochromeVendor, $dealerColorVendor), 'grossMargin', array('legend' => 'Gross Margin Settings'));
+        $this->addDisplayGroup(array('actualPageCoverageMono', 'actualPageCoverageColor', 'useDevicePageCoverages', 'adminCostPerPage', 'laborCostPerPage', 'partsCostPerPage', $dealerMonochromeVendor, $dealerColorVendor), 'grossMargin', array('legend' => 'Gross Margin Settings'));
 
         $this->setElementDecorators(array(
-                                         'FieldSize',
-                                         'ViewHelper',
-                                         'Addon',
-                                         'ElementErrors',
-                                         array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
-                                         'Wrapper',
-                                         array(array('data' => 'HtmlTag'), array('tag' => 'td')),
-                                         array('Description', array('tag' => 'td', 'placement' => 'prepend', 'class' => 'description')),
-                                         array('Label', array('tag' => 'td')),
-                                         array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
-                                    ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            'ElementErrors',
+            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+            'Wrapper',
+            array(array('data' => 'HtmlTag'), array('tag' => 'td')),
+            array('Description', array('tag' => 'td', 'placement' => 'prepend', 'class' => 'description')),
+            array('Label', array('tag' => 'td')),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group')),
+        ));
 
         $this->tonerSelectElementsDisplayGroups(2);
 
         // Form Buttons
         $submitButton = $this->createElement('submit', 'save', array(
-                                                                    'label'      => 'Submit',
-                                                                    'class'      => 'btn-primary',
-                                                                    'decorators' => array(
-                                                                        'FieldSize',
-                                                                        'ViewHelper',
-                                                                        'Addon',
-                                                                        'ElementErrors'
-                                                                    )
-                                                               ));
+            'label'      => 'Submit',
+            'class'      => 'btn-primary',
+            'decorators' => array(
+                'FieldSize',
+                'ViewHelper',
+                'Addon',
+                'ElementErrors'
+            )
+        ));
 
         $cancelButton = $this->createElement('submit', 'cancel', array(
-                                                                      'label'      => 'Cancel',
-                                                                      'decorators' => array(
-                                                                          'FieldSize',
-                                                                          'ViewHelper',
-                                                                          'Addon',
-                                                                          'ElementErrors'
-                                                                      )
-                                                                 ));
+            'label'      => 'Cancel',
+            'decorators' => array(
+                'FieldSize',
+                'ViewHelper',
+                'Addon',
+                'ElementErrors'
+            )
+        ));
 
         $this->addDisplayGroup(array($submitButton, $cancelButton), 'buttonGroup');
         $this->setDisplayGroupDecorators(array(
-                                              'FormElements',
-                                              array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
-                                              array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-                                              array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
-                                              'Fieldset'
-                                         ));
+            'FormElements',
+            array('ColumnHeader', array('data' => array('Property', 'Value'), 'placement' => 'prepend')),
+            array(array('table' => 'HtmlTag'), array('tag' => 'table')),
+            array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
+            'Fieldset'
+        ));
 
         $this->getDisplayGroup('buttonGroup')->setDecorators(array(
-                                                                  'FormElements',
-                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
-                                                                  'Fieldset'
-                                                             ));
+            'FormElements',
+            array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+            'Fieldset'
+        ));
+
+        $this->getElement("useDevicePageCoverages")->setDecorators(array("ViewHelper",
+                                                                         'FieldSize',
+                                                                         'ViewHelper',
+                                                                         'Addon',
+                                                                         'ElementErrors',
+                                                                         array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+                                                                         'Wrapper',
+                                                                         array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'value', 'style' => 'text-align:right')),
+                                                                         array('Description', array('tag' => 'td', 'placement' => 'prepend', 'class' => 'description')),
+                                                                         array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'switch', 'data-on-label' => 'Yes', 'data-off-label' => 'No', 'data-off' => 'danger', 'data-on' => 'success')),
+                                                                         array("label", array('class' => 'control-label')),
+                                                                         array(array('controls' => 'HtmlTag'), array('tag' => 'div', 'class' => 'control-group')),
+                                                                         array('Label', array('tag' => 'td')),
+                                                                         array(array('row' => 'HtmlTag'), array('tag' => 'tr', 'class' => 'control-group'))));
 
 
         $tonerVendors = Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAllForDropdown();
@@ -281,18 +300,18 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
     public function setUpFormWithDefaultDecorators ()
     {
         $this->setDisplayGroupDecorators(array(
-                                              'FormElements',
-                                              array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'class' => array('property', 'default', 'value'), 'placement' => 'prepend')),
-                                              array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-                                              array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
-                                              'Fieldset'
-                                         ));
+            'FormElements',
+            array('ColumnHeader', array('data' => array('Property', 'Default', 'Value'), 'class' => array('property', 'default', 'value'), 'placement' => 'prepend')),
+            array(array('table' => 'HtmlTag'), array('tag' => 'table')),
+            array(array('well' => 'HtmlTag'), array('tag' => 'div', 'class' => 'well')),
+            'Fieldset'
+        ));
         $this->tonerSelectElementsDisplayGroups(3);
         $this->getDisplayGroup('buttonGroup')->setDecorators(array(
-                                                                  'FormElements',
-                                                                  array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
-                                                                  'Fieldset'
-                                                             ));
+            'FormElements',
+            array(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'center-form-actions')),
+            'Fieldset'
+        ));
     }
 
     /**
@@ -303,74 +322,74 @@ class Preferences_Form_ReportSetting extends Twitter_Bootstrap_Form_Horizontal
     {
 
         $this->getElement("dealerMonochromeRankSetArray")->setDecorators(array(
-                                                                              'FieldSize',
-                                                                              'ViewHelper',
-                                                                              'Addon',
-                                                                              array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
-                                                                              'ElementErrors',
-                                                                              array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
-                                                                              array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
-                                                                              array('AddRowData', array('header'    => 'Monochrome Toner Preference',
-                                                                                                        "trClass"   => "control-group",
-                                                                                                        "tdAttr"    => "colspan={$colSpan}",
-                                                                                                        "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
-                                                                              array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
-                                                                                                                                       "tdClass"   => "short-row",
-                                                                                                                                       "tdAttr"    => "colspan={$colSpan}",
-                                                                                                                                       "placement" => Zend_Form_Decorator_Abstract::APPEND))
-                                                                         ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+            'ElementErrors',
+            array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+            array('AddRowData', array('header'    => 'Monochrome Toner Preference',
+                                      "trClass"   => "control-group",
+                                      "tdAttr"    => "colspan={$colSpan}",
+                                      "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+            array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                     "tdClass"   => "short-row",
+                                                                     "tdAttr"    => "colspan={$colSpan}",
+                                                                     "placement" => Zend_Form_Decorator_Abstract::APPEND))
+        ));
 
         $this->getElement("dealerColorRankSetArray")->setDecorators(array(
-                                                                         'FieldSize',
-                                                                         'ViewHelper',
-                                                                         'Addon',
-                                                                         array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
-                                                                         'ElementErrors',
-                                                                         array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
-                                                                         array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
-                                                                         array('AddRowData', array('header'    => 'Color Toner Preference',
-                                                                                                   "trClass"   => "control-group",
-                                                                                                   "tdAttr"    => "colspan={$colSpan}",
-                                                                                                   "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
-                                                                         array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
-                                                                                                                                  "tdClass"   => "short-row",
-                                                                                                                                  "tdAttr"    => "colspan={$colSpan}",
-                                                                                                                                  "placement" => Zend_Form_Decorator_Abstract::APPEND))
-                                                                    ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+            'ElementErrors',
+            array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+            array('AddRowData', array('header'    => 'Color Toner Preference',
+                                      "trClass"   => "control-group",
+                                      "tdAttr"    => "colspan={$colSpan}",
+                                      "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+            array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                     "tdClass"   => "short-row",
+                                                                     "tdAttr"    => "colspan={$colSpan}",
+                                                                     "placement" => Zend_Form_Decorator_Abstract::APPEND))
+        ));
         $this->getElement("customerMonochromeRankSetArray")->setDecorators(array(
-                                                                                'FieldSize',
-                                                                                'ViewHelper',
-                                                                                'Addon',
-                                                                                array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
-                                                                                'ElementErrors',
-                                                                                array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
-                                                                                array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
-                                                                                array('AddRowData', array('header'    => 'Monochrome Toner Preference',
-                                                                                                          "trClass"   => "control-group",
-                                                                                                          "tdAttr"    => "colspan={$colSpan}",
-                                                                                                          "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
-                                                                                array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
-                                                                                                                                         "tdClass"   => "short-row",
-                                                                                                                                         "tdAttr"    => "colspan={$colSpan}",
-                                                                                                                                         "placement" => Zend_Form_Decorator_Abstract::APPEND))
-                                                                           ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+            'ElementErrors',
+            array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+            array('AddRowData', array('header'    => 'Monochrome Toner Preference',
+                                      "trClass"   => "control-group",
+                                      "tdAttr"    => "colspan={$colSpan}",
+                                      "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+            array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                     "tdClass"   => "short-row",
+                                                                     "tdAttr"    => "colspan={$colSpan}",
+                                                                     "placement" => Zend_Form_Decorator_Abstract::APPEND))
+        ));
         $this->getElement("customerColorRankSetArray")->setDecorators(array(
-                                                                           'FieldSize',
-                                                                           'ViewHelper',
-                                                                           'Addon',
-                                                                           array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
-                                                                           'ElementErrors',
-                                                                           array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
-                                                                           array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
-                                                                           array('AddRowData', array('header'    => 'Color Toner Preference',
-                                                                                                     "trClass"   => "control-group",
-                                                                                                     "tdAttr"    => "colspan={$colSpan}",
-                                                                                                     "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
-                                                                           array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
-                                                                                                                                    "tdClass"   => "short-row",
-                                                                                                                                    "tdAttr"    => "colspan={$colSpan}",
-                                                                                                                                    "placement" => Zend_Form_Decorator_Abstract::APPEND))
-                                                                      ));
+            'FieldSize',
+            'ViewHelper',
+            'Addon',
+            array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'controls')),
+            'ElementErrors',
+            array(array('data' => 'HtmlTag'), array('tag' => 'td', "colspan" => $colSpan)),
+            array(array('row' => 'HtmlTag'), array('tag' => 'tr', "class" => "control-group")),
+            array('AddRowData', array('header'    => 'Color Toner Preference',
+                                      "trClass"   => "control-group",
+                                      "tdAttr"    => "colspan={$colSpan}",
+                                      "placement" => Zend_Form_Decorator_Abstract::PREPEND)),
+            array(array('defaultDescription' => 'AddRowData'), array('header'    => '<em>OEM toners will be used by default</em>',
+                                                                     "tdClass"   => "short-row",
+                                                                     "tdAttr"    => "colspan={$colSpan}",
+                                                                     "placement" => Zend_Form_Decorator_Abstract::APPEND))
+        ));
     }
 
     /**

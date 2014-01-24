@@ -55,6 +55,7 @@ class Preferences_Service_HealthcheckSetting
             {
                 $this->_form->getElement("pageCoverageMonochrome")->setDescription($populateSettings["pageCoverageMonochrome"]);
                 $this->_form->getElement("pageCoverageColor")->setDescription($populateSettings["pageCoverageColor"]);
+                $this->_form->getElement("useDevicePageCoverages")->setDescription(($populateSettings["useDevicePageCoverages"]) ? 'Yes' : 'No');
                 $this->_form->getElement("healthcheckMargin")->setDescription($populateSettings["healthcheckMargin"]);
                 $this->_form->getElement("monthlyLeasePayment")->setDescription($populateSettings["monthlyLeasePayment"]);
                 $this->_form->getElement("defaultPrinterCost")->setDescription($populateSettings["defaultPrinterCost"]);

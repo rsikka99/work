@@ -70,6 +70,7 @@ class Memjetoptimization_Service_Setting
             $this->_form->getElement("name")->setDescription("Memjet Optimization " . date('Y/m/d'));
             $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
             $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
+            $this->_form->getElement("useDevicePageCoverages")->setDescription(($this->_populateSettings->useDevicePageCoverages) ? 'Yes' : 'No');
             $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
             $this->_form->getElement("laborCostPerPage")->setDescription("$" . $this->_populateSettings->laborCostPerPage . " / page");
             $this->_form->getElement("adminCostPerPage")->setDescription("$" . $this->_populateSettings->adminCostPerPage . " / page");

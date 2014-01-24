@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Model_Assessment_Setting
  */
@@ -160,6 +161,7 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
      * @var int
      */
     public $dealerColorRankSetId;
+
     /**
      * @var float
      */
@@ -181,6 +183,11 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
      * @var float
      */
     public $targetColorCostPerPage;
+
+    /**
+     * @var bool
+     */
+    public $useDevicePageCoverages = 0;
 
     /**
      * Overrides all the settings.
@@ -295,6 +302,10 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
         {
             $this->dealerMonochromeRankSetId = $params->dealerMonochromeRankSetId;
         }
+        if (isset($params->useDevicePageCoverages) && !is_null($params->useDevicePageCoverages))
+        {
+            $this->useDevicePageCoverages = $params->useDevicePageCoverages;
+        }
     }
 
     /**
@@ -325,7 +336,7 @@ class Assessment_Model_Assessment_Setting extends My_Model_Abstract
             "customerMonochromeRankSetId" => $this->customerMonochromeRankSetId,
             "dealerColorRankSetId"        => $this->dealerColorRankSetId,
             "dealerMonochromeRankSetId"   => $this->dealerMonochromeRankSetId,
-
+            "useDevicePageCoverages"      => $this->useDevicePageCoverages,
         );
     }
 

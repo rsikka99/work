@@ -946,7 +946,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfColorDevices               = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
+                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $deviceInstance));
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
                     $numberOfColorDevices++;
@@ -983,7 +983,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfColorDevices = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting));
+                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $deviceInstance));
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
                     $numberOfColorDevices++;

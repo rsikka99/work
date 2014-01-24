@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Healthcheck_ViewModel_Abstract
  */
@@ -20,13 +21,6 @@ class Healthcheck_ViewModel_Abstract
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForCustomer;
-
-    /**
-     * The cost page setting when displaying numbers to a dealer
-     *
-     * @var Proposalgen_Model_CostPerPageSetting
-     */
-    protected $_costPerPageSettingForDealer;
 
     /**
      * The cost page setting when selecting replacement devices
@@ -88,6 +82,7 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->pageCoverageMonochrome = $this->getPageCoverageBlackAndWhite();
             $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $healthcheckSettings->getCustomerMonochromeRankSet();
             $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $healthcheckSettings->getCustomerColorRankSet();
+            $this->_costPerPageSettingForCustomer->useDevicePageCoverages = $healthcheckSettings->useDevicePageCoverages;
         }
 
         return $this->_costPerPageSettingForCustomer;

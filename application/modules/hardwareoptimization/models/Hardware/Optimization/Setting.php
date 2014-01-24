@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Hardwareoptimization_Model_Hardware_Optimization_Setting
  */
@@ -48,6 +49,11 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
      * @var float
      */
     public $pageCoverageColor;
+
+    /**
+     * @var bool
+     */
+    public $useDevicePageCoverages = 0;
 
     /**
      * @var int
@@ -145,6 +151,11 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             $this->pageCoverageColor = $params->pageCoverageColor;
         }
 
+        if (isset($params->useDevicePageCoverages) && !is_null($params->useDevicePageCoverages))
+        {
+            $this->useDevicePageCoverages = $params->useDevicePageCoverages;
+        }
+
         if (isset($params->replacementColorRankSetId) && !is_null($params->replacementColorRankSetId))
         {
             $this->replacementColorRankSetId = $params->replacementColorRankSetId;
@@ -181,6 +192,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_Setting extends My_Model_
             "partsCostPerPage"               => $this->partsCostPerPage,
             "pageCoverageMonochrome"         => $this->pageCoverageMonochrome,
             "pageCoverageColor"              => $this->pageCoverageColor,
+            "useDevicePageCoverages"         => $this->useDevicePageCoverages,
             "replacementColorRankSetId"      => $this->replacementColorRankSetId,
             "replacementMonochromeRankSetId" => $this->replacementMonochromeRankSetId,
             "dealerColorRankSetId"           => $this->dealerColorRankSetId,

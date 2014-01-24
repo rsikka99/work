@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Assessment_Form_Assessment_Settings
  */
@@ -85,9 +86,9 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                     ->setAttrib('style', 'text-align: right')
                     ->setRequired(true);
         $report_date->addFilters(array(
-                                      'StringTrim',
-                                      'StripTags'
-                                 ));
+            'StringTrim',
+            'StripTags'
+        ));
 
         $this->addElement($report_date);
 
@@ -99,9 +100,9 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                     ->setAttrib('class', 'span2')
                     ->setAttrib('style', 'text-align: right');
         $report_name->addFilters(array(
-                                      'StringTrim',
-                                      'StripTags'
-                                 ));
+            'StringTrim',
+            'StripTags'
+        ));
 
         $this->addElement($report_name);
         $generalGroup->elements [] = $report_name;
@@ -114,9 +115,9 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
         $pricing_margin->setLabel('Pricing Margin')
                        ->addValidator(new Zend_Validate_Float())
                        ->addValidator(new Zend_Validate_Between(array(
-                                                                     'min' => 0,
-                                                                     'max' => 99
-                                                                )))
+                           'min' => 0,
+                           'max' => 99
+                       )))
                        ->setAttrib('class', 'span2')
                        ->setAttrib('maxlength', 10)
                        ->setAttrib('style', 'text-align: right')
@@ -142,8 +143,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / device')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -161,8 +162,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / device')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -180,8 +181,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / page')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -199,8 +200,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / page')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -218,8 +219,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / page')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -239,8 +240,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / page')
                 ->addValidator('greaterThan', true, array(
-                                                         'min' => 0
-                                                    ));
+                    'min' => 0
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -258,10 +259,10 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                 ->setAttrib('inputprepend', '$')
                 ->setAttrib('inputappend', ' / KWh')
                 ->addValidator('between', true, array(
-                                                     'inclusive' => true,
-                                                     'min'       => 0,
-                                                     'max'       => 25
-                                                ));
+                    'inclusive' => true,
+                    'min'       => 0,
+                    'max'       => 25
+                ));
         $element->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($element);
@@ -289,8 +290,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                              ->addValidator(new Zend_Validate_Float())
                              ->addValidator(new Zend_Validate_Between(0, 100), false)
                              ->addValidator('greaterThan', true, array(
-                                                                      'min' => 0
-                                                                 ))
+                                 'min' => 0
+                             ))
                              ->setAttrib('class', 'span2')
                              ->setAttrib('maxlength', 10)
                              ->setAttrib('style', 'text-align: right')
@@ -307,8 +308,8 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                                    ->addValidator(new Zend_Validate_Float())
                                    ->addValidator(new Zend_Validate_Between(0, 100), false)
                                    ->addValidator('greaterThan', true, array(
-                                                                            'min' => 0
-                                                                       ))
+                                       'min' => 0
+                                   ))
                                    ->setAttrib('class', 'span2')
                                    ->setAttrib('maxlength', 10)
                                    ->setAttrib('style', 'text-align: right')
@@ -319,6 +320,40 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
 
         $this->addElement($actual_page_coverage_color);
         $dealerGroup->elements [] = $actual_page_coverage_color;
+
+        // Use Device Page Coverage
+        $useDevicePageCoverage = $this->createElement('checkbox', 'useDevicePageCoverages', array(
+            'label' => 'Use Device Page Coverages',
+        ));
+        $useDevicePageCoverage->setAttrib('data-defaultvalue', $this->_defaultSettings->useDevicePageCoverages ? 'Yes' : 'No');
+
+        $this->addElement($useDevicePageCoverage);
+
+        $dealerGroup->elements [] = $useDevicePageCoverage;
+        $this->getElement("useDevicePageCoverages")->setDecorators(
+             array(
+                 "ViewHelper",
+                 array(
+                     array('wrapper' => 'HtmlTag'),
+                     array(
+                         'tag'            => 'div',
+                         'class'          => 'switch',
+                         'data-on-label'  => 'Yes',
+                         'data-off-label' => 'No',
+                         'data-off'       => 'danger',
+                         'data-on'        => 'success'
+                     )
+                 ),
+                 array(
+                     array('donkeyKong' => 'HtmlTag'),
+                 ),
+                 array(
+                     "label",
+                     array('class' => 'control-label')
+                 ),
+             )
+        );
+
 
         // Admin Cost Per Page
         $admin_charge = new Zend_Form_Element_Text('adminCostPerPage');
@@ -332,10 +367,10 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                      ->setAttrib('inputprepend', '$')
                      ->setAttrib('inputappend', ' / page')
                      ->addValidator('between', true, array(
-                                                          'inclusive' => true,
-                                                          'min'       => 0,
-                                                          'max'       => 5
-                                                     ));
+                         'inclusive' => true,
+                         'min'       => 0,
+                         'max'       => 5
+                     ));
         $admin_charge->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($admin_charge);
@@ -353,10 +388,10 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                    ->setAttrib('inputprepend', '$')
                    ->setAttrib('inputappend', ' / page')
                    ->addValidator('between', true, array(
-                                                        'inclusive' => true,
-                                                        'min'       => 0,
-                                                        'max'       => 5
-                                                   ));
+                       'inclusive' => true,
+                       'min'       => 0,
+                       'max'       => 5
+                   ));
         $labor_cost->getValidator('Float')->setMessage('Please enter a number.');
 
         $this->addElement($labor_cost);
@@ -374,10 +409,10 @@ class Assessment_Form_Assessment_Settings extends Twitter_Bootstrap_Form_Vertica
                    ->setAttrib('inputprepend', '$')
                    ->setAttrib('inputappend', ' / page')
                    ->addValidator('between', true, array(
-                                                        'inclusive' => true,
-                                                        'min'       => 0,
-                                                        'max'       => 5
-                                                   ));
+                       'inclusive' => true,
+                       'min'       => 0,
+                       'max'       => 5
+                   ));
 
         $parts_cost->getValidator('Float')->setMessage('Please enter a number.');
 

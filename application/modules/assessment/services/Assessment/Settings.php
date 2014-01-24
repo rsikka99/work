@@ -92,18 +92,18 @@ class Assessment_Service_Assessment_Settings
             $reportName = $this->_assessment->name;
 
             $this->_form->populate(array(
-                                        'reportDate' => $reportDate,
-                                        'name'       => $reportName,
-                                   ));
+                'reportDate' => $reportDate,
+                'name'       => $reportName,
+            ));
 
             $this->_form->setDecorators(array(
-                                             array(
-                                                 'ViewScript',
-                                                 array(
-                                                     'viewScript' => 'forms/assessment/settings.phtml'
-                                                 )
-                                             )
-                                        ));
+                array(
+                    'ViewScript',
+                    array(
+                        'viewScript' => 'forms/assessment/settings.phtml'
+                    )
+                )
+            ));
         }
 
         return $this->_form;
@@ -148,7 +148,7 @@ class Assessment_Service_Assessment_Settings
 
             foreach ($validData as $key => $value)
             {
-                if (empty($value))
+                if (empty($value) && $value != 0)
                 {
                     unset($validData [$key]);
                 }

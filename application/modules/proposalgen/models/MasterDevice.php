@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Proposalgen_Model_MasterDevice
  */
@@ -803,17 +804,47 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * Calculates the cost per page for a master device.
      *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting  $costPerPageSetting
      *            The settings to use when calculating cost per page
+     *
+     * @param null|Proposalgen_Model_DeviceInstance $deviceInstance
      *
      * @return Proposalgen_Model_CostPerPage
      */
-    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting)
+    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $deviceInstance = null)
     {
         // Make sure our array is initialized
         if (!isset($this->_cachedCostPerPage))
         {
             $this->_cachedCostPerPage = array();
+        }
+        $oldMonochromePageCoverage = 0;
+        $oldColorPageCoverage      = 0;
+
+        if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance && $costPerPageSetting->useDevicePageCoverages)
+        {
+            $oldMonochromePageCoverage = $costPerPageSetting->pageCoverageMonochrome;
+            $oldColorPageCoverage      = $costPerPageSetting->pageCoverageColor;
+
+            /**
+             * Monochrome page coverage should be used from the device
+             */
+            if ($deviceInstance->pageCoverageMonochrome > 0)
+            {
+                $costPerPageSetting->pageCoverageMonochrome = $deviceInstance->pageCoverageMonochrome;
+            }
+
+            /**
+             * Color page coverage is added here. It should be noted that in our settings for "pageCoverageColor" that it already contains
+             */
+            if ($deviceInstance->pageCoverageCyan > 0 || $deviceInstance->pageCoverageMagenta > 0 || $deviceInstance->pageCoverageYellow > 0)
+            {
+                $oldColorCoverage                      = $costPerPageSetting->pageCoverageColor / 4;
+                $costPerPageSetting->pageCoverageColor = ($deviceInstance->pageCoverageMonochrome > 0) ? $deviceInstance->pageCoverageMonochrome : $oldColorCoverage; // Mono compensation
+                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageCyan > 0) ? $deviceInstance->pageCoverageCyan : $oldColorCoverage;
+                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageMagenta > 0) ? $deviceInstance->pageCoverageMagenta : $oldColorCoverage;
+                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageYellow > 0) ? $deviceInstance->pageCoverageYellow : $oldColorCoverage;
+            }
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
@@ -836,6 +867,19 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             }
 
             $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+        }
+
+        /**
+         * We must reset page coverages to original values
+         */
+        if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+        {
+            // Do some page coverage stuff
+            if ($costPerPageSetting->useDevicePageCoverages)
+            {
+                $costPerPageSetting->pageCoverageMonochrome = $oldMonochromePageCoverage;
+                $costPerPageSetting->pageCoverageColor      = $oldColorPageCoverage;
+            }
         }
 
         return $this->_cachedCostPerPage [$cacheKey];

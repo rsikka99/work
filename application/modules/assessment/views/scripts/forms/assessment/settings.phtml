@@ -24,13 +24,24 @@ $tonerVendorElements = array('dealerMonochromeRankSetArray' => 'Monochrome Toner
                         <tr style="height: 50px;">
                             <td style="padding-left: 20px;"><?php echo $element->getLabel(); ?></td>
                             <td><?php echo ($inputPrepend) ? : ""; ?><?php echo $element->getAttrib('data-defaultvalue'); ?><?php echo ($inputAppend) ? : ""; ?></td>
-                            <td style="text-align: right;">
+                            <td>
                                 <?php if ($element instanceof ZendX_JQuery_Form_Element_UiWidget) : ?>
                                     <div class='control-group '>
                                         <div class='controls'>
                                             <div class='input-append'>
                                                 <?php echo $element->renderUiWidgetElement(); ?>
                                                 <span class='add-on' style="width: 65px;"><?php echo $inputPrepend . ' ' . $inputAppend; ?></span>;
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php else :
+                                $errors = ($element->hasErrors()) ? 'error' : null;
+                                ?>
+                                <?php if ($element instanceof Zend_Form_Element_Checkbox) : ?>
+                                    <div class='control-group '>
+                                        <div class='controls'>
+                                            <div class='input-append'>
+                                                <?php echo $element->removeDecorator('label'); ?>
                                             </div>
                                         </div>
                                     </div>
@@ -47,6 +58,7 @@ $tonerVendorElements = array('dealerMonochromeRankSetArray' => 'Monochrome Toner
                                             <span class='help-inline'> <?php echo $errorMessages; ?> </span>
                                         <?php endforeach; ?>
                                     </div>
+                                    <?php endif; ?>
                                     <?php endif; ?>
                             </td>
                         </tr>
