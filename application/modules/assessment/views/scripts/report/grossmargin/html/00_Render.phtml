@@ -113,8 +113,8 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         <th class="column9">Toner Yield</th>
         <th class="column10">CPP</th>
         <th class="column11">Total Printing Cost</th>
-        <th class="column12">Dealer SKUs</th>
-        <th class="column13">System SKUs</th>
+        <th class="column12"><?php echo My_Brand::$dealerSku; ?>s</th>
+        <th class="column13">OEM SKUs</th>
     </tr>
     </thead>
     <tbody>

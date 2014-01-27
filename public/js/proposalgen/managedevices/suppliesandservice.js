@@ -69,7 +69,7 @@ function loadSuppliesAndService()
                     width   : 80,
                     name    : 'skuModified',
                     index   : 'dealerSku',
-                    label   : '(Your SKU)<br/>MFG. Part #',
+                    label   : '(' + dealerSkuName + ')<br/>OEM SKU',
                     sortable: true
                 },
                 {
@@ -472,7 +472,7 @@ function loadSuppliesAndService()
                     width: 80,
                     name : 'skuModified',
                     index: 'dealerSku',
-                    label: '(Your SKU)<br/>MFG. Part #'
+                    label: '(' + dealerSkuName + ')<br/>OEM SKU'
                 },
                 {
                     width   : 213,
@@ -1196,7 +1196,7 @@ function loadReplacementGrids()
                     width: 300,
                     name : 'skuModified',
                     index: 'sku',
-                    label: '(Your SKU)<br/>MFG. Part #'
+                    label: '(' + dealerSkuName + ')<br/>OEM SKU'
                 },
                 {
                     width   : 295,
@@ -1353,7 +1353,7 @@ function loadReplacementGrids()
                     width: 80,
                     name : 'skuModified',
                     index: 'sku',
-                    label: '(Your SKU)<br/>MFG. Part #'
+                    label: '(' + dealerSkuName + ')<br/>OEM SKU'
                 },
                 {
                     width : 220,
@@ -1536,8 +1536,8 @@ function loadReplacementGrids()
             data    : function (term, page)
             {
                 return {
-                    manufacturerName         : term, // search term
-                    page_limit: 10
+                    manufacturerName: term, // search term
+                    page_limit      : 10
                 };
             },
             results : function (data, page)

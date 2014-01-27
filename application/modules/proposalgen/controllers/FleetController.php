@@ -558,6 +558,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "isManaged"                => $deviceInstance->isManaged,
                         "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
                         "ampv"                     => number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
+                        "reportsTonerLevels"       => $deviceInstance->reportsTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
                         "validToners"              => $deviceInstance->hasValidToners()
                     );
@@ -566,12 +567,15 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
                     if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
                     {
-                        $row["mappedToDeviceName"] = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
+                        $row["mappedToDeviceName"]              = $deviceInstance->getMasterDevice()->getManufacturer()->fullname . " " . $deviceInstance->getMasterDevice()->modelName;
+                        $row["isCapableOfReportingTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? "Yes" : "No";
                     }
                     else
                     {
-                        $row["mappedToDeviceName"] = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
+                        $row["mappedToDeviceName"]              = $deviceInstance->getRmsUploadRow()->getManufacturer()->fullname . " " . $deviceInstance->getRmsUploadRow()->modelName;
+                        $row["isCapableOfReportingTonerLevels"] = "No";
                     }
+
                     $rows[] = $row;
 
                 }
@@ -1181,7 +1185,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse['masterDevice']['wattsPowerIdle']     = number_format($jsonResponse['masterDevice']['wattsPowerIdle']);
                         $jsonResponse['masterDevice']['leasedTonerYield']   = number_format($jsonResponse['masterDevice']['leasedTonerYield']);
                         $jsonResponse["masterDevice"]["manufacturer"]       = $deviceInstance->getMasterDevice()->getManufacturer()->toArray();
-                        $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->isCapableOfReportingTonerLevels();
+                        $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels;
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
                         $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
                         $jsonResponse["masterDevice"]["toners"]             = [];

@@ -116,7 +116,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
             $fleetAttributesData[$deviceCounter]['Monthly Page Volume']               = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();
             $fleetAttributesData[$deviceCounter]['Suggested Maximum Page Volume']     = $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer());
             $fleetAttributesData[$deviceCounter]['Percent of Total Page Volume']      = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() / $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $fleetAttributesData[$deviceCounter]['Reports Toner Levels']              = $deviceInstance->getMasterDevice()->reportsTonerLevels ? 'Yes' : 'No';
+            $fleetAttributesData[$deviceCounter]['Reports Toner Levels']              = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels ? 'Yes' : 'No';
             $fleetAttributesData[$deviceCounter]['Compatible with ' . My_Brand::$jit] = $deviceInstance->getMasterDevice()->isJitCompatible($dealerId) ? 'Yes' : 'No';
             $fleetAttributesData[$deviceCounter]['Is Managed']                        = $deviceInstance->isLeased ? 'No' : ($deviceInstance->isManaged ? 'Yes' : 'No');
             $fleetAttributesData[$deviceCounter]['Can Copy/Scan']                     = $deviceInstance->getMasterDevice()->isCopier ? 'Yes' : 'No';

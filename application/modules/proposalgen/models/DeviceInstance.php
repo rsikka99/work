@@ -1445,7 +1445,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function isCapableOfReportingTonerLevels ()
     {
         // Always use the master device record. This way administrators can control which devices can and can not report toner levels.
-        $reportsTonerLevels = (!$this->getMasterDevice()) ? false : $this->getMasterDevice()->reportsTonerLevels;
+        $reportsTonerLevels = (!$this->getMasterDevice()) ? false : $this->getMasterDevice()->isCapableOfReportingTonerLevels;
 
         return $reportsTonerLevels;
     }

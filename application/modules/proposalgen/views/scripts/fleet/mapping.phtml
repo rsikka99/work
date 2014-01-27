@@ -1,5 +1,6 @@
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
+var dealerSkuName = '<?php echo My_Brand::$dealerSku;?>';
 var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
 <?php $this->headScript()->captureEnd(); ?>
 <?php $this->headScript()->appendFile($this->baseUrl('js/quotegen/devicesetup/deviceSetup.js'))

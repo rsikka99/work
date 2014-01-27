@@ -130,8 +130,8 @@ if ($this->suppliesAndService)
                         <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='availableTonersClearManSearch' style="margin-left:4px" />
                         Filter:
                         <select id="availableTonersFilter" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
-                            <option value="dealerSku">Your SKU</option>
-                            <option value="sku">MFG. Part #</option>
+                            <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
+                            <option value="sku">OEM SKU</option>
                             <option value="tonerColorId">Color</option>
                             <option value="isSystemDevice">Unapproved</option>
                         </select>
@@ -194,8 +194,8 @@ if ($this->suppliesAndService)
                         <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='replacementTonersClearManSearch' style="margin-left:4px" />
                         Filter:
                         <select id="replacementTonersFilter" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
-                            <option value="dealerSku">Your SKU</option>
-                            <option value="sku">MFG. Part #</option>
+                            <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
+                            <option value="sku">OEM SKU</option>
                         </select>
                         <input type="text" id="replacementTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
                         <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
@@ -284,7 +284,7 @@ if ($this->availableOptions)
             Filter:
             <select id="optionFilterList" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
                 <option value="oemSku">OEM SKU</option>
-                <option value="dealerSku">Dealer SKU</option>
+                <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
                 <option value="option">Option</option>
                 <option value="description">Description</option>
             </select>

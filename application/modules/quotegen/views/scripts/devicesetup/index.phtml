@@ -9,8 +9,9 @@ $this->headScript()
      ->appendFile($this->baseUrl('js/proposalgen/managedevices/hardwareconfigurations.js'));
 
 $this->headScript()->captureStart('append', 'text/javascript'); ?>
-var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false');
-$this->headScript()->captureEnd();
+var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
+var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
+<?php $this->headScript()->captureEnd();
 ?>
 <div class="clearfix">
     <div class="page-header">
@@ -26,7 +27,7 @@ $this->headScript()->captureEnd();
                     <select name="criteria_filter" id="criteria_filter" class="filter_dropdown" style="width: 200px; margin: 0px 0px 0px 26px;">
                         <option value="deviceName">Device Name</option>
                         <option value="oemSku">OEM SKU</option>
-                        <option value="dealerSku">Dealer SKU</option>
+                        <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
                     </select>
                     <label for="txtCriteria" style="padding: 0px 0px 0px 10px;">For</label>
                     <input type="text" name="txtCriteria" style="width: 200px;" id="txtCriteria" value="<?php echo $this->pf_model_id; ?>" />

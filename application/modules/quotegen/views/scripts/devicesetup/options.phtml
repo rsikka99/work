@@ -65,7 +65,7 @@ $id = $this->id;
                         <option value="oemSku" <?php if ($this->search_filter == 'oemSku')
                         {
                             echo "selected";
-                        } ?>>Dealer SKU
+                        } ?>><?php My_Brand::$dealerSku;?>
                         </option>
                         <option value="name" <?php if ($this->search_filter == 'name')
                         {
@@ -92,7 +92,7 @@ $id = $this->id;
                 <table class="table table-bordered table-striped table-condensed">
                     <tr>
                         <th style="width: 120px;">OEM SKU</th>
-                        <th style="width: 120px;">Dealer SKU</th>
+                        <th style="width: 120px;"><?php My_Brand::$dealerSku;?></th>
                         <th style="width: 220px;">Option</th>
                         <th>Description</th>
                         <th style="width: 85px; text-align: center;">Action</th>

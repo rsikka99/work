@@ -55,7 +55,7 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
         $this->addElement($availableTonersColorIdElement);
 
         $this->addElement('text', 'availableTonersdealerSku', array(
-            'label'     => 'Your SKU:',
+            'label'     => My_Brand::$dealerSku,
             'class'     => 'span3',
             'required'  => false,
             'maxlength' => 255,
@@ -73,10 +73,10 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
         $tonerMapper = Proposalgen_Model_Mapper_Toner::getInstance();
 
         $dbNoRecordExistsValidator = $tonerMapper->getDbNoRecordExistsValidator($this->_id);
-        $dbNoRecordExistsValidator->setMessage("MFG. Part # is already in use");
+        $dbNoRecordExistsValidator->setMessage("OEM SKU is already in use");
 
         $availableTonersSystemSkuElement = $this->createElement('text', 'availableTonerssystemSku', array(
-            'label'      => 'MFG. Part #',
+            'label'      => 'OEM SKU',
             'class'      => 'span3',
             'required'   => true,
             'maxlength'  => 255,

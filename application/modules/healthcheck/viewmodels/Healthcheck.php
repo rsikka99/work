@@ -809,7 +809,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                         if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHOLD)
                         {
                             //Check to see if it is reporting toner levels
-                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->isLeased)
+                            if ($deviceInstance->reportsTonerLevels || $deviceInstance->isLeased)
                             {
                                 /**
                                  * We are a fully optimized device!
@@ -1179,7 +1179,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $devicesReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->isCapableOfReportingTonerLevels())
+            if ($device->reportsTonerLevels)
             {
                 $devicesReportingTonerLevels[] = $device;
             }
@@ -1196,7 +1196,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $devicesNotReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->isCapableOfReportingTonerLevels() == false)
+            if ($device->reportsTonerLevels == false)
             {
                 $devicesNotReportingTonerLevels[] = $device;
             }
@@ -1965,7 +1965,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $deviceCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->isCapableOfReportingTonerLevels())
+                if ($deviceInstance->reportsTonerLevels)
                 {
                     $deviceCount++;
                 }
@@ -2407,7 +2407,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $a3CapableDeviceCount    = number_format(($this->getDevices()->a3DeviceInstances->getCount() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100, 0);
             $a3NonCapableDeviceCount = 100 - $a3CapableDeviceCount;
-            $a3CapableGraph          = new gchart\gPie3DChart(280, 210);
+            $a3CapableGraph          = new gchart\gPie3DChart(290, 210);
             $a3CapableGraph->setTitle("Percent of A3-Capable devices");
             $a3CapableGraph->addDataSet(array(
                 $a3CapableDeviceCount,
@@ -2434,7 +2434,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $a3PageCountPercent      = number_format(($this->getDevices()->a3DeviceInstances->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100, 0);
             $a3NonA3PageCountPercent = 100 - $a3PageCountPercent;
-            $a3CapableGraph          = new gchart\gPie3DChart(280, 210);
+            $a3CapableGraph          = new gchart\gPie3DChart(290, 210);
             $a3CapableGraph->setTitle("Percent of A3 Pages");
             $a3CapableGraph->addDataSet(array(
                 $a3PageCountPercent,
@@ -2959,8 +2959,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setLegendPosition("bv");
 
             $barGraph->setLegend(array(
-                "Managed (" . My_Brand::$jit . ")",
-                "Unmanaged",
+                "Managed/On " . My_Brand::$jit,
+                "Not " . My_Brand::$jit . " Compatible",
                 "Compatible (" . My_Brand::$jit . ")",
             ));
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2975,8 +2975,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged    = "Managed (" . My_Brand::$jit . ")";
-            $pagesPrintedOnUnmanaged  = "Unmanaged";
+            $pagesPrintedOnManaged    = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnUnmanaged  = "Not " . My_Brand::$jit . " Compatible";
             $pagesPrintedOnCompatible = "Compatible (" . My_Brand::$jit . ")";
             $pagesPrinted             = array(
                 $pagesPrintedOnManaged    => 0,
@@ -3316,7 +3316,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesReportingTonerLevels = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->isCapableOfReportingTonerLevels())
+                if ($device->reportsTonerLevels)
                 {
                     $devicesReportingTonerLevels[] = $device;
                 }
@@ -3382,7 +3382,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $devicesNotReportingTonerLevels = array();
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if (!$device->isCapableOfReportingTonerLevels())
+                if (!$device->reportsTonerLevels)
                 {
                     $devicesNotReportingTonerLevels[] = $device;
                 }

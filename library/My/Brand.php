@@ -23,6 +23,7 @@ class My_Brand
     public static $brandName = "MPSToolbox.com";
     public static $companyName = "MPSToolbox.com";
     public static $companyNameFull = "MPSToolbox.com";
+    public static $dealerSku = "Dealer SKU";
 
 
     /**
@@ -115,6 +116,11 @@ class My_Brand
         {
             self::$companyNameFull = $params->companyNameFull;
         }
+
+        if (isset($params->dealerSku) && !is_null($params->dealerSku))
+        {
+            self::$dealerSku = $params->dealerSku;
+        }
     }
 
     /**
@@ -138,6 +144,7 @@ class My_Brand
             "jit"                                       => self::$jit,
             "jitName"                                   => self::$jitName,
             "jitFullName"                               => self::$jitFullName,
+            "dealerSku"                                 => self::$dealerSku,
         );
     }
 

@@ -34,6 +34,18 @@ $(function ()
                 },
                 {
                     align   : 'right',
+                    name    : 'reportsTonerLevels', index: 'reportsTonerLevels', label: 'Reports Toner Levels',
+                    sortable: false,
+                    width   : 40
+                },
+                {
+                    align   : 'right',
+                    name    : 'isCapableOfReportingTonerLevels', index: 'isCapableOfReportingTonerLevels', label: 'Capable of Reporting Toner Levels',
+                    sortable: false,
+                    width   : 40
+                },
+                {
+                    align   : 'right',
                     name    : 'ampv', index: 'ampv', label: 'AMPV',
                     sortable: false,
                     width   : 40

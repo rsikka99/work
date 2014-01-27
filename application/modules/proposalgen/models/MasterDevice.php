@@ -127,7 +127,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var bool
      */
-    public $reportsTonerLevels;
+    public $isCapableOfReportingTonerLevels;
 
     /**
      * @var float
@@ -390,9 +390,9 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             $this->leasedTonerYield = $params->leasedTonerYield;
         }
-        if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
+        if (isset($params->isCapableOfReportingTonerLevels) && !is_null($params->isCapableOfReportingTonerLevels))
         {
-            $this->reportsTonerLevels = $params->reportsTonerLevels;
+            $this->isCapableOfReportingTonerLevels = $params->isCapableOfReportingTonerLevels;
         }
 
         if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
@@ -451,28 +451,28 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                  => $this->id,
-            "userId"              => $this->userId,
-            "manufacturerId"      => $this->manufacturerId,
-            "modelName"           => $this->modelName,
-            "tonerConfigId"       => $this->tonerConfigId,
-            "isCopier"            => $this->isCopier,
-            "isFax"               => $this->isFax,
-            "isDuplex"            => $this->isDuplex,
-            "isA3"                => $this->isA3,
-            "isReplacementDevice" => $this->isReplacementDevice,
-            "isSystemDevice"      => $this->isSystemDevice,
-            "wattsPowerNormal"    => $this->wattsPowerNormal,
-            "wattsPowerIdle"      => $this->wattsPowerIdle,
-            "launchDate"          => $this->launchDate,
-            "dateCreated"         => $this->dateCreated,
-            "ppmBlack"            => $this->ppmBlack,
-            "ppmColor"            => $this->ppmColor,
-            "isLeased"            => $this->isLeased,
-            "leasedTonerYield"    => $this->leasedTonerYield,
-            "reportsTonerLevels"  => $this->reportsTonerLevels,
-            "partsCostPerPage"    => $this->partsCostPerPage,
-            "laborCostPerPage"    => $this->laborCostPerPage,
+            "id"                              => $this->id,
+            "userId"                          => $this->userId,
+            "manufacturerId"                  => $this->manufacturerId,
+            "modelName"                       => $this->modelName,
+            "tonerConfigId"                   => $this->tonerConfigId,
+            "isCopier"                        => $this->isCopier,
+            "isFax"                           => $this->isFax,
+            "isDuplex"                        => $this->isDuplex,
+            "isA3"                            => $this->isA3,
+            "isReplacementDevice"             => $this->isReplacementDevice,
+            "isSystemDevice"                  => $this->isSystemDevice,
+            "wattsPowerNormal"                => $this->wattsPowerNormal,
+            "wattsPowerIdle"                  => $this->wattsPowerIdle,
+            "launchDate"                      => $this->launchDate,
+            "dateCreated"                     => $this->dateCreated,
+            "ppmBlack"                        => $this->ppmBlack,
+            "ppmColor"                        => $this->ppmColor,
+            "isLeased"                        => $this->isLeased,
+            "leasedTonerYield"                => $this->leasedTonerYield,
+            "isCapableOfReportingTonerLevels" => $this->isCapableOfReportingTonerLevels,
+            "partsCostPerPage"                => $this->partsCostPerPage,
+            "laborCostPerPage"                => $this->laborCostPerPage,
         );
     }
 

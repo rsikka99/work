@@ -1042,7 +1042,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
                         if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHOLD)
                         {
                             //Check to see if it is reporting toner levels
-                            if ($deviceInstance->isCapableOfReportingTonerLevels() || $deviceInstance->isLeased)
+                            if ($deviceInstance->reportsTonerLevels || $deviceInstance->isLeased)
                             {
                                 /**
                                  * We are a fully optimized device!
@@ -1529,7 +1529,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         $devicesReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->isCapableOfReportingTonerLevels())
+            if ($device->reportsTonerLevels)
             {
                 $devicesReportingTonerLevels[] = $device;
             }
@@ -1546,7 +1546,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         $devicesNotReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->isCapableOfReportingTonerLevels() == false)
+            if ($device->reportsTonerLevels == false)
             {
                 $devicesNotReportingTonerLevels[] = $device;
             }
@@ -2981,7 +2981,7 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
             $deviceCount = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                if ($deviceInstance->isCapableOfReportingTonerLevels())
+                if ($deviceInstance->reportsTonerLevels)
                 {
                     $deviceCount++;
                 }

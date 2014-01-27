@@ -126,7 +126,7 @@ $imageTable->addRow();
 $imageTable->addCell(9428, $this->styles->tables->singleimage->cell1)->addImage($graphs['PercentPerDeviceBrand'], array('align' => 'center'));
 
 $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', My_Brand::$companyNameFull), 2);
-$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are managed, %3$s that are unmanaged and %4$s devices compatible with %5$s. These unmanaged devices are shown in the fleet attributes section below. A complete list of all devices and their %6$s compatibility can be found in the Appendix.'
+$section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are managed, %3$s that are not compatible and %4$s devices compatible with %5$s. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their %6$s compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , count($healthcheckViewModel->getIsManagedDevices())
     , count($healthcheckViewModel->getUnManagedDevices())

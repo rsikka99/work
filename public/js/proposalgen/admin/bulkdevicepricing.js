@@ -381,7 +381,7 @@ $document.ready(function ()
                 width      : 90,
                 name       : 'dealer_sku',
                 index      : 'dealerSku',
-                label      : 'Dealer Sku',
+                label      : dealerSkuName,
                 sortable   : true,
                 editable   : true,
                 editoptions: {size: 10, maxlength: 4},
@@ -391,7 +391,7 @@ $document.ready(function ()
                 width: 120,
                 name : 'new_dealer_sku',
                 index: 'new_dealer_sku',
-                label: 'New Dealer Sku',
+                label: 'New ' + dealerSkuName,
                 align: 'right'
             },
             {

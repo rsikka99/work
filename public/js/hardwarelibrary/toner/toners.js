@@ -66,7 +66,7 @@ $(function ()
                     width: 120,
                     name : 'skuModified',
                     index: 'dealerSku',
-                    label: '(Your SKU)<br/>MFG. Part #'
+                    label: '(' + dealerSkuName + ')<br/>OEM SKU'
                 },
                 {
                     width   : 213,

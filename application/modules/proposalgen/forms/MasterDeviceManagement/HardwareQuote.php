@@ -47,7 +47,7 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareQuote extends Twitter_Boot
          * Dealer SKU
          */
         $this->addElement('text', 'dealerSku', array(
-            'label'      => 'Your SKU',
+            'label'      => My_Brand::$dealerSku,
             'class'      => 'span2',
             'maxlength'  => 255,
             'required'   => false,

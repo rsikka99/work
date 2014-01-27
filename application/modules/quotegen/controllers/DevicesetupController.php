@@ -490,7 +490,7 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
                         {
                             if ($formValues ['oemSku'] || $formValues ['cost'] || $formValues ['description'] || $formValues ['dealerSku'] || $formValues ['partsCostPerPage'] || $formValues ['laborCostPerPage'])
                             {
-                                $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save OEM SKU, Dealer SKU, Standard Features or Device Cost."));
+                                $this->_flashMessenger->addMessage(array('warning' => "Can Sell must be selected to save OEM SKU, " . My_Brand::$dealerSku . ", Standard Features or Device Cost."));
                             }
 
                             $deviceMapper->delete($quoteDevice);

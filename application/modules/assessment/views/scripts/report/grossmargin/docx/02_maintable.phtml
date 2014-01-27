@@ -49,8 +49,8 @@ $table->addCell($tcStyle->col8Width, $tcStyle->header->cell)->addText('Toner Cos
 $table->addCell($tcStyle->col9Width, $tcStyle->header->cell)->addText('Toner Yield', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col10Width, $tcStyle->header->cell)->addText('CPP', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('Total Printing Cost', $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('Dealer SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
-$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('System SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText(sprintf('%1$ss', My_Brand::$dealerSku), $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col11Width, $tcStyle->header->cell)->addText('OEM SKUs', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 
 
 foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)

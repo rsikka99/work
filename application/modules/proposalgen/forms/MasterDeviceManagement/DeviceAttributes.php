@@ -48,13 +48,13 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
             $isFaxElement->setAttrib('disabled', 'disabled');
         }
 
-        $reportsTonerLevelsElement = $this->createElement('checkbox', 'reportsTonerLevels', array(
-            'label' => 'Reports Toner Levels '
+        $isCapableOfReportingTonerLevelsElement = $this->createElement('checkbox', 'isCapableOfReportingTonerLevels', array(
+            'label' => 'Capable of Reporting Toner Levels '
         ));
 
         if (!$this->_isAllowedToEditFields)
         {
-            $reportsTonerLevelsElement->setAttrib('disabled', 'disabled');
+            $isCapableOfReportingTonerLevelsElement->setAttrib('disabled', 'disabled');
         }
 
         $isA3Element = $this->createElement('checkbox', 'isA3', array(
@@ -224,7 +224,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
         }
 
         $this->addDisplayGroup(array($isCopierElement, $isDuplexElement, $isA3Element, $ppmBlackElement, $ppmColorElement), 'leftSide');
-        $this->addDisplayGroup(array($isFaxElement, $reportsTonerLevelsElement, $jitCompatibleElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
+        $this->addDisplayGroup(array($isFaxElement, $isCapableOfReportingTonerLevelsElement, $jitCompatibleElement, $launchDateElement, $wattsPowerNormalElement, $wattsPowerIdleElement), 'rightSide');
 
         $this->getElement("isCopier")->setDecorators(
              array(
@@ -332,7 +332,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
              )
         );
 
-        $this->getElement("reportsTonerLevels")->setDecorators(
+        $this->getElement("isCapableOfReportingTonerLevels")->setDecorators(
              array(
                  "ViewHelper",
                  array(

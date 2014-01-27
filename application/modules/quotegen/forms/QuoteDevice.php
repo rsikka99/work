@@ -79,7 +79,7 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
             ));
 
             $this->addElement('text', 'dealerSku', array(
-                'label'    => 'Dealer SKU:',
+                'label'    => My_Brand::$dealerSku . ":",
                 'disabled' => true,
                 'ignore'   => true
             ));

@@ -75,7 +75,7 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableOptions extends Twitter_B
         ));
 
         $this->addElement('text', 'availableOptionsdealerSku', array(
-            'label'     => 'Dealer SKU:',
+            'label'     => My_Brand::$dealerSku . ":",
             'class'     => 'span3',
             'maxlength' => 255,
             'filters'   => array(

@@ -106,7 +106,7 @@ $tableData = array();
 <div class="pheader">Number of Printing Devices Compatible with <?php echo My_Brand::$companyNameFull; ?></div>
 <p>Out of your <?php echo $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(); ?>
     networked printing devices, you have
-    <strong><?php echo count($healthcheckViewModel->getIsManagedDevices()); ?></strong> devices that are managed,  <?php echo count($healthcheckViewModel->getUnManagedDevices()); ?> devices that are unmanaged and <?php echo count($healthcheckViewModel->getUnmanagedJitCompatibleDevices()) ?> devices compatible with <?php echo $this->jitFullName ?>. These unmanaged devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
+    <strong><?php echo count($healthcheckViewModel->getIsManagedDevices()); ?></strong> devices that are managed,  <?php echo count($healthcheckViewModel->getUnManagedDevices()); ?> devices that are not compatible and <?php echo count($healthcheckViewModel->getUnmanagedJitCompatibleDevices()) ?> devices compatible with <?php echo $this->jitFullName ?>. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their <?php echo $this->jit ?> compatibility can be found in the Appendix.
 </p>
 <br />
 <div class="center">

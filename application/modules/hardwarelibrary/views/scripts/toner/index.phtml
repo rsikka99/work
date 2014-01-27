@@ -3,7 +3,8 @@ $this->headScript()->appendFile($this->baseUrl('js/hardwarelibrary/toner/toners.
      ->appendFile($this->baseUrl('js/proposalgen/managedevices/suppliesandservice.js'))
      ->appendFile($this->baseUrl('js/proposalgen/managedevices/managemasterdevices.js'));
 $this->headScript()->captureStart('append', 'text/javascript'); ?>
-var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>
+var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
+var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
 <?php
 $this->headScript()->captureEnd();
 ?>
@@ -81,8 +82,8 @@ $this->headScript()->captureEnd();
                 <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='replacementTonersClearManSearch' style="margin-left:4px" />
                 Filter:
                 <select id="replacementTonersFilter" name="filterList" class="input-large" style="margin:0px 0px 0px 0px">
-                    <option value="dealerSku">Your SKU</option>
-                    <option value="sku">MFG. Part #</option>
+                    <option value="dealerSku"><?php echo My_Brand::$dealerSku; ?></option>
+                    <option value="sku">OEM SKU</option>
                 </select>
                 <input type="text" id="replacementTonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
                 <input id="replacementTonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />

@@ -102,7 +102,7 @@ class Quotegen_Form_DeviceSetup extends EasyBib_Form
         ));
 
         $this->addElement('text', 'dealerSku', array(
-            'label'      => 'Dealer SKU:',
+            'label'      => My_Brand::$dealerSku . ":",
             'class'      => 'span2',
             'maxlength'  => 255,
             'required'   => false,

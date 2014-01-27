@@ -231,7 +231,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
             }
 
             // Checks to see if the device is JIT Compatible
-            if ($deviceInstance->getMasterDevice()->reportsTonerLevels)
+            if ($deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels)
             {
                 $this->jitCompatibleCount++;
             }
@@ -299,7 +299,7 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
                 $excessDevices []   = $deviceInstance;
                 $replacedDevices [] = $deviceInstance;
 
-                if ($replacementDevice->reportsTonerLevels)
+                if ($replacementDevice->isCapableOfReportingTonerLevels)
                 {
                     $this->replacementJitCompatibleCount++;
                 }

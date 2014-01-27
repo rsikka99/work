@@ -16,6 +16,7 @@ var default_labor = <?php echo $this->default_labor; ?>;
 var default_parts  = <?php echo $this->default_parts; ?>;
 var repop_array = '<?php echo $this->repop_array; ?>';
 var repop_page = '<?php echo $this->repop_page; ?>';
+var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
 <?php $this->headScript()->captureEnd() ?>
 
 <?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/admin/bulkdevicepricing.js')); ?>

@@ -27,7 +27,7 @@ function loadAvailableOptions()
                     width   : 100,
                     name    : 'dealerSku',
                     index   : 'dealerSku',
-                    label   : 'Dealer Sku',
+                    label   : dealerSkuName,
                     sortable: true,
                     editable: true
                 },

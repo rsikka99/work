@@ -16,4 +16,5 @@ return array(
     "jit"                                       => "ATR",
     "jitName"                                   => "Office Depot ATR",
     "jitFullName"                               => "Office Depot At The Ready (ATR)",
+    "dealerSku"                                 => "OD SKU"
 );

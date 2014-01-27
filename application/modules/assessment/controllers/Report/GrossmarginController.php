@@ -134,13 +134,13 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
             '',
             '',
             '',
-            'Dealer SKUs',
+            My_Brand::$dealerSku . 's',
             '',
             '',
             '',
             '',
             '',
-            'System SKUs',
+            'OEM SKUs',
         );
 
         $fieldTitlesLvl2 = array(
