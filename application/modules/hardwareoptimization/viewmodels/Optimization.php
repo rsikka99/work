@@ -116,7 +116,7 @@ class Hardwareoptimization_ViewModel_Optimization
     {
         if (!isset($this->_devices))
         {
-            $this->_devices = new Hardwareoptimization_ViewModel_Devices($this->_optimization);
+            $this->_devices = new Hardwareoptimization_ViewModel_Devices($this->_optimization->rmsUploadId, $this->_optimization->getHardwareOptimizationSetting()->laborCostPerPage, $this->_optimization->getHardwareOptimizationSetting()->partsCostPerPage, $this->_optimization->getHardwareOptimizationSetting()->adminCostPerPage);
         }
 
         return $this->_devices;

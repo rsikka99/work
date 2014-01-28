@@ -12,6 +12,7 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
     public $col_rmsUploadId = 'rmsUploadId';
     public $col_modelName = 'modelName';
     public $col_manufacturer = 'manufacturerName';
+    public $col_csvLineNumber = 'csvLineNumber';
 
     /**
      * The default db table class to use
@@ -283,12 +284,16 @@ class Proposalgen_Model_Mapper_Rms_Excluded_Row extends My_Model_Mapper_Abstract
             else if ($sortColumn == $this->col_manufacturer)
             {
                 $order[] = "{$this->col_manufacturer} {$sortDirection}";
-                $order[] = "{$this->col_modelName} ASC";
+                $order[] = "{$this->col_modelName} {$sortDirection}";
             }
             else if ($sortColumn == $this->col_modelName)
             {
-                $order[] = "{$this->col_manufacturer} ASC";
+                $order[] = "{$this->col_manufacturer} {$sortDirection}";
                 $order[] = "{$this->col_modelName} {$sortDirection}";
+            }
+            else
+            {
+                $order[] = "{$this->col_csvLineNumber} ASC";
             }
             /*
              * Parse our Limit

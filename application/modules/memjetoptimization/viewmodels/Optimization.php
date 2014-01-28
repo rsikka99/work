@@ -133,7 +133,7 @@ class Memjetoptimization_ViewModel_Optimization
     {
         if (!isset($this->_devices))
         {
-            $this->_devices = new Memjetoptimization_ViewModel_Devices($this->_optimization);
+            $this->_devices = new Memjetoptimization_ViewModel_Devices($this->_optimization->rmsUploadId, $this->_optimization->getMemjetOptimizationSetting()->laborCostPerPage, $this->_optimization->getMemjetOptimizationSetting()->partsCostPerPage, $this->_optimization->getMemjetOptimizationSetting()->adminCostPerPage);
         }
 
         return $this->_devices;

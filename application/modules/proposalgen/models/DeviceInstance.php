@@ -593,8 +593,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_meter))
         {
-            $meter        = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchForDeviceInstance($this->id);
-            $this->_meter = $meter;
+            $this->_meter = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance()->fetchForDeviceInstance($this->id);
         }
 
         return $this->_meter;

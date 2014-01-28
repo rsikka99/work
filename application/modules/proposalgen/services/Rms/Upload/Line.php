@@ -9,19 +9,14 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     const METER_IS_NOT_PRESENT = 1;
     const METER_IS_INVALID     = 2;
 
-    /**
-     * The minimum number of days that we need to monitor a device before we can get a decent average page count
-     *
-     * @var int
-     */
-    const MINIMUM_MONITOR_INTERVAL_DAYS = 4;
+    const ERROR_MISSING_MODEL_NAME   = "Device does not have a model name";
+    const ERROR_MISSING_MANUFACTURER = "Device does not have a manufacturer";
+    const ERROR_MISSING_START_DATE   = "Device does not have a start date";
+    const ERROR_MISSING_END_DATE     = "Device does not have a end date";
+    const ERROR_BAD_START_DATE       = "Invalid Monitor Start Date";
+    const ERROR_BAD_END_DATE         = "Invalid Monitor End Date";
+    const ERROR_BAD_INTERVAL         = "Monitoring dates are incorrect.";
 
-    /**
-     * The maximum age for the introduction date
-     *
-     * @var int
-     */
-    const MAXIMUM_DEVICE_AGE_YEARS = 5;
 
     /**
      * The format needed to change a DateTime object into a MySQL compatible time
@@ -917,24 +912,23 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public function isValid ($incomingDateFormat)
     {
         // Settings
-        $minimumDeviceIntroductionDate = new DateTime("-" . self::MAXIMUM_DEVICE_AGE_YEARS . " years");
 
         // Validate that certain fields are present
         if (empty($this->modelName))
         {
-            return "Device does not have a model name";
+            return self::ERROR_MISSING_MODEL_NAME;
         }
         if (empty($this->manufacturer))
         {
-            return "Device does not have a manufacturer";
+            return self::ERROR_MISSING_MANUFACTURER;
         }
         if (empty($this->monitorStartDate))
         {
-            return "Device does not have a start date";
+            return self::ERROR_MISSING_START_DATE;
         }
         if (empty($this->monitorEndDate))
         {
-            return "Device does not have a end date";
+            return self::ERROR_MISSING_END_DATE;
         }
 
         /*
@@ -980,12 +974,12 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
 
         if (!$monitorStartDate)
         {
-            return "Invalid Monitor Start Date";
+            return self::ERROR_BAD_START_DATE;
         }
 
         if (!$monitorEndDate)
         {
-            return "Invalid Monitor End Date";
+            return self::ERROR_BAD_END_DATE;
         }
 
         // If the discovery date is after the start date, use the discovery date
@@ -1004,17 +998,10 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         $monitoringInterval = $monitorStartDate->diff($monitorEndDate);
 
         // Monitoring should not be inverted (means start date occurred after end date)
-        if ($monitoringInterval->invert || $monitoringInterval->days < self::MINIMUM_MONITOR_INTERVAL_DAYS)
+        if ($monitoringInterval->invert)
         {
-            return "Device was monitored for less than " . self::MINIMUM_MONITOR_INTERVAL_DAYS . " days.";
+            return self::ERROR_BAD_INTERVAL;
         }
-
-        // Check to make sure our start date is not more than 5 years old
-        if ($minimumDeviceIntroductionDate->diff($monitorStartDate)->invert == 1)
-        {
-            return "Start date is greater than " . self::MAXIMUM_DEVICE_AGE_YEARS . " years old.";
-        }
-
 
         // Convert all the dates back to MySQL dates
         $this->monitorStartDate = (!$monitorStartDate) ? null : $monitorStartDate->format(self::DATETIME_TO_MYSQL_DATE_FORMAT);

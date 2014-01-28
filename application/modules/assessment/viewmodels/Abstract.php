@@ -65,7 +65,7 @@ class Assessment_ViewModel_Abstract
     {
         if (!isset($this->_devices))
         {
-            $this->_devices = new Assessment_ViewModel_Devices($this->assessment);
+            $this->_devices = new Assessment_ViewModel_Devices($this->assessment->rmsUploadId, $this->assessment->getAssessmentSettings()->laborCostPerPage, $this->assessment->getAssessmentSettings()->partsCostPerPage, $this->assessment->getAssessmentSettings()->adminCostPerPage);
         }
 
         return $this->_devices;

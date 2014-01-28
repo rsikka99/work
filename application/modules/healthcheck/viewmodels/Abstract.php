@@ -60,7 +60,7 @@ class Healthcheck_ViewModel_Abstract
     {
         if (!isset($this->_devices))
         {
-            $this->_devices = new Healthcheck_ViewModel_Devices($this->healthcheck);
+            $this->_devices = new Healthcheck_ViewModel_Devices($this->healthcheck->rmsUploadId, $this->healthcheck->getHealthcheckSettings()->laborCostPerPage, $this->healthcheck->getHealthcheckSettings()->partsCostPerPage, $this->healthcheck->getHealthcheckSettings()->adminCostPerPage);
         }
 
         return $this->_devices;

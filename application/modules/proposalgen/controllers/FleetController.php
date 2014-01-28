@@ -314,7 +314,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
              * Grab the incoming parameters
              */
             $jqGridParameters = array(
-                'sidx' => $this->_getParam('sidx', 'manufacturerName'),
+                'sidx' => $this->_getParam('sidx', 'csvLineNumber'),
                 'sord' => $this->_getParam('sord', 'desc'),
                 'page' => $this->_getParam('page', 1),
                 'rows' => $this->_getParam('rows', 10)

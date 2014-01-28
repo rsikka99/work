@@ -5,11 +5,12 @@
  */
 class Assessment_ViewModel_Devices
 {
+    const MINIMUM_MONITOR_INTERVAL_DAYS = 4;
+
     /**
      * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $allDeviceInstances;
-
 
     /**
      * @var Proposalgen_Model_DeviceInstancesGroup
@@ -37,99 +38,129 @@ class Assessment_ViewModel_Devices
     public $unmappedDeviceInstances;
 
     /**
-     * @var Assessment_Model_Assessment
+     * @var Proposalgen_Model_DeviceInstancesGroup
      */
-    protected $_assessment;
+    public $allDevicesWithShortMonitorInterval;
 
     /**
-     * @var bool
+     * @var float
      */
-    private $_devicesFetchedAndSorted = false;
+    protected $_adminCostPerPage;
 
     /**
      * Constructor
      *
-     * @param Assessment_Model_Assessment $assessment
+     * @param int   $rmsUploadId
+     * @param float $laborCostPerPage
+     * @param float $partsCostPerPage
+     * @param float $adminCostPerPage
      */
-    public function __construct (Assessment_Model_Assessment $assessment)
+    public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
     {
-        $this->_assessment                                      = $assessment;
-        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $assessment->getAssessmentSettings()->laborCostPerPage;
-        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $assessment->getAssessmentSettings()->partsCostPerPage;
-        $this->_fetchAndSortAllDevices($assessment->getRmsUpload()->id);
+        $this->_adminCostPerPage                                = $adminCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportLaborCostPerPage = $laborCostPerPage;
+        Proposalgen_Model_MasterDevice::$ReportPartsCostPerPage = $partsCostPerPage;
+
+        /**
+         * Initialize groups
+         */
+        $this->allDeviceInstances                 = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->allDevicesWithShortMonitorInterval = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->allIncludedDeviceInstances         = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->excludedDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->leasedDeviceInstances              = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->purchasedDeviceInstances           = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->unmappedDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
+
+        /**
+         *
+         */
+        $deviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
+        foreach ($deviceInstances as $device)
+        {
+            $this->allDeviceInstances->add($device);
+        }
+
+        /**
+         * Sort our devices into their categories
+         */
+        foreach ($this->allDeviceInstances->getDeviceInstances() as $deviceInstance)
+        {
+            $this->_sortDevice($deviceInstance);
+        }
     }
 
+
     /**
-     * Fetches and sorts all of our device instances
-     *
-     * @param $rmsUploadId
-     *
-     * @return bool
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
      */
-    public function _fetchAndSortAllDevices ($rmsUploadId)
+    protected function _sortDevice ($deviceInstance)
     {
-        if (!$this->_devicesFetchedAndSorted)
+        /**
+         * Sort excluded devices
+         */
+        if ($deviceInstance->isExcluded)
         {
-            $this->allDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
-
-            $deviceInstances = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->fetchAllForRmsUpload($rmsUploadId);
-            foreach ($deviceInstances as $device)
+            $this->_sortExcludedDevice($deviceInstance);
+        }
+        else
+        {
+            if ($deviceInstance->getMeter()->calculateMpsMonitorInterval()->days < self::MINIMUM_MONITOR_INTERVAL_DAYS)
             {
-                $this->allDeviceInstances->add($device);
+                $this->allDevicesWithShortMonitorInterval->add($deviceInstance);
             }
-
-            $this->allIncludedDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
-            $this->excludedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
-            $this->leasedDeviceInstances      = new Proposalgen_Model_DeviceInstancesGroup();
-            $this->purchasedDeviceInstances   = new Proposalgen_Model_DeviceInstancesGroup();
-            $this->unmappedDeviceInstances    = new Proposalgen_Model_DeviceInstancesGroup();
-
-            /*
-             * Sort our devices into their categories
-             */
-            foreach ($this->allDeviceInstances->getDeviceInstances() as $deviceInstance)
+            else
             {
-                /*
-                 * Sort excluded devices
+                /**
+                 * If we're here, it's not excluded. Further sorting is needed.
                  */
-                if ($deviceInstance->isExcluded)
+                if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
                 {
-                    $this->excludedDeviceInstances->add($deviceInstance);
+                    $this->_sortMappedDevice($deviceInstance);
                 }
                 else
                 {
-                    /*
-                     * If we're here, it's not excluded. Further sorting is needed.
-                     */
-                    $masterDevice = $deviceInstance->getMasterDevice();
-                    if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
-                    {
-                        $this->allIncludedDeviceInstances->add($deviceInstance);
-                        /*
-                         * Sort leased and purchased devices
-                         */
-                        if ($deviceInstance->isLeased)
-                        {
-                            $this->leasedDeviceInstances->add($deviceInstance);
-                        }
-                        else
-                        {
-                            $this->purchasedDeviceInstances->add($deviceInstance);
-                        }
-
-                        // Might as well process the overrides now too
-                        $deviceInstance->processOverrides($this->_assessment->getAssessmentSettings()->adminCostPerPage);
-                    }
-                    else
-                    {
-                        $this->unmappedDeviceInstances->add($deviceInstance);
-                    }
+                    $this->_sortUnmappedDevice($deviceInstance);
                 }
             }
+        }
+    }
 
-            $this->_devicesFetchedAndSorted = true;
+    /**
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     */
+    protected function _sortMappedDevice ($deviceInstance)
+    {
+        $this->allIncludedDeviceInstances->add($deviceInstance);
+        /*
+         * Sort leased and purchased devices
+         */
+        if ($deviceInstance->isLeased)
+        {
+            $this->leasedDeviceInstances->add($deviceInstance);
+        }
+        else
+        {
+            $this->purchasedDeviceInstances->add($deviceInstance);
         }
 
-        return $this->_devicesFetchedAndSorted;
+        // Might as well process the overrides now too
+        $deviceInstance->processOverrides($this->_adminCostPerPage);
+    }
+
+    /**
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     */
+    protected function _sortUnmappedDevice ($deviceInstance)
+    {
+        $this->unmappedDeviceInstances->add($deviceInstance);
+    }
+
+    /**
+     * @param Proposalgen_Model_DeviceInstance $deviceInstance
+     */
+    protected function _sortExcludedDevice ($deviceInstance)
+    {
+        $this->unmappedDeviceInstances->add($deviceInstance);
     }
 }

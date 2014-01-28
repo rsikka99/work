@@ -24,10 +24,10 @@ $(function ()
                 {
                     width   : 275,
                     name    : 'model',
-                    index   : 'model',
+                    index   : 'modelName',
                     label   : 'Model Name',
                     title   : true,
-                    sortable: false,
+                    sortable: true,
                     align   : 'left'
                 },
                 {
