@@ -738,29 +738,29 @@ WHERE `toners`.`id` IN ({$tonerIdList})
      * Gets the cheapest toners
      *
      * @param int   $masterDeviceId                   The master device id to get toners for
-     * @param int   $dealerId                         The dealer id to get toners for
+     * @param int   $dealerId                         The dealer id to get toner pricing for
      * @param array $monochromeManufacturerPreference CSV list of manufacturer ids
      * @param array $colorManufacturerPreference      CSV list of manufacturer ids
+     * @param int   $clientId                         The client id to get toner pricing for
      *
      * @return array
      */
-    public function getCheapestTonersForDevice ($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference)
+    public function getCheapestTonersForDevice ($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId = null)
     {
         $db                               = $this->getDbTable()->getDefaultAdapter();
         $masterDeviceId                   = $db->quoteInto($masterDeviceId, "INTEGER");
-        $dealerId                         = $db->quoteInto($dealerId, "INTEGER");
+        $clientId                         = $db->quoteInto($dealerId, "INTEGER");
+        $dealerId                         = $db->quoteInto($clientId, "INTEGER");
         $monochromeManufacturerPreference = $db->quoteInto($monochromeManufacturerPreference, "STRING");
         $colorManufacturerPreference      = $db->quoteInto($colorManufacturerPreference, "STRING");
-        $sql                              = "CALL getCheapestTonersForDevice(?,?,?,?)";
+        $sql                              = "CALL getCheapestTonersForDevice(?,?,?,?,?)";
 
-        $query   = $db->query($sql, array($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference));
+        $query   = $db->query($sql, array($masterDeviceId, $dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $clientId));
         $results = $query->fetchAll();
         $toners  = array();
         foreach ($results as $row)
         {
             $toners [$row[$this->col_tonerColorId]] = new Proposalgen_Model_Toner($row);
-//            $toners [$row["{$this->col_manufacturerId}"]] ['isOem']     = $row['isOem'];
-
         }
 
         return $toners;

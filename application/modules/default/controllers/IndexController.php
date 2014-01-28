@@ -75,6 +75,9 @@ class Default_IndexController extends Tangent_Controller_Action
 
             $rmsUploads                      = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->fetchAllForClient($this->_selectedClientId);
             $this->view->availableRmsUploads = $rmsUploads;
+
+//            $clientTonerAttributes             = Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance()->fetchAllForClient($this->_selectedClientId);
+//            $this->view->clientTonerAttributes = $clientTonerAttributes;
         }
 
         if ($this->getRequest()->isPost())
@@ -295,6 +298,10 @@ class Default_IndexController extends Tangent_Controller_Action
                 {
                     $this->redirector('mapping', 'fleet', 'proposalgen', array('rmsUploadId' => $rmsUploadId));
                 }
+            }
+            else if (isset($postData['uploadCustomerTonerCost']))
+            {
+                $this->redirector('index', 'customer-pricing', 'proposalgen');
             }
         }
 

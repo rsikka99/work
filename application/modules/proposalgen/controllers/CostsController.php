@@ -6,6 +6,13 @@
 class Proposalgen_CostsController extends Tangent_Controller_Action
 {
     /**
+     * The namespace for our mps application
+     *
+     * @var Zend_Session_Namespace
+     */
+    protected $_mpsSession;
+
+    /**
      * @var stdClass
      */
     protected $_identity;
@@ -25,11 +32,17 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
      */
     protected $_userId;
 
+    /**
+     * @var int
+     */
+    protected $_selectedClientId;
+
     public function init ()
     {
-        $this->_identity = Zend_Auth::getInstance()->getIdentity();
-        $this->_dealerId = $this->_identity->dealerId;
-        $this->_config   = Zend_Registry::get('config');
+        $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
+        $this->_identity   = Zend_Auth::getInstance()->getIdentity();
+        $this->_dealerId   = $this->_identity->dealerId;
+        $this->_config     = Zend_Registry::get('config');
 
         /**
          * FIXME: Is this used anymore?
@@ -44,6 +57,31 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->user_id = $this->_identity->id;
         $this->_userId       = $this->_identity->id;
         $this->_dealerId     = $this->_identity->dealerId;
+
+        if (isset($this->_mpsSession->selectedClientId))
+        {
+            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
+            // Make sure the selected client is ours!
+            if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
+            {
+                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
+                $this->view->selectedClientId = $this->_selectedClientId;
+            }
+            else
+            {
+                $this->_flashMessenger->addMessage(array(
+                    "error" => "You must select a client before you can access this."
+                ));
+                $this->redirector('index', 'index', 'default');
+            }
+        }
+        else
+        {
+            $this->_flashMessenger->addMessage(array(
+                "error" => "You must select a client before you can access this."
+            ));
+            $this->redirector('index', 'index', 'default');
+        }
     }
 
     /**
@@ -58,13 +96,185 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
 
     public function indexAction ()
     {
-        // Nothing to do here
+
+        $this->view->clientTonersForm = new Proposalgen_Form_Costs_ClientToner();
+    }
+
+    public function clientTonersListAction ()
+    {
+        $jqGridService    = new Tangent_Service_JQGrid();
+        $filter           = $this->_getParam('filter', false);
+        $criteria         = $this->_getParam('criteria', false);
+        $jqGridParameters = array(
+            'sidx' => $this->_getParam('sidx', 'id'),
+            'sord' => $this->_getParam('sord', 'desc'),
+            'page' => $this->_getParam('page', 1),
+            'rows' => $this->_getParam('rows', 10),
+        );
+        $sortColumns      = array(
+            'oemSku',
+            'dealerSku',
+            'clientSku',
+            'cost',
+        );
+        $jqGridService->setValidSortColumns($sortColumns);
+        if ($jqGridService->sortingIsValid())
+        {
+            $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance();
+
+            $jqGridService->parseJQGridPagingRequest($jqGridParameters);
+
+            $sortOrder = array();
+            if ($jqGridService->hasColumns())
+            {
+                $sortOrder[] = $jqGridService->getSortColumn() . ' ' . $jqGridService->getSortDirection();
+            }
+
+            $jqGridService->setRecordCount($clientTonerAttributeMapper->fetchAllForClient($this->_selectedClientId, $this->_dealerId, $sortOrder, 10000, 0, $filter, $criteria, true));
+
+            // Validate current page number since we don't want to be out of bounds
+            if ($jqGridService->getCurrentPage() < 1)
+            {
+                $jqGridService->setCurrentPage(1);
+            }
+            else if ($jqGridService->getCurrentPage() > $jqGridService->calculateTotalPages())
+            {
+                $jqGridService->setCurrentPage($jqGridService->calculateTotalPages());
+            }
+
+            // Return a small subset of the results based on the jqGrid parameters
+            $startRecord = $jqGridService->getRecordsPerPage() * ($jqGridService->getCurrentPage() - 1);
+
+            if ($startRecord < 0)
+            {
+                $startRecord = 0;
+            }
+
+            $jqGridService->setRows($clientTonerAttributeMapper->fetchAllForClient($this->_selectedClientId, $this->_dealerId, $sortOrder, $jqGridService->getRecordsPerPage(), $startRecord, $filter, $criteria));
+
+            // Send back jqGrid JSON data
+            $this->sendJson($jqGridService->createPagerResponseArray());
+        }
+        else
+        {
+            $this->_response->setHttpResponseCode(500);
+            $this->sendJson(array(
+                'error' => 'Sorting parameters are invalid'
+            ));
+        }
+    }
+
+    public function saveClientPricingAction ()
+    {
+        $tonerId    = $this->_getParam('tonerId', null);
+        $clientId   = $this->_selectedClientId;
+        $clientSku  = $this->_getParam('clientSku', null);
+        $clientCost = $this->_getParam('cost', null);
+
+        $form = new Proposalgen_Form_Costs_ClientToner();
+        if ($form->isValid(array('clientSku' => $clientSku, 'cost' => $clientCost)))
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->beginTransaction();
+            try
+            {
+                $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance();
+                $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($tonerId, $clientId));
+                if ($clientTonerAttribute instanceof Proposalgen_Model_Client_Toner_Attribute)
+                {
+                    if (empty($clientSku))
+                    {
+                        $clientSku = new Zend_Db_Expr('NULL');
+                    }
+                    if (empty($clientCost))
+                    {
+                        $clientCost = new Zend_Db_Expr('NULL');
+                    }
+                    $clientTonerAttribute->populate(array('clientSku' => $clientSku, 'cost' => $clientCost));
+                    $clientTonerAttributeMapper->save($clientTonerAttribute);
+                    $db->commit();
+                    $this->sendJson(array(
+                        'success' => 'Successfully saved client toner attributes'
+                    ));
+                }
+            }
+            catch (Exception $e)
+            {
+                $db->rollback();
+                Tangent_Log::logException($e);
+                $this->sendJson(array(
+                    'error' => 'failed to save client toner attributes'
+                ));
+            }
+        }
+        else
+        {
+            $json = $form->getErrors();
+            unset($json['tonerId']);
+            unset($json['systemSku']);
+            unset($json['dealerSku']);
+            unset($json['tonerId']);
+            if (count($json['clientSku']) == 0)
+            {
+                unset($json['clientSku']);
+            }
+
+            $this->sendJsonError($json);
+        }
+    }
+
+    public function deleteClientPricingAction ()
+    {
+        $tonerId = $this->_getParam('deleteTonerId', null);
+        if ($tonerId)
+        {
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $db->beginTransaction();
+            try
+            {
+                $clientId                   = $this->_selectedClientId;
+                $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance();
+                $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($tonerId, $clientId));
+                if ($clientTonerAttribute instanceof Proposalgen_Model_Client_Toner_Attribute)
+                {
+                    $clientTonerAttributeMapper->delete($clientTonerAttribute);
+                    $db->commit();
+                    $this->sendJson(array('success' => 'Successfully deleted client toner attribute'));
+                }
+            }
+            catch (Exception $e)
+            {
+                $db->rollback();
+                Tangent_Log::logException($e);
+            }
+        }
+
+        $this->sendJsonError('failed to delete client toner attribute');
+    }
+
+    public function deleteAllClientPricingAction ()
+    {
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $db->beginTransaction();
+        try
+        {
+            $clientId                   = $this->_selectedClientId;
+            $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance();
+            $clientTonerAttributeMapper->deleteAllForClient($clientId);
+            $db->commit();
+            $this->sendJson(array('success' => 'successfully deleted all client pricing'));
+        }
+        catch (Exception $e)
+        {
+            $db->rollback();
+            Tangent_Log::logException($e);
+            $this->sendJsonError('failed to delete all client toner attribute');
+        }
     }
 
     public function bulkdevicepricingAction ()
     {
         $this->view->headTitle('Bulk Hardware/Pricing Updates');
-        $this->view->title       = "Update Pricing";
         $this->view->parts_list  = array();
         $this->view->device_list = array();
         $db                      = Zend_Db_Table::getDefaultAdapter();

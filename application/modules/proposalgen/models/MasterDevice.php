@@ -915,7 +915,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         {
             $monochromeManufacturerPreference               = implode(',', $costPerPageSetting->monochromeTonerRankSet->getRanksAsArray());
             $colorManufacturerPreference                    = implode(',', $costPerPageSetting->colorTonerRankSet->getRanksAsArray());
-            $this->_cachedCheapestTonerVendorSet[$cacheKey] = Proposalgen_Model_Mapper_Toner::getInstance()->getCheapestTonersForDevice($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference);
+            $this->_cachedCheapestTonerVendorSet[$cacheKey] = Proposalgen_Model_Mapper_Toner::getInstance()->getCheapestTonersForDevice($this->id, $costPerPageSetting->dealerId, $monochromeManufacturerPreference, $colorManufacturerPreference, $costPerPageSetting->clientId);
         }
 
         return $this->_cachedCheapestTonerVendorSet[$cacheKey];

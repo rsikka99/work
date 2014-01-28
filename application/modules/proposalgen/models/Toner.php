@@ -64,6 +64,11 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     protected $_tonerColor;
 
     /**
+     * @var Proposalgen_Model_Dealer_Toner_Attribute
+     */
+    protected $_dealerTonerAttribute;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -170,21 +175,52 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     {
         if (!isset($this->_tonerColor))
         {
-            $tonerColorMapper  = Proposalgen_Model_Mapper_TonerColor::getInstance();
-            $this->_tonerColor = $tonerColorMapper->find($this->tonerColorId);
+            $this->_tonerColor = Proposalgen_Model_Mapper_TonerColor::getInstance()->find($this->tonerColorId);
         }
 
         return $this->_tonerColor;
     }
 
     /**
-     * @param Proposalgen_Model_TonerColor $TonerColor
+     * @param Proposalgen_Model_TonerColor $tonerColor
      *
      * @return \Proposalgen_Model_Toner
      */
-    public function setTonerColor ($TonerColor)
+    public function setTonerColor ($tonerColor)
     {
-        $this->_tonerColor = $TonerColor;
+        $this->_tonerColor = $tonerColor;
+
+        return $this;
+    }
+
+    /**
+     * @param int $dealerId
+     *
+     * @return Proposalgen_Model_Dealer_Toner_Attribute
+     */
+    public function getDealerTonerAttribute ($dealerId)
+    {
+        if (!isset($this->_dealerTonerAttribute))
+        {
+            $this->_dealerTonerAttribute = array();
+        }
+
+        if (!isset($this->_dealerTonerAttribute[$dealerId]))
+        {
+            $this->_dealerTonerAttribute[$dealerId] = $this->_dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($this->id, $dealerId));
+        }
+
+        return $this->_dealerTonerAttribute[$dealerId];
+    }
+
+    /**
+     * @param Proposalgen_Model_Dealer_Toner_Attribute $dealerTonerAttribute
+     *
+     * @return Proposalgen_Model_Dealer_Toner_Attribute
+     */
+    public function setDealerTonerAttribute ($dealerTonerAttribute)
+    {
+        $this->_dealerTonerAttribute[$dealerTonerAttribute->dealerId] = $dealerTonerAttribute;
 
         return $this;
     }

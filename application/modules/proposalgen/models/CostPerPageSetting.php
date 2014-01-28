@@ -59,7 +59,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      * @var bool
      */
     public $useDevicePageCoverages;
-    
+
     /**
      * The monochrome page coverage
      *
@@ -73,6 +73,20 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      * @var float
      */
     public $customerColorCostPerPage;
+
+    /**
+     * The client id
+     *
+     * @var int
+     */
+    public $clientId;
+
+    /**
+     * The dealer id
+     *
+     * @var int
+     */
+    public $dealerId;
 
 
     /**
@@ -91,6 +105,16 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         if (!isset($this->colorTonerRankSet))
         {
             $this->colorTonerRankSet = new Proposalgen_Model_Toner_Vendor_Ranking_Set();
+        }
+
+        if (!isset($this->clientId))
+        {
+            $this->clientId = (new Zend_Session_Namespace('mps-tools'))->selectedClientId;
+        }
+
+        if (!isset($this->dealerId))
+        {
+            $this->dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
         }
     }
 
@@ -133,7 +157,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         {
             $this->useDevicePageCoverages = $params->useDevicePageCoverages;
         }
-        
+
         if (isset($params->customerMonochromeCostPerPage) && !is_null($params->customerMonochromeCostPerPage))
         {
             $this->customerMonochromeCostPerPage = $params->customerMonochromeCostPerPage;
@@ -142,6 +166,16 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         if (isset($params->customerColorCostPerPage) && !is_null($params->customerColorCostPerPage))
         {
             $this->customerColorCostPerPage = $params->customerColorCostPerPage;
+        }
+
+        if (isset($params->clientId) && !is_null($params->clientId))
+        {
+            $this->clientId = $params->clientId;
+        }
+
+        if (isset($params->dealerId) && !is_null($params->dealerId))
+        {
+            $this->dealerId = $params->dealerId;
         }
     }
 
@@ -158,9 +192,11 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
             "pageCoverageColor"             => $this->pageCoverageColor,
             "monochromeTonerRankSet"        => $this->monochromeTonerRankSet,
             "colorTonerRankSet"             => $this->colorTonerRankSet,
-            "useDevicePageCoverages" => $this->useDevicePageCoverages,
+            "useDevicePageCoverages"        => $this->useDevicePageCoverages,
             "customerMonochromeCostPerPage" => $this->customerMonochromeCostPerPage,
             "customerColorCostPerPage"      => $this->customerColorCostPerPage,
+            "clientId"                      => $this->clientId,
+            "dealerId"                      => $this->dealerId,
         );
     }
 
@@ -174,6 +210,18 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         $monochromeRanks = implode("_", $this->monochromeTonerRankSet->getRanksAsArray());
         $colorRanks      = implode("_", $this->colorTonerRankSet->getRanksAsArray());
 
-        return "{$this->adminCostPerPage}_{$this->partsCostPerPage}_{$this->laborCostPerPage}_{$this->pageCoverageMonochrome}_{$this->pageCoverageColor}_{$this->useDevicePageCoverages}_monoranks_{$monochromeRanks}_colorranks_{$colorRanks}_{$this->customerMonochromeCostPerPage}_{$this->customerColorCostPerPage}";
+        return "CPPSetting"
+               . "_{$this->clientId}"
+               . "_{$this->dealerId}"
+               . "_{$this->adminCostPerPage}"
+               . "_{$this->partsCostPerPage}"
+               . "_{$this->laborCostPerPage}"
+               . "_{$this->pageCoverageMonochrome}"
+               . "_{$this->pageCoverageColor}"
+               . "_{$this->useDevicePageCoverages}"
+               . "_monoranks_{$monochromeRanks}"
+               . "_colorranks_{$colorRanks}"
+               . "_{$this->customerMonochromeCostPerPage}"
+               . "_{$this->customerColorCostPerPage}";
     }
 }

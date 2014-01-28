@@ -629,6 +629,14 @@
                                 </bulkfiletonermatchup>
                             </pages>
                         </updatepricing>
+                        <customerpricing>
+                            <label>Customer Pricing</label>
+                            <module>proposalgen</module>
+                            <controller>costs</controller>
+                            <action>index</action>
+                            <resource>proposalgen__costs__index</resource>
+                            <visible>0</visible>
+                        </customerpricing>
                         <deviceswaps>
                             <label>Device Swaps</label>
                             <module>hardwareoptimization</module>
