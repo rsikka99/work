@@ -349,8 +349,8 @@
     </form>
 
     <h3>Customer Pricing</h3>
-    <div>There are currently <?php echo count(Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance()->fetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId)); ?> customer pricings for this client, manage them
-        <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array("action" => "index", "controller" => "costs", "module" => "proposalgen")); ?>">Here</a>
+    <div>There are currently <?php echo count(Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance()->fetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId)); ?> customer prices for this client.
+        <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array("action" => "index", "controller" => "costs", "module" => "proposalgen")); ?>">Manage Customer Pricing</a>
     </div>
 
 
