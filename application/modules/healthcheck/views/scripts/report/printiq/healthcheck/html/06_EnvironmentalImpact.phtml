@@ -81,3 +81,23 @@ else
     <img src="<?php echo $graphs['faxCapableBar']; ?>" style="width: 270px; height: 175px;" />
     <img src="<?php echo $graphs[14]; ?>" style="width: 270px; height: 175px;" />
 </div>
+<br />
+<table class="table table-bordered">
+    <tr>
+        <th>Device Name</th>
+        <th>Serial No.</th>
+        <th>Average Monthly Volume</th>
+        <th>Average Monthly Scan Pages</th>
+        <th>Average Monthly Faxed Pages</th>
+    </tr>
+    <?php foreach ($healthcheckViewModel->getDevices()->faxAndScanDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
+        <tr>
+            <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+            <td><?php echo $deviceName; ?></td>
+            <td><?php echo $deviceInstance->serialNumber; ?></td>
+            <td><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0); ?></td>
+            <td><?php echo number_format($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly(), 0); ?></td>
+            <td><?php echo number_format($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly(), 0); ?></td>
+        </tr>
+    <?php endforeach; ?>
+</table>

@@ -11,9 +11,15 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
      */
     public $a3DeviceInstances;
 
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $faxAndScanDeviceInstances;
+
     public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
     {
-        $this->a3DeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->a3DeviceInstances         = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->faxAndScanDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
 
         parent::__construct($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage);
     }
@@ -32,6 +38,11 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
             if ($deviceInstance->getMasterDevice()->isA3)
             {
                 $this->a3DeviceInstances->add($deviceInstance);
+            }
+
+            if($deviceInstance->getMasterDevice()->isFax || $deviceInstance->getMasterDevice()->isCopier)
+            {
+                $this->faxAndScanDeviceInstances->add($deviceInstance);
             }
         }
 
