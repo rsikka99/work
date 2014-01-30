@@ -138,9 +138,9 @@ class Healthcheck_ViewModel_Ranking extends Tangent_Model_Abstract
             $criteria           = $criteria ["TechnologyReliabilityAndUserProductivity"];
             $AverageAge         = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageDeviceAge(), $criteria ["AverageAge"]);
             $PercentITTime      = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getweeklyITHours() * 60) / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount(), $criteria ["PercentITTime"]);
-            $ScanCapable        = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
-            $FaxCapable         = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfFaxCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["FaxCapable"]);
-            $ColorCapable       = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfColorCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ColorCapable"]);
+            $ScanCapable        = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getDevices()->scanCapableDeviceInstances->getCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
+            $FaxCapable         = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getDevices()->faxCapableDeviceInstances->getCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["FaxCapable"]);
+            $ColorCapable       = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getDevices()->colorCapableDeviceInstances->getCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ColorCapable"]);
             $technologyFeatures = ($ScanCapable + $FaxCapable + $ColorCapable) / 3;
             $totalRanking       = round(((($AverageAge + $PercentITTime) / 2) + $technologyFeatures) / 2, 1);
 
@@ -198,8 +198,8 @@ class Healthcheck_ViewModel_Ranking extends Tangent_Model_Abstract
             $AverageOperatingWatts = Tangent_Functions::getValueFromRangeStepTable($this->proposal->getAverageOperatingWatts(), $criteria ["AverageOperatingWatts"]);
             $rankingsCalculated++;
 
-            $DuplexCapable = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfDuplexCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["DuplexCapable"]);
-            $ScanCapable   = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getNumberOfScanCapableDevices() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
+            $DuplexCapable = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getDevices()->duplexCapableDeviceInstances->getCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["DuplexCapable"]);
+            $ScanCapable   = Tangent_Functions::getValueFromRangeStepTable(($this->proposal->getDevices()->scanCapableDeviceInstances->getCount() / $this->proposal->getDevices()->allIncludedDeviceInstances->getCount()) * 100, $criteria ["ScanCapable"]);
             $greenFeatures = ($DuplexCapable + $ScanCapable) / 2;
             $rankingsCalculated++;
 

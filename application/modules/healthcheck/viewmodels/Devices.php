@@ -15,11 +15,65 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
      * @var Proposalgen_Model_DeviceInstancesGroup
      */
     public $faxAndScanDeviceInstances;
+    
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $reportingTonerLevelsDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $isManagedDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $unmanagedDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $unmanagedJitCompatibleDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $scanCapableDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $copyCapableDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $duplexCapableDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $faxCapableDeviceInstances;
+
+    /**
+     * @var Proposalgen_Model_DeviceInstancesGroup
+     */
+    public $colorCapableDeviceInstances;
 
     public function __construct ($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage)
     {
-        $this->a3DeviceInstances         = new Proposalgen_Model_DeviceInstancesGroup();
-        $this->faxAndScanDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->a3DeviceInstances                     = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->reportingTonerLevelsDeviceInstances   = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->faxAndScanDeviceInstances             = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->isManagedDeviceInstances              = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->unmanagedDeviceInstances              = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->unmanagedJitCompatibleDeviceInstances = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->scanCapableDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->copyCapableDeviceInstances            = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->duplexCapableDeviceInstances          = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->faxCapableDeviceInstances             = new Proposalgen_Model_DeviceInstancesGroup();
+        $this->colorCapableDeviceInstances           = new Proposalgen_Model_DeviceInstancesGroup();
 
         parent::__construct($rmsUploadId, $laborCostPerPage, $partsCostPerPage, $adminCostPerPage);
     }
@@ -44,6 +98,49 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
             {
                 $this->faxAndScanDeviceInstances->add($deviceInstance);
             }
+
+            if ($deviceInstance->getMasterDevice()->isCopier)
+            {
+                $this->scanCapableDeviceInstances->add($deviceInstance);
+            }
+
+            if ($deviceInstance->getMasterDevice()->isMfp())
+            {
+                $this->copyCapableDeviceInstances->add($deviceInstance);
+            }
+
+            if ($deviceInstance->getMasterDevice()->isDuplex)
+            {
+                $this->duplexCapableDeviceInstances->add($deviceInstance);
+            }
+
+            if ($deviceInstance->getMasterDevice()->isFax)
+            {
+                $this->faxCapableDeviceInstances->add($deviceInstance);
+            }
+
+            if ($deviceInstance->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
+            {
+                $this->colorCapableDeviceInstances->add($deviceInstance);
+            }
+        }
+
+        if ($deviceInstance->reportsTonerLevels)
+        {
+            $this->reportingTonerLevelsDeviceInstances->add($deviceInstance);
+        }
+
+        if ($deviceInstance->isManaged)
+        {
+            $this->isManagedDeviceInstances->add($deviceInstance);
+        }
+        else if (!$deviceInstance->compatibleWithJitProgram)
+        {
+            $this->unmanagedDeviceInstances->add($deviceInstance);
+        }
+        else
+        {
+            $this->unmanagedJitCompatibleDeviceInstances->add($deviceInstance);
         }
 
         parent::_sortMappedDevice($deviceInstance);

@@ -116,7 +116,7 @@ $section->addTextBreak();
 
 $section->addTitle('Color Usage', 2);
 
-$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getNumberOfColorCapableDevices()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
+$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

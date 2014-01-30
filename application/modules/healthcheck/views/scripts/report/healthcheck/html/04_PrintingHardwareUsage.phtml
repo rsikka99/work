@@ -122,7 +122,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 
 <div class="pheader">Color Usage</div>
 <p>You currently have
-    <strong><?php echo $healthcheckViewModel->getNumberOfColorCapableDevices(); ?></strong> color printing devices that print a monthly average of
+    <strong><?php echo $healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount(); ?></strong> color printing devices that print a monthly average of
     <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
     <strong><?php echo number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2); ?>%</strong> of your total monthly print volume.
 </p>

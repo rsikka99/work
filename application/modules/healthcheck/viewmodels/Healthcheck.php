@@ -57,14 +57,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
     // Summary
     // Other
-    protected $NumberOfColorCapableDevices;
-    protected $NumberOfBlackAndWhiteCapableDevices;
-    protected $NumberOfScanCapableDevices;
-    protected $NumberOfDuplexCapableDevices;
-    protected $NumberOfFaxCapableDevices;
     protected $NumberOfUniqueModels;
     protected $NumberOfUniquePurchasedModels;
-    protected $NumberOfUniqueToners;
     protected $CashHeldInInventory;
     protected $AverageCostOfDevices;
     protected $PercentDevicesUnderused;
@@ -78,7 +72,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $PercentColorDevices;
     protected $AverageAgeOfDevices;
     protected $HighPowerConsumptionDevices;
-    protected $HighCostMonochromeDevices;
     protected $MostExpensiveDevices;
     protected $DateReportPrepared;
     protected $AveragePowerUsagePerMonth;
@@ -149,27 +142,16 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     protected $UniquePurchasedDeviceList;
     protected $_averageCompatibleOnlyCostPerPage;
     protected $_averageOemOnlyCostPerPage;
-    protected $_numberOfDevicesReportingTonerLevels;
-    protected $_numberOfColorCapablePurchasedDevices;
     protected $_maximumMonthlyPurchasedPrintVolume;
     protected $_purchasedTotalMonthlyCost;
     protected $_purchasedColorMonthlyCost;
     protected $_purchasedMonochromeMonthlyCost;
     protected $_optimizedDevices;
-    protected $_numberOfDevicesNotReportingTonerLevels;
-    protected $_numberOfCopyCapableDevices;
     protected $_includedDevicesSortedAscendingByAge;
     protected $_includedDevicesSortedDescendingByAge;
-    protected $_isManagedDevices;
-    protected $_unManagedDevices;
     protected $_uniqueDeviceCountArray;
     protected $_deviceVendorCount;
-    protected $_includedDevicesReportingTonerLevels;
-    protected $_includedDevicesNotReportingTonerLevels;
-    protected $_includedDevicesJitCompatible;
-    protected $_includedDevicesNotJitCompatible;
     protected $_underutilizedA3Devices;
-    protected $_a3Devices;
     protected $_pageCounts;
     public $highCostPurchasedDevices;
     public static $COLOR_ARRAY = array(
@@ -260,30 +242,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->healthcheckMargin;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDeviceCount ()
-    {
-        return count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances());
-    }
-
-    /**
-     * @return int
-     */
-    public function getLeasedDeviceCount ()
-    {
-        return count($this->getDevices()->leasedDeviceInstances->getDeviceInstances());
-    }
-
-    /**
-     * @return int
-     */
-    public function getPurchasedDeviceCount ()
-    {
-        return count($this->getDevices()->purchasedDeviceInstances->getDeviceInstances());
     }
 
     /**
@@ -407,90 +365,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     /**
      * @return int
      */
-    public function getNumberOfScanCapableDevices ()
-    {
-        if (!isset($this->NumberOfScanCapableDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isMfp())
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->NumberOfScanCapableDevices = $numberOfDevices;
-        }
-
-        return $this->NumberOfScanCapableDevices;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfCopyCapableDevices ()
-    {
-        if (!isset($this->_numberOfCopyCapableDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isMfp())
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->_numberOfCopyCapableDevices = $numberOfDevices;
-        }
-
-        return $this->_numberOfCopyCapableDevices;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfDuplexCapableDevices ()
-    {
-        if (!isset($this->NumberOfDuplexCapableDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->getMasterDevice()->isDuplex)
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->NumberOfDuplexCapableDevices = $numberOfDevices;
-        }
-
-        return $this->NumberOfDuplexCapableDevices;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfFaxCapableDevices ()
-    {
-        if (!isset($this->NumberOfFaxCapableDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                if ($deviceInstance->getMasterDevice()->isFax)
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->NumberOfFaxCapableDevices = $numberOfDevices;
-        }
-
-        return $this->NumberOfFaxCapableDevices;
-    }
-
-    /**
-     * @return int
-     */
     public function getNumberOfUniqueModels ()
     {
         if (!isset($this->NumberOfUniqueModels))
@@ -536,48 +410,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->MaximumMonthlyPrintVolume;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfColorCapableDevices ()
-    {
-        if (!isset($this->NumberOfColorCapableDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->NumberOfColorCapableDevices = $numberOfDevices;
-        }
-
-        return $this->NumberOfColorCapableDevices;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfColorCapablePurchasedDevices ()
-    {
-        if (!isset($this->_numberOfColorCapablePurchasedDevices))
-        {
-            $numberOfDevices = 0;
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
-                {
-                    $numberOfDevices++;
-                }
-            }
-            $this->_numberOfColorCapablePurchasedDevices = $numberOfDevices;
-        }
-
-        return $this->_numberOfColorCapablePurchasedDevices;
     }
 
     /**
@@ -1100,32 +932,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return int
-     */
-    public function getLeastUsedDeviceCount ()
-    {
-        if (!isset($this->LeastUsedDeviceCount))
-        {
-            $this->LeastUsedDeviceCount = count($this->getLeastUsedDevices());
-        }
-
-        return $this->LeastUsedDeviceCount;
-    }
-
-    /**
-     * @return int
-     */
-    public function getMostUsedDeviceCount ()
-    {
-        if (!isset($this->MostUsedDeviceCount))
-        {
-            $this->MostUsedDeviceCount = count($this->getMostUsedDevices());
-        }
-
-        return $this->MostUsedDeviceCount;
-    }
-
-    /**
      * @return float
      */
     public function getAverageDeviceAge ()
@@ -1149,46 +955,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * @return int
-     */
-    public function getNumberOfUniquePurchasedModels ()
-    {
-        if (!isset($this->NumberOfUniquePurchasedModels))
-        {
-            $numberOfModels   = 0;
-            $uniqueModelArray = array();
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if (!in_array($device->getMasterDevice()->modelName, $uniqueModelArray))
-                {
-                    $numberOfModels++;
-                    $uniqueModelArray [] = $device->getMasterDevice()->modelName;
-                }
-            }
-            $this->NumberOfUniquePurchasedModels = $numberOfModels;
-        }
-
-        return $this->NumberOfUniquePurchasedModels;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getDevicesReportingTonerLevels ()
-    {
-        $devicesReportingTonerLevels = array();
-        foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
-        {
-            if ($device->reportsTonerLevels)
-            {
-                $devicesReportingTonerLevels[] = $device;
-            }
-        }
-
-        return $devicesReportingTonerLevels;
-    }
-
-    /**
      * @return Proposalgen_Model_DeviceInstance[]
      */
     public function getDevicesNotReportingTonerLevels ()
@@ -1203,32 +969,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $devicesNotReportingTonerLevels;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfDevicesReportingTonerLevels ()
-    {
-        if (!isset($this->_numberOfDevicesReportingTonerLevels))
-        {
-            $this->_numberOfDevicesReportingTonerLevels = count($this->getDevicesReportingTonerLevels());
-        }
-
-        return $this->_numberOfDevicesReportingTonerLevels;
-    }
-
-    /**
-     * @return int
-     */
-    public function getNumberOfDevicesNotReportingTonerLevels ()
-    {
-        if (!isset($this->_numberOfDevicesNotReportingTonerLevels))
-        {
-            $this->_numberOfDevicesNotReportingTonerLevels = count($this->getDevicesNotReportingTonerLevels());
-        }
-
-        return $this->_numberOfDevicesNotReportingTonerLevels;
     }
 
     /**
@@ -1626,7 +1366,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $duplexPercentage = 0;
             if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $duplexPercentage = round((($this->getNumberOfDuplexCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+                $duplexPercentage = round((($this->getDevices()->duplexCapableDeviceInstances->getCount() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
 
             $notDuplexPercentage = 100 - $duplexPercentage;
@@ -1656,7 +1396,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             if ($this->getDevices()->allIncludedDeviceInstances->getCount())
             {
-                $scanPercentage = round((($this->getNumberOfScanCapableDevices() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
+                $scanPercentage = round((($this->getDevices()->scanCapableDeviceInstances->getCount() / $this->getDevices()->allIncludedDeviceInstances->getCount()) * 100), 2);
             }
             else
             {
@@ -1674,8 +1414,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Not scan capable"
             ));
             $scanCapableGraph->setLabels(array(
-                number_format($this->getNumberOfScanCapableDevices()),
-                number_format($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getNumberOfScanCapableDevices())
+                number_format($this->getDevices()->scanCapableDeviceInstances->getCount()),
+                number_format($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->scanCapableDeviceInstances->getCount())
             ));
             $scanCapableGraph->addColors(array(
                 "E21736",
@@ -1959,19 +1699,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculatePercentageOfFleetReportingTonerLevels ()
     {
         $percentage       = 0;
-        $totalDeviceCount = count($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances());
+        $totalDeviceCount = $this->getDevices()->allIncludedDeviceInstances->getCount();
         if ($totalDeviceCount > 0)
         {
-            $deviceCount = 0;
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                if ($deviceInstance->reportsTonerLevels)
-                {
-                    $deviceCount++;
-                }
-            }
-
-            $percentage = $deviceCount / $totalDeviceCount * 100;
+            $percentage = $this->getDevices()->reportingTonerLevelsDeviceInstances->getCount() / $totalDeviceCount * 100;
         }
 
         return $percentage;
@@ -2075,16 +1806,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      *
      * @return float
      */
-    public function calculatePercentOfTotalVolumePurchasedColorMonthly ()
-    {
-        return ($this->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100;
-    }
-
-    /**
-     * Calculates the percent of total volume of purchased devices that are color
-     *
-     * @return float
-     */
     public function calculatePercentOfTotalVolumeColorMonthly ()
     {
         return ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() / $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()) * 100;
@@ -2097,7 +1818,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function calculateAverageTotalCostOemMonochromeMonthly ()
     {
-
         return $this->calculateAverageOemOnlyCostPerPage()->monochromeCostPerPage * $this->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
     }
 
@@ -2132,26 +1852,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     }
 
     /**
-     * Calculates the total Average Cost For OEM Combined Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostOemCombinedMonthly ()
-    {
-        return $this->calculateAverageTotalCostOemMonochromeMonthly() + $this->calculateAverageTotalCostOemColorMonthly();
-    }
-
-    /**
-     * Calculates the total Average Cost For Compatible Combined Printers Monthly
-     *
-     * @return float
-     */
-    public function calculateAverageTotalCostCompatibleCombinedMonthly ()
-    {
-        return $this->calculateAverageTotalCostCompatibleMonochromeMonthly() + $this->calculateAverageTotalCostCompatibleColorMonthly();
-    }
-
-    /**
      * Gets an array of graphs
      *
      * @return array
@@ -2168,7 +1868,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberValueMarker       = "N *sz0";
             $companyName             = $this->healthcheck->getClient()->companyName;
             $employeeCount           = $this->healthcheck->getClient()->employeeCount;
-            $numberOfIncludedDevices = $this->getDeviceCount();
+            $numberOfIncludedDevices = $this->getDevices()->allIncludedDeviceInstances->getCount();
 
             /**
              * -- PagesPrintedReportingTonerLevelsPieGraph
@@ -2303,20 +2003,20 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ColorCapablePrintingDevices
              */
-            $highest  = ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getNumberOfColorCapableDevices() > $this->getNumberOfColorCapableDevices()) ? ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getNumberOfColorCapableDevices()) : $this->getNumberOfColorCapableDevices();
+            $highest  = ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount() > $this->getDevices()->colorCapableDeviceInstances->getCount()) ? ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount()) : $this->getDevices()->colorCapableDeviceInstances->getCount();
             $barGraph = new gchart\gBarChart(280, 210);
             $barGraph->setTitle("Color-Capable Printing Devices");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
             $barGraph->addDataSet(array(
-                $this->getNumberOfColorCapableDevices()
+                $this->getDevices()->colorCapableDeviceInstances->getCount()
             ));
             $barGraph->addColors(array(
                 "E21736"
             ));
             $barGraph->addDataSet(array(
-                $this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getNumberOfColorCapableDevices()
+                $this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount()
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
@@ -2376,7 +2076,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- colorCapablePieChart
              */
-            $colorCapableDeviceCount    = $this->getNumberOfColorCapableDevices();
+            $colorCapableDeviceCount    = $this->getDevices()->colorCapableDeviceInstances->getCount();
             $colorNonCapableDeviceCount = $numberOfIncludedDevices - $colorCapableDeviceCount;
             $colorCapableGraph          = new gchart\gPie3DChart(210, 150);
             $colorCapableGraph->setTitle("Color-Capable Printing Devices");
@@ -2458,7 +2158,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- reportingTonerLevelsBarGraph
              */
-            $numberOfDevicesReportingTonerLevels = count($this->getIncludedDevicesReportingTonerLevels());
+            $numberOfDevicesReportingTonerLevels = $this->getDevices()->reportingTonerLevelsDeviceInstances->getCount();
             $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
             $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
             $barGraph                            = new gchart\gBarChart(220, 220);
@@ -2495,7 +2195,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CompatibleJITBarGraph
              */
-            $numberOfDevicesReportingTonerLevels = count($this->getUnmanagedJitCompatibleDevices());
+            $numberOfDevicesReportingTonerLevels = $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
             $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
             $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
             $barGraph                            = new gchart\gBarChart(220, 220);
@@ -2765,8 +2465,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- DuplexCapableDevicesGraph
              */
-            $duplexCapableDeviceCount    = $this->getNumberOfDuplexCapableDevices();
-            $duplexNonCapableDeviceCount = $numberOfIncludedDevices - $this->getNumberOfDuplexCapableDevices();
+            $duplexCapableDeviceCount    = $this->getDevices()->duplexCapableDeviceInstances->getCount();
+            $duplexNonCapableDeviceCount = $numberOfIncludedDevices - $duplexCapableDeviceCount;
             $duplexCapableGraph          = new gchart\gPie3DChart(210, 150);
             $duplexCapableGraph->setTitle("Duplex-Capable Printing Devices");
             $duplexCapableGraph->addDataSet(array(
@@ -2900,8 +2600,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CopyCapableDevicesGraph
              */
-            $copyCapableDeviceCount    = $this->getNumberOfCopyCapableDevices();
-            $copyNonCapableDeviceCount = $numberOfIncludedDevices - $this->getNumberOfCopyCapableDevices();
+            $copyCapableDeviceCount    = $this->getDevices()->copyCapableDeviceInstances->getCount();
+            $copyNonCapableDeviceCount = $numberOfIncludedDevices - $copyCapableDeviceCount;
             $copyCapableGraph          = new gchart\gPie3DChart(210, 150);
             $copyCapableGraph->setTitle("Copy-Capable Printing Devices");
             $copyCapableGraph->addDataSet(array(
@@ -2927,30 +2627,33 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- UnmanagedVsManagedDevices
              */
-            $insufficientData = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
-            $leasedDevices    = $this->getDevices()->leasedDeviceInstances->getCount();
+            $insufficientData                  = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
+            $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
+            $isManagedDeviceCount              = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $unmanagedDeviceCount              = $this->getDevices()->unmanagedDeviceInstances->getCount();
+            $unmanagedJitCompatibleDeviceCount = $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
 
 
-            $highest  = max(count($this->getIsManagedDevices()), count($this->getUnManagedDevices()), count($this->getUnmanagedJitCompatibleDevices()), $insufficientData, $leasedDevices);
+            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $unmanagedJitCompatibleDeviceCount, $insufficientData, $leasedDevices);
             $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
             $barGraph->addDataSet(array(
-                count($this->getIsManagedDevices())
+                $this->getDevices()->isManagedDeviceInstances->getCount()
             ));
             $barGraph->addColors(array(
                 "0194D2"
             ));
 
             $barGraph->addDataSet(array(
-                count($this->getUnManagedDevices())
+                $unmanagedDeviceCount
             ));
             $barGraph->addColors(array(
                 "E21736"
             ));
             $barGraph->addDataSet(array(
-                count($this->getUnmanagedJitCompatibleDevices())
+                $unmanagedJitCompatibleDeviceCount
             ));
 
             $barGraph->addColors(array(
@@ -3135,7 +2838,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $faxPercentage = 0;
             if ($numberOfIncludedDevices)
             {
-                $faxPercentage = round((($this->getNumberOfFaxCapableDevices() / $numberOfIncludedDevices) * 100), 2);
+                $faxPercentage = round((($this->getDevices()->faxCapableDeviceInstances->getCount() / $numberOfIncludedDevices) * 100), 2);
             }
 
             $notFaxPercentage = 100 - $faxPercentage;
@@ -3150,8 +2853,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Not fax capable"
             ));
             $faxCapable->setLabels(array(
-                number_format($this->getNumberOfFaxCapableDevices()),
-                number_format($numberOfIncludedDevices - $this->getNumberOfFaxCapableDevices())
+                number_format($this->getDevices()->faxCapableDeviceInstances->getCount()),
+                number_format($numberOfIncludedDevices - $this->getDevices()->faxCapableDeviceInstances->getCount())
             ));
             $faxCapable->addColors(array(
                 "E21736",
@@ -3205,54 +2908,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculateQuarterOfNumberOfGallonsWaterUsed ()
     {
         return $this->calculateNumberOfGallonsWaterUsed() * .25;
-    }
-
-    /**
-     * Gets all the devices that have the isManaged flag set to true
-     *
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getIsManagedDevices ()
-    {
-        if (!isset($this->_isManagedDevices))
-        {
-            $devicesThatAreManaged = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->isManaged)
-                {
-                    $devicesThatAreManaged[] = $device;
-                }
-            }
-
-            $this->_isManagedDevices = $devicesThatAreManaged;
-        }
-
-        return $this->_isManagedDevices;
-    }
-
-    /**
-     * Gets all the devices that have the isManaged flag set to false
-     *
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getUnManagedDevices ()
-    {
-        if (!isset($this->_unManagedDevices))
-        {
-            $devicesThatAreUnManaged = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if (!$device->isManaged && !$device->compatibleWithJitProgram)
-                {
-                    $devicesThatAreUnManaged[] = $device;
-                }
-            }
-
-            $this->_unManagedDevices = $devicesThatAreUnManaged;
-        }
-
-        return $this->_unManagedDevices;
     }
 
     /**
@@ -3355,94 +3010,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         }
 
         return $this->_deviceVendorCount;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getIncludedDevicesReportingTonerLevels ()
-    {
-        if (!isset($this->_includedDevicesReportingTonerLevels))
-        {
-            $devicesReportingTonerLevels = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->reportsTonerLevels)
-                {
-                    $devicesReportingTonerLevels[] = $device;
-                }
-            }
-
-            $this->_includedDevicesReportingTonerLevels = $devicesReportingTonerLevels;
-        }
-
-        return $this->_includedDevicesReportingTonerLevels;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getUnmanagedJitCompatibleDevices ()
-    {
-        if (!isset($this->_includedDevicesJitCompatible))
-        {
-            $devicesThatAreJitCompatible = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->compatibleWithJitProgram && $device->isManaged == false)
-                {
-                    $devicesThatAreJitCompatible[] = $device;
-                }
-            }
-
-            $this->_includedDevicesJitCompatible = $devicesThatAreJitCompatible;
-        }
-
-        return $this->_includedDevicesJitCompatible;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getNotJitCompatibleDevices ()
-    {
-        if (!isset($this->_includedDevicesNotJitCompatible))
-        {
-            $devicesNotJitCompatible = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if (!$device->compatibleWithJitProgram)
-                {
-                    $devicesNotJitCompatible[] = $device;
-                }
-            }
-
-            $this->_includedDevicesNotJitCompatible = $devicesNotJitCompatible;
-        }
-
-        return $this->_includedDevicesNotJitCompatible;
-    }
-
-    /**
-     * @return Proposalgen_Model_DeviceInstance[]
-     */
-    public function getIncludedDevicesNotReportingTonerLevels ()
-    {
-        if (!isset($this->_includedDevicesNotReportingTonerLevels))
-        {
-            $devicesNotReportingTonerLevels = array();
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if (!$device->reportsTonerLevels)
-                {
-                    $devicesNotReportingTonerLevels[] = $device;
-                }
-            }
-
-            $this->_includedDevicesNotReportingTonerLevels = $devicesNotReportingTonerLevels;
-        }
-
-        return $this->_includedDevicesNotReportingTonerLevels;
     }
 
     public function calculatePercentageA3Pages ()
