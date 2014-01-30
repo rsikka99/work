@@ -29,14 +29,18 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
      */
     protected $_identity;
 
+    /**
+     * @var Proposalgen_Model_Fleet_Steps
+     */
+    protected $_navigation;
+
     public function init ()
     {
         /* Initialize action controller here */
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
         $this->_identity   = Zend_Auth::getInstance()->getIdentity();
         $this->_userId     = $this->_identity->id;
-
-
+        $this->_navigation = Proposalgen_Model_Fleet_Steps::getInstance();
         if (isset($this->_mpsSession->selectedClientId))
         {
             $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
@@ -59,11 +63,20 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         $this->view->headTitle('Upload');
         $time        = -microtime(true);
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
-
+        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_UPLOAD);
         $rmsUpload = null;
         if ($rmsUploadId > 0)
         {
             $rmsUpload = Proposalgen_Model_Mapper_Rms_Upload::getInstance()->find($rmsUploadId);
+        }
+
+        if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload)
+        {
+            $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+        }
+        else
+        {
+            $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_UPLOAD);
         }
 
         $uploadService = new Proposalgen_Service_Rms_Upload($this->_userId, $this->_selectedClientId, $rmsUpload);
@@ -200,6 +213,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     {
         $this->view->headTitle('RMS Upload');
         $this->view->headTitle('Map Devices');
+        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_MAPPING);
+        $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
 
         $rmsUpload = null;
@@ -465,7 +481,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         $this->view->headTitle('RMS Upload');
         $this->view->headTitle('Summary');
         $rmsUploadId = $this->_getParam('rmsUploadId', false);
-
+        $this->_navigation->setActiveStep(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
+        $this->_navigation->updateAccessibleSteps(Proposalgen_Model_Fleet_Steps::STEP_FLEET_SUMMARY);
         $rmsUpload = null;
         if ($rmsUploadId > 0)
         {
@@ -1235,5 +1252,15 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         }
 
         $this->sendJson($jsonResponse);
+    }
+
+    /**
+     * (non-PHPdoc)
+     *
+     * @see Zend_Controller_Action::postDispatch()
+     */
+    public function postDispatch ()
+    {
+        $this->view->placeholder('ProgressionNav')->set($this->view->NavigationMenu($this->_navigation));
     }
 }
