@@ -4,6 +4,15 @@ $form = $this->element;
 
 /* @var $quote Quotegen_Model_Quote */
 $quote = $form->getQuote();
+
+/* @var $dealerMonochromeRankSetArray */
+$dealerMonochromeRankSetArray = $form->getElement('dealerMonochromeRankSetArray');
+$dealerMonochromeRankSetArray->removeDecorator('Zend_Form_Decorator_HtmlTag');
+
+/* @var $dealerColorRankSetArray Zend_Form_Element_Select */
+$dealerColorRankSetArray = $form->getElement('dealerColorRankSetArray');
+$dealerColorRankSetArray->removeDecorator('Zend_Form_Decorator_HtmlTag');
+
 ?>
 <form id="<?php echo $form->getId(); ?>" class='<?php echo $form->getAttrib('class') ?>' action="<?php echo $form->getAction() ?>" method="<?php echo $form->getMethod() ?>" name="<?php echo $form->getName() ?>">
     <div class="accordion" id="accordion2">
@@ -25,13 +34,13 @@ $quote = $form->getQuote();
                                 </div>
                                 <div class='span8'>
                                     <p> Monochrome Toner Preference </p>
-                                    <?php echo $form->getElement('dealerMonochromeRankSetArray')->renderViewHelper(); ?>
+                                    <?php echo $dealerMonochromeRankSetArray->render(); ?>
                                     <em>OEM toners will be used by default</em>
                                     <br />
                                     <br />
 
                                     <p> Color Toner Preference </p>
-                                    <?php echo $form->getElement('dealerColorRankSetArray')->renderViewHelper(); ?>
+                                    <?php echo $dealerColorRankSetArray->render(); ?>
                                     <em>OEM toners will be used by default</em>
                                 </div>
                             </div>
@@ -42,9 +51,7 @@ $quote = $form->getQuote();
         </div>
     </div>
 
-    <?php
-    /* @var $quoteDeviceGroup Quotegen_Model_QuoteDeviceGroup */
-    foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : ?>
+    <?php foreach ($quote->getQuoteDeviceGroups() as $quoteDeviceGroup) : ?>
         <h3><?php echo $quoteDeviceGroup->name; ?></h3>
         <table class='table table-bordered table-striped table-condensed'>
             <tr class='header-row'>
@@ -56,9 +63,8 @@ $quote = $form->getQuote();
                 <th style='width: 100px;'> Color CPP</th>
                 <th style='width: 80px;'> Color Pages Per Device</th>
             </tr>
-            <tr>        <?php
-                /* @var $quoteDeviceGroupDevice Quotegen_Model_QuoteDeviceGroupDevice */
-                foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : ?>
+            <tr>
+                <?php foreach ($quoteDeviceGroup->getQuoteDeviceGroupDevices() as $quoteDeviceGroupDevice) : ?>
                 <?php $quoteDevice = $quoteDeviceGroupDevice->getQuoteDevice(); ?>
                 <td><?php echo $quoteDevice->name; ?></td>
                 <td><?php echo $quoteDevice->oemSku; ?></td>

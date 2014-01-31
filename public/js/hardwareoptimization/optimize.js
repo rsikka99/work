@@ -329,15 +329,21 @@ $(function ()
                     },
                     success   : function (data)
                     {
-                        grid.setCell(rowId, 'reason', data.replaceReason);
-                        grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
-                        // Update the calculation
-                        $('#monochromeCpp').html(data.monochromeCpp);
-                        $('#colorCpp').html(data.colorCpp);
-                        $('#totalCost').html(data.totalCost);
-                        $('#marginDollar').html(data.marginDollar);
-                        $('#marginPercent').html(data.marginPercent);
-                        $('#numberOfDevicesReplaced').html(data.summary.numberOfDevicesReplaced);
+                        try
+                        {
+                            grid.setCell(rowId, 'reason', data.replaceReason);
+                            grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+                            // Update the calculation
+                            $('#monochromeCpp').html(data.monochromeCpp);
+                            $('#colorCpp').html(data.colorCpp);
+                            $('#totalCost').html(data.totalCost);
+                            $('#marginDollar').html(data.marginDollar);
+                            $('#marginPercent').html(data.marginPercent);
+                            $('#numberOfDevicesReplaced').html(data.numberOfDevicesReplaced);
+                        }
+                        catch (e)
+                        {
+                        }
                     }
                 });
             }
@@ -346,15 +352,15 @@ $(function ()
 
                 var replacementReasonId = $(this).val();
                 $.ajax({
-                    url       : TMTW_BASEURL + 'hardwareoptimization/index/update-device-swap-reason',
-                    dataType  : 'json',
-                    data      : {
+                    url     : TMTW_BASEURL + 'hardwareoptimization/index/update-device-swap-reason',
+                    dataType: 'json',
+                    data    : {
                         deviceInstanceId   : elementId,
                         replacementReasonId: replacementReasonId
                     },
-                    success   : function (data)
+                    success : function (data)
                     {
-                        
+
                     }
                 });
             }

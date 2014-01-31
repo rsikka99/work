@@ -132,7 +132,7 @@ class Hardwareoptimization_ViewModel_Optimization
         $numberOfDevices = 0;
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id) instanceof Proposalgen_Model_MasterDevice)
+            if ($device->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id) instanceof Proposalgen_Model_MasterDevice)
             {
                 $numberOfDevices++;
             }
