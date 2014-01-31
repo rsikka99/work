@@ -555,6 +555,24 @@
                         </editClient>
                     </pages>
                 </clients>
+                <clientpricing>
+                    <label>Client Pricing</label>
+                    <module>proposalgen</module>
+                    <controller>client-pricing</controller>
+                    <action>index</action>
+                    <resource>proposalgen__client-controller__index</resource>
+                    <visible>0</visible>
+                    <pages>
+                        <client-pricing-upload>
+                            <label>Client Pricing</label>
+                            <module>proposalgen</module>
+                            <controller>client-pricing</controller>
+                            <action>upload</action>
+                            <resource>proposalgen__client-controller__upload</resource>
+                            <visible>0</visible>
+                        </client-pricing-upload>
+                    </pages>
+                </clientpricing>
             </pages>
         </homemenu>
         <adminmenu>
@@ -629,14 +647,6 @@
                                 </bulkfiletonermatchup>
                             </pages>
                         </updatepricing>
-                        <customerpricing>
-                            <label>Customer Pricing</label>
-                            <module>proposalgen</module>
-                            <controller>costs</controller>
-                            <action>index</action>
-                            <resource>proposalgen__costs__index</resource>
-                            <visible>0</visible>
-                        </customerpricing>
                         <deviceswaps>
                             <label>Device Swaps</label>
                             <module>hardwareoptimization</module>

@@ -150,7 +150,7 @@ $cellWidths = array(
 $section->addTextBreak(2);
 $section->addTitle('Estimated OEM Toner Costs vs. Compatible Toner Costs', 2);
 $section->addText(sprintf('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.',
-        $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostMonthlyAndCompMonthly()),
-        $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()),
-        number_format($healthcheckViewModel->calculateDifferencePercentageBetweenOemTotalCostAnnuallyAndCompAnnually() * 100), 0)
+        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings()),
+        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings() * 12),
+    number_format($healthcheckViewModel->calculateCurrentTonerOrderSavingPercentage()))
 );

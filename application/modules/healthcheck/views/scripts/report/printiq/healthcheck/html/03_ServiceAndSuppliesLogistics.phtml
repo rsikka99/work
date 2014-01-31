@@ -121,6 +121,3 @@ $tableData = array();
         </tbody>
     </table>
 </div>
-
-<div class="pheader">Estimated OEM Toner Costs vs. Compatible Toner Costs</div>
-<p>From the review of your toner purchases, you are saving <?php echo $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostMonthlyAndCompMonthly()); ?> a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately <?php echo $this->currency($healthcheckViewModel->calculateDifferenceBetweenOemTotalCostAnnuallyAndCompAnnually()) ?>. That is a <?php echo number_format($healthcheckViewModel->calculateDifferencePercentageBetweenOemTotalCostAnnuallyAndCompAnnually() * 100); ?>% savings for that time period.</p>

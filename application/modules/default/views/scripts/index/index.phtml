@@ -16,15 +16,12 @@
                 </p>
 
                 <p><strong>Address:</strong><br>
-                    <?php
-                    $truncatedAddressLines = array();
-                    foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
+                    <?php $truncatedAddressLines = array(); ?>
+                    <?php foreach (explode("\n", $selectedClient->getAddress()->getFullAddressMultipleLines()) as $addressLine) : ?>
                         <?php $truncatedAddressLines[] = (strlen($addressLine) > 26) ? substr($addressLine, 0, 26) . "..." : $addressLine; ?>
-                    <?php
-                    endforeach;
+                    <?php endforeach; ?>
 
-                    echo implode("<br>", $truncatedAddressLines);
-                    ?>
+                    <?php echo implode("<br>", $truncatedAddressLines); ?>
                 </p>
 
                 <p><strong>Organization Size:</strong><br><strong><?php echo number_format($selectedClient->employeeCount); ?></strong> employees</p>
@@ -348,11 +345,12 @@
         </table>
     </form>
 
-    <h3>Customer Pricing</h3>
-    <div>There are currently <?php echo count(Proposalgen_Model_Mapper_Client_Toner_Attribute::getInstance()->fetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId)); ?> customer prices for this client.
-        <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array("action" => "index", "controller" => "costs", "module" => "proposalgen")); ?>">Manage Customer Pricing</a>
-    </div>
-
+    <?php if (My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
+        <h3>Client Pricing</h3>
+        <div>There are currently <?php echo Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, null, null, null, null, true); ?> client prices for this client.
+            <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array("action" => "index", "controller" => "client-pricing", "module" => "proposalgen")); ?>">Manage Client Pricing</a>
+        </div>
+    <?php endif; ?>
 
 <?php else : ?>
     <div class="well">

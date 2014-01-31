@@ -69,6 +69,21 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     protected $_dealerTonerAttribute;
 
     /**
+     * @var bool
+     */
+    protected $_isCompatible;
+
+    /**
+     * @var Proposalgen_Model_Toner[]
+     */
+    protected $_compatibleToners;
+
+    /**
+     * @var Proposalgen_Model_Toner[]
+     */
+    protected $_oemToners;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -207,7 +222,7 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
 
         if (!isset($this->_dealerTonerAttribute[$dealerId]))
         {
-            $this->_dealerTonerAttribute[$dealerId] = $this->_dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($this->id, $dealerId));
+            $this->_dealerTonerAttribute[$dealerId] = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($this->id, $dealerId));
         }
 
         return $this->_dealerTonerAttribute[$dealerId];
@@ -282,5 +297,71 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
         }
 
         return $this->_cachedCostPerPage [$cacheKey];
+    }
+
+    /**
+     * Whether or not this toner is a compatible toner
+     *
+     * @return bool
+     */
+    public function isCompatible ()
+    {
+        if (!isset($this->_isCompatible))
+        {
+
+            $this->_isCompatible = (Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->find($this->manufacturerId) instanceof Proposalgen_Model_TonerVendorManufacturer);
+        }
+
+        return $this->_isCompatible;
+    }
+
+    /**
+     * Finds other compatible toners that can be used in place of this one.
+     *
+     * @param null $clientId
+     * @param null $dealerId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getCompatibleToners ($clientId = null, $dealerId = null)
+    {
+        if (!isset($this->_compatibleToners))
+        {
+            if ($this->isCompatible())
+            {
+                $this->_compatibleToners = array();
+            }
+            else
+            {
+                $this->_compatibleToners = Proposalgen_Model_Mapper_Toner::getInstance()->findCompatibleToners($this->id, $clientId, $dealerId);
+            }
+        }
+
+        return $this->_compatibleToners;
+    }
+
+    /**
+     * Finds other OEM toners that can be used in place of this one.
+     *
+     * @param null $clientId
+     * @param null $dealerId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getOemToners ($clientId = null, $dealerId = null)
+    {
+        if (!isset($this->_oemToners))
+        {
+            if ($this->isCompatible())
+            {
+                $this->_oemToners = Proposalgen_Model_Mapper_Toner::getInstance()->findOemToners($this->id, $clientId, $dealerId);
+            }
+            else
+            {
+                $this->_oemToners = array();
+            }
+        }
+
+        return $this->_oemToners;
     }
 }

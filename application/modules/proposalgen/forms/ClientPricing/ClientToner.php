@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Class Proposalgen_Form_MasterDeviceManagement_AvailableToners
+ * Class Proposalgen_Form_ClientPricing_ClientToner
  */
-class Proposalgen_Form_Costs_ClientToner extends Twitter_Bootstrap_Form_Horizontal
+class Proposalgen_Form_ClientPricing_ClientToner extends Twitter_Bootstrap_Form_Horizontal
 {
-
 
     /**
      * @param null $options
@@ -19,12 +18,20 @@ class Proposalgen_Form_Costs_ClientToner extends Twitter_Bootstrap_Form_Horizont
     {
         $this->setMethod('post');
 
+        $this->addElement('hidden', 'id', array(
+            'label'    => 'Id',
+            'class'    => 'span3',
+            'required' => false,
+            'disabled' => true,
+            'visible'  => false
+        ));
+
         $this->addElement('hidden', 'tonerId', array(
             'label'    => 'Toner Id',
             'class'    => 'span3',
             'required' => false,
             'disabled' => true,
-            'visible' => false
+            'visible'  => false
         ));
 
         $this->addElement('text', 'systemSku', array(
@@ -57,6 +64,12 @@ class Proposalgen_Form_Costs_ClientToner extends Twitter_Bootstrap_Form_Horizont
             )
         ));
 
+        $this->addElement('select', 'replacementTonerId', array(
+            'label'    => "Replacement Toner",
+            'class'    => "span3",
+            "required" => false,
+        ));
+
         $costElement = $this->createElement('text', 'cost', array(
             'label'      => 'Client Cost',
             'class'      => 'span3',
@@ -72,10 +85,10 @@ class Proposalgen_Form_Costs_ClientToner extends Twitter_Bootstrap_Form_Horizont
                     'options'   => array(
                         'min' => 0
                     )),
-                )
+            )
         ));
+
         $costElement->setErrorMessages(array("Must be greater than 0"));
         $this->addElement($costElement);
-
     }
 }

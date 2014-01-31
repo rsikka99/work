@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Class Proposalgen_Service_Import_Device_Pricing
+ * Class Proposalgen_Service_Import_Client_Pricing
  */
-class Proposalgen_Service_Import_Customer_Pricing
+class Proposalgen_Service_Import_Client_Pricing
 {
     const CSV_HEADER_TOTALS                = 'T-O-T-A-L-S';
     const CSV_HEADER_CUSTOMER_NUMBER       = 'CUSTOMER #';
@@ -55,7 +55,7 @@ class Proposalgen_Service_Import_Customer_Pricing
     protected $_inputFilter;
 
     /**
-     * @var Proposalgen_Form_ImportCustomerCostCsv
+     * @var Proposalgen_Form_ImportClientCostCsv
      */
     protected $_form;
 
@@ -84,6 +84,11 @@ class Proposalgen_Service_Import_Customer_Pricing
                     'StripTags',
                     'StringTrim',
                 ),
+                self::CSV_HEADER_DATE_RECONCILED       => array(
+                    'StripTags',
+                    'StringTrim',
+                    array('PregReplace', '/-/', '/'),
+                ),
             ),
             array(
                 '*'                                 => array(
@@ -91,11 +96,15 @@ class Proposalgen_Service_Import_Customer_Pricing
                 ),
                 self::CSV_HEADER_DATE_SHIPPED       => array(
                     'allowEmpty' => true,
-                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_2),
+                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
                 ),
                 self::CSV_HEADER_DATE_ORDERED       => array(
                     'allowEmpty' => true,
-                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_2),
+                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
+                ),
+                self::CSV_HEADER_DATE_RECONCILED       => array(
+                    'allowEmpty' => true,
+                    new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
                 ),
                 self::CSV_HEADER_UNIT_MEASUREMENT   => array(
                     array('InArray', array('EA')),
@@ -117,13 +126,13 @@ class Proposalgen_Service_Import_Customer_Pricing
     /**
      * Gets an instance of the form
      *
-     * @return Proposalgen_Form_ImportCustomerCostCsv
+     * @return Proposalgen_Form_ImportClientCostCsv
      */
     public function getForm ()
     {
         if (!isset($this->_form))
         {
-            $this->_form = new Proposalgen_Form_ImportCustomerCostCsv('.csv');
+            $this->_form = new Proposalgen_Form_ImportClientCostCsv('.csv');
         }
 
         return $this->_form;

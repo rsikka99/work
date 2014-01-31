@@ -5,7 +5,7 @@
  */
 class Proposalgen_Model_Acl
 {
-    const RESOURCE_PROPOSALGEN_CUSTOMER_COST_WILDCARD = "proposalgen__customer-pricing__%";
+    const RESOURCE_PROPOSALGEN_CLIENT_PRICING_WILDCARD = "proposalgen__client-pricing__%";
 
     const RESOURCE_PROPOSALGEN_REPORT_ASSESSMENT_WILDCARD = "proposalgen__report_assessment__%";
 
@@ -24,12 +24,6 @@ class Proposalgen_Model_Acl
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKDEVICEPRICING = "proposalgen__costs__bulkdevicepricing";
     const RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING     = "proposalgen__costs__exportpricing";
-
-    const RESOURCE_PROPOSALGEN_COSTS_INDEX                  = "proposalgen__costs__index";
-    const RESOURCE_PROPOSALGEN_COSTS_CLIENTTONERSLIST       = "proposalgen__costs__client-toners-list";
-    const RESOURCE_PROPOSALGEN_COSTS_DELETECLIENTPRICING    = "proposalgen__costs__delete-client-pricing";
-    const RESOURCE_PROPOSALGEN_COSTS_SAVECLIENTPRICING      = "proposalgen__costs__save-client-pricing";
-    const RESOURCE_PROPOSALGEN_COSTS_DELETEALLCLIENTPRICING = "proposalgen__costs__delete-all-client-pricing";
 
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING   = "proposalgen__costs__bulk-file-toner-pricing";
     const RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP   = "proposalgen__costs__bulk-file-toner-matchup";
@@ -95,7 +89,7 @@ class Proposalgen_Model_Acl
      */
     private static function setupAclResources (Application_Model_Acl $acl)
     {
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_CUSTOMER_COST_WILDCARD);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_CLIENT_PRICING_WILDCARD);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_INDEX);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERS);
@@ -116,11 +110,6 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERMATCHUP);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_BULKFILETONERPRICING);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_EXPORTPRICING);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_INDEX);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_CLIENTTONERSLIST);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_DELETECLIENTPRICING);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_SAVECLIENTPRICING);
-        $acl->addResource(self::RESOURCE_PROPOSALGEN_COSTS_DELETEALLCLIENTPRICING);
 
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_DEVICEINSTANCEDETAILS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_FLEET_RMSUPLOADLIST);
@@ -184,15 +173,10 @@ class Proposalgen_Model_Acl
         /**
          * Assessment User
          */
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_CUSTOMER_COST_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_CLIENT_PRICING_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_DEVICETONERCOUNT, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_COSTS_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_COSTS_CLIENTTONERSLIST, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_COSTS_DELETECLIENTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_COSTS_SAVECLIENTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_COSTS_DELETEALLCLIENTPRICING, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_SURVEY_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_AUTHENTICATED_USER, self::RESOURCE_PROPOSALGEN_FLEET_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);

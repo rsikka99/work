@@ -779,11 +779,12 @@ $data = array(
 $this->partial("report/printiq/healthcheck/docx/01_titlepage.phtml", $titledata);
 $this->partial("report/printiq/healthcheck/docx/02_reportcard.phtml", $data);
 $this->partial("report/printiq/healthcheck/docx/03_serviceandsupplieslogistics.phtml", $data);
-$this->partial("report/printiq/healthcheck/docx/04_printinghardwareusage.phtml", $data);
-$this->partial("report/printiq/healthcheck/docx/05_techandproductivity.phtml", $data);
-$this->partial("report/printiq/healthcheck/docx/06_environmental.phtml", $data);
-$this->partial("report/printiq/healthcheck/docx/07_fleetattributes.phtml", $data);
-$this->partial("report/printiq/healthcheck/docx/08_summary.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/04_oemvscompatible.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/05_printinghardwareusage.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/06_techandproductivity.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/07_environmental.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/08_fleetattributes.phtml", $data);
+$this->partial("report/printiq/healthcheck/docx/09_summary.phtml", $data);
 
 $objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 $objWriter->save($this->savePath);

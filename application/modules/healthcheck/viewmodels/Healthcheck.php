@@ -178,6 +178,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     );
 
     /**
+     * @var Proposalgen_Model_Client_Toner_Order[]
+     */
+    protected $_clientTonerOrders;
+
+    /**
      * @param Healthcheck_Model_Healthcheck $report
      */
     public function __construct (Healthcheck_Model_Healthcheck $report)
@@ -3012,8 +3017,170 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         return $this->_deviceVendorCount;
     }
 
+    /**
+     * A3 Print volume as a percentage of the total print volume
+     *
+     * @return float
+     */
     public function calculatePercentageA3Pages ()
     {
         return $this->getDevices()->a3DeviceInstances->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly() / $this->getPageCounts()->getCombinedPageCount()->getMonthly();
+    }
+
+    /**
+     * @return int|Proposalgen_Model_Client_Toner_Order[]
+     */
+    public function getClientTonerOrders ()
+    {
+        if (!isset($this->_clientTonerOrders))
+        {
+            $this->_clientTonerOrders = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->fetchAllForClient($this->healthcheck->clientId, $this->healthcheck->dealerId);
+        }
+
+        return $this->_clientTonerOrders;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOptimizedClientTonerOrderSavings ()
+    {
+        $totalSavings = 0.0;
+        foreach ($this->getClientTonerOrders() as $clientTonerOrder)
+        {
+            if ($clientTonerOrder->getReplacementToner())
+            {
+                $totalSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity;
+            }
+        }
+
+        return $totalSavings;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOptimizedClientTonerOrderCost ()
+    {
+        $totalCost = 0.0;
+        foreach ($this->getClientTonerOrders() as $clientTonerOrder)
+        {
+            $totalCost += $clientTonerOrder->cost - $clientTonerOrder->quantity;
+        }
+
+        return $totalCost;
+    }
+
+    protected $_currentTonerOrderCost;
+    protected $_currentTonerOrderSavings;
+    protected $_optimizedTonerOrderSavings;
+
+    /**
+     * Gets the total cost of the current toner order
+     *
+     * @return float
+     */
+    public function calculateCurrentTonerOrderCost ()
+    {
+        if (!isset($this->_currentTonerOrderCost))
+        {
+            $this->_currentTonerOrderCost = 0.0;
+            foreach ($this->getClientTonerOrders() as $clientTonerOrder)
+            {
+                $this->_currentTonerOrderCost += $clientTonerOrder->cost * $clientTonerOrder->quantity;
+            }
+        }
+
+        return $this->_currentTonerOrderCost;
+    }
+
+
+    /**
+     * Gets the difference between the current toner order and OEM supplies. This will be 0 if they are not compatible toners.
+     *
+     * @return float
+     */
+    public function calculateCurrentTonerOrderSavings ()
+    {
+        if (!isset($this->_currentTonerOrderSavings))
+        {
+            $totalOemCost = 0.0;
+            foreach ($this->getClientTonerOrders() as $clientTonerOrder)
+            {
+                if ($clientTonerOrder->getToner() instanceof Proposalgen_Model_Toner)
+                {
+                    if ($clientTonerOrder->getToner()->isCompatible())
+                    {
+                        $toners = $clientTonerOrder->getToner()->getOemToners($this->healthcheck->clientId, $this->healthcheck->dealerId);
+                        if (count($toners) > 0)
+                        {
+                            $toner = $toners[0];
+                            $totalOemCost += $toner->cost - $clientTonerOrder->quantity;
+                        }
+                        else
+                        {
+                            $totalOemCost += $clientTonerOrder->cost * $clientTonerOrder->quantity;
+                        }
+                    }
+                    else
+                    {
+                        $totalOemCost += $clientTonerOrder->cost * $clientTonerOrder->quantity;
+                    }
+
+                }
+            }
+
+            $this->_currentTonerOrderSavings = $totalOemCost - $this->calculateCurrentTonerOrderCost();
+        }
+
+        return $this->_currentTonerOrderSavings;
+    }
+
+    /**
+     * Calculates the current savings percentage
+     *
+     * @return float
+     */
+    public function calculateCurrentTonerOrderSavingPercentage ()
+    {
+        return $this->calculateCurrentTonerOrderSavings() / $this->calculateCurrentTonerOrderCost() * 100;
+    }
+
+    /**
+     * Gets the difference between the current toner order and OEM supplies. This will be 0 if they are not compatible toners.
+     *
+     * @return float
+     */
+    public function calculateOptimizedTonerOrderSavings ()
+    {
+        if (!isset($this->_optimizedTonerOrderSavings))
+        {
+            $totalOptimizedCost = 0.0;
+            foreach ($this->getClientTonerOrders() as $clientTonerOrder)
+            {
+                if ($clientTonerOrder->getReplacementToner() instanceof Proposalgen_Model_Toner)
+                {
+                    $totalOptimizedCost += $clientTonerOrder->getReplacementToner()->cost * $clientTonerOrder->quantity;
+                }
+                else
+                {
+                    $totalOptimizedCost += $clientTonerOrder->cost * $clientTonerOrder->quantity;
+                }
+            }
+
+            $this->_optimizedTonerOrderSavings = $this->calculateCurrentTonerOrderCost() - $totalOptimizedCost;
+        }
+
+        return $this->_optimizedTonerOrderSavings;
+    }
+
+    /**
+     * Calculates the current savings percentage
+     *
+     * @return float
+     */
+    public function calculateOptimizedTonerOrderSavingPercentage ()
+    {
+        return $this->calculateOptimizedTonerOrderSavings() / $this->calculateCurrentTonerOrderCost() * 100;
     }
 }

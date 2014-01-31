@@ -24,6 +24,7 @@ class My_Feature
     const ASSESSMENT_LEASE_BUYBACK                   = "assessment_lease_buyback";
     const ASSESSMENT_FLEET_ATTRIBUTES                = "assessment_fleet_attributes";
     const ASSESSMENT_UTILIZATION                     = "assessment_utilization";
+    const CLIENT_PRICING                           = "client_pricing";
 
     /**
      * @var My_Feature_AdapterInterface

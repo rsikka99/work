@@ -1,10 +1,10 @@
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
 <?php $this->headScript()->captureEnd(); ?>
-<?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/cost/index.js')); ?>
+<?php $this->headScript()->appendFile($this->baseUrl('/js/proposalgen/client-pricing/index.js')); ?>
 
 <div class="page-header">
-    <h1>Customer Pricing</h1>
+    <h1>Client Pricing</h1>
 </div>
 <div id="toners_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
     Filter:
@@ -15,19 +15,19 @@ var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
     <input type="text" id="tonersCriteria" class="input-medium" style="margin:0px 0px 0px 0px" />
     <input id="tonersSearch" type="button" value="Search" class="btn btn-mini btn-success" />
     <input id="tonersReset" type="button" value="Reset" class="btn btn-mini btn-inverse" />
-    <a class="btn btn-mini btn-success pull-right" href="<?php echo $this->url(array("action" => "index", "controller" => "customer-pricing", "module" => "proposalgen")); ?>">Upload</a>
+    <a class="btn btn-mini btn-success pull-right" href="<?php echo $this->url(array("action" => "upload", "controller" => "client-pricing", "module" => "proposalgen")); ?>">Upload</a>
 </div>
 <table id="clientToners"></table>
 <div id='clientToners_Pager'></div>
 <hr>
 <div class="alert-danger"><h1>DANGER ZONE!</h1></div>
-<input id="deleteAllCustomerPricing" type="button" value="Delete All Customer Pricing" class="btn btn-mini btn-danger pull-right" />
+<input id="deleteAllClientPricing" type="button" value="Delete All Client Pricing" class="btn btn-mini btn-danger pull-right" />
 
 <div class="modal hide" id="clientTonersModal">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">x</a>
 
-        <h3 style="text-align: center">Edit Customer Pricing</h3>
+        <h3 style="text-align: center">Edit Client Pricing</h3>
     </div>
     <div class="modal-body">
         <form id="clientTonersForm" class="form-horizontal form-center-actions">
@@ -71,12 +71,12 @@ var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
 <div class="modal hide" id="alertDeleteAllModal">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">x</a>
-        <h4 style="text-align: center">Are you sure you want to delete all customer pricing<br /> for this client?</h4>
+        <h4 style="text-align: center">Are you sure you want to delete all pricing<br /> for this client?</h4>
     </div>
     <div class="modal-body">
         <div class="form-horizontal">
             <div style="text-align:center">
-                <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: delteAllCustomerPricing();" />
+                <input type="button" class="btn btn-primary" value="Yes" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: deleteAllClientPricing();" />
                 <input type="button" class="btn" value="No" data-dismiss="modal" style="margin-bottom: 4px" />
             </div>
         </div>

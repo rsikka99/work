@@ -749,8 +749,8 @@ WHERE `toners`.`id` IN ({$tonerIdList})
     {
         $db                               = $this->getDbTable()->getDefaultAdapter();
         $masterDeviceId                   = $db->quoteInto($masterDeviceId, "INTEGER");
-        $clientId                         = $db->quoteInto($dealerId, "INTEGER");
-        $dealerId                         = $db->quoteInto($clientId, "INTEGER");
+        $clientId                         = $db->quoteInto($clientId, "INTEGER");
+        $dealerId                         = $db->quoteInto($dealerId, "INTEGER");
         $monochromeManufacturerPreference = $db->quoteInto($monochromeManufacturerPreference, "STRING");
         $colorManufacturerPreference      = $db->quoteInto($colorManufacturerPreference, "STRING");
         $sql                              = "CALL getCheapestTonersForDevice(?,?,?,?,?)";
@@ -963,5 +963,210 @@ FROM toners
         $result = $stmt->fetchAll();
 
         return $result;
+    }
+
+    /**
+     * Fetches a list of toners that are compatible with a certain toner
+     *
+     * @param int|Proposalgen_Model_Toner $tonerId
+     * @param int                         $clientId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function getCompatibleToners ($tonerId, $clientId = null)
+    {
+        $toners = array();
+
+        if ($tonerId instanceof Proposalgen_Model_Toner)
+        {
+            $tonerId = $tonerId->id;
+        }
+
+        if ($tonerId > 0)
+        {
+            $db       = $this->getDbTable()->getAdapter();
+            $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
+            $sql      = "SELECT
+    dt.toner_id,
+    dt.master_device_id,
+    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
+    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS cpp
+FROM device_toners AS dt
+    LEFT JOIN toners ON toners.id = dt.toner_id
+    LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = dt.toner_id AND dealer_toner_attributes.dealerId = ?
+    LEFT JOIN client_toner_orders ON client_toner_orders.tonerId = dt.toner_id AND client_toner_orders.clientId = ?
+WHERE dt.master_device_id IN (SELECT
+                                  dt2.master_device_id
+                              FROM device_toners AS dt2
+                              WHERE dt2.toner_id = ?) AND dt.toner_id != ? AND toners.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+GROUP BY dt.toner_id
+ORDER BY cpp ASC";
+            $stmt     = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId));
+            $result   = $stmt->fetchAll();
+
+            foreach ($result as $tonerData)
+            {
+                $newTonerId = $tonerData['toner_id'];
+                $toner      = $this->getItemFromCache($newTonerId);
+                if (!$toner instanceof Proposalgen_Model_Toner)
+                {
+                    $toner                 = $this->find($newTonerId);
+                    $toner->calculatedCost = $tonerData['calculatedCost'];
+                    $this->saveItemToCache($toner);
+                }
+
+                $toners[] = $toner;
+            }
+        }
+
+        return $toners;
+    }
+
+    /**
+     * Gets compatible toners
+     *
+     * @param int|Proposalgen_Model_Toner $tonerId
+     * @param null|int                    $clientId
+     * @param null|int                    $dealerId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function findCompatibleToners ($tonerId, $clientId = null, $dealerId = null)
+    {
+        $db  = $this->getDbTable()->getDefaultAdapter();
+        $toners = array();
+
+        if ($tonerId instanceof Proposalgen_Model_Toner)
+        {
+            $tonerId = $tonerId->id;
+        }
+
+
+        $sql = 'SELECT
+    t.*,
+    COALESCE(cta.cost, dta.cost, t.cost)           AS calculatedCost,
+    COALESCE(cta.cost, dta.cost, t.cost) / t.yield AS cpp
+FROM device_toners AS dt
+-- Toners
+    JOIN toners AS t
+        ON t.id = dt.toner_id
+-- Toners
+    JOIN master_devices AS md
+        ON md.id = dt.master_device_id
+-- Dealer Toner attributes
+    LEFT JOIN dealer_toner_attributes AS dta
+        ON dta.tonerId = dt.toner_id AND dta.dealerId = ?
+-- Client Toner Orders
+    LEFT JOIN client_toner_orders AS cta
+        ON cta.tonerId = dt.toner_id AND cta.clientId = ?
+WHERE dt.master_device_id IN
+      (
+          SELECT
+              md2.id
+          FROM master_devices AS md2
+-- Device toners
+              JOIN device_toners AS dt2
+                  ON dt2.master_device_id = md2.id
+-- Toners
+              JOIN toners AS t2
+                  ON dt2.toner_id = t2.id
+          WHERE dt2.toner_id = ?
+      )
+      AND dt.toner_id != ?
+      AND t.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+      AND t.manufacturerId != md.manufacturerId
+GROUP BY dt.toner_id
+ORDER BY cpp ASC';
+
+        $result = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId))->fetchAll();
+        foreach ($result as $tonerData)
+        {
+            $newTonerId = $tonerData['id'];
+            $toner      = $this->getItemFromCache($newTonerId);
+            if (!$toner instanceof Proposalgen_Model_Toner)
+            {
+                $toner                 = $this->find($newTonerId);
+                $toner->calculatedCost = $tonerData['calculatedCost'];
+                $this->saveItemToCache($toner);
+            }
+
+            $toners[] = $toner;
+        }
+
+        return $toners;
+    }
+
+    /**
+     * Gets other OEM toners
+     *
+     * @param int|Proposalgen_Model_Toner $tonerId
+     * @param null|int                    $clientId
+     * @param null|int                    $dealerId
+     *
+     * @return Proposalgen_Model_Toner[]
+     */
+    public function findOemToners ($tonerId, $clientId = null, $dealerId = null)
+    {
+        $toners = array();
+
+        if ($tonerId instanceof Proposalgen_Model_Toner)
+        {
+            $tonerId = $tonerId->id;
+        }
+
+        $db  = $this->getDbTable()->getDefaultAdapter();
+        $sql = 'SELECT
+    t.*,
+    COALESCE(cta.cost, dta.cost, t.cost)           AS calculatedCost,
+    COALESCE(cta.cost, dta.cost, t.cost) / t.yield AS cpp
+FROM device_toners AS dt
+-- Toners
+    JOIN toners AS t
+        ON t.id = dt.toner_id
+-- Toners
+    JOIN master_devices AS md
+        ON md.id = dt.master_device_id
+-- Dealer Toner attributes
+    LEFT JOIN dealer_toner_attributes AS dta
+        ON dta.tonerId = dt.toner_id AND dta.dealerId = ?
+-- Client Toner Orders
+    LEFT JOIN client_toner_orders AS cta
+        ON cta.tonerId = dt.toner_id AND cta.clientId = ?
+WHERE dt.master_device_id IN
+      (
+          SELECT
+              md2.id
+          FROM master_devices AS md2
+-- Device toners
+              JOIN device_toners AS dt2
+                  ON dt2.master_device_id = md2.id
+-- Toners
+              JOIN toners AS t2
+                  ON dt2.toner_id = t2.id
+          WHERE dt2.toner_id = ?
+      )
+      AND dt.toner_id != ?
+      AND t.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+      AND t.manufacturerId = md.manufacturerId
+GROUP BY dt.toner_id
+ORDER BY cpp ASC';
+
+        $result = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId))->fetchAll();
+
+        foreach ($result as $tonerData)
+        {
+            $newTonerId = $tonerData['id'];
+            $toner      = $this->getItemFromCache($newTonerId);
+            if (!$toner instanceof Proposalgen_Model_Toner)
+            {
+                $toner                 = $this->find($newTonerId);
+                $toner->calculatedCost = $tonerData['calculatedCost'];
+                $this->saveItemToCache($toner);
+            }
+
+            $toners[] = $toner;
+        }
+
+        return $toners;
     }
 }

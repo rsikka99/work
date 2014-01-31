@@ -11,7 +11,7 @@ class AddClientPricingToStoredProcedure extends AbstractMigration
     {
         $this->execute('DROP PROCEDURE getCheapestTonersForDevice;');
 
-        $this->execute('-- Create Prodedure
+        $this->execute('-- Create Procedure
 CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), IN inDealerId INT(11), IN inMonochromeTonerPreference TEXT,
                                             IN inColorTonerPreference TEXT, IN inClientId INT(11))
     BEGIN
@@ -27,9 +27,9 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                      device_toners.toner_id                                                                           AS id,
                      toners.sku,
                      toners.cost,
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
                      toners.yield,
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
                      toners.manufacturerId,
                      IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                  AS isOem,
                      toners.tonerColorId
@@ -38,11 +38,11 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                      LEFT JOIN master_devices ON master_devices.id = device_toners.master_device_id
                      LEFT JOIN dealer_toner_attributes
                          ON dealer_toner_attributes.tonerId = device_toners.toner_id AND dealer_toner_attributes.dealerId = inDealerId
-                     LEFT JOIN client_toner_attributes
-                         ON client_toner_attributes.tonerId = device_toners.toner_id AND client_toner_attributes.clientId = inClientId
+                     LEFT JOIN client_toner_orders
+                         ON client_toner_orders.tonerId = device_toners.toner_id AND client_toner_orders.clientId = inClientId
                  WHERE device_toners.master_device_id = inMasterDeviceId AND toners.tonerColorId != 1
                        AND find_in_set(toners.manufacturerId, CONCAT(inColorTonerPreference, master_devices.manufacturerId))
-                       AND COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield =
+                       AND COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield =
                            (SELECT
                                 min(COALESCE(dta.cost, t.cost) / t.yield)
                             FROM device_toners
@@ -53,14 +53,14 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                                     ON md.id = device_toners.master_device_id
                                 LEFT JOIN dealer_toner_attributes AS dta
                                     ON dta.tonerId = device_toners.toner_id AND dta.dealerId = inDealerId
-                                LEFT JOIN client_toner_attributes AS cta
+                                LEFT JOIN client_toner_orders AS cta
                                     ON cta.tonerId = device_toners.toner_id AND cta.clientId = inClientId
                             WHERE
                                 toners.tonerColorId = t.tonerColorId AND
                                 device_toners.master_device_id = inMasterDeviceId AND
                                 t.manufacturerId = toners.manufacturerId)
                  ORDER BY find_in_set(toners.manufacturerId, CONCAT(inColorTonerPreference, master_devices.manufacturerId)),
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield ASC
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield ASC
              ) AS selectStatement1
         GROUP BY selectStatement1.tonerColorId
 
@@ -73,9 +73,9 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                      device_toners.toner_id                                                                           AS id,
                      toners.sku,
                      toners.cost,
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
                      toners.yield,
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
                      toners.manufacturerId,
                      IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                  AS isOem,
                      toners.tonerColorId
@@ -84,11 +84,11 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                      LEFT JOIN master_devices ON master_devices.id = device_toners.master_device_id
                      LEFT JOIN dealer_toner_attributes
                          ON dealer_toner_attributes.tonerId = device_toners.toner_id AND dealer_toner_attributes.dealerId = inDealerId
-                     LEFT JOIN client_toner_attributes
-                         ON client_toner_attributes.tonerId = device_toners.toner_id AND client_toner_attributes.clientId = inClientId
+                     LEFT JOIN client_toner_orders
+                         ON client_toner_orders.tonerId = device_toners.toner_id AND client_toner_orders.clientId = inClientId
                  WHERE device_toners.master_device_id = inMasterDeviceId AND toners.tonerColorId = 1
                        AND find_in_set(toners.manufacturerId, CONCAT(inMonochromeTonerPreference, master_devices.manufacturerId))
-                       AND COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield =
+                       AND COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield =
                            (SELECT
                                 min(COALESCE(dta.cost, t.cost) / t.yield)
                             FROM device_toners
@@ -99,14 +99,14 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
                                     ON md.id = device_toners.master_device_id
                                 LEFT JOIN dealer_toner_attributes AS dta
                                     ON dta.tonerId = device_toners.toner_id AND dta.dealerId = inDealerId
-                                LEFT JOIN client_toner_attributes AS cta
+                                LEFT JOIN client_toner_orders AS cta
                                     ON cta.tonerId = device_toners.toner_id AND cta.clientId = inClientId
                             WHERE
                                 toners.tonerColorId = t.tonerColorId AND
                                 device_toners.master_device_id = inMasterDeviceId AND
                                 t.manufacturerId = toners.manufacturerId)
                  ORDER BY find_in_set(toners.manufacturerId, CONCAT(inMonochromeTonerPreference, master_devices.manufacturerId)),
-                     COALESCE(client_toner_attributes.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield ASC
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield ASC
              ) AS selectStatement2
         GROUP BY selectStatement2.tonerColorId;
 

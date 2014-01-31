@@ -1,0 +1,54 @@
+<?php
+/* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
+$healthcheckViewModel = $this->healthcheckViewModel;
+$graphs = $healthcheckViewModel->getGraphs();
+?>
+<div class="pheader">Estimated OEM Toner Costs vs. Compatible Toner Costs</div>
+<p>From the review of your toner purchases, you are saving <?php echo $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings()); ?> a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately <?php echo $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings() * 12); ?>. That is a <?php echo number_format($healthcheckViewModel->calculateCurrentTonerOrderSavingPercentage()); ?>% savings for that time period.</p>
+
+<p>You can save an additional <?php echo $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings()); ?> over the first month and approximately <?php echo $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings() * 12); ?> over 12 months by moving to the suggested products on the analysis below. That is a total savings of <?php echo number_format($healthcheckViewModel->calculateOptimizedTonerOrderSavingPercentage()); ?>% going forward.</p>
+<br/>
+<table class="genericTable" id="oemVsCompTable">
+    <thead>
+    <tr class="shaded">
+        <th>SKU</th>
+        <th>VPN</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>New SKU</th>
+        <th>New VPN</th>
+        <th>New Price</th>
+        <th>Net Savings</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    $totalNetSavings = 0;
+    foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder) :
+        ?>
+        <tr>
+            <td><?php echo $clientTonerOrder->dealerSku; ?></td>
+            <td><?php echo $clientTonerOrder->oemSku; ?></td>
+            <td><?php echo number_format($clientTonerOrder->quantity); ?></td>
+            <td class="currency-cell"><?php echo $this->currency($clientTonerOrder->cost); ?></td>
+            <?php if ($clientTonerOrder->replacementTonerId > 0) : ?>
+                <td><?php echo ($clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)) ? $clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)->dealerSku : '-'; ?></td>
+                <td><?php echo $clientTonerOrder->getReplacementToner()->sku; ?></td>
+                <td class="currency-cell"><?php echo $this->currency($clientTonerOrder->getReplacementToner()->cost); ?></td>
+                <td class="currency-cell"><?php echo $this->currency(($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity); ?></td>
+                <?php $totalNetSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity; ?>
+            <?php else : ?>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            <?php endif; ?>
+        </tr>
+
+    <?php endforeach; ?>
+    <tr class="shaded">
+        <td colspan="7"></td>
+        <td class="currency-cell"><?php echo $this->currency($totalNetSavings); ?></td>
+    </tr>
+    </tbody>
+</table>
