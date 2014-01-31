@@ -138,13 +138,13 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['UnmanagedVsManagedDevices']);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutJIT']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['ManagedVsNotJitVsJitDevices']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedManagedVsJitVsCompVsLeased']);
 $cellWidths = array(
     1528,
     1800
 );
-$section->addTextBreak(2);
+$section->addPageBreak();
 $section->addTitle('Estimated OEM Toner Costs vs. Estimated Compatible Toner Costs', 2);
 $section->addText(sprintf('You are saving money by moving to Private Brand Toner for the machines that are on your %1$s Program.'), $this->jit);
 $section->addText(sprintf('%1$s analyzed your usage on your ink and toner spend and you can save an additional %2$s over the next 6 months by moving to the suggested items on the attached analysis. ',

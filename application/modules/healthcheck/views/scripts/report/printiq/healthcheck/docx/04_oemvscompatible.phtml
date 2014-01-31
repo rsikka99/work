@@ -12,7 +12,12 @@ $section = $this->section;
 /* @var $healthcheckViewModel Healthcheck_ViewModel_Healthcheck */
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
-
+$section->addTitle('Estimated OEM Toner Costs vs. Compatible Toner Costs', 2);
+$section->addText(sprintf('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.',
+        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings()),
+        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings() * 12),
+        number_format($healthcheckViewModel->calculateCurrentTonerOrderSavingPercentage()))
+);
 $section->addText(sprintf('You can save an additional %1$s over the first month and approximately %2$s over 12 months by moving to the suggested products on the analysis below. That is a total savings of %3$s%% going forward.',
     $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings()),
     $this->currency($healthcheckViewModel->calculateOptimizedTonerOrderSavings() * 12),
@@ -42,15 +47,15 @@ foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder)
     $tonerOrderSavingsTable->addRow($this->styles->tables->utilization->rowheight);
     $tonerOrderSavingsTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($clientTonerOrder->dealerSku, null, 'nospacing_centeralign');
     $tonerOrderSavingsTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($clientTonerOrder->oemSku, null, 'nospacing_centeralign');
-    $tonerOrderSavingsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($clientTonerOrder->quantity), null, 'nospacing_centeralign');
-    $tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($clientTonerOrder->cost), null, 'nospacing_centeralign');
+    $tonerOrderSavingsTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($clientTonerOrder->quantity), null, 'nospacing_rightalign');
+    $tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($clientTonerOrder->cost), null, 'nospacing_rightalign');
     if ($clientTonerOrder->replacementTonerId > 0)
     {
         $tonerOrderSavingsTable->addCell($cellWidths [4], $this->styles->tables->utilization->cell4)->addText(($clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)) ? $clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)->dealerSku : '-', null, 'nospacing_centeralign');
         $tonerOrderSavingsTable->addCell($cellWidths [5], $this->styles->tables->utilization->cell4)->addText($clientTonerOrder->getReplacementToner()->sku, null, 'nospacing_centeralign');
-        $tonerOrderSavingsTable->addCell($cellWidths [7], $this->styles->tables->utilization->cell4)->addText($this->currency($clientTonerOrder->getReplacementToner()->cost), null, 'nospacing_centeralign');
-        $tonerOrderSavingsTable->addCell($cellWidths [6], $this->styles->tables->utilization->cell4)->addText($this->currency(($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity), null, 'nospacing_centeralign');
-        $totalNetSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity;
+        $tonerOrderSavingsTable->addCell($cellWidths [7], $this->styles->tables->utilization->cell4)->addText($this->currency($clientTonerOrder->getReplacementTonerCost($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)), null, 'nospacing_rightalign');
+        $tonerOrderSavingsTable->addCell($cellWidths [6], $this->styles->tables->utilization->cell4)->addText($this->currency($clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)), null, 'nospacing_rightalign');
+        $totalNetSavings += $clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin);
     }
     else
     {
@@ -62,4 +67,4 @@ foreach ($healthcheckViewModel->getClientTonerOrders() as $clientTonerOrder)
 }
 $tonerOrderSavingsTable->addRow($this->styles->tables->utilization->rowheight);
 $tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader, 7)->addText('', null, 'nospacing_centeralign');
-$tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader, 1)->addText($this->currency($totalNetSavings), null, 'nospacing_centeralign');
+$tonerOrderSavingsTable->addCell($cellWidths [3], $this->styles->tables->utilization->cellHeader, 1)->addText($this->currency($totalNetSavings), null, 'nospacing_rightalign');

@@ -86,6 +86,11 @@ class Proposalgen_Model_Client_Toner_Order extends My_Model_Abstract
     protected $_replacementToner;
 
     /**
+     * @var float
+     */
+    protected $_replacementTonerSavings;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -271,5 +276,47 @@ class Proposalgen_Model_Client_Toner_Order extends My_Model_Abstract
         $this->_replacementToner = $toner;
 
         return $this;
+    }
+
+    /**
+     * Gets the replacement toner cost + margin
+     *
+     * @param $margin
+     *
+     * @return number
+     */
+    public function getReplacementTonerCost ($margin)
+    {
+        return Tangent_Accounting::applyMargin($this->getReplacementToner()->cost, $margin);
+    }
+
+    /**
+     * Gets the replacement toner savings + margin
+     *
+     * @param $margin
+     *
+     * @return float
+     */
+    public function getReplacementTonerSavings ($margin)
+    {
+        if (!isset($this->_replacementTonerSavings))
+        {
+            $this->_replacementTonerSavings = array();
+        }
+
+        $cacheKey = $margin;
+        if ($this->getReplacementToner() instanceof Proposalgen_Model_Toner)
+        {
+            if (!isset($this->_replacementTonerSavings[$cacheKey]))
+            {
+                $this->_replacementTonerSavings[$cacheKey] = ($this->cost - $this->getReplacementTonerCost($margin)) * $this->quantity;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+
+        return $this->_replacementTonerSavings[$cacheKey];
     }
 }

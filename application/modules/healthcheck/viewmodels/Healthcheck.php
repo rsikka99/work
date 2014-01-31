@@ -2630,7 +2630,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $healthcheckGraphs['CopyCapableDevicesGraph'] = $copyCapableGraph->getUrl();
 
             /**
-             * -- UnmanagedVsManagedDevices
+             * -- ManagedVsNotJitVsJitDevices
              */
             $insufficientData                  = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
             $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
@@ -2639,7 +2639,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $unmanagedJitCompatibleDeviceCount = $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
 
 
-            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $unmanagedJitCompatibleDeviceCount, $insufficientData, $leasedDevices);
+            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $unmanagedJitCompatibleDeviceCount, $leasedDevices);
             $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
@@ -2672,6 +2672,61 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addColors(array(
                 "ababab"
             ));
+            $barGraph->setBarScale(50, 10);
+            $barGraph->addAxisRange(0, 0, $highest * 1.1);
+            $barGraph->setDataRange(0, $highest * 1.1);
+
+            $barGraph->setLegendPosition("b|l");
+
+            $barGraph->setLegend(array(
+                "Managed/On " . My_Brand::$jit,
+                "Not " . My_Brand::$jit . " Compatible",
+                My_Brand::$jit . " Compatible",
+                "Leased",
+            ));
+
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
+            $barGraph->setTitle("Total printers on network");
+            // Graphs[ManagedVsNotJitVsJitDevices]
+            $healthcheckGraphs['ManagedVsNotJitVsJitDevices'] = $barGraph->getUrl();
+
+            /**
+             * -- UnmanagedVsManagedDevices
+             */
+            $insufficientData                  = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
+            $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
+            $isManagedDeviceCount              = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $unmanagedDeviceCount              = $this->getDevices()->unmanagedDeviceInstances->getCount() + $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
+
+
+            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $leasedDevices);
+            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph->setVisibleAxes(array(
+                'y'
+            ));
+            $barGraph->addDataSet(array(
+                $isManagedDeviceCount
+            ));
+            $barGraph->addColors(array(
+                "0194D2"
+            ));
+
+            $barGraph->addDataSet(array(
+                $unmanagedDeviceCount
+            ));
+            $barGraph->addColors(array(
+                "E21736"
+            ));
+            $barGraph->addDataSet(array(
+                $leasedDevices
+            ));
+
+            $barGraph->addColors(array(
+                "ababab"
+            ));
 
             if ($insufficientData > 0)
             {
@@ -2682,7 +2737,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $barGraph->addColors(array(
                     "666666"
                 ));
-                $barGraph->setBarScale(40, 5);
+                $barGraph->setBarScale(50, 10);
             }
             else
             {
@@ -2697,8 +2752,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $barGraph->setLegend(array(
                 "Managed/On " . My_Brand::$jit,
-                "Not " . My_Brand::$jit . " Compatible",
-                My_Brand::$jit . " Compatible",
+                "Unmanaged",
                 "Leased",
                 "Insufficient Data",
             ));
@@ -2714,6 +2768,81 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             /**
              * -- PagesWithOrWithoutJIT
+             */
+            $barGraph = new gchart\gBarChart(280, 230);
+
+            $pagesPrintedOnManaged    = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnUnmanaged  = "Not " . My_Brand::$jit . " Compatible";
+            $pagesPrintedOnLeased     = "Leased";
+
+            $pagesPrinted = array(
+                $pagesPrintedOnManaged    => 0,
+                $pagesPrintedOnUnmanaged  => 0,
+                $pagesPrintedOnLeased     => 0,
+            );
+
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if ($device->isManaged)
+                {
+                    $pagesPrinted [$pagesPrintedOnManaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                }
+                else if ($device->isLeased)
+                {
+                    $pagesPrinted [$pagesPrintedOnLeased] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                }
+                else
+                {
+                    $pagesPrinted [$pagesPrintedOnUnmanaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
+                }
+            }
+
+            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted[$pagesPrintedOnCompatible], $pagesPrinted [$pagesPrintedOnLeased]);
+            $barGraph->setVisibleAxes(array(
+                'y'
+            ));
+            $barGraph->addDataSet(array(
+                round($pagesPrinted[$pagesPrintedOnManaged])
+            ));
+            $barGraph->addColors(array(
+                "0194D2"
+            ));
+            $barGraph->addDataSet(array(
+                round($pagesPrinted[$pagesPrintedOnUnmanaged])
+            ));
+
+            $barGraph->addColors(array(
+                "E21736"
+            ));
+
+            $barGraph->addDataSet(array(
+                round($pagesPrinted[$pagesPrintedOnLeased])
+            ));
+
+            $barGraph->addColors(array(
+                "ababab"
+            ));
+            $barGraph->addAxisRange(0, 0, $highest * 1.20);
+            $barGraph->setDataRange(0, $highest * 1.20);
+            $barGraph->setBarScale(50, 5);
+            $barGraph->setLegendPosition("b|l");
+
+            $barGraph->setLegend(array(
+                $pagesPrintedOnManaged,
+                $pagesPrintedOnUnmanaged,
+                $pagesPrintedOnLeased,
+            ));
+            $barGraph->setTitle("Total pages printed");
+            $barGraph->setProperty('chxs', '0N*sz0*');
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
+            // Graphs[PagesWithOrWithoutJIT]
+            $healthcheckGraphs['PagesWithOrWithoutJIT'] = $barGraph->getUrl();
+
+            /**
+             * -- PagesPrintedManagedVsJitVsCompVsLeased
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
@@ -2779,7 +2908,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addColors(array(
-                "666666"
+                "ababab"
             ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
@@ -2798,8 +2927,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
-            // Graphs[PagesWithOrWithoutJIT]
-            $healthcheckGraphs['PagesWithOrWithoutJIT'] = $barGraph->getUrl();
+            // Graphs[PagesPrintedManagedVsJitVsCompVsLeased]
+            $healthcheckGraphs['PagesPrintedManagedVsJitVsCompVsLeased'] = $barGraph->getUrl();
 
             /**
              * -- UniqueDevicesGraph
@@ -3035,9 +3164,34 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         if (!isset($this->_clientTonerOrders))
         {
             $this->_clientTonerOrders = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->fetchAllForClient($this->healthcheck->clientId, $this->healthcheck->dealerId);
+            usort($this->_clientTonerOrders, array(
+                $this,
+                "descendingSortClientTonerOrdersByNetSavings"
+            ));
         }
 
         return $this->_clientTonerOrders;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort Client Toner Orders by their net savings
+     *
+     * @param $clientTonerA \Proposalgen_Model_Client_Toner_Order
+     * @param $clientTonerB \Proposalgen_Model_Client_Toner_Order
+     *
+     * @return int
+     */
+    public function descendingSortClientTonerOrdersByNetSavings ($clientTonerA, $clientTonerB)
+    {
+        $netSavingsA = $clientTonerA->getReplacementTonerSavings($this->getHealthcheckMargin());
+        $netSavingsB = $clientTonerB->getReplacementTonerSavings($this->getHealthcheckMargin());
+
+        if ($netSavingsA == $netSavingsB)
+        {
+            return 0;
+        }
+
+        return ($netSavingsA > $netSavingsB) ? -1 : 1;
     }
 
     /**
@@ -3050,7 +3204,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         {
             if ($clientTonerOrder->getReplacementToner())
             {
-                $totalSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity;
+                $totalSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementTonerCost($this->getHealthcheckMargin())) * $clientTonerOrder->quantity;
             }
         }
 
@@ -3160,7 +3314,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($clientTonerOrder->getReplacementToner() instanceof Proposalgen_Model_Toner)
                 {
-                    $totalOptimizedCost += $clientTonerOrder->getReplacementToner()->cost * $clientTonerOrder->quantity;
+                    $totalOptimizedCost += $clientTonerOrder->getReplacementTonerCost($this->getHealthcheckMargin()) * $clientTonerOrder->quantity;
                 }
                 else
                 {

@@ -62,7 +62,6 @@ foreach ($uniqueDeviceArray as $modelName => $deviceCount)
             "name"    => $modelName . " (" . $deviceCount . ")",
             "percent" => number_format(($deviceCount / $totalAmount) * 100, 1) . "%",
         );
-
     }
     $counter++;
 }
@@ -141,16 +140,10 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
 $section->addTextBreak(2);
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['UnmanagedVsManagedDevices']);
-$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesWithOrWithoutJIT']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs['ManagedVsNotJitVsJitDevices']);
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs['PagesPrintedManagedVsJitVsCompVsLeased']);
 $cellWidths = array(
     1528,
     1800
 );
-$section->addTextBreak(2);
-$section->addTitle('Estimated OEM Toner Costs vs. Compatible Toner Costs', 2);
-$section->addText(sprintf('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.',
-        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings()),
-        $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings() * 12),
-    number_format($healthcheckViewModel->calculateCurrentTonerOrderSavingPercentage()))
-);
+$section->addPageBreak();

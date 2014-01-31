@@ -29,14 +29,14 @@ $graphs = $healthcheckViewModel->getGraphs();
         <tr>
             <td><?php echo $clientTonerOrder->dealerSku; ?></td>
             <td><?php echo $clientTonerOrder->oemSku; ?></td>
-            <td><?php echo number_format($clientTonerOrder->quantity); ?></td>
-            <td class="currency-cell"><?php echo $this->currency($clientTonerOrder->cost); ?></td>
+            <td class="text-right"><?php echo number_format($clientTonerOrder->quantity); ?></td>
+            <td class="text-right"><?php echo $this->currency($clientTonerOrder->cost); ?></td>
             <?php if ($clientTonerOrder->replacementTonerId > 0) : ?>
                 <td><?php echo ($clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)) ? $clientTonerOrder->getReplacementToner()->getDealerTonerAttribute($healthcheckViewModel->healthcheck->dealerId)->dealerSku : '-'; ?></td>
                 <td><?php echo $clientTonerOrder->getReplacementToner()->sku; ?></td>
-                <td class="currency-cell"><?php echo $this->currency($clientTonerOrder->getReplacementToner()->cost); ?></td>
-                <td class="currency-cell"><?php echo $this->currency(($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity); ?></td>
-                <?php $totalNetSavings += ($clientTonerOrder->cost - $clientTonerOrder->getReplacementToner()->cost) * $clientTonerOrder->quantity; ?>
+                <td class="text-right"><?php echo $this->currency($clientTonerOrder->getReplacementTonerCost($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)); ?></td>
+                <td class="text-right"><?php echo $this->currency($clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin)); ?></td>
+                <?php $totalNetSavings += $clientTonerOrder->getReplacementTonerSavings($healthcheckViewModel->healthcheck->getHealthcheckSettings()->healthcheckMargin); ?>
             <?php else : ?>
                 <td>-</td>
                 <td>-</td>
@@ -48,7 +48,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     <?php endforeach; ?>
     <tr class="shaded">
         <td colspan="7"></td>
-        <td class="currency-cell"><?php echo $this->currency($totalNetSavings); ?></td>
+        <td class="text-right"><?php echo $this->currency($totalNetSavings); ?></td>
     </tr>
     </tbody>
 </table>
