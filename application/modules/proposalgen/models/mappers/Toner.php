@@ -271,37 +271,52 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
      * Gets a list of all the toner pricing for a master device by dealer
      * This list will have the cost of the toner resolved.
      *
-     * @param $masterDeviceId
-     * @param $dealerId
+     * @param int $masterDeviceId
+     * @param int $dealerId
+     * @param int $clientId
      *
      * @return Proposalgen_Model_Toner []
      */
-    public function getReportToners ($masterDeviceId, $dealerId)
+    public function getReportToners ($masterDeviceId, $dealerId, $clientId = null)
     {
-        $db       = Zend_Db_Table::getDefaultAdapter();
-        $dealerId = $db->quote($dealerId, 'INT');
+        $db = Zend_Db_Table::getDefaultAdapter();
 
         $select = $db->select()
                      ->from('toners', array('*'))
                      ->joinLeft('device_toners', 'toner_id = id', array(null))
-                     ->joinLeft('dealer_toner_attributes', "tonerId = id AND dealerId = {$dealerId}", array(
-                "calculatedCost" => "COALESCE(dealer_toner_attributes.cost, toners.cost)",
+                     ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", array(
                 "dealerSku",
+            ))
+                     ->joinLeft('client_toner_orders', "tonerId = id AND dealerId = ?", array(
+                "calculatedCost"         => "COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)",
+                "isUsingCustomerPricing" => "IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)",
+                "isUsingDealerPricing"   => "IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE)",
             ))
                      ->where('master_device_id = ?', $masterDeviceId);
 
 
-        $stmt = $db->query($select);
+        $stmt = $db->query($select, array($dealerId, $clientId));
 
         $result     = $stmt->fetchAll();
         $tonerArray = false;
 
         foreach ($result as $row)
         {
-            $toner = new Proposalgen_Model_Toner($row);
-            // $tonerArray[1][2][] = Proposalgen_Model_Toner
-            $tonerArray [$toner->manufacturerId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
-            $this->saveItemToCache($toner);
+            $toner = $this->getItemFromCache($row['id']);
+            if (!$toner instanceof Proposalgen_Model_Toner)
+            {
+                $toner                                                                          = new Proposalgen_Model_Toner($row);
+                $tonerArray [$toner->manufacturerId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
+                $this->saveItemToCache($toner);
+            }
+            else
+            {
+                $toner->calculatedCost         = $row['calculatedCost'];
+                $toner->isUsingCustomerPricing = $row['isUsingCustomerPricing'];
+                $toner->isUsingDealerPricing   = $row['isUsingDealerPricing'];
+            }
+
+
         }
 
         return $tonerArray;
@@ -701,8 +716,17 @@ WHERE `toners`.`id` IN ({$tonerIdList})
         return $query->fetchAll();
     }
 
+    /**
+     * @param      $tonerId
+     * @param null $order
+     * @param int  $count
+     * @param int  $offset
+     *
+     * @return array|bool
+     */
     public function fetchListOfAffectedToners ($tonerId, $order = null, $count = 25, $offset = 0)
     {
+        $result = false;
         if ($tonerId)
         {
             $db           = $this->getDbTable()->getAdapter();
@@ -730,8 +754,10 @@ WHERE `toners`.`id` IN ({$tonerIdList})
 
             $result = $stmt->fetchAll();
 
-            return $result;
+
         }
+
+        return $result;
     }
 
     /**
@@ -986,11 +1012,13 @@ FROM toners
         {
             $db       = $this->getDbTable()->getAdapter();
             $dealerId = Zend_Auth::getInstance()->getIdentity()->dealerId;
-            $sql      = "SELECT
+            $sql      = 'SELECT
     dt.toner_id,
     dt.master_device_id,
-    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
-    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS cpp
+    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                  AS calculatedCost,
+    IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+    IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
+    COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield   AS cpp
 FROM device_toners AS dt
     LEFT JOIN toners ON toners.id = dt.toner_id
     LEFT JOIN dealer_toner_attributes ON dealer_toner_attributes.tonerId = dt.toner_id AND dealer_toner_attributes.dealerId = ?
@@ -998,9 +1026,12 @@ FROM device_toners AS dt
 WHERE dt.master_device_id IN (SELECT
                                   dt2.master_device_id
                               FROM device_toners AS dt2
-                              WHERE dt2.toner_id = ?) AND dt.toner_id != ? AND toners.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+                              WHERE dt2.toner_id = ?) AND dt.toner_id != ? AND toners.tonerColorId IN (SELECT
+                                                                                                           tonerColorId
+                                                                                                       FROM toners
+                                                                                                       WHERE toners.id = ?)
 GROUP BY dt.toner_id
-ORDER BY cpp ASC";
+ORDER BY cpp ASC';
             $stmt     = $db->query($sql, array($dealerId, $clientId, $tonerId, $tonerId, $tonerId));
             $result   = $stmt->fetchAll();
 
@@ -1033,7 +1064,7 @@ ORDER BY cpp ASC";
      */
     public function findCompatibleToners ($tonerId, $clientId = null, $dealerId = null)
     {
-        $db  = $this->getDbTable()->getDefaultAdapter();
+        $db     = $this->getDbTable()->getDefaultAdapter();
         $toners = array();
 
         if ($tonerId instanceof Proposalgen_Model_Toner)
@@ -1044,8 +1075,10 @@ ORDER BY cpp ASC";
 
         $sql = 'SELECT
     t.*,
-    COALESCE(cta.cost, dta.cost, t.cost)           AS calculatedCost,
-    COALESCE(cta.cost, dta.cost, t.cost) / t.yield AS cpp
+    COALESCE(cta.cost, dta.cost, t.cost)                                                           AS calculatedCost,
+    IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+    IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
+    COALESCE(cta.cost, dta.cost, t.cost) / t.yield                                                 AS cpp
 FROM device_toners AS dt
 -- Toners
     JOIN toners AS t
@@ -1073,7 +1106,10 @@ WHERE dt.master_device_id IN
           WHERE dt2.toner_id = ?
       )
       AND dt.toner_id != ?
-      AND t.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+      AND t.tonerColorId IN (SELECT
+                                 tonerColorId
+                             FROM toners
+                             WHERE toners.id = ?)
       AND t.manufacturerId != md.manufacturerId
 GROUP BY dt.toner_id
 ORDER BY cpp ASC';
@@ -1085,8 +1121,10 @@ ORDER BY cpp ASC';
             $toner      = $this->getItemFromCache($newTonerId);
             if (!$toner instanceof Proposalgen_Model_Toner)
             {
-                $toner                 = $this->find($newTonerId);
-                $toner->calculatedCost = $tonerData['calculatedCost'];
+                $toner                         = $this->find($newTonerId);
+                $toner->calculatedCost         = $tonerData['calculatedCost'];
+                $toner->isUsingCustomerPricing = $tonerData['isUsingCustomerPricing'];
+                $toner->isUsingDealerPricing   = $tonerData['isUsingDealerPricing'];
                 $this->saveItemToCache($toner);
             }
 
@@ -1117,8 +1155,10 @@ ORDER BY cpp ASC';
         $db  = $this->getDbTable()->getDefaultAdapter();
         $sql = 'SELECT
     t.*,
-    COALESCE(cta.cost, dta.cost, t.cost)           AS calculatedCost,
-    COALESCE(cta.cost, dta.cost, t.cost) / t.yield AS cpp
+    COALESCE(cta.cost, dta.cost, t.cost)                                                           AS calculatedCost,
+    IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+    IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
+    COALESCE(cta.cost, dta.cost, t.cost) / t.yield                                                 AS cpp
 FROM device_toners AS dt
 -- Toners
     JOIN toners AS t
@@ -1146,7 +1186,10 @@ WHERE dt.master_device_id IN
           WHERE dt2.toner_id = ?
       )
       AND dt.toner_id != ?
-      AND t.tonerColorId IN (SELECT tonerColorId FROM toners WHERE toners.id = ?)
+      AND t.tonerColorId IN (SELECT
+                                 tonerColorId
+                             FROM toners
+                             WHERE toners.id = ?)
       AND t.manufacturerId = md.manufacturerId
 GROUP BY dt.toner_id
 ORDER BY cpp ASC';
@@ -1159,8 +1202,10 @@ ORDER BY cpp ASC';
             $toner      = $this->getItemFromCache($newTonerId);
             if (!$toner instanceof Proposalgen_Model_Toner)
             {
-                $toner                 = $this->find($newTonerId);
-                $toner->calculatedCost = $tonerData['calculatedCost'];
+                $toner                         = $this->find($newTonerId);
+                $toner->calculatedCost         = $tonerData['calculatedCost'];
+                $toner->isUsingCustomerPricing = $tonerData['isUsingCustomerPricing'];
+                $toner->isUsingDealerPricing   = $tonerData['isUsingDealerPricing'];
                 $this->saveItemToCache($toner);
             }
 

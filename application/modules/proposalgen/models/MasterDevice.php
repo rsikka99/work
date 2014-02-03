@@ -533,14 +533,17 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
+     * @param int $dealerId
+     * @param int $clientId
+     *
      * @return Proposalgen_Model_Toner[]
      */
-    public function getToners ()
+    public function getToners ($dealerId, $clientId = null)
     {
         if (!isset($this->_toners))
         {
             // Get the toners for the device
-            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getReportToners($this->id, Zend_Auth::getInstance()->getIdentity()->dealerId);
+            $this->_toners = Proposalgen_Model_Mapper_Toner::getInstance()->getReportToners($this->id, $dealerId, $clientId);
         }
 
         return $this->_toners;

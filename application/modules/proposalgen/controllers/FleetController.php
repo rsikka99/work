@@ -577,7 +577,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "ampv"                     => number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
                         "reportsTonerLevels"       => $deviceInstance->reportsTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
-                        "validToners"              => $deviceInstance->hasValidToners()
+                        "validToners"              => $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)
                     );
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
@@ -908,7 +908,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             if ($rmsUpload->id == $rmsUploadId)
                             {
 
-                                if ($isLeased || $deviceInstance->hasValidToners())
+                                if ($isLeased || $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId))
                                 {
                                     $db = Zend_Db_Table_Abstract::getDefaultAdapter();
                                     $db->beginTransaction();
@@ -1207,7 +1207,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
                         $jsonResponse["masterDevice"]["toners"]             = [];
 
-                        foreach ($deviceInstance->getMasterDevice()->getToners() as $tonersByManufacturer)
+                        foreach ($deviceInstance->getMasterDevice()->getToners($this->_identity->dealerId, $this->_selectedClientId) as $tonersByManufacturer)
                         {
                             foreach ($tonersByManufacturer as $tonersByColor)
                             {

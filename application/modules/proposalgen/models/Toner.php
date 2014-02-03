@@ -54,6 +54,16 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
     public $calculatedCost;
 
     /**
+     * @var bool
+     */
+    public $isUsingCustomerPricing = false;
+
+    /**
+     * @var bool
+     */
+    public $isUsingDealerPricing = false;
+
+    /**
      * @var Proposalgen_Model_Manufacturer
      */
     protected $_manufacturer;
@@ -136,6 +146,16 @@ class Proposalgen_Model_Toner extends My_Model_Abstract
         if (isset($params->calculatedCost) && !is_null($params->calculatedCost))
         {
             $this->calculatedCost = $params->calculatedCost;
+        }
+
+        if (isset($params->isUsingCustomerPricing) && !is_null($params->isUsingCustomerPricing))
+        {
+            $this->isUsingCustomerPricing = $params->isUsingCustomerPricing;
+        }
+
+        if (isset($params->isUsingDealerPricing) && !is_null($params->isUsingDealerPricing))
+        {
+            $this->isUsingDealerPricing = $params->isUsingDealerPricing;
         }
 
     }

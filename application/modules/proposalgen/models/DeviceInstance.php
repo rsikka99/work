@@ -1585,14 +1585,22 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId));
     }
 
-    public function hasValidToners ()
+    /**
+     * Checks to see if a device has valid toners
+     *
+     * @param int $dealerId
+     * @param int $clientId
+     *
+     * @return int
+     */
+    public function hasValidToners ($dealerId, $clientId = null)
     {
         $masterDevice        = $this->getMasterDevice();
-        $masterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDevice->id, $this->_identity->dealerId);
+        $masterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDevice->id, $dealerId);
         $first               = true;
         $tonersList          = "";
 
-        foreach ($masterDevice->getToners() as $manufacturerIdList)
+        foreach ($masterDevice->getToners($dealerId, $clientId) as $manufacturerIdList)
         {
             foreach ($manufacturerIdList as $tonerColorIdList)
             {

@@ -24,14 +24,16 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
             *
         FROM (
                  SELECT
-                     device_toners.toner_id                                                                           AS id,
+                     device_toners.toner_id                                                                         AS id,
                      toners.sku,
                      toners.cost,
-                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                  AS calculatedCost,
+                     IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+                     IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
                      toners.yield,
-                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield   AS costPerPage,
                      toners.manufacturerId,
-                     IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                  AS isOem,
+                     IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                AS isOem,
                      toners.tonerColorId
                  FROM device_toners
                      LEFT JOIN toners ON toners.id = device_toners.toner_id
@@ -70,14 +72,16 @@ CREATE PROCEDURE getCheapestTonersForDevice(IN inMasterDeviceId       INT(11), I
             *
         FROM (
                  SELECT
-                     device_toners.toner_id                                                                           AS id,
+                     device_toners.toner_id                                                                         AS id,
                      toners.sku,
                      toners.cost,
-                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                AS calculatedCost,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)                  AS calculatedCost,
+                     IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+                     IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
                      toners.yield,
-                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield AS costPerPage,
+                     COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost) / toners.yield   AS costPerPage,
                      toners.manufacturerId,
-                     IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                  AS isOem,
+                     IF(master_devices.manufacturerId = toners.manufacturerId, 1, 0)                                AS isOem,
                      toners.tonerColorId
                  FROM device_toners
                      LEFT JOIN toners ON toners.id = device_toners.toner_id
