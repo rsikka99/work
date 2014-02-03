@@ -2797,7 +2797,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 }
             }
 
-            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted[$pagesPrintedOnCompatible], $pagesPrinted [$pagesPrintedOnLeased]);
+            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted [$pagesPrintedOnLeased]);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
