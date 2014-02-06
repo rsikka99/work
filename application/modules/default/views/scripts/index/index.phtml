@@ -347,7 +347,7 @@
 
     <?php if (My_Feature::canAccess(My_Feature::CLIENT_PRICING)) : ?>
         <h3>Client Pricing</h3>
-        <div>There are currently <?php echo Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, null, null, null, null, true); ?> client prices for this client.
+        <div>There are currently <?php echo Proposalgen_Model_Mapper_Client_Toner_Order::getInstance()->jqgridFetchAllForClient($this->selectedClientId, Zend_auth::getInstance()->getIdentity()->dealerId, null, 10000, 0, null, null, true); ?> client prices for this client.
             <a class="btn btn-mini btn-primary" href="<?php echo $this->url(array("action" => "index", "controller" => "client-pricing", "module" => "proposalgen")); ?>">Manage Client Pricing</a>
         </div>
     <?php endif; ?>
