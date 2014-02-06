@@ -85,6 +85,7 @@ class Healthcheck_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->useDevicePageCoverages        = $healthcheckSettings->useDevicePageCoverages;
             $this->_costPerPageSettingForCustomer->customerMonochromeCostPerPage = $healthcheckSettings->customerMonochromeCostPerPage;
             $this->_costPerPageSettingForCustomer->customerColorCostPerPage      = $healthcheckSettings->customerColorCostPerPage;
+            $this->_costPerPageSettingForCustomer->pricingMargin                 = $healthcheckSettings->healthcheckMargin;
         }
 
         return $this->_costPerPageSettingForCustomer;

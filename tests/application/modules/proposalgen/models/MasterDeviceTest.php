@@ -57,7 +57,7 @@ class Proposalgen_Model_MasterDeviceTest extends PHPUnit_Framework_TestCase
         $masterDevice       = $this->getMasterDevice();
         $costPerPageSetting = $this->getCostPerPageSetting();
 
-        $costPerPage = $masterDevice->calculateCostPerPage($costPerPageSetting);
+        $costPerPage = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage();
 
         $this->assertSame($costPerPage->monochromeCostPerPage, 0.020727272727273);
         $this->assertSame($costPerPage->colorCostPerPage, 0.10092857142857);

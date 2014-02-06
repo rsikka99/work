@@ -36,8 +36,8 @@ $deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($cust
                 <td class='number'><?php echo $percentOfMonthlyCost; ?>%</td>
                 <td class='number'><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
                 <td class='number'><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A'; ?></td>
-                <td class='number cpp'><?php echo $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->monochromeCostPerPage, array("precision" => 4)); ?></td>
-                <td class='number cpp'><?php echo ($isColor) ? $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->colorCostPerPage, array("precision" => 4)) : 'N/A'; ?></td>
+                <td class='number cpp'><?php echo $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->getCostPerPage()->monochromeCostPerPage, array("precision" => 4)); ?></td>
+                <td class='number cpp'><?php echo ($isColor) ? $this->currency($deviceInstance->calculateCostPerPage($customerCostPerPageSetting)->getCostPerPage()->colorCostPerPage, array("precision" => 4)) : 'N/A'; ?></td>
                 <td class='number'><?php echo $this->currency($deviceInstance->calculateMonthlyCost($customerCostPerPageSetting)); ?></td>
             </tr>
         <?php endforeach; ?>

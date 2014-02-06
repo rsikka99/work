@@ -370,8 +370,8 @@ class Memjetoptimization_Model_Mapper_Memjet_Optimization extends My_Model_Mappe
                 $pageCountsOptimizated          = $deviceInstance->getPageCounts(($replacementDevice != null && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio : null);
                 $jsonData['estimatedMonoAmpv']  = number_format($pageCountsOptimizated->getBlackPageCount()->getMonthly());
                 $jsonData['estimatedColorAmpv'] = number_format($pageCountsOptimizated->getColorPageCount()->getMonthly());
-                $jsonData['rawMonoCpp']         = $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
-                $jsonData['rawColorCpp']        = $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
+                $jsonData['rawMonoCpp']         = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
+                $jsonData['rawColorCpp']        = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage;
                 $jsonData['rawCostDelta']       = $costDelta;
 
                 $returnDevices['jsonData'][] = $jsonData;

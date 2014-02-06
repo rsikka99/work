@@ -48,8 +48,8 @@ class Admin_ViewModel_MemjetDeviceSwap
                 $data['isColor']       = $masterDevice->isColor();
                 $data['manufacturer']  = $masterDevice->getManufacturer()->fullname;
                 $data['deviceName']    = $masterDevice->modelName;
-                $data['monochromeCPP'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
-                $data['colorCPP']      = $masterDevice->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
+                $data['monochromeCPP'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
+                $data['colorCPP']      = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
                 $data['minPageCount']  = $replacementDevice->minimumPageCount;
                 $data['maxPageCount']  = $replacementDevice->maximumPageCount;
 

@@ -296,13 +296,13 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 $rowData [1]                 = $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly();
                 $rowData [2]                 = $blackCost;
                 $rowData [3]                 = $blackYield;
-                $blackCPP                    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
+                $blackCPP                    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
                 $rowData [4]                 = $blackCPP;
                 $rowData [5]                 = $deviceInstance->getMonthlyBlackAndWhiteCost($costPerPageSetting);
                 $rowData [6]                 = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
                 $rowData [7]                 = $colorCost;
                 $rowData [8]                 = $colorYield;
-                $rowData [9]                 = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage, 4, '.', '') : "-";
+                $rowData [9]                 = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage, 4, '.', '') : "-";
                 $rowData [10]                = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($costPerPageSetting), 2, '.', '') : "-";
                 $rowData ['completeMono']    = $completeMonoToners;
                 $rowData ['completeColor']   = $completeColorToners;

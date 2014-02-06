@@ -251,13 +251,13 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList [] = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->monochromeCostPerPage, 4, '.', '');
+                $fieldList [] = number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage, 4, '.', '');
 
                 $fieldList [] = "$" . number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
                 $fieldList [] = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->colorCostPerPage, 4, '.', '') : "-";
+                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage, 4, '.', '') : "-";
                 $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
                 $fieldList [] = isset($tonerSkus['black']['dealerSku']) ? $tonerSkus['black']['dealerSku'] : '-';
                 $fieldList [] = isset($tonerSkus['cyan']['dealerSku']) ? $tonerSkus['cyan']['dealerSku'] : '-';

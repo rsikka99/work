@@ -189,7 +189,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * calculated values and other things
      */
     public $adminCostPerPage;
-    protected $_cachedCostPerPage;
+    protected $_cachedDeviceCostPerPage;
     protected $_cachedCheapestTonerVendorSet;
     protected $_usingIncompleteBlackTonerData;
     protected $_usingIncompleteColorTonerData;
@@ -807,94 +807,32 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * Calculates the cost per page for a master device.
      *
-     * @param Proposalgen_Model_CostPerPageSetting  $costPerPageSetting
-     *            The settings to use when calculating cost per page
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting The settings to use when calculating cost per page
+     * @param bool                                 $isManaged
      *
-     * @param null|Proposalgen_Model_DeviceInstance $deviceInstance
-     *
-     * @return Proposalgen_Model_CostPerPage
+     * @return Proposalgen_Model_DeviceCostPerPage
      */
-    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $deviceInstance = null)
+    public function calculateCostPerPage (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $isManaged = false)
     {
-        // Make sure our array is initialized
-        if (!isset($this->_cachedCostPerPage))
+        /**
+         * Caching Array
+         */
+        if (!isset($this->_cachedDeviceCostPerPage))
         {
-            $this->_cachedCostPerPage = array();
-        }
-        $oldMonochromePageCoverage = 0;
-        $oldColorPageCoverage      = 0;
-
-        if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance && $costPerPageSetting->useDevicePageCoverages)
-        {
-            $oldMonochromePageCoverage = $costPerPageSetting->pageCoverageMonochrome;
-            $oldColorPageCoverage      = $costPerPageSetting->pageCoverageColor;
-
-            /**
-             * Monochrome page coverage should be used from the device
-             */
-            if ($deviceInstance->pageCoverageMonochrome > 0)
-            {
-                $costPerPageSetting->pageCoverageMonochrome = $deviceInstance->pageCoverageMonochrome;
-            }
-
-            /**
-             * Color page coverage is added here. It should be noted that in our settings for "pageCoverageColor" that it already contains
-             */
-            if ($deviceInstance->pageCoverageCyan > 0 || $deviceInstance->pageCoverageMagenta > 0 || $deviceInstance->pageCoverageYellow > 0)
-            {
-                $oldColorCoverage                      = $costPerPageSetting->pageCoverageColor / 4;
-                $costPerPageSetting->pageCoverageColor = ($deviceInstance->pageCoverageMonochrome > 0) ? $deviceInstance->pageCoverageMonochrome : $oldColorCoverage; // Mono compensation
-                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageCyan > 0) ? $deviceInstance->pageCoverageCyan : $oldColorCoverage;
-                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageMagenta > 0) ? $deviceInstance->pageCoverageMagenta : $oldColorCoverage;
-                $costPerPageSetting->pageCoverageColor += ($deviceInstance->pageCoverageYellow > 0) ? $deviceInstance->pageCoverageYellow : $oldColorCoverage;
-            }
+            $this->_cachedDeviceCostPerPage = array();
         }
 
         $cacheKey = $costPerPageSetting->createCacheKey();
-        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
+
+        if (!array_key_exists($cacheKey, $this->_cachedDeviceCostPerPage))
         {
-            // Initialize the CPP object
-            $costPerPage = new Proposalgen_Model_CostPerPage();
+            $deviceCostPerPage            = new Proposalgen_Model_DeviceCostPerPage($this->getCheapestTonerSetByVendor($costPerPageSetting), $costPerPageSetting, $this->calculatedLaborCostPerPage, $this->calculatedPartsCostPerPage);
+            $deviceCostPerPage->isManaged = $isManaged;
 
-            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance && $deviceInstance->isManaged && $costPerPageSetting->customerColorCostPerPage != null && $costPerPageSetting->customerColorCostPerPage != null)
-            {
-                $costPerPage->monochromeCostPerPage = $costPerPageSetting->customerMonochromeCostPerPage;
-                $costPerPage->colorCostPerPage      = $costPerPageSetting->customerColorCostPerPage;
-            }
-            else
-            {
-                $costPerPage->monochromeCostPerPage = 0;
-                $costPerPage->colorCostPerPage      = 0;
-
-                /* @var $toner Proposalgen_Model_Toner */
-                foreach ($this->getCheapestTonerSetByVendor($costPerPageSetting) as $toner)
-                {
-                    if ($toner)
-                    {
-                        $tonerCostPerPage = $toner->calculateCostPerPage($costPerPageSetting);
-
-                        $costPerPage->add($tonerCostPerPage);
-                    }
-                }
-            }
-
-            $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+            $this->_cachedDeviceCostPerPage [$cacheKey] = $deviceCostPerPage;
         }
 
-        /**
-         * We must reset page coverages to original values
-         */
-        if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
-        {
-            // Do some page coverage stuff
-            if ($costPerPageSetting->useDevicePageCoverages)
-            {
-                $costPerPageSetting->pageCoverageMonochrome = $oldMonochromePageCoverage;
-                $costPerPageSetting->pageCoverageColor      = $oldColorPageCoverage;
-            }
-        }
-
-        return $this->_cachedCostPerPage [$cacheKey];
+        return $this->_cachedDeviceCostPerPage [$cacheKey];
     }
 
 

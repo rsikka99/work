@@ -261,11 +261,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var float
      */
-    protected $_grossMarginMonthlyColorCost;
-
-    /**
-     * @var float
-     */
     protected $_monthlyRate;
 
     /**
@@ -312,7 +307,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var Proposalgen_Model_CostPerPage
      */
-    protected $_cachedCostPerPage;
+    protected $_cachedDeviceCostPerPage;
 
     /**
      * @var Proposalgen_Model_CostPerPage
@@ -641,15 +636,13 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
-     * @param float                                $margin
-     *
      * @return float
      */
-    public function getCostOfInkAndToner ($costPerPageSetting, $margin)
+    public function getCostOfInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->_costOfInkAndToner))
         {
-            $this->_costOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting, $margin) + $this->getCostOfColorInkAndToner($costPerPageSetting, $margin);
+            $this->_costOfInkAndToner = $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting) + $this->getCostOfColorInkAndToner($costPerPageSetting);
         }
 
         return $this->_costOfInkAndToner;
@@ -657,15 +650,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float                                $margin
      *
      * @return float
      */
-    public function getCostOfBlackAndWhiteInkAndToner ($costPerPageSetting, $margin)
+    public function getCostOfBlackAndWhiteInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->_costOfBlackAndWhiteInkAndToner))
         {
-            $this->_costOfBlackAndWhiteInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly(), $margin);
+            $this->_costOfBlackAndWhiteInkAndToner = $this->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly();
         }
 
         return $this->_costOfBlackAndWhiteInkAndToner;
@@ -673,15 +665,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
     /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float                                $margin
      *
      * @return float
      */
-    public function getCostOfColorInkAndToner ($costPerPageSetting, $margin)
+    public function getCostOfColorInkAndToner ($costPerPageSetting)
     {
         if (!isset($this->_costOfColorInkAndToner))
         {
-            $this->_costOfColorInkAndToner = Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly(), $margin);
+            $this->_costOfColorInkAndToner = $this->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage * $this->getPageCounts()->getColorPageCount()->getMonthly();
         }
 
         return $this->_costOfColorInkAndToner;
@@ -691,26 +682,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * Gets the monochrome CPP with a margin
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float                                $margin
      *
      * @return float
      */
-    public function getColorCostPerPageWithMargin ($costPerPageSetting, $margin)
+    public function getColorCostPerPageWithMargin ($costPerPageSetting)
     {
-        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->colorCostPerPage, $margin);
-    }
-
-    /**
-     * Gets the monochrome CPP with a margin
-     *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param float                                $margin
-     *
-     * @return float
-     */
-    public function getMonochromeCostPerPageWithMargin ($costPerPageSetting, $margin)
-    {
-        return Tangent_Accounting::applyMargin($this->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $this)->monochromeCostPerPage, $margin);
+        return $this->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
     }
 
     /**
@@ -920,7 +897,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         $cacheKey = $costPerPageSetting->createCacheKey() . '_device_instance' . $this->id;
         if (!array_key_exists($cacheKey, $this->_cachedMonthlyBlackAndWhiteCost))
         {
-            $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
+            $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey] = ($this->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage * $this->getPageCounts()->getBlackPageCount()->getMonthly());
         }
 
         return $this->_cachedMonthlyBlackAndWhiteCost [$cacheKey];
@@ -931,17 +908,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * replacement devices
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param                                      $margin
      *
      * @return float
      */
-    public function getMonthlyRate ($costPerPageSetting, $margin)
+    public function getMonthlyRate ($costPerPageSetting)
     {
         if (!isset($this->_monthlyRate))
         {
             $this->_monthlyRate = 0;
-            $this->_monthlyRate += $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting, $margin);
-            $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting, $margin);
+            $this->_monthlyRate += $this->getCostOfBlackAndWhiteInkAndToner($costPerPageSetting);
+            $this->_monthlyRate += $this->getCostOfColorInkAndToner($costPerPageSetting);
             $this->_monthlyRate += ($this->getPageCounts()->getCombinedPageCount()->getMonthly() * self::getITCostPerPage());
         }
 
@@ -949,29 +925,15 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * Takes the monthly rate and multiplies it by 12
-     *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param                                      $margin
-     *
-     * @return float
-     */
-    public function getYearlyRate ($costPerPageSetting, $margin)
-    {
-        return $this->getMonthlyRate($costPerPageSetting, $margin) * 12;
-    }
-
-    /**
      * @param                                      $monthlyTotalCost
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     * @param                                      $margin
      *
      * @return float
      */
-    public function getMonthlyRatePercentage ($monthlyTotalCost, $costPerPageSetting, $margin)
+    public function getMonthlyRatePercentage ($monthlyTotalCost, $costPerPageSetting)
     {
-        return ($this->getMonthlyRate($costPerPageSetting, $margin) / $monthlyTotalCost) * 100;
+        return ($this->getMonthlyRate($costPerPageSetting) / $monthlyTotalCost) * 100;
     }
 
     /**
@@ -1394,14 +1356,16 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      *            The master device to use
      *
      * @throws InvalidArgumentException
-     * @return Proposalgen_Model_CostPerPage
+     * @return Proposalgen_Model_DeviceCostPerPage
      */
     public function calculateCostPerPage ($costPerPageSetting, $masterDevice = null)
     {
-        // Make sure our array is initialized
-        if (!isset($this->_cachedCostPerPage))
+        /**
+         * Caching Array
+         */
+        if (!isset($this->_cachedDeviceCostPerPage))
         {
-            $this->_cachedCostPerPage = array();
+            $this->_cachedDeviceCostPerPage = array();
         }
 
         // If master device isn't passed, get the master device
@@ -1410,30 +1374,61 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $masterDevice = $this->getMasterDevice();
         }
 
-        $cacheKey = $costPerPageSetting->createCacheKey() . "_" . (int)$masterDevice->id . "_device_instance" . $this->id;
+        $masterDeviceId = ($masterDevice instanceof Proposalgen_Model_MasterDevice) ? (int)$masterDevice->id : 0;
 
-        if (!array_key_exists($cacheKey, $this->_cachedCostPerPage))
+        $cacheKey = $costPerPageSetting->createCacheKey() . "_master_device" . $masterDeviceId . "_device_instance" . (int)$this->id;
+
+        if (!array_key_exists($cacheKey, $this->_cachedDeviceCostPerPage))
         {
-            $costPerPage = new Proposalgen_Model_CostPerPage();
-
-            // DO MATH
-            if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+            /**
+             * Set our page coverages if the  device has it's specific coverages
+             */
+            if ($costPerPageSetting->useDevicePageCoverages)
             {
-                $costPerPage->add($masterDevice->calculateCostPerPage($costPerPageSetting, $this));
-                if (!$this->isManaged)
+                // Clone to make sure we don't modify global page coverages
+                $costPerPageSetting = clone $costPerPageSetting;
+
+                /**
+                 * Monochrome page coverage should be used from the device
+                 */
+                if ($this->pageCoverageMonochrome > 0)
                 {
-                    $costPerPage->monochromeCostPerPage = $costPerPage->monochromeCostPerPage + $masterDevice->calculatedLaborCostPerPage + $masterDevice->calculatedPartsCostPerPage + $costPerPageSetting->adminCostPerPage;
-                    if ($masterDevice->isColor())
-                    {
-                        $costPerPage->colorCostPerPage = $costPerPage->monochromeCostPerPage + $costPerPage->colorCostPerPage;
-                    }
+                    $costPerPageSetting->pageCoverageMonochrome = $this->pageCoverageMonochrome;
+                }
+
+                /**
+                 * Color page coverage is added here. It should be noted that in our settings for "pageCoverageColor" that it already contains
+                 */
+                if ($this->pageCoverageCyan > 0 || $this->pageCoverageMagenta > 0 || $this->pageCoverageYellow > 0)
+                {
+                    $oldColorCoverage                      = $costPerPageSetting->pageCoverageColor / 4;
+                    $costPerPageSetting->pageCoverageColor = ($this->pageCoverageMonochrome > 0) ? $this->pageCoverageMonochrome : $oldColorCoverage; // Mono compensation
+                    $costPerPageSetting->pageCoverageColor += ($this->pageCoverageCyan > 0) ? $this->pageCoverageCyan : $oldColorCoverage;
+                    $costPerPageSetting->pageCoverageColor += ($this->pageCoverageMagenta > 0) ? $this->pageCoverageMagenta : $oldColorCoverage;
+                    $costPerPageSetting->pageCoverageColor += ($this->pageCoverageYellow > 0) ? $this->pageCoverageYellow : $oldColorCoverage;
                 }
             }
 
-            $this->_cachedCostPerPage [$cacheKey] = $costPerPage;
+            /**
+             * Get our device cost per page or create a blank one
+             */
+            if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                $deviceCostPerPage = $masterDevice->calculateCostPerPage($costPerPageSetting, $this->isManaged);
+            }
+            else
+            {
+                // Create fake instance
+                $deviceCostPerPage = new Proposalgen_Model_DeviceCostPerPage(array(), $costPerPageSetting);
+                $deviceCostPerPage->isManaged = $this->isManaged;
+            }
+
+
+
+            $this->_cachedDeviceCostPerPage [$cacheKey] = $deviceCostPerPage;
         }
 
-        return $this->_cachedCostPerPage [$cacheKey];
+        return $this->_cachedDeviceCostPerPage [$cacheKey];
     }
 
     /**
@@ -1479,7 +1474,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateMonthlyMonoCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
-        $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->monochromeCostPerPage;
+        $monoCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->getCostPerPage()->monochromeCostPerPage;
         if ($blackToColorRatio != null)
         {
             return $monoCostPerPage * $this->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly();
@@ -1502,7 +1497,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateMonthlyColorCost (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $masterDevice = null, $blackToColorRatio = null)
     {
-        $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->colorCostPerPage;
+        $colorCostPerPage = $this->calculateCostPerPage($costPerPageSetting, $masterDevice)->getCostPerPage()->colorCostPerPage;
         if ($blackToColorRatio != null)
         {
             return $colorCostPerPage * $this->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly();
@@ -1567,7 +1562,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $hardwareOptimizationId)
     {
-        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId))->getCostPerPage();
     }
 
     /**
@@ -1582,7 +1577,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateMemjetCostPerPageWithReplacement (Proposalgen_Model_CostPerPageSetting $costPerPageSetting, $memjetOptimizationId)
     {
-        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId));
+        return $this->calculateCostPerPage($costPerPageSetting, $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId))->getCostPerPage();
     }
 
     /**

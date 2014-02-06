@@ -88,6 +88,12 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
      */
     public $dealerId;
 
+    /**
+     * The pricing margin
+     *
+     * @var float
+     */
+    public $pricingMargin = 0;
 
     /**
      * @param null|array $options
@@ -177,6 +183,11 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
         {
             $this->dealerId = $params->dealerId;
         }
+
+        if (isset($params->pricingMargin) && !is_null($params->pricingMargin))
+        {
+            $this->pricingMargin = $params->pricingMargin;
+        }
     }
 
     /**
@@ -197,6 +208,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
             "customerColorCostPerPage"      => $this->customerColorCostPerPage,
             "clientId"                      => $this->clientId,
             "dealerId"                      => $this->dealerId,
+            "pricingMargin"                 => $this->pricingMargin,
         );
     }
 
@@ -222,6 +234,7 @@ class Proposalgen_Model_CostPerPageSetting extends My_Model_Abstract
                . "_monoranks_{$monochromeRanks}"
                . "_colorranks_{$colorRanks}"
                . "_{$this->customerMonochromeCostPerPage}"
-               . "_{$this->customerColorCostPerPage}";
+               . "_{$this->customerColorCostPerPage}"
+               . "_{$this->pricingMargin}";
     }
 }

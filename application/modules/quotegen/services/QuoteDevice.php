@@ -223,7 +223,7 @@ class Quotegen_Service_QuoteDevice
         $oemCostPerPageSetting->colorTonerRankSet      = $this->getQuote()->getDealerColorRankSet();
 
         // Calculate the cost per page
-        $costPerPage = $masterDevice->calculateCostPerPage($oemCostPerPageSetting);
+        $costPerPage = $masterDevice->calculateCostPerPage($oemCostPerPageSetting)->getCostOfInkAndTonerPerPage();
 
         // Set our mono cost per page
         $quoteDevice->costPerPageMonochrome = $costPerPage->monochromeCostPerPage;

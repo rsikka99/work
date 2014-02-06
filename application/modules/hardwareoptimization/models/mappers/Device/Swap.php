@@ -311,8 +311,8 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             {
                 $masterDevice         = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($row['id']);
                 $row['deviceType']    = Proposalgen_Model_MasterDevice::$TonerConfigNames[$masterDevice->getDeviceType()];
-                $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage;
-                $row['colorCpp']      = $row['monochromeCpp'] + $masterDevice->calculateCostPerPage($costPerPageSetting)->colorCostPerPage;
+                $row['monochromeCpp'] = $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage;
+                $row['colorCpp']      = $row['monochromeCpp'] + $masterDevice->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage()->colorCostPerPage;
 
                 $deviceSwaps[] = $row;
             }

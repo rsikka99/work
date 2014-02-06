@@ -88,6 +88,7 @@ class Assessment_ViewModel_Abstract
             $this->_costPerPageSettingForCustomer->monochromeTonerRankSet = $assessmentSettings->getCustomerMonochromeRankSet();
             $this->_costPerPageSettingForCustomer->colorTonerRankSet      = $assessmentSettings->getCustomerColorRankSet();
             $this->_costPerPageSettingForCustomer->useDevicePageCoverages = $assessmentSettings->useDevicePageCoverages;
+            $this->_costPerPageSettingForCustomer->pricingMargin          = $assessmentSettings->assessmentReportMargin;
         }
 
         return $this->_costPerPageSettingForCustomer;
@@ -115,30 +116,6 @@ class Assessment_ViewModel_Abstract
 
         return $this->_costPerPageSettingForDealer;
     }
-
-    /**
-     * Gets the cost per page settings for replacement devices
-     *
-     * @return Proposalgen_Model_CostPerPageSetting
-     */
-    public function getCostPerPageSettingForReplacements ()
-    {
-
-        if (!isset($this->_costPerPageSettingForReplacements))
-        {
-            $this->_costPerPageSettingForReplacements = new Proposalgen_Model_CostPerPageSetting();
-
-            $assessmentSettings                                               = $this->assessment->getAssessmentSettings();
-            $this->_costPerPageSettingForReplacements->adminCostPerPage       = $assessmentSettings->adminCostPerPage;
-            $this->_costPerPageSettingForReplacements->pageCoverageColor      = $assessmentSettings->actualPageCoverageColor;
-            $this->_costPerPageSettingForReplacements->pageCoverageMonochrome = $assessmentSettings->actualPageCoverageMono;
-            $this->_costPerPageSettingForReplacements->monochromeTonerRankSet = $assessmentSettings->getReplacementPricingConfig();
-            $this->_costPerPageSettingForReplacements->useDevicePageCoverages = $assessmentSettings->useDevicePageCoverages;
-        }
-
-        return $this->_costPerPageSettingForReplacements;
-    }
-
 
     /**
      * @return float

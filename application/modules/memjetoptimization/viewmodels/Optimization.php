@@ -286,7 +286,7 @@ class Memjetoptimization_ViewModel_Optimization
             /**@var $value Proposalgen_Model_DeviceInstance */
             foreach ($deviceArray as $key => $deviceInstance)
             {
-                $costArray[] = array($key, ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage) + ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
+                $costArray[] = array($key, ($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) + ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->monochromeCostPerPage));
             }
 
             usort($costArray, array(
@@ -680,7 +680,7 @@ class Memjetoptimization_ViewModel_Optimization
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting);
+                $costPerPage = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage();
                 if ($totalMonthlyMonoPagesPrinted > 0)
                 {
                     $monoCpp += ($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() / $totalMonthlyMonoPagesPrinted) * $costPerPage->monochromeCostPerPage;

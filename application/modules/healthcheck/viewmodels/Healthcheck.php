@@ -344,7 +344,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $totalCost = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
             {
-                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting, $this->getHealthcheckMargin());
+                $totalCost += $device->getCostOfInkAndToner($costPerPageSetting);
             }
             $this->CostOfInkAndTonerMonthly = $totalCost;
         }
@@ -598,12 +598,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function ascendingSortDevicesByMonthlyCost ($deviceA, $deviceB)
     {
-        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()))
+        if ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) == $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer()))
         {
             return 0;
         }
 
-        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer(), $this->getHealthcheckMargin())) ? -1 : 1;
+        return ($deviceA->getMonthlyRate($this->getCostPerPageSettingForCustomer()) > $deviceB->getMonthlyRate($this->getCostPerPageSettingForCustomer())) ? -1 : 1;
     }
 
     /**
@@ -739,7 +739,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
-                    $costArray[] = array($key, $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->colorCostPerPage);
+                    $costArray[] = array($key, $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage);
                 }
             }
 
@@ -830,7 +830,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfColorDevices               = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $deviceInstance));
+                $costPerPage->add($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage());
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
                     $numberOfColorDevices++;
@@ -867,7 +867,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $numberOfColorDevices = 0;
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $costPerPage->add($deviceInstance->getMasterDevice()->calculateCostPerPage($costPerPageSetting, $deviceInstance));
+                $costPerPage->add($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostOfInkAndTonerPerPage());
                 if ($deviceInstance->getMasterDevice()->isColor())
                 {
                     $numberOfColorDevices++;

@@ -199,7 +199,7 @@ $assessmentViewModel = $this->assessmentViewModel;
             <td class="center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></td>
             <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?> pages</td>
             <td class="center">
-                $<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer(), $assessmentViewModel->getReportMargin())); ?></td>
+                $<?php echo number_format($deviceInstance->getMonthlyRate($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
