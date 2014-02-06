@@ -562,49 +562,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     * @param $tonerColor
-     * @param $incomplete
-     *
-     * @return Proposalgen_Model_MasterDevice
-     */
-    public function setUsingIncompleteTonerData ($tonerColor, $incomplete)
-    {
-        switch ($tonerColor)
-        {
-            case Proposalgen_Model_TonerColor::FOUR_COLOR :
-                $this->_usingIncompleteBlackTonerData = $incomplete;
-                $this->_usingIncompleteColorTonerData = $incomplete;
-                break;
-            case Proposalgen_Model_TonerColor::THREE_COLOR :
-            case Proposalgen_Model_TonerColor::CYAN :
-            case Proposalgen_Model_TonerColor::MAGENTA :
-            case Proposalgen_Model_TonerColor::YELLOW :
-                $this->_usingIncompleteColorTonerData = $incomplete;
-                break;
-            case Proposalgen_Model_TonerColor::BLACK :
-                $this->_usingIncompleteBlackTonerData = $incomplete;
-                break;
-        }
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUsingIncompleteBlackTonerData ()
-    {
-        return ($this->_usingIncompleteBlackTonerData);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUsingIncompleteColorTonerData ()
-    {
-        return ($this->_usingIncompleteColorTonerData);
-    }
-
-    /**
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return bool
