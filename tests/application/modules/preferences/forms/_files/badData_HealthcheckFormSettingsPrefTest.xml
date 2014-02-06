@@ -20,6 +20,8 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>6</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>-1</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -108,6 +110,31 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+
+        </data>
+    </healthcheck>
+    <healthcheck>
+        <data>
+            <pageCoverageMonochrome>0.000000001</pageCoverageMonochrome>
+            <pageCoverageColor>99</pageCoverageColor>
+            <healthcheckMargin>100</healthcheckMargin>
+            <monthlyLeasePayment>10</monthlyLeasePayment>
+            <defaultPrinterCost>0.000000001</defaultPrinterCost>
+            <leasedBwCostPerPage>100000000000</leasedBwCostPerPage>
+            <leasedColorCostPerPage>0.000000001</leasedColorCostPerPage>
+            <mpsBwCostPerPage>0.000000001</mpsBwCostPerPage>
+            <mpsColorCostPerPage>0.000000001</mpsColorCostPerPage>
+            <kilowattsPerHour>0.000000001</kilowattsPerHour>
+            <adminCostPerPage>0.000000001</adminCostPerPage>
+            <laborCostPerPage>8</laborCostPerPage>
+            <partsCostPerPage>0.000000001</partsCostPerPage>
+            <averageItHourlyRate>0.000000001</averageItHourlyRate>
+            <hoursSpentOnIt>0.000000001</hoursSpentOnIt>
+            <costOfLabor>0.000000001</costOfLabor>
+            <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
+            <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>-55</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>55</customerColorCostPerPage>
         </data>
     </healthcheck>
 </healthchecks>

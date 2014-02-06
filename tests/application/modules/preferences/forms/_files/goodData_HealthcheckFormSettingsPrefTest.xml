@@ -22,6 +22,8 @@
             <numberOfSupplyOrdersPerMonth>0.01</numberOfSupplyOrdersPerMonth>
             <customerMonochromeRankSetArray>3</customerMonochromeRankSetArray>
             <customerColorRankSetArray>3</customerColorRankSetArray>
+            <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -44,6 +46,8 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>5</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>1</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -66,6 +70,8 @@
             <costOfLabor>0.0000033691</costOfLabor>
             <costToExecuteSuppliesOrder>0.0000089791</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000008941</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>2</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>2</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -88,6 +94,8 @@
             <costOfLabor>4.000564891</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -110,6 +118,8 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
     </healthcheck>
     <healthcheck>
@@ -132,6 +142,8 @@
             <costOfLabor>0.000000001</costOfLabor>
             <costToExecuteSuppliesOrder>0.000000001</costToExecuteSuppliesOrder>
             <numberOfSupplyOrdersPerMonth>0.000000001</numberOfSupplyOrdersPerMonth>
+            <customerMonochromeCostPerPage>4</customerMonochromeCostPerPage>
+            <customerColorCostPerPage>4</customerColorCostPerPage>
         </data>
     </healthcheck>
 </healthchecks>

@@ -118,7 +118,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends Z
         $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isCopier'));
         $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isDuplex'));
         $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isFax'));
-        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('reportsTonerLevels'));
+        $this->assertAttributeEquals('disabled', 'disabled', $this->_form->getElement('isCapableOfReportingTonerLevels'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('ppmBlack'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('ppmColor'));
         $this->assertAttributeEquals('readonly', 'readonly', $this->_form->getElement('launchDate'));
@@ -135,7 +135,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributesFormTest extends Z
         $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isCopier'));
         $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isDuplex'));
         $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isFax'));
-        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('reportsTonerLevels'));
+        $this->assertObjectNotHasAttribute('disabled', $this->_form->getElement('isCapableOfReportingTonerLevels'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('ppmBlack'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('ppmColor'));
         $this->assertObjectNotHasAttribute('readonly', $this->_form->getElement('launchDate'));

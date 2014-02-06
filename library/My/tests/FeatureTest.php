@@ -8,6 +8,12 @@ class My_FeatureTest extends PHPUnit_Framework_TestCase
 
     public function setUp ()
     {
+        // My_Feature has a protected static variable that caches the features, so we need to make it accessible and then unset the cache
+        $myFeatureClass   = new ReflectionClass('My_Feature');
+        $featuresProperty = $myFeatureClass->getProperty('_features');
+        $featuresProperty->setAccessible(true);
+        $featuresProperty->setValue(null);
+
         $mockAdapter = $this->getMock('My_Feature_AdapterInterface', array('getFeatures'));
         $mockAdapter->expects($this->any())->method('getFeatures')->will($this->returnValue($this->validFeatures));
         My_Feature::setAdapter($mockAdapter);

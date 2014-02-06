@@ -119,11 +119,6 @@ class Admin_Form_UserTest extends PHPUnit_Framework_TestCase
                   Admin_Form_User::MODE_CREATE,
                   'reset_password',
             ),
-            array(
-                'Zend_Form_Element_Checkbox',
-                Admin_Form_User::MODE_EDIT,
-                'resetPasswordOnNextLogin',
-            ),
         );
     }
 

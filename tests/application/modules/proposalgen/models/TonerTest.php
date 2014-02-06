@@ -8,7 +8,7 @@ class Proposalgen_Model_TonerTest extends PHPUnit_Framework_TestCase
     {
         if (!isset($this->_costPerPageSetting))
         {
-            $this->_costPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting();
+            $this->_costPerPageSetting                         = new Proposalgen_Model_CostPerPageSetting(array('dealerId' => 2));
             $this->_costPerPageSetting->adminCostPerPage       = 0.05;
             $this->_costPerPageSetting->laborCostPerPage       = 0.06;
             $this->_costPerPageSetting->partsCostPerPage       = 0.07;

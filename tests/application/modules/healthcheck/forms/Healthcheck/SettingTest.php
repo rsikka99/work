@@ -12,11 +12,13 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
 
     public function setUp ()
     {
-        /**
-         * @var PHPUnit_Framework_MockObject_MockObject | Healthcheck_Model_Healthcheck_Setting $defaultSettings
-         */
+        $mockAdapter = $this->getMock('My_Feature_AdapterInterface', array('getFeatures'));
+        $mockAdapter->expects($this->any())->method('getFeatures')->will($this->returnValue(array(My_Feature::HEALTHCHECK_PRINTIQ)));
+        My_Feature::setAdapter($mockAdapter);
+
         $defaultSettings = $this->getMock('Healthcheck_Model_Healthcheck_Setting');
         $this->_form     = new Healthcheck_Form_Healthcheck_Settings($defaultSettings);
+
         parent::setUp();
     }
 
@@ -73,9 +75,17 @@ class Healthcheck_Form_Healthcheck_SettingsTest extends PHPUnit_Framework_TestCa
      *
      * @dataProvider badHCFormSettingsData
      */
-    public
-    function testFormRejectsBadData ($data)
+    public function testFormRejectsBadData ($data)
     {
         $this->assertFalse($this->_form->isValid((array)$data), implode(' | ', $this->_form->getErrorMessages()));
+    }
+
+    /**
+     * Tests that the customer fields exist when the feature is allowed
+     */
+    public function testCustomerFieldsExists ()
+    {
+        $this->assertInstanceOf("Zend_Form_Element_Text", $this->_form->getElement('customerMonochromeCostPerPage'));
+        $this->assertInstanceOf("Zend_Form_Element_Text", $this->_form->getElement('customerColorCostPerPage'));
     }
 }
