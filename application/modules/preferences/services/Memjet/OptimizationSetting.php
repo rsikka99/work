@@ -61,6 +61,8 @@ class Preferences_Service_Memjet_OptimizationSetting
                 $this->_form->getElement("partsCostPerPage")->setDescription(number_Format($populateSettings["partsCostPerPage"], 4));
                 $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($populateSettings["targetMonochromeCostPerPage"]);
                 $this->_form->getElement("targetColorCostPerPage")->setDescription($populateSettings["targetColorCostPerPage"]);
+                $this->_form->getElement("optimizedTargetMonochromeCostPerPage")->setDescription($populateSettings["optimizedTargetMonochromeCostPerPage"]);
+                $this->_form->getElement("optimizedTargetColorCostPerPage")->setDescription($populateSettings["optimizedTargetColorCostPerPage"]);
                 // Re-load the settings into report settings
                 $populateSettings = $this->_defaultSettings->toArray();
             }

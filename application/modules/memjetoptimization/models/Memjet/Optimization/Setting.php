@@ -16,14 +16,24 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
     public $costThreshold;
 
     /**
-     * @var int
+     * @var float
      */
     public $targetColorCostPerPage;
 
     /**
-     * @var int
+     * @var float
      */
     public $targetMonochromeCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $optimizedTargetColorCostPerPage;
+
+    /**
+     * @var float
+     */
+    public $optimizedTargetMonochromeCostPerPage;
 
     /**
      * @var float
@@ -136,6 +146,16 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
             $this->targetMonochromeCostPerPage = $params->targetMonochromeCostPerPage;
         }
 
+        if (isset($params->optimizedTargetColorCostPerPage) && !is_null($params->optimizedTargetColorCostPerPage))
+        {
+            $this->optimizedTargetColorCostPerPage = $params->optimizedTargetColorCostPerPage;
+        }
+
+        if (isset($params->optimizedTargetMonochromeCostPerPage) && !is_null($params->optimizedTargetMonochromeCostPerPage))
+        {
+            $this->optimizedTargetMonochromeCostPerPage = $params->optimizedTargetMonochromeCostPerPage;
+        }
+
         if (isset($params->adminCostPerPage) && !is_null($params->adminCostPerPage))
         {
             $this->adminCostPerPage = $params->adminCostPerPage;
@@ -203,22 +223,24 @@ class Memjetoptimization_Model_Memjet_Optimization_Setting extends My_Model_Abst
     public function toArray ()
     {
         return array(
-            "id"                             => $this->id,
-            "costThreshold"                  => $this->costThreshold,
-            "targetColorCostPerPage"         => $this->targetColorCostPerPage,
-            "targetMonochromeCostPerPage"    => $this->targetMonochromeCostPerPage,
-            "adminCostPerPage"               => $this->adminCostPerPage,
-            "laborCostPerPage"               => $this->laborCostPerPage,
-            "partsCostPerPage"               => $this->partsCostPerPage,
-            "pageCoverageMonochrome"         => $this->pageCoverageMonochrome,
-            "pageCoverageColor"              => $this->pageCoverageColor,
-            "useDevicePageCoverages"         => $this->useDevicePageCoverages,
-            "lossThreshold"                  => $this->lossThreshold,
-            "blackToColorRatio"              => $this->blackToColorRatio,
-            "replacementColorRankSetId"      => $this->replacementColorRankSetId,
-            "replacementMonochromeRankSetId" => $this->replacementMonochromeRankSetId,
-            "dealerColorRankSetId"           => $this->dealerColorRankSetId,
-            "dealerMonochromeRankSetId"      => $this->dealerMonochromeRankSetId,
+            "id"                                   => $this->id,
+            "costThreshold"                        => $this->costThreshold,
+            "targetColorCostPerPage"               => $this->targetColorCostPerPage,
+            "targetMonochromeCostPerPage"          => $this->targetMonochromeCostPerPage,
+            "optimizedTargetColorCostPerPage"      => $this->optimizedTargetColorCostPerPage,
+            "optimizedTargetMonochromeCostPerPage" => $this->optimizedTargetMonochromeCostPerPage,
+            "adminCostPerPage"                     => $this->adminCostPerPage,
+            "laborCostPerPage"                     => $this->laborCostPerPage,
+            "partsCostPerPage"                     => $this->partsCostPerPage,
+            "pageCoverageMonochrome"               => $this->pageCoverageMonochrome,
+            "pageCoverageColor"                    => $this->pageCoverageColor,
+            "useDevicePageCoverages"               => $this->useDevicePageCoverages,
+            "lossThreshold"                        => $this->lossThreshold,
+            "blackToColorRatio"                    => $this->blackToColorRatio,
+            "replacementColorRankSetId"            => $this->replacementColorRankSetId,
+            "replacementMonochromeRankSetId"       => $this->replacementMonochromeRankSetId,
+            "dealerColorRankSetId"                 => $this->dealerColorRankSetId,
+            "dealerMonochromeRankSetId"            => $this->dealerMonochromeRankSetId,
         );
     }
 

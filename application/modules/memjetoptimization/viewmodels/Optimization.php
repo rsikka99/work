@@ -621,13 +621,13 @@ class Memjetoptimization_ViewModel_Optimization
                  */
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor())
                 {
-                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly() * $settings->targetMonochromeCostPerPage;
-                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly() * $settings->targetColorCostPerPage;
+                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly() * $settings->optimizedTargetMonochromeCostPerPage;
+                    $total += $deviceInstance->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly() * $settings->optimizedTargetColorCostPerPage;
                 }
                 else
                 {
-                    $total += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $settings->targetMonochromeCostPerPage;
-                    $total += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $settings->targetColorCostPerPage;
+                    $total += $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly() * $settings->optimizedTargetMonochromeCostPerPage;
+                    $total += $deviceInstance->getPageCounts()->getColorPageCount()->getMonthly() * $settings->optimizedTargetColorCostPerPage;
                 }
 
             }

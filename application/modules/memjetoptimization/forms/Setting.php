@@ -111,6 +111,17 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
             'validators' => $cppValidator
         ));
 
+        $this->addElement('text', 'optimizedTargetMonochromeCostPerPage', array(
+            'label'      => 'Optimized Target Monochrome Cost Per Page',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
+        $this->addElement('text', 'optimizedTargetColorCostPerPage', array(
+            'label'      => 'Optimized Target Color Cost Per Page',
+            'append'     => '$ / page',
+            'validators' => $cppValidator
+        ));
+
         $this->addElement('text', 'blackToColorRatio', array(
             'label'      => 'Black to Color Page Ratio',
             'append'     => '%',
@@ -159,7 +170,7 @@ class Memjetoptimization_Form_Setting extends Twitter_Bootstrap_Form_Horizontal
         }
 
 
-        $this->addDisplayGroup(array('name', 'pageCoverageMonochrome', 'pageCoverageColor', 'useDevicePageCoverages', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', 'lossThreshold', 'blackToColorRatio', 'costThreshold', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'Memjetoptimization');
+        $this->addDisplayGroup(array('name', 'pageCoverageMonochrome', 'pageCoverageColor', 'useDevicePageCoverages', 'partsCostPerPage', 'laborCostPerPage', 'adminCostPerPage', 'targetMonochromeCostPerPage', 'targetColorCostPerPage', 'optimizedTargetMonochromeCostPerPage', 'optimizedTargetColorCostPerPage', 'lossThreshold', 'blackToColorRatio', 'costThreshold', $replacementMonochromeVendor, $replacementColorVendor, $dealerMonochromeVendor, $dealerColorVendor), 'Memjetoptimization');
 
         $group = $this->getDisplayGroup('Memjetoptimization');
         $group->setDecorators(array(

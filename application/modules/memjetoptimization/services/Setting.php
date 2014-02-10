@@ -80,6 +80,8 @@ class Memjetoptimization_Service_Setting
 
             $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->targetMonochromeCostPerPage . " / page");
             $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $this->_populateSettings->targetColorCostPerPage . " / page");
+            $this->_form->getElement("optimizedTargetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->optimizedTargetMonochromeCostPerPage . " / page");
+            $this->_form->getElement("optimizedTargetColorCostPerPage")->setDescription("$" . $this->_populateSettings->optimizedTargetColorCostPerPage . " / page");
 
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();

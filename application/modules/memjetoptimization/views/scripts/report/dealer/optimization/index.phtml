@@ -53,6 +53,12 @@ $totalDevices = $optimizationDevices->getDeviceCount();
         <td><?php echo $this->currency($memjetOptimization->getMemjetOptimizationSetting()->targetColorCostPerPage, array('precision' => 4)); ?></td>
     </tr>
     <tr>
+        <td><strong>Optimized Target Monochrome CPP:</strong></td>
+        <td><?php echo $this->currency($memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetMonochromeCostPerPage, array('precision' => 4)); ?></td>
+        <td><strong>Optimized Target Color CPP:</strong></td>
+        <td><?php echo $this->currency($memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetColorCostPerPage, array('precision' => 4)); ?></td>
+    </tr>
+    <tr>
         <td><strong>Monthly Monochrome Page Count:</strong></td>
         <td><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
         <td><strong>Monthly Color Page Count:</strong></td>

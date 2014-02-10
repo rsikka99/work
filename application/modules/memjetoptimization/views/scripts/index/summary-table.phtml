@@ -18,7 +18,16 @@ $memjetOptimization = $this->memjetOptimization;
         <td>
             <strong>Mono/Color Conversion: </strong><?php echo number_format((float)$memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio); ?>%
         </td>
-
+    </tr>
+    <tr>
+        <td>
+            <strong>Optimized Target Monochrome CPP : </strong><?php echo $this->currency((float)$memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetMonochromeCostPerPage, array('precision' => 4)); ?>
+        </td>
+        <td>
+            <strong>Optimized Target Color CPP : </strong><?php echo $this->currency((float)$memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetColorCostPerPage, array('precision' => 4)); ?>
+        </td>
+        <td>
+        </td>
     </tr>
     <tr>
         <td>

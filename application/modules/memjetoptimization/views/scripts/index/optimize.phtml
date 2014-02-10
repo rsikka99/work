@@ -9,6 +9,8 @@ $targetBlackCPP = (float)$memjetOptimization->getMemjetOptimizationSetting()->ta
 $thresholdBlackCpp = $targetBlackCPP * (1 - ($thresholdPercent / 100));
 $targetColorCPP = (float)$memjetOptimization->getMemjetOptimizationSetting()->targetColorCostPerPage;
 $thresholdColorCpp = $targetColorCPP * (1 - ($thresholdPercent / 100));
+$optimizedTargetMonochromeCPP = (float)$memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetMonochromeCostPerPage;
+$optimizedTargetColorCPP = (float)$memjetOptimization->getMemjetOptimizationSetting()->optimizedTargetColorCostPerPage;
 $formActions [] = $form->getElement('ResetReplacements');
 $formActions [] = $form->getElement('Analyze');
 
@@ -47,6 +49,8 @@ var targetCostPerPageMono               = <?php echo $targetBlackCPP; ?>;
 var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp; ?>;
 var targetCostPerPageColor              = <?php echo $targetColorCPP; ?>;
 var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp; ?>;
+var optimizedTargetCostPerPageMono      = <?php echo $optimizedTargetMonochromeCPP; ?>;
+var optimizedTargetCostPerPageColor     = <?php echo $optimizedTargetColorCPP; ?>;
 var deviceListUrl                       = '<?php echo $this->baseUrl('memjetoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
