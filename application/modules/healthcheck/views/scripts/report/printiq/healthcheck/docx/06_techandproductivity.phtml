@@ -17,18 +17,12 @@ $section->addPageBreak();
 $section->addTitle("Analysis: Technology Reliability and User Productivity", 1);
 $section->addTitle('Age of Printing Devices', 2);
 $section->addText(sprintf('We estimate the average age of your printing devices is %1$s year(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.', number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1)));
+$section->addText("The breakdown of the age of your printing devices is shown below.");
 
-$imageTable = $section->addTable(array(
-    'borderBottomSize' => 1
-));
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
 $imageTable->addRow();
-$cell = $imageTable->addCell(9028.8, array(
-    'valign' => 'center'
-));
-
-$cell->addImage($graphs ['AgePieGraph'], array(
-    'align' => 'center'
-));
+$imageTable->addCell(5010, $this->styles->tables->tripleimage->cell1)->addImage($graphs ['PrintIQAgePieGraph']);
+$imageTable->addCell(5010, $this->styles->tables->tripleimage->cell2)->addImage($graphs ['PrintIQPagesPrintedByAgeBarGraph']);
 $section->addTitle('Technology Features and Functionality', 2);
 $section->addText('The ability to scan and fax documents from convenient locations helps to improve document workflow and productivity, and scanning can also help reduce the number of pages printed. Color printing capabilities are important if you are generating client-facing or other important documents in-house.');
 $section->addText('The charts below show the percentage of your printing devices that are capable of copying, duplex printing, and color printing.');

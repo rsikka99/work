@@ -6,8 +6,10 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="h1">Analysis: Technology Reliability and User Productivity</div>
 <div class="pheader">Age of Printing Devices</div>
 <p>We estimate the average age of your printing devices is <?php echo number_format($healthcheckViewModel->getAverageAgeOfDevices(), 1) ?> years(s); a good industry average is 3 years. Devices over 5 years old receive, on average, one repair per year.</p>
+<p>The breakdown of the age of your printing devices is shown below.</p>
 <div class="center">
-    <img src="<?php echo $graphs['AgePieGraph']; ?>" />
+    <img src="<?php echo $graphs['PrintIQAgePieGraph']; ?>" />
+    <img src="<?php echo $graphs['PrintIQPagesPrintedByAgeBarGraph']; ?>" />
 </div>
 <br />
 <br />

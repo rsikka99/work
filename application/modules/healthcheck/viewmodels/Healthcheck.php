@@ -2468,6 +2468,135 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $healthcheckGraphs['AgePieGraph'] = $AgeOfPrintingPieChart->getUrl();
 
             /**
+             * -- PrintIQAgePieGraph
+             */
+            $deviceAges = array(
+                "Less than 3 years old" => 0,
+                "3-5 years old"         => 0,
+                "6-8 years old"         => 0,
+                "More than 8 years old" => 0
+            );
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if ($device->getAge() < 3)
+                {
+                    $deviceAges ["Less than 3 years old"]++;
+                }
+                else if ($device->getAge() <= 5)
+                {
+                    $deviceAges ["3-5 years old"]++;
+                }
+                else if ($device->getAge() <= 8)
+                {
+                    $deviceAges ["6-8 years old"]++;
+                }
+                else
+                {
+                    $deviceAges ["More than 8 years old"]++;
+                }
+            }
+
+            $PrintIQAgeOfPrintingPieChart = new gchart\gPie3DChart(250, 220);
+            $PrintIQAgeOfPrintingPieChart->addDataSet($deviceAges);
+            $PrintIQAgeOfPrintingPieChart->addColors(array(
+                "E21736",
+                "0094cf",
+                "adba1d",
+                "5c3f9b",
+            ));
+            $PrintIQAgeOfPrintingPieChart->setLegendPosition("bv");
+            $PrintIQAgeOfPrintingPieChart->setTitle("Age of device");
+            $PrintIQAgeOfPrintingPieChart->setLabels(array(
+                number_format((($deviceAges ["Less than 3 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
+                number_format((($deviceAges ["3-5 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
+                number_format((($deviceAges ["6-8 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
+                number_format((($deviceAges ["More than 8 years old"] / $numberOfIncludedDevices) * 100), 0) . "%",
+            ));
+            $PrintIQAgeOfPrintingPieChart->setLegend(array(
+                "Less than 3 years old",
+                "3-5 years old",
+                "6-8 years old",
+                "More than 8 years old"
+            ));
+            // PrintIQAgePieGraph
+            $healthcheckGraphs['PrintIQAgePieGraph'] = $PrintIQAgeOfPrintingPieChart->getUrl();
+
+            /**
+             * -- PrintIQPagesPrintedByAgeBarGraph
+             */
+            $deviceAges = array(
+                "Less than 3 years old" => 0,
+                "3-5 years old"         => 0,
+                "6-8 years old"         => 0,
+                "More than 8 years old" => 0
+            );
+            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
+            {
+                if ($device->getAge() < 3)
+                {
+                    $deviceAges ["Less than 3 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                }
+                else if ($device->getAge() <= 5)
+                {
+                    $deviceAges ["3-5 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                }
+                else if ($device->getAge() <= 8)
+                {
+                    $deviceAges ["6-8 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                }
+                else
+                {
+                    $deviceAges ["More than 8 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                }
+            }
+            $PrintIQPagesPrintedByAgeBarGraph = new gchart\gBarChart(250, 250);
+            $PrintIQPagesPrintedByAgeBarGraph->setVisibleAxes(array(
+                'y'
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
+                $deviceAges ["Less than 3 years old"]
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
+                "E21736"
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
+                $deviceAges ["3-5 years old"]
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
+                "0094cf"
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
+                $deviceAges ["6-8 years old"]
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
+                "adba1d"
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
+                $deviceAges ["More than 8 years old"]
+            ));
+            $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
+                "5c3f9b"
+            ));
+
+            $highest = max($deviceAges["Less than 3 years old"], $deviceAges["3-5 years old"], $deviceAges["6-8 years old"], $deviceAges["More than 8 years old"]);
+            $PrintIQPagesPrintedByAgeBarGraph->addAxisRange(0, 0, $highest * 1.1);
+            $PrintIQPagesPrintedByAgeBarGraph->setDataRange(0, $highest * 1.1);
+            $PrintIQPagesPrintedByAgeBarGraph->setBarScale(50, 5);
+            $PrintIQPagesPrintedByAgeBarGraph->setLegendPosition("bv");
+            $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
+            $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
+            $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
+            $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
+            $PrintIQPagesPrintedByAgeBarGraph->setLegend(array(
+                "Less than 3 years old",
+                "3-5 years old",
+                "6-8 years old",
+                "More than 8 years old"
+            ));
+            // PrintIQPagesPrintedByAgeBarGraph
+            $healthcheckGraphs['PrintIQPagesPrintedByAgeBarGraph'] = $PrintIQPagesPrintedByAgeBarGraph->getUrl();
+
+            /**
              * -- DuplexCapableDevicesGraph
              */
             $duplexCapableDeviceCount    = $this->getDevices()->duplexCapableDeviceInstances->getCount();
@@ -2696,10 +2825,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- UnmanagedVsManagedDevices
              */
-            $insufficientData                  = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
-            $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
-            $isManagedDeviceCount              = $this->getDevices()->isManagedDeviceInstances->getCount();
-            $unmanagedDeviceCount              = $this->getDevices()->unmanagedDeviceInstances->getCount() + $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
+            $insufficientData     = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
+            $leasedDevices        = $this->getDevices()->leasedDeviceInstances->getCount();
+            $isManagedDeviceCount = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $unmanagedDeviceCount = $this->getDevices()->unmanagedDeviceInstances->getCount() + $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
 
 
             $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $leasedDevices);
@@ -2771,14 +2900,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged    = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnUnmanaged  = "Not " . My_Brand::$jit . " Compatible";
-            $pagesPrintedOnLeased     = "Leased";
+            $pagesPrintedOnManaged   = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnUnmanaged = "Not " . My_Brand::$jit . " Compatible";
+            $pagesPrintedOnLeased    = "Leased";
 
             $pagesPrinted = array(
-                $pagesPrintedOnManaged    => 0,
-                $pagesPrintedOnUnmanaged  => 0,
-                $pagesPrintedOnLeased     => 0,
+                $pagesPrintedOnManaged   => 0,
+                $pagesPrintedOnUnmanaged => 0,
+                $pagesPrintedOnLeased    => 0,
             );
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
