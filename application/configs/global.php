@@ -131,6 +131,7 @@ return array(
             'helperPath' => array(
                 'My_View_Helper'            => 'My/View/Helper',
                 'My_View_Helper_Navigation' => 'My/View/Helper/Navigation',
+                'Tangent_View_Helper'       => 'Tangent/View/Helper',
                 'Application_View_Helper'   => APPLICATION_PATH . '/layouts/helpers',
             ),
         ),
