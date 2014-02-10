@@ -461,7 +461,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
                     }
                 }
                 catch (Exception $e)
@@ -553,7 +553,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
                     }
                 }
                 catch (Exception $e)
@@ -664,7 +664,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
                     }
                 }
                 catch (Exception $e)
@@ -757,7 +757,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                     }
                     else
                     {
-                        $this->_flashMessenger->addMessage(array("error" => "This file headers are in-correct please verify headers against export file."));
+                        $this->_flashMessenger->addMessage(array("error" => "This file headers are incorrect please verify headers against export file."));
                     }
                 }
                 catch (Exception $e)
