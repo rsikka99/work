@@ -283,11 +283,11 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
 
         $select = $db->select()
                      ->from('toners', array('*'))
-                     ->joinLeft('device_toners', 'toner_id = id', array(null))
+                     ->joinLeft('device_toners', 'toner_id = toners.id', array(null))
                      ->joinLeft('dealer_toner_attributes', "dealer_toner_attributes.tonerId = toners.id AND dealer_toner_attributes.dealerId = ?", array(
                 "dealerSku",
             ))
-                     ->joinLeft('client_toner_orders', "tonerId = id AND dealerId = ?", array(
+                     ->joinLeft('client_toner_orders', "client_toner_orders.tonerId = toners.id AND client_toner_orders.clientId = ?", array(
                 "calculatedCost"         => "COALESCE(client_toner_orders.cost, dealer_toner_attributes.cost, toners.cost)",
                 "isUsingCustomerPricing" => "IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)",
                 "isUsingDealerPricing"   => "IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE)",
