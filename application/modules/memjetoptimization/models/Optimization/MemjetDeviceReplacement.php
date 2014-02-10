@@ -140,88 +140,91 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
                 {
                     break;
                 }
-
-                $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage);
-                $blackToColorRatio     = ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $this->_blackToColorRatio : 0;
-                $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice, $blackToColorRatio);
-
-                $costDelta = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
-
-                /*
-                 * 1. Are we inside the page volume and above the lossThreshold?
-                 * 2. If we are a Color MFP and cost savings is less than the threshold, don't swap.
-                 */
-                if
-                (
-                    $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() <= $deviceSwap->getDealerMaximumPageCount($this->_dealerId) &&
-                    $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() >= $deviceSwap->getDealerMinimumPageCount($this->_dealerId) &&
-                    $costDelta > $this->_lossThreshold &&
-                    !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta < $this->_costSavingsThreshold)
-                )
+                // Make sure we do not lose a3 compatibility
+                if (!($deviceInstance->getMasterDevice()->isA3 && !$deviceSwap->getMasterDevice()->isA3))
                 {
+                    $replacementDevice     = $masterDeviceMapper->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage);
+                    $blackToColorRatio     = ($replacementDevice->isColor() && $deviceInstance->getMasterDevice()->isColor() == false) ? $this->_blackToColorRatio : 0;
+                    $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, $replacementDevice, $blackToColorRatio);
+
+                    $costDelta = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
+
                     /*
-                     * We fit inside the ampv, but we do not want to downgrade color or functionality
+                     * 1. Are we inside the page volume and above the lossThreshold?
+                     * 2. If we are a Color MFP and cost savings is less than the threshold, don't swap.
                      */
                     if
                     (
-                        $suggestedDevice == null &&
-                        (
-                            !($deviceInstance->getMasterDevice()->isColor() === true && $deviceSwap->getMasterDevice()->isColor() === false) && // Not losing color
-                            !($deviceInstance->getMasterDevice()->isMfp() === true && $deviceSwap->getMasterDevice()->isMfp() === false) // Not losing mfp
-
-                        )
+                        $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() <= $deviceSwap->getDealerMaximumPageCount($this->_dealerId) &&
+                        $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() >= $deviceSwap->getDealerMinimumPageCount($this->_dealerId) &&
+                        $costDelta > $this->_lossThreshold &&
+                        !($deviceInstance->getMasterDevice()->isColor() && $deviceInstance->getMasterDevice()->isMfp() && $costDelta < $this->_costSavingsThreshold)
                     )
                     {
-                        $suggestedDevice = $deviceSwap;
-                        $greatestSavings = $costDelta;
-                    }
-                    else if
-                    (
                         /*
-                         * Here we take 4 steps to compare the previous upgrade
+                         * We fit inside the ampv, but we do not want to downgrade color or functionality
                          */
-                        $suggestedDevice instanceof Admin_Model_Memjet_Device_Swap &&
+                        if
                         (
-                            /*
-                             *  1. Upgrade color, no functionality change(Mono -> Color, Mono MFP -> Color MFP)
-                             */
+                            $suggestedDevice == null &&
                             (
-                                $deviceSwap->getMasterDevice()->isColor()
-                                && $suggestedDevice->getMasterDevice()->isColor() == false
-                                && $suggestedDevice->getMasterDevice()->isMfp() == $deviceSwap->getMasterDevice()->isMfp()
-                            ) ||
+                                !($deviceInstance->getMasterDevice()->isColor() === true && $deviceSwap->getMasterDevice()->isColor() === false) && // Not losing color
+                                !($deviceInstance->getMasterDevice()->isMfp() === true && $deviceSwap->getMasterDevice()->isMfp() === false) // Not losing mfp
 
-                            /*
-                             *  2. Functionality change, no color changes (Mono -> Mono MFP, Color -> Color MFP)
-                             */
-                            (
-                                $deviceSwap->getMasterDevice()->isMfp()
-                                && $suggestedDevice->getMasterDevice()->isMfp() == false
-                                && $deviceSwap->getMasterDevice()->isColor() == $suggestedDevice->getMasterDevice()->isColor()
-                            ) ||
-
-                            /*
-                             *  3. Functionality and color upgrade (Mono -> Color MFP)
-                             */
-                            (
-                                $deviceSwap->getMasterDevice()->isColor() == false
-                                && $deviceSwap->getMasterDevice()->isMfp() == false
-                                && $suggestedDevice->getMasterDevice()->isColor() && $suggestedDevice->getMasterDevice()->isMfp()
-                            ) ||
-
-                            /*
-                             *  4. No functionality upgrade, no color upgrade, just cheaper.
-                             */
-                            (
-                                $costDelta > $greatestSavings
-                                && $deviceSwap->getMasterDevice()->isMfp() == $suggestedDevice->getMasterDevice()->isMfp()
-                                && $deviceSwap->getMasterDevice()->isColor() == $suggestedDevice->getMasterDevice()->isColor()
                             )
                         )
-                    )
-                    {
-                        $suggestedDevice = $deviceSwap->getMasterDevice();
-                        $greatestSavings = $costDelta;
+                        {
+                            $suggestedDevice = $deviceSwap;
+                            $greatestSavings = $costDelta;
+                        }
+                        else if
+                        (
+                            /*
+                             * Here we take 4 steps to compare the previous upgrade
+                             */
+                            $suggestedDevice instanceof Admin_Model_Memjet_Device_Swap &&
+                            (
+                                /*
+                                 *  1. Upgrade color, no functionality change(Mono -> Color, Mono MFP -> Color MFP)
+                                 */
+                                (
+                                    $deviceSwap->getMasterDevice()->isColor()
+                                    && $suggestedDevice->getMasterDevice()->isColor() == false
+                                    && $suggestedDevice->getMasterDevice()->isMfp() == $deviceSwap->getMasterDevice()->isMfp()
+                                ) ||
+
+                                /*
+                                 *  2. Functionality change, no color changes (Mono -> Mono MFP, Color -> Color MFP)
+                                 */
+                                (
+                                    $deviceSwap->getMasterDevice()->isMfp()
+                                    && $suggestedDevice->getMasterDevice()->isMfp() == false
+                                    && $deviceSwap->getMasterDevice()->isColor() == $suggestedDevice->getMasterDevice()->isColor()
+                                ) ||
+
+                                /*
+                                 *  3. Functionality and color upgrade (Mono -> Color MFP)
+                                 */
+                                (
+                                    $deviceSwap->getMasterDevice()->isColor() == false
+                                    && $deviceSwap->getMasterDevice()->isMfp() == false
+                                    && $suggestedDevice->getMasterDevice()->isColor() && $suggestedDevice->getMasterDevice()->isMfp()
+                                ) ||
+
+                                /*
+                                 *  4. No functionality upgrade, no color upgrade, just cheaper.
+                                 */
+                                (
+                                    $costDelta > $greatestSavings
+                                    && $deviceSwap->getMasterDevice()->isMfp() == $suggestedDevice->getMasterDevice()->isMfp()
+                                    && $deviceSwap->getMasterDevice()->isColor() == $suggestedDevice->getMasterDevice()->isColor()
+                                )
+                            )
+                        )
+                        {
+                            $suggestedDevice = $deviceSwap->getMasterDevice();
+                            $greatestSavings = $costDelta;
+                        }
                     }
                 }
             }
@@ -233,7 +236,6 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
             {
                 $suggestedDevice = $suggestedDevice->getMasterDevice();
             }
-
         }
 
         return $suggestedDevice;

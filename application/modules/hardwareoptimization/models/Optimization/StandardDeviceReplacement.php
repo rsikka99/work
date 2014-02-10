@@ -152,15 +152,19 @@ class Hardwareoptimization_Model_Optimization_StandardDeviceReplacement implemen
         $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($this->_costPerPageSetting);
         foreach ($replacementDevices as $deviceSwap)
         {
-            $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage));
-            $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
-            if ($costDelta > $this->_savingsThreshold && $costDelta > $greatestSavings)
+            // Make sure we do not lose a3 compatibility
+            if (!($deviceInstance->getMasterDevice()->isA3 && !$deviceSwap->getMasterDevice()->isA3))
             {
-                // We replaced the device on cost at this point, we need to look at AMPV
-                if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
+                $deviceReplacementCost = $deviceInstance->calculateMonthlyCost($this->_replacementCostPerPageSetting, Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($deviceSwap->masterDeviceId, $this->_dealerId, $this->_reportLaborCostPerPage, $this->_reportPartsCostPerPage));
+                $costDelta             = ($deviceInstanceMonthlyCost - $deviceReplacementCost);
+                if ($costDelta > $this->_savingsThreshold && $costDelta > $greatestSavings)
                 {
-                    $suggestedDevice = $deviceSwap->getMasterDevice();
-                    $greatestSavings = $costDelta;
+                    // We replaced the device on cost at this point, we need to look at AMPV
+                    if ($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() < $deviceSwap->maximumPageCount && $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly() > $deviceSwap->minimumPageCount)
+                    {
+                        $suggestedDevice = $deviceSwap->getMasterDevice();
+                        $greatestSavings = $costDelta;
+                    }
                 }
             }
         }
