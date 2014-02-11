@@ -2010,7 +2010,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $highest  = ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount() > $this->getDevices()->colorCapableDeviceInstances->getCount()) ? ($this->getDevices()->allIncludedDeviceInstances->getCount() - $this->getDevices()->colorCapableDeviceInstances->getCount()) : $this->getDevices()->colorCapableDeviceInstances->getCount();
             $barGraph = new gchart\gBarChart(280, 210);
-            $barGraph->setTitle("Color-Capable Printing Devices");
+            $barGraph->setTitle("Color-Capable|Printing Devices");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2048,7 +2048,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $highest  = ($this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > $blackAndWhitePageCount) ? $this->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() : $blackAndWhitePageCount;
             $barGraph = new gchart\gBarChart(280, 210);
-            $barGraph->setTitle("Color vs Black/White Pages");
+            $barGraph->setTitle("Color vs|Black/White Pages");
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2761,7 +2761,6 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ManagedVsNotJitVsJitDevices
              */
-            $insufficientData                  = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
             $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
             $isManagedDeviceCount              = $this->getDevices()->isManagedDeviceInstances->getCount();
             $unmanagedDeviceCount              = $this->getDevices()->unmanagedDeviceInstances->getCount();
@@ -2825,14 +2824,14 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- UnmanagedVsManagedDevices
              */
-            $insufficientData     = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount();
+            $insufficientData     = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount() + $this->getDevices()->unmappedDeviceInstances->getCount();
             $leasedDevices        = $this->getDevices()->leasedDeviceInstances->getCount();
             $isManagedDeviceCount = $this->getDevices()->isManagedDeviceInstances->getCount();
             $unmanagedDeviceCount = $this->getDevices()->unmanagedDeviceInstances->getCount() + $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
 
 
             $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $leasedDevices);
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(280, 330);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2860,7 +2859,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             if ($insufficientData > 0)
             {
                 $barGraph->addDataSet(array(
-                    $this->getDevices()->allDevicesWithShortMonitorInterval->getCount()
+                    $insufficientData
                 ));
 
                 $barGraph->addColors(array(
@@ -2877,11 +2876,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
 
-            $barGraph->setLegendPosition("b|l");
+            $barGraph->setLegendPosition("bv|l");
 
             $barGraph->setLegend(array(
                 "Managed/On " . My_Brand::$jit,
-                "Unmanaged",
+                "Umanaged",
                 "Leased",
                 "Insufficient Data",
             ));
@@ -2898,10 +2897,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- PagesWithOrWithoutJIT
              */
-            $barGraph = new gchart\gBarChart(280, 230);
+            $barGraph = new gchart\gBarChart(280, 330);
 
             $pagesPrintedOnManaged   = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnUnmanaged = "Not " . My_Brand::$jit . " Compatible";
+            $pagesPrintedOnUnmanaged = "Unmanaged";
             $pagesPrintedOnLeased    = "Leased";
 
             $pagesPrinted = array(
@@ -2954,7 +2953,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(50, 5);
-            $barGraph->setLegendPosition("b|l");
+            $barGraph->setLegendPosition("bv|l");
 
             $barGraph->setLegend(array(
                 $pagesPrintedOnManaged,
