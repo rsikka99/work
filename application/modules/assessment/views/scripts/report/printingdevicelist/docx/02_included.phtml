@@ -31,6 +31,7 @@ $table->addCell($tcStyle->col1Width, $tcStyle->header->cell)->addText('Manufactu
 $table->addCell($tcStyle->col2Width, $tcStyle->header->cell)->addText('Model', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('IP Address', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('Serial No.', $tcStyle->header->fontStyle, $tcStyle->centeralign);
+$table->addCell($tcStyle->col3Width, $tcStyle->header->cell)->addText('Age (Years)', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col4Width, $tcStyle->header->cell)->addText('Purchased or Leased', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col5Width, $tcStyle->header->cell)->addText('AMPV', $tcStyle->header->fontStyle, $tcStyle->centeralign);
 $table->addCell($tcStyle->col6Width, $tcStyle->header->cell)->addText(sprintf('%1$s Compatible', My_Brand::$jit), $tcStyle->header->fontStyle, $tcStyle->centeralign);
@@ -43,6 +44,7 @@ foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDevi
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->row->fontStyle, $tcStyle->leftalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->ipAddress) ? $deviceInstance->ipAddress : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->serialNumber) ? $deviceInstance->serialNumber : "Unknown", $tcStyle->row->fontStyle, $tcStyle->centeralign);
+    $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText($deviceInstance->getAge(), $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->isLeased) ? "Leased" : "Purchased", $tcStyle->row->fontStyle, $tcStyle->centeralign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()), $tcStyle->row->fontStyle, $tcStyle->rightalign);
     $table->addCell($tcStyle->col2Width, $tcStyle->row->cell)->addText(($deviceInstance->reportsTonerLevels) ? "Yes" : "No", $tcStyle->row->fontStyle, $tcStyle->centeralign);
