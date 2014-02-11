@@ -13,7 +13,7 @@ $section = $this->section;
 $healthcheckViewModel = $this->healthcheckViewModel;
 $graphs               = $healthcheckViewModel->getGraphs();
 $section->addTitle('Estimated OEM Toner Costs vs. Compatible Toner Costs', 2);
-$section->addText(sprintf('From the review of your toner purchases, you are saving %1$s a month by moving from OEM to a compatible toner. Over the next 12 months you can save approximately %2$s. That is a %3$s%% savings for that time period.',
+$section->addText(sprintf('From the review of your toner purchases, you are currently saving %1$s a month by moving from OEM to a compatible toner. That equates to %2$s a year. That is a %3$s%% savings for that time period.',
         $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings()),
         $this->currency($healthcheckViewModel->calculateCurrentTonerOrderSavings() * 12),
         number_format($healthcheckViewModel->calculateCurrentTonerOrderSavingPercentage()))
