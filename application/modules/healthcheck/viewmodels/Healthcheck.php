@@ -2534,19 +2534,19 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             {
                 if ($device->getAge() < 3)
                 {
-                    $deviceAges ["Less than 3 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                    $deviceAges ["Less than 3 years old"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else if ($device->getAge() <= 5)
                 {
-                    $deviceAges ["3-5 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                    $deviceAges ["3-5 years old"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else if ($device->getAge() <= 8)
                 {
-                    $deviceAges ["6-8 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                    $deviceAges ["6-8 years old"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
                 else
                 {
-                    $deviceAges ["More than 8 years old"] += $device->getPageCounts()->getCombinedPageCount();
+                    $deviceAges ["More than 8 years old"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
             $PrintIQPagesPrintedByAgeBarGraph = new gchart\gBarChart(250, 250);
@@ -2581,8 +2581,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $highest = max($deviceAges["Less than 3 years old"], $deviceAges["3-5 years old"], $deviceAges["6-8 years old"], $deviceAges["More than 8 years old"]);
             $PrintIQPagesPrintedByAgeBarGraph->addAxisRange(0, 0, $highest * 1.1);
             $PrintIQPagesPrintedByAgeBarGraph->setDataRange(0, $highest * 1.1);
-            $PrintIQPagesPrintedByAgeBarGraph->setBarScale(50, 5);
+            $PrintIQPagesPrintedByAgeBarGraph->setBarScale(45, 5);
             $PrintIQPagesPrintedByAgeBarGraph->setLegendPosition("bv");
+            $PrintIQPagesPrintedByAgeBarGraph->setTitle("Pages Printed By Age of Device");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $PrintIQPagesPrintedByAgeBarGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
