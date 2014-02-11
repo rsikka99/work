@@ -2832,7 +2832,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
 
             $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $leasedDevices);
-            $barGraph = new gchart\gBarChart(280, 330);
+            $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2877,7 +2877,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
 
-            $barGraph->setLegendPosition("bv|l");
+            $barGraph->setLegendPosition("b|l");
 
             $barGraph->setLegend(array(
                 "Managed/On " . My_Brand::$jit,
@@ -2898,7 +2898,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- PagesWithOrWithoutJIT
              */
-            $barGraph = new gchart\gBarChart(280, 330);
+            $barGraph = new gchart\gBarChart(280, 230);
 
             $pagesPrintedOnManaged   = "Managed/On " . My_Brand::$jit;
             $pagesPrintedOnUnmanaged = "Unmanaged";
@@ -2954,7 +2954,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
             $barGraph->setBarScale(50, 5);
-            $barGraph->setLegendPosition("bv|l");
+            $barGraph->setLegendPosition("b|l");
 
             $barGraph->setLegend(array(
                 $pagesPrintedOnManaged,
