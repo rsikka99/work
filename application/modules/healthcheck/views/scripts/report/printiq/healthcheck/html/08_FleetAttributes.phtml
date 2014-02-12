@@ -5,6 +5,79 @@ $healthcheckViewModel = $this->healthcheckViewModel;
 <div class="h1">Fleet Attributes</div>
 <p>The following provides a summary of your existing printing devices.</p>
 <p>Leased devices are shown in gray.</p>
+
+<div class="pheader">Devices compatible with <?php echo My_Brand::$companyNameFull; ?></div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+    <tr class="shaded">
+        <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
+    foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getDeviceInstances()) as $deviceInstance): ?>
+        <?php
+        $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+        if ($deviceInstance->isLeased)
+        {
+            echo ' shaded';
+        }
+        ?>">
+            <td><?php echo $deviceName ?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<div class="pheader">Devices not compatible with <?php echo My_Brand::$companyNameFull; ?></div>
+<table cellspacing="0" class="genericTable" style="font-size: 10pt;">
+    <thead>
+    <tr class="shaded">
+        <th style="width: 170px;vertical-align: middle"><strong>Device Name</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Device Age (Years)</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Monthly Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Percent of Total Page Volume</strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Comp. with <?php echo My_Brand::$jit; ?></strong></th>
+        <th style="width: 51px;vertical-align: middle" class="center"><strong>Linked to <?php echo My_Brand::$jit; ?> Program</strong></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+
+    foreach ($healthcheckViewModel->getDevices()->unmanagedDeviceInstances->getDeviceInstances() as $deviceInstance):
+        ?>
+        <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
+        <tr class="<?php
+        if ($deviceInstance->isLeased)
+        {
+            echo ' shaded';
+        }?>">
+            <td><?php echo $deviceName ?>
+                <br /> <?php echo (strlen($deviceInstance->serialNumber) > 14) ? substr($deviceInstance->serialNumber, 0, 11) . '...' : $deviceInstance->serialNumber; ?>
+                <br /> <?php echo $deviceInstance->ipAddress; ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0) ?></td>
+            <td class="right"><?php echo number_format($deviceInstance->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) ?>%</td>
+            <td class="center"> <?php echo($deviceInstance->compatibleWithJitProgram ? 'Y' : 'N') ?></td>
+            <td class="center"> <?php echo($deviceInstance->isLeased ? 'N' : ($deviceInstance->isManaged ? 'Y' : 'N')) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
 <div class="pheader">Optimized Devices - No Changes Necessary</div>
 <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
     <thead>

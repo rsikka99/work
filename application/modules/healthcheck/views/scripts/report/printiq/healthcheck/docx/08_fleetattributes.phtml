@@ -18,6 +18,90 @@ $section->addText("The following provides a summary of your existing printing de
 $section->addText("Leased devices are shown in gray.");
 
 $cellWidths = array(
+    5000,
+    900,
+    900,
+    900,
+    900,
+    900,
+    900,
+    900
+);
+$tcStyle    = $this->styles->tables->fleetattributes;
+/**
+ * Comatpbile with jit Devices
+ */
+$section->addTitle(sprintf('Devices compatible with %1$s', My_Brand::$companyNameFull), 2);
+$compatibleDevicesTable = $section->addTable($tcStyle->tablestyle);
+$compatibleDevicesTable->addRow($tcStyle->rowheight);
+$compatibleDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
+$compatibleDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
+$compatibleDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
+$compatibleDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Total Page Volume', 'bold_text', 'nospacing_centeralign');
+$compatibleDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$compatibleDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getDeviceInstances()) as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $compatibleDevicesTable->addRow();
+    $cell = $compatibleDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $compatibleDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $compatibleDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $compatibleDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
+    $compatibleDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->compatibleWithJitProgram ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $compatibleDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+}
+$section->addPageBreak();
+
+$cellWidths = array(
+    5000,
+    900,
+    900,
+    900,
+    900,
+    900,
+    900,
+    900
+);
+
+/**
+ * Non compatible with jit Devices
+ */
+$section->addTitle(sprintf('Devices not compatible with %1$s', My_Brand::$companyNameFull), 2);
+$notCompatibleDevicesTable = $section->addTable($tcStyle->tablestyle);
+$notCompatibleDevicesTable->addRow($tcStyle->rowheight);
+$notCompatibleDevicesTable->addCell($cellWidths [0], $tcStyle->cellHeader)->addText('Device Name', 'bold_text', 'nospacing_centeralign');
+$notCompatibleDevicesTable->addCell($cellWidths [1], $tcStyle->cellHeader)->addText('Device Age (Years)', 'bold_text', 'nospacing_centeralign');
+$notCompatibleDevicesTable->addCell($cellWidths [2], $tcStyle->cellHeader)->addText('Monthly Page Volume', 'bold_text', 'nospacing_centeralign');
+$notCompatibleDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText('Percent of Total Page Volume', 'bold_text', 'nospacing_centeralign');
+$notCompatibleDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
+$notCompatibleDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
+
+/* @var $device Proposalgen_Model_DeviceInstance */
+foreach ($healthcheckViewModel->getUnderutilizedDevices() as $device)
+{
+    $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
+
+    $notCompatibleDevicesTable->addRow();
+    $cell = $notCompatibleDevicesTable->addCell($cellWidths [0], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell1));
+    $cell->addText($deviceName, null, array('spaceAfter' => 0));
+    $cell->addText($device->serialNumber, null, array('spaceAfter' => 0));
+    $cell->addText($device->ipAddress, null, array('spaceAfter' => 0));
+    $notCompatibleDevicesTable->addCell($cellWidths [1], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText(number_format($device->getAge(), 0), null, 'nospacing_rightalign');
+    $notCompatibleDevicesTable->addCell($cellWidths [2], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell3))->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
+    $notCompatibleDevicesTable->addCell($cellWidths [3], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell4))->addText($this->translate(number_format($device->calculateMonthlyPercentOfTotalVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), 2) . '%'), null, 'nospacing_rightalign');
+    $notCompatibleDevicesTable->addCell($cellWidths [6], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->compatibleWithJitProgram ? 'Y' : 'N')), null, 'nospacing_centeralign');
+    $notCompatibleDevicesTable->addCell($cellWidths [5], ($device->isLeased ? $tcStyle->cellshaded : $tcStyle->cell2))->addText($this->translate(($device->isLeased ? 'N' : ($device->isManaged ? 'Y' : 'N'))), null, 'nospacing_centeralign');
+}
+$section->addPageBreak();
+
+
+$cellWidths = array(
     6500,
     500,
     500,
