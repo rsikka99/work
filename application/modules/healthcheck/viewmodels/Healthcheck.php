@@ -2499,10 +2499,10 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $PrintIQAgeOfPrintingPieChart = new gchart\gPie3DChart(250, 220);
             $PrintIQAgeOfPrintingPieChart->addDataSet($deviceAges);
             $PrintIQAgeOfPrintingPieChart->addColors(array(
-                "E21736",
-                "0094cf",
-                "adba1d",
-                "5c3f9b",
+                "008000",
+                "39d439",
+                "ffff00",
+                "ff0000",
             ));
             $PrintIQAgeOfPrintingPieChart->setLegendPosition("bv");
             $PrintIQAgeOfPrintingPieChart->setTitle("Age of device");
@@ -2549,6 +2549,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                     $deviceAges ["More than 8 years old"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }
             }
+
             $PrintIQPagesPrintedByAgeBarGraph = new gchart\gBarChart(250, 250);
             $PrintIQPagesPrintedByAgeBarGraph->setVisibleAxes(array(
                 'y'
@@ -2557,25 +2558,25 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $deviceAges ["Less than 3 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "E21736"
+                "008000"
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["3-5 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "0094cf"
+                "39d439"
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["6-8 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "adba1d"
+                "ffff00"
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["More than 8 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "5c3f9b"
+                "ff0000"
             ));
 
             $highest = max($deviceAges["Less than 3 years old"], $deviceAges["3-5 years old"], $deviceAges["6-8 years old"], $deviceAges["More than 8 years old"]);
@@ -2791,7 +2792,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addColors(array(
-                "F36433"
+                "ffff00"
             ));
 
             $barGraph->addDataSet(array(
@@ -3029,7 +3030,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addColors(array(
-                "F36433"
+                "ffff00"
             ));
 
             $barGraph->addDataSet(array(
