@@ -580,7 +580,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "validToners"              => $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)
                     );
 
-                    $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress;
+                    $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;
 
                     if ($deviceInstance->getMasterDevice() instanceof Proposalgen_Model_MasterDevice)
                     {

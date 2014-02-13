@@ -495,12 +495,12 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
      */
     public function ascendingSortDevicesByA3Volume ($deviceA, $deviceB)
     {
-        if ($deviceA->getPageCounts()->getPrintA3CombinedPageCount() == $deviceB->getPageCounts()->getPrintA3CombinedPageCount())
+        if ($deviceA->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly() == $deviceB->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly())
         {
             return 0;
         }
 
-        return ($deviceA->getPageCounts()->getPrintA3CombinedPageCount() < $deviceB->getPageCounts()->getPrintA3CombinedPageCount()) ? -1 : 1;
+        return ($deviceA->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly() < $deviceB->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly()) ? -1 : 1;
     }
 
     /**
@@ -2200,7 +2200,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- CompatibleJITBarGraph
              */
-            $numberOfDevicesReportingTonerLevels = $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
+            $numberOfDevicesReportingTonerLevels = $this->getDevices()->compatibleDeviceInstances->getCount();
             $numberOfIncompatibleDevices         = $this->getDevices()->allIncludedDeviceInstances->getCount() - $numberOfDevicesReportingTonerLevels;
             $highest                             = ($numberOfDevicesReportingTonerLevels > $numberOfIncompatibleDevices ? $numberOfDevicesReportingTonerLevels : ($numberOfIncompatibleDevices));
             $barGraph                            = new gchart\gBarChart(220, 220);
@@ -2500,8 +2500,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $PrintIQAgeOfPrintingPieChart->addDataSet($deviceAges);
             $PrintIQAgeOfPrintingPieChart->addColors(array(
                 "008000",
-                "39d439",
-                "ffff00",
+                "54CC64",
+                "FFD000",
                 "ff0000",
             ));
             $PrintIQAgeOfPrintingPieChart->setLegendPosition("bv");
@@ -2564,13 +2564,13 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 $deviceAges ["3-5 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "39d439"
+                "54CC64"
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["6-8 years old"]
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addColors(array(
-                "ffff00"
+                "FFD000"
             ));
             $PrintIQPagesPrintedByAgeBarGraph->addDataSet(array(
                 $deviceAges ["More than 8 years old"]
@@ -2763,40 +2763,39 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ManagedVsNotJitVsJitDevices
              */
-            $leasedDevices                     = $this->getDevices()->leasedDeviceInstances->getCount();
-            $isManagedDeviceCount              = $this->getDevices()->isManagedDeviceInstances->getCount();
-            $unmanagedDeviceCount              = $this->getDevices()->unmanagedDeviceInstances->getCount();
-            $unmanagedJitCompatibleDeviceCount = $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
+            $managedByThirdPartyDeviceCount = $this->getDevices()->managedByThirdPartyDeviceInstances->getCount();
+            $isManagedDeviceCount           = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $notCompatibleDeviceCount       = $this->getDevices()->notCompatibleDeviceInstances->getCount();
+            $jitCompatibleDeviceCount       = $this->getDevices()->compatibleDeviceInstances->getCount();
 
-
-            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $unmanagedJitCompatibleDeviceCount, $leasedDevices);
+            $highest  = max($isManagedDeviceCount, $notCompatibleDeviceCount, $jitCompatibleDeviceCount, $managedByThirdPartyDeviceCount);
             $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
             $barGraph->addDataSet(array(
-                $this->getDevices()->isManagedDeviceInstances->getCount()
+                $isManagedDeviceCount
             ));
             $barGraph->addColors(array(
                 "0194D2"
             ));
 
             $barGraph->addDataSet(array(
-                $unmanagedDeviceCount
+                $notCompatibleDeviceCount
             ));
             $barGraph->addColors(array(
                 "E21736"
             ));
             $barGraph->addDataSet(array(
-                $unmanagedJitCompatibleDeviceCount
+                $jitCompatibleDeviceCount
             ));
 
             $barGraph->addColors(array(
-                "ffff00"
+                "FFD000"
             ));
 
             $barGraph->addDataSet(array(
-                $leasedDevices
+                $managedByThirdPartyDeviceCount
             ));
 
             $barGraph->addColors(array(
@@ -2826,13 +2825,13 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- UnmanagedVsManagedDevices
              */
-            $insufficientData     = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount() + $this->getDevices()->unmappedDeviceInstances->getCount();
-            $leasedDevices        = $this->getDevices()->leasedDeviceInstances->getCount();
-            $isManagedDeviceCount = $this->getDevices()->isManagedDeviceInstances->getCount();
-            $unmanagedDeviceCount = $this->getDevices()->unmanagedDeviceInstances->getCount() + $this->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount();
+            $insufficientData               = $this->getDevices()->allDevicesWithShortMonitorInterval->getCount() + $this->getDevices()->unmappedDeviceInstances->getCount() + $this->getDevices()->excludedDeviceInstances->getCount();
+            $managedByThirdPartyDeviceCount = $this->getDevices()->managedByThirdPartyDeviceInstances->getCount();
+            $isManagedDeviceCount           = $this->getDevices()->isManagedDeviceInstances->getCount();
+            $unmanagedDeviceCount           = $this->getDevices()->unmanagedDeviceInstances->getCount();
 
 
-            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $leasedDevices);
+            $highest  = max($isManagedDeviceCount, $unmanagedDeviceCount, $insufficientData, $managedByThirdPartyDeviceCount);
             $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
@@ -2851,7 +2850,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "E21736"
             ));
             $barGraph->addDataSet(array(
-                $leasedDevices
+                $managedByThirdPartyDeviceCount
             ));
 
             $barGraph->addColors(array(
@@ -2882,7 +2881,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $barGraph->setLegend(array(
                 "Managed/On " . My_Brand::$jit,
-                "Umanaged",
+                "Unmanaged",
                 "Leased",
                 "Insufficient Data",
             ));
@@ -2901,33 +2900,20 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged   = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnUnmanaged = "Unmanaged";
-            $pagesPrintedOnLeased    = "Leased";
+            $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnUnmanaged         = "Unmanaged";
+            $pagesPrintedManagedByThirdParty = "Leased";
 
-            $pagesPrinted = array(
-                $pagesPrintedOnManaged   => 0,
-                $pagesPrintedOnUnmanaged => 0,
-                $pagesPrintedOnLeased    => 0,
+            $pagesPrinted                                   = array(
+                $pagesPrintedOnManaged           => 0,
+                $pagesPrintedOnUnmanaged         => 0,
+                $pagesPrintedManagedByThirdParty => 0,
             );
+            $pagesPrinted[$pagesPrintedOnManaged]           = $this->getDevices()->isManagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnUnmanaged]         = $this->getDevices()->unmanagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedManagedByThirdParty] = $this->getDevices()->managedByThirdPartyDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
 
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->isManaged)
-                {
-                    $pagesPrinted [$pagesPrintedOnManaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-                else if ($device->isLeased)
-                {
-                    $pagesPrinted [$pagesPrintedOnLeased] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-                else
-                {
-                    $pagesPrinted [$pagesPrintedOnUnmanaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-            }
-
-            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted [$pagesPrintedOnLeased]);
+            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted [$pagesPrintedManagedByThirdParty]);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -2946,7 +2932,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addDataSet(array(
-                round($pagesPrinted[$pagesPrintedOnLeased])
+                round($pagesPrinted[$pagesPrintedManagedByThirdParty])
             ));
 
             $barGraph->addColors(array(
@@ -2960,7 +2946,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->setLegend(array(
                 $pagesPrintedOnManaged,
                 $pagesPrintedOnUnmanaged,
-                $pagesPrintedOnLeased,
+                $pagesPrintedManagedByThirdParty,
             ));
             $barGraph->setTitle("Total pages printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
@@ -2976,39 +2962,24 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
              */
             $barGraph = new gchart\gBarChart(280, 230);
 
-            $pagesPrintedOnManaged    = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnUnmanaged  = "Not " . My_Brand::$jit . " Compatible";
-            $pagesPrintedOnCompatible = My_Brand::$jit . " Compatible";
-            $pagesPrintedOnLeased     = "Leased";
+            $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
+            $pagesPrintedOnNotCompatible     = "Not " . My_Brand::$jit . " Compatible";
+            $pagesPrintedOnCompatible        = My_Brand::$jit . " Compatible";
+            $pagesPrintedManagedByThirdParty = "Leased";
 
             $pagesPrinted = array(
-                $pagesPrintedOnManaged    => 0,
-                $pagesPrintedOnUnmanaged  => 0,
-                $pagesPrintedOnCompatible => 0,
-                $pagesPrintedOnLeased     => 0,
+                $pagesPrintedOnManaged           => 0,
+                $pagesPrintedOnNotCompatible     => 0,
+                $pagesPrintedOnCompatible        => 0,
+                $pagesPrintedManagedByThirdParty => 0,
             );
 
-            foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-            {
-                if ($device->isManaged)
-                {
-                    $pagesPrinted [$pagesPrintedOnManaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-                else if ($device->isLeased)
-                {
-                    $pagesPrinted [$pagesPrintedOnLeased] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-                else if ($device->compatibleWithJitProgram)
-                {
-                    $pagesPrinted [$pagesPrintedOnCompatible] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-                else
-                {
-                    $pagesPrinted [$pagesPrintedOnUnmanaged] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                }
-            }
+            $pagesPrinted[$pagesPrintedOnManaged]           = $this->getDevices()->isManagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnNotCompatible]     = $this->getDevices()->notCompatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedOnCompatible]        = $this->getDevices()->compatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
+            $pagesPrinted[$pagesPrintedManagedByThirdParty] = $this->getDevices()->managedByThirdPartyDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
 
-            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnUnmanaged], $pagesPrinted[$pagesPrintedOnCompatible], $pagesPrinted [$pagesPrintedOnLeased]);
+            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnNotCompatible], $pagesPrinted[$pagesPrintedOnCompatible], $pagesPrinted [$pagesPrintedManagedByThirdParty]);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -3019,7 +2990,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "0194D2"
             ));
             $barGraph->addDataSet(array(
-                round($pagesPrinted[$pagesPrintedOnUnmanaged])
+                round($pagesPrinted[$pagesPrintedOnNotCompatible])
             ));
 
             $barGraph->addColors(array(
@@ -3030,11 +3001,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             ));
 
             $barGraph->addColors(array(
-                "ffff00"
+                "FFD000"
             ));
 
             $barGraph->addDataSet(array(
-                round($pagesPrinted[$pagesPrintedOnLeased])
+                round($pagesPrinted[$pagesPrintedManagedByThirdParty])
             ));
 
             $barGraph->addColors(array(
@@ -3047,9 +3018,9 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $barGraph->setLegend(array(
                 $pagesPrintedOnManaged,
-                $pagesPrintedOnUnmanaged,
+                $pagesPrintedOnNotCompatible,
                 $pagesPrintedOnCompatible,
-                $pagesPrintedOnLeased,
+                $pagesPrintedManagedByThirdParty,
             ));
             $barGraph->setTitle("Total pages printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
@@ -3466,5 +3437,56 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function calculateOptimizedTonerOrderSavingPercentage ()
     {
         return $this->calculateOptimizedTonerOrderSavings() / $this->calculateCurrentTonerOrderCost() * 100;
+    }
+
+    /**
+     * Gets the list of fax/scan capable devices sorted by scan volume
+     *
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function getFaxAndScanTableDevices ()
+    {
+        $devices = array();
+
+        /**
+         * We only want
+         */
+        foreach ($this->getDevices()->faxAndScanDeviceInstances->getDeviceInstances() as $deviceInstance)
+        {
+            if ($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly() > 0 || $deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly() > 0)
+            {
+                $devices[] = $deviceInstance;
+            }
+        }
+
+        usort($devices, array(
+            $this,
+            "sortDescendingFaxAndScanTableData"
+        ));
+
+        return $devices;
+    }
+
+    /**
+     * Callback function for uSort when we want to sort a device based on its scan and fax page volume
+     *
+     * @param $deviceA \Proposalgen_Model_DeviceInstance
+     * @param $deviceB \Proposalgen_Model_DeviceInstance
+     *
+     * @return int
+     */
+    public function sortDescendingFaxAndScanTableData ($deviceA, $deviceB)
+    {
+        if ($deviceA->getPageCounts()->getScanPageCount()->getMonthly() == $deviceB->getPageCounts()->getScanPageCount()->getMonthly())
+        {
+            if ($deviceA->getPageCounts()->getFaxPageCount()->getMonthly() == $deviceB->getPageCounts()->getFaxPageCount()->getMonthly())
+            {
+                return 0;
+            }
+
+            return ($deviceA->getPageCounts()->getFaxPageCount()->getMonthly() > $deviceB->getPageCounts()->getFaxPageCount()->getMonthly()) ? -1 : 1;
+        }
+
+        return ($deviceA->getPageCounts()->getScanPageCount()->getMonthly() > $deviceB->getPageCounts()->getScanPageCount()->getMonthly()) ? -1 : 1;
     }
 }

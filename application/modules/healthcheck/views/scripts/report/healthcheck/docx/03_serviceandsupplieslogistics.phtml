@@ -130,7 +130,7 @@ $section->addText(sprintf('Out of your %1$s networked printing devices, you have
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount()
     , $healthcheckViewModel->getDevices()->unmanagedDeviceInstances->getCount()
-    , $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount()
+    , $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount()
     , My_Brand::$companyNameFull
     , My_Brand::$jit
 ));

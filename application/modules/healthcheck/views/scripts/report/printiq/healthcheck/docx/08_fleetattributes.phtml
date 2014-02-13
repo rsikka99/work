@@ -41,7 +41,7 @@ $compatibleDevicesTable->addCell($cellWidths [3], $tcStyle->cellHeader)->addText
 $compatibleDevicesTable->addCell($cellWidths [6], $tcStyle->cellHeader)->addText(sprintf('Comp. with %1$s', $this->jit), 'bold_text', 'nospacing_centeralign');
 $compatibleDevicesTable->addCell($cellWidths [5], $tcStyle->cellHeader)->addText(sprintf('Linked to %1$s Program', $this->jit), 'bold_text', 'nospacing_centeralign');
 /* @var $device Proposalgen_Model_DeviceInstance */
-foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getDeviceInstances()) as $device)
+foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getDeviceInstances()) as $device)
 {
     $deviceName = str_replace("Hewlett-Packard", "HP", $device->getDeviceName());
 

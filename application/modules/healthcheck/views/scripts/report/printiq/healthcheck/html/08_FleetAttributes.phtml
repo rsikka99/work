@@ -21,7 +21,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     <tbody>
     <?php
     /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
-    foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getDeviceInstances()) as $deviceInstance): ?>
+    foreach (array_merge($healthcheckViewModel->getDevices()->isManagedDeviceInstances->getDeviceInstances(), $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getDeviceInstances()) as $deviceInstance): ?>
         <?php
         $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
         <tr class="<?php

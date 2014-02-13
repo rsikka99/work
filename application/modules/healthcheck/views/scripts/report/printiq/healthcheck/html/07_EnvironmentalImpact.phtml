@@ -90,14 +90,14 @@ else
         <th>Average Monthly Scan Pages</th>
         <th>Average Monthly Faxed Pages</th>
     </tr>
-    <?php foreach ($healthcheckViewModel->getDevices()->faxAndScanDeviceInstances->getDeviceInstances() as $deviceInstance) : ?>
+    <?php foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $deviceInstance) : ?>
         <tr>
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
-            <td><?php echo $deviceName; ?></td>
-            <td><?php echo $deviceInstance->serialNumber; ?></td>
-            <td><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0); ?></td>
-            <td><?php echo number_format($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly(), 0); ?></td>
-            <td><?php echo number_format($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly(), 0); ?></td>
+            <td class="device-instance-name"><?php echo $deviceName; ?></td>
+            <td class="serial-number"><?php echo $deviceInstance->serialNumber; ?></td>
+            <td class="page-volume"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0); ?></td>
+            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isCopier) ? number_format($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly(), 0) : '-'; ?></td>
+            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isFax) ? number_format($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly(), 0) : '-'; ?></td>
         </tr>
     <?php endforeach; ?>
 </table>

@@ -131,8 +131,8 @@ $section->addTitle(sprintf('Number of Printing Devices Compatible with %1$s', $t
 $section->addText(sprintf('Out of your %1$s networked printing devices, you have %2$s that are managed, %3$s that are not compatible and %4$s devices compatible with %5$s. These non compatible devices are shown in the fleet attributes section below. A complete list of all devices and their %6$s compatibility can be found in the Appendix.'
     , $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()
     , $healthcheckViewModel->getDevices()->isManagedDeviceInstances->getCount()
-    , $healthcheckViewModel->getDevices()->unmanagedDeviceInstances->getCount()
-    , $healthcheckViewModel->getDevices()->unmanagedJitCompatibleDeviceInstances->getCount()
+    , $healthcheckViewModel->getDevices()->notCompatibleDeviceInstances->getCount()
+    , $healthcheckViewModel->getDevices()->compatibleDeviceInstances->getCount()
     , $this->companyNameFull
     , My_Brand::$jit
 ));
