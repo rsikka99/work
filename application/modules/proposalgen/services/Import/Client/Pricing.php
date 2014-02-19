@@ -80,11 +80,11 @@ class Proposalgen_Service_Import_Client_Pricing
     {
         $this->_inputFilter = new Zend_Filter_Input(
             array(
-                '*' => array(
+                '*'                              => array(
                     'StripTags',
                     'StringTrim',
                 ),
-                self::CSV_HEADER_DATE_RECONCILED       => array(
+                self::CSV_HEADER_DATE_RECONCILED => array(
                     'StripTags',
                     'StringTrim',
                     array('PregReplace', '/-/', '/'),
@@ -102,7 +102,7 @@ class Proposalgen_Service_Import_Client_Pricing
                     'allowEmpty' => true,
                     new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
                 ),
-                self::CSV_HEADER_DATE_RECONCILED       => array(
+                self::CSV_HEADER_DATE_RECONCILED    => array(
                     'allowEmpty' => true,
                     new My_Validate_DateTime(My_Validate_DateTime::FORMAT_DATE_AMERICAN),
                 ),
@@ -147,12 +147,6 @@ class Proposalgen_Service_Import_Client_Pricing
         if (count(array_diff($this->importHeaders, $this->csvHeaders)) == 0)
         {
             return true;
-        }
-        else
-        {
-            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-            var_dump(array_diff($this->importHeaders, $this->csvHeaders));
-            die();
         }
 
         return false;
