@@ -1156,8 +1156,8 @@ ORDER BY cpp ASC';
         $sql = 'SELECT
     t.*,
     COALESCE(cta.cost, dta.cost, t.cost)                                                           AS calculatedCost,
-    IF(client_toner_orders.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
-    IF(client_toner_orders.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
+    IF(cta.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
+    IF(cta.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
     COALESCE(cta.cost, dta.cost, t.cost) / t.yield                                                 AS cpp
 FROM device_toners AS dt
 -- Toners
@@ -1170,7 +1170,7 @@ FROM device_toners AS dt
     LEFT JOIN dealer_toner_attributes AS dta
         ON dta.tonerId = dt.toner_id AND dta.dealerId = ?
 -- Client Toner Orders
-    LEFT JOIN client_toner_orders AS cta
+    LEFT JOIN cta AS cta
         ON cta.tonerId = dt.toner_id AND cta.clientId = ?
 WHERE dt.master_device_id IN
       (
