@@ -67,10 +67,27 @@ class Proposalgen_ManufacturerController extends Tangent_Controller_Action
                 // Delete manufacturer from database
                 if ($form->isValid($values))
                 {
-                    $mapper->delete($manufacturer);
+                    $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+                    try
+                    {
+                        $db->beginTransaction();
+                        $mapper->delete($manufacturer);
+                        $db->commit();
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        Tangent_Log::logException($e);
+                        $this->_flashMessenger->addMessage(array(
+                            'error' => "Manufacturer  {$this->view->escape($manufacturer->fullname)} failed to delete."
+                        ));
+                        $this->redirector('index');
+                    }
+
                     $this->_flashMessenger->addMessage(array(
                         'success' => "Manufacturer  {$this->view->escape($manufacturer->fullname)} was deleted successfully."
                     ));
+
                     $this->redirector('index');
                 }
             }

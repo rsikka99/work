@@ -4,7 +4,8 @@
     </h1>
 </div>
 <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_CREATE))
-{ ?>
+{
+    ?>
     <div class="clearfix">
         <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('action' => 'create')) ?>">
             <i class="icon-white icon-plus-sign"></i> Create new</a>
@@ -20,7 +21,7 @@ if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
             <th>Display Name</th>
             <?php if ($this->canEdit) : ?>
                 <th style="width: 80px;">Is Deleted</th>
-                <th style="width: 80px;">Action</th>
+                <th style="width: 85px;">Action</th>
             <?php endif; ?>
         </tr>
         </thead>
@@ -34,12 +35,16 @@ if (isset($this->paginator) && $this->paginator->count() > 0) : ?>
                 <?php if ($this->canEdit) : ?>
                     <td><?php echo ($manufacturer->isDeleted) ? "Deleted" : ""; ?></td>
                     <td>
-                        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT))
-                        { ?>
+                        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT)) : ?>
                             <div class="btn-group">
                                 <a class="btn btn-warning" title="Edit Manufacturer" href="<?php echo $this->url(array('action' => 'edit', 'id' => $manufacturer->id)); ?>"><i class="icon-pencil"></i></a>
                             </div>
-                        <?php } ?>
+                        <?php endif; ?>
+                        <?php if ($this->isAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_MANUFACTURER_DELETE)) : ?>
+                            <div class="btn-group">
+                                <a class="btn btn-danger" title="Delete Manufacturer" href="<?php echo $this->url(array('action' => 'delete', 'id' => $manufacturer->id)); ?>"><i class="icon-trash"></i></a>
+                            </div>
+                        <?php endif; ?>
                     </td>
                 <?php endif; ?>
             </tr>
