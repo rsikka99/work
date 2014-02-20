@@ -1170,7 +1170,7 @@ FROM device_toners AS dt
     LEFT JOIN dealer_toner_attributes AS dta
         ON dta.tonerId = dt.toner_id AND dta.dealerId = ?
 -- Client Toner Orders
-    LEFT JOIN cta AS cta
+    LEFT JOIN client_toner_orders AS cta
         ON cta.tonerId = dt.toner_id AND cta.clientId = ?
 WHERE dt.master_device_id IN
       (
