@@ -2811,7 +2811,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Managed/On " . My_Brand::$jit,
                 "Not " . My_Brand::$jit . " Compatible",
                 My_Brand::$jit . " Compatible",
-                "Leased",
+                "Future Review",
             ));
 
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
@@ -2881,8 +2881,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             $barGraph->setLegend(array(
                 "Managed/On " . My_Brand::$jit,
-                "Unmanaged",
-                "Leased",
+                "Manageable",
+                "Future Review",
                 "Insufficient Data",
             ));
 
@@ -2901,8 +2901,8 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph = new gchart\gBarChart(280, 230);
 
             $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
-            $pagesPrintedOnUnmanaged         = "Unmanaged";
-            $pagesPrintedManagedByThirdParty = "Leased";
+            $pagesPrintedOnUnmanaged         = "Manageable";
+            $pagesPrintedManagedByThirdParty = "Future Review";
 
             $pagesPrinted                                   = array(
                 $pagesPrintedOnManaged           => 0,
@@ -2965,7 +2965,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
             $pagesPrintedOnNotCompatible     = "Not " . My_Brand::$jit . " Compatible";
             $pagesPrintedOnCompatible        = My_Brand::$jit . " Compatible";
-            $pagesPrintedManagedByThirdParty = "Leased";
+            $pagesPrintedManagedByThirdParty = "Future Review";
 
             $pagesPrinted = array(
                 $pagesPrintedOnManaged           => 0,
