@@ -157,12 +157,12 @@ class Preferences_Form_HealthcheckSetting extends Twitter_Bootstrap_Form_Horizon
             'validators' => $cppValidator
         ));
         $this->addElement('text', 'averageItHourlyRate', array(
-            'label'      => 'Estimated Average It Hourly Rate',
+            'label'      => 'Estimated Average IT Hourly Rate',
             'append'     => '$ / hour',
             'validators' => $costValidator
         ));
         $hoursSpentOnIt = $this->createElement('text', 'hoursSpentOnIt', array(
-            'label'      => 'Estimated Hours Spent On It',
+            'label'      => 'Estimated Hours Spent On IT',
             'append'     => 'hours',
             'validators' => $costValidator
         ));

@@ -17,7 +17,7 @@ manufacturerSelect.select2({
         {
             var allArray = [];
             allArray['id']= 0;
-            allArray['text']= "All Manufactures";
+            allArray['text']= "All Manufacturers";
             data.push(allArray);
 
             return {results: data};

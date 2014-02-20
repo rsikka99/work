@@ -111,7 +111,7 @@ class Healthcheck_Model_Healthcheck_Setting extends My_Model_Abstract
     public $kilowattsPerHour;
 
     /**
-     * The Average It Hourly Rate
+     * The Average IT Hourly Rate
      */
     public $averageItHourlyRate;
 

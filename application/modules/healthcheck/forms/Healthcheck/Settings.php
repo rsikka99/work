@@ -432,7 +432,7 @@ class Healthcheck_Form_Healthcheck_Settings extends Twitter_Bootstrap_Form_Horiz
 
         // Average IT Hourly Rate
         $averageItHourlyRate = new Zend_Form_Element_Text('averageItHourlyRate');
-        $averageItHourlyRate->setLabel('Estimated Average It Hourly Rate')
+        $averageItHourlyRate->setLabel('Estimated Average IT Hourly Rate')
                             ->addValidator(new Zend_Validate_Float())
                             ->setAttrib('class', 'span2')
                             ->setAttrib('maxlength', 10)
