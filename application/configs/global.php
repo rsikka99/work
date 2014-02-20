@@ -9,6 +9,7 @@ return array(
     ),
     'app'                  => array(
         'uploadPath' => DATA_PATH . '/uploads',
+        'copyright'  => 'Tangent MTW',
     ),
     'bootstrap'            => array(
         'path'  => APPLICATION_PATH . '/Bootstrap.php',

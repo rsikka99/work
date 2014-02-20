@@ -4,6 +4,7 @@ return array(
         'title'        => 'MPS Toolbox',
         'theme'        => 'default',
         'useAnalytics' => false,
+        'copyright'    => 'Tangent MTW',
     ),
     'email'       => array(
         'host'     => '',
