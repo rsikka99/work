@@ -1,7 +1,7 @@
 <?php
 
 // Get the path based on the theme
-$commonPartsBasePath = 'quote/reports/common/';
+$commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme;
 // Render the elements in the theme
 $this->render("{$commonPartsBasePath}/styles.phtml");
 

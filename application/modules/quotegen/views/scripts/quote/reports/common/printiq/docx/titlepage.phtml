@@ -1,0 +1,43 @@
+<?php
+/**
+ * Assessment Title Page
+ */
+/* @var $phpword PHPWord */
+$phpword = $this->phpword;
+
+/* @var $quote Quotegen_Model_Quote */
+$quote = $this->quote;
+
+$client = $quote->getClient();
+
+$quoteDate = date('F jS, Y', strtotime($quote->quoteDate));
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+// Table to get the images working properly
+$table = $section->addTable();
+$table->addRow();
+$cell = $table->addCell(3209);
+$cell->addImage(ASSETS_PATH . "/docx/quote/images/cell1.jpg");
+$cell = $table->addCell(5818);
+$cell->addTextBreak(3);
+$cell->addImage(ASSETS_PATH . "/docx/quote/images/cell2.jpg");
+$cell->addTextBreak(5);
+
+$clientName = $quote->clientDisplayName;
+if (empty($clientName))
+{
+    $clientName = $client->companyName;
+}
+
+$cell->addText($this->translate('Prepared For:') . " " . $clientName, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+
+$cell->addText($quoteDate, 'titlepageHeaderFont', 'titlepageHeaderParagraph');
+$cell->addTextBreak(4);
+// Parse the address
+$addressLines = explode("\n", $client->getAddress());
+foreach ( $addressLines as $line )
+{
+    $cell->addText($line, null, 'nospacing');
+}
