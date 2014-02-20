@@ -1157,7 +1157,7 @@ ORDER BY cpp ASC';
     t.*,
     COALESCE(cta.cost, dta.cost, t.cost)                                                           AS calculatedCost,
     IF(cta.cost IS NOT NULL, TRUE, FALSE)                                          AS isUsingCustomerPricing,
-    IF(cta.cost IS NULL AND dealer_toner_attributes.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
+    IF(cta.cost IS NULL AND dta.cost IS NOT NULL, TRUE, FALSE) AS isUsingDealerPricing,
     COALESCE(cta.cost, dta.cost, t.cost) / t.yield                                                 AS cpp
 FROM device_toners AS dt
 -- Toners
