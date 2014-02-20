@@ -2763,12 +2763,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             /**
              * -- ManagedVsNotJitVsJitDevices
              */
-            $managedByThirdPartyDeviceCount = $this->getDevices()->managedByThirdPartyDeviceInstances->getCount();
             $isManagedDeviceCount           = $this->getDevices()->isManagedDeviceInstances->getCount();
             $notCompatibleDeviceCount       = $this->getDevices()->notCompatibleDeviceInstances->getCount();
             $jitCompatibleDeviceCount       = $this->getDevices()->compatibleDeviceInstances->getCount();
 
-            $highest  = max($isManagedDeviceCount, $notCompatibleDeviceCount, $jitCompatibleDeviceCount, $managedByThirdPartyDeviceCount);
+            $highest  = max($isManagedDeviceCount, $notCompatibleDeviceCount, $jitCompatibleDeviceCount);
             $barGraph = new gchart\gBarChart(280, 230);
             $barGraph->setVisibleAxes(array(
                 'y'
@@ -2793,15 +2792,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $barGraph->addColors(array(
                 "FFD000"
             ));
-
-            $barGraph->addDataSet(array(
-                $managedByThirdPartyDeviceCount
-            ));
-
-            $barGraph->addColors(array(
-                "ababab"
-            ));
-            $barGraph->setBarScale(50, 10);
+            $barGraph->setBarScale(65, 10);
             $barGraph->addAxisRange(0, 0, $highest * 1.1);
             $barGraph->setDataRange(0, $highest * 1.1);
 
@@ -2811,13 +2802,11 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "Managed/On " . My_Brand::$jit,
                 "Not " . My_Brand::$jit . " Compatible",
                 My_Brand::$jit . " Compatible",
-                "Future Review",
             ));
 
             $barGraph->addValueMarkers($numberValueMarker, "000000", "0", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "1", "-1", "11");
             $barGraph->addValueMarkers($numberValueMarker, "000000", "2", "-1", "11");
-            $barGraph->addValueMarkers($numberValueMarker, "000000", "3", "-1", "11");
             $barGraph->setTitle("Total printers on network");
             // Graphs[ManagedVsNotJitVsJitDevices]
             $healthcheckGraphs['ManagedVsNotJitVsJitDevices'] = $barGraph->getUrl();
@@ -2965,21 +2954,18 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
             $pagesPrintedOnManaged           = "Managed/On " . My_Brand::$jit;
             $pagesPrintedOnNotCompatible     = "Not " . My_Brand::$jit . " Compatible";
             $pagesPrintedOnCompatible        = My_Brand::$jit . " Compatible";
-            $pagesPrintedManagedByThirdParty = "Future Review";
 
             $pagesPrinted = array(
                 $pagesPrintedOnManaged           => 0,
                 $pagesPrintedOnNotCompatible     => 0,
                 $pagesPrintedOnCompatible        => 0,
-                $pagesPrintedManagedByThirdParty => 0,
             );
 
             $pagesPrinted[$pagesPrintedOnManaged]           = $this->getDevices()->isManagedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $pagesPrinted[$pagesPrintedOnNotCompatible]     = $this->getDevices()->notCompatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
             $pagesPrinted[$pagesPrintedOnCompatible]        = $this->getDevices()->compatibleDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $pagesPrinted[$pagesPrintedManagedByThirdParty] = $this->getDevices()->managedByThirdPartyDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly();
 
-            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnNotCompatible], $pagesPrinted[$pagesPrintedOnCompatible], $pagesPrinted [$pagesPrintedManagedByThirdParty]);
+            $highest = max($pagesPrinted[$pagesPrintedOnManaged], $pagesPrinted [$pagesPrintedOnNotCompatible], $pagesPrinted[$pagesPrintedOnCompatible]);
             $barGraph->setVisibleAxes(array(
                 'y'
             ));
@@ -3004,23 +2990,15 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                 "FFD000"
             ));
 
-            $barGraph->addDataSet(array(
-                round($pagesPrinted[$pagesPrintedManagedByThirdParty])
-            ));
-
-            $barGraph->addColors(array(
-                "ababab"
-            ));
             $barGraph->addAxisRange(0, 0, $highest * 1.20);
             $barGraph->setDataRange(0, $highest * 1.20);
-            $barGraph->setBarScale(50, 5);
+            $barGraph->setBarScale(65, 10);
             $barGraph->setLegendPosition("b|l");
 
             $barGraph->setLegend(array(
                 $pagesPrintedOnManaged,
                 $pagesPrintedOnNotCompatible,
                 $pagesPrintedOnCompatible,
-                $pagesPrintedManagedByThirdParty,
             ));
             $barGraph->setTitle("Total pages printed");
             $barGraph->setProperty('chxs', '0N*sz0*');
