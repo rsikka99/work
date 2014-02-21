@@ -230,8 +230,11 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
 
     public function deleteClientPricingAction ()
     {
-        $tonerId = $this->_getParam('deleteTonerId', null);
-        if ($tonerId)
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $clientTonerId = $this->_getParam('deleteClientTonerOrderId', null);
+        if ($clientTonerId)
         {
             $db = Zend_Db_Table::getDefaultAdapter();
             $db->beginTransaction();
@@ -239,22 +242,31 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
             {
                 $clientId                   = $this->_selectedClientId;
                 $clientTonerAttributeMapper = Proposalgen_Model_Mapper_Client_Toner_Order::getInstance();
-                $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($tonerId, $clientId));
+                $clientTonerAttribute       = $clientTonerAttributeMapper->find(array($clientTonerId, $clientId));
                 if ($clientTonerAttribute instanceof Proposalgen_Model_Client_Toner_Order)
                 {
                     $clientTonerAttributeMapper->delete($clientTonerAttribute);
                     $db->commit();
-                    $this->sendJson(array('success' => 'Successfully deleted client toner attribute'));
+                    $this->sendJson(array('success' => 'Successfully deleted client pricing for that SKU.'));
+                }
+                else
+                {
+                    Tangent_Log::log('User tried to delete client pricing for id:' . $clientTonerId);
+                    $this->sendJsonError('Sorry, we cannot find that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
                 }
             }
             catch (Exception $e)
             {
                 $db->rollback();
                 Tangent_Log::logException($e);
+                $this->sendJsonError('Sorry, an error occurred trying to delete that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
             }
         }
-
-        $this->sendJsonError('failed to delete client toner attribute');
+        else
+        {
+            Tangent_Log::log('User tried to delete client pricing for ID:' . $clientTonerId);
+            $this->sendJsonError('Sorry, for some reason we cannot find that SKU. A message has been logged. #' . Tangent_Log::getUniqueId());
+        }
     }
 
     /**

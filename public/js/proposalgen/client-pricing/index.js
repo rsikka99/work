@@ -269,7 +269,7 @@ function deleteClientPricing(id)
     var rowdata = $("#clientToners").jqGrid('getRowData', id);
     if (rowdata)
     {
-        $("#deleteTonerId").val(rowdata.tonerId);
+        $("#deleteClientTonerOrderId").val(rowdata.id);
         $('#alertDeleteModal').modal('show');
     }
 }
@@ -383,7 +383,7 @@ function deleteClientToner()
         type    : "post",
         dataType: "json",
         data    : {
-            deleteTonerId: $("#deleteTonerId").val()
+            deleteClientTonerOrderId: $("#deleteClientTonerOrderId").val()
         },
         success : function (xhr)
         {
