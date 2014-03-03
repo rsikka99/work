@@ -11,7 +11,7 @@ class Application_Service_Navigation
     /**
      * @var int
      */
-    public static $userId = -1;
+    public static $userId = 0;
 
     public function getNavigationContainer ($useCaching = self::USE_CACHE)
     {

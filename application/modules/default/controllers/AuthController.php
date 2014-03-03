@@ -350,6 +350,7 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     function resetpasswordAction ()
     {
+        $this->view->layout()->setLayout('auth');
         $this->view->headTitle('Reset Password');
         $this->logout();
         $form = new Default_Form_ResetPassword();

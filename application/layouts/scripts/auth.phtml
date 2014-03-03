@@ -42,13 +42,8 @@
 <div class="container body-container" id="meat">
     <!-- Start of main container -->
     <div class="container" id="authContent">
-        <div class="page-header">
-            <h1>Please Login</h1>
-        </div>
-        <div class="well well-small">
-            <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
-            <?php echo $this->layout()->content ?>
-        </div>
+        <?php echo $this->flashMessenger("info", '<div class="alert alert-%s">%s</div>'); ?>
+        <?php echo $this->layout()->content ?>
 
         <hr>
 
