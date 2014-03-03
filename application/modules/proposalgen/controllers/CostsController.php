@@ -518,7 +518,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     {
                                         // If cost && SKU are empty  or cost = 0 -> delete.
                                         // Delete
-                                        if (empty($importCost) && empty($importDealerSku))
+                                        if (empty($dataArray['cost']) && empty($dataArray['dealerSku']))
                                         {
                                             // If the attributes are empty after being found, delete them.
                                             Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->delete($tonerAttribute);
@@ -533,7 +533,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                     }
                                     else
                                     {
-                                        if ($dataArray['cost'] > 0 || !empty($importDealerSku))
+                                        if ($dataArray['cost'] > 0 || !empty($dataArray['dealerSku']))
                                         {
                                             $tonerAttribute = new Proposalgen_Model_Dealer_Toner_Attribute();
                                             $tonerAttribute->populate($dataArray);
