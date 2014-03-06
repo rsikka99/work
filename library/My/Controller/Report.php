@@ -59,7 +59,7 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      */
     protected $_excelFormat = array(
         'extension'      => 'xlsx',
-        'name'           => 'Excel (XSLX)',
+        'name'           => 'Excel (XLSX)',
         'loadingmessage' => '',
         'btnstyle'       => 'success'
     );
