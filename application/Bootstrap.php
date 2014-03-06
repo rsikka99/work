@@ -129,14 +129,49 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         /**
          * Site Styles
          */
-        My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, $forceRecompile);
-        My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, $forceRecompile);
-        My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, $forceRecompile);
+        try
+        {
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, $forceRecompile);
+        }
+        catch (Exception $e)
+        {
+            // Retry in case of a directory error.
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/bootstrap/bootstrap.less', PUBLIC_PATH . '/css/site/bootstrap.css', $theme, true);
+        }
+
+        try
+        {
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, $forceRecompile);
+        }
+        catch (Exception $e)
+        {
+            // Retry in case of a directory error.
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/site/styles.less', PUBLIC_PATH . '/css/site/styles.css', $theme, true);
+        }
+
+        try
+        {
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, $forceRecompile);
+        }
+        catch (Exception $e)
+        {
+            // Retry in case of a directory error.
+            My_Less::autoCompileLess(PUBLIC_PATH . '/less/reports/reports.less', PUBLIC_PATH . '/css/reports/reports.css', $theme, true);
+        }
+
 
         /**
          * Theme specific styles
          */
-        My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, $forceRecompile);
+        try
+        {
+            My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, $forceRecompile);
+        }
+        catch (Exception $e)
+        {
+            // Retry in case of a directory error.
+            My_Less::autoCompileLess($themeDir . '/less/site/styles.less', $themeDir . '/css/site/styles.css', $theme, true);
+        }
 
 
         $view->headLink()->prependStylesheet($view->theme("/css/site/styles.css"));
