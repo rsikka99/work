@@ -32,11 +32,6 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
      */
     protected $_userId;
 
-    /**
-     * @var int
-     */
-    protected $_selectedClientId;
-
     public function init ()
     {
         $this->_mpsSession = new Zend_Session_Namespace('mps-tools');
@@ -58,30 +53,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->_userId       = $this->_identity->id;
         $this->_dealerId     = $this->_identity->dealerId;
 
-        if (isset($this->_mpsSession->selectedClientId))
-        {
-            $client = Quotegen_Model_Mapper_Client::getInstance()->find($this->_mpsSession->selectedClientId);
-            // Make sure the selected client is ours!
-            if ($client && $client->dealerId == Zend_Auth::getInstance()->getIdentity()->dealerId)
-            {
-                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
-                $this->view->selectedClientId = $this->_selectedClientId;
-            }
-            else
-            {
-                $this->_flashMessenger->addMessage(array(
-                    "error" => "You must select a client before you can access this."
-                ));
-                $this->redirector('index', 'index', 'default');
-            }
-        }
-        else
-        {
-            $this->_flashMessenger->addMessage(array(
-                "error" => "You must select a client before you can access this."
-            ));
-            $this->redirector('index', 'index', 'default');
-        }
+
     }
 
     /**
@@ -94,8 +66,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         return $this->view->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
     }
 
-
-
+    /**
+     * Handles bulk device pricing in a jqgrid (Such description. I know right?)
+     */
     public function bulkdevicepricingAction ()
     {
         $this->view->headTitle('Bulk Hardware/Pricing Updates');
@@ -388,6 +361,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         }
     }
 
+    /**
+     * Handles device pricing in a csv format
+     */
     public function bulkFileDeviceFeaturesAction ()
     {
         $db                    = Zend_Db_Table::getDefaultAdapter();
@@ -479,6 +455,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->errorMessages = $errorMessages;
     }
 
+    /**
+     * Handles bulk toner pricing updates in a csv format
+     */
     public function bulkFileTonerPricingAction ()
     {
         $db                  = Zend_Db_Table::getDefaultAdapter();
@@ -573,6 +552,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->errorMessages = $errorMessages;
     }
 
+    /**
+     * Handles bringing in new compatible toners
+     */
     public function bulkFileTonerMatchupAction ()
     {
         $db             = Zend_Db_Table::getDefaultAdapter();
@@ -682,6 +664,9 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         $this->view->errorMessages = $errorMessages;
     }
 
+    /**
+     * Handles updating device pricing by csv
+     */
     public function bulkFileDevicePricingAction ()
     {
         $db                   = Zend_Db_Table::getDefaultAdapter();
@@ -778,6 +763,8 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
     }
 
     /**
+     * Handles checking to see if data has changed or if it should be nullified
+     *
      * @param $importData  array
      * @param $object      mixed
      *
@@ -804,6 +791,11 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
         return $hasChanged;
     }
 
+    /**
+     * Exports pricing for various items.
+     *
+     * @throws Exception
+     */
     public function exportpricingAction ()
     {
         $this->_helper->layout->disableLayout();
