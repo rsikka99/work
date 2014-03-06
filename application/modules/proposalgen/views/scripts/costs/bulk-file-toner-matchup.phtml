@@ -39,22 +39,24 @@
 
 <br />
 <br />
-<?php if ($this->errorMessages != null): ?>
+<?php if ($this->errorMessages != null) : ?>
     <div class="well">
         <table class="table">
             <tr>
-                <th> Line Number</th>
-                <th> Error Type</th>
-                <th> Error Message</th>
+                <th>Line Number</th>
+                <th>Error Type</th>
+                <th>Column</th>
+                <th>Error Message</th>
             </tr>
             <?php foreach ($this->errorMessages as $lineNumber => $error) : ?>
-                <?php foreach ($error as $errorType => $fieldErrors): ?>
-                    <?php foreach ($fieldErrors as $fieldName => $errorMessages): ?>
-                        <?php foreach ($errorMessages as $key => $errorMessage): ?>
+                <?php foreach ($error as $errorType => $fieldErrors) : ?>
+                    <?php foreach ($fieldErrors as $fieldName => $errorMessages) : ?>
+                        <?php foreach ($errorMessages as $key => $errorMessage) : ?>
                             <tr>
-                                <td><?php echo $lineNumber ?></td>
-                                <td><?php echo $errorType ?></td>
-                                <td><?php echo $fieldName . ' ' . $errorMessage ?></td>
+                                <td><?php echo $lineNumber; ?></td>
+                                <td><?php echo $errorType; ?></td>
+                                <td><?php echo $fieldName; ?></td>
+                                <td><?php echo $errorMessage; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php endforeach; ?>

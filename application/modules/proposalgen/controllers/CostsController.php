@@ -578,6 +578,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                         {
                             $value     = array_combine($matchupService->importHeaders, $value);
                             $validData = $matchupService->processValidation($value);
+                            $tonerId   = false;
 
                             if (!isset($validData['error']))
                             {
@@ -588,49 +589,74 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                                 }
                                 else
                                 {
-                                    // Insert
-                                    // If we insert then we want to use the dealer price as the base price
-                                    $toner                 = new Proposalgen_Model_Toner($validData['parsedToners']['comp']);
-                                    $toner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($toner->cost);
-                                    $toner->isSystemDevice = $canApprove;
-                                    $toner->userId         = $this->_userId;
-                                    $tonerId               = Proposalgen_Model_Mapper_Toner::getInstance()->insert($toner);
-                                }
-
-                                $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($tonerId, $this->_dealerId));
-                                if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
-                                {
-                                    // Update
-                                    $dealerTonerAttribute->cost = $validData['parsedToners']['comp']['cost'];
-                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($dealerTonerAttribute);
-                                }
-                                else
-                                {
-                                    // Insert
-                                    $dealerTonerAttribute            = new Proposalgen_Model_Dealer_Toner_Attribute();
-                                    $dealerTonerAttribute->tonerId   = $tonerId;
-                                    $dealerTonerAttribute->dealerId  = $this->_dealerId;
-                                    $dealerTonerAttribute->cost      = $validData['parsedToners']['comp']['cost'];
-                                    $dealerTonerAttribute->dealerSku = $validData['parsedToners']['comp']['dealerSku'];
-
-                                    Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($dealerTonerAttribute);
-                                }
-
-                                // Have we found the OEM toner data based on the OEM Toner SKU?
-                                // Attempt to link device toners to existing toner id
-                                if (isset($validData['parsedToners']['oem']['id']))
-                                {
-                                    // Insert
-                                    // Find the master devices that we have assigned for this toner.
-                                    $existingDeviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
-                                    foreach ($existingDeviceToners as $existingDeviceToner)
+                                    if (isset($validData['parsedToners']['oem']['tonerColorId']))
                                     {
-                                        if (!Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                        $validData['parsedToners']['comp']['tonerColorId'] = $validData['parsedToners']['oem']['tonerColorId'];
+
+                                        /**
+                                         * Insert a new compatible toner.
+                                         *
+                                         * When inserting a new one we need to obfuscate the dealers cost
+                                         */
+                                        $toner                 = new Proposalgen_Model_Toner($validData['parsedToners']['comp']);
+                                        $toner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($toner->cost);
+                                        $toner->isSystemDevice = $canApprove;
+                                        $toner->userId         = $this->_userId;
+                                        $tonerId               = Proposalgen_Model_Mapper_Toner::getInstance()->insert($toner);
+                                    }
+                                    else
+                                    {
+                                        $errorMessages [$lineCounter] = array('Toner Color' => 'No OEM Toner found and Toner Color not specified!');
+                                    }
+                                }
+
+                                if ($tonerId !== false)
+                                {
+
+
+                                    /**
+                                     * Dealer Toner Attributes
+                                     */
+                                    $dealerTonerAttribute = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->find(array($tonerId, $this->_dealerId));
+                                    if ($dealerTonerAttribute instanceof Proposalgen_Model_Dealer_Toner_Attribute)
+                                    {
+                                        $dealerTonerAttribute->cost = $validData['parsedToners']['comp']['cost'];
+                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->save($dealerTonerAttribute);
+                                    }
+                                    else
+                                    {
+                                        $dealerTonerAttribute           = new Proposalgen_Model_Dealer_Toner_Attribute();
+                                        $dealerTonerAttribute->tonerId  = $tonerId;
+                                        $dealerTonerAttribute->dealerId = $this->_dealerId;
+                                        $dealerTonerAttribute->cost     = $validData['parsedToners']['comp']['cost'];
+
+                                        if (strlen($validData['parsedToners']['comp']['dealerSku']) > 0)
                                         {
-                                            $deviceToner                   = new Proposalgen_Model_DeviceToner();
-                                            $deviceToner->toner_id         = $tonerId;
-                                            $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
-                                            Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                            $dealerTonerAttribute->dealerSku = $validData['parsedToners']['comp']['dealerSku'];
+                                        }
+
+                                        Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance()->insert($dealerTonerAttribute);
+                                    }
+
+                                    /**
+                                     * Have we found the OEM toner data based on the OEM Toner SKU?
+                                     * Attempt to link device toners to existing toner id
+                                     */
+                                    if (isset($validData['parsedToners']['oem']['id']))
+                                    {
+                                        /**
+                                         * Map our compatible to the same devices that our OEM toner is mapped to.
+                                         */
+                                        $existingDeviceToners = Proposalgen_Model_Mapper_DeviceToner::getInstance()->fetchDeviceTonersByTonerId($validData['parsedToners']['oem']['id']);
+                                        foreach ($existingDeviceToners as $existingDeviceToner)
+                                        {
+                                            if (!Proposalgen_Model_Mapper_DeviceToner::getInstance()->find(array($tonerId, $existingDeviceToner->master_device_id)) instanceof Proposalgen_Model_DeviceToner)
+                                            {
+                                                $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                                                $deviceToner->toner_id         = $tonerId;
+                                                $deviceToner->master_device_id = $existingDeviceToner->master_device_id;
+                                                Proposalgen_Model_Mapper_DeviceToner::getInstance()->insert($deviceToner);
+                                            }
                                         }
                                     }
                                 }

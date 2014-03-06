@@ -10,10 +10,10 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
     const TONER_MATCHUP_OEM_TONER_SKU          = "OEM Toner SKU*";
     const TONER_MATCHUP_OEM_DEALER_TONER_SKU   = "OEM Dealer Toner SKU";
     const TONER_MATCHUP_OEM_DEALER_COST        = "OEM Dealer Cost";
-    const TONER_MATCHUP_COLOR                  = "Color*";
+    const TONER_MATCHUP_COLOR                  = "Color";
     const TONER_MATCHUP_COMPATIBLE_VENDOR_NAME = "Compatible Vendor Name*";
     const TONER_MATCHUP_COMPATIBLE_VENDOR_SKU  = "Compatible Vendor SKU*";
-    const TONER_MATCHUP_COMPATIBLE_DEALER_SKU  = "Compatible Dealer SKU*";
+    const TONER_MATCHUP_COMPATIBLE_DEALER_SKU  = "Compatible Dealer SKU";
     const TONER_MATCHUP_COMPATIBLE_YIELD       = "Compatible Yield*";
     const TONER_MATCHUP_COMPATIBLE_DEALER_COST = "Compatible Dealer Cost*";
 
@@ -56,16 +56,10 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
                 self::TONER_MATCHUP_OEM_TONER_SKU          => array(
                     'allowEmpty' => false,
                 ),
-                self::TONER_MATCHUP_COLOR                  => array(
-                    'allowEmpty' => false,
-                ),
                 self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => array(
                     'allowEmpty' => false,
                 ),
                 self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU  => array(
-                    'allowEmpty' => false,
-                ),
-                self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU  => array(
                     'allowEmpty' => false,
                 ),
                 self::TONER_MATCHUP_COMPATIBLE_YIELD       => array(
@@ -103,7 +97,6 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
                 $oemTonerData                           = array(
                     'sku'              => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_OEM_TONER_SKU),
                     'manufacturerName' => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_MANUFACTURER),
-                    'colorName'        => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COLOR),
                 );
                 $parsedTonerData['parsedToners']['oem'] = $this->_parseTonerData($oemTonerData);
 
@@ -112,7 +105,6 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
                     'cost'             => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_COST),
                     'yield'            => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_YIELD),
                     'manufacturerName' => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME),
-                    'colorName'        => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COLOR),
                     'dealerSku'        => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU),
                 );
                 $parsedTonerData['parsedToners']['comp'] = $this->_parseTonerData($compTonerData);
@@ -129,11 +121,12 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
             // Is our parsed data valid if we got a valid manufacturer id we know its valid
             if (!isset($parsedTonerData['parsedToners']['comp']['manufacturerId']))
             {
-                $errors ['parseError'][key($parsedTonerData['parsedToners']['comp'])] = $parsedTonerData['parsedToners']['comp'];
+                $errors ['parseError'][self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME] = array('Could not find manufacturer with the name of ' . $parsedTonerData['parsedToners']['comp']['manufacturerName']);
             }
+
             if (!isset($parsedTonerData['parsedToners']['oem']['manufacturerId']))
             {
-                $errors ['parseError'][key($parsedTonerData['parsedToners']['oem'])] = $parsedTonerData['parsedToners']['oem'];
+                $errors ['parseError'][self::TONER_MATCHUP_MANUFACTURER] = array('Could not find manufacturer with the name of ' . $parsedTonerData['parsedToners']['oem']['manufacturerName']);
             }
 
             if (isset($errors['parseError']))
@@ -158,13 +151,14 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
      */
     private function _parseTonerData ($tonerData)
     {
-        //$toner = Proposalgen_Model_Mapper_Toner::getInstance()->searchBySku($tonerData['sku']);
         $toner = Proposalgen_Model_Mapper_Toner::getInstance()->fetchBySku($tonerData['sku']);
+
         // Persist the id if we have found the toner by the SKU
         if ($toner instanceof Proposalgen_Model_Toner)
         {
             $tonerData['id']             = $toner->id;
-            $tonerData['manufacturerId'] = $toner->manufacturerId;;
+            $tonerData['manufacturerId'] = $toner->manufacturerId;
+            $tonerData['tonerColorId']   = $toner->tonerColorId;
         }
         else
         {
@@ -173,27 +167,28 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
             if (empty($manufacturer))
             {
                 // This an OEM or comp toner
-                if (isset($tonerData['dealerSku']))
+                if (array_key_exists('dealerSku', $tonerData))
                 {
-                    return array(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => "Manufacturer does not exist, or it is spelt incorrectly.");
+                    return array(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME => "Manufacturer does not exist, or it is spelt incorrectly. (" . $tonerData['manufacturerName'] . ")");
                 }
-                else
-                {
-                    return array(self::TONER_MATCHUP_MANUFACTURER => "Manufacturer does not exist, or it is spelt incorrectly.");
-                }
-            }
-
-            $tonerData['manufacturerId'] = $manufacturer[0]->id;
-
-            $tonerColorId = array_search($tonerData['colorName'], Proposalgen_Model_TonerColor::$ColorNames);
-
-            if ($tonerColorId)
-            {
-                $tonerData['tonerColorId'] = $tonerColorId;
             }
             else
             {
-                return array(self::TONER_MATCHUP_COLOR => "Color does not exist, or it is spelt incorrectly.");
+                $tonerData['manufacturerId'] = $manufacturer[0]->id;
+
+                if (strlen($tonerData['colorName']) > 0)
+                {
+                    $tonerColorId = array_search($tonerData['colorName'], Proposalgen_Model_TonerColor::$ColorNames);
+
+                    if ($tonerColorId)
+                    {
+                        $tonerData['tonerColorId'] = $tonerColorId;
+                    }
+                    else
+                    {
+                        return array(self::TONER_MATCHUP_COLOR => "Color does not exist, or it is spelt incorrectly.");
+                    }
+                }
             }
         }
 
