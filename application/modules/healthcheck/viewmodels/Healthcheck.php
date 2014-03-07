@@ -188,7 +188,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
     public function __construct (Healthcheck_Model_Healthcheck $report)
     {
         parent::__construct($report);
-        $this->DealerCompany = "Office Depot Inc.";
+        $this->DealerCompany = My_Brand::$companyName;
 
         if (isset(self::$Proposal))
         {
