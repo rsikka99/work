@@ -112,7 +112,7 @@ class Default_InfoController extends Tangent_Controller_Action
     public function getChangelog ()
     {
         // We could fetch change logs on a module basis if we wanted to...
-        $file = APPLICATION_PATH . "/configs/changelog.txt";
+        $file = APPLICATION_PATH . "/configs/changelog.md";
         $text = 'Not Available';
 
         if (file_exists($file))

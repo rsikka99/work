@@ -1,6 +1,0 @@
-Version Pending Changes
-#######################
-Version 1.4.9
--------------
-[ADDED]   customer pricing import
-[ADDED]   assumption inside the solution
