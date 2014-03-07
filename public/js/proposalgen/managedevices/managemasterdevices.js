@@ -28,47 +28,6 @@ function showMasterDeviceManagementModal(newMasterDeviceId, rmsUploadRowId, isAl
         loadHardwareConfigurations();
         updateTabs();
         $(".switch").bootstrapSwitch();
-
-        // May use this code at some point, It makes the manufacturer turn into a select2
-//        /*
-//         **
-//         * Master Device manufacturer search
-//         */
-//        var manufacturerIdSelect2 = $("#manufacturerId");
-//        var manufacturerValue = manufacturerIdSelect2.val();
-//        manufacturerIdSelect2.select2({
-//            minimumInputLength: 1,
-//            ajax              : { // instead of writing the function to execute the request we use Select2's convenient helper
-//                url     : TMTW_BASEURL + 'proposalgen/managedevices/search-for-manufacturer',
-//                dataType: 'json',
-//                data    : function (term, page)
-//                {
-//                    return {
-//                        q         : term, // search term
-//                        page_limit: 10
-//                    };
-//                },
-//                results : function (data, page)
-//                { // parse the results into the format expected by Select2.
-//                    // since we are using custom formatting functions we do not need to alter remote JSON data
-//                    return {results: data};
-//                }
-//            },
-//            initSelection : function (element, callback) {
-//                var data = [{id:1,text:'Brother'}];
-//                callback(data);
-//            },
-//            dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
-//
-//            escapeMarkup    : function (m)
-//            {
-//                return m;
-//            } // we do not want to escape markup since we are displaying html in results
-//        }).select2("data",
-//                [{"id":"1","text":"Brother"}]);
-//        manufacturerIdSelect2.on("change", function (e)
-//        {
-//        });
     });
 }
 

@@ -14,6 +14,36 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
     public function __construct ($options = null, $isAllowedToEditFields = false)
     {
         $this->_isAllowedToEditFields = $isAllowedToEditFields;
+
+        if (!$this->_prefixesInitialized)
+        {
+            if (null !== $this->getView())
+            {
+                $this->getView()->addHelperPath(
+                     'ZendX/JQuery/View/Helper',
+                         'ZendX_JQuery_View_Helper'
+                );
+            }
+
+            $this->addPrefixPath(
+                 'ZendX_JQuery_Form_Element',
+                     'ZendX/JQuery/Form/Element',
+                     'element'
+            );
+
+            $this->addElementPrefixPath(
+                 'ZendX_JQuery_Form_Decorator',
+                     'ZendX/JQuery/Form/Decorator',
+                     'decorator'
+            );
+
+            $this->addDisplayGroupPrefixPath(
+                 'ZendX_JQuery_Form_Decorator',
+                     'ZendX/JQuery/Form/Decorator'
+            );
+
+        }
+
         parent::__construct($options);
     }
 
@@ -93,10 +123,12 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
                 )
             )
         ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+
         if (!$this->_isAllowedToEditFields)
         {
             $ppmBlackElement->setAttrib('readonly', 'readonly');
         }
+
         /*
          * Print Speed Color
          */
@@ -120,29 +152,33 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
                 )
             )
         ))->setAttrib('onkeypress', 'javascript: return numbersonly(this, event)');
+
         if (!$this->_isAllowedToEditFields)
         {
             $ppmColorElement->setAttrib('readonly', 'readonly');
         }
+
         /*
         * Launch Date
         */
         $minYear           = 1950;
         $maxYear           = ((int)date('Y')) + 2;
-        $launchDateElement = new ZendX_JQuery_Form_Element_DatePicker('launchDate');
+        $launchDateElement = $this->createElement('DatePicker', 'launchDate', array('decorators' => array('UiWidgetElement')));
+
 
         $launchDateElement->setJQueryParam('dateFormat', 'yy-mm-dd')
-                          ->setJqueryParam('timeFormat', 'hh:mm')
                           ->setJQueryParam('changeYear', 'true')
                           ->setJqueryParam('changeMonth', 'true')
                           ->setJqueryParam('yearRange', "{$minYear}:{$maxYear}")
                           ->addValidator(new My_Validate_DateTime('/\d{4}-\d{2}-\d{2}/'))
-                          ->setRequired($this->_isAllowedToEditFields)->setLabel('Launch Date:');
+                          ->setRequired($this->_isAllowedToEditFields)
+                          ->setLabel('Launch Date:');
+
         $launchDateElement->addFilters(array(
             'StringTrim',
             'StripTags'
         ));
-//        $launchDateElement->setAttrib('class', 'span6');
+
         if (!$this->_isAllowedToEditFields)
         {
             $launchDateElement->setAttrib('readonly', 'readonly');
@@ -439,6 +475,7 @@ class Proposalgen_Form_MasterDeviceManagement_DeviceAttributes extends Twitter_B
 
         $this->getElement("launchDate")->addDecorators(
              array(
+                 'UiWidgetElement',
                  array(
                      array('wrapper' => 'HtmlTag'),
                      array('tag' => 'div')
