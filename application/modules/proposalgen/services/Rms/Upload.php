@@ -97,6 +97,10 @@ class Proposalgen_Service_Rms_Upload
                     $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINT_AUDIT;
                     $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintAudit();
                     break;
+                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_NER_DATA:
+                    $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_NER_DATA;
+                    $uploadCsvService = new Proposalgen_Service_Rms_Upload_NerData();
+                    break;
                 default :
                     $uploadCsvService    = null;
                     $uploadProviderId    = null;

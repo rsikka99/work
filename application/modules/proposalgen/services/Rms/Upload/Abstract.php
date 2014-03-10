@@ -299,7 +299,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             $this->_csvHeaders = array();
             foreach (str_getcsv(array_shift($fileLines)) as $header)
             {
-                $lowerCaseHeader = strtolower($header);
+                $lowerCaseHeader = strtolower(trim($header));
                 /*
                  * We'll build the array of headers ourselves and ensure that they are normalized.
                  * We could map column names here for different reports

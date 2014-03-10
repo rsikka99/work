@@ -9,6 +9,7 @@ class Proposalgen_Model_Rms_Provider extends My_Model_Abstract
     const RMS_PROVIDER_FMAUDIT     = 2;
     const RMS_PROVIDER_XEROX       = 3;
     const RMS_PROVIDER_PRINT_AUDIT = 4;
+    const RMS_PROVIDER_NER_DATA    = 5;
 
     /**
      * @var int

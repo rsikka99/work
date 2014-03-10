@@ -3,7 +3,7 @@ Version Pending Changes
 
 Version 1.4.10
 ==============
-
+* Added **NER Data** as a RMS vendor
 
 Template Change log
 ===================
