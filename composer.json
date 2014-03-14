@@ -26,7 +26,8 @@
         "phpexcel/phpexcel"           : "dev-master",
         "gChartPhp/gChartPhp"         : "dev-master",
         "robmorgan/phinx"             : "*",
-        "nesbot/Carbon"               : "1.7.x"
+        "nesbot/Carbon"               : "1.7.x",
+        "michelf/php-markdown": "1.4.*"
     },
     "require-dev" : {
         "phpunit/phpunit": "3.7.x",

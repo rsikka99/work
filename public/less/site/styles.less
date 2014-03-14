@@ -1,7 +1,6 @@
 // These two must be at the top to ensure our variables and mixins are available.
 @import "bootstrap/variables";
 @import "bootstrap/mixins";
-
 // Our organized styles
 @import "select2.less";
 @import "jquerySelect.less";
@@ -16,12 +15,10 @@
 @import "tabbable";
 @import "mpsicons.less";
 @import "masterDeviceModal.less";
-
-    // Bring in module styles
+// Bring in module styles
+@import "module_styles/default";
 @import "module_styles/quotegen";
 @import "module_styles/proposalgen";
 @import "module_styles/memjet-optimization";
-
-
-    // Bring in global styles to override everything else
+// Bring in global styles to override everything else
 @import "global.less";
