@@ -70,74 +70,74 @@ $assessmentViewModel = $this->assessmentViewModel;
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::BLACK])) ? $toners[Proposalgen_Model_TonerColor::BLACK]->sku : "-"; ?></div>
                 </td>
                 <td class="column5">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::BLACK])) ? "$" . $toners[Proposalgen_Model_TonerColor::BLACK]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::BLACK])) ? $this->currency($toners[Proposalgen_Model_TonerColor::BLACK]->cost) : "-"; ?></div>
                 </td>
                 <td class="column6">
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::CYAN])) ? $toners[Proposalgen_Model_TonerColor::CYAN]->sku : "-"; ?></div>
                 </td>
                 <td class="column7">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::CYAN])) ? "$" . $toners[Proposalgen_Model_TonerColor::CYAN]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::CYAN])) ? $this->currency($toners[Proposalgen_Model_TonerColor::CYAN]->cost) : "-"; ?></div>
                 </td>
                 <td class="column8">
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::MAGENTA])) ? $toners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "-"; ?></div>
                 </td>
                 <td class="column9">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::MAGENTA])) ? "$" . $toners[Proposalgen_Model_TonerColor::MAGENTA]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::MAGENTA])) ? $this->currency($toners[Proposalgen_Model_TonerColor::MAGENTA]->cost) : "-"; ?></div>
                 </td>
                 <td class="column10">
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::YELLOW])) ? $toners[Proposalgen_Model_TonerColor::YELLOW]->sku : "-"; ?></div>
                 </td>
                 <td class="column11">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::YELLOW])) ? "$" . $toners[Proposalgen_Model_TonerColor::YELLOW]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::YELLOW])) ? $this->currency($toners[Proposalgen_Model_TonerColor::YELLOW]->cost) : "-"; ?></div>
                 </td>
                 <td class="column12">
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $toners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "-"; ?></div>
                 </td>
                 <td class="column13">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? "$" . $toners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $this->currency($toners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost) : "-"; ?></div>
                 </td>
                 <td class="column14">
                     <div class="center"><?php echo (isset($toners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $toners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "-"; ?></div>
                 </td>
                 <td class="column15">
-                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? "$" . $toners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($toners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $this->currency($toners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost) : "-"; ?></div>
                 </td>
                 <!-- COMPATIBLE -->
                 <td class="column16">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $compatibleToners[Proposalgen_Model_TonerColor::BLACK]->sku : "-"; ?></div>
                 </td>
                 <td class="column16">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::BLACK]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::BLACK])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::BLACK]->cost) : "-"; ?></div>
                 </td>
                 <td class="column18">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $compatibleToners[Proposalgen_Model_TonerColor::CYAN]->sku : "-"; ?></div>
                 </td>
                 <td class="column18">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::CYAN]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::CYAN])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::CYAN]->cost) : "-"; ?></div>
                 </td>
                 <td class="column20">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->sku : "-"; ?></div>
                 </td>
                 <td class="column20">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::MAGENTA]->cost) : "-"; ?></div>
                 </td>
                 <td class="column22">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->sku : "-"; ?></div>
                 </td>
                 <td class="column23">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::YELLOW])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::YELLOW]->cost) : "-"; ?></div>
                 </td>
                 <td class="column24">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->sku : "-"; ?></div>
                 </td>
                 <td class="column25">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::THREE_COLOR]->cost : "-"; ?></div>
                 </td>
                 <td class="column26">
                     <div class="center"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->sku : "-"; ?></div>
                 </td>
                 <td class="column27">
-                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? "$" . $compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost : "-"; ?></div>
+                    <div class="right"><?php echo (isset($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR])) ? $this->currency($compatibleToners[Proposalgen_Model_TonerColor::FOUR_COLOR]->cost) : "-"; ?></div>
                 </td>
             </tr>
         <?php endforeach; ?>

@@ -58,8 +58,8 @@ foreach ($profitabilityDevices->replaced as $device)
     $cell3->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
 
     $table->addCell($tcStyle->col4Width, $ampvStyle)->addText($device->getMemjetReason($memjetOptimization->id), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(number_format($device->getPageCounts(($replacementDevice->isColor() && $device->getMasterDevice()->isColor() == false) ? $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio : null)->getBlackPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $ampvStyle)->addText(($isColor) ? number_format($device->getPageCounts(($replacementDevice->isColor() && $device->getMasterDevice()->isColor() == false) ? $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio : null)->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText($this->formatPageVolume($device->getPageCounts(($replacementDevice->isColor() && $device->getMasterDevice()->isColor() == false) ? $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio : null)->getBlackPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $ampvStyle)->addText(($isColor) ? $this->formatPageVolume($device->getPageCounts(($replacementDevice->isColor() && $device->getMasterDevice()->isColor() == false) ? $memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio : null)->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
 }
 
 $section->addTextBreak();
@@ -68,7 +68,7 @@ $section->addTextBreak();
 $section->addTitle('Memjet Utilization and Capacity', 2);
 $section->addImage($this->graphs[4], $this->styles->images->center);
 $section->addTitle('Print Volume and Number of Printing Devices', 2);
-$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), number_format(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), number_format($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), $this->formatPageVolume($device->getPageCounts(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()))));
 $section->addTextBreak();
 
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);

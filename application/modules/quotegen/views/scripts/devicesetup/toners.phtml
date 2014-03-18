@@ -154,7 +154,7 @@ else
                                 <td><?php echo $toner->getManufacturer()->displayname; ?></td>
                                 <td style="text-transform: capitalize;"><?php echo strToLower($toner->getTonerColor()->tonerColorName); ?></td>
                                 <td style="text-align: right;"><?php echo number_format($toner->yield, 0, '', ','); ?></td>
-                                <td style="text-align: right;"><?php echo "$" . number_format($toner->cost, 2, '.', ','); ?></td>
+                                <td style="text-align: right;"><?php echo $this->currency($toner->cost); ?></td>
                                 <td>
                                     <div class="" style="text-align: center;">
                                         <?php if (in_array($toner->id, $this->assignedToners))

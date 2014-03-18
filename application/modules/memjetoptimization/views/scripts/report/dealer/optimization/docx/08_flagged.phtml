@@ -53,8 +53,8 @@ foreach ($memjetOptimizationDevices->flagged as $device)
     $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 
-    $table->addCell($tcStyle->col3Width, $style)->addText(number_format($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? number_format($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? $this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
     $table->addCell($tcStyle->col6Width, $style)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage, array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
     $table->addCell($tcStyle->col7Width, $style)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);

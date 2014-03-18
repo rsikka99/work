@@ -14,7 +14,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     </tr>
     <tr>
         <td width="400px">Average number of total printed pages per month</td>
-        <td width="400px" style="text-align:right"><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
+        <td width="400px" style="text-align:right"><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
     </tr>
     <tr>
         <td width="400px">Average number of pages per device, per month</td>
@@ -55,7 +55,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown'; ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
                 <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
@@ -89,7 +89,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo ($deviceInstance->serialNumber) ? : 'Unknown' ?></div>
             </td>
             <td class="column3">
-                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
                 <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
@@ -108,7 +108,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 <div class="pheader">Color Usage</div>
 <p>You currently have
     <strong><?php echo $healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount(); ?></strong> color printing devices that print a monthly average of
-    <strong><?php echo number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
+    <strong><?php echo $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></strong> color pages per month, which is
     <strong><?php echo number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2); ?>%</strong> of your total monthly print volume.
 </p>
 <br />
@@ -157,7 +157,7 @@ $graphs = $healthcheckViewModel->getGraphs();
             <td class="center"><?php echo number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer(), $healthcheckViewModel->getHealthcheckMargin())), 2) ?>
                 %
             </td>
-            <td class="center"><?php echo number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
+            <td class="center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
             <td><?php echo $this->currency($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer()), array('precision' => 4)); ?></td>
             <td><?php echo $this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer()), array('precision' => 2)) ?></td>
         </tr>

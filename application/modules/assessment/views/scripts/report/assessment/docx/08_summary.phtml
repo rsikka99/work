@@ -60,33 +60,33 @@ $section->addTitle(sprintf('Estimated Costs: Printing Devices Managed with %1$s'
 $summaryTable = $section->addTable($this->styles->tables->expenseSummaryTable->tablestyle);
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf('%1$s monochrome cost per page', $this->brandName), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 5), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getMPSBlackAndWhiteCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf('%1$s color cost per page', $this->brandName), null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->getMPSColorCPP(), 5), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getMPSColorCPP(), 5), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Predicted annual monochrome pages', null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Predicted annual color pages', null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Cost of monochrome pages', null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText('Cost of color pages', null, 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText('Annual internal administration cost', null, 'nospacing');
 $cell->addText(sprintf('Processing 1 invoice/month @ %1$s/invoice', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)), 'small_italic_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->getInternalAdminCost()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getInternalAdminCost()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
@@ -98,25 +98,25 @@ $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1);
 $cell->addText('Annual cost of internal IT supporting printing devices', null, 'nospacing');
 $cell->addText('Assume reduction of 50%', 'small_italic_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->getHalfOfAnnualITCost()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getHalfOfAnnualITCost()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $cell = $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border);
 $cell->addText('Annual cost of new hardware purchases', null, 'nospacing');
 $cell->addText('Assume no change', 'small_italic_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), null, 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText(sprintf('%1$s estimated annual cost of purchased devices', $this->brandName), 'bold_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($assessmentViewModel->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getPrintIQTotalCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1Border)->addText('Current estimated annual cost of purchased devices', 'bold_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText('$' . number_format($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2Border)->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), 'bold_text', 'nospacing_rightalign');
 
 $summaryTable->addRow($this->styles->tables->expenseSummaryTable->rowheight);
 $summaryTable->addCell($this->styles->tables->expenseSummaryTable->col1Width, $this->styles->tables->expenseSummaryTable->cell1)->addText(sprintf('POTENTIAL ANNUAL SAVINGS USING %1$s', $this->brandName), 'bold_red_text', 'nospacing');
-$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText('$' . number_format($assessmentViewModel->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
+$summaryTable->addCell($this->styles->tables->expenseSummaryTable->col2Width, $this->styles->tables->expenseSummaryTable->cell2)->addText($this->currency($assessmentViewModel->getPrintIQSavings()), 'bold_highlight_text', 'nospacing_rightalign');
 
 $section->addTextBreak();
 

@@ -8,6 +8,8 @@
             <partsCostPerPage>0.0015</partsCostPerPage>
             <laborCostPerPage>0.002</laborCostPerPage>
             <adminCostPerPage>0.0006</adminCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <targetMonochromeCostPerPage>0.02</targetMonochromeCostPerPage>
             <targetColorCostPerPage>0.1</targetColorCostPerPage>
             <lossThreshold>20</lossThreshold>
@@ -23,6 +25,8 @@
             <pageCoverageColor>0</pageCoverageColor>
             <adminCostPerPage>0</adminCostPerPage>
             <partsCostPerPage>0</partsCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <laborCostPerPage>0</laborCostPerPage>
             <targetMonochromeCostPerPage>0</targetMonochromeCostPerPage>
             <targetColorCostPerPage>0</targetColorCostPerPage>
@@ -38,6 +42,8 @@
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>3</adminCostPerPage>
             <partsCostPerPage>3</partsCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>3</targetMonochromeCostPerPage>
             <targetColorCostPerPage>3</targetColorCostPerPage>
@@ -53,6 +59,8 @@
             <pageCoverageColor>99</pageCoverageColor>
             <adminCostPerPage>.01</adminCostPerPage>
             <partsCostPerPage>.2</partsCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <laborCostPerPage>.3456</laborCostPerPage>
             <targetMonochromeCostPerPage>.4</targetMonochromeCostPerPage>
             <targetColorCostPerPage>2.5</targetColorCostPerPage>
@@ -68,6 +76,8 @@
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>5</adminCostPerPage>
             <partsCostPerPage>4</partsCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>
@@ -83,6 +93,8 @@
             <pageCoverageColor>50</pageCoverageColor>
             <adminCostPerPage>5</adminCostPerPage>
             <partsCostPerPage>4</partsCostPerPage>
+            <optimizedTargetMonochromeCostPerPage>1</optimizedTargetMonochromeCostPerPage>
+            <optimizedTargetColorCostPerPage>2</optimizedTargetColorCostPerPage>
             <laborCostPerPage>3</laborCostPerPage>
             <targetMonochromeCostPerPage>2</targetMonochromeCostPerPage>
             <targetColorCostPerPage>1</targetColorCostPerPage>

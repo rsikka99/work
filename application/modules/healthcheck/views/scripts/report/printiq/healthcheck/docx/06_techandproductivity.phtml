@@ -42,8 +42,8 @@ $section->addText("Do you have too much invested in larger, more expensive hardw
 $section->addText(sprintf('You currently have %1$s devices in your fleet, and of those, %2$s are A3 Compatible. Of the %3$s total pages printed, %4$s are A3 pages, or %5$s%%. You should also consider A3 devices where AMPV\'s are low as candidates for replacement or movement.',
     $healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount(),
     count($healthcheckViewModel->getDevices()->a3DeviceInstances->getDeviceInstances()),
-    number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly(), 0),
-    number_format($healthcheckViewModel->getDevices()->a3DeviceInstances->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly(), 0),
+    $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()),
+    $this->formatPageVolume($healthcheckViewModel->getDevices()->a3DeviceInstances->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly()),
     number_format($healthcheckViewModel->calculatePercentageA3Pages() * 100, 0)
 ));
 
@@ -72,8 +72,8 @@ foreach ($healthcheckViewModel->getUnderutilizedA3Devices() as $device)
     $lowestA3UtilizationTable->addRow($this->styles->tables->utilization->rowheight);
     $lowestA3UtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing_centeralign');
     $lowestA3UtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
-    $lowestA3UtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
-    $lowestA3UtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $lowestA3UtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $lowestA3UtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($device->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
 }
 $section->addTextBreak();
 

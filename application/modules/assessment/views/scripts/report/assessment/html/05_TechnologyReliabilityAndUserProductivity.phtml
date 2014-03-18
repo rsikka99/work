@@ -50,13 +50,13 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo $deviceInstance->getAge(); ?> years</div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column5">
-                <div class=" center"><?php echo number_format($deviceInstance->getMeter()->endMeterLife); ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></div>
             </td>
             <td class="column6">
-                <div class=" center"><?php echo number_format($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>
             </td>
         </tr>
         <?php $ctr++;
@@ -79,7 +79,7 @@ $graphs = $assessmentViewModel->getGraphs();
 <table cellspacing="0" class="bold fontChange">
     <tr>
         <td style="width: 470px;">Annual internal IT hours spent servicing and supporting printers</td>
-        <td style="width: 175px;" class="right"><?php echo $assessmentViewModel->getAnnualITHours(); ?></td>
+        <td style="width: 175px;" class="right"><?php echo number_format($assessmentViewModel->getAnnualITHours()); ?></td>
     </tr>
     <tr>
         <td>Average hourly IT rate</td>
@@ -87,7 +87,7 @@ $graphs = $assessmentViewModel->getGraphs();
     </tr>
     <tr>
         <td>Annual cost for internal IT staff to service and support printers</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualITCost()); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->getAnnualITCost()); ?></td>
     </tr>
 </table>
 <br />

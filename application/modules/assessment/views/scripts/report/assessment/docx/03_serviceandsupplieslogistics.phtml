@@ -101,7 +101,7 @@ $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getNumberOfAnnualInkTonerOrders()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Estimated annual cost to execute ink and toner orders', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText('$' . number_format($assessmentViewModel->getCostOfExecutingSuppliesOrders()), 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText($this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()), 'bold_text', 'nospacing_rightalign');
 $section->addText(sprintf('Time spent dealing with multiple vendors could be better spent focusing on your core business tasks. %1$s can bundle your supplies and service into a single invoice - and if you need new hardware, that can be included too.', $this->companyName), 'small_italic_text');
 
 

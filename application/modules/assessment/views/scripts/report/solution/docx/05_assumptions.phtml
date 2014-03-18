@@ -11,16 +11,16 @@ $section->addPageBreak();
 $section->addTitle('Survey Assumptions', 1);
 
 $section->addText("Q: How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?", "bold_text");
-$section->addText(sprintf('A: %1$s / year', $this->currency($assessmentViewModel->getCostOfInkAndToner($customerCostPerPageSetting), array('precision' => 2))));
+$section->addText(sprintf('A: %1$s / year', $this->currency($assessmentViewModel->getCostOfInkAndToner($customerCostPerPageSetting))));
 
 $section->addText("Q: How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)?", "bold_text");
-$section->addText(sprintf('A: %1$s / year',$this->currency($assessmentViewModel->getEstimatedAnnualCostOfService(), array('precision' => 2))  ));
+$section->addText(sprintf('A: %1$s / year',$this->currency($assessmentViewModel->getEstimatedAnnualCostOfService())  ));
 
 $section->addText("Q: What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?", "bold_text");
-$section->addText(sprintf('A: %1$s / order', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder, array('precision' => 2))  ));
+$section->addText(sprintf('A: %1$s / order', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)  ));
 
 $section->addText("Q: What is the average hourly rate for IT personnel involved in managing printing devices?", "bold_text");
-$section->addText(sprintf('A: %1$s / hour',$this->currency($assessmentViewModel->getAverageITRate(), array('precision' => 2))   ));
+$section->addText(sprintf('A: %1$s / hour',$this->currency($assessmentViewModel->getAverageITRate())   ));
 
 $section->addText("Q: How many times per month does your organization order printer supplies?", "bold_text");
 $section->addText(sprintf('A: %1$s / month', $assessmentViewModel->getNumberOfOrdersPerMonth()  ));

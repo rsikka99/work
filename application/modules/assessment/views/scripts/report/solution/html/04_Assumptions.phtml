@@ -4,19 +4,19 @@ $assessmentViewModel = $this->assessmentViewModel;
 ?>
 <div class="pheader" style="margin: 10pt 0pt;">Survey Assumptions</div>
 <div><strong>Q: How much did you spend last year on ink and toner for your printer fleet (excluding the cost of leased copiers)?</strong></div>
-<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer()), array('precision' => 2)); ?> / year</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())); ?> / year</div>
 <br />
 <div>
     <strong>Q: How much did you spend last year on service from outside vendors for your printer fleet, including maintenance kits, parts and labor (excluding the cost of leased copiers)?</strong>
 </div>
-<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getEstimatedAnnualCostOfService(), array('precision' => 2)) ?> / year</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getEstimatedAnnualCostOfService()) ?> / year</div>
 <br />
 <div><strong>Q: What is the average cost for you to execute a supplies purchase order, including labor for purchasing and administrative personnel?</strong>
 </div>
-<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder, array('precision' => 2)); ?> / order</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder); ?> / order</div>
 <br />
 <div><strong>Q: What is the average hourly rate for IT personnel involved in managing printing devices?</strong></div>
-<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getAverageITRate(), array('precision' => 2)); ?> / hour</div>
+<div><strong>A:</strong> <?php echo $this->currency($assessmentViewModel->getAverageITRate()); ?> / hour</div>
 <br />
 <div><strong>Q: How many times per month does your organization order printer supplies?</strong></div>
 <div><strong>A:</strong> <?php echo $assessmentViewModel->getNumberOfOrdersPerMonth() ?> / month</div>

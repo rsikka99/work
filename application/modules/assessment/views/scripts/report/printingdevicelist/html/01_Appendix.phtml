@@ -50,7 +50,7 @@ $this->jit = My_Brand::$jit;
                 <div class="center"><?php echo ($deviceInstance->isLeased) ? "Leased" : "Purchased"; ?></div>
             </td>
             <td class="column5">
-                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
+                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column6">
                 <div class="center"><?php echo ($deviceInstance->reportsTonerLevels) ? "Yes" : "No"; ?></div>

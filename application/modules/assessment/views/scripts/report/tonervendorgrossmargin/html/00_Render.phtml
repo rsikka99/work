@@ -30,7 +30,8 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
         <h3>Summary</h3>
 
         <p>
-            There are <?= count($this->vendorSeperatedData) - 2 ?> toner vendors in the system. Out of the <?= count($this->vendorSeperatedData) ?> Toner Preferences, <?php
+            There are <?= count($this->vendorSeperatedData) - 2 ?> toner vendors in the system. Out of the <?= count($this->vendorSeperatedData) ?> Toner
+            Preferences, <?php
             $vendorConfigurationNames = implode(', ', $this->highestNames);
             // Replace last occurrence of a comma to an and
             if (strrpos($vendorConfigurationNames, ',') > 0)
@@ -193,16 +194,18 @@ foreach ($this->vendorSeperatedData as $vendorData)
                     <tr class="<?php echo ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?php echo ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
                         <td class=""><?= $fields[0]['deviceName'] ?><br /><?= '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?>
                         </td>
-                        <td class="mono"><?= number_format($fields[1], 0) ?></td>
-                        <td class="mono">$<?= number_format($fields[2], 2) ?></td>
-                        <td class="mono"><?= number_format($fields[3], 0, '.', ',') ?></td>
-                        <td class="mono">$<?= number_format($fields[4], 4) ?></td>
-                        <td class="mono">$<?= number_format($fields[5], 2) ?></td>
-                        <td class="color"><?= (is_numeric($fields[6]) ? number_format($fields[6], 0, '.', ',') : $fields[6]) ?></td>
-                        <td class="color"><?= (is_numeric($fields[7]) ? number_format($fields[7], 2) : $fields[7]) ?></td>
-                        <td class="color"><?= (is_numeric($fields[8]) ? number_format($fields[8], 0, '.', ',') : $fields[8]) ?></td>
-                        <td class="color"><?= (is_numeric($fields[9]) ? number_format($fields[9], 4) : $fields[9]) ?></td>
-                        <td class="color"><?= (is_numeric($fields[10]) ? number_format($fields[10], 2) : $fields[10]) ?></td>
+                        <td class="mono"><?= number_format($fields[1]) ?></td>
+                        <td class="mono"><?= $this->currency($fields[2]) ?></td>
+                        <td class="mono"><?= number_format($fields[3]) ?></td>
+                        <td class="mono"><?= $this->formatCostPerPage($fields[4]) ?></td>
+                        <td class="mono"><?= $this->currency($fields[5]) ?></td>
+
+                        <td class="color"><?= (is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
+                        <td class="color"><?= (is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
+                        <td class="color"><?= (is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
+                        <td class="color"><?= (is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
+                        <td class="color"><?= (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
+
                     </tr>
                 <?php
 
@@ -213,18 +216,18 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div><?= $vendorData['fieldTotals'][0] ?></div>
                     </td>
                     <td>
-                        <div class="right"><?= number_format($vendorData['fieldTotals'][4], 0, '.', ',') ?></div>
+                        <div class="right"><?= number_format($vendorData['fieldTotals'][4]) ?></div>
                     </td>
                     <td colspan="3"></td>
                     <td class="column2">
-                        <div class="right">$<?= number_format($vendorData['fieldTotals'][8], 2) ?></div>
+                        <div class="right">$<?= $this->currency($vendorData['fieldTotals'][8]) ?></div>
                     </td>
                     <td>
-                        <div class="center"><?= number_format($vendorData['fieldTotals'][9], 0, '.', ',') ?></div>
+                        <div class="center"><?= number_format($vendorData['fieldTotals'][9]) ?></div>
                     </td>
                     <td colspan="3"></td>
                     <td>
-                        <div class="right">$<?= number_format($vendorData['fieldTotals'][13], 0) ?></div>
+                        <div class="right">$<?= number_format($vendorData['fieldTotals'][13]) ?></div>
                     </td>
                 </tr>
                 </tbody>

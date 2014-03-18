@@ -64,7 +64,7 @@ foreach ($assessmentViewModel->getHighRiskDevices() as $device)
     $highRiskDevicesTable->addCell($cellWidths [0], $this->styles->tables->highriskdevices->cell1)->addText($device->getDeviceName(), null, 'nospacing');
     $highRiskDevicesTable->addCell($cellWidths [1], $this->styles->tables->highriskdevices->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing');
     $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAge()) . " year(s)", null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->getMeter()->endMeterLife), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $rowCount++;
@@ -90,10 +90,10 @@ $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell
 $table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText(number_format($assessmentViewModel->getAnnualITHours()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Average hourly IT rate', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText('$' . number_format($assessmentViewModel->getAverageITRate()), 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText($this->currency($assessmentViewModel->getAverageITRate()), 'bold_text', 'nospacing_rightalign');
 $table->addRow($this->styles->tables->twoColumnDataTable->rowheight);
 $table->addCell($cellWidths [0], $this->styles->tables->twoColumnDataTable->cell1)->addText('Annual cost for internal IT staff to service and support printers', 'bold_text', 'nospacing');
-$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText('$' . number_format($assessmentViewModel->getAnnualITCost()), 'bold_text', 'nospacing_rightalign');
+$table->addCell($cellWidths [1], $this->styles->tables->twoColumnDataTable->cell2)->addText($this->currency($assessmentViewModel->getAnnualITCost()), 'bold_text', 'nospacing_rightalign');
 $section->addTextBreak();
 
 $section->addText(sprintf('The Gartner Group stated that 30% to 40% of all IT and help desk calls are related to issues with printing and copying. The time that your IT personnel spend managing printers reduces the resources available for your core technology projects. %1$s can help you manage your printers efficiently and free up the time of your IT staff.', $this->companyName));

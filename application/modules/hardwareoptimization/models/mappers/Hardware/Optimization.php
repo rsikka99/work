@@ -361,7 +361,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
                 $returnDevices['deviceInstances'][] = $deviceInstance;
                 $jsonData                           = $devices['jsonData'][$i];
 
-                $pageCount                 = $deviceInstance->getPageCounts();
+                $pageCount                 = $this->formatPageVolume($deviceInstance->getPageCounts());
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
                 $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
                 $jsonData['monoAmpv']      = number_format($pageCount->getBlackPageCount()->getMonthly());

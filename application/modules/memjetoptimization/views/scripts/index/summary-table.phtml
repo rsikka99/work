@@ -56,9 +56,9 @@ $memjetOptimization = $this->memjetOptimization;
     </tr>
     <tr>
         <td class="description"><strong>Mono Volume : </strong></td>
-        <td><?php echo number_format($optimizationViewModel->getPageCounts()->getBlackPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getMonochromePagePercentage()); ?>%)</td>
+        <td><?php echo $this->formatPageVolume($optimizationViewModel->getPageCounts()->getBlackPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getMonochromePagePercentage()); ?>%)</td>
         <td class="description"><strong>Color Volume : </strong></td>
-        <td><?php echo number_format($optimizationViewModel->getPageCounts()->getColorPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getColorPagePercentage()); ?>%)</td>
+        <td><?php echo $this->formatPageVolume($optimizationViewModel->getPageCounts()->getColorPageCount()->getMonthly()); ?> (<?php echo number_format($optimizationViewModel->getPageCounts()->getColorPagePercentage()); ?>%)</td>
         <td class="description"><strong>Dealer Cost :</strong></td>
         <td><?php echo $this->currency($optimizationViewModel->calculateDealerMonthlyCost()); ?></td>
     </tr>
@@ -86,11 +86,11 @@ $memjetOptimization = $this->memjetOptimization;
     <tr>
         <td class="description"><strong>Mono Volume : </strong></td>
         <td>
-            <span id="monoVolume"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getBlackPageCount()->getMonthly()); ?></span> (<span id="monoVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getMonochromePagePercentage()); ?></span>%)
+            <span id="monoVolume"><?php echo $this->formatPageVolume($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getBlackPageCount()->getMonthly()); ?></span> (<span id="monoVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getMonochromePagePercentage()); ?></span>%)
         </td>
         <td class="description"><strong>Color Volume : </strong></td>
         <td>
-            <span id="colorVolume"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPageCount()->getMonthly()); ?></span> (<span id="colorVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPagePercentage()); ?></span>%)
+            <span id="colorVolume"><?php echo $this->formatPageVolume($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPageCount()->getMonthly()); ?></span> (<span id="colorVolumePercent"><?php echo number_format($optimizationViewModel->getPageCounts($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->getColorPagePercentage()); ?></span>%)
         </td>
         <td class="description"><strong>Dealer Cost :</strong></td>
         <td id="totalCost"><?php echo $this->currency((float)$optimizationViewModel->calculateDealerMonthlyCostWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio), array('precision' => 2)) ?></td>

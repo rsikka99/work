@@ -6,15 +6,26 @@ $fh = fopen($this->savePath, "w+");
 
 
 // Please note that is is a hacked way around things. This should be done more properly with PHPExcel or fputcsv.
-fputs($fh, "INCLUDED DEVICES:\n\n");
-fputs($fh, $this->appendix_titles);
-fputs($fh, "\n");
-fputs($fh, $this->appendix_values);
-fputs($fh, "\n\n\n");
-fputs($fh, "EXCLUDED DEVICES:\n\n");
-fputs($fh, $this->excluded_titles);
-fputs($fh, "\n");
-fputs($fh, $this->excluded_values);
+fputcsv($fh, array("INCLUDED DEVICES:"));
+fputcsv($fh, array());
+fputcsv($fh, array());
+fputcsv($fh, $this->appendix_titles);
+fputcsv($fh, array());
+foreach ($this->appendix_values as $line)
+{
+    fputcsv($fh, $line);
+}
+fputcsv($fh, array());
+fputcsv($fh, array());
+fputcsv($fh, array());
+fputcsv($fh, array("EXCLUDED DEVICES:"));
+fputcsv($fh, array());
+fputcsv($fh, $this->excluded_titles);
+fputcsv($fh, array());
+foreach ($this->excluded_values as $line)
+{
+    fputcsv($fh, $line);
+}
 
 fclose($fh);
 echo $this->baseUrl($this->publicFileName);

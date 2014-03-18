@@ -111,7 +111,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
 
         $justInTimeCompatibleTitle = My_Brand::$jit . ' Compatible';
 
-        $this->view->appendix_titles = "Manufacturer,Model,IP Address,Serial,Age (Years),Purchased or Leased,AMPV,{$justInTimeCompatibleTitle}";
+        $this->view->appendix_titles = array("Manufacturer", "Model", "IP Address", "Serial", "Age (Years)", "Purchased or Leased", "AMPV", $justInTimeCompatibleTitle);
 
         $appendix_values = "";
         try
@@ -119,16 +119,16 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
             /* @var $device Proposalgen_Model_DeviceInstance */
             foreach ($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                $row    = array();
-                $row [] = $device->getMasterDevice()->getFullDeviceName();
-                $row [] = $device->getMasterDevice()->modelName;
-                $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown";
-                $row [] = ($device->serialNumber) ? $device->serialNumber : "Unknown";
-                $row [] = $device->getAge();
-                $row [] = ($device->isLeased) ? "Leased" : "Purchased";
-                $row [] = $device->getPageCounts()->getCombinedPageCount()->getMonthly();
-                $row [] = ($device->reportsTonerLevels) ? "Yes" : "No";
-                $appendix_values .= implode(",", $row) . "\n";
+                $row               = array();
+                $row []            = $device->getMasterDevice()->getManufacturer()->displayname;
+                $row []            = $device->getMasterDevice()->modelName;
+                $row []            = ($device->ipAddress) ? $device->ipAddress : "Unknown";
+                $row []            = ($device->serialNumber) ? $device->serialNumber : "Unknown";
+                $row []            = $device->getAge();
+                $row []            = ($device->isLeased) ? "Leased" : "Purchased";
+                $row []            = $this->view->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly());
+                $row []            = ($device->reportsTonerLevels) ? "Yes" : "No";
+                $appendix_values[] = $row;
             } // end Purchased Devices foreach
         }
         catch (Exception $e)
@@ -138,7 +138,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
         $this->view->appendix_values = $appendix_values;
 
         // Define our field titles
-        $this->view->excluded_titles = "Manufacturer,Model,Serial,IP Address,Exclusion Reason";
+        $this->view->excluded_titles = array("Manufacturer","Model","Serial","IP Address","Exclusion Reason");
 
         $excluded_values = "";
         try
@@ -157,10 +157,10 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                     $row [] = $device->getRmsUploadRow()->manufacturer;
                     $row [] = $device->getRmsUploadRow()->modelName;
                 }
-                $row [] = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
-                $row [] = ($device->ipAddress) ? $device->ipAddress : "Unknown IP";
-                $row [] = ($device->isExcluded) ? 'Manually excluded' : 'Device not mapped.';
-                $excluded_values .= implode(",", $row) . "\n";
+                $row []            = (strlen($device->serialNumber) > 0) ? $device->serialNumber : "Unknown";
+                $row []            = ($device->ipAddress) ? $device->ipAddress : "Unknown IP";
+                $row []            = ($device->isExcluded) ? 'Manually excluded' : 'Device not mapped.';
+                $excluded_values[] = $row;
             } // end Purchased Devices foreach
         }
         catch (Exception $e)

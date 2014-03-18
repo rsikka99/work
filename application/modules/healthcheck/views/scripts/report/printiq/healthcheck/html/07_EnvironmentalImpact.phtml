@@ -95,9 +95,9 @@ else
             <?php $deviceName = str_replace("Hewlett-Packard", "HP", $deviceInstance->getDeviceName()) ?>
             <td class="device-instance-name"><?php echo $deviceName; ?></td>
             <td class="serial-number"><?php echo $deviceInstance->serialNumber; ?></td>
-            <td class="page-volume"><?php echo number_format($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), 0); ?></td>
-            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isCopier) ? number_format($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly(), 0) : '-'; ?></td>
-            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isFax) ? number_format($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly(), 0) : '-'; ?></td>
+            <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></td>
+            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isCopier) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getScanPageCount()->getMonthly()) : '-'; ?></td>
+            <td class="page-volume"><?php echo ($deviceInstance->getMasterDevice()->isFax) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getFaxPageCount()->getMonthly()) : '-'; ?></td>
         </tr>
     <?php endforeach; ?>
 </table>

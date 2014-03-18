@@ -43,32 +43,32 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td><?php echo $this->brandName; ?> monochrome cost per page</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 5); ?></td>
+        <td class="right"><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?></td>
     </tr>
     <tr>
         <td><?php echo $this->brandName; ?> color cost per page</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getMPSColorCPP(), 5); ?></td>
+        <td class="right"><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?></td>
     </tr>
     <tr>
         <td>Predicted annual monochrome pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
+        <td class="right"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Predicted annual color pages</td>
-        <td class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
+        <td class="right"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()); ?></td>
     </tr>
     <tr>
         <td>Cost of monochrome pages</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()); ?></td>
     </tr>
     <tr>
         <td>Cost of color pages</td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()); ?></td>
     </tr>
     <tr>
         <td>Annual internal administration cost<br /><em>Processing 1 invoice/month @ <?php echo $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder); ?>/invoice</em>
         </td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getInternalAdminCost()) ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->getInternalAdminCost()) ?></td>
     </tr>
     <tr>
         <td>Annual cost of external service<br /><em>Maintenance kits and parts are included</em></td>
@@ -76,23 +76,23 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td>Annual cost of internal IT supporting printing devices<br /><em>Assume reduction of 50%</em></td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getHalfOfAnnualITCost()); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->getHalfOfAnnualITCost()); ?></td>
     </tr>
     <tr>
         <td>Annual cost of new hardware purchases<br /><em>Assume no change</em></td>
-        <td class="right">$<?php echo number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases()); ?></td>
+        <td class="right"><?php echo $this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()); ?></td>
     </tr>
     <tr>
         <td class="bold topborder"><?php echo $this->brandName; ?> estimated annual cost of purchased devices</td>
-        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getPrintIQTotalCost()); ?></td>
+        <td class="right bold topborder"><?php echo $this->currency($assessmentViewModel->getPrintIQTotalCost()); ?></td>
     </tr>
     <tr>
         <td class="bold topborder">Current estimated annual cost of purchased devices</td>
-        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getTotalPurchasedAnnualCost()); ?></td>
+        <td class="right bold topborder"><?php echo $this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()); ?></td>
     </tr>
     <tr>
         <td class="bold topborder">POTENTIAL ANNUAL SAVINGS USING <?php echo $this->brandName; ?></td>
-        <td class="right bold topborder">$<?php echo number_format($assessmentViewModel->getPrintIQSavings()); ?></td>
+        <td class="right bold topborder"><?php echo $this->currency($assessmentViewModel->getPrintIQSavings()); ?></td>
     </tr>
 </table>
 <br />

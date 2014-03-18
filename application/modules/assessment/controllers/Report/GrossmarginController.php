@@ -104,17 +104,17 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         {
             $assessmentViewModel = $this->getAssessmentViewModel();
 
-            $this->view->PrintIQ_Black_And_White_CPP  = number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4, '.', '');
-            $this->view->PrintIQ_Color_CPP            = number_format($assessmentViewModel->getMPSColorCPP(), 4, '.', '');
-            $this->view->Weighted_Black_And_White_CPP = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4, '.', '');
-            $this->view->Weighted_Color_CPP           = number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4, '.', '');
-            $this->view->Black_And_White_Margin       = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin(), 0, '.', '');
+            $this->view->PrintIQ_Black_And_White_CPP  = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
+            $this->view->PrintIQ_Color_CPP            = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
+            $this->view->Weighted_Black_And_White_CPP = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite);
+            $this->view->Weighted_Color_CPP           = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color);
+            $this->view->Black_And_White_Margin       = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin());
 
-            $this->view->Total_Cost     = number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2, '.', '');
-            $this->view->Total_Revenue  = number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
-            $this->view->Monthly_Profit = number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2, '.', '');
-            $this->view->Overall_Margin = number_format($assessmentViewModel->getGrossMarginOverallMargin(), 0, '.', '');
-            $this->view->Color_Margin   = number_format($assessmentViewModel->getGrossMarginColorMargin(), 0, '.', '');
+            $this->view->Total_Cost     = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined);
+            $this->view->Total_Revenue  = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined);
+            $this->view->Monthly_Profit = $this->view->currency($assessmentViewModel->getGrossMarginMonthlyProfit());
+            $this->view->Overall_Margin = number_format($assessmentViewModel->getGrossMarginOverallMargin());
+            $this->view->Color_Margin   = number_format($assessmentViewModel->getGrossMarginColorMargin());
         }
         catch (Exception $e)
         {
@@ -172,7 +172,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         try
         {
             $dealerId         = Zend_Auth::getInstance()->getIdentity()->dealerId;
-            $fieldList_Values = "";
+            $fieldList_Values = array();
             /* @var $deviceInstance Proposalgen_Model_DeviceInstance() */
             foreach ($assessmentViewModel->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
@@ -231,8 +231,8 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 }
 
                 // Black Toner
-                $blackCost  = "$" . number_format($blackToner->cost, 2, '.', '');
-                $blackYield = number_format($blackToner->yield, 0, '.', '');
+                $blackCost  = $this->view->currency($blackToner->cost);
+                $blackYield = number_format($blackToner->yield);
 
                 // Color Toner
                 $colorCost  = "-";
@@ -240,25 +240,25 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $isColor    = false;
                 if ($colorToner)
                 {
-                    $colorCost  = "$" . number_format($colorToner->cost, 2, '.', '');
-                    $colorYield = number_format($colorToner->yield, 0, '.', '');
+                    $colorCost  = $this->view->currency($colorToner->cost);
+                    $colorYield = number_format($colorToner->yield);
                     $isColor    = true;
                 }
 
                 // Create an array of purchased devices (this will be the dynamic CSV body)
                 $fieldList    = array();
                 $fieldList [] = str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . " (" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")";
-                $fieldList [] = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
+                $fieldList [] = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
                 $fieldList [] = $blackCost;
                 $fieldList [] = $blackYield;
-                $fieldList [] = number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage, 4, '.', '');
+                $fieldList [] = $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage);
 
-                $fieldList [] = "$" . number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '');
-                $fieldList [] = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
+                $fieldList [] = $this->view->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()));
+                $fieldList [] = $isColor ? $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage, 4, '.', '') : "-";
-                $fieldList [] = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2, '.', '') : "-";
+                $fieldList [] = $isColor ? $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-";
+                $fieldList [] = $isColor ? $this->view->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-";
                 $fieldList [] = isset($tonerSkus['black']['dealerSku']) ? $tonerSkus['black']['dealerSku'] : '-';
                 $fieldList [] = isset($tonerSkus['cyan']['dealerSku']) ? $tonerSkus['cyan']['dealerSku'] : '-';
                 $fieldList [] = isset($tonerSkus['magenta']['dealerSku']) ? $tonerSkus['magenta']['dealerSku'] : '-';
@@ -272,30 +272,30 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList [] = isset($tonerSkus['threeColor']['sku']) ? $tonerSkus['threeColor']['sku'] : '-';
                 $fieldList [] = isset($tonerSkus['fourColor']['sku']) ? $tonerSkus['fourColor']['sku'] : '-';
 
-                $fieldList_Values .= implode(",", $fieldList) . "\n";
+                $fieldList_Values [] = $fieldList;
             }
 
             $fieldTotals    = array();
-            $fieldTotals [] = 'Totals for ' . $assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount() . ' devices:';
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly(), 0, '.', '');
+            $fieldTotals [] = 'Totals for ' . number_format($assessmentViewModel->getDevices()->allIncludedDeviceInstances->getCount()) . ' devices:';
+            $fieldTotals [] = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());
+            $fieldTotals [] = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());
             $fieldTotals [] = '';
             $fieldTotals [] = '';
             $fieldTotals [] = '';
-            $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2, '.', '');
-            $fieldTotals [] = number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '');
+            $fieldTotals [] = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite);
+            $fieldTotals [] = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly());
             $fieldTotals [] = '';
             $fieldTotals [] = '';
-            $fieldTotals [] = '$' . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2, '.', '');
+            $fieldTotals [] = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color);
         }
         catch (Exception $e)
         {
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        $this->view->fieldTitlesLvl1 = implode(",", $fieldTitlesLvl1) . "\n";
-        $this->view->fieldTitlesLvl2 = implode(",", $fieldTitlesLvl2) . "\n";
+        $this->view->fieldTitlesLvl1 = $fieldTitlesLvl1;
+        $this->view->fieldTitlesLvl2 = $fieldTitlesLvl2;
         $this->view->fieldList       = $fieldList_Values;
-        $this->view->fieldTotals     = implode(",", $fieldTotals) . "\n";
+        $this->view->fieldTotals     = $fieldTotals;
     }
 }

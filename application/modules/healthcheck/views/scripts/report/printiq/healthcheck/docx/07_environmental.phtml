@@ -104,8 +104,8 @@ foreach ($healthcheckViewModel->getFaxAndScanTableDevices() as $device)
     $scanAndFaxTable->addRow($this->styles->tables->utilization->rowheight);
     $scanAndFaxTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($deviceName, null, 'nospacing_centeralign');
     $scanAndFaxTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
-    $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly(), 0), null, 'nospacing_rightalign');
-    $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isCopier) ? number_format($device->getPageCounts()->getScanPageCount()->getMonthly(), 0) : '-', null, 'nospacing_rightalign');
-    $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isFax) ? number_format($device->getPageCounts()->getFaxPageCount()->getMonthly(), 0) : '-', null, 'nospacing_rightalign');
+    $scanAndFaxTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
+    $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isCopier) ? $this->formatPageVolume($device->getPageCounts()->getScanPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
+    $scanAndFaxTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(($device->getMasterDevice()->isFax) ? $this->formatPageVolume($device->getPageCounts()->getFaxPageCount()->getMonthly()) : '-', null, 'nospacing_rightalign');
 }
 $section->addTextBreak();

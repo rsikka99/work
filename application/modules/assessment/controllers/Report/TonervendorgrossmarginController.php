@@ -169,17 +169,17 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
     function getStatistics ($assessmentViewModel, $costPerPageSetting)
     {
         $statisticsGroup                                                   = array();
-        $statisticsGroup['left'][My_Brand::$brandName . ' Monochrome CPP'] = "$" . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4, '.', '');
-        $statisticsGroup['left'][My_Brand::$brandName . ' Color CPP']      = "$" . number_format($assessmentViewModel->getMPSColorCPP(), 4, '.', '');
-        $statisticsGroup['left']['Weighted Monochrome CPP']                = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite, 4, '.', '');
-        $statisticsGroup['left']['Weighted Color CPP']                     = "$" . number_format($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color, 4, '.', '');
-        $statisticsGroup['left']['Monochrome Margin']                      = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting), 0, '.', '') . "%";
+        $statisticsGroup['left'][My_Brand::$brandName . ' Monochrome CPP'] = $this->view->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP());
+        $statisticsGroup['left'][My_Brand::$brandName . ' Color CPP']      = $this->view->formatCostPerPage($assessmentViewModel->getMPSColorCPP());
+        $statisticsGroup['left']['Weighted Monochrome CPP']                = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->BlackAndWhite);
+        $statisticsGroup['left']['Weighted Color CPP']                     = $this->view->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP($costPerPageSetting)->Color);
+        $statisticsGroup['left']['Monochrome Margin']                      = number_format($assessmentViewModel->getGrossMarginBlackAndWhiteMargin($costPerPageSetting)) . "%";
 
-        $statisticsGroup['right']['Total Cost']     = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined, 2, '.', '');
-        $statisticsGroup['right']['Total Revenue']  = "$" . number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2, '.', '');
-        $statisticsGroup['right']['Monthly Profit'] = "$" . number_format($assessmentViewModel->getGrossMarginMonthlyProfit($costPerPageSetting), 2, '.', '');
-        $statisticsGroup['right']['Overall Margin'] = number_format($assessmentViewModel->getGrossMarginOverallMargin($costPerPageSetting), 0, '.', '');
-        $statisticsGroup['right']['Color Margin']   = number_format($assessmentViewModel->getGrossMarginColorMargin($costPerPageSetting), 0, '.', '') . "%";
+        $statisticsGroup['right']['Total Cost']     = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->Combined);
+        $statisticsGroup['right']['Total Revenue']  = $this->view->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined);
+        $statisticsGroup['right']['Monthly Profit'] = $this->view->currency($assessmentViewModel->getGrossMarginMonthlyProfit($costPerPageSetting));
+        $statisticsGroup['right']['Overall Margin'] = number_format($assessmentViewModel->getGrossMarginOverallMargin($costPerPageSetting));
+        $statisticsGroup['right']['Color Margin']   = number_format($assessmentViewModel->getGrossMarginColorMargin($costPerPageSetting)) . "%";
 
         return $statisticsGroup;
     }
@@ -271,8 +271,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 }
 
                 // Black Toner
-                $blackCost  = number_format($blackToner->cost, 2, '.', '');
-                $blackYield = number_format($blackToner->yield, 0, '.', '');
+                $blackCost  = $this->view->currency($blackToner->cost);
+                $blackYield = number_format($blackToner->yield);
 
                 // Color Toner
                 $colorCost  = "-";
@@ -281,8 +281,8 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
                 if ($colorToner)
                 {
-                    $colorCost  = "$" . number_format($colorToner->cost, 2, '.', '');
-                    $colorYield = number_format($colorToner->yield, 0, '.', '');
+                    $colorCost  = $this->view->currency($colorToner->cost);
+                    $colorYield = number_format($colorToner->yield);
                     $isColor    = true;
                 }
 
@@ -293,17 +293,17 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 $rowData [0]['name']         = $deviceInstance->getMasterDevice()->modelName;
                 $rowData [0]['ipAddress']    = $deviceInstance->ipAddress;
                 $rowData [0]['serialNumber'] = $deviceInstance->serialNumber;
-                $rowData [1]                 = $deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly();
+                $rowData [1]                 = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
                 $rowData [2]                 = $blackCost;
                 $rowData [3]                 = $blackYield;
                 $blackCPP                    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
                 $rowData [4]                 = $blackCPP;
                 $rowData [5]                 = $deviceInstance->getMonthlyBlackAndWhiteCost($costPerPageSetting);
-                $rowData [6]                 = $isColor ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), 0, '.', '') : "-";
+                $rowData [6]                 = $isColor ? $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-";
                 $rowData [7]                 = $colorCost;
                 $rowData [8]                 = $colorYield;
-                $rowData [9]                 = $isColor ? "$" . number_format($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage, 4, '.', '') : "-";
-                $rowData [10]                = $isColor ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($costPerPageSetting), 2, '.', '') : "-";
+                $rowData [9]                 = $isColor ? $this->view->currency($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : "-";
+                $rowData [10]                = $isColor ? $this->view->currency($deviceInstance->calculateMonthlyColorCost($costPerPageSetting)) : "-";
                 $rowData ['completeMono']    = $completeMonoToners;
                 $rowData ['completeColor']   = $completeColorToners;
                 $fieldLists[]                = $rowData;
@@ -311,12 +311,12 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
             $fieldTotals      = array();
             $fieldTotals [0]  = 'Totals for ' . $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount() . ' devices:';
-            $fieldTotals [4]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly();
+            $fieldTotals [4]  = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly());
             $fieldTotals [5]  = '';
             $fieldTotals [6]  = '';
             $fieldTotals [7]  = '';
             $fieldTotals [8]  = $assessmentViewModel->getGrossMarginTotalMonthlyCost($costPerPageSetting)->BlackAndWhite;
-            $fieldTotals [9]  = $assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly();
+            $fieldTotals [9]  = $this->view->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly());
             $fieldTotals [10] = '';
             $fieldTotals [11] = '';
             $fieldTotals [12] = '';

@@ -4,23 +4,26 @@ $assessmentViewModel = $this->assessmentViewModel;
 
 $fh = fopen($this->savePath, "w+");
 
-
-// Please note that is is a hacked way around things. This should be done more properly with PHPExcel or fputcsv.
-
-fputs($fh, "GROSS MARGIN REPORT\n");
-fputs($fh, "AMPV = Average Monthly Page Volume\n");
-fputs($fh, "\n");
-fputs($fh, "MPSToolbox.com Black And White CPP:,$" . $this->PrintIQ_Black_And_White_CPP . ",,,,,Total Cost:,$" . $this->Total_Cost . "\n");
-fputs($fh, "MPSToolbox.com Color CPP:,$" . $this->PrintIQ_Color_CPP . ",,,,,Total Revenue:,$" . $this->Total_Revenue . "\n");
-fputs($fh, "Weighted Black And White CPP:,$" . $this->Weighted_Black_And_White_CPP . ",,,,,Monthly Profit:,$" . $this->Monthly_Profit . "\n");
-fputs($fh, "Weighted Color CPP:,$" . $this->Weighted_Color_CPP . ",,,,,Overall Margin:," . $this->Overall_Margin . "%\n");
-fputs($fh, "Black And White Margin:," . $this->Black_And_White_Margin . "%,,,,,Color Margin:," . $this->Color_Margin . "%\n");
-fputs($fh, "\n");
-fputs($fh, $this->fieldTitlesLvl1);
-fputs($fh, $this->fieldTitlesLvl2);
-fputs($fh, $this->fieldList);
-fputs($fh, "\n");
-fputs($fh, $this->fieldTotals);
+/**
+ * TODO lrobert: Convert to PHP Excel when possible
+ */
+fputcsv($fh, array("GROSS MARGIN REPORT"));
+fputcsv($fh, array("AMPV = Average Monthly Page Volume"));
+fputcsv($fh, array());
+fputcsv($fh, array("MPSToolbox.com Black And White CPP:", $this->PrintIQ_Black_And_White_CPP, "", "", "", "", "Total Cost:", $this->Total_Cost));
+fputcsv($fh, array("MPSToolbox.com Color CPP:", $this->PrintIQ_Color_CPP, "", "", "", "", "Total Revenue:", $this->Total_Revenue));
+fputcsv($fh, array("Weighted Black And White CPP:", $this->Weighted_Black_And_White_CPP, "", "", "", "", "Monthly Profit:", $this->Monthly_Profit));
+fputcsv($fh, array("Weighted Color CPP:", $this->Weighted_Color_CPP, "", "", "", "", "Overall Margin:", $this->Overall_Margin));
+fputcsv($fh, array("Black And White Margin:", $this->Black_And_White_Margin, "", "", "", "", "Color Margin:", $this->Color_Margin));
+fputcsv($fh, array());
+fputcsv($fh, $this->fieldTitlesLvl1);
+fputcsv($fh, $this->fieldTitlesLvl2);
+foreach ($this->fieldList as $line)
+{
+    fputcsv($fh, $line);
+}
+fputcsv($fh, array());
+fputcsv($fh, $this->fieldTotals);
 
 fclose($fh);
 echo $this->baseUrl($this->publicFileName);

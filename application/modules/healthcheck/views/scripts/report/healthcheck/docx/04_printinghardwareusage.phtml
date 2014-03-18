@@ -16,7 +16,7 @@ $graphs               = $healthcheckViewModel->getGraphs();
 $section->addPageBreak();
 $section->addTitle("Analysis: Printing Hardware Usage", 1);
 $section->addTitle('Print Volume and Number of Printing Devices', 2);
-$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getCount()), number_format($healthcheckViewModel->calculateAveragePagesPerDeviceMonthly()), $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
 
 $imageTable = $section->addTable($this->styles->tables->tripleimage->tablestyle);
 $imageTable->addRow();
@@ -40,7 +40,7 @@ $estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estim
 
 $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of total printed pages, per month', null, null);
-$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText(number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
+$estimatedTonerCostsTable->addCell($cellWidths [1], $this->styles->tables->estimatedTonerCosts->cell5)->addText($this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_rightalign');
 
 $estimatedTonerCostsTable->addRow();
 $estimatedTonerCostsTable->addCell($cellWidths [0], $this->styles->tables->estimatedTonerCosts->cell1)->addText('Average number of pages per device, per month', null, null);
@@ -85,7 +85,7 @@ foreach ($healthcheckViewModel->getLeastUsedDevices() as $device)
     $lowestUtilizationTable->addRow($this->styles->tables->utilization->rowheight);
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
-    $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
@@ -107,7 +107,7 @@ foreach ($healthcheckViewModel->getMostUsedDevices() as $device)
     $highestUtilizationTable->addRow();
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate($device->getDeviceName()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber)) ? : "Unknown", null, 'nospacing_centeralign');
-    $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
@@ -116,7 +116,7 @@ $section->addTextBreak();
 
 $section->addTitle('Color Usage', 2);
 
-$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()), number_format($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
+$section->addText(sprintf('You currently have %1$s color printing devices that print a monthly average of %2$s color pages per month, which is %3$s%% of your total monthly print volume.', number_format($healthcheckViewModel->getDevices()->colorCapableDeviceInstances->getCount()), $this->formatPageVolume($healthcheckViewModel->getDevices()->allIncludedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()), number_format($healthcheckViewModel->calculatePercentOfTotalVolumeColorMonthly(), 2)));
 
 $section->addTextBreak();
 $imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
@@ -144,7 +144,7 @@ foreach ($healthcheckViewModel->getMonthlyHighCostPurchasedColorDevices($healthc
     $expensiveColorDevicesTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate($deviceName), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber) ? : "Unknown"), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText(number_format(($deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) . '%', null, 'nospacing_centeralign');
-    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), null, 'nospacing_centeralign');
+    $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->getColorCostPerPageWithMargin($healthcheckViewModel->getCostPerPageSettingForCustomer()), array('precision' => 4)), null, 'nospacing_centeralign');
     $expensiveColorDevicesTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText($this->currency($deviceInstance->getCostOfColorInkAndToner($healthcheckViewModel->getCostPerPageSettingForCustomer()), array('precision' => 2)), null, 'nospacing_centeralign');
     $ctr++;

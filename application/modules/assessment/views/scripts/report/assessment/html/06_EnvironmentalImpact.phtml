@@ -19,7 +19,7 @@ $graphs = $assessmentViewModel->getGraphs();
     ?>
     <p>You are currently using an estimated average of
         <strong><?php echo number_format($assessmentViewModel->getAveragePowerUsagePerMonth()); ?> kWh</strong> per month to operate printing devices at an estimated monthly cost of
-        <strong>$<?php echo number_format($assessmentViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.
+        <strong><?php echo $this->currency($assessmentViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of <?php echo $this->currency($assessmentViewModel->assessment->getAssessmentSettings()->kilowattsPerHour, 2); ?> per kWh.
     </p>
     <p>The following lists the devices with the highest average power consumption per month.</p>
     <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
@@ -48,7 +48,7 @@ $graphs = $assessmentViewModel->getGraphs();
                         echo 'Unknown';
                     } ?></td>
                 <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
-                <td class="center">$<?php echo number_format($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
+                <td class="center"><?php echo $this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
             </tr>
             <?php $ctr++;
             if ($ctr > 2)

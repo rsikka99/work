@@ -112,8 +112,8 @@ class Assessment_Report_UtilizationController extends Assessment_Library_Control
             $utilizationData[$deviceCounter]['Model']                              = $deviceInstance->getMasterDevice()->modelName;
             $utilizationData[$deviceCounter]['IP Address']                         = $deviceInstance->ipAddress;
             $utilizationData[$deviceCounter]['Serial Number']                      = $deviceInstance->serialNumber;
-            $utilizationData[$deviceCounter]['Monthly Page Volume']                = $deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly();
-            $utilizationData[$deviceCounter]['Maximum Monthly Recommended Volume'] = $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer());
+            $utilizationData[$deviceCounter]['Monthly Page Volume']                = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
+            $utilizationData[$deviceCounter]['Maximum Monthly Recommended Volume'] = $this->view->formatPageVolume($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer()));
             $utilizationData[$deviceCounter]['Utilization Percent']                = $deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($assessmentViewModel->getCostPerPageSettingForDealer()) / 100;
             $deviceCounter++;
         }

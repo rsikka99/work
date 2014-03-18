@@ -77,5 +77,5 @@ $cell = $savingsTable->addCell(9028, $this->styles->tables->savings->cell1);
 
 $textrun = $cell->createTextRun('savingsParagraph');
 $textrun->addText(sprintf('Our %1$s program could provide you with annual savings of up to ', $this->brandName), 'savingsFont');
-$textrun->addText('$' . number_format($assessmentViewModel->getPrintIQSavings()), 'savingsAmountFont');
+$textrun->addText($this->currency($assessmentViewModel->getPrintIQSavings()), 'savingsAmountFont');
 $textrun->addText('.', 'savingsFont');

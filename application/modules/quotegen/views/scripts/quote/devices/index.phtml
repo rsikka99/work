@@ -62,16 +62,16 @@ $this->headScript()->appendScript("$('i').popover();");
                         <td style="padding-left: 25px;"><?php echo $quoteDeviceOption->name; ?></td>
                         <td><?php echo $quoteDeviceOption->oemSku; ?></td>
                         <td><?php echo $quoteDeviceOption->description; ?></td>
-                        <td style="text-align: right"><?php echo '$' . number_format($quoteDeviceOption->cost, 2); ?></td>
+                        <td style="text-align: right"><?php echo $this->currency($quoteDeviceOption->cost); ?></td>
                         <td style="text-align: right"><?php echo number_format($quoteDeviceOption->quantity); ?></td>
-                        <td style="text-align: right"><?php echo '$' . number_format($quoteDeviceOption->getTotalCost(), 2); ?></td>
+                        <td style="text-align: right"><?php echo $this->currency($quoteDeviceOption->getTotalCost()); ?></td>
                         <td></td>
                     </tr>
                 <?php endforeach; ?>
             <?php endif; ?>
             <tr>
                 <td colspan='5' style='text-align: right'><strong> Package Cost </strong></td>
-                <td style='text-align: right'><?php echo '$' . number_format($device->calculatePackageCost(), 2); ?></td>
+                <td style='text-align: right'><?php echo $this->currency($device->calculatePackageCost()); ?></td>
                 <td></td>
             </tr>
             <tr>

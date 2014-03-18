@@ -71,18 +71,28 @@ class Hardwareoptimization_ViewModel_Optimization
      * @var Proposalgen_Model_CostPerPage
      */
     protected $_dealerWeightedAverageMonthlyCostPerPageWithReplacements;
+
+    /**
+     * The weighted average monthly cost per page
+     *
+     * @var Proposalgen_Model_CostPerPage
+     */
+    protected $_dealerWeightedAverageMonthlyCostPerPage;
+
     /**
      * The dealers monthly cost with replacements
      *
      * @var number
      */
     protected $_dealerMonthlyCostWithReplacements;
+
     /**
      * Cost per page setting for a dealer
      *
      * @var Proposalgen_Model_CostPerPageSetting
      */
     protected $_costPerPageSettingForDealer;
+
     /**
      * Cost per page setting for replacement devices
      *

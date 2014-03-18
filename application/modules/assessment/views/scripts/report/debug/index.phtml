@@ -85,12 +85,12 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
         ?>
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
-            <td class="debugNumber"><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ""; ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage, array("precision" => 4)); ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage, $reportMargin), array("precision" => 4)); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage, array("precision" => 4)) : ""; ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->currency((float)Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage, $reportMargin), array("precision" => 4)) : ""; ?></td>
+            <td class="debugNumber"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ""; ?></td>
+            <td class="debugNumber"><?php echo $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage); ?></td>
+            <td class="debugNumber"><?php echo $this->formatCostPerPage(Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage, $reportMargin)); ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage) : ""; ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage((float)Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage, $reportMargin)) : ""; ?></td>
             <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings), array("precision" => 2)); ?></td>
             <td>
                 <table class="table-bordered table-condensed debugTable">
@@ -109,8 +109,8 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
                             <td><?php echo Proposalgen_Model_TonerColor::$ColorNames[$tonerColor]; ?></td>
                             <td class="debugNumber"><?php echo number_format($toner->yield); ?></td>
                             <td class="debugNumber"><?php echo $this->currency((float)$toner->cost); ?></td>
-                            <td class="debugNumber"><?php echo $this->currency((float)$toner->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage, array("precision" => 4)); ?></td>
-                            <td class="debugNumber"><?php echo $this->currency((float)$toner->calculateCostPerPage($costPerPageSettings)->colorCostPerPage, array("precision" => 4)); ?></td>
+                            <td class="debugNumber"><?php echo $this->formatCostPerPage($toner->calculateCostPerPage($costPerPageSettings)->monochromeCostPerPage); ?></td>
+                            <td class="debugNumber"><?php echo $this->formatCostPerPage($toner->calculateCostPerPage($costPerPageSettings)->colorCostPerPage); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -159,8 +159,8 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
         ?>
         <tr>
             <td><?php echo $deviceInstance->getDeviceName(); ?></td>
-            <td class="debugNumber"><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ""; ?></td>
+            <td class="debugNumber"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+            <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : ""; ?></td>
             <td></td>
         </tr>
     <?php endforeach; ?>

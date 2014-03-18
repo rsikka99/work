@@ -45,45 +45,45 @@ $cell = $table->addCell($tc->headerCol2Width, $tc->header->cell2->cellStyle, 2)-
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Ink and toner', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getCostOfInkAndToner($assessmentViewModel->getCostPerPageSettingForCustomer())), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Monochrome cost per page', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Executing supplies orders', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getCostOfExecutingSuppliesOrders()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getCostOfExecutingSuppliesOrders()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Color cost per page', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getMPSColorCPP(), 4), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('External service', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualCostOfOutSourcing()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getAnnualCostOfOutSourcing()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Estimated monochrome pages', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getYearly()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Internal IT support for printers', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualITCost()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getAnnualITCost()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Estimated color pages', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText(number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getYearly()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('Hardware purchases', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Cost of monochrome pages', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->calculateTotalCostOfMonochromePagesAnnually()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('', $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Cost of color pages', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->calculateTotalCostOfColorPagesAnnually()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('', $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText(sprintf('Processing 1 invoice/month @ %1$s', $this->currency($assessmentViewModel->assessment->getSurvey()->costToExecuteSuppliesOrder)), $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getInternalAdminCost()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getInternalAdminCost()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
@@ -95,20 +95,20 @@ $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('', $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Internal IT support for printers', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualITCost() * 0.5), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getAnnualITCost() * 0.5), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText('', $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
 $cell = $table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('', $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->body->cell3->cellStyle)->addText('Hardware purchases', $tc->body->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getAnnualCostOfHardwarePurchases()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->body->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getAnnualCostOfHardwarePurchases()), $tc->body->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 // Table Footer
 $table->addRow($tc->body->rowheight);
 $cell = $table->addCell($tc->col1Width, $tc->footer->cell1->cellStyle)->addText('Total Cost', $tc->footer->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$cell = $table->addCell($tc->col2Width, $tc->footer->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getTotalPurchasedAnnualCost()), $tc->footer->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$cell = $table->addCell($tc->col2Width, $tc->footer->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getTotalPurchasedAnnualCost()), $tc->footer->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 $cell = $table->addCell($tc->col3Width, $tc->footer->cell3->cellStyle)->addText('Total Cost', $tc->footer->cell3->fontStyle, $tc->body->cell3->paragraphStyle);
-$cell = $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText('$' . number_format($assessmentViewModel->getPrintIQTotalCost()), $tc->footer->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
+$cell = $table->addCell($tc->col4Width, $tc->footer->cell4->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQTotalCost()), $tc->footer->cell4->fontStyle, $tc->body->cell4->paragraphStyle);
 
 
 $section->addText(sprintf('Note that although the page volumes from all of your purchased devices were included in our savings calculations, not all of them may qualify for our managed print services program or just-in-time supplies fulfillment. Volumes from unqualified devices would have to be merged to an existing or new qualified device to be included in the program. Please see the Appendix for a complete printing device list with details on compatibility with the %1$s program.', $this->brandName), 'small_italic_text');
@@ -118,7 +118,7 @@ $table = $section->addTable($tc->tablestyle);
 
 $table->addRow($tc->body->rowheight);
 $table->addCell($tc->col1Width, $tc->body->cell1->cellStyle)->addText(sprintf('Total annual savings with %1$s', $this->brandName), $tc->body->cell1->fontStyle, $tc->body->cell1->paragraphStyle);
-$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText('$' . number_format($assessmentViewModel->getPrintIQSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
+$table->addCell($tc->col2Width, $tc->body->cell2->cellStyle)->addText($this->currency($assessmentViewModel->getPrintIQSavings()), $tc->body->cell2->fontStyle, $tc->body->cell2->paragraphStyle);
 
 
 

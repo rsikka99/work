@@ -20,13 +20,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading"><?php echo $brandName ?> Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div>$<?php echo number_format($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Cost:</div>
         </td>
         <td class="column4">
-            <div>$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2); ?></div>
         </td>
     </tr>
     <tr>
@@ -34,13 +34,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading"><?php echo $brandName ?> Color CPP:</div>
         </td>
         <td class="column2">
-            <div>$<?php echo number_format($assessmentViewModel->getMPSColorCPP(), 4); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getMPSColorCPP(), 4); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Revenue:</div>
         </td>
         <td class="column4">
-            <div>$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2); ?></div>
         </td>
     </tr>
     <tr>
@@ -48,13 +48,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading">Weighted Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div>$<?php echo number_format($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Monthly Profit:</div>
         </td>
         <td class="column4">
-            <div>$<?php echo number_format($assessmentViewModel->getGrossMarginMonthlyProfit(), 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit(), 2); ?></div>
         </td>
     </tr>
     <tr>
@@ -62,7 +62,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading">Weighted Color CPP:</div>
         </td>
         <td class="column2">
-            <div>$<?php echo number_format($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Overall Margin:</div>
@@ -177,7 +177,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         }
 
         // Black Toner
-        $blackCost  = "$" . number_format($blackToner->calculatedCost, 2);
+        $blackCost  = $this->currency($blackToner->calculatedCost);
         $blackYield = number_format($blackToner->yield);
 
         // Color Toner
@@ -187,7 +187,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         $isColor    = false;
         if ($colorToner instanceof Proposalgen_Model_Toner)
         {
-            $colorCost  = "$" . number_format($colorToner->cost, 2);
+            $colorCost  = $this->currency($colorToner->cost);
             $colorYield = number_format($colorToner->yield);
             $isColor    = true;
         }
@@ -198,7 +198,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
                 <div><?php echo str_ireplace("hewlett-packard", "HP", $deviceInstance->getDeviceName()) . "<br />(" . $deviceInstance->ipAddress . " - " . $deviceInstance->serialNumber . ")"; ?></div>
             </td>
             <td class="column2 mono">
-                <div class="right"><?php echo number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
+                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
             </td>
 
             <td class="column3 mono">
@@ -208,16 +208,16 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
                 <div class="right"><?php echo $blackYield ?></div>
             </td>
             <td class="column5 mono">
-                <div class="right"><?php echo number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage, 4); ?></div>
+                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
             </td>
             <td class="column6 mono">
                 <div class="right">
-                    $<?php echo number_format($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
+                    <?php echo $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
             </td>
 
             <!-- Color -->
             <td class="column7 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-"; ?></div>
             </td>
             <td class="column8 color">
                 <div class="<?php echo $colorStyle; ?>"><?php echo $colorCost ?></div>
@@ -226,11 +226,11 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
                 <div class="<?php echo $colorStyle; ?>"><?php echo $colorYield ?></div>
             </td>
             <td class="column10 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? number_format($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage, 4) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-"; ?></div>
             </td>
 
             <td class="column11 color">
-                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? "$" . number_format($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2) : "-"; ?></div>
+                <div class="<?php echo $colorStyle; ?>"><?php echo ($isColor) ? $this->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-"; ?></div>
             </td>
             <td class="column12">
                 <div class="<?php echo $colorStyle; ?>">
@@ -263,21 +263,21 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
     <?php endforeach; ?>
     <tr class="totals">
         <td class="column1">
-            <div>Totals for <?php echo $assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount(); ?> devices:</div>
+            <div>Totals for <?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getCount()); ?> devices:</div>
         </td>
         <td>
-            <div class="right"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
+            <div class="right"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td class="column2">
-            <div class="right">$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2); ?></div>
+            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2); ?></div>
         </td>
         <td>
-            <div class="center"><?php echo number_format($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
+            <div class="center"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td>
-            <div class="right">$<?php echo number_format($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2); ?></div>
+            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2); ?></div>
         </td>
         <td colspan="2"></td>
     </tr>

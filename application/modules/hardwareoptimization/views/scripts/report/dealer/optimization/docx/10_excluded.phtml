@@ -44,6 +44,6 @@ foreach ($hardwareOptimizationDevices->excluded as $device)
     $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
     $table->addCell($tcStyle->col2Width, $style)->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
     $table->addCell($tcStyle->col3Width, $style)->addText($device->serialNumber, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText(number_format($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText(number_format($device->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }
