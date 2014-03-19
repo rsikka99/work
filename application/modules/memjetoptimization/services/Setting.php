@@ -65,23 +65,24 @@ class Memjetoptimization_Service_Setting
         if (!isset($this->_form))
         {
             $this->_form = new Memjetoptimization_Form_Setting();
+            $view        = $this->_form->getView();
 
             // User form will populate the description with defaults
             $this->_form->getElement("name")->setDescription("Memjet Optimization " . date('Y/m/d'));
             $this->_form->getElement("pageCoverageMonochrome")->setDescription($this->_populateSettings->pageCoverageMonochrome . "%");
             $this->_form->getElement("pageCoverageColor")->setDescription($this->_populateSettings->pageCoverageColor . "%");
             $this->_form->getElement("useDevicePageCoverages")->setDescription(($this->_populateSettings->useDevicePageCoverages) ? 'Yes' : 'No');
-            $this->_form->getElement("partsCostPerPage")->setDescription("$" . $this->_populateSettings->partsCostPerPage . " / page");
-            $this->_form->getElement("laborCostPerPage")->setDescription("$" . $this->_populateSettings->laborCostPerPage . " / page");
-            $this->_form->getElement("adminCostPerPage")->setDescription("$" . $this->_populateSettings->adminCostPerPage . " / page");
-            $this->_form->getElement("lossThreshold")->setDescription("$" . $this->_populateSettings->lossThreshold);
+            $this->_form->getElement("partsCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->partsCostPerPage) . " / page");
+            $this->_form->getElement("laborCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->laborCostPerPage) . " / page");
+            $this->_form->getElement("adminCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->adminCostPerPage) . " / page");
+            $this->_form->getElement("lossThreshold")->setDescription($view->currency($this->_populateSettings->lossThreshold));
             $this->_form->getElement("blackToColorRatio")->setDescription($this->_populateSettings->blackToColorRatio . "%");
-            $this->_form->getElement("costThreshold")->setDescription("$" . $this->_populateSettings->costThreshold);
+            $this->_form->getElement("costThreshold")->setDescription($view->currency($this->_populateSettings->costThreshold));
 
-            $this->_form->getElement("targetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->targetMonochromeCostPerPage . " / page");
-            $this->_form->getElement("targetColorCostPerPage")->setDescription("$" . $this->_populateSettings->targetColorCostPerPage . " / page");
-            $this->_form->getElement("optimizedTargetMonochromeCostPerPage")->setDescription("$" . $this->_populateSettings->optimizedTargetMonochromeCostPerPage . " / page");
-            $this->_form->getElement("optimizedTargetColorCostPerPage")->setDescription("$" . $this->_populateSettings->optimizedTargetColorCostPerPage . " / page");
+            $this->_form->getElement("targetMonochromeCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->targetMonochromeCostPerPage) . " / page");
+            $this->_form->getElement("targetColorCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->targetColorCostPerPage) . " / page");
+            $this->_form->getElement("optimizedTargetMonochromeCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->optimizedTargetMonochromeCostPerPage) . " / page");
+            $this->_form->getElement("optimizedTargetColorCostPerPage")->setDescription($view->formatCostPerPage($this->_populateSettings->optimizedTargetColorCostPerPage) . " / page");
 
             // This function sets up the third row column header decorator
             $this->_form->allowNullValues();

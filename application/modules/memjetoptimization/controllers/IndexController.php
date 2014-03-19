@@ -303,10 +303,10 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"          => $deviceInstance->serialNumber,
                 "lifePageCount"         => number_format($deviceInstance->getMeter()->endMeterLife),
-                "monoAmpv"              => $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
-                "colorAmpv"             => $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage, array("precision" => 4)),
+                "monoAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
+                "colorAmpv"             => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
+                "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage),
                 "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
                 "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
                 "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
@@ -322,8 +322,8 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
                 "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage, array("precision" => 4)),
+                "costPerPageMonochrome" => $this->view->formatCostPerPage((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"      => $this->view->formatCostPerPage((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
@@ -443,12 +443,12 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                      /**
                       * Summary page Page Data
                       */
-                     "monochromeCpp"               => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage, array("precision" => 4)),
-                     "colorCpp"                    => $this->view->currency($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage, array("precision" => 4)),
-                     "totalRevenue"                => $this->view->currency((float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio), array('precision' => 2)),
-                     "monoVolume"                  => $this->formatPageVolume($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly()),
+                     "monochromeCpp"               => $this->view->formatCostPerPage($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->monochromeCostPerPage),
+                     "colorCpp"                    => $this->view->formatCostPerPage($memjetOptimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($blackToColorRatio)->colorCostPerPage),
+                     "totalRevenue"                => $this->view->currency((float)$memjetOptimizationViewModel->calculateDealerMonthlyRevenueUsingTargetCostPerPageWithReplacements($blackToColorRatio)),
+                     "monoVolume"                  => $this->view->formatPageVolume($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getBlackPageCount()->getMonthly()),
                      "monoVolumePercent"           => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getMonochromePagePercentage()),
-                     "colorVolume"                 => $this->formatPageVolume($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly()),
+                     "colorVolume"                 => $this->view->formatPageVolume($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPageCount()->getMonthly()),
                      "colorVolumePercent"          => number_format($memjetOptimizationViewModel->getPageCounts($blackToColorRatio)->getColorPagePercentage()),
                      "totalCost"                   => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyCostWithReplacements($blackToColorRatio)),
                      "marginDollar"                => $this->view->currency($memjetOptimizationViewModel->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements($blackToColorRatio)),
@@ -542,10 +542,10 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             $replacementDeviceElement       = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
             $replacementDeviceReasonElement = $form->getElement("deviceInstanceReason_{$row['deviceInstanceId']}");
             $row['action']                  = $replacementDeviceElement->renderViewHelper();
-            $row['monoCpp']                 = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
-            $row['colorCpp']                = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
-            $row['costDelta']               = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
-            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+            $row['monoCpp']                 = $this->view->formatCostPerPage($row['rawMonoCpp']);
+            $row['colorCpp']                = ($row['isColor']) ? $this->view->formatCostPerPage($row['rawColorCpp']) : 'N/A';
+            $row['costDelta']               = $this->view->currency($row['rawCostDelta']);
+            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost']);
 
             if ($replacementDeviceReasonElement !== null)
             {

@@ -310,8 +310,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "lifePageCount"         => number_format($deviceInstance->getMeter()->endMeterLife),
                 "monoAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
                 "colorAmpv"             => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage, array("precision" => 4)),
+                "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage),
                 "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
                 "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
                 "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
@@ -327,8 +327,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
                 "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage, array("precision" => 4)),
-                "costPerPageColor"      => $this->view->currency((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage, array("precision" => 4)),
+                "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
@@ -423,8 +423,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         // Add calculated amounts to JSON
         // Monochrome CPP, Color CPP, Total Cost, Margin $, Margin %
         $this->sendJson(array(
-            "monochromeCpp"           => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage, array("precision" => 4)),
-            "colorCpp"                => $this->view->currency($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage, array("precision" => 4)),
+            "monochromeCpp"           => $this->view->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage),
+            "colorCpp"                => $this->view->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage),
             "totalCost"               => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
             "replaceReason"           => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
             "marginDollar"            => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
@@ -497,10 +497,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $replacementDeviceElement       = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
             $replacementDeviceReasonElement = $form->getElement("deviceInstanceReason_{$row['deviceInstanceId']}");
             $row['action']                  = $replacementDeviceElement->renderViewHelper();
-            $row['monoCpp']                 = $this->view->currency($row['rawMonoCpp'], array('precision' => 4));
-            $row['colorCpp']                = ($row['isColor']) ? $this->view->currency($row['rawColorCpp'], array('precision' => 4)) : 'N/A';
-            $row['costDelta']               = $this->view->currency($row['rawCostDelta'], array('precision' => 2));
-            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost'], array('precision' => 2));
+            $row['monoCpp']                 = $this->view->formatCostPerPage($row['rawMonoCpp']);
+            $row['colorCpp']                = ($row['isColor']) ? $this->view->formatCostPerPage($row['rawColorCpp']) : 'N/A';
+            $row['costDelta']               = $this->view->currency($row['rawCostDelta']);
+            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost']);
 
             if ($replacementDeviceReasonElement !== null)
             {

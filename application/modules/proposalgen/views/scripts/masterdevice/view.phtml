@@ -29,9 +29,9 @@ $masterDevice = $this->masterDevice; ?>
         <dt>Device Price</dt>
         <dd><?php echo ($masterDevice->getDealerAttributes()->cost) ? $this->currency($masterDevice->getDealerAttributes()->cost) : 'No Price Defined'; ?></dd>
         <dt>Parts Cost Per Page</dt>
-        <dd><?php echo ($masterDevice->getDealerAttributes()->partsCostPerPage) ? $this->currency($masterDevice->getDealerAttributes()->partsCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
+        <dd><?php echo ($masterDevice->getDealerAttributes()->partsCostPerPage) ? $this->formatCostPerPage($masterDevice->getDealerAttributes()->partsCostPerPage) : 'No Price Defined'; ?></dd>
         <dt>Labor Cost Per Page</dt>
-        <dd><?php echo ($masterDevice->getDealerAttributes()->laborCostPerPage) ? $this->currency($masterDevice->getDealerAttributes()->laborCostPerPage, array('precision' => 4)) : 'No Price Defined'; ?></dd>
+        <dd><?php echo ($masterDevice->getDealerAttributes()->laborCostPerPage) ? $this->formatCostPerPage($masterDevice->getDealerAttributes()->laborCostPerPage) : 'No Price Defined'; ?></dd>
         <dt>Launch Date</dt>
         <dd><?php echo ($masterDevice->launchDate) ? : 'Not Set'; ?></dd>
         <dt>Date Created</dt>

@@ -574,7 +574,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "isExcluded"               => $deviceInstance->isExcluded,
                         "isManaged"                => $deviceInstance->isManaged,
                         "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
-                        "ampv"                     => $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
+                        "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
                         "reportsTonerLevels"       => $deviceInstance->reportsTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
                         "validToners"              => $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)

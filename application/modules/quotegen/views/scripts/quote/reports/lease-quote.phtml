@@ -43,7 +43,7 @@
                             <td></td>
                             <td>Pages Included</td>
                             <td></td>
-                            <td style="text-align: right;"><?php echo number_format($quoteDeviceGroup->calculateTotalMonochromePages()); ?> </td>
+                            <td style="text-align: right;"><?php echo $this->formatPageVolume($quoteDeviceGroup->calculateTotalMonochromePages()); ?> </td>
                             <td></td>
                         </tr>
                     <?php endif ?>
@@ -53,7 +53,7 @@
                             <td></td>
                             <td>Pages Included</td>
                             <td></td>
-                            <td style="text-align: right;"><?php echo number_format($quoteDeviceGroup->calculateTotalColorPages()); ?> </td>
+                            <td style="text-align: right;"><?php echo $this->formatPageVolume($quoteDeviceGroup->calculateTotalColorPages()); ?> </td>
                             <td></td>
                         </tr>
                     <?php endif ?>
@@ -67,11 +67,11 @@
         <table class="table table-condensed table-bordered table-striped quoteDeviceTable">
             <tr class="pagesRow">
                 <td style="text-align: right;" colspan="5">Monochrome overage price</td>
-                <td style="text-align: right; width: 70px;"><?php echo $this->currency($quote->calculateMonochromeOverageRatePerPage(), array('precision' => 3)); ?></td>
+                <td style="text-align: right; width: 70px;"><?php echo $this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()); ?></td>
             </tr>
             <tr class="pagesRow">
                 <td style="text-align: right;" colspan="5">Color overage price</td>
-                <td style="text-align: right; width: 70px"><?php echo $this->currency($quote->calculateColorOverageRatePerPage(), array('precision' => 3)); ?></td>
+                <td style="text-align: right; width: 70px"><?php echo $this->formatCostPerPage($quote->calculateColorOverageRatePerPage()); ?></td>
             </tr>
         </table>
         <div class='pull-right'>

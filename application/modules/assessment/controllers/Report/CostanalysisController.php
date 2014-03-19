@@ -99,8 +99,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
         {
             $assessmentViewModel = $this->getAssessmentViewModel();
 
-            $this->view->monochromeCPP = $this->view->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4));
-            $this->view->colorCPP      = $this->view->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4));
+            $this->view->monochromeCPP = $this->view->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage);
+            $this->view->colorCPP      = $this->view->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage);
         }
         catch (Exception $e)
         {
@@ -134,8 +134,8 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $fieldList [] = "%" . number_format($percentOfMonthlyCost, 2);
                 $fieldList [] = $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
                 $fieldList [] = ($isColor) ? $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : '-';
-                $fieldList [] = $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->getCostPerPage()->monochromeCostPerPage, array("precision" => 4));
-                $fieldList [] = ($isColor) ? $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->getCostPerPage()->colorCostPerPage, array("precision" => 4)) : '-';
+                $fieldList [] = $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->getCostPerPage()->monochromeCostPerPage);
+                $fieldList [] = ($isColor) ? $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->getCostPerPage()->colorCostPerPage) : '-';
                 $fieldList [] = $this->view->currency($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()));
 
                 $fieldList_Values .= implode(",", $fieldList) . "\n";

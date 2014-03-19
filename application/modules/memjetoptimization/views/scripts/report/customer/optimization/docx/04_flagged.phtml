@@ -56,8 +56,8 @@ foreach ($profitabiltyDevices->flagged as $device)
     $table->addCell($tcStyle->col3Width, $ampvStyle)->addText($device->getMemjetReason($memjetOptimization->id), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $ampvStyle)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
     $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($isColor) ? $this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
-    $table->addCell($tcStyle->col6Width, $ampvStyle)->addText($this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage, array('precision' => 4)), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
-    $table->addCell($tcStyle->col7Width, $ampvStyle)->addText(($isColor) ? $this->currency($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage, array('precision' => 4)) : 'N/A', $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $ampvStyle)->addText($this->formatCostPerPage($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell6->fontStyle, $tcStyle->body->cell6->paragraphStyle);
+    $table->addCell($tcStyle->col7Width, $ampvStyle)->addText(($isColor) ? $this->formatCostPerPage($device->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : 'N/A', $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
     $table->addCell($tcStyle->col8Width, $ampvStyle)->addText($this->currency($device->calculateMonthlyCost($optimization->getCostPerPageSettingForDealer())), $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
 }
 $section->addTextBreak();

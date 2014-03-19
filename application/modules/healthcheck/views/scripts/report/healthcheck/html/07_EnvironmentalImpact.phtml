@@ -5,7 +5,7 @@ $graphs = $healthcheckViewModel->getGraphs();
 ?>
 <div class="h1">Analysis: Environmental Impact</div>
 <div class="pheader">Forest and Water Consumption</div>
-<p>Did you know that it takes one average-sized tree to produce <?php echo number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE, 0, '.', ','); ?> pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for <?php echo $healthcheckViewModel->healthcheck->getClient()->companyName ?>:</p>
+<p>Did you know that it takes one average-sized tree to produce <?php echo number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE); ?> pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for <?php echo $healthcheckViewModel->healthcheck->getClient()->companyName ?>:</p>
 <table>
     <tr>
         <td><img style="width:95px;" src="/img/reports/health-check/tree.jpg" /></td>
@@ -25,7 +25,7 @@ $graphs = $healthcheckViewModel->getGraphs();
     ?>
     <p>You are currently using an estimated average of
         <strong><?php echo number_format($healthcheckViewModel->getAveragePowerUsagePerMonth()); ?> </strong>kilowatt hours (kWh) per month to operate printing devices at an estimated monthly cost of
-        <strong>$<?php echo number_format($healthcheckViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of $<?php echo number_format($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2); ?> per kWh.
+        <strong><?php echo $this->currency($healthcheckViewModel->getAveragePowerCostPerMonth()); ?></strong>, assuming a cost of <?php echo $this->currency($healthcheckViewModel->healthcheck->getHealthcheckSettings()->kilowattsPerHour, 2); ?> per kWh.
     </p>
     <p>The following lists the devices with the highest average power consumption per month.</p>
     <table cellspacing="0" class="genericTable" style="font-size: 10pt;">
@@ -54,7 +54,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                         echo 'Unknown';
                     } ?></td>
                 <td class="center"><?php echo number_format($deviceInstance->getAverageMonthlyPowerConsumption()); ?> kWh</td>
-                <td class="center">$<?php echo number_format($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
+                <td class="center"><?php echo $this->currency($deviceInstance->getAverageMonthlyPowerCost(), 2); ?></td>
             </tr>
             <?php $ctr++;
             if ($ctr > 2)

@@ -17,7 +17,7 @@ $graphs               = $healthcheckViewModel->getGraphs();
 $section->addPageBreak();
 $section->addTitle("Analysis: Environmental Impact", 1);
 $section->addTitle('Forest and Water Consumption', 2);
-$section->addText(sprintf('Did you know that it takes one average-sized tree to produce %2$s pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for %1$s:', $healthcheckViewModel->healthcheck->getClient()->companyName, number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE, 0, '.', ',')));
+$section->addText(sprintf('Did you know that it takes one average-sized tree to produce %2$s pages of standard 20lb office paper? Paper production also uses a tremendous amount of water and other solvents to produce traditional white copy paper. Based on your annual page volume we estimate the following tree and water requirements to produce documents for %1$s:', $healthcheckViewModel->healthcheck->getClient()->companyName, number_format(Healthcheck_ViewModel_Healthcheck::PAGES_PER_TREE)));
 $cellWidths  = array(
     350,
     1500

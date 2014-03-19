@@ -148,7 +148,7 @@ class Proposalgen_ClientPricingController extends Tangent_Controller_Action
             $toners = Proposalgen_Model_Mapper_Toner::getInstance()->getCompatibleToners($tonerId, $this->_selectedClientId);
             foreach ($toners as $toner)
             {
-                $replacementData[$toner->id] = $toner->getManufacturer()->displayname . " - " . $toner->sku . " - " . $this->view->currency($toner->calculatedCost / $toner->yield, array('precision' => 4));
+                $replacementData[$toner->id] = $toner->getManufacturer()->displayname . " - " . $toner->sku . " - " . $this->view->formatCostPerPage($toner->calculatedCost / $toner->yield);
             }
         }
 
