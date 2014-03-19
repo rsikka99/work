@@ -280,11 +280,14 @@ class Hardwareoptimization_Model_Mapper_Device_Swap extends My_Model_Mapper_Abst
             $manufacturerMapper = Proposalgen_Model_Mapper_Manufacturer::getInstance();
             $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
 
-            $returnLimit = 10;
+            /**
+             * FIXME lrobert: WHY. WHYYY. Seriously why is this hardcoded in. Investigate why and document it or fix it so it's proper.
+             */
+            $returnLimit = 1000;
 
             if (!$limit)
             {
-                $limit  = "25";
+                $limit  = "1000";
                 $offset = ($offset > 0) ? $offset : 0;
             }
 
