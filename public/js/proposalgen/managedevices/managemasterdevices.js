@@ -288,20 +288,18 @@ function saveChanges(approve)
         error   : function (xhr)
         {
             clearErrors();
-            var launchDate = $("#launchDate");
+            var $launchDate = $("#launchDate");
             // We need to destroy the launchDate datepicker
-            launchDate.datepicker("destroy");
+            $launchDate.datepicker("destroy");
+
             var data = $.parseJSON(xhr.responseText);
             var errorMessage;
-            var element;
-            var parent;
             if (data['error']['modelAndManufacturer'] != undefined)
             {
                 //Lets loop through and display the errors
                 $.each(data['error']['modelAndManufacturer']['errorMessages'], function (key, value)
                 {
-                    element = document.getElementById(key);
-                    parent = element.parentNode;
+                    var parent = document.getElementById(key).parentNode;
                     parent.className = "control-group error ";
                     parent.innerHTML = parent.innerHTML + "<span class='help-inline'>" + value + "</span>";
                 });
@@ -318,18 +316,34 @@ function saveChanges(approve)
                 $.each(data.error[formKey]['errorMessages'], function (elementKey)
                 {
                     errorMessage = data.error[formKey]['errorMessages'][elementKey];
-                    element = document.getElementById(elementKey);
 
                     // We need to change the attribute value, to the new value or else it will revert to the last correct value, Which we do not want
+                    var element = document.getElementById(elementKey);
                     element.setAttribute("value", element.value);
-                    parent = element.parentNode.parentNode;
+
+                    var parent = element.parentNode.parentNode;
                     parent.className = "control-group error ";
                     parent.innerHTML = parent.innerHTML + "<span class='help-inline'>" + errorMessage + "</span>";
                 });
             });
 
             // We need to recreate the datepicker when we have an error!
-            launchDate.datepicker({ dateFormat: 'mm/dd/yy', changeMonth: true, changeYear: true});
+            // Note we reselect using jQuery it because it gets deleted above somewhere (Lee thinks the "destroy" part of the datepicker but we don't know.
+            $("#launchDate").datepicker({
+                dateFormat : 'yy-mm-dd',
+                changeMonth: true,
+                changeYear : true,
+                yearRange  : '1980:+2',
+                beforeShow : function (input)
+                {
+                    $(input).css({
+                        "position": "relative",
+                        "z-index" : 999999
+                    });
+                }
+            });
+
+
             displayAlert("danger", "Please fix the errors before continuing");
         }
     });
