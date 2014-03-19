@@ -45,10 +45,10 @@ $formActions [] = $form->getElement('Analyze');
 
 <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
 
-var targetCostPerPageMono               = <?php echo $this->formatCostPerPage($targetBlackCPP); ?>;
-var targetCostPerPageMonoThreshold      = <?php echo $this->formatCostPerPage($thresholdBlackCpp); ?>;
-var targetCostPerPageColor              = <?php echo $this->formatCostPerPage($targetColorCPP); ?>;
-var targetCostPerPageColorThreshold     = <?php echo $this->formatCostPerPage($thresholdColorCpp); ?>;
+var targetCostPerPageMono               = <?php echo $targetBlackCPP ?>;
+var targetCostPerPageMonoThreshold      = <?php echo $thresholdBlackCpp ?>;
+var targetCostPerPageColor              = <?php echo $targetColorCPP ?>;
+var targetCostPerPageColorThreshold     = <?php echo $thresholdColorCpp ?>;
 var deviceListUrl                       = '<?php echo $this->baseUrl('hardwareoptimization/index/get-device-by-device-instance-id'); ?>'
 
 <?php $this->headScript()->captureEnd(); ?>
