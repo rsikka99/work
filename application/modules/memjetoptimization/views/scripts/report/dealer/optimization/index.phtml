@@ -162,7 +162,7 @@ $totalDevices = $optimizationDevices->getDeviceCount();
                 <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting)); ?></td>
                 <!-- Replacement Devices -->
                 <td class='deviceName'><?php echo '<em>' . $replacementDevice->getManufacturer()->fullname . '</em><br/><strong>' . $replacementDevice->modelName . '</strong>'; ?></td>
-                <td><?php echo $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage, array('precision' => 4)) ?></td>
+                <td><?php echo $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage) ?></td>
                 <td><?php echo ($isColor) ? $this->currency($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->colorCostPerPage) : 'N/A'; ?></td>
                 <td class='borderRight'><?php echo $this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice, ($isUpgradingToColor) ? $blackToColorRatio : null)); ?></td>
                 <!-- Monthly Statistics -->

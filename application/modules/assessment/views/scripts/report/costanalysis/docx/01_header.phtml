@@ -14,8 +14,8 @@ $section->addTitle('Customer Cost Analysis');
 
 $textRun = $section->createTextRun();
 $textRun->addText("Average Monochrome CPP: ", array("bold" => true));
-$textRun->addText($this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, array("precision" => 4)));
+$textRun->addText($this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage));
 
 $textRun = $section->createTextRun();
 $textRun->addText("Average Color CPP: ", array("bold" => true));
-$textRun->addText($this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, array("precision" => 4)));
+$textRun->addText($this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage));

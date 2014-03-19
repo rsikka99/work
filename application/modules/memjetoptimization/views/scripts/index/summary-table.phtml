@@ -77,7 +77,7 @@ $memjetOptimization = $this->memjetOptimization;
     <tbody>
     <tr>
         <td class="description"><strong>Mono CPP :</strong></td>
-        <td id="monochromeCpp"><?php echo $this->formatCostPerPage((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->monochromeCostPerPage, array('precision' => 4)) ?></td>
+        <td id="monochromeCpp"><?php echo $this->formatCostPerPage((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->monochromeCostPerPage) ?></td>
         <td class="description"><strong>Color CPP :</strong></td>
         <td id="colorCpp"><?php echo ((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements($memjetOptimization->getMemjetOptimizationSetting()->blackToColorRatio)->colorCostPerPage > 0) ? $this->currency((float)$optimizationViewModel->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'N/A'; ?></td>
         <td class="description"><strong>Customer Cost :</strong></td>

@@ -144,8 +144,8 @@ $dealerColorRankSetArray->removeDecorator('Zend_Form_Decorator_HtmlTag');
                 </tr>
                 <tr>
                     <th>Overage Rate Per Page</th>
-                    <td> <?php echo $this->currency($quote->calculateMonochromeOverageRatePerPage(), array('precision' => 3)); ?></td>
-                    <td> <?php echo $this->currency($quote->calculateColorOverageRatePerPage(), array('precision' => 3)); ?></td>
+                    <td> <?php echo $this->formatCostPerPage($quote->calculateMonochromeOverageRatePerPage()); ?></td>
+                    <td> <?php echo $this->formatCostPerPage($quote->calculateColorOverageRatePerPage()); ?></td>
                 </tr>
             </table>
         </div>

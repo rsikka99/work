@@ -91,7 +91,7 @@ $totalDeviceCount = number_format(count($assessmentViewModel->getDevices()->allI
             <td class="debugNumber"><?php echo $this->formatCostPerPage(Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->monochromeCostPerPage, $reportMargin)); ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage) : ""; ?></td>
             <td class="debugNumber"><?php echo ($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage((float)Tangent_Accounting::applyMargin($deviceInstance->calculateCostPerPage($costPerPageSettings)->getCostOfInkAndTonerPerPage()->colorCostPerPage, $reportMargin)) : ""; ?></td>
-            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings), array("precision" => 2)); ?></td>
+            <td class="debugNumber"><?php echo $this->currency((float)$deviceInstance->getCostOfInkAndToner($costPerPageSettings)); ?></td>
             <td>
                 <table class="table-bordered table-condensed debugTable">
                     <thead>
