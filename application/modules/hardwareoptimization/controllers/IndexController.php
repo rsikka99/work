@@ -428,7 +428,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             "totalCost"               => $this->view->currency($optimization->calculateDealerMonthlyCostWithReplacements()),
             "replaceReason"           => ($deviceInstanceReasonElement !== null) ? $deviceInstanceReasonElement->renderViewHelper() : " ",
             "marginDollar"            => $this->view->currency($optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()),
-            "costDelta"               => $this->view->currency($costDelta),
+            "costDelta"               => (float)$costDelta,
             "rawCostDelta"            => (float)$costDelta,
             "marginPercent"           => number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) . "%",
             "numberOfDevicesReplaced" => number_format($optimization->getNumberOfDevicesWithReplacements()),
