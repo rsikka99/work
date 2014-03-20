@@ -497,10 +497,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $replacementDeviceElement       = $form->getElement("deviceInstance_{$row['deviceInstanceId']}");
             $replacementDeviceReasonElement = $form->getElement("deviceInstanceReason_{$row['deviceInstanceId']}");
             $row['action']                  = $replacementDeviceElement->renderViewHelper();
-            $row['monoCpp']                 = $this->view->formatCostPerPage($row['rawMonoCpp']);
-            $row['colorCpp']                = ($row['isColor']) ? $this->view->formatCostPerPage($row['rawColorCpp']) : 'N/A';
-            $row['costDelta']               = $this->view->currency($row['rawCostDelta']);
-            $row['monthlyCost']             = $this->view->currency($row['rawMonthlyCost']);
+            $row['monoCpp']                 = $row['rawMonoCpp'];
+            $row['colorCpp']                = ($row['isColor']) ? $row['rawColorCpp'] : 'N/A';
+            $row['costDelta']               = $row['rawCostDelta'];
+            $row['monthlyCost']             = $row['rawMonthlyCost'];
 
             if ($replacementDeviceReasonElement !== null)
             {
