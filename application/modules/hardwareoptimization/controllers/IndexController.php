@@ -498,7 +498,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             $replacementDeviceReasonElement = $form->getElement("deviceInstanceReason_{$row['deviceInstanceId']}");
             $row['action']                  = $replacementDeviceElement->renderViewHelper();
             $row['monoCpp']                 = $row['rawMonoCpp'];
-            $row['colorCpp']                = ($row['isColor']) ? $row['rawColorCpp'] : 'N/A';
+            $row['colorCpp']                = ($row['isColor']) ? $row['rawColorCpp'] : '';
             $row['costDelta']               = $row['rawCostDelta'];
             $row['monthlyCost']             = $row['rawMonthlyCost'];
 
