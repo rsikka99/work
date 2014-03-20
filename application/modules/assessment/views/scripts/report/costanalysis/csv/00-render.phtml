@@ -5,14 +5,18 @@ $assessmentViewModel = $this->assessmentViewModel;
 $fh = fopen($this->savePath, "w+");
 
 
-fputs($fh, $this->fieldTitleList);
-fputs($fh, "\n");
-fputs($fh, "MPSToolbox.com Black And White CPP:," . $this->monochromeCPP);
-fputs($fh, "\n");
-fputs($fh, "MPSToolbox.com Color CPP:," . $this->colorCPP);
-fputs($fh, "\n");
-fputs($fh, "\n");
-fputs($fh, $this->fieldList);
+fputcsv($fh, $this->fieldTitleList);
+fputcsv($fh, array());
+fputcsv($fh, array("MPSToolbox.com Black And White CPP:", $this->monochromeCPP));
+fputcsv($fh, array());
+fputcsv($fh, array("MPSToolbox.com Color CPP:", $this->colorCPP));
+fputcsv($fh, array());
+fputcsv($fh, array());
+
+foreach ($this->fieldList as $line)
+{
+    fputcsv($fh, $line);
+}
 
 
 fclose($fh);

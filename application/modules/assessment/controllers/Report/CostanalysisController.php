@@ -138,7 +138,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 $fieldList [] = ($isColor) ? $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForCustomer())->getCostPerPage()->colorCostPerPage) : '-';
                 $fieldList [] = $this->view->currency($deviceInstance->calculateMonthlyCost($assessmentViewModel->getCostPerPageSettingForCustomer()));
 
-                $fieldList_Values .= implode(",", $fieldList) . "\n";
+                $fieldList_Values [] = $fieldList;
             }
 
         }
@@ -147,7 +147,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
             throw new Exception("CSV File could not be opened/written for export.", 0, $e);
         }
 
-        $this->view->fieldTitleList = implode(",", $fieldTitleList) . "\n";
+        $this->view->fieldTitleList = $fieldTitleList;
         $this->view->fieldList      = $fieldList_Values;
     }
 }
