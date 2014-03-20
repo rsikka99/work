@@ -192,8 +192,7 @@ foreach ($this->vendorSeperatedData as $vendorData)
                 {
                     ?>
                     <tr class="<?php echo ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?php echo ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
-                        <td class=""><?= $fields[0]['deviceName'] ?><br /><?= '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?>
-                        </td>
+                        <td class=""><?= $fields[0]['deviceName'] ?><br /><?= '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?></td>
                         <td class="mono"><?= number_format($fields[1]) ?></td>
                         <td class="mono"><?= $this->currency($fields[2]) ?></td>
                         <td class="mono"><?= number_format($fields[3]) ?></td>
@@ -220,14 +219,14 @@ foreach ($this->vendorSeperatedData as $vendorData)
                     </td>
                     <td colspan="3"></td>
                     <td class="column2">
-                        <div class="right">$<?= $this->currency($vendorData['fieldTotals'][8]) ?></div>
+                        <div class="right"><?= $this->currency($vendorData['fieldTotals'][8]) ?></div>
                     </td>
                     <td>
                         <div class="center"><?= number_format($vendorData['fieldTotals'][9]) ?></div>
                     </td>
                     <td colspan="3"></td>
                     <td>
-                        <div class="right">$<?= number_format($vendorData['fieldTotals'][13]) ?></div>
+                        <div class="right"><?= $this->currency($vendorData['fieldTotals'][13]) ?></div>
                     </td>
                 </tr>
                 </tbody>
