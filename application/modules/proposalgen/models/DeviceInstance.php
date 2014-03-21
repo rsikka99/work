@@ -1284,11 +1284,27 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_deviceAction))
         {
-            if ($this->getMasterDevice()->getAge() > self::RETIREMENT_AGE && $this->getPageCounts()->getCombinedPageCount()->getMonthly() < self::RETIREMENT_MAX_PAGE_COUNT)
+            /**
+             * Retirement
+             * - Device must be printing less than Y pages
+             */
+            if ($this->getPageCounts()->getCombinedPageCount()->getMonthly() <= self::RETIREMENT_MAX_PAGE_COUNT)
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
-            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->getLifeUsage($costPerPageSetting) > 1) && $this->getPageCounts()->getCombinedPageCount()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
+            /**
+             * Replacement (Do Not Repair)
+             * - Device must be printing more than Y pages
+             *
+             * - Must also match ONE of the following:
+             *      - Not capable of reporting toner levels
+             *      - Over it's max life usage
+             *      - Over X years old
+             */
+            else if (
+                ($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->getLifeUsage($costPerPageSetting) > 1 || !$this->isCapableOfReportingTonerLevels())
+                && $this->getPageCounts()->getCombinedPageCount()->getMonthly() >= self::REPLACEMENT_MIN_PAGE_COUNT
+            )
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
@@ -1527,10 +1543,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function isCapableOfReportingTonerLevels ()
     {
-        // Always use the master device record. This way administrators can control which devices can and can not report toner levels.
-        $reportsTonerLevels = (!$this->getMasterDevice()) ? false : $this->getMasterDevice()->isCapableOfReportingTonerLevels;
-
-        return $reportsTonerLevels;
+        /**
+         * Always use the master device record.
+         * This way administrators can control which devices can and can not report toner levels.
+         */
+        return (!$this->getMasterDevice()) ? false : $this->getMasterDevice()->isCapableOfReportingTonerLevels;
     }
 
     /**
