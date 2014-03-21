@@ -118,78 +118,56 @@ $(function ()
                         $table.empty();
                         $replacementTable.empty();
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td colspan='2'><strong>Current Device</strong></td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>");
-                        $table.append($row);
+                        $table.append($("<tr></tr>").append("<td colspan='2'><strong>Current Device</strong></td>"));
+                        $table.append($("<tr></tr>").append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>"));
+                        $table.append($("<tr></tr>").append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>"));
 
                         if (data.deviceInstance.isColor == 1)
                         {
-                            $row = $("<tr></tr>");
-                            $row.append("<td>Color CPP</td><td>" + data.deviceInstance.costPerPageColor + "</td>");
-                            $table.append($row);
-
-                            $row = $("<tr></tr>");
-                            $row.append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>");
-                            $table.append($row);
+                            $table.append($("<tr></tr>").append("<td>Color CPP</td><td>" + data.deviceInstance.costPerPageColor + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>"));
                         }
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> ");
-                        $table.append($row);
-                        $row = $("<tr></tr>");
+                        $table.append($("<tr></tr>").append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> "));
 
-                        $row = $("<tr></tr>");
                         if (data.deviceInstance.isCopy)
                         {
-                            $row.append("<td>Copier</td><td>Yes</td>");
+                            $table.append($("<tr></tr>").append("<td>Copier</td><td>Yes</td>"));
                         }
                         else
                         {
-                            $row.append("<td>Copier</td><td>No</td>");
+                            $table.append($("<tr></tr>").append("<td>Copier</td><td>No</td>"));
                         }
-                        $table.append($row);
 
-                        $row = $("<tr></tr>");
                         if (data.deviceInstance.isFax)
                         {
-                            $row.append("<td>Fax</td><td>Yes</td>");
+                            $table.append($("<tr></tr>").append("<td>Fax</td><td>Yes</td>"));
                         }
                         else
                         {
-                            $row.append("<td>Fax</td><td>No</td>");
+                            $table.append($("<tr></tr>").append("<td>Fax</td><td>No</td>"));
                         }
-                        $table.append($row);
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td>PPM - Mono</td> <td>" + data.deviceInstance.ppmBlack + "</td>");
-                        $table.append($row);
+                        $table.append($("<tr></tr>").append("<td>PPM - Mono</td> <td>" + data.deviceInstance.ppmBlack + "</td>"));
 
                         if (data.deviceInstance.isColor == 1)
                         {
-                            $row = $("<tr></tr>");
-                            $row.append("<td>PPM - Color</td><td>" + data.deviceInstance.ppmColor + "</td>");
-                            $table.append($row);
+                            $table.append($("<tr></tr>").append("<td>PPM - Color</td><td>" + data.deviceInstance.ppmColor + "</td>"));
                         }
+
+                        $table.append($("<tr></tr>").append("<td>Coverage - Mono</td><td>" + data.deviceInstance.pageCoverageMonochrome + "</td>"));
+
+                        if (data.deviceInstance.isColor == 1)
+                        {
+                            $table.append($("<tr></tr>").append("<td>Coverage - Cyan</td><td>" + data.deviceInstance.pageCoverageCyan + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>Coverage - Magenta</td><td>" + data.deviceInstance.pageCoverageMagenta + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>Coverage - Yellow</td><td>" + data.deviceInstance.pageCoverageYellow + "</td>"));
+                        }
+
+
                         // Replacement Device Information
                         if (data.hasReplacement == 1)
                         {
@@ -198,31 +176,24 @@ $(function ()
                             var blankRow = "<tr><td colspan='2'>&nbsp;</td></tr>";
                             $replacementTable.show();
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td colspan='2'><strong>New Device</strong></td>");
-                            $replacementTable.append($row);
-
-                            $row = $("<tr></tr>");
-                            $row.append("<td colspan='2'><em>" + data.replacementDevice.deviceName + "</em></td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td colspan='2'><strong>New Device</strong></td>"));
+                            $replacementTable.append($("<tr></tr>").append("<td colspan='2'><em>" + data.replacementDevice.deviceName + "</em></td>"));
 
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td>Mono CPP</td><td>" + data.replacementDevice.costPerPageMonochrome + "</td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.replacementDevice.costPerPageMonochrome + "</td>"));
+
 
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
+
 
                             if (data.replacementDevice.isColor == 1)
                             {
-                                $row = $("<tr></tr>");
-                                $row.append("<td>Color CPP</td><td>" + data.replacementDevice.costPerPageColor + "</td>");
-                                $replacementTable.append($row);
+                                $replacementTable.append($("<tr></tr>").append("<td>Color CPP</td><td>" + data.replacementDevice.costPerPageColor + "</td>"));
 
                                 // Blank row to match device rows up
                                 $replacementTable.append($(blankRow));
@@ -231,40 +202,29 @@ $(function ()
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
 
-                            // Blank row to match device rows up
-                            $replacementTable.append($(blankRow));
-
-
-                            $row = $("<tr></tr>");
                             if (data.replacementDevice.isCopy)
                             {
-                                $row.append("<td>Copier</td><td>Yes</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Copier</td><td>Yes</td>"));
                             }
                             else
                             {
-                                $row.append("<td>Copier</td><td>No</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Copier</td><td>No</td>"));
                             }
-                            $replacementTable.append($row);
-                            $row = $("<tr></tr>");
+
                             if (data.replacementDevice.isFax)
                             {
-                                $row.append("<td>Fax</td><td>Yes</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Fax</td><td>Yes</td>"));
                             }
                             else
                             {
-                                $row.append("<td>Fax</td><td>No</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Fax</td><td>No</td>"));
                             }
-                            $replacementTable.append($row);
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td>PPM - Mono</td> <td>" + data.replacementDevice.ppmBlack + "</td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td>PPM - Mono</td> <td>" + data.replacementDevice.ppmBlack + "</td>"));
 
                             if (data.replacementDevice.isColor == 1)
                             {
-                                $row = $("<tr></tr>");
-                                $row.append("<td>PPM - Color</td><td>" + data.replacementDevice.ppmColor + "</td>");
-                                $replacementTable.append($row);
+                                $replacementTable.append($("<tr></tr>").append("<td>PPM - Color</td><td>" + data.replacementDevice.ppmColor + "</td>"));
                             }
                         }
                         else

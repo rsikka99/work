@@ -357,19 +357,20 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
                 }
                 // We want the two arrays to be in parallel since we need to pass and array of devices to the form to generate the select elements
                 $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($devices['jsonData'][$i]['deviceInstanceId']);
+                $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
+                $replacementDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
 
                 $returnDevices['deviceInstances'][] = $deviceInstance;
                 $jsonData                           = $devices['jsonData'][$i];
 
                 $pageCount                 = $deviceInstance->getPageCounts();
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId));
+                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice);
                 $jsonData['monoAmpv']      = $pageCount->getBlackPageCount()->getMonthly();
                 $jsonData['colorAmpv']     = $pageCount->getColorPageCount()->getMonthly();
                 $jsonData['rawMonoCpp']    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
                 $jsonData['rawColorCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage;
                 $jsonData['rawCostDelta']  = $costDelta;
-//                $jsonData['reason']        = $deviceInstance->getReason();
 
                 $returnDevices['jsonData'][] = $jsonData;
             }

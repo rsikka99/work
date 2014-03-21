@@ -1,0 +1,47 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader">
+    Hardware Utilization and Capacity
+</div>
+<p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In
+    essence, you should not have to change the same toner cartridge more than once per month.
+    Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your
+    printing devices. As a guide we suggest that company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at
+    maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following
+    chart displays your estimated monthly page volume compared to your maximum monthly page capacity.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[4]; ?>" /></td>
+    </tr>
+</table>
+
+<div class="pheader">
+    Print Volume and Number of Printing Devices
+</div>
+<p>You currently have <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print
+    an average of
+    <strong><?php echo $this->formatPageVolume(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())); ?>
+    </strong> pages each per month, for an average total monthly print volume of
+    <strong><?php echo $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></strong> pages.
+    Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[5]; ?>" /></td>
+        <td><img src="<?php echo $graphs[6]; ?>" /></td>
+        <!--<div class="pheader"> Printing Device Management Breakdown </div>-->
+        <!--    <p>Different types of printing devices are managed in different ways-newer networked printers can be managed with remote monitoring software; leased multifunction devices are typically managed by the vendor who sold the machine; devices not connected to the network, such as inkjets and some older printers, are difficult to manage because you cannot monitor them with software.</p>-->
+        <td><img src="<?php echo $graphs[7]; ?>" /></td>
+    </tr>
+</table>
+<br />

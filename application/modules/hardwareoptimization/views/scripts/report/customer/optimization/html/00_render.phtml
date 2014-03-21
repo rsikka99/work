@@ -1,0 +1,43 @@
+<?php
+$this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
+$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
+
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+$customerOptimization = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
+
+$graphs = $customerOptimization->getGraphs();
+
+$titleData = array(
+    "hardwareOptimization" => $hardwareOptimization,
+    "dealerLogoFile"       => $this->dealerLogoFile,
+    "companyName"          => My_Brand::$companyName,
+);
+
+$profitabilityDevices = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
+
+$data = array(
+    "hardwareOptimization" => $hardwareOptimization,
+    "optimization"         => $optimization,
+    "customerOptimization" => $customerOptimization,
+    "graphs"               => $graphs,
+    "companyName"          => My_Brand::$companyName,
+);
+?>
+<div class="container landscape hardware-optimization" id="htmlReportContainer">
+    <?php
+    // Actual pages
+    echo $this->partial("report/customer/optimization/html/01_titlepage.phtml", $titleData);
+    echo $this->partial("report/customer/optimization/html/02_optimization_summary.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/03_hardware_utilization.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/04_technology_features.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/05_age_of_fleet.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/06_fleet_diversity.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/07_color_usage.phtml", $data);
+    echo $this->partial("report/customer/optimization/html/08_device_appendix.phtml", $data);
+    ?>
+</div>

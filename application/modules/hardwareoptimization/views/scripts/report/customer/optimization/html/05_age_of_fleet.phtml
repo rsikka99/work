@@ -1,0 +1,24 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader">
+    Age Of Printing Devices
+</div>
+<p>The breakdown of the age of your printing devices is shown below: </p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[10]; ?>" /></td>
+        <td><img src="<?php echo $graphs[11]; ?>" /></td>
+    </tr>
+</table>
+<br />

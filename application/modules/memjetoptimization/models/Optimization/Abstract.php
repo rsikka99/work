@@ -237,11 +237,11 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
             }
 
             // Check the action status first, then check the replacement status
-            if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
             {
                 $actionReplace++;
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            else if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 $actionRetire++;
             }
@@ -254,7 +254,7 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
             $ageRank = Tangent_Functions::getValueFromRangeStepTable($deviceInstance->getMasterDevice()->getAge(), self::$ageRankTable, false);
             // Get the replacement device of the device instance if there is one
             $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($memjetOptimization->id);
-            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 // Assigned the optimized age rank if replacement device exists
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
@@ -304,11 +304,11 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
                     $this->replacementJitCompatibleCount++;
                 }
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            else if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 $retiredDevices [] = $deviceInstance;
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            else if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
             {
                 $flaggedDevices [] = $deviceInstance;
             }
@@ -409,7 +409,7 @@ abstract class Memjetoptimization_Model_Optimization_Abstract
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
-            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            if ($deviceInstance->getAction($this->_optimization->getCostPerPageSettingForDealer()) !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
             {
                 $replacementDevice = $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_memjetOptimization->id);
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)

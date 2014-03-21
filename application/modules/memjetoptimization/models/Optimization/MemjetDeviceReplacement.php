@@ -121,7 +121,7 @@ class Memjetoptimization_Model_Optimization_MemjetDeviceReplacement implements H
     {
         $suggestedDevice = null;
 
-        if ($deviceInstance->getAction() != "Retire")
+        if ($deviceInstance->getAction($this->_costPerPageSetting) != "Retire")
         {
 
             $greatestSavings           = 0;

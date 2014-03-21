@@ -1,27 +1,39 @@
 $(function ()
 {
-//    var ajaxArray = [];
-    var ajaxCounter = 0;
+    var ajaxRequestsActiveCounter = 0;
 
     $("#deviceInstanceInformationModal").hide();
+
+    /**
+     * Gets the index of a column by name
+     *
+     * @param grid
+     * @param columnName
+     * @returns {number}
+     */
     var getColumnSrcIndexByName = function (grid, columnName)
     {
-        var cm = grid.jqGrid('getGridParam', 'colModel'),
-            i = 0, index = 0, l = cm.length, cmName;
-        while (i < l)
+        var colModelColumnName = grid.jqGrid('getGridParam', 'colModel');
+        var currentIndex = 0;
+        var indexOfColumn = -1;
+
+        for (var i = 0; i < colModelColumnName.length; i++)
         {
-            cmName = cm[i].name;
-            i++;
-            if (cmName === columnName)
+            if (colModelColumnName[i].name === columnName)
             {
-                return index;
+                indexOfColumn = currentIndex;
+                break;
             }
-            else if (cmName !== 'rn' && cmName !== 'cb' && cmName !== 'subgrid')
+
+            if (colModelColumnName[i].name !== 'rn'
+                && colModelColumnName[i].name !== 'cb'
+                && colModelColumnName[i].name !== 'subgrid')
             {
-                index++;
+                currentIndex++;
             }
         }
-        return -1;
+
+        return indexOfColumn;
     };
 
     $("#replacementDeviceTable").jqGrid({
@@ -222,6 +234,7 @@ $(function ()
         {
             var grid = $(this);
             var nameColumn = getColumnSrcIndexByName(grid, 'info');
+
             if (iCol == nameColumn)
             {
                 var row = grid.getRowData(rowid);
@@ -243,77 +256,56 @@ $(function ()
                         $table.empty();
                         $replacementTable.empty();
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td colspan='2'><strong>Current Device</strong></td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>");
-                        $table.append($row);
-
-                        $row = $("<tr></tr>");
-                        $row.append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>");
-                        $table.append($row);
+                        $table.append($("<tr></tr>").append("<td colspan='2'><strong>Current Device</strong></td>"));
+                        $table.append($("<tr></tr>").append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>"));
+                        $table.append($("<tr></tr>").append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>"));
 
                         if (data.deviceInstance.isColor == 1)
                         {
-                            $row = $("<tr></tr>");
-                            $row.append("<td>Color CPP</td><td>" + data.deviceInstance.costPerPageColor + "</td>");
-                            $table.append($row);
-                            $row = $("<tr></tr>");
-                            $row.append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>");
-                            $table.append($row);
+                            $table.append($("<tr></tr>").append("<td>Color CPP</td><td>" + data.deviceInstance.costPerPageColor + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>"));
                         }
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> ");
-                        $table.append($row);
-                        $row = $("<tr></tr>");
+                        $table.append($("<tr></tr>").append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> "));
 
-                        $row = $("<tr></tr>");
                         if (data.deviceInstance.isCopy)
                         {
-                            $row.append("<td>Copier</td><td>Yes</td>");
+                            $table.append($("<tr></tr>").append("<td>Copier</td><td>Yes</td>"));
                         }
                         else
                         {
-                            $row.append("<td>Copier</td><td>No</td>");
+                            $table.append($("<tr></tr>").append("<td>Copier</td><td>No</td>"));
                         }
-                        $table.append($row);
 
-                        $row = $("<tr></tr>");
                         if (data.deviceInstance.isFax)
                         {
-                            $row.append("<td>Fax</td><td>Yes</td>");
+                            $table.append($("<tr></tr>").append("<td>Fax</td><td>Yes</td>"));
                         }
                         else
                         {
-                            $row.append("<td>Fax</td><td>No</td>");
+                            $table.append($("<tr></tr>").append("<td>Fax</td><td>No</td>"));
                         }
-                        $table.append($row);
 
-                        $row = $("<tr></tr>");
-                        $row.append("<td>PPM - Mono</td> <td>" + data.deviceInstance.ppmBlack + "</td>");
-                        $table.append($row);
+                        $table.append($("<tr></tr>").append("<td>PPM - Mono</td> <td>" + data.deviceInstance.ppmBlack + "</td>"));
 
                         if (data.deviceInstance.isColor == 1)
                         {
-                            $row = $("<tr></tr>");
-                            $row.append("<td>PPM - Color</td><td>" + data.deviceInstance.ppmColor + "</td>");
-                            $table.append($row);
+                            $table.append($("<tr></tr>").append("<td>PPM - Color</td><td>" + data.deviceInstance.ppmColor + "</td>"));
                         }
+
+                        $table.append($("<tr></tr>").append("<td>Coverage - Mono</td><td>" + data.deviceInstance.pageCoverageMonochrome + "</td>"));
+
+                        if (data.deviceInstance.isColor == 1)
+                        {
+                            $table.append($("<tr></tr>").append("<td>Coverage - Cyan</td><td>" + data.deviceInstance.pageCoverageCyan + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>Coverage - Magenta</td><td>" + data.deviceInstance.pageCoverageMagenta + "</td>"));
+                            $table.append($("<tr></tr>").append("<td>Coverage - Yellow</td><td>" + data.deviceInstance.pageCoverageYellow + "</td>"));
+                        }
+
+
                         // Replacement Device Information
                         if (data.hasReplacement == 1)
                         {
@@ -322,31 +314,24 @@ $(function ()
                             var blankRow = "<tr><td colspan='2'>&nbsp;</td></tr>";
                             $replacementTable.show();
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td colspan='2'><strong>New Device</strong></td>");
-                            $replacementTable.append($row);
-
-                            $row = $("<tr></tr>");
-                            $row.append("<td colspan='2'><em>" + data.replacementDevice.deviceName + "</em></td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td colspan='2'><strong>New Device</strong></td>"));
+                            $replacementTable.append($("<tr></tr>").append("<td colspan='2'><em>" + data.replacementDevice.deviceName + "</em></td>"));
 
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td>Mono CPP</td><td>" + data.replacementDevice.costPerPageMonochrome + "</td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.replacementDevice.costPerPageMonochrome + "</td>"));
+
 
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
+
 
                             if (data.replacementDevice.isColor == 1)
                             {
-                                $row = $("<tr></tr>");
-                                $row.append("<td>Color CPP</td><td>" + data.replacementDevice.costPerPageColor + "</td>");
-                                $replacementTable.append($row);
+                                $replacementTable.append($("<tr></tr>").append("<td>Color CPP</td><td>" + data.replacementDevice.costPerPageColor + "</td>"));
 
                                 // Blank row to match device rows up
                                 $replacementTable.append($(blankRow));
@@ -355,40 +340,29 @@ $(function ()
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
 
-                            // Blank row to match device rows up
-                            $replacementTable.append($(blankRow));
-
-
-                            $row = $("<tr></tr>");
                             if (data.replacementDevice.isCopy)
                             {
-                                $row.append("<td>Copier</td><td>Yes</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Copier</td><td>Yes</td>"));
                             }
                             else
                             {
-                                $row.append("<td>Copier</td><td>No</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Copier</td><td>No</td>"));
                             }
-                            $replacementTable.append($row);
-                            $row = $("<tr></tr>");
+
                             if (data.replacementDevice.isFax)
                             {
-                                $row.append("<td>Fax</td><td>Yes</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Fax</td><td>Yes</td>"));
                             }
                             else
                             {
-                                $row.append("<td>Fax</td><td>No</td>");
+                                $replacementTable.append($("<tr></tr>").append("<td>Fax</td><td>No</td>"));
                             }
-                            $replacementTable.append($row);
 
-                            $row = $("<tr></tr>");
-                            $row.append("<td>PPM - Mono</td> <td>" + data.replacementDevice.ppmBlack + "</td>");
-                            $replacementTable.append($row);
+                            $replacementTable.append($("<tr></tr>").append("<td>PPM - Mono</td> <td>" + data.replacementDevice.ppmBlack + "</td>"));
 
                             if (data.replacementDevice.isColor == 1)
                             {
-                                $row = $("<tr></tr>");
-                                $row.append("<td>PPM - Color</td><td>" + data.replacementDevice.ppmColor + "</td>");
-                                $replacementTable.append($row);
+                                $replacementTable.append($("<tr></tr>").append("<td>PPM - Color</td><td>" + data.replacementDevice.ppmColor + "</td>"));
                             }
                         }
                         else
@@ -402,7 +376,7 @@ $(function ()
                             {
                                 modal    : true,
                                 title    : "Device Information",
-                                height   : 375,
+                                height   : 450,
                                 width    : myWidth,
                                 resizable: false
                             }).dialog('open', { position: [e.pageX + 5, e.pageY + 5]});
@@ -422,34 +396,36 @@ $(function ()
     $(document).on('change', 'select',
         function ()
         {
-            var elementId = $(this).attr("id");
+            var $thisSelectElement = $(this);
+            var elementId = $thisSelectElement.attr("id");
+            var deviceInstanceId = $thisSelectElement.data('device-instance-id');
 
             // See if it's a reason or it's a device element that has been changed
             if (elementId.search("deviceInstanceReason") == -1)
             {
-                var replacementDeviceId = $(this).val();
+                var replacementDeviceId = $thisSelectElement.val();
 
                 // Get the jqGrid and the id of the row we changed
                 var grid = jQuery("#replacementDeviceTable");
-                var rowId = $(this).closest('tr').attr('id');
+                var rowId = $thisSelectElement.closest('tr').attr('id');
 
                 $.ajax({
                     url       : TMTW_BASEURL + 'hardwareoptimization/index/update-replacement-device',
                     dataType  : 'json',
                     data      : {
-                        deviceInstanceId   : elementId,
+                        deviceInstanceId   : deviceInstanceId,
                         replacementDeviceId: replacementDeviceId
                     },
                     beforeSend: function ()
                     {
                         $('#loadingDiv').show();
                         grid.setCell(rowId, 'costDelta', 'Loading...');
-                        ajaxCounter++;
+                        ajaxRequestsActiveCounter++;
                     },
                     complete  : function ()
                     {
-                        ajaxCounter--;
-                        if (ajaxCounter < 1)
+                        ajaxRequestsActiveCounter--;
+                        if (ajaxRequestsActiveCounter < 1)
                         {
                             $('#loadingDiv').hide();
                         }
@@ -460,6 +436,7 @@ $(function ()
                         {
                             grid.setCell(rowId, 'reason', data.replaceReason);
                             grid.setCell(rowId, 'costDelta', data.costDelta, (data.rawCostDelta >= 0) ? "positiveCostDelta" : "negativeCostDelta");
+
                             // Update the calculation
                             $('#monochromeCpp').html(data.monochromeCpp);
                             $('#colorCpp').html(data.colorCpp);
@@ -482,7 +459,7 @@ $(function ()
                     url     : TMTW_BASEURL + 'hardwareoptimization/index/update-device-swap-reason',
                     dataType: 'json',
                     data    : {
-                        deviceInstanceId   : elementId,
+                        deviceInstanceId   : deviceInstanceId,
                         replacementReasonId: replacementReasonId
                     },
                     success : function (data)

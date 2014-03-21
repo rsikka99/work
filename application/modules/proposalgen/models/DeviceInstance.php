@@ -15,10 +15,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * These constants help determine whether or not to retire a device
      */
-    const RETIREMENT_AGE             = 10;
-    const RETIREMENT_MAX_PAGE_COUNT  = 500;
-    const REPLACEMENT_AGE            = 10;
-    const REPLACEMENT_MIN_PAGE_COUNT = 500;
+    const RETIREMENT_AGE             = 12;
+    const RETIREMENT_MAX_PAGE_COUNT  = 200;
+    const REPLACEMENT_AGE            = 12;
+    const REPLACEMENT_MIN_PAGE_COUNT = 200;
+
+    const LIFE_PAGE_COUNT_MONTHS = 36;
 
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
@@ -182,6 +184,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      * @var Proposalgen_Model_MasterDevice
      */
     protected $_replacementMasterDevice;
+
+    /**
+     * @var Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance
+     */
+    protected $_hardwareOptimizationDeviceInstances;
+
     /**
      * @var Proposalgen_Model_MasterDevice
      */
@@ -352,9 +360,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * Applies overrides to for cost per page
      *
-     * @param $adminCostPerPage
+     * @param float    $adminCostPerPage
+     * @param bool|int $hardwareOptimizationId
+     * @param bool|int $memjetOptimizationId
      */
-    public function processOverrides ($adminCostPerPage)
+    public function processOverrides ($adminCostPerPage, $hardwareOptimizationId = false, $memjetOptimizationId = false)
     {
         /**
          * Process any overrides we have on a master device
@@ -368,14 +378,26 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         /*
          * Process any overrides on the replacement master device
          */
-        if ($this->getIsMappedToMasterDevice() || $this->useUserData)
+        if ($hardwareOptimizationId > 0)
         {
-            $replacementMasterDevice = $this->getReplacementMasterDevice();
-            if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
+            if ($this->getIsMappedToMasterDevice() || $this->useUserData)
             {
-                $replacementMasterDevice->processOverrides($adminCostPerPage);
+                $hardwareOptimizationDeviceInstance = $this->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
+                if ($hardwareOptimizationDeviceInstance instanceof Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance)
+                {
+                    if ($hardwareOptimizationDeviceInstance->masterDeviceId > 0)
+                    {
+                        $hardwareOptimizationDeviceInstance->getMasterDevice()->processOverrides($adminCostPerPage);
+                    }
+                }
             }
         }
+
+        if ($memjetOptimizationId > 0)
+        {
+            // TODO lrobert: Process the override for the memjet replacement
+        }
+
     }
 
     /**
@@ -754,8 +776,8 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
-            // volume * 36 months)
-            $maximumLifeCount = $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 36;
+            // volume * LIFE_PAGE_COUNT_MONTHS)
+            $maximumLifeCount = $this->calculateEstimatedMaxLifeCount($costPerPageSetting);
             if ($maximumLifeCount > 0)
             {
                 $this->_lifeUsage = $this->getMeter()->endMeterLife / $maximumLifeCount;
@@ -1094,6 +1116,64 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         return (!$this->useUserData && $this->getDeviceInstanceMasterDevice() instanceof Proposalgen_Model_Device_Instance_Master_Device);
     }
 
+    /**
+     * Gets an associated hardware optimization device instance
+     *
+     * @param int $hardwareOptimizationId The hardware optimization id to use when searching for the hardware optimization device instance
+     *
+     * @return \Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance
+     */
+    public function getHardwareOptimizationDeviceInstance ($hardwareOptimizationId)
+    {
+        if (!isset($this->_hardwareOptimizationDeviceInstances))
+        {
+            $this->_hardwareOptimizationDeviceInstances = array();
+        }
+
+        if ($hardwareOptimizationId > 0 && !array_key_exists($hardwareOptimizationId, $this->_hardwareOptimizationDeviceInstances))
+        {
+            $hardwareOptimizationDeviceInstance = Hardwareoptimization_Model_Mapper_Hardware_Optimization_DeviceInstance::getInstance()->find(array($this->id, $hardwareOptimizationId));
+            if (!$hardwareOptimizationDeviceInstance instanceof Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance)
+            {
+                $hardwareOptimizationDeviceInstance                         = new Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance();
+                $hardwareOptimizationDeviceInstance->deviceInstanceId       = $this->id;
+                $hardwareOptimizationDeviceInstance->hardwareOptimizationId = $hardwareOptimizationId;
+                $hardwareOptimizationDeviceInstance->action                 = Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP;
+
+                try
+                {
+                    Hardwareoptimization_Model_Mapper_Hardware_Optimization_DeviceInstance::getInstance()->insert($hardwareOptimizationDeviceInstance);
+                }
+                catch (Exception $e)
+                {
+                    $hardwareOptimizationDeviceInstance = false;
+                }
+            }
+
+            $this->_hardwareOptimizationDeviceInstances[$hardwareOptimizationId] = $hardwareOptimizationDeviceInstance;
+        }
+
+        return $this->_hardwareOptimizationDeviceInstances[$hardwareOptimizationId];
+    }
+
+    /**
+     * Sets the hardware optimization device instance
+     *
+     * @param Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance $hardwareOptimizationDeviceInstance
+     *
+     * @return $this
+     */
+    public function setHardwareOptimizationDeviceInstance ($hardwareOptimizationDeviceInstance)
+    {
+        if (!isset($this->_hardwareOptimizationDeviceInstances))
+        {
+            $this->_hardwareOptimizationDeviceInstances = array();
+        }
+
+        $this->_hardwareOptimizationDeviceInstances[$hardwareOptimizationDeviceInstance->hardwareOptimizationId] = $hardwareOptimizationDeviceInstance;
+
+        return $this;
+    }
 
     /**
      * Gets the replacement master device
@@ -1144,15 +1224,19 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_replacementMasterDevice))
         {
-            $deviceInstanceReplacementMasterDevice = Proposalgen_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->find(array($this->id, $hardwareOptimizationId));
-            $hardwareOptimization                  = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($hardwareOptimizationId);
-            if ($deviceInstanceReplacementMasterDevice)
+            $this->_replacementMasterDevice = array();
+        }
+
+        if (!array_key_exists($hardwareOptimizationId, $this->_replacementMasterDevice))
+        {
+            $hardwareOptimizationDeviceInstance = $this->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
+            if ($hardwareOptimizationDeviceInstance instanceof Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance)
             {
-                $this->_replacementMasterDevice = $deviceInstanceReplacementMasterDevice->getMasterDeviceForReports($hardwareOptimization->dealerId, $hardwareOptimization->getHardwareOptimizationSetting()->laborCostPerPage, $hardwareOptimization->getHardwareOptimizationSetting()->partsCostPerPage);
+                $this->_replacementMasterDevice[$hardwareOptimizationId] = $hardwareOptimizationDeviceInstance->getMasterDevice();
             }
         }
 
-        return $this->_replacementMasterDevice;
+        return $this->_replacementMasterDevice[$hardwareOptimizationId];
     }
 
     /**
@@ -1192,9 +1276,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * The action of the device
      *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
      * @return String $Action
      */
-    public function getAction ()
+    public function getAction ($costPerPageSetting)
     {
         if (!isset($this->_deviceAction))
         {
@@ -1202,7 +1288,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_RETIRE;
             }
-            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->_lifeUsage > 1) && $this->getPageCounts()->getCombinedPageCount()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
+            else if (($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->getLifeUsage($costPerPageSetting) > 1) && $this->getPageCounts()->getCombinedPageCount()->getMonthly() > self::REPLACEMENT_MIN_PAGE_COUNT)
             {
                 $this->_deviceAction = Proposalgen_Model_DeviceInstance::ACTION_REPLACE;
             }
@@ -1304,11 +1390,14 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function getDefaultDeviceSwapReasonCategoryId ($hardwareOptimizationId)
     {
         $categoryId = 0;
-        if ($this->getReplacementMasterDeviceForHardwareOptimization($hardwareOptimizationId))
+
+        $hardwareOptimizationDeviceInstance = $this->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
+
+        if ($hardwareOptimizationDeviceInstance->action == Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
         {
             $categoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
         }
-        else if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+        else if ($hardwareOptimizationDeviceInstance->action == Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR)
         {
             $categoryId = Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
         }
@@ -1317,11 +1406,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @param $memjetOptimizationId
+     * @param int                                  $memjetOptimizationId
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return int
      */
-    public function getDefaultMemjetDeviceSwapReasonCategoryId ($memjetOptimizationId)
+    public function getDefaultMemjetDeviceSwapReasonCategoryId ($memjetOptimizationId, $costPerPageSetting)
     {
         $categoryId        = 0;
         $replacementDevice = $this->getReplacementMasterDeviceForMemjetOptimization($memjetOptimizationId);
@@ -1336,7 +1426,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
                 $categoryId = Memjetoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT;
             }
         }
-        else if ($this->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+        else if ($this->getAction($costPerPageSetting) === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
         {
             $categoryId = Memjetoptimization_Model_Device_Swap_Reason_Category::FLAGGED;
         }
@@ -1419,10 +1509,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             else
             {
                 // Create fake instance
-                $deviceCostPerPage = new Proposalgen_Model_DeviceCostPerPage(array(), $costPerPageSetting);
+                $deviceCostPerPage            = new Proposalgen_Model_DeviceCostPerPage(array(), $costPerPageSetting);
                 $deviceCostPerPage->isManaged = $this->isManaged;
             }
-
 
 
             $this->_cachedDeviceCostPerPage [$cacheKey] = $deviceCostPerPage;
@@ -1547,7 +1636,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function calculateEstimatedMaxLifeCount ($costPerPageSetting)
     {
-        return $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 36;
+        return $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * self::LIFE_PAGE_COUNT_MONTHS;
     }
 
     /**

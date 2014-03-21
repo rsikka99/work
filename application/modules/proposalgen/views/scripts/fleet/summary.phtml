@@ -9,74 +9,128 @@ var jit = '<?php echo My_Brand::$jit; ?>';
     <?php echo $this->navigationForm; ?>
 </div>
 <div class="lightbox-panel" id="deviceDetailsContainer" style="display: none;">
-    <h4>Device Details</h4>
-    <table class="table table-bordered table-striped table-condensed">
-        <tr>
-            <td style="width: 200px;">Launch Date:</td>
-            <td id="deviceDetails_launchDate">Launch Date</td>
-        </tr>
-        <tr>
-            <td>Copier:</td>
-            <td id="deviceDetails_isCopier">YES</td>
-        </tr>
-        <tr>
-            <td>Duplex:</td>
-            <td id="deviceDetails_isDuplex">NO</td>
-        </tr>
-        <tr>
-            <td>Fax:</td>
-            <td id="deviceDetails_isFax">YES</td>
-        </tr>
-        <tr>
-            <td>Capable of Reporting Toner Levels:</td>
-            <td id="deviceDetails_reportsToners">YES</td>
-        </tr>
-        <tr>
-            <td>PPM Black:</td>
-            <td id="deviceDetails_ppmBlack"></td>
-        </tr>
-        <tr>
-            <td>PPM Color:</td>
-            <td id="deviceDetails_ppmColor"></td>
-        </tr>
-        <tr>
-            <td>Watts Power Normal:</td>
-            <td id="deviceDetails_wattsPowerNormal"></td>
-        </tr>
-        <tr>
-            <td>Watts Power Idle:</td>
-            <td id="deviceDetails_wattsPowerIdle"></td>
-        </tr>
-        <tr>
-            <td>Device Cost:</td>
-            <td id="deviceDetails_cost"></td>
-        </tr>
-        <tr>
-            <td>Toner Configuration:</td>
-            <td id="deviceDetails_tonerConfigName"></td>
-        </tr>
-        <tr>
-            <td>Leased by default:</td>
-            <td id="deviceDetails_isLeased">YESNO</td>
-        </tr>
-        <tr>
-            <td><?php echo My_Brand::$jit; ?> compatible by default:</td>
-            <td id="deviceDetails_compatibleWithJit">YESNO</td>
-        </tr>
-    </table>
-    <h4>Toners</h4>
-    <table class="table table-bordered table-striped table-condensed">
-        <thead>
-        <tr>
-            <th>SKU</th>
-            <th>Manufacturer</th>
-            <th>Color</th>
-            <th>Yield</th>
-            <th>Cost</th>
-        </tr>
-        </thead>
-        <tbody id="deviceDetails_toners">
+    <div class="row-fluid">
+        <div class="span6">
+            <h4>Device Details</h4>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <td style="width: 200px;">Launch Date:</td>
+                    <td id="deviceDetails_launchDate">Launch Date</td>
+                </tr>
+                <tr>
+                    <td>PPM Black:</td>
+                    <td id="deviceDetails_ppmBlack"></td>
+                </tr>
+                <tr>
+                    <td>PPM Color:</td>
+                    <td id="deviceDetails_ppmColor"></td>
+                </tr>
+                <tr>
+                    <td>Watts Power Normal:</td>
+                    <td id="deviceDetails_wattsPowerNormal"></td>
+                </tr>
+                <tr>
+                    <td>Watts Power Idle:</td>
+                    <td id="deviceDetails_wattsPowerIdle"></td>
+                </tr>
+                <tr>
+                    <td>Device Cost:</td>
+                    <td id="deviceDetails_cost"></td>
+                </tr>
+                <tr>
+                    <td>Toner Configuration:</td>
+                    <td id="deviceDetails_tonerConfigName"></td>
+                </tr>
+                <tr>
+                    <td>Leased by default:</td>
+                    <td id="deviceDetails_isLeased">YESNO</td>
+                </tr>
+            </table>
+        </div>
+        <div class="span6">
+            <h4>Device Capabilities</h4>
+            <table class="table table-bordered table-striped table-condensed">
+                <tr>
+                    <td>Copier:</td>
+                    <td id="deviceDetails_isCopier">YES</td>
+                </tr>
+                <tr>
+                    <td>Duplex:</td>
+                    <td id="deviceDetails_isDuplex">NO</td>
+                </tr>
+                <tr>
+                    <td>Fax:</td>
+                    <td id="deviceDetails_isFax">YES</td>
+                </tr>
+                <tr>
+                    <td>Can Print A3:</td>
+                    <td id="deviceDetails_isA3">YES</td>
+                </tr>
+                <tr>
+                    <td>Capable of Reporting Toner Levels:</td>
+                    <td id="deviceDetails_reportsToners">YES</td>
+                </tr>
+                <tr>
+                    <td><?php echo My_Brand::$jit; ?> compatible by default:</td>
+                    <td id="deviceDetails_compatibleWithJit">YESNO</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span6">
+            <h4>Meters</h4>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Monthly Volume</th>
+                </tr>
+                </thead>
+                <tbody id="deviceDetails_meters">
 
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+        <div class="span6">
+            <h4>Page Coverages</h4>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>Black</th>
+                    <th>Cyan</th>
+                    <th>Magenta</th>
+                    <th>Yellow</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td id="pageCoverageMonochrome">5%</td>
+                    <td id="pageCoverageCyan">5%</td>
+                    <td id="pageCoverageMagenta">5%</td>
+                    <td id="pageCoverageYellow">5%</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h4>Toners</h4>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Manufacturer</th>
+                    <th>Color</th>
+                    <th>Yield</th>
+                    <th>Cost</th>
+                </tr>
+                </thead>
+                <tbody id="deviceDetails_toners">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

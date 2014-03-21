@@ -217,6 +217,8 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($this->_optimization->getMonthlyHighCostPurchasedDevice($this->_optimization->getCostPerPageSettingForDealer()) as $deviceInstance)
         {
+            $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id);
+
             if ($deviceInstance->getMasterDevice()->isCopier)
             {
                 $this->deviceCategories["current"]["copy"]++;
@@ -237,11 +239,11 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
             }
 
             // Check the action status first, then check the replacement status
-            if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
             {
                 $actionReplace++;
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            else if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE)
             {
                 $actionRetire++;
             }
@@ -252,9 +254,11 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
 
             // Get the age rank of the device instance
             $ageRank = Tangent_Functions::getValueFromRangeStepTable($deviceInstance->getMasterDevice()->getAge(), self::$ageRankTable, false);
+
             // Get the replacement device of the device instance if there is one
-            $replacementDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization(($hardwareOptimization->id));
-            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            $replacementDevice = ($hardwareOptimizationDeviceInstance->masterDeviceId > 0) ? $hardwareOptimizationDeviceInstance->getMasterDevice() : false;
+
+            if ($hardwareOptimizationDeviceInstance->action !== Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE)
             {
                 // Assigned the optimized age rank if replacement device exists
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
@@ -304,11 +308,11 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
                     $this->replacementJitCompatibleCount++;
                 }
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            else if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE)
             {
                 $retiredDevices [] = $deviceInstance;
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            else if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR)
             {
                 $flaggedDevices [] = $deviceInstance;
             }
@@ -409,9 +413,11 @@ abstract class Hardwareoptimization_Model_Optimization_Abstract
         /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($this->_optimization->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
         {
-            if ($deviceInstance->getAction() !== Proposalgen_Model_DeviceInstance::ACTION_RETIRE)
+            $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_hardwareOptimization->id);
+
+            if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
             {
-                $replacementDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimization->id);
+                $replacementDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
                 if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
                 {
                     $masterDevices [] = $replacementDevice;

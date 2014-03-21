@@ -1,0 +1,38 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader">
+    Current Fleet Statistics (before replacements)
+</div>
+
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[0]; ?>" /></td>
+        <td><img src="<?php echo $graphs[1]; ?>" /></td>
+        <td><img src="<?php echo $graphs[2]; ?>" /></td>
+    </tr>
+</table>
+
+<div class="pheader">
+    Optimization Summary
+</div>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris.
+    Nunc id eros vel urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque
+    tellus facilisis ligula, sed posuere ipsum odio eget est. Duis venenatis sodales nisi ut congue.</p>
+<br />
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[3]; ?>" /></td>
+    </tr>
+</table>
+<br /><br />

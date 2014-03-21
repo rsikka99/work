@@ -1,0 +1,62 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$deviceInstances = $optimization->getDevicesGroupedByAction();
+
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+?>
+    <div class="h1">
+        Device Appendix<em> (<?php echo number_format($totalNumberOfDevices) ?> devices)</em>
+    </div>
+
+<?php
+echo $this->partial('report/customer/optimization/html/device_table.phtml',
+    array("title"                  => "Acceptable Devices",
+          "description"            => "The following devices have been deemed productive and we suggest keeping these devices.",
+          "deviceInstances"        => $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP],
+          "showReplacementDevices" => false,
+          "hardwareOptimization"   => $hardwareOptimization,
+          "totalNumberOfDevices"   => $totalNumberOfDevices,
+    )
+);
+
+echo $this->partial('report/customer/optimization/html/device_table.phtml',
+    array("title"                  => "Suggested Replacement Devices",
+          "description"            => "The following devices have been targeted for replacement.",
+          "deviceInstances"        => $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE],
+          "showReplacementDevices" => true,
+          "hardwareOptimization"   => $hardwareOptimization,
+          "totalNumberOfDevices"   => $totalNumberOfDevices,
+    )
+);
+
+echo $this->partial('report/customer/optimization/html/device_table.phtml',
+    array("title"                  => "Devices eligible for retirement",
+          "description"            => "Devices with both low volume and age of over " . Proposalgen_Model_DeviceInstance::RETIREMENT_AGE . " years have been target for retirement. We suggest migrating the page volume into another device.",
+          "deviceInstances"        => $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE],
+          "showReplacementDevices" => false,
+          "hardwareOptimization"   => $hardwareOptimization,
+          "totalNumberOfDevices"   => $totalNumberOfDevices,
+    )
+);
+
+echo $this->partial('report/customer/optimization/html/device_table.phtml',
+    array("title"                  => "Devices flagged as Do Not Repair",
+          "description"            => "These devices have been flagged for replacement on breakdown based on operation reliability.",
+          "deviceInstances"        => $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR],
+          "showReplacementDevices" => false,
+          "hardwareOptimization"   => $hardwareOptimization,
+          "totalNumberOfDevices"   => $totalNumberOfDevices,
+    )
+);
+?>

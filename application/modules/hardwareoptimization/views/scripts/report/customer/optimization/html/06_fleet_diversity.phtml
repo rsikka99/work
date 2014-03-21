@@ -1,0 +1,37 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader">
+    Number of Printing Device Models and Supply Types
+</div>
+<p>Out of your <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
+    <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
+    We estimate that <strong><?php echo count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices
+    are leased machines, for which supplies are included in your contract. The <strong><?php echo number_format($totalPurchasedDevices); ?></strong> remaining machines consist
+    of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
+    <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you
+    have an estimated <strong><?php echo $this->currency($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies
+        inventory</strong> at any given time.</p>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[12]; ?>" /></td>
+    </tr>
+</table>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[13]; ?>" /></td>
+    </tr>
+</table>
+<p>By using printing devices with the same supplies, you can minimize the amount of operating cash held up in supplies inventory and the amount of storage space
+    required. <?php echo My_Brand::$brandName; ?> can provide you with just-in-time supplies fulfillment, which can further reduce your inventory requirements and emergency supply
+    orders.</p>

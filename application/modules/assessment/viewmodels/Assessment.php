@@ -703,27 +703,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
     /**
      * @return int
      */
-    public function calculateMaximumMonthlyPrintVolumeWithReplacements ()
-    {
-        $maxVolume = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
-        {
-            if ($deviceInstance->getReplacementMasterDevice())
-            {
-                $maxVolume += $deviceInstance->getReplacementMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer());
-            }
-            else
-            {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForCustomer());
-            }
-        }
-
-        return $maxVolume;
-    }
-
-    /**
-     * @return int
-     */
     public function getMaximumMonthlyPurchasedPrintVolume ()
     {
         if (!isset($this->_maximumMonthlyPurchasedPrintVolume))
@@ -779,33 +758,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         }
 
         return $this->_numberOfColorCapablePurchasedDevices;
-    }
-
-    /**
-     * Gets the amount of color capable devices with replacement devices
-     *
-     * @return int
-     */
-    public function getNumberOfColorCapableDevicesWithReplacements ()
-    {
-        $numberOfDevices = 0;
-        foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
-        {
-            $replacementDevice = $device->getReplacementMasterDevice();
-            if ($replacementDevice instanceof Proposalgen_Model_MasterDevice)
-            {
-                if ($replacementDevice->isColor())
-                {
-                    $numberOfDevices++;
-                }
-            }
-            else if ($device->getMasterDevice()->tonerConfigId != Proposalgen_Model_TonerConfig::BLACK_ONLY)
-            {
-                $numberOfDevices++;
-            }
-        }
-
-        return $numberOfDevices;
     }
 
     /**
@@ -3213,15 +3165,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
         return $this->calculateDealerMonthlyRevenueUsingTargetCostPerPage() - $this->calculateDealerMonthlyCost();
     }
 
-    /**
-     * Calculates the dealers monthly profit when using a target cost per page schema and replacement devices
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements ()
-    {
-        return $this->calculateDealerMonthlyRevenueUsingTargetCostPerPage() - $this->calculateDealerMonthlyCostWithReplacements();
-    }
 
     /**
      * The dealers monthly cost with replacements
@@ -3229,28 +3172,6 @@ class Assessment_ViewModel_Assessment extends Assessment_ViewModel_Abstract
      * @var number
      */
     protected $_dealerMonthlyCostWithReplacements;
-
-    /**
-     * Calculates the dealers monthly cost with replacements
-     *
-     * @return number
-     */
-    public function calculateDealerMonthlyCostWithReplacements ()
-    {
-        if (!isset($this->_dealerMonthlyCostWithReplacements))
-        {
-            $this->_dealerMonthlyCostWithReplacements = 0;
-
-            $costPerPageSetting = $this->getCostPerPageSettingForDealer();
-
-            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
-            {
-                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice());
-            }
-        }
-
-        return $this->_dealerMonthlyCostWithReplacements;
-    }
 
     /**
      * The weighted average monthly cost per page when using replacements

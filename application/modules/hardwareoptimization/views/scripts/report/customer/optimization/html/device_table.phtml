@@ -1,0 +1,75 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+$title = $this->title;
+$description = $this->description;
+$totalNumberOfDevices = $this->totalNumberOfDevices;
+$showReplacementDevices = $this->showReplacementDevices;
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $this->deviceInstances;
+?>
+<div class="pheader">
+    <?php echo $title; ?>
+    <em> (<?php echo number_format(count($deviceInstances)) ?> out of <?php echo number_format($totalNumberOfDevices) ?> devices)</em>
+</div>
+
+<p><?php echo $description; ?></p>
+
+<table class="rDevices">
+    <?php if (count($deviceInstances) > 0) : ?>
+        <thead>
+        <tr class="header">
+            <th style="width:175px;">Device Name</th>
+            <th>Serial<br />IP Address</th>
+            <th>Mono AMPV</th>
+            <th>Color AMPV</th>
+            <th>Device Age</th>
+            <th>Life Page Count</th>
+            <?php if ($showReplacementDevices) : ?>
+                <th style="width:175px;">Replacement Device</th>
+            <?php endif; ?>
+            <th>Reason</th>
+        </tr>
+        </thead>
+        <?php foreach ($deviceInstances as $deviceInstance) :
+            $masterDevice            = $deviceInstance->getMasterDevice();
+            $replacementMasterDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
+            $isColor                 = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+            ?>
+            <tr>
+                <td class="deviceName">
+                    <em><?php echo $masterDevice->getManufacturer()->fullname ?></em>
+                    <br>
+                    <strong><?php echo $masterDevice->modelName ?></strong>
+                </td>
+                <td class="serialNumber">
+                    <?php echo $deviceInstance->serialNumber ?>
+                    <br>
+                    <?php echo $deviceInstance->ipAddress; ?>
+                </td>
+                <!-- Monthly Statistics -->
+                <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+                <td class="pageVolume"><?php echo ($isColor) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A' ?></td>
+                <td class="deviceAge"><?php echo $deviceInstance->getAge() ?>y</td>
+                <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife) ?></td>
+                <?php if ($showReplacementDevices && $replacementMasterDevice) : ?>
+                    <td>
+                        <em><?php echo $replacementMasterDevice->getManufacturer()->fullname ?></em>
+                        <br>
+                        <strong><?php echo $replacementMasterDevice->modelName ?></strong>
+                    </td>
+                <?php elseif ($showReplacementDevices) : ?>
+                    <td>-</td>
+                <?php endif; ?>
+                <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else : ?>
+        <thead><tr class="header"><th>No devices fall under this category.</th></tr></thead>
+    <?php endif; ?>
+</table>
+<br>
+<hr>
+<br>

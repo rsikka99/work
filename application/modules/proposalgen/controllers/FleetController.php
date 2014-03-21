@@ -1205,6 +1205,17 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["masterDevice"]["reportsTonerLevels"] = $deviceInstance->getMasterDevice()->isCapableOfReportingTonerLevels;
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
                         $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
+                        $jsonResponse["masterDevice"]["isColor"]            = $deviceInstance->getMasterDevice()->isColor();
+                        $jsonResponse["meters"]                             = array();
+                        $jsonResponse["meters"]['monochrome']               = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
+                        $jsonResponse["meters"]['color']                    = number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly());
+                        $jsonResponse["meters"]['a3Combined']               = number_format($deviceInstance->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly());
+                        $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getPageCounts()->getLifePageCount()->getMonthly());
+                        $jsonResponse["pageCoverage"]                       = array();
+                        $jsonResponse["pageCoverage"]['monochrome']         = number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%';
+                        $jsonResponse["pageCoverage"]['cyan']               = number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%';
+                        $jsonResponse["pageCoverage"]['magenta']            = number_format((float)$deviceInstance->pageCoverageMagenta, 2) . '%';
+                        $jsonResponse["pageCoverage"]['yellow']             = number_format((float)$deviceInstance->pageCoverageYellow, 2) . '%';
                         $jsonResponse["masterDevice"]["toners"]             = [];
 
                         foreach ($deviceInstance->getMasterDevice()->getToners($this->_identity->dealerId, $this->_selectedClientId) as $tonersByManufacturer)

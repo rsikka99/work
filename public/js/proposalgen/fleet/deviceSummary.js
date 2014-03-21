@@ -163,6 +163,7 @@ $(function ()
                 $('#deviceDetails_isCopier').empty().html((data.masterDevice.isCopier) ? 'YES' : 'NO');
                 $('#deviceDetails_isDuplex').empty().html((data.masterDevice.isDuplex) ? 'YES' : 'NO');
                 $('#deviceDetails_isFax').empty().html((data.masterDevice.isFax) ? 'YES' : 'NO');
+                $('#deviceDetails_isA3').empty().html((data.masterDevice.isA3) ? 'YES' : 'NO');
                 $('#deviceDetails_reportsToners').empty().html((data.masterDevice.reportsTonerLevels == 1) ? 'YES' : 'NO');
                 $('#deviceDetails_ppmBlack').empty().html(data.masterDevice.ppmBlack);
                 $('#deviceDetails_ppmColor').empty().html(data.masterDevice.ppmColor);
@@ -172,6 +173,41 @@ $(function ()
                 $('#deviceDetails_tonerConfigName').empty().html(data.masterDevice.tonerConfigName);
                 $('#deviceDetails_isLeased').empty().html((data.masterDevice.isLeased) ? 'YES' : 'NO');
                 $('#deviceDetails_compatibleWithJit').empty().html((data.masterDevice.compatibleWithJit) ? 'YES' : 'NO');
+
+                $('#pageCoverageMonochrome').empty().html(data.pageCoverage.monochrome);
+                $('#pageCoverageCyan').empty().html(data.pageCoverage.cyan);
+                $('#pageCoverageMagenta').empty().html(data.pageCoverage.magenta);
+                $('#pageCoverageYellow').empty().html(data.pageCoverage.yellow);
+
+                var metersTBody = $('#deviceDetails_meters');
+                metersTBody.empty();
+                metersTBody.append(
+                    $('<tr></tr>')
+                        .append($('<td></td>').html('Life Pages'))
+                        .append($('<td></td>').html(data.meters.life))
+                );
+                metersTBody.append(
+                    $('<tr></tr>')
+                        .append($('<td></td>').html('Monochrome Pages'))
+                        .append($('<td></td>').html(data.meters.monochrome))
+                );
+                if (data.masterDevice.isColor)
+                {
+                    metersTBody.append(
+                        $('<tr></tr>')
+                            .append($('<td></td>').html('Color Pages'))
+                            .append($('<td></td>').html(data.meters.color))
+                    );
+                }
+                if (data.masterDevice.isA3)
+                {
+                    metersTBody.append(
+                        $('<tr></tr>')
+                            .append($('<td></td>').html('A3 Pages'))
+                            .append($('<td></td>').html(data.meters.a3Combined))
+                    );
+                }
+
 
                 var tonerTBody = $('#deviceDetails_toners');
                 tonerTBody.empty();
@@ -207,7 +243,7 @@ $(function ()
                 deviceDetailsContainer.dialog({
                     modal  : true,
                     title  : data.masterDevice.manufacturer.fullname + " " + data.masterDevice.modelName,
-                    width  : 700,
+                    width  : 800,
                     buttons: {
                         Ok: function ()
                         {

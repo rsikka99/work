@@ -137,7 +137,7 @@ $totalDevices = $optimizationDevices->getDeviceCount();
         </tr>
         <?php foreach ($optimizationDevices->replaced as $device) :
             $isColor           = $device->getMasterDevice()->isColor();
-            $replacementDevice = $device->getReplacementMasterDevice();
+            $replacementDevice = $device->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
             ?>
             <tr class='<?php echo $this->cycle(array("rowOne", "rowTwo"))->next(); ?>'>
                 <td class='deviceName'><?php echo '<em>' . $device->getMasterDevice()->getManufacturer()->fullname . '</em><br/><strong>' . $device->getMasterDevice()->modelName . '</strong><br/><em>'; ?></td>

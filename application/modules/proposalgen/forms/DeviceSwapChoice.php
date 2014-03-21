@@ -27,33 +27,33 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
     /**
      *
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Hardwareoptimization_Model_Device_Swap[]
      */
     protected $blackReplacementDevices;
 
     /**
      *
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Hardwareoptimization_Model_Device_Swap[]
      */
     protected $blackMfpReplacementDevices;
 
     /**
      *
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Hardwareoptimization_Model_Device_Swap[]
      */
     protected $colorReplacementDevices;
 
     /**
      *
-     * @var Proposalgen_Model_DeviceInstance[]
+     * @var Hardwareoptimization_Model_Device_Swap[]
      */
     protected $colorMfpReplacementDevices;
 
     /**
-     * @param null $devices
-     * @param      $dealerId               int
-     * @param      $hardwareOptimizationId int
-     * @param null $options
+     * @param Proposalgen_Model_DeviceInstance[] $devices
+     * @param int                                $dealerId
+     * @param int                                $hardwareOptimizationId
+     * @param null|array                         $options
      */
     public function __construct ($devices, $dealerId, $hardwareOptimizationId, $options = null)
     {
@@ -63,97 +63,121 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         parent::__construct($options);
     }
 
+    /**
+     * Initializes the form
+     */
     public function init ()
     {
-
-        /* @var $deviceInstance Proposalgen_Model_DeviceInstance */
         foreach ($this->_devices as $deviceInstance)
         {
-            // Get replacement devices for each type of device
-            if ($deviceInstance->getAction() !== 'Retire')
+            /**
+             *
+             * Get the proper replacement device list
+             *
+             */
+            if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
             {
-                if ($deviceInstance->getMasterDevice()->tonerConfigId === Proposalgen_Model_TonerConfig::BLACK_ONLY)
+                if ($deviceInstance->getMasterDevice()->isMfp())
                 {
-                    if ($deviceInstance->getMasterDevice()->isMfp())
-                    {
-                        $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
-                    }
-                    else
-                    {
-                        $replacementDevices = $this->getBlackReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
-                    }
+                    $replacementDevices = $this->getBlackMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                 }
                 else
                 {
-                    if ($deviceInstance->getMasterDevice()->isMfp())
-                    {
-                        $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
-                    }
-                    else
-                    {
-                        $replacementDevices = $this->getColorReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
-                    }
+                    $replacementDevices = $this->getBlackReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
                 }
-                $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_hardwareOptimizationId);
             }
             else
             {
-                $replacementDevices                    = array();
-                $deviceInstanceReplacementMasterDevice = null;
+                if ($deviceInstance->getMasterDevice()->isMfp())
+                {
+                    $replacementDevices = $this->getColorMfpReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
+                }
+                else
+                {
+                    $replacementDevices = $this->getColorReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly());
+                }
             }
 
-            $elementType = 'deviceInstance_';
 
-            $replacementDevices[0] = $deviceInstance->getAction();
-            // Create an element for each device Device list per manufacturer
-            $deviceElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                'label'   => 'Device: ',
-                'attribs' => array(
-                    'style' => 'width: 100%'
+            /**
+             *
+             * Setup the dropdown for actions and replacements
+             *
+             */
+            $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_hardwareOptimizationId);
+
+            $replacementDeviceOptions = array(
+                Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP   => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP,
+                Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE,
+                Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR    => Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR,
+            );
+
+            /**
+             * Only display the replacement option if we have devices available.
+             */
+            if (count($replacementDevices) > 0)
+            {
+                $replacementDeviceOptions["Replace With:"] = $replacementDevices;
+            }
+
+            // Eligible replacement master devices changed from time to time. Old selections should still show up for the sake of usability.
+            if ($hardwareOptimizationDeviceInstance->masterDeviceId > 0 && !array_key_exists($hardwareOptimizationDeviceInstance->masterDeviceId, $replacementDevices['Replace With:']))
+            {
+                $replacementMasterDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
+                if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $replacementDevices [$replacementMasterDevice->id] = $replacementMasterDevice->getManufacturer()->fullname . " " . $replacementMasterDevice->modelName;
+                }
+            }
+
+            $this->addElement('select', 'deviceInstance_' . $deviceInstance->id, array(
+                'label'        => 'Device: ',
+                'attribs'      => array(
+                    'style'                   => 'width: 100%',
+                    'data-device-instance-id' => $deviceInstance->id,
                 ),
-                'value'   => ($deviceInstanceReplacementMasterDevice) ? $deviceInstanceReplacementMasterDevice->id : 0
+                'value'        => ($hardwareOptimizationDeviceInstance->masterDeviceId > 0) ? $hardwareOptimizationDeviceInstance->masterDeviceId : $hardwareOptimizationDeviceInstance->action,
+                'multiOptions' => $replacementDeviceOptions,
             ));
 
-            $this->addElement($deviceElement);
 
-            $elementType = 'deviceInstanceReason_';
-
-            $deviceInstanceDeviceSwapReason = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance()->find(array($this->_hardwareOptimizationId, $deviceInstance->id));
-
-            if ($deviceInstance->getReplacementMasterDevice() instanceof Proposalgen_Model_MasterDevice)
-            {
-                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                    'label'   => ': ',
-                    'attribs' => array(
-                        'style' => 'width: 100%'
-                    ),
-                    'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
-                ));
-                $this->addElement($deviceReasonElement);
-                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT));
-            }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
-            {
-                $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
-                    'label'   => ': ',
-                    'attribs' => array(
-                        'style' => 'width: 100%'
-                    ),
-                    'value'   => ($deviceInstanceDeviceSwapReason->deviceSwapReasonId) ? $deviceInstanceDeviceSwapReason->deviceSwapReasonId : 0
-                ));
-                $this->addElement($deviceReasonElement);
-                $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED));
-            }
-
-            /*
-             * If the master device device does not exist in our array we need to add it as it is replaced anyways....
-             * o.O
+            /**
+             *
+             * Setup the dropdown the replacement reason
+             *
              */
-            if ($deviceInstanceReplacementMasterDevice && !array_key_exists($deviceInstanceReplacementMasterDevice->id, $replacementDevices))
+            $deviceSwapReason = $hardwareOptimizationDeviceInstance->getDeviceSwapReason();
+
+            $reasons = false;
+
+            if ($hardwareOptimizationDeviceInstance->action == Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE && $hardwareOptimizationDeviceInstance->masterDeviceId > 0)
             {
-                $replacementDevices [$deviceInstanceReplacementMasterDevice->id] = $deviceInstanceReplacementMasterDevice->getManufacturer()->fullname . " " . $deviceInstanceReplacementMasterDevice->modelName;
+                $reasons = $this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::HAS_REPLACEMENT);
             }
-            $deviceElement->setMultiOptions($replacementDevices);
+            else if ($hardwareOptimizationDeviceInstance->action == Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR)
+            {
+                $reasons = $this->getDeviceSwapsByCategory(Hardwareoptimization_Model_Device_Swap_Reason_Category::FLAGGED);
+            }
+
+            if ($deviceSwapReason->id > 0 && !in_array($deviceSwapReason->id, $reasons))
+            {
+                $reasons[$deviceSwapReason->id] = $deviceSwapReason->reason;
+            }
+
+            if ($reasons !== false)
+            {
+                $this->addElement('select', 'deviceInstanceReason_' . $deviceInstance->id, array(
+                    'label'        => ': ',
+                    'attribs'      => array(
+                        'style'                   => 'width: 100%',
+                        'data-device-instance-id' => $deviceInstance->id,
+                    ),
+                    'multiOptions' => $reasons,
+                    'value'        => ($deviceSwapReason->id) ? $deviceSwapReason->id : 0,
+                ));
+            }
+
+
         }
     }
 
@@ -162,12 +186,11 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      *
      * @param $monthlyPageCounts
      *
-     * @return Proposalgen_Model_DeviceInstance []
+     * @return Hardwareoptimization_Model_Device_Swap []
      */
     public function getBlackReplacementDevices ($monthlyPageCounts)
     {
         $deviceArray        = array();
-        $deviceArray [0]    = 'Keep';
         $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -188,12 +211,11 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      *
      * @param $monthlyPageCounts
      *
-     * @return Proposalgen_Model_DeviceInstance []
+     * @return Hardwareoptimization_Model_Device_Swap []
      */
     public function getBlackMfpReplacementDevices ($monthlyPageCounts)
     {
         $deviceArray        = array();
-        $deviceArray [0]    = 'Keep';
         $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getBlackMfpReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -215,12 +237,11 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      *
      * @param $monthlyPageCounts
      *
-     * @return Proposalgen_Model_DeviceInstance []
+     * @return Hardwareoptimization_Model_Device_Swap []
      */
     public function getColorReplacementDevices ($monthlyPageCounts)
     {
         $deviceArray        = array();
-        $deviceArray [0]    = 'Keep';
         $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -244,12 +265,11 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
      *
      * @param $monthlyPageCounts
      *
-     * @return Proposalgen_Model_DeviceInstance []
+     * @return Hardwareoptimization_Model_Device_Swap []
      */
     public function getColorMfpReplacementDevices ($monthlyPageCounts)
     {
         $deviceArray        = array();
-        $deviceArray [0]    = 'Keep';
         $replacementDevices = Hardwareoptimization_Model_Mapper_Device_Swap::getInstance()->getColorMfpReplacementDevices($this->_dealerId);
         foreach ($replacementDevices as $replacementDevice)
         {
@@ -286,7 +306,7 @@ class Proposalgen_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         foreach (Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->fetchAllByCategoryId($categoryId, $this->_dealerId) as $reason)
         {
             // Add the element to the array as long as it's not the default since that is already added
-            if ($reason->id !== $defaultReason->deviceSwapReasonId)
+            if (!array_key_exists($reason->id, $reasonArray))
             {
                 $reasonArray[$reason->id] = $reason->reason;
             }

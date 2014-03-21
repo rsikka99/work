@@ -165,8 +165,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
             $graph->setLegend(array(
                 "Keep",
                 "Replaced",
-                "Flagged",
-                "Retire",
+                "Do Not Repair",
+                "Retire/Migrate",
             ));
             $graph->setTitle("Optimized Fleet Summary");
             $graph->addValueMarkers($percentValueMarker1, "000000", "0", "-1", "11");
@@ -487,7 +487,8 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
              */
             $uniqueSupplyTypes = $this->getUniqueTonerList($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
             $highest           = $this->getMaximumSupplyCount($this->getUniquePurchasedMasterDevices($this->getAllMasterDevicesWithReplacements()));
-            $diamond           = count($uniqueSupplyTypes) / $highest;
+            $graphMaximum      = $highest + $highest * .15;
+            $diamond           = count($uniqueSupplyTypes) / $graphMaximum;
             $targetUniqueness  = $highest * 0.15;
 
             $barGraph = new gchart\gStackedBarChart(600, 160);
@@ -507,9 +508,9 @@ class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimizat
                 "Your Optimized Supply Uniqueness"
             ));
             //Ticksize is used to scale the number of ticks on the x axis to never go above 21
-            $tickSize = (int)($highest / 20 + 1);
-            $barGraph->addAxisRange(0, 0, $highest, $tickSize);
-            $barGraph->setDataRange(0, $highest);
+            $tickSize = (int)($graphMaximum / 20 + 1);
+            $barGraph->addAxisRange(0, 0, $graphMaximum, $tickSize);
+            $barGraph->setDataRange(0, $graphMaximum);
             $barGraph->setBarScale(40, 5);
             $barGraph->setLegendPosition("t");
 

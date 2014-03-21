@@ -298,20 +298,24 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
         $device = array(
             "deviceInstance" => array(
-                "deviceName"            => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
-                "ipAddress"             => $deviceInstance->ipAddress,
-                "isColor"               => (int)$deviceInstance->getMasterDevice()->isColor(),
-                "serialNumber"          => $deviceInstance->serialNumber,
-                "lifePageCount"         => number_format($deviceInstance->getMeter()->endMeterLife),
-                "monoAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
-                "colorAmpv"             => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
-                "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
-                "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage),
-                "jitSuppliesSupported"  => (int)$deviceInstance->reportsTonerLevels,
-                "isCopy"                => (int)$deviceInstance->getMasterDevice()->isCopier,
-                "isFax"                 => (int)$deviceInstance->getMasterDevice()->isFax,
-                "ppmBlack"              => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
-                "ppmColor"              => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
+                "deviceName"             => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
+                "ipAddress"              => $deviceInstance->ipAddress,
+                "isColor"                => (int)$deviceInstance->getMasterDevice()->isColor(),
+                "serialNumber"           => $deviceInstance->serialNumber,
+                "lifePageCount"          => number_format($deviceInstance->getMeter()->endMeterLife),
+                "monoAmpv"               => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
+                "colorAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
+                "costPerPageMonochrome"  => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"       => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage),
+                "jitSuppliesSupported"   => (int)$deviceInstance->reportsTonerLevels,
+                "isCopy"                 => (int)$deviceInstance->getMasterDevice()->isCopier,
+                "isFax"                  => (int)$deviceInstance->getMasterDevice()->isFax,
+                "pageCoverageMonochrome" => ($deviceInstance->pageCoverageMonochrome > 0) ? number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%' : 'N/A',
+                "pageCoverageCyan"       => ($deviceInstance->pageCoverageCyan > 0) ? number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%' : 'N/A',
+                "pageCoverageMagenta"    => ($deviceInstance->pageCoverageMagenta > 0) ? number_format((float)$deviceInstance->pageCoverageMagenta, 2) . '%' : 'N/A',
+                "pageCoverageYellow"     => ($deviceInstance->pageCoverageYellow > 0) ? number_format((float)$deviceInstance->pageCoverageYellow, 2) . '%' : 'N/A',
+                "ppmBlack"               => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
+                "ppmColor"               => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
             ),
             "hasReplacement" => (int)$hasReplacementDevice
         );
@@ -401,12 +405,12 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             $costDelta = $deviceInstance->calculateMonthlyCost($memjetOptimizationViewModel->getCostPerPageSettingForDealer()) -
                          $deviceInstance->calculateMonthlyCost($memjetOptimizationViewModel->getCostPerPageSettingForReplacements(), $replacementDevice, ($replacementDevice != null && $deviceInstance->getMasterDevice()->isColor() == false && $replacementDevice->isColor()) ? $blackToColorRatio : null);
 
-            $form                        = new Memjetoptimization_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_memjetOptimization->id);
+            $form                        = new Memjetoptimization_Form_DeviceSwapChoice(array($deviceInstance), $this->_dealerId, $this->_memjetOptimization->id, $memjetOptimizationViewModel->getCostPerPageSettingForDealer());
             $deviceInstanceReasonElement = $form->getElement("deviceInstanceReason_" . $deviceInstanceId);
         }
 
         // Save the device reason into the table
-        $deviceSwapReasonId             = Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimization->id), $this->_identity->dealerId)->deviceSwapReasonId;
+        $deviceSwapReasonId             = Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimization->id, $this->_optimizationViewModel->getCostPerPageSettingForDealer()), $this->_identity->dealerId)->deviceSwapReasonId;
         $deviceInstanceDeviceSwapReason = $deviceInstanceDeviceSwapReasonMapper->find(array($this->_memjetOptimization->id, $deviceInstanceId));
         if ($deviceInstanceDeviceSwapReason instanceof Memjetoptimization_Model_Device_Instance_Device_Swap_Reason)
         {
@@ -586,7 +590,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
 
             foreach ($deviceInstances as $deviceInstance)
             {
-                $defaultReason = Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimization->id), $this->_identity->dealerId);
+                $defaultReason = Memjetoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimization->id, $this->_optimizationViewModel->getCostPerPageSettingForDealer()), $this->_identity->dealerId);
                 // If we have found the default reason process save / insert
                 if ($defaultReason instanceof Memjetoptimization_Model_Device_Swap_Reason_Default)
                 {
@@ -668,7 +672,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
     {
         if (!isset($this->_deviceSwapForm))
         {
-            $this->_deviceSwapForm = new Memjetoptimization_Form_DeviceSwapChoice($devices, $this->_identity->dealerId, $this->_memjetOptimization->id);
+            $this->_deviceSwapForm = new Memjetoptimization_Form_DeviceSwapChoice($devices, $this->_identity->dealerId, $this->_memjetOptimization->id, $this->getOptimizationViewModel()->getCostPerPageSettingForDealer());
         }
 
         return $this->_deviceSwapForm;

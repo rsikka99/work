@@ -74,16 +74,18 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     protected $memjetColorMfpReplacementDevices;
 
     /**
-     * @param null $devices
-     * @param      $dealerId               int
-     * @param      $memjetOptimizationId   int
-     * @param null $options
+     * @param null                                 $devices
+     * @param                                      $dealerId               int
+     * @param                                      $memjetOptimizationId   int
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param null                                 $options
      */
-    public function __construct ($devices, $dealerId, $memjetOptimizationId, $options = null)
+    public function __construct ($devices, $dealerId, $memjetOptimizationId, $costPerPageSetting, $options = null)
     {
         $this->_devices              = $devices;
         $this->_dealerId             = $dealerId;
         $this->_memjetOptimizationId = $memjetOptimizationId;
+        $this->_costPerPageSetting   = $costPerPageSetting;
         parent::__construct($options);
     }
 
@@ -94,7 +96,7 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
         foreach ($this->_devices as $deviceInstance)
         {
             // Get replacement devices for each type of device
-            if ($deviceInstance->getAction() !== 'Retire')
+            if ($deviceInstance->getAction($this->_costPerPageSetting) !== 'Retire')
             {
                 $memjetReplacementDevices              = $this->getAllMemjetReplacementDevices($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly(), $deviceInstance);
                 $deviceInstanceReplacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForMemjetOptimization($this->_memjetOptimizationId);
@@ -107,7 +109,7 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
             $elementType = 'deviceInstance_';
 
-            $memjetReplacementDevices[0] = $deviceInstance->getAction();
+            $memjetReplacementDevices[0] = $deviceInstance->getAction($this->_costPerPageSetting);
             // Create an element for each device Device list per manufacturer
             $deviceElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
                 'label'   => 'Device: ',
@@ -125,7 +127,7 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
 
             if ($deviceInstance->getMemjetReplacementMasterDevice($this->_memjetOptimizationId) instanceof Proposalgen_Model_MasterDevice)
             {
-                $memjetReason   = $deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimizationId);
+                $memjetReason   = $deviceInstance->getDefaultMemjetDeviceSwapReasonCategoryId($this->_memjetOptimizationId, $this->_costPerPageSetting);
                 $reasonCategory = null;
                 if ($memjetReason == Memjetoptimization_Model_Device_Swap_Reason_Category::FUNCTIONALITY_UPGRADE)
                 {
@@ -146,7 +148,7 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
                 $this->addElement($deviceReasonElement);
                 $deviceReasonElement->setMultiOptions($this->getDeviceSwapsByCategory($reasonCategory));
             }
-            else if ($deviceInstance->getAction() === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
+            else if ($deviceInstance->getAction($this->_costPerPageSetting) === Proposalgen_Model_DeviceInstance::ACTION_REPLACE)
             {
                 $deviceReasonElement = $this->createElement('select', $elementType . $deviceInstance->id, array(
                     'label'   => ': ',

@@ -101,6 +101,11 @@ class Hardwareoptimization_ViewModel_Optimization
     protected $_costPerPageSettingForReplacements;
 
     /**
+     * @var Proposalgen_Model_DeviceInstance[]
+     */
+    protected $_devicesGroupedByAction;
+
+    /**
      * Constructor
      *
      * @param int|Hardwareoptimization_Model_Hardware_Optimization $hardwareOptimization
@@ -707,6 +712,41 @@ class Hardwareoptimization_ViewModel_Optimization
         }
 
         return $this->_dealerMonthlyCostWithReplacements;
+    }
+
+    /**
+     * Gets all the devices grouped by their action
+     */
+    public function getDevicesGroupedByAction ()
+    {
+        if (!isset($this->_devicesGroupedByAction))
+        {
+            $this->_devicesGroupedByAction = array();
+            foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
+            {
+                $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_optimization->id);
+                switch ($hardwareOptimizationDeviceInstance->action)
+                {
+                    case Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP:
+                        $this->_devicesGroupedByAction[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_KEEP][] = $deviceInstance;
+                        break;
+
+                    case Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE:
+                        $this->_devicesGroupedByAction[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE][] = $deviceInstance;
+                        break;
+
+                    case Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE:
+                        $this->_devicesGroupedByAction[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE][] = $deviceInstance;
+                        break;
+
+                    case Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR:
+                        $this->_devicesGroupedByAction[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_DNR][] = $deviceInstance;
+                        break;
+                }
+            }
+        }
+
+        return $this->_devicesGroupedByAction;
     }
 
 }
