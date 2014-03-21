@@ -74,6 +74,11 @@ class Memjetoptimization_Form_DeviceSwapChoice extends Twitter_Bootstrap_Form
     protected $memjetColorMfpReplacementDevices;
 
     /**
+     * @var Proposalgen_Model_CostPerPageSetting
+     */
+    protected $_costPerPageSetting;
+
+    /**
      * @param null                                 $devices
      * @param                                      $dealerId               int
      * @param                                      $memjetOptimizationId   int
