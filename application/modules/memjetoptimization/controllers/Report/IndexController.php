@@ -50,11 +50,13 @@ class Memjetoptimization_Report_IndexController extends Memjetoptimization_Libra
                         $memjetOptimizationQuote->memjetOptimizationId = $this->_memjetOptimization->id;
                         $memjetOptimizationQuote->quoteId              = $quoteId;
                         Memjetoptimization_Model_Mapper_Memjet_Optimization_Quote::getInstance()->insert($memjetOptimizationQuote);
+
                         // Get the replacement master devices
                         $quoteDeviceService = new  Quotegen_Service_QuoteDevice($userId, $quoteId);
                         foreach ($masterDeviceIds as $masterDeviceId)
                         {
-                            $quoteDeviceService->addDeviceToQuote($masterDeviceId, true);
+                            $quantity = Memjetoptimization_Model_Mapper_Device_Instance_Replacement_Master_Device::getInstance()->countReplacementDevicesById($memjetOptimizationQuote->memjetOptimizationId, $masterDeviceId);
+                            $quoteDeviceService->addDeviceToQuote($masterDeviceId, $quantity);
                         }
 
                         $this->redirector('index', 'quote_devices', 'quotegen', array('quoteId' => $quoteId));

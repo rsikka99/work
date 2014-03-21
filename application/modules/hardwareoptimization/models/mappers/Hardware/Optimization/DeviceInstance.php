@@ -241,4 +241,24 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization_DeviceInstance ext
             "{$this->col_hardwareOptimizationId} = ?" => $hardwareOptimizationId,
         ));
     }
+
+    /**
+     * Gets all the master device ids with the quantities
+     *
+     * @param $hardwareOptimizationId
+     *
+     * @return array
+     */
+    public function getMasterDeviceQuantitiesForHardwareOptimization ($hardwareOptimizationId)
+    {
+        $select = $this->getDbTable()
+                       ->select(Zend_Db_Table::SELECT_WITH_FROM_PART)
+                       ->columns(array("masterDeviceId", "quantity" => "COUNT(*)"))
+                       ->group("masterDeviceId")
+                       ->where("hardwareOptimizationId = ?", $hardwareOptimizationId)
+                       ->where("masterDeviceId IS NOT NULL");
+
+        return $select->query()->fetchAll(Zend_Db::FETCH_ASSOC);
+
+    }
 }
