@@ -300,9 +300,11 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
             "deviceInstance" => array(
                 "deviceName"             => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
                 "ipAddress"              => $deviceInstance->ipAddress,
+                "age"                    => $deviceInstance->getAge(),
                 "isColor"                => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"           => $deviceInstance->serialNumber,
                 "lifePageCount"          => number_format($deviceInstance->getMeter()->endMeterLife),
+                "maxLifePageCount"       => number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting)),
                 "monoAmpv"               => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
                 "colorAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
                 "costPerPageMonochrome"  => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
@@ -325,14 +327,16 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
         {
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
+                "age"                   => $replacementDevice->getAge(),
                 "isColor"               => (int)$replacementDevice->isColor(),
-                "costPerPageMonochrome" => $this->view->formatCostPerPage((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage),
-                "costPerPageColor"      => $this->view->formatCostPerPage((float)$deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage),
+                "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage),
+                "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage),
+                "maxLifePageCount"      => number_format($replacementDevice->calculateEstimatedMaxLifeCount($replacementCostPerPageSetting)),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
                 "ppmColor"              => ($replacementDevice->ppmColor > 0) ? number_format($replacementDevice->ppmColor) : 'N/A',
-                "reason"                => $deviceInstance->getMemjetReason($this->_memjetOptimization->id)
+                "reason"                => $deviceInstance->getReason($this->_hardwareOptimization->id)
             );
         }
 

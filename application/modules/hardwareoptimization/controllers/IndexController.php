@@ -255,13 +255,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 $hardwareOptimizationDeviceInstanceMapper->save($hardwareOptimizationDeviceInstance);
             }
 
-            if (!$this->_saveDeviceSwapReason(true))
-            {
-                $db->rollBack();
-
-                return false;
-            }
-
             $db->commit();
         }
         catch (Exception $e)
@@ -323,9 +316,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
             "deviceInstance" => array(
                 "deviceName"             => "{$deviceInstance->getMasterDevice()->getManufacturer()->fullname} {$deviceInstance->getMasterDevice()->modelName}",
                 "ipAddress"              => $deviceInstance->ipAddress,
+                "age"                    => $deviceInstance->getAge(),
                 "isColor"                => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"           => $deviceInstance->serialNumber,
                 "lifePageCount"          => number_format($deviceInstance->getMeter()->endMeterLife),
+                "maxLifePageCount"       => number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting)),
                 "monoAmpv"               => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),
                 "colorAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
                 "costPerPageMonochrome"  => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
@@ -348,9 +343,11 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
         {
             $device ["replacementDevice"] = array(
                 "deviceName"            => "{$replacementDevice->getManufacturer()->fullname} {$replacementDevice->modelName}",
+                "age"                   => $replacementDevice->getAge(),
                 "isColor"               => (int)$replacementDevice->isColor(),
                 "costPerPageMonochrome" => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->monochromeCostPerPage),
                 "costPerPageColor"      => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($replacementCostPerPageSetting, $replacementDevice)->getCostPerPage()->colorCostPerPage),
+                "maxLifePageCount"       => number_format($replacementDevice->calculateEstimatedMaxLifeCount($replacementCostPerPageSetting)),
                 "isCopy"                => (int)$replacementDevice->isCopier,
                 "isFax"                 => (int)$replacementDevice->isFax,
                 "ppmBlack"              => ($replacementDevice->ppmBlack > 0) ? number_format($replacementDevice->ppmBlack) : 'N/A',
@@ -527,7 +524,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
     {
         $jqGridService              = new Tangent_Service_JQGrid();
         $hardwareoptimizationMapper = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance();
-        $this->_saveDeviceSwapReason();
 
         /*
          * Grab the incoming parameters
@@ -597,55 +593,6 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
 
         // Send back jqGrid JSON data
         $this->sendJson($jqGridService->createPagerResponseArray());
-    }
-
-    /**
-     * Processes device swaps reason saves.
-     *
-     * @param bool $deleteSwapReasons Delete all device swap reasons for this optimization?
-     *
-     * @throws Exception
-     * @return bool
-     */
-    protected function _saveDeviceSwapReason ($deleteSwapReasons = false)
-    {
-        $success                              = true;
-        $deviceInstanceDeviceSwapReasonMapper = Hardwareoptimization_Model_Mapper_Device_Instance_Device_Swap_Reason::getInstance();
-        $deviceInstances                      = $this->getOptimizationViewModel()->getDevices()->purchasedDeviceInstances->getDeviceInstances();
-        try
-        {
-            if ($deleteSwapReasons)
-            {
-                // Delete all the device instances device swap reasons for this hardware optimization id
-                $deviceInstanceDeviceSwapReasonMapper->deleteAllByHardwareOptimizationId($this->_hardwareOptimization->id);
-            }
-
-            foreach ($deviceInstances as $deviceInstance)
-            {
-                $defaultReason = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization->id), $this->_identity->dealerId);
-                // If we have found the default reason process save / insert
-                if ($defaultReason instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
-                {
-                    $deviceInstanceDeviceSwapReason                         = new Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason();
-                    $deviceInstanceDeviceSwapReason->hardwareOptimizationId = $this->_hardwareOptimization->id;
-                    $deviceInstanceDeviceSwapReason->deviceInstanceId       = $deviceInstance->id;
-                    $deviceInstanceDeviceSwapReason->deviceSwapReasonId     = $defaultReason->deviceSwapReasonId;
-
-                    // If deleteSwapReasons we know that we don't need to worry about finding and device swap reason, insert them all
-                    // Or if we have a result in the database for this device instance we skip it.
-                    if ($deleteSwapReasons || !$deviceInstanceDeviceSwapReasonMapper->find(array($this->_hardwareOptimization->id, $deviceInstance->id)) instanceof Hardwareoptimization_Model_Device_Instance_Device_Swap_Reason)
-                    {
-                        $deviceInstanceDeviceSwapReasonMapper->insert($deviceInstanceDeviceSwapReason);
-                    }
-                }
-            }
-        }
-        catch (Exception $e)
-        {
-            throw new Exception("Passing up the chain.", 0, $e);
-        }
-
-        return $success;
     }
 
     /**

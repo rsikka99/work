@@ -260,6 +260,7 @@ $(function ()
                         $table.append($("<tr></tr>").append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>"));
                         $table.append($("<tr></tr>").append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>"));
                         $table.append($("<tr></tr>").append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>Age</td><td>" + data.deviceInstance.age + "y</td>"));
                         $table.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>"));
                         $table.append($("<tr></tr>").append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>"));
 
@@ -270,6 +271,7 @@ $(function ()
                         }
 
                         $table.append($("<tr></tr>").append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> "));
+                        $table.append($("<tr></tr>").append("<td>Max. Life Page Count</td> <td>" + data.deviceInstance.maxLifePageCount + "</td> "));
 
                         if (data.deviceInstance.isCopy)
                         {
@@ -317,10 +319,13 @@ $(function ()
                             $replacementTable.append($("<tr></tr>").append("<td colspan='2'><strong>New Device</strong></td>"));
                             $replacementTable.append($("<tr></tr>").append("<td colspan='2'><em>" + data.replacementDevice.deviceName + "</em></td>"));
 
+
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));
+
+                            $replacementTable.append($("<tr></tr>").append("<td>Age</td><td>" + data.replacementDevice.age + "y</td>"));
 
                             $replacementTable.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.replacementDevice.costPerPageMonochrome + "</td>"));
 
@@ -336,6 +341,8 @@ $(function ()
                                 // Blank row to match device rows up
                                 $replacementTable.append($(blankRow));
                             }
+
+                            $replacementTable.append($("<tr></tr>").append("<td>Max. Life Page Count</td> <td>" + data.replacementDevice.maxLifePageCount + "</td> "));
 
                             // Blank row to match device rows up
                             $replacementTable.append($(blankRow));

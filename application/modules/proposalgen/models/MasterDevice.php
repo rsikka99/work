@@ -13,6 +13,8 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     const DEVICE_TYPE_COLOR     = 2;
     const DEVICE_TYPE_COLOR_MFP = 3;
 
+    const LIFE_PAGE_COUNT_MONTHS = 36;
+
     static $TonerConfigNames = array(
         self::DEVICE_TYPE_MONO      => "Monochrome",
         self::DEVICE_TYPE_MONO_MFP  => "Monochrome MFP",
@@ -919,5 +921,17 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function isMfp ()
     {
         return ($this->isCopier);
+    }
+
+    /**
+     * Calculates the max estimated life count
+     *
+     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     *
+     * @return int
+     */
+    public function calculateEstimatedMaxLifeCount ($costPerPageSetting)
+    {
+        return $this->getMaximumMonthlyPageVolume($costPerPageSetting) * self::LIFE_PAGE_COUNT_MONTHS;
     }
 }

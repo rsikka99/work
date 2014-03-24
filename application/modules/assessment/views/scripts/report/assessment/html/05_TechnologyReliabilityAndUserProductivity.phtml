@@ -56,7 +56,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMeter()->endMeterLife); ?></div>
             </td>
             <td class="column6">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())); ?></div>
             </td>
         </tr>
         <?php $ctr++;

@@ -48,8 +48,9 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             // Make sure the selected client is ours!
             if ($client && $client->dealerId == $this->_identity->dealerId)
             {
-                $this->_selectedClientId      = $this->_mpsSession->selectedClientId;
-                $this->view->selectedClientId = $this->_selectedClientId;
+                $this->_selectedClientId       = $this->_mpsSession->selectedClientId;
+                $this->view->selectedClientId  = $this->_selectedClientId;
+                $this->_navigation->clientName = $client->companyName;
             }
         }
     }
@@ -1168,6 +1169,8 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
         $jsonResponse = array();
         $errorMessage = false;
 
+        $costPerPageSetting = new Proposalgen_Model_CostPerPageSetting();
+
         if ($rmsUploadId > 0)
         {
             $deviceInstanceId = $this->_getParam("deviceInstanceId", false);
@@ -1195,6 +1198,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse['masterDevice']                       = $deviceInstance->getMasterDevice()->toArray();
                         $launchDate                                         = new Zend_Date($jsonResponse['masterDevice']['launchDate']);
                         $jsonResponse['masterDevice']['launchDate']         = $launchDate->toString(Zend_Date::DATE_MEDIUM);
+                        $jsonResponse['masterDevice']['age']                = $deviceInstance->getAge();
                         $jsonResponse['masterDevice']['cost']               = ($jsonResponse['cost'] > 0) ? $this->view->currency((float)$jsonResponse['cost']) : '';
                         $jsonResponse['masterDevice']['ppmBlack']           = ($jsonResponse['masterDevice']['ppmBlack'] > 0) ? number_format($jsonResponse['masterDevice']['ppmBlack']) : '';
                         $jsonResponse['masterDevice']['ppmColor']           = ($jsonResponse['masterDevice']['ppmColor'] > 0) ? number_format($jsonResponse['masterDevice']['ppmColor']) : '';
@@ -1206,11 +1210,13 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["masterDevice"]["tonerConfigName"]    = $deviceInstance->getMasterDevice()->getTonerConfig()->tonerConfigName;
                         $jsonResponse["masterDevice"]["compatibleWithJit"]  = $deviceInstance->getMasterDevice()->isJitCompatible($this->_identity->dealerId);
                         $jsonResponse["masterDevice"]["isColor"]            = $deviceInstance->getMasterDevice()->isColor();
+                        $jsonResponse["pageCounts"]                         = array();
+                        $jsonResponse["pageCounts"]['monochrome']           = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
+                        $jsonResponse["pageCounts"]['color']                = number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly());
+                        $jsonResponse["pageCounts"]['a3Combined']           = number_format($deviceInstance->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly());
                         $jsonResponse["meters"]                             = array();
-                        $jsonResponse["meters"]['monochrome']               = number_format($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly());
-                        $jsonResponse["meters"]['color']                    = number_format($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly());
-                        $jsonResponse["meters"]['a3Combined']               = number_format($deviceInstance->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly());
-                        $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getPageCounts()->getLifePageCount()->getMonthly());
+                        $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getMeter()->endMeterLife);
+                        $jsonResponse["meters"]['maxLife']                  = number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting));
                         $jsonResponse["pageCoverage"]                       = array();
                         $jsonResponse["pageCoverage"]['monochrome']         = number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%';
                         $jsonResponse["pageCoverage"]['cyan']               = number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%';

@@ -60,8 +60,7 @@ class Proposalgen_Model_Fleet_Steps extends My_Navigation_Abstract
      */
     public function __construct ()
     {
+        $this->title = "RMS Upload";
         $this->_setNewSteps(self::$stepNames);
     }
-
-
 }

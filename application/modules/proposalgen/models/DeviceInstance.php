@@ -20,7 +20,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     const REPLACEMENT_AGE            = 12;
     const REPLACEMENT_MIN_PAGE_COUNT = 200;
 
-    const LIFE_PAGE_COUNT_MONTHS = 36;
 
     /**
      * An array used to determine how many hours a device is running based on its average volume per day
@@ -777,7 +776,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * LIFE_PAGE_COUNT_MONTHS)
-            $maximumLifeCount = $this->calculateEstimatedMaxLifeCount($costPerPageSetting);
+            $maximumLifeCount = $this->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting);
             if ($maximumLifeCount > 0)
             {
                 $this->_lifeUsage = $this->getMeter()->endMeterLife / $maximumLifeCount;
@@ -1642,18 +1641,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculateMonthlyPercentOfTotalVolume ($totalPageVolume)
     {
         return $this->getPageCounts()->getCombinedPageCount()->getMonthly() / $totalPageVolume * 100;
-    }
-
-    /**
-     * Calculates the max estimated life count
-     *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
-     *
-     * @return int
-     */
-    public function calculateEstimatedMaxLifeCount ($costPerPageSetting)
-    {
-        return $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * self::LIFE_PAGE_COUNT_MONTHS;
     }
 
     /**

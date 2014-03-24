@@ -159,7 +159,9 @@ $(function ()
                  */
                 var deviceDetailsContainer = $('#deviceDetailsContainer');
 
-                $('#deviceDetails_launchDate').empty().html(data.masterDevice.launchDate);
+                $('#deviceInstanceInfoTabs').find('a:first').tab('show');
+
+                $('#deviceDetails_launchDate').empty().html(data.masterDevice.launchDate + " (" + data.masterDevice.age + "y)");
                 $('#deviceDetails_isCopier').empty().html((data.masterDevice.isCopier) ? 'YES' : 'NO');
                 $('#deviceDetails_isDuplex').empty().html((data.masterDevice.isDuplex) ? 'YES' : 'NO');
                 $('#deviceDetails_isFax').empty().html((data.masterDevice.isFax) ? 'YES' : 'NO');
@@ -186,25 +188,34 @@ $(function ()
                         .append($('<td></td>').html('Life Pages'))
                         .append($('<td></td>').html(data.meters.life))
                 );
+
+                metersTBody.append(
+                    $('<tr></tr>')
+                        .append($('<td></td>').html('Maximum Recommended Life Volume'))
+                        .append($('<td></td>').html(data.meters.maxLife))
+                );
+
                 metersTBody.append(
                     $('<tr></tr>')
                         .append($('<td></td>').html('Monochrome Pages'))
-                        .append($('<td></td>').html(data.meters.monochrome))
+                        .append($('<td></td>').html(data.pageCounts.monochrome))
                 );
+
                 if (data.masterDevice.isColor)
                 {
                     metersTBody.append(
                         $('<tr></tr>')
                             .append($('<td></td>').html('Color Pages'))
-                            .append($('<td></td>').html(data.meters.color))
+                            .append($('<td></td>').html(data.pageCounts.color))
                     );
                 }
+
                 if (data.masterDevice.isA3)
                 {
                     metersTBody.append(
                         $('<tr></tr>')
                             .append($('<td></td>').html('A3 Pages'))
-                            .append($('<td></td>').html(data.meters.a3Combined))
+                            .append($('<td></td>').html(data.pageCounts.a3Combined))
                     );
                 }
 
@@ -258,6 +269,9 @@ $(function ()
                         })
                     }
                 });
+
+                // Remove Focus on the first Tab
+                deviceDetailsContainer.find('a').blur();
                 /**
                  * End of the dialog
                  */
