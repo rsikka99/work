@@ -248,6 +248,10 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     }
                 }
 
+                $deviceSwapReasonId = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization->id), $this->_identity->dealerId)->deviceSwapReasonId;
+
+                $hardwareOptimizationDeviceInstance->deviceSwapReasonId = $deviceSwapReasonId;
+
                 $hardwareOptimizationDeviceInstanceMapper->save($hardwareOptimizationDeviceInstance);
             }
 
@@ -432,7 +436,7 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                     /**
                      * Update the reason to match the default
                      */
-                    $deviceSwapReasonId = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization), $this->_identity->dealerId)->deviceSwapReasonId;
+                    $deviceSwapReasonId = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->findDefaultByDealerId($deviceInstance->getDefaultDeviceSwapReasonCategoryId($this->_hardwareOptimization->id), $this->_identity->dealerId)->deviceSwapReasonId;
 
                     $hardwareOptimizationDeviceInstance->deviceSwapReasonId = $deviceSwapReasonId;
 

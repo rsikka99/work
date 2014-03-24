@@ -1,5 +1,12 @@
 $(document).ready(function ()
 {
+    if ($("#reportNavbar").length > 0)
+    {
+        $('body').scrollspy({
+            target: '#reportNavbar'
+        });
+    }
+
     /**
      * The report navigation drop down
      */

@@ -6,11 +6,13 @@ $title = $this->title;
 $description = $this->description;
 $totalNumberOfDevices = $this->totalNumberOfDevices;
 $showReplacementDevices = $this->showReplacementDevices;
+$showReason = $this->showReason;
+$scrollSpyId = $this->scrollSpyId;
 
 /* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
 $deviceInstances = $this->deviceInstances;
 ?>
-<div class="pheader">
+<div class="pheader" id="<?php echo $scrollSpyId; ?>">
     <?php echo $title; ?>
     <em> (<?php echo number_format(count($deviceInstances)) ?> out of <?php echo number_format($totalNumberOfDevices) ?> devices)</em>
 </div>
@@ -28,9 +30,13 @@ $deviceInstances = $this->deviceInstances;
             <th>Device Age</th>
             <th>Life Page Count</th>
             <?php if ($showReplacementDevices) : ?>
-                <th style="width:175px;">Replacement Device</th>
+                <th style="width:175px;">Replacement Device<?php echo ($showReason) ? " & Reason" : "" ?></th>
+                <?php else : ?>
+                <?php if ($showReason) : ?>
+                    <th>Reason</th>
+                <?php endif; ?>
             <?php endif; ?>
-            <th>Reason</th>
+
         </tr>
         </thead>
         <?php foreach ($deviceInstances as $deviceInstance) :
@@ -59,15 +65,27 @@ $deviceInstances = $this->deviceInstances;
                         <em><?php echo $replacementMasterDevice->getManufacturer()->fullname ?></em>
                         <br>
                         <strong><?php echo $replacementMasterDevice->modelName ?></strong>
+                        <br>
+                        <?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?>
                     </td>
                 <?php elseif ($showReplacementDevices) : ?>
                     <td>-</td>
+                    <?php if ($showReason) : ?>
+                        <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
+                    <?php endif; ?>
+                <?php else : ?>
+                    <?php if ($showReason) : ?>
+                        <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
+                    <?php endif; ?>
                 <?php endif; ?>
-                <td class="optimizationReason"><?php echo $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason ?></td>
             </tr>
         <?php endforeach; ?>
     <?php else : ?>
-        <thead><tr class="header"><th>No devices fall under this category.</th></tr></thead>
+        <thead>
+        <tr class="header">
+            <th>No devices fall under this category.</th>
+        </tr>
+        </thead>
     <?php endif; ?>
 </table>
 <br>

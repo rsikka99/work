@@ -15,7 +15,7 @@ $deviceInstances = $optimization->getDevicesGroupedByAction();
 
 $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
 ?>
-    <div class="h1">
+    <div class="h1" id="device-appendix">
         Device Appendix<em> (<?php echo number_format($totalNumberOfDevices) ?> devices)</em>
     </div>
 
@@ -27,6 +27,8 @@ echo $this->partial('report/customer/optimization/html/device_table.phtml',
           "showReplacementDevices" => false,
           "hardwareOptimization"   => $hardwareOptimization,
           "totalNumberOfDevices"   => $totalNumberOfDevices,
+          "showReason"             => false,
+          "scrollSpyId"            => "device-appendix-acceptable",
     )
 );
 
@@ -37,6 +39,8 @@ echo $this->partial('report/customer/optimization/html/device_table.phtml',
           "showReplacementDevices" => true,
           "hardwareOptimization"   => $hardwareOptimization,
           "totalNumberOfDevices"   => $totalNumberOfDevices,
+          "showReason"             => true,
+          "scrollSpyId"            => "device-appendix-replaced",
     )
 );
 
@@ -47,6 +51,8 @@ echo $this->partial('report/customer/optimization/html/device_table.phtml',
           "showReplacementDevices" => false,
           "hardwareOptimization"   => $hardwareOptimization,
           "totalNumberOfDevices"   => $totalNumberOfDevices,
+          "showReason"             => false,
+          "scrollSpyId"            => "device-appendix-retire",
     )
 );
 
@@ -57,6 +63,8 @@ echo $this->partial('report/customer/optimization/html/device_table.phtml',
           "showReplacementDevices" => false,
           "hardwareOptimization"   => $hardwareOptimization,
           "totalNumberOfDevices"   => $totalNumberOfDevices,
+          "showReason"             => true,
+          "scrollSpyId"            => "device-appendix-dnr",
     )
 );
 ?>

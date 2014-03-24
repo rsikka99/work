@@ -11,7 +11,7 @@ $customerOptimization = $this->customerOptimization;
 /* @var $graphs array */
 $graphs = $this->graphs;
 ?>
-<div class="pheader">
+<div class="pheader" id="hardware-utilization">
     Hardware Utilization and Capacity
 </div>
 <p>A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In
@@ -26,7 +26,7 @@ $graphs = $this->graphs;
     </tr>
 </table>
 
-<div class="pheader">
+<div class="pheader" id="print-volume">
     Print Volume and Number of Printing Devices
 </div>
 <p>You currently have <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices that print

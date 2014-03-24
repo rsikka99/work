@@ -28,16 +28,40 @@ $data = array(
     "companyName"          => My_Brand::$companyName,
 );
 ?>
-<div class="container landscape hardware-optimization" id="htmlReportContainer">
-    <?php
-    // Actual pages
-    echo $this->partial("report/customer/optimization/html/01_titlepage.phtml", $titleData);
-    echo $this->partial("report/customer/optimization/html/02_optimization_summary.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/03_hardware_utilization.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/04_technology_features.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/05_age_of_fleet.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/06_fleet_diversity.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/07_color_usage.phtml", $data);
-    echo $this->partial("report/customer/optimization/html/08_device_appendix.phtml", $data);
-    ?>
+<div class="row-fluid">
+    <div class="span10">
+        <div class="container full-width hardware-optimization" id="htmlReportContainer">
+            <?php
+            // Actual pages
+            echo $this->partial("report/customer/optimization/html/01_titlepage.phtml", $titleData);
+            echo $this->partial("report/customer/optimization/html/02_optimization_summary.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/03_hardware_utilization.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/04_technology_features.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/05_age_of_fleet.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/06_fleet_diversity.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/07_color_usage.phtml", $data);
+            echo $this->partial("report/customer/optimization/html/08_device_appendix.phtml", $data);
+            ?>
+        </div>
+    </div>
+    <div class="span2">
+        <div id="reportNavbar" data-spy="affix" data-offset-top="158" class="affix-top">
+            <ul id="reportNav" class="nav nav-list">
+                <li class="active"><a href="#title-page">Title Page</a></li>
+                <li><a href="#current-fleet-statistics">Current Fleet</a></li>
+                <li><a href="#optimization-summary">Optimization</a></li>
+                <li><a href="#hardware-utilization">Utilization</a></li>
+                <li><a href="#print-volume">Print Volume</a></li>
+                <li><a href="#technology">Technology</a></li>
+                <li><a href="#age-of-devices">Age of Devices</a></li>
+                <li><a href="#supply-types">Supply Types</a></li>
+                <li><a href="#color-usage">Color Usage</a></li>
+                <li><a href="#device-appendix">Appendix</a></li>
+                <li><a href="#device-appendix-acceptable">Acceptable</a></li>
+                <li><a href="#device-appendix-replaced">Replaced</a></li>
+                <li><a href="#device-appendix-retire">Retire/Migrate</a></li>
+                <li><a href="#device-appendix-dnr">Do Not Repair</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
