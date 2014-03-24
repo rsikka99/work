@@ -937,9 +937,9 @@ function loadSuppliesAndService()
         }
     });
 
-    $("#availableTonersForm").bind("createTonerSuccess", function (e, masterDeviceId)
+    $("#availableTonersForm").bind("createTonerSuccess", function (e, tonerId)
     {
-        assignToner(masterDeviceId);
+        assignToner(tonerId);
     });
 }
 /**

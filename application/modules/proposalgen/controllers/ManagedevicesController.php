@@ -551,7 +551,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
             }
             else if ($formName == 'availableTonersForm')
             {
-                $form = $manageMasterDeviceService->getAvailableTonersForm(isset($formData['form']['availableTonersid']) ? $formData['form']['availableTonersid'] : null);
+                $form = $manageMasterDeviceService->getAvailableTonersForm(isset($formData['form']['availableTonersId']) ? $formData['form']['availableTonersId'] : null);
             }
 
             $formErrors = array();
@@ -592,7 +592,7 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 }
                 else if ($formName == 'availableTonersForm')
                 {
-                    $id = $manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0);
+                    $id = $manageMasterDeviceService->updateAvailableTonersForm($formData['form'], 0, $masterDevice);
                     if ($id > 0)
                     {
                         $this->sendJson(array("Message" => "Successfully updated available toners form", "id" => $id));

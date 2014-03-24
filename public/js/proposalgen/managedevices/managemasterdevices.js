@@ -92,11 +92,6 @@ function createOrEdit(formName, shouldAssign)
             // Reload our grid
             $("#" + formName.substr(0, formName.length - 4)).trigger('reloadGrid');
 
-            if (formName.substr(0, formName.length - 4) == 'availableToners')
-            {
-                $("#assignedToners").trigger('reloadGrid');
-            }
-
             $("#availableTonersForm").trigger("createTonerSuccess", xhr.id);
         },
         error   : function (xhr)

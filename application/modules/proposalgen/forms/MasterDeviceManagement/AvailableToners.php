@@ -181,6 +181,6 @@ class Proposalgen_Form_MasterDeviceManagement_AvailableToners extends Twitter_Bo
         ));
         $this->addElement($saveAndApproveElement);
 
-        $this->addElement('hidden', 'availableTonersid', array());
+        $this->addElement('hidden', 'availableTonersId', array());
     }
 }

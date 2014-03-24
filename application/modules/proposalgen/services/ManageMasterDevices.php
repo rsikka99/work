@@ -788,14 +788,16 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * This creates, saves and deletes for the buttons inside the available toners jqGrid
      *
-     * @param array|bool $data
-     * @param bool       $deleteTonerId
+     * @param array|bool                          $data
+     * @param bool                                $deleteTonerId
+     * @param bool|Proposalgen_Model_MasterDevice $masterDevice
      *
      * @return int
      */
-    public function updateAvailableTonersForm ($data = false, $deleteTonerId = false)
+    public function updateAvailableTonersForm ($data = false, $deleteTonerId = false, $masterDevice = false)
     {
         $dealerTonerAttributesMapper = Proposalgen_Model_Mapper_Dealer_Toner_Attribute::getInstance();
+        $deviceTonerMapper           = Proposalgen_Model_Mapper_DeviceToner::getInstance();
         $tonerMapper                 = Proposalgen_Model_Mapper_Toner::getInstance();
         $validData                   = array();
         $toner                       = null;
@@ -841,6 +843,24 @@ class Proposalgen_Service_ManageMasterDevices
 
                     $validData['id'] = $tonerMapper->insert($toner);
                     $toner->id       = (int)$validData['id'];
+
+                    /**
+                     * Map The toner
+                     */
+                    if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                    {
+                        $deviceToner = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+                        if (!$deviceToner instanceof Proposalgen_Model_DeviceToner)
+                        {
+                            $deviceToner                   = new Proposalgen_Model_DeviceToner();
+                            $deviceToner->master_device_id = $masterDevice->id;
+                            $deviceToner->toner_id         = $toner->id;
+
+                            $deviceToner->isSystemDevice = $this->_isAdmin;
+
+                            $deviceTonerMapper->insert($deviceToner);
+                        }
+                    }
                 }
                 // We are editing a toner
                 else if ($validData['id'] > 0)
@@ -854,8 +874,8 @@ class Proposalgen_Service_ManageMasterDevices
                             if ($validData['saveAndApproveHdn'] == 1 && $this->_isAdmin)
                             {
                                 $toner->isSystemDevice = 1;
-                                $deviceTonerMapper     = Proposalgen_Model_Mapper_DeviceToner::getInstance();
-                                $deviceToner           = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
+
+                                $deviceToner = $deviceTonerMapper->find(array($toner->id, $this->masterDeviceId));
                                 if ($deviceToner instanceof Proposalgen_Model_DeviceToner)
                                 {
                                     $deviceToner->isSystemDevice = 1;
