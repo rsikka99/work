@@ -38,7 +38,7 @@ $(function ()
                     name    : 'dealerSku',
                     index   : 'dealerSku',
                     hidden  : false,
-                    label   : dealerSkuName,
+                    label   : 'dealerSkuName',
                     title   : false,
                     sortable: false
                 },
