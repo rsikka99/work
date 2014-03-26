@@ -307,6 +307,7 @@ $(document).ready(function ()
                 var url = TMTW_BASEURL + '/proposalgen/admin/devicetonercount?tonerid=' + rowid;
                 $.ajax({
                     url    : url,
+                    type   : 'POST',
                     success: function (data)
                     {
                         var obj = jQuery.parseJSON(data);
@@ -508,6 +509,7 @@ $(document).ready(function ()
 
         //GET DEVICE DETAILS
         $.ajax({
+            type    : 'POST',
             beforeSend: function ()
             {
                 disable_form();
@@ -1048,6 +1050,7 @@ function do_action(inAction)
             $("#replacement_message").html("");
             var url = TMTW_BASEURL + '/proposalgen/admin/replacetoner?replace_mode=' + replace_mode + '&replace_toner_id=' + replace_toner_id + '&with_toner_id=' + with_toner_id + '&chkAlLToners=' + apply_all;
             $.ajax({
+                type    : 'POST',
                 url     : url,
                 success : function (data)
                 {

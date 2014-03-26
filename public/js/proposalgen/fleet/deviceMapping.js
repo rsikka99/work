@@ -371,6 +371,7 @@ $(function ()
         var deviceInstanceIds = $(this).data("device-instance-ids");
         $.ajax({
             url     : TMTW_BASEURL + "/proposalgen/fleet/remove-unknown-device",
+            type    : 'POST',
             dataType: 'json',
             data    : {
                 rmsUploadId        : rmsUploadId,
@@ -395,6 +396,7 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
 {
     $.ajax({
         url     : TMTW_BASEURL + '/proposalgen/fleet/set-mapped-to',
+        type    : 'POST',
         dataType: 'json',
         data    : {
             'deviceInstanceIds': deviceInstanceIds,

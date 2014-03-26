@@ -472,6 +472,7 @@ $(document).ready(function ()
                 var url = TMTW_BASEURL + '/proposalgen/admin/devicetonercount?tonerid=' + rowid;
                 $.ajax({
                     url    : url,
+                    type    : 'POST',
                     success: function (data)
                     {
                         var obj = data
@@ -689,6 +690,7 @@ $(document).ready(function ()
                 disable_form();
             },
             url       : TMTW_BASEURL + '/proposalgen/admin/devicedetails?deviceid=' + master_device_id,
+            type    : 'POST',
             success   : function (data)
             {
                 if (form_mode != 'add' && repop != 1)
@@ -1225,6 +1227,7 @@ function do_action(inAction)
             var url = TMTW_BASEURL + '/proposalgen/admin/replacetoner?replace_mode=' + replace_mode + '&replace_toner_id=' + replace_toner_id + '&with_toner_id=' + with_toner_id + '&chkAlLToners=' + apply_all;
             $.ajax({
                 url     : url,
+                type    : 'POST',
                 success : function (data)
                 {
                     $('#message_container').html(data);
