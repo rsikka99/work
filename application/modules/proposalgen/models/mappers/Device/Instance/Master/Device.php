@@ -112,6 +112,31 @@ class Proposalgen_Model_Mapper_Device_Instance_Master_Device extends My_Model_Ma
     }
 
     /**
+     * Deletes many ids in a single query
+     *
+     * @param Proposalgen_Model_Device_Instance_Master_Device[]|int[] $objects
+     *
+     * @return int
+     */
+    public function deleteMany ($objects)
+    {
+        $ids = array();
+        foreach ($objects as $object)
+        {
+            if ($object instanceof Proposalgen_Model_Device_Instance_Master_Device)
+            {
+                $ids[] = $object->deviceInstanceId;
+            }
+            else
+            {
+                $ids[] = $object;
+            }
+        }
+
+        return $this->getDbTable()->delete(array("{$this->col_deviceInstanceId} IN(?)" => $ids));
+    }
+
+    /**
      * Finds a Device_Instance_Master_Device based on it's primaryKey
      *
      * @param $id int

@@ -394,66 +394,82 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
     public function setMappedToAction ()
     {
         $db                               = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $deviceInstanceIds                = $this->_getParam('deviceInstanceIds', false);
+        $targetDeviceInstanceId           = $this->_getParam('deviceInstanceId', false);
         $masterDeviceId                   = $this->_getParam('masterDeviceId', false);
         $errorMessage                     = null;
         $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
         $deviceInstanceMapper             = Proposalgen_Model_Mapper_DeviceInstance::getInstance();
         $successMessage                   = "Device mapped successfully";
 
-        if ($deviceInstanceIds !== false && $masterDeviceId !== false)
+        if ($targetDeviceInstanceId !== false && $masterDeviceId !== false)
         {
             $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
             if ($masterDevice instanceof Proposalgen_Model_MasterDevice || $masterDeviceId == 0)
             {
-                $deviceInstanceIds = explode(',', $deviceInstanceIds);
-
-                $db->beginTransaction();
-                try
+                $targetDeviceInstance = $deviceInstanceMapper->find($targetDeviceInstanceId);
+                if ($targetDeviceInstance instanceof Proposalgen_Model_DeviceInstance)
                 {
-                    if ($masterDeviceId == 0)
+                    $deviceInstances = array();
+                    if ($targetDeviceInstance->getRmsUploadRow()->rmsModelId > 0)
                     {
-                        $successMessage = "Device unmapped successfully";
-                        // Delete mapping
-                        foreach ($deviceInstanceIds as $deviceInstanceId)
-                        {
-                            $deviceInstanceMasterDeviceMapper->delete($deviceInstanceId);
-                        }
+                        $deviceInstances = $deviceInstanceMapper->fetchAllWithRmsModelId($targetDeviceInstance->rmsUploadId, $targetDeviceInstance->getRmsUploadRow()->rmsProviderId, $targetDeviceInstance->getRmsUploadRow()->rmsModelId);
                     }
                     else
                     {
-                        foreach ($deviceInstanceIds as $deviceInstanceId)
-                        {
-                            $deviceInstanceMasterDevice = $deviceInstanceMasterDeviceMapper->find($deviceInstanceId);
-                            if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
-                            {
-                                $deviceInstanceMasterDevice->masterDeviceId = $masterDeviceId;
-                                $deviceInstanceMasterDeviceMapper->save($deviceInstanceMasterDevice);
-                            }
-                            else
-                            {
-                                $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
-                                $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstanceId;
-                                $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
-                                $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
-                            }
+                        $deviceInstances[] = $targetDeviceInstance;
+                    }
 
-                            $deviceInstance = $deviceInstanceMapper->find($deviceInstanceId);
-                            if ($deviceInstance instanceof Proposalgen_Model_DeviceInstance)
+                    $db->beginTransaction();
+                    try
+                    {
+                        if ($masterDeviceId == 0)
+                        {
+                            $successMessage = "Device unmapped successfully";
+                            // Delete mapping
+                            $deviceInstanceIds = array();
+                            foreach ($deviceInstances as $deviceInstance)
                             {
+                                $deviceInstanceIds[] = $deviceInstance->id;
+                            }
+                            
+                            $deviceInstanceMasterDeviceMapper->deleteMany($deviceInstanceIds);
+                        }
+                        else
+                        {
+                            foreach ($deviceInstances as $deviceInstance)
+                            {
+
+                                $deviceInstanceMasterDevice = $deviceInstance->getDeviceInstanceMasterDevice();
+                                if ($deviceInstanceMasterDevice instanceof Proposalgen_Model_Device_Instance_Master_Device)
+                                {
+                                    $deviceInstanceMasterDevice->masterDeviceId = $masterDeviceId;
+                                    $deviceInstanceMasterDeviceMapper->save($deviceInstanceMasterDevice);
+                                }
+                                else
+                                {
+                                    $deviceInstanceMasterDevice                   = new Proposalgen_Model_Device_Instance_Master_Device();
+                                    $deviceInstanceMasterDevice->deviceInstanceId = $deviceInstance->id;
+                                    $deviceInstanceMasterDevice->masterDeviceId   = $masterDeviceId;
+                                    $deviceInstanceMasterDeviceMapper->insert($deviceInstanceMasterDevice);
+                                }
+
                                 $deviceInstance->compatibleWithJitProgram = $masterDevice->isJitCompatible($this->_identity->dealerId);
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                         }
-                    }
 
-                    $db->commit();
+                        $db->commit();
+                    }
+                    catch (Exception $e)
+                    {
+                        $db->rollBack();
+                        Tangent_Log::logException($e);
+                        $errorMessage = "An error occurred while mapping";
+                    }
                 }
-                catch (Exception $e)
+                else
                 {
-                    $db->rollBack();
-                    Tangent_Log::logException($e);
-                    $errorMessage = "An error occurred while mapping";
+                    $errorMessage = "Invalid Device Instance Selected!";
                 }
             }
             else
@@ -461,6 +477,10 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                 // Invalid Master Device
                 $errorMessage = "Invalid master device selected";
             }
+        }
+        else
+        {
+            $errorMessage = "You must send a master device id and a device instance id";
         }
 
         if ($errorMessage !== null)

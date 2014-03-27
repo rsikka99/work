@@ -19,10 +19,10 @@ $(function ()
             colModel  : [
                 {
                     width   : 10,
-                    name    : 'deviceInstanceIds',
-                    index   : 'deviceInstanceIds',
+                    name    : 'deviceInstanceId',
+                    index   : 'deviceInstanceId',
                     hidden  : true,
-                    label   : 'Device Instance Ids',
+                    label   : 'Device Instance Id',
                     title   : false,
                     sortable: false
                 },
@@ -213,8 +213,8 @@ $(function ()
                     if (row.useUserData == 1)
                     {
                         // Display message instead of drop down
-                        row.mapToMasterDevice = 'New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-ids="' + row.deviceInstanceIds + '">Click to Remove</a>)';
-                        row.action = '<input style="width:75px;" title="Edit Printer" class="addEditUnknownDeviceButton btn btn-small btn-warning" type="button" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit"  />';
+                        row.mapToMasterDevice = 'New Printer Added (<a href="javascript: void(0);" class="removeUnknownDeviceButton" data-device-instance-id="' + row.deviceInstanceId + '">Click to Remove</a>)';
+                        row.action = '<input style="width:75px;" title="Edit Printer" class="addEditUnknownDeviceButton btn btn-small btn-warning" type="button" data-device-instance-id="' + row.deviceInstanceId + '" value="Edit"  />';
 
                     }
                     else
@@ -225,7 +225,7 @@ $(function ()
                             mappedToDeviceName = row.mappedManufacturer + ' ' + row.mappedModelName;
                         }
                         var master_device_dropdown = '';
-                        master_device_dropdown += '<input type="hidden" name="deviceInstanceIds" class="deviceInstanceIds" value="' + row.deviceInstanceIds + '" />';
+                        master_device_dropdown += '<input type="hidden" name="deviceInstanceId" class="deviceInstanceId" value="' + row.deviceInstanceId + '" />';
                         master_device_dropdown += '<input type="hidden" name="masterDeviceId" class="masterDeviceId" value="' + row.masterDeviceId + '" />';
                         master_device_dropdown += '<input type="hidden" name="modelName" class="masterDeviceName" value="' + row.mappedModelName + '" />';
                         master_device_dropdown += '<input type="hidden" name="manufacturer" class="manufacturerName" value="' + row.mappedManufacturer + '" />';
@@ -242,11 +242,11 @@ $(function ()
                         }
                         if (row.isMapped == 1)
                         {
-                            row.action = '<input title="Edit Device" type="button" id="deviceAction" class="btn btn-block btn-block btn-warning" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + hasAccess + '\', \'' + row.deviceInstanceIds + '\');" />';
+                            row.action = '<input title="Edit Device" type="button" id="deviceAction" class="btn btn-block btn-block btn-warning" data-device-instance-id="' + row.deviceInstanceId + '" value="Edit" onclick="javascript: createMasterDevice(' + row.masterDeviceId + ',' + 0 + ', \'' + hasAccess + '\', \'' + row.deviceInstanceId + '\');" />';
                         }
                         else
                         {
-                            row.action = '<input title="Create New Device" type="button" id="deviceAction" class="btn btn-block btn-success" data-device-instance-ids="' + row.deviceInstanceIds + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + hasAccess + '\', \'' + row.deviceInstanceIds + '\');" />';
+                            row.action = '<input title="Create New Device" type="button" id="deviceAction" class="btn btn-block btn-success" data-device-instance-id="' + row.deviceInstanceId + '" value="Create" onclick="javascript: createMasterDevice(' + 0 + ',' + row.rmsUploadRowId + ', \'' + hasAccess + '\', \'' + row.deviceInstanceId + '\');" />';
                         }
 
 
@@ -316,7 +316,7 @@ $(function ()
                             var rmsUploadRowId = this.id.replace("txtMasterDevices", "");
                             var masterDeviceId = $.trim(parent.find("input.masterDeviceId")[0].value);
                             var deviceName = $.trim(parent.find("input.masterDeviceName")[0].value);
-                            var deviceInstanceIds = $(this).parent().find("input.deviceInstanceIds")[0].value;
+                            var deviceInstanceId = $(this).parent().find("input.deviceInstanceId")[0].value;
 
                             /*
                              * Populate the text field if the user was auto completing, or clear it out if they were deleting the text
@@ -336,7 +336,7 @@ $(function ()
 
                                 }
                                 this.value = textValue;
-                                set_mapped(deviceInstanceIds, masterDeviceId);
+                                set_mapped(deviceInstanceId, masterDeviceId);
                             }
                             else
                             {
@@ -344,7 +344,7 @@ $(function ()
                                 parent.find("input.masterDeviceName")[0].value = "";
                                 parent.find("input.manufacturerName")[0].value = "";
                                 this.value = textValue;
-                                set_mapped(deviceInstanceIds, 0);
+                                set_mapped(deviceInstanceId, 0);
                             }
 
                         }
@@ -359,7 +359,7 @@ $(function ()
      */
     $(document).on("click", ".addEditMasterDevice", function ()
     {
-        $("#masterDeviceDeviceInstanceIds").val($(this).data("device-instance-ids"));
+        $("#masterDeviceDeviceInstanceId").val($(this).data("device-instance-id"));
 //        $("#addMasterDeviceForm").submit();
     });
 
@@ -368,14 +368,14 @@ $(function ()
      */
     $(document).on("click", ".removeUnknownDeviceButton", function ()
     {
-        var deviceInstanceIds = $(this).data("device-instance-ids");
+        var deviceInstanceId = $(this).data("device-instance-id");
         $.ajax({
             url     : TMTW_BASEURL + "/proposalgen/fleet/remove-unknown-device",
             type    : 'POST',
             dataType: 'json',
             data    : {
                 rmsUploadId        : rmsUploadId,
-                'deviceInstanceIds': deviceInstanceIds
+                'deviceInstanceId': deviceInstanceId
             },
             success : function (data)
             {
@@ -392,15 +392,15 @@ $(function ()
 });
 
 
-function set_mapped(deviceInstanceIds, masterDeviceId)
+function set_mapped(deviceInstanceId, masterDeviceId)
 {
     $.ajax({
         url     : TMTW_BASEURL + '/proposalgen/fleet/set-mapped-to',
         type    : 'POST',
         dataType: 'json',
         data    : {
-            'deviceInstanceIds': deviceInstanceIds,
-            'masterDeviceId'   : masterDeviceId
+            'deviceInstanceId': deviceInstanceId,
+            'masterDeviceId'  : masterDeviceId
         },
         complete: function (data)
         {
@@ -410,9 +410,17 @@ function set_mapped(deviceInstanceIds, masterDeviceId)
 }
 
 var deviceInstanceIdList = [];
-function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInstanceIds)
+
+/**
+ * Creates a master device
+ * @param masterDeviceId
+ * @param rmsUploadRowId
+ * @param isAdmin
+ * @param deviceInstanceId
+ */
+function createMasterDevice(masterDeviceId, rmsUploadRowId, isAdmin, deviceInstanceId)
 {
-    deviceInstanceIdList = deviceInstanceIds;
+    deviceInstanceIdList = deviceInstanceId;
     $("#masterDeviceModal").modal('show');
     showMasterDeviceManagementModal(masterDeviceId, rmsUploadRowId, isAdmin);
 }

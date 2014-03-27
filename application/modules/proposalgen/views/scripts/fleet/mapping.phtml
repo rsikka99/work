@@ -18,10 +18,10 @@ var rmsUploadId = <?php echo $this->rmsUpload->id; ?>
         incorrectly you will need to remove the mapping by clearing the text in the "Select Master Device" box.</p>
 
     <form id="addUnknownDeviceForm" action="<?php echo $this->url(array("action" => "edit-unknown-device")); ?>" method="POST">
-        <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
+        <input type="hidden" name="deviceInstanceId" id="unknownDeviceDeviceInstanceIds" />
     </form>
     <form id="addMasterDeviceForm" method="POST">
-        <input type="hidden" name="deviceInstanceIds" id="masterDeviceDeviceInstanceIds" />
+        <input type="hidden" name="deviceInstanceId" id="masterDeviceDeviceInstanceId" />
     </form>
     <table id="mappingGrid"></table>
     <div id="mappingGridPager"></div>

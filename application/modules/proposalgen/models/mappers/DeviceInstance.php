@@ -261,6 +261,45 @@ class Proposalgen_Model_Mapper_DeviceInstance extends My_Model_Mapper_Abstract
     }
 
     /**
+     * Fetches all devices for an upload with the same rms provider and model id
+     *
+     * @param int $rmsUploadId
+     * @param int $rmsProviderId
+     * @param int $rmsModelId
+     *
+     * @return Proposalgen_Model_DeviceInstance[]
+     */
+    public function fetchAllWithRmsModelId ($rmsUploadId, $rmsProviderId, $rmsModelId)
+    {
+        $dbTable            = $this->getDbTable();
+        $rmsUploadRowMapper = Proposalgen_Model_Mapper_Rms_Upload_Row::getInstance();
+
+        $select = $dbTable->select()
+                          ->from(array("di" => $this->getTableName()))
+                          ->join(array("rum" => $rmsUploadRowMapper->getTableName()), "rum.{$rmsUploadRowMapper->col_id} = di.{$this->col_rmsUploadRowId}", array())
+                          ->where("di.{$this->col_rmsUploadId} = ?", $rmsUploadId)
+                          ->where("rum.{$rmsUploadRowMapper->col_rmsProviderId} = ?", $rmsProviderId)
+                          ->where("rum.{$rmsUploadRowMapper->col_rmsModelId} = ?", $rmsModelId);
+
+        $query = $dbTable->getAdapter()->query($select);
+
+        $results = $query->fetchAll();
+
+        $deviceInstances = array();
+        foreach ($results as $result)
+        {
+            $object = new Proposalgen_Model_DeviceInstance($result);
+
+            // Save the object into the cache
+            $this->saveItemToCache($object);
+
+            $deviceInstances [] = $object;
+        }
+
+        return $deviceInstances;
+    }
+
+    /**
      * This function fetches match up devices
      *
      * @param int     $rmsUploadId

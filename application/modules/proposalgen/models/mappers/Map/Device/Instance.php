@@ -193,7 +193,7 @@ SELECT
     master_devices.modelName AS mappedModelName,
     master_devices.isSystemDevice,
     COUNT(*) AS deviceCount,
-    GROUP_CONCAT(device_instances.id) AS deviceInstanceIds
+    device_instances.id as deviceInstanceId
 FROM device_instances
 JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
 LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId AND rms_upload_rows.rmsModelId = rms_devices.rmsModelId
@@ -252,22 +252,22 @@ WHERE device_instances.rmsUploadId = {$rmsUploadId}
             }
 
             $sql = "SELECT
-    rms_upload_rows.id AS rmsUploadRowId,
+    rms_upload_rows.id                                                                AS rmsUploadRowId,
     rms_upload_rows.rmsProviderId,
     rms_upload_rows.rmsModelId,
-    IF(rms_devices.isGeneric = 1, UUID(), IFNULL(rms_upload_rows.rmsModelId,UUID())) AS groupField,
+    IF(rms_devices.isGeneric = 1, UUID(), IFNULL(rms_upload_rows.rmsModelId, UUID())) AS groupField,
     rms_upload_rows.manufacturer,
     rms_upload_rows.modelName,
     device_instances.rawDeviceName,
     device_instances.useUserData,
     device_instances.rmsUploadId,
     device_instance_master_devices.masterDeviceId,
-    device_instance_master_devices.masterDeviceId IS NOT NULL AS isMapped,
-    manufacturers.displayname                                      AS mappedManufacturer,
-    master_devices.modelName                                  AS mappedModelName,
-    master_devices.isSystemDevice AS isSystemDevice,
-    COUNT(*)                                                       AS deviceCount,
-    GROUP_CONCAT(device_instances.id)                         AS deviceInstanceIds
+    device_instance_master_devices.masterDeviceId IS NOT NULL                         AS isMapped,
+    manufacturers.displayname                                                         AS mappedManufacturer,
+    master_devices.modelName                                                          AS mappedModelName,
+    master_devices.isSystemDevice                                                     AS isSystemDevice,
+    COUNT(*)                                                                          AS deviceCount,
+    device_instances.id                                                               AS deviceInstanceId
 FROM device_instances
     JOIN rms_upload_rows ON device_instances.rmsUploadRowId = rms_upload_rows.id
     LEFT JOIN rms_devices ON rms_upload_rows.rmsProviderId = rms_devices.rmsProviderId AND rms_upload_rows.rmsModelId = rms_devices.rmsModelId

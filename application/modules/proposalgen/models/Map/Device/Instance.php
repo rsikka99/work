@@ -78,7 +78,7 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     /**
      * @var int
      */
-    public $deviceInstanceIds;
+    public $deviceInstanceId;
 
 
     /**
@@ -161,9 +161,9 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
             $this->deviceCount = $params->deviceCount;
         }
 
-        if (isset($params->deviceInstanceIds) && !is_null($params->deviceInstanceIds))
+        if (isset($params->deviceInstanceId) && !is_null($params->deviceInstanceId))
         {
-            $this->deviceInstanceIds = $params->deviceInstanceIds;
+            $this->deviceInstanceId = $params->deviceInstanceId;
         }
 
     }
@@ -188,7 +188,7 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
             "mappedManufacturer" => $this->mappedManufacturer,
             "mappedModelName"    => $this->mappedModelName,
             "deviceCount"        => $this->deviceCount,
-            "deviceInstanceIds"  => $this->deviceInstanceIds,
+            "deviceInstanceId"   => $this->deviceInstanceId,
         );
     }
 }

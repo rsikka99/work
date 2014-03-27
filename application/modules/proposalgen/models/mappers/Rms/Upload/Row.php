@@ -10,6 +10,8 @@ class Proposalgen_Model_Mapper_Rms_Upload_Row extends My_Model_Mapper_Abstract
      */
     public $col_id = 'id';
     public $col_userId = 'userId';
+    public $col_rmsProviderId = 'rmsProviderId';
+    public $col_rmsModelId = 'rmsModelId';
 
     /**
      * The default db table class to use
