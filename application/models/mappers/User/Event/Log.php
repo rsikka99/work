@@ -1,26 +1,28 @@
 <?php
 
 /**
- * Class Application_Model_Mapper_User
+ * Class Application_Model_Mapper_User_Event_Log
  */
-class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
+class Application_Model_Mapper_User_Event_Log extends My_Model_Mapper_Abstract
 {
-    // Column Names
-    public $col_id = "id";
-    public $col_dealerId = "dealerId";
-    public $col_email = "email";
+    /*
+     * Column Definitions
+     */
+    public $col_eventLogId = 'eventLogId';
+    public $col_userId = 'userId';
+
     /**
      * The default db table class to use
      *
      * @var String
      *
      */
-    protected $_defaultDbTable = 'Application_Model_DbTable_User';
+    protected $_defaultDbTable = 'Application_Model_DbTable_User_Event_Log';
 
     /**
      * Gets an instance of the mapper
      *
-     * @return Application_Model_Mapper_User
+     * @return Application_Model_Mapper_User_Event_Log
      */
     public static function getInstance ()
     {
@@ -28,10 +30,10 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves an instance of Application_Model_User to the database.
+     * Saves an instance of Application_Model_User_Event_Log to the database.
      * If the id is null then it will insert a new row
      *
-     * @param $object Application_Model_User
+     * @param $object Application_Model_User_Event_Log
      *                The object to insert
      *
      * @return mixed The primary key of the new row
@@ -40,9 +42,6 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     {
         // Get an array of data to save
         $data = $object->toArray();
-
-        // Remove the id
-        unset($data [$this->col_id]);
 
         // Insert the data
         $id = $this->getDbTable()->insert($data);
@@ -56,10 +55,10 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Saves (updates) an instance of Application_Model_User to the database.
+     * Saves (updates) an instance of Application_Model_User_Event_Log to the database.
      *
-     * @param $object     Application_Model_User
-     *                    The user model to save to the database
+     * @param $object     Application_Model_User_Event_Log
+     *                    The event_log model to save to the database
      * @param $primaryKey mixed
      *                    Optional: The original primary key, in case we're changing it
      *
@@ -71,12 +70,12 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
 
         if ($primaryKey === null)
         {
-            $primaryKey = $data [$this->col_id];
+            $primaryKey = $data [$this->$col_eventLogId];
         }
 
         // Update the row
         $rowsAffected = $this->getDbTable()->update($data, array(
-            "{$this->col_id} = ?" => $primaryKey
+            "{$this->$col_eventLogId} = ?" => $primaryKey
         ));
 
         // Save the object into the cache
@@ -89,23 +88,23 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      * Deletes rows from the database.
      *
      * @param $object mixed
-     *                This can either be an instance of Application_Model_User or the
+     *                This can either be an instance of Application_Model_User_Event_Log or the
      *                primary key to delete
      *
      * @return mixed The number of rows deleted
      */
     public function delete ($object)
     {
-        if ($object instanceof Application_Model_User)
+        if ($object instanceof Application_Model_User_Event_Log)
         {
             $whereClause = array(
-                "{$this->col_id} = ?" => $object->id
+                "{$this->$col_eventLogId} = ?" => $object->id
             );
         }
         else
         {
             $whereClause = array(
-                "{$this->col_id} = ?" => $object
+                "{$this->$col_eventLogId} = ?" => $object
             );
         }
 
@@ -115,18 +114,18 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Finds a user based on it's primaryKey
+     * Finds a event_log based on it's primaryKey
      *
      * @param $id int
-     *            The id of the user to find
+     *            The id of the event_log to find
      *
-     * @return Application_Model_User
+     * @return Application_Model_User_Event_Log
      */
     public function find ($id)
     {
         // Get the item from the cache and return it if we find it.
         $result = $this->getItemFromCache($id);
-        if ($result instanceof Application_Model_User)
+        if ($result instanceof Application_Model_User_Event_Log)
         {
             return $result;
         }
@@ -138,7 +137,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
             return false;
         }
         $row    = $result->current();
-        $object = new Application_Model_User($row->toArray());
+        $object = new Application_Model_User_Event_Log($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -147,7 +146,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a user
+     * Fetches a event_log
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -156,7 +155,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL OFFSET value.
      *
-     * @return  Application_Model_User
+     * @return  Application_Model_User_Event_Log
      */
     public function fetch ($where = null, $order = null, $offset = null)
     {
@@ -166,7 +165,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
             return false;
         }
 
-        $object = new Application_Model_User($row->toArray());
+        $object = new Application_Model_User_Event_Log($row->toArray());
 
         // Save the object into the cache
         $this->saveItemToCache($object);
@@ -175,7 +174,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches all users
+     * Fetches all event_logs
      *
      * @param $where  string|array|Zend_Db_Table_Select
      *                OPTIONAL An SQL WHERE clause or Zend_Db_Table_Select object.
@@ -186,7 +185,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
      * @param $offset int
      *                OPTIONAL An SQL LIMIT offset.
      *
-     * @return Application_Model_User[]
+     * @return Application_Model_User_Event_Log[]
      */
     public function fetchAll ($where = null, $order = null, $count = 150, $offset = null)
     {
@@ -194,7 +193,7 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         $entries   = array();
         foreach ($resultSet as $row)
         {
-            $object = new Application_Model_User($row->toArray());
+            $object = new Application_Model_User_Event_Log($row->toArray());
 
             // Save the object into the cache
             $this->saveItemToCache($object);
@@ -203,14 +202,6 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
         }
 
         return $entries;
-    }
-
-    /**
-     * @return Application_Model_User[]
-     */
-    public function fetchAllExceptRoot ()
-    {
-        return $this->fetchAll(array("{$this->col_id} != 1"));
     }
 
     /**
@@ -223,40 +214,13 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     public function getWhereId ($id)
     {
         return array(
-            "{$this->col_id} = ?" => $id
+            "{$this->$col_eventLogId} = ?" => $id
         );
     }
 
-    /**
-     * Gets a where clause for filtering by email
-     *
-     * @param string $email
-     *
-     * @return array
-     */
-    public function getWhereUsername ($email)
-    {
-        return array(
-            "{$this->col_email} = ?" => $email
-        );
-    }
 
     /**
-     * Gets a where clause for filtering by dealerId
-     *
-     * @param string $dealerId
-     *
-     * @return array
-     */
-    public function getWhereDealerId ($dealerId)
-    {
-        return array(
-            "dealerId = ?" => $dealerId
-        );
-    }
-
-    /**
-     * @param Application_Model_User $object
+     * @param Application_Model_User_Event_Log $object
      *
      * @return int
      */
@@ -266,63 +230,34 @@ class Application_Model_Mapper_User extends My_Model_Mapper_Abstract
     }
 
     /**
-     * Fetches a list of users in the system
+     * @param      $userId
+     * @param      $type
+     * @param null $message
      *
-     * @param bool $includeRootUser
-     *
-     * @return Application_Model_User[]
+     * @return bool|int
      */
-    public function fetchUserList ($includeRootUser = false)
+    public function createUserEventLog ($userId, $type, $message = null)
     {
-        if ($includeRootUser)
+        $userLogId = false;
+
+        $eventLogId = Application_Model_Mapper_Event_Log::getInstance()->createEventLog($type, $message);
+
+        if ($eventLogId)
         {
-            $users = $this->fetchAll();
+            // Use a try here because if this fails the program should not crash, just log it and continue
+            try
+            {
+                $userLog             = new Application_Model_User_Event_Log();
+                $userLog->eventLogId = $eventLogId;
+                $userLog->userId     = $userId;
+                $userLogId           = $this->insert($userLog);
+            }
+            catch (Exception $e)
+            {
+                Tangent_Log::logException($e);
+            }
         }
-        else
-        {
-            $users = $this->fetchAll(array("{$this->col_id} != ?" => 1));
-        }
 
-        return $users;
-    }
-
-    /**
-     * Fetches a list of users for the dealer
-     *
-     * @param $dealerId
-     *
-     * @return Application_Model_User[]
-     */
-    public function fetchUserListForDealer ($dealerId)
-    {
-        return $this->fetchAll(array("{$this->col_dealerId} = ?" => $dealerId));
-
-    }
-
-    /**
-     * * Fetches users by email
-     *
-     * @param $email
-     *
-     * @return Application_Model_User
-     */
-    public function fetchUserByEmail ($email)
-    {
-        return $this->fetch(array("{$this->col_email} = ?" => $email));
-    }
-
-    /**
-     * Searches the user by email (uses LIKE %EMAIL% in where clause)
-     *
-     * @param string $emailName
-     *
-     * @return Application_Model_User []
-     */
-    public function searchByEmail ($emailName)
-    {
-        $results = $this->fetchAll(array("{$this->col_email} LIKE ?" => "%{$emailName}%"));
-
-        return $results;
+        return $userLogId;
     }
 }
-

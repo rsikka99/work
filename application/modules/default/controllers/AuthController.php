@@ -112,6 +112,8 @@ class Default_AuthController extends Tangent_Controller_Action
                             $userSession->sessionId = $currentSessionId;
                             $userSessionMapper->insert($userSession);
                         }
+
+                        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($userInfo->id, Application_Model_Event_Log_Type::LOGIN);
                     }
                     catch (Exception $e)
                     {
@@ -126,6 +128,7 @@ class Default_AuthController extends Tangent_Controller_Action
                 else
                 {
                     Tangent_Statsd::increment('mpstoolbox.login.failures');
+                    Application_Model_Mapper_Event_Log::getInstance()->createEventLog(Application_Model_Event_Log_Type::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
 
                     switch ($result->getCode())
                     {
@@ -143,6 +146,10 @@ class Default_AuthController extends Tangent_Controller_Action
                             break;
                     }
                 }
+            }
+            else
+            {
+                Application_Model_Mapper_Event_Log::getInstance()->createEventLog(Application_Model_Event_Log_Type::LOGIN_FAIL, "Email: " . $request->getParam('email', ''));
             }
         }
 
@@ -172,8 +179,12 @@ class Default_AuthController extends Tangent_Controller_Action
      */
     public function logout ()
     {
+        $auth     = Zend_Auth::getInstance();
+        $identity = $auth->getIdentity();
+        $userId   = $identity->id;
         // Destroy only information that is part of a user being logged in.
         Zend_Auth::getInstance()->clearIdentity();
+        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($userId, Application_Model_Event_Log_Type::LOGOUT);
     }
 
     /**
@@ -211,8 +222,8 @@ class Default_AuthController extends Tangent_Controller_Action
 
                     Application_Model_Mapper_User_PasswordResetRequest::getInstance()->insert($passwordResetRequest);
                     $db->commit();
+                    Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::FORGOT_PASSWORD_SEND);
                     $this->sendForgotPasswordEmail($user, $passwordResetRequest->resetToken);
-
                 }
                 catch (Exception $e)
                 {
@@ -302,6 +313,7 @@ class Default_AuthController extends Tangent_Controller_Action
                         $user->resetPasswordOnNextLogin = 0;
                         $userMapper->save($user);
 
+                        Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::CHANGE_PASSWORD);
                         // Remove flag on session
                         $identity->resetPasswordOnNextLogin = false;
                         $auth->getStorage()->write($identity);
@@ -391,6 +403,7 @@ class Default_AuthController extends Tangent_Controller_Action
                                 $user->password = (Application_Model_User::cryptPassword($this->_request->getParam('password')));
                                 Application_Model_Mapper_User::getInstance()->save($user);
                                 Application_Model_Mapper_User_PasswordResetRequest::getInstance()->deleteByUserId($user->id);
+                                Application_Model_Mapper_User_Event_Log::getInstance()->createUserEventLog($user->id, Application_Model_Event_Log_Type::FORGOT_PASSWORD_CHANGED);
                                 $this->_flashMessenger->addMessage(array(
                                     "success" => 'Password has been updated'
                                 ));

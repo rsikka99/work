@@ -1124,8 +1124,16 @@
                                 </index>
                             </pages>
                         </MemjetDeviceSwaps>
+                        <EventLog>
+                            <label>Event Log</label>
+                            <module>admin</module>
+                            <controller>event_log</controller>
+                            <action>index</action>
+                            <resource>admin__event_log__index</resource>
+                        </EventLog>
                     </pages>
                 </sysadmin>
+
                 <settings>
                     <order>999997</order>
                     <label>Settings</label>

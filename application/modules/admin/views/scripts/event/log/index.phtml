@@ -1,0 +1,29 @@
+<?php $this->headScript()->appendFile($this->baseUrl('js/admin/event/log/eventLog.js')); ?>
+<div class="page-header">
+    <h1>Event Log</h1>
+</div>
+
+<form method="post">
+    <div id="criteriaContainer" class="form-inline">
+        <div id="emailCriteria_criteria_container" style="display: inline; padding: 0px 0px 0px 0px;">
+            <label for="emailCriteria">Email:</label>
+            <input id="emailCriteria" type="text" name="emailCriteria" class="input-large" />
+            <input type="button" value="Reset" class="btn btn-mini btn-inverse" id='emailCriteriaReset' style="margin-left:4px" />
+        </div>
+        <label for="typeCriteria">Type:</label>
+        <select id="typeCriteria">
+            <option>All</option>
+            <?php
+            foreach ($this->eventLogTypes as $types)
+            {
+                ?>
+                <option value="<?php echo $types; ?>"><?php echo $types; ?></option>
+            <?php
+            }
+            ?>
+        </select>
+        <input class="btn btn-danger pull-right" id="clearAllLogs" name="clearAllLogs" type="submit" value="Clear All Logs">
+    </div>
+</form>
+<table id="eventLogGrid"></table>
+<div id="eventLogPager"></div>
