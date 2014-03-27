@@ -38,5 +38,22 @@ $form = $this->element;
             <input class="span2" disabled="disabled" name='packagePrice' style="padding-left: 2px" value="<?php echo $form->getQuoteDevice()->calculatePackageCost(); ?>" />
         </div>
     </div>
+
+    <h3>Configurations</h3>
+
+    <div class="control-group">
+        <select id="configurationId" name="configurationId" onchange="loadNewConfiguration()">
+            <option value="" id="">Select a configuration</option>
+            <?php
+            foreach ($this->configurations as $configuration) :
+                ?>
+                <option value="<?php echo $configuration->id; ?>"><?php echo $configuration->description; ?></option>
+            <?php
+            endforeach;
+            ?>
+        </select>
+    </div>
+    <div id="configurationsTable">
+    </div>
     <?php echo $form->getDisplayGroup('actions')->render(); ?>
 </form>

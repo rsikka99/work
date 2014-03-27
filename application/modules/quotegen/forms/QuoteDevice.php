@@ -178,7 +178,8 @@ class Quotegen_Form_QuoteDevice extends Twitter_Bootstrap_Form_Horizontal
                 array(
                     'ViewScript',
                     array(
-                        'viewScript' => 'quote/devices/form/quotedevice.phtml'
+                        'viewScript' => 'quote/devices/form/quotedevice.phtml',
+                        'configurations' => Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($this->_quoteDevice->getDevice()->masterDeviceId)
                     )
                 )
             ));

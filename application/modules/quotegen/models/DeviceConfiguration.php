@@ -127,7 +127,7 @@ class Quotegen_Model_DeviceConfiguration extends My_Model_Abstract
     /**
      * Get the array of options for the device
      *
-     * @return Quotegen_Model_DeviceOption[]
+     * @return Quotegen_Model_DeviceConfigurationOption[]
      */
     public function getOptions ()
     {

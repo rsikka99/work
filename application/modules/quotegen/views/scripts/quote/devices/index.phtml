@@ -43,15 +43,35 @@ $this->headScript()->appendScript("$('i').popover();");
                     <div class="btn-group">
                         <a href="#" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench"></i></a>
                         <ul class="dropdown-menu pull-right">
+                            <li><strong>Device</strong></li>
                             <?php if ($device->getDevice()) : ?>
-                            <li>
-                                <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->id)); ?>"><i class="icon-refresh"></i>
-                                    Sync Device</a>
-                                <?php endif; ?>
+                                <li>
+                                    <a href="<?php echo $this->url(array('action' => 'sync-device-configuration', 'id' => $device->id)); ?>"><i class="icon-refresh"></i>
+                                        Sync Device</a></li>
+                            <?php endif; ?>
                             <li><a href="<?php echo $this->url(array('action' => 'edit-quote-device', 'id' => $device->id)); ?>"><i class="icon-pencil"></i>
-                                    Edit Device</a>
+                                    Edit Device</a></li>
                             <li><a href="<?php echo $this->url(array('action' => 'delete-quote-device', 'id' => $device->id)); ?>"><i class="icon-trash"></i>
-                                    Delete Device</a>
+                                    Delete Device</a></li>
+                            <?php
+                            $configurations = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->fetchAllDeviceConfigurationByDeviceIdAndDealerId($device->getDevice()->masterDeviceId);
+                            if (count($configurations) > 0) :
+                                ?>
+                                <li><strong>Use Configuration</strong></li>
+                                <?php
+                                foreach ($configurations as $configuration) :
+                                    ?>
+                                    <li>
+                                        <a href="<?php echo $this->url(array('action' => 'use-configuration', 'deviceId' => $device->id, 'configurationId' => $configuration->id)); ?>">
+                                            <?php
+                                            echo $configuration->name;
+                                            ?>
+                                        </a>
+                                    </li>
+                                <?php
+                                endforeach;
+                            endif;
+                            ?>
                         </ul>
                     </div>
                 </td>

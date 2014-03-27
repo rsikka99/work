@@ -99,6 +99,56 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
     }
 
     /**
+     * Clears and sets the options on a quote device to use the specified configurations
+     */
+    public function useConfigurationAction ()
+    {
+        $deviceConfigurationId = $this->_getParam('configurationId', false);
+        $quoteDeviceId         = $this->_getParam('deviceId', false);
+
+        if (!$deviceConfigurationId && !$quoteDeviceId)
+        {
+            $this->_flashMessenger->addMessage(array(
+                'warning' => 'A configuration and quote device must be set'
+            ));
+
+            $this->redirector('index', null, null, array('quoteId' => $this->_quoteId));
+        }
+
+        $this->useConfigurationOnDevice($deviceConfigurationId, $quoteDeviceId);
+
+        $this->redirector('index', null, null, array('quoteId' => $this->_quoteId));
+    }
+
+    /**
+     * Gets the options and sets them into the view object, this is used on the edit quote device page to load different configurations dynamically
+     */
+    public function configurationsTableAction ()
+    {
+        $this->_helper->layout()->disableLayout();
+        $configurationId = $this->_getParam('configurationId', false);
+
+        if ($configurationId > 0)
+        {
+            $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($configurationId);
+            if ($deviceConfiguration instanceof Quotegen_Model_DeviceConfiguration)
+            {
+                $deviceConfigurationOptions = $deviceConfiguration->getOptions();
+                $options                    = array();
+
+                foreach ($deviceConfigurationOptions as $deviceConfigurationOption)
+                {
+                    $data             = $deviceConfigurationOption->getOption()->toArray();
+                    $data['quantity'] = $deviceConfigurationOption->quantity;
+                    $options []       = $data;
+                }
+
+                $this->view->options = $options;
+            }
+        }
+    }
+
+    /**
      * Removes a device configuration from the quote
      */
     public function deleteQuoteDeviceAction ()
@@ -165,6 +215,15 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
             {
                 // User has cancelled. We could do a redirect here if we wanted.
                 $this->redirector('index', null, null, array(
+                    'quoteId' => $this->_quoteId
+                ));
+            }
+            else if (isset($values['useConfiguration']))
+            {
+                $this->useConfigurationOnDevice($values['configurationId'], $quoteDevice->id);
+
+                $this->redirector('edit-quote-device', null, null, array(
+                    'id'      => $quoteDevice->id,
                     'quoteId' => $this->_quoteId
                 ));
             }
@@ -374,7 +433,6 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
                 ));
             }
         }
-
         $this->view->form = $form;
     }
 
@@ -488,6 +546,58 @@ class Quotegen_Quote_DevicesController extends Quotegen_Library_Controller_Quote
         $this->redirector('index', null, null, array(
             'quoteId' => $this->_quoteId
         ));
+    }
+
+    public function useConfigurationOnDevice ($deviceConfigurationId, $quoteDeviceId)
+    {
+        $quoteDeviceService = new Quotegen_Service_QuoteDevice($this->_userId, $this->_quote->id);
+        Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($deviceConfigurationId);
+        $db = Zend_Db_Table::getDefaultAdapter();
+
+        try
+        {
+            $mapperDeviceOption = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance();
+            $device             = Quotegen_Model_Mapper_QuoteDevice::getInstance()->find($quoteDeviceId);
+            $deviceOptions      = $device->getQuoteDeviceOptions();
+
+            foreach ($deviceOptions as $deviceOption)
+            {
+                $mapperDeviceOption->delete($deviceOption);
+            }
+
+            $db->beginTransaction();
+            $deviceConfiguration = Quotegen_Model_Mapper_DeviceConfiguration::getInstance()->find($deviceConfigurationId);
+
+            // Prepare option link
+            $quoteDeviceConfigurationOption                 = new Quotegen_Model_QuoteDeviceConfigurationOption();
+            $quoteDeviceConfigurationOption->masterDeviceId = $deviceConfiguration->masterDeviceId;
+            foreach ($deviceConfiguration->getOptions() as $option)
+            {
+                // Get the device option
+                $deviceOption = Quotegen_Model_Mapper_DeviceOption::getInstance()->find(array(
+                    $deviceConfiguration->masterDeviceId,
+                    $option->optionId
+                ));
+
+                // Insert quote device option
+                $quoteDeviceOption                = $quoteDeviceService->syncOption(new Quotegen_Model_QuoteDeviceOption(), $deviceOption);
+                $quoteDeviceOption->quoteDeviceId = $quoteDeviceId;
+                $quoteDeviceOption->quantity      = $option->quantity;
+                $quoteDeviceOptionId              = Quotegen_Model_Mapper_QuoteDeviceOption::getInstance()->insert($quoteDeviceOption);
+
+                // Insert link
+                $quoteDeviceConfigurationOption->quoteDeviceOptionId = $quoteDeviceOptionId;
+                $quoteDeviceConfigurationOption->optionId            = $option->optionId;
+                Quotegen_Model_Mapper_QuoteDeviceConfigurationOption::getInstance()->insert($quoteDeviceConfigurationOption);
+                $db->commit();
+            }
+        }
+        catch (Exception $e)
+        {
+            $db->rollback();
+            Tangent_Log::logException($e);
+            $this->_flashMessenger->addMessage(array("error" => "Error: The updates were not saved. Reference #: " . Tangent_Log::getUniqueId()));
+        }
     }
 }
 
