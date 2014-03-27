@@ -15,10 +15,10 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
         <li class="active"><a data-toggle="tab" href="#summary">Summary</a></li>
         <?php
         $tabCounter = 0;
-        foreach ($this->vendorSeperatedData as $vendorData)
+        foreach ($this->vendorSeparatedData as $vendorData)
         {
             ?>
-            <li><a data-toggle="tab" href="#tab<?= $tabCounter; ?>"><?= $vendorData['pageTitle'] ?></a></li>
+            <li><a data-toggle="tab" href="#tab<?php echo $tabCounter; ?>"><?php echo $vendorData['pageTitle'] ?></a></li>
             <?php $tabCounter++;
         }
         ?>
@@ -30,7 +30,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
         <h3>Summary</h3>
 
         <p>
-            There are <?= count($this->vendorSeperatedData) - 2 ?> toner vendors in the system. Out of the <?= count($this->vendorSeperatedData) ?> Toner
+            There are <?php echo number_format(count($this->vendorSeparatedData) - 2) ?> toner vendors in the system. Out of the <?php echo number_format(count($this->vendorSeparatedData)) ?> Toner
             Preferences, <?php
             $vendorConfigurationNames = implode(', ', $this->highestNames);
             // Replace last occurrence of a comma to an and
@@ -39,7 +39,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
                 $vendorConfigurationNames = substr_replace($vendorConfigurationNames, ' and ', strrpos($vendorConfigurationNames, ','), 1);
             }
             echo $vendorConfigurationNames;
-            ?> has the highest overall gross margin at <?= $this->highestMargin ?>.
+            ?> has the highest overall gross margin at <?php echo $this->highestMargin ?>.
         </p>
         <table class="table">
             <tr>
@@ -49,14 +49,14 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
 
             <?php
             $highestMarginArray = [];
-            foreach ($this->vendorSeperatedData as $vendorData)
+            foreach ($this->vendorSeparatedData as $vendorData)
             {
                 $vendorOverallMargin = $vendorData['statisticsGroup']['right']['Overall Margin'];
                 $vendorName          = $vendorData['pageTitle'];
                 ?>
-                <tr <?= (in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
-                    <td><?= $vendorName ?></td>
-                    <td><?= $vendorOverallMargin; ?>%</td>
+                <tr <?php echo (in_array($vendorName, $this->highestNames) ? 'style="background-color:#C3FFA6"' : '') ?>>
+                    <td><?php echo $vendorName ?></td>
+                    <td><?php echo $vendorOverallMargin; ?>%</td>
                 </tr>
             <?php } ?>
         </table>
@@ -66,13 +66,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
 
 <?php
 $tabCounter = 0;
-foreach ($this->vendorSeperatedData as $vendorData)
+foreach ($this->vendorSeparatedData as $vendorData)
 {
     ?>
-    <div class="tab-pane" id="tab<?= $tabCounter; ?>">
+    <div class="tab-pane" id="tab<?php echo $tabCounter; ?>">
         <div class="span9">
             <div>
-                <h3 class="reportTitle"><?= $vendorData['pageTitle']; ?></h3>
+                <h3 class="reportTitle"><?php echo $vendorData['pageTitle']; ?></h3>
                 <em>AMPV = Average Monthly Page Volume</em>
             </div>
 
@@ -85,13 +85,13 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading"><?php echo My_Brand::$brandName; ?> Monochrome CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Monochrome CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Monochrome CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Cost:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Total Cost'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['right']['Total Cost'] ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -99,13 +99,13 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading"><?php echo My_Brand::$brandName; ?> Color CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Color CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left'][My_Brand::$brandName . ' Color CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Total Revenue:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Total Revenue'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['right']['Total Revenue'] ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -113,13 +113,13 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading">Weighted Monochrome CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left']['Weighted Monochrome CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left']['Weighted Monochrome CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Monthly Profit:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Monthly Profit'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['right']['Monthly Profit'] ?></div>
                     </td>
                 </tr>
                 <tr>
@@ -127,13 +127,13 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading">Weighted Color CPP:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left']['Weighted Color CPP'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left']['Weighted Color CPP'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Overall Margin:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Overall Margin'] ?>%</div>
+                        <div><?php echo $vendorData['statisticsGroup']['right']['Overall Margin'] ?>%</div>
                     </td>
                 </tr>
                 <tr>
@@ -141,13 +141,13 @@ foreach ($this->vendorSeperatedData as $vendorData)
                         <div class="heading">Monochrome Margin:</div>
                     </td>
                     <td class="column2">
-                        <div><?= $vendorData['statisticsGroup']['left']['Monochrome Margin'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['left']['Monochrome Margin'] ?></div>
                     </td>
                     <td class="column3">
                         <div class="heading">Color Margin:</div>
                     </td>
                     <td class="column4">
-                        <div><?= $vendorData['statisticsGroup']['right']['Color Margin'] ?></div>
+                        <div><?php echo $vendorData['statisticsGroup']['right']['Color Margin'] ?></div>
                     </td>
                 </tr>
                 </tbody>
@@ -192,18 +192,18 @@ foreach ($this->vendorSeperatedData as $vendorData)
                 {
                     ?>
                     <tr class="<?php echo ($fields['completeMono']) ? "" : "nonCompliantMono" ?> <?php echo ($fields['completeColor']) ? "" : "nonCompliantColor" ?>">
-                        <td class=""><?= $fields[0]['deviceName'] ?><br /><?= '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?></td>
-                        <td class="mono"><?= number_format($fields[1]) ?></td>
-                        <td class="mono"><?= $this->currency($fields[2]) ?></td>
-                        <td class="mono"><?= number_format($fields[3]) ?></td>
-                        <td class="mono"><?= $this->formatCostPerPage($fields[4]) ?></td>
-                        <td class="mono"><?= $this->currency($fields[5]) ?></td>
+                        <td class=""><?php echo $fields[0]['deviceName'] ?><br /><?php echo '(' . $fields[0]['ipAddress'] . ' - ' . $fields[0]['serialNumber'] . ')' ?></td>
+                        <td class="mono"><?php echo number_format($fields[1]) ?></td>
+                        <td class="mono"><?php echo $this->currency($fields[2]) ?></td>
+                        <td class="mono"><?php echo number_format($fields[3]) ?></td>
+                        <td class="mono"><?php echo $this->formatCostPerPage($fields[4]) ?></td>
+                        <td class="mono"><?php echo $this->currency($fields[5]) ?></td>
 
-                        <td class="color"><?= (is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
-                        <td class="color"><?= (is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
-                        <td class="color"><?= (is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
-                        <td class="color"><?= (is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
-                        <td class="color"><?= (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
+                        <td class="color"><?php echo (is_numeric($fields[6]) ? number_format($fields[6]) : "-") ?></td>
+                        <td class="color"><?php echo (is_numeric($fields[7]) ? $this->currency($fields[7]) : "-") ?></td>
+                        <td class="color"><?php echo (is_numeric($fields[8]) ? number_format($fields[8]) : "-") ?></td>
+                        <td class="color"><?php echo (is_numeric($fields[9]) ? $this->formatCostPerPage($fields[9]) : "-") ?></td>
+                        <td class="color"><?php echo (is_numeric($fields[10]) ? $this->currency($fields[10]) : "-") ?></td>
 
                     </tr>
                 <?php
@@ -212,21 +212,21 @@ foreach ($this->vendorSeperatedData as $vendorData)
                 ?>
                 <tr class="totals">
                     <td class="column1">
-                        <div><?= $vendorData['fieldTotals'][0] ?></div>
+                        <div><?php echo $vendorData['fieldTotals'][0] ?></div>
                     </td>
                     <td>
-                        <div class="right"><?= number_format($vendorData['fieldTotals'][4]) ?></div>
+                        <div class="right"><?php echo number_format($vendorData['fieldTotals'][4]) ?></div>
                     </td>
                     <td colspan="3"></td>
                     <td class="column2">
-                        <div class="right"><?= $this->currency($vendorData['fieldTotals'][8]) ?></div>
+                        <div class="right"><?php echo $this->currency($vendorData['fieldTotals'][8]) ?></div>
                     </td>
                     <td>
-                        <div class="center"><?= number_format($vendorData['fieldTotals'][9]) ?></div>
+                        <div class="center"><?php echo number_format($vendorData['fieldTotals'][9]) ?></div>
                     </td>
                     <td colspan="3"></td>
                     <td>
-                        <div class="right"><?= $this->currency($vendorData['fieldTotals'][13]) ?></div>
+                        <div class="right"><?php echo $this->currency($vendorData['fieldTotals'][13]) ?></div>
                     </td>
                 </tr>
                 </tbody>

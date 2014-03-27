@@ -69,10 +69,10 @@ $tableData = array();
         <tr>
             <?php if (array_key_exists("column1", $row)) : ?>
                 <td style="border:1px solid">
-                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column1"]["color"]; ?>"></div>
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?php echo $row["column1"]["color"]; ?>"></div>
                 </td>
-                <td style="border:1px solid"><?= $row["column1"]["name"]; ?></td>
-                <td style="border:1px solid"><?= $row["column1"]["percent"] ?></td>
+                <td style="border:1px solid"><?php echo $row["column1"]["name"]; ?></td>
+                <td style="border:1px solid"><?php echo $row["column1"]["percent"] ?></td>
             <?php else : ?>
                 <td colspan="3">&nbsp;</td>
             <?php endif; ?>
@@ -80,10 +80,10 @@ $tableData = array();
 
             <?php if (array_key_exists("column2", $row)) : ?>
                 <td style="border:1px solid">
-                    <div style="width:20px;height:20px;margin: auto;background-color:#<?= $row["column2"]["color"]; ?>"></div>
+                    <div style="width:20px;height:20px;margin: auto;background-color:#<?php echo $row["column2"]["color"]; ?>"></div>
                 </td>
-                <td style="border:1px solid"><?= $row["column2"]["name"]; ?></td>
-                <td style="border:1px solid"><?= $row["column2"]["percent"] ?></td>
+                <td style="border:1px solid"><?php echo $row["column2"]["name"]; ?></td>
+                <td style="border:1px solid"><?php echo $row["column2"]["percent"] ?></td>
             <?php else : ?>
                 <td colspan="3">&nbsp;</td>
             <?php endif; ?>

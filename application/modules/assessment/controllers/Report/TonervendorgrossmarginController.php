@@ -123,24 +123,24 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
         );
 
         $fieldTitles         = array($fieldTitlesLvl1, $fieldTitlesLvl2);
-        $vendorSeperatedData = array();
+        $vendorSeparatedData = array();
 
         // Your Preferences
-        $vendorSeperatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "Your Preferences", 0);
+        $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "Your Preferences", 0);
 
         // OEM
-        $vendorSeperatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "OEM", -1);
+        $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, "OEM", -1);
 
         // Individual Vendors
         foreach (Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->fetchAll() as $tonerVendor)
         {
-            $vendorSeperatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, $tonerVendor->getManufacturerName(), $tonerVendor->manufacturerId);
+            $vendorSeparatedData[] = $this->getReportData($assessmentViewModel, $fieldTitles, $tonerVendor->getManufacturerName(), $tonerVendor->manufacturerId);
         }
 
         $highestMarginNames = [];
         $highestMargin      = -5000;
 
-        foreach ($vendorSeperatedData as $arrayData)
+        foreach ($vendorSeparatedData as $arrayData)
         {
             $currentPercentage = $arrayData['statisticsGroup']['right']['Overall Margin'];
             if ($currentPercentage > $highestMargin)
@@ -154,7 +154,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
             }
         }
 
-        $this->view->vendorSeperatedData = $vendorSeperatedData;
+        $this->view->vendorSeparatedData = $vendorSeparatedData;
         $this->view->highestNames        = $highestMarginNames;
         $this->view->highestMargin       = $highestMargin . "%";
     }
@@ -271,7 +271,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
                 }
 
                 // Black Toner
-                $blackCost  = $blackToner->cost;
+                $blackCost  = $blackToner->calculatedCost;
                 $blackYield = $blackToner->yield;
 
                 // Color Toner
@@ -281,7 +281,7 @@ class Assessment_Report_TonervendorgrossmarginController extends Assessment_Libr
 
                 if ($colorToner)
                 {
-                    $colorCost  = $colorToner->cost;
+                    $colorCost  = $colorToner->calculatedCost;
                     $colorYield = $colorToner->yield;
                     $isColor    = true;
                 }

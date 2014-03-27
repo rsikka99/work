@@ -38,7 +38,7 @@
         <?php
         $rowCount = count($this->csv->getData()) + count($this->csv->getBadData());
         ?>
-        <h3><?= count($this->csv->getData()) ?> out of <?= $rowCount ?> Results to be Imported:</h3><br />
+        <h3><?php echo count($this->csv->getData()) ?> out of <?php echo $rowCount ?> Results to be Imported:</h3><br />
     </div>
 </div>
 <hr>
@@ -47,7 +47,7 @@
         <table>
             <tr>
                 <?php foreach ($this->csv->getHeaders() as $value) : ?>
-                    <th nowrap="nowrap">&nbsp;&nbsp;<?= $value ?>&nbsp;&nbsp;</th>
+                    <th nowrap="nowrap">&nbsp;&nbsp;<?php echo $value ?>&nbsp;&nbsp;</th>
                 <?php endforeach; ?>
             </tr>
             <?php
@@ -55,7 +55,7 @@
             foreach ($this->csv->getData() as $row) : ?>
                 <tr>
                     <?php foreach ($row as $column) : ?>
-                        <td nowrap="nowrap"><?= $column ?></td>
+                        <td nowrap="nowrap"><?php echo $column ?></td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
@@ -75,7 +75,7 @@
 <?php if (count($this->csv->getBaddata()) > 0)
 { ?>
     <div class="span-24">
-        <h3><?= count($this->csv->getBaddata()) ?> Excluded Rows:</h3>
+        <h3><?php echo count($this->csv->getBaddata()) ?> Excluded Rows:</h3>
 
         <p>Records below have invalid or missing data.</p>
     </div>
@@ -91,7 +91,7 @@
                 { ?>
                     <tr>
                         <td><?php echo $row[0]; ?></td>
-                        <td><?= $row[1]["modelname"] ?></td>
+                        <td><?php echo $row[1]["modelname"] ?></td>
                     </tr>
                 <?php } ?>
             </table>
@@ -104,7 +104,7 @@
 <?php if (count($this->csv->test["rows"]) > 0)
 { ?>
     <div class="span-24">
-        <h3><?= count($this->csv->test["rows"]) ?> Excluded Row with toner data:</h3>
+        <h3><?php echo count($this->csv->test["rows"]) ?> Excluded Row with toner data:</h3>
     </div>
     <hr>
     <div class="span-24">
@@ -118,9 +118,9 @@
                 <?php foreach ($this->csv->test["rows"] as $key => $row)
                 { ?>
                     <tr>
-                        <td><?= $row["printermodelid"] ?></td>
-                        <td><?= $row["modelname"] ?></td>
-                        <td><?= $this->csv->test["errors"][$key] ?></td>
+                        <td><?php echo $row["printermodelid"] ?></td>
+                        <td><?php echo $row["modelname"] ?></td>
+                        <td><?php echo $this->csv->test["errors"][$key] ?></td>
                     </tr>
                 <?php } ?>
             </table>
