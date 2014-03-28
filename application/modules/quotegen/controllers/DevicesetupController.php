@@ -523,58 +523,32 @@ class Quotegen_DevicesetupController extends Tangent_Controller_Action
      */
     public function deleteAction ()
     {
-        $deviceId = $this->_getParam('id', false);
-
-        if (!$deviceId)
+        $masterDeviceId = $this->_getParam('masterDeviceId', false);
+        if (!$masterDeviceId)
         {
-            $this->_flashMessenger->addMessage(array(
-                'warning' => 'Please select a device to delete first.'
-            ));
-            $this->redirector('index');
+            $this->sendJsonError('Missing Master Device ID');
         }
 
-        $device = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($deviceId);
-        if (!$device)
+        $masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+        if (!$masterDevice)
         {
-            $this->_flashMessenger->addMessage(array(
-                'danger' => 'There was an error selecting the device to delete.'
-            ));
-            $this->redirector('index');
+            $this->sendJsonError('Invalid Master Device');
         }
 
-        // Get the device name
-        $deviceName = $device->getFullDeviceName();
-
-        $message = "Are you sure you want to delete {$deviceName}?";
-        $form    = new Application_Form_Delete($message);
-
-        $request = $this->getRequest();
-        if ($request->isPost())
+        $db = Zend_Db_Table_Abstract::getDefaultAdapter();
+        try
         {
-            $values = $request->getPost();
-            if (!isset($values ['cancel']))
-            {
-                // Delete device from database
-                if ($form->isValid($values))
-                {
-                    // Get the Quotegen Device Object
-                    $quotegenDeviceMapper = Quotegen_Model_Mapper_Device::getInstance();
-                    $quotegenDevice       = $quotegenDeviceMapper->find(array($deviceId, Zend_Auth::getInstance()->getIdentity()->dealerId));
-                    Quotegen_Model_Mapper_Device::getInstance()->delete($quotegenDevice);
-
-                    // Display Message and return
-                    $this->_flashMessenger->addMessage(array(
-                        'success' => "{$deviceName} was deleted successfully."
-                    ));
-                    $this->redirector('index');
-                }
-            }
-            else
-            {
-                $this->redirector('index');
-            }
+            $db->beginTransaction();
+            Proposalgen_Model_Mapper_MasterDevice::getInstance()->delete($masterDevice);
+            $db->commit();
+            $this->sendJson(array('success' => true, 'message' => 'Device successfully deleted'));
         }
-        $this->view->form = $form;
+        catch (Exception $e)
+        {
+            $db->rollBack();
+            Tangent_Log::logException($e);
+            $this->sendJsonError('A server error occurred when trying to delete the master device. Error ID #' . Tangent_Log::getUniqueId());
+        }
     }
 
     /**

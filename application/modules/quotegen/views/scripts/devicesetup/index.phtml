@@ -10,6 +10,7 @@ $this->headScript()
 
 $this->headScript()->captureStart('append', 'text/javascript'); ?>
 var isSaveAndApproveAdmin = <?php echo($this->IsAllowed(Proposalgen_Model_Acl::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN) ? 'true' : 'false'); ?>;
+var canDelete = <?php echo($this->IsAllowed(Quotegen_Model_Acl::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, Application_Model_Acl::PRIVILEGE_VIEW) ? 'true' : 'false'); ?>;
 var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
 <?php $this->headScript()->captureEnd();
 ?>
@@ -46,7 +47,9 @@ var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
             </div>
             <input type="hidden" name="deviceInstanceIds" id="unknownDeviceDeviceInstanceIds" />
         </form>
-        <table id="devicesGrid"></table>
+        <form>
+            <table id="devicesGrid"></table>
+        </form>
         <div id="devicesGridPager"></div>
     </div>
 </div>
@@ -61,6 +64,22 @@ var dealerSkuName = '<?php echo My_Brand::$dealerSku; ?>';
         <div id="masterDeviceManagement">
         </div>
     </div>
+</div>
+
+<div class="modal hide" id="alertDeleteModal">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">x</a>
+        <h4 style="text-align: center">Are you sure you want to delete</h4>
+    </div>
+    <div class="modal-body">
+        <div class="form-horizontal">
+            <div style="text-align:center">
+                <input type="button" class="btn btn-danger" value="Delete" id="deleteMasterDevice" data-dismiss="modal" style="margin-bottom: 4px" onclick="javascript: deleteMasterDevice()" />
+                <input type="button" class="btn btn-inverse" value="Cancel" data-dismiss="modal" style="margin-bottom: 4px" />
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="deleteMasterDeviceId">
 </div>
 
 <input type="hidden" id="isAdmin" value="<?php echo $this->isAdmin; ?>" />

@@ -60,7 +60,7 @@ $(function ()
                     sortable: false
                 },
                 {
-                    width   : 120,
+                    width   : 99,
                     name    : 'action',
                     index   : 'action',
                     label   : 'Action',
@@ -109,13 +109,23 @@ $(function ()
                     {
                         canEdit = 'true';
                     }
-                    row.action = '<input title="Edit Printer" class="btn btn-mini btn-warning btn-block" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />';
+
+                    if (canDelete)
+                    {
+                        row.action = '<input title="Edit Printer" class="btn btn-mini btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />' +
+                            '<input title="Delete Printer" class="btn btn-mini btn-danger" type="button" value="Delete" onclick="javascript: showDeleteAlertModal(' + row.id + ');" />';
+
+                    }
+                    else
+                    {
+                        row.action = '<input title="Edit Printer" class="btn btn-block btn-warning" type="button" value="Edit" onclick="javascript: showMasterDeviceManagementModal(' + row.id + ',0, \'' + canEdit + '\');" />';
+
+                    }
+
                     grid.setRowData(ids[i], row);
                 }
             }
         })
-
-
 });
 function updateGrid($type)
 {
@@ -127,7 +137,8 @@ function updateGrid($type)
     {
         clearFilters();
     }
-};
+}
+
 function clearFilters()
 {
     $("#chkCanSell").removeAttr("checked");
@@ -143,3 +154,25 @@ $("#masterDeviceManagement").bind("approveSuccess", function (e, masterDeviceId)
 {
     $("#manageMasterDeviceModal").modal("hide");
 });
+
+function showDeleteAlertModal(masterDeviceId)
+{
+    var deleteModal = $('#alertDeleteModal');
+    deleteModal.modal('show');
+    $('#deleteMasterDeviceId').val(masterDeviceId)
+}
+
+function deleteMasterDevice()
+{
+    $.ajax({
+        url     : TMTW_BASEURL + "quotegen/devicesetup/delete",
+        dataType: "json",
+        data    : {
+            masterDeviceId: $('#deleteMasterDeviceId').val()
+        },
+        success : function (data)
+        {
+            $("#devicesGrid").trigger("reloadGrid");
+        }
+    });
+}

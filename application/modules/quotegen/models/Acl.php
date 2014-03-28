@@ -111,11 +111,15 @@ class Quotegen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS, Application_Model_Acl::PRIVILEGE_VIEW);
-        $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_DEVICESETUP_DELETE, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_CONFIGURATION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_CATEGORY_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_PRICING_AND_HARDWARE_ADMINISTRATOR, self::RESOURCE_QUOTEGEN_OPTION_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
 
-        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_ALLDEVICESLIST, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CONFIGURATIONS, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_CREATE, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_EDIT, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_INDEX, Application_Model_Acl::PRIVILEGE_ADMIN);
+        $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_QUOTEGEN_DEVICESETUP_OPTIONS, Application_Model_Acl::PRIVILEGE_ADMIN);
     }
 }
