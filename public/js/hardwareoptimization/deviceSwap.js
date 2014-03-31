@@ -251,6 +251,18 @@ $(function ()
     // Persist the jqGrid row id to the hidden form element inside the model
     $(document).on("click", ".editSwapReasonAction", function ()
     {
+        /**
+         * TODO lrobert: Quick hax to fix the height of the modal when adding error messages.
+         * This can probably be done in a better way (css only maybe?)
+         */
+        $('#reasonAddModal').on('show', function ()
+        {
+            $(this).find('.modal-body').css({
+                width       : 'auto', //probably not needed
+                height      : 'auto', //probably not needed
+                'max-height': '100%'
+            });
+        });
         $("#reasonAddModal").modal("show");
         // Get the data from the selected row
         var row_data = getJqGridRow(jQuery("#deviceReasonTable"));
@@ -343,38 +355,29 @@ $(function ()
     $(document).on("click", "#saveDeviceReason", function ()
     {
         $.ajax({
-            url    : TMTW_BASEURL + "hardwareoptimization/deviceswaps/update-device-reason",
-            type   : "post",
-            data   : $("#deviceSwapReason").serialize(),
-            success: function ()
+            url     : TMTW_BASEURL + "hardwareoptimization/deviceswaps/update-device-reason",
+            type    : "POST",
+            dataType: "json",
+            data    : $("#deviceSwapReason").serialize(),
+            success : function ()
             {
                 $("#deviceReasonTable").jqGrid().trigger('reloadGrid');
                 $("#reasonAddModal").modal('hide');
             },
-            error  : function (xhr)
+            error   : function (ajaxRequest)
             {
-                // Show the error message
-                var errorMessageElement = $("#save-error");
-
                 try
                 {
-                    // a try/catch is recommended as the error handler
-                    // could occur in many events and there might not be
-                    // a JSON response from the server
+                    // Show the error message
+                    var errorMessageElement = $("#reason-add-save-error");
 
-                    var json = $.parseJSON(xhr.responseText);
-                    errorMessageElement.html('<ol>');
-
-                    for (var i = 0; i < json.error.length; i++)
-                    {
-                        errorMessageElement.append('<li>' + json.error[i] + '</li>');
-                    }
-
-                    errorMessageElement.append('</ol>');
+                    var json = $.parseJSON(ajaxRequest.responseText);
+                    errorMessageElement.empty().html(json.error);
+                    errorMessageElement.show();
                 }
-                catch (e)
+                catch (error)
                 {
-                    console.log('Something bad happened.');
+                    console.log('An error occurred while trying to display device swap reason error messages');
                 }
 
                 errorMessageElement.show();
@@ -418,7 +421,7 @@ $(function ()
                 $("#deviceReasonTable").jqGrid().trigger('reloadGrid');
                 $("#deleteReasonModal").modal('hide');
             },
-            error : function(data)
+            error   : function (data)
             {
                 var json = $.parseJSON(data.responseText);
                 var errorMessageElement = $('#device-swap-error-message');

@@ -233,10 +233,12 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
         );
 
         // Does the reason exist
-        $reasonCategory = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Category::getInstance()->find($postData['reasonCategory']);
+        $db = Zend_Db_Table::getDefaultAdapter();
         try
         {
+            $db->beginTransaction();
 
+            $reasonCategory = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Category::getInstance()->find($postData['reasonCategory']);
             if ($reasonCategory instanceof Hardwareoptimization_Model_Device_Swap_Reason_Category)
             {
                 // Is this an edit reason ?
@@ -257,21 +259,34 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
                     Hardwareoptimization_Model_Mapper_Device_Swap_Reason::getInstance()->insert($reason);
                 }
 
-                if ($postData['isDefault'])
-                {
-                    $reasonCategoryDefault                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
-                    $reasonCategoryDefault->deviceSwapReasonCategoryId = $reasonCategory->id;
-                    $reasonCategoryDefault->dealerId                   = $this->_identity->dealerId;
-                    $reasonCategoryDefault->deviceSwapReasonId         = $reason->id;
+                $reasonDefault = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->find(array($reasonCategory->id, $this->_identity->dealerId));
 
-                    $reasonDefault = Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->find(array($reasonCategory->id, $this->_identity->dealerId));
-                    if ($reasonDefault instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
+                if ($reasonDefault->deviceSwapReasonId === $reason->id)
+                {
+                    // This reason is default
+                    if (!$postData["isDefault"])
                     {
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->save($reasonCategoryDefault);
+                        $this->sendJsonError("You cannot unset the default reason. Instead please set a different reason to be the new default.");
                     }
-                    else
+                }
+                else
+                {
+                    // Do we want to set this reason as default?
+                    if ($postData['isDefault'])
                     {
-                        Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($reasonCategoryDefault);
+                        if ($reasonDefault instanceof Hardwareoptimization_Model_Device_Swap_Reason_Default)
+                        {
+                            $reasonDefault->deviceSwapReasonId = $reason->id;
+                            Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->save($reasonDefault);
+                        }
+                        else
+                        {
+                            $reasonDefault                             = new Hardwareoptimization_Model_Device_Swap_Reason_Default();
+                            $reasonDefault->deviceSwapReasonCategoryId = $reasonCategory->id;
+                            $reasonDefault->dealerId                   = $this->_identity->dealerId;
+                            $reasonDefault->deviceSwapReasonId         = $reason->id;
+                            Hardwareoptimization_Model_Mapper_Device_Swap_Reason_Default::getInstance()->insert($reasonDefault);
+                        }
                     }
                 }
             }
@@ -279,13 +294,16 @@ class Hardwareoptimization_DeviceswapsController extends Tangent_Controller_Acti
             {
                 $this->sendJsonError("Cannot find reason category, try again.");
             }
+
+            $db->commit();
         }
         catch (Exception $e)
         {
+            $db->rollBack();
             $this->sendJsonError("Error updating database, please try again.");
         }
 
-        $this->sendJson(array());
+        $this->sendJson(array("success" => "true", "message" => "Device swap reason saved."));
     }
 
     public function deleteDeviceAction ()
