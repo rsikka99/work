@@ -303,6 +303,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 "age"                    => $deviceInstance->getAge(),
                 "isColor"                => (int)$deviceInstance->getMasterDevice()->isColor(),
                 "serialNumber"           => $deviceInstance->serialNumber,
+                "lifeUsage"              => number_format($deviceInstance->getLifeUsage() * 100) . '%',
                 "lifePageCount"          => number_format($deviceInstance->getMeter()->endMeterLife),
                 "maxLifePageCount"       => number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount()),
                 "monoAmpv"               => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()),

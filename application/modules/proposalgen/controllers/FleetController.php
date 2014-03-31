@@ -431,7 +431,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                             {
                                 $deviceInstanceIds[] = $deviceInstance->id;
                             }
-                            
+
                             $deviceInstanceMasterDeviceMapper->deleteMany($deviceInstanceIds);
                         }
                         else
@@ -1237,6 +1237,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["meters"]                             = array();
                         $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getMeter()->endMeterLife);
                         $jsonResponse["meters"]['maxLife']                  = number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount());
+                        $jsonResponse["lifeUsage"]                          = number_format($deviceInstance->getLifeUsage() * 100) . '%';
                         $jsonResponse["pageCoverage"]                       = array();
                         $jsonResponse["pageCoverage"]['monochrome']         = number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%';
                         $jsonResponse["pageCoverage"]['cyan']               = number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%';

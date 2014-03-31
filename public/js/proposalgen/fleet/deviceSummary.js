@@ -183,6 +183,13 @@ $(function ()
 
                 var metersTBody = $('#deviceDetails_meters');
                 metersTBody.empty();
+
+                metersTBody.append(
+                    $('<tr></tr>')
+                        .append($('<td></td>').html('Life Usage'))
+                        .append($('<td></td>').html(data.lifeUsage))
+                );
+
                 metersTBody.append(
                     $('<tr></tr>')
                         .append($('<td></td>').html('Life Pages'))

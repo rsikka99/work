@@ -270,6 +270,7 @@ $(function ()
                             $table.append($("<tr></tr>").append("<td>AMPV - Color</td><td>" + data.deviceInstance.colorAmpv + "</td>"));
                         }
 
+                        $table.append($("<tr></tr>").append("<td>Life Usage</td> <td>" + data.deviceInstance.lifeUsage + "</td> "));
                         $table.append($("<tr></tr>").append("<td>Life Page Count</td> <td>" + data.deviceInstance.lifePageCount + "</td> "));
                         $table.append($("<tr></tr>").append("<td>Max. Life Page Count</td> <td>" + data.deviceInstance.maxLifePageCount + "</td> "));
 
