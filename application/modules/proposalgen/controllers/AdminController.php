@@ -306,20 +306,20 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
             $gridFormData->total   = 1;
             $gridFormData->records = 50;
             $gridFormData->rows    = array();
-            foreach ($toners as $row)
+            foreach ($toners as $toner)
             {
                 $formDataRow       = new stdClass();
-                $formDataRow->id   = $row['id'];
+                $formDataRow->id   = $toner->id;
                 $formDataRow->cell = array(
-                    $row ['id'],
-                    $row ['sku'],
-                    $row ['manufacturer_name'],
+                    $toner->id,
+                    $toner->sku,
+                    $toner->getManufacturer()->displayname,
                     'Remove Part Types!',
-                    Proposalgen_Model_TonerColor::$ColorNames[$row['tonerColorId']],
-                    $row ['yield'],
-                    $row ['cost'],
-                    $row ['master_device_id'],
-                    $row ['master_device_id'],
+                    Proposalgen_Model_TonerColor::$ColorNames[$toner->tonerColorId],
+                    $toner->yield,
+                    $toner->cost,
+                    $masterDeviceId,
+                    $masterDeviceId,
                     null
                 );
 
@@ -671,6 +671,25 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
 
             // Update the toner vendor manufacturer
             Proposalgen_Model_Mapper_TonerVendorManufacturer::getInstance()->updateTonerVendorByManufacturerId($toner->manufacturerId);
+
+            $uniqueMasterDevices = array();
+            foreach ($deviceToners as $deviceToner)
+            {
+                if (!isset($uniqueMasterDevices[$deviceToner->master_device_id]))
+                {
+                    $uniqueMasterDevices[$deviceToner->master_device_id] = $deviceToner->getMasterDevice();
+                }
+            }
+
+            $masterDeviceMapper = Proposalgen_Model_Mapper_MasterDevice::getInstance();
+
+            /* @var $uniqueMasterDevices Proposalgen_Model_MasterDevice[] */
+            foreach ($uniqueMasterDevices as $masterDevice)
+            {
+                $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
+                $masterDeviceMapper->save($masterDevice);
+
+            }
 
             $db->commit();
         }

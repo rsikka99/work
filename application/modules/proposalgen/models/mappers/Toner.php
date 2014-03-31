@@ -348,7 +348,19 @@ WHERE `device_toners`.`master_device_id` = ?';
 
         $query = $db->query($sql);
 
-        return $query->fetchAll();
+        $toners = array();
+        foreach ($query->fetchAll() as $row)
+        {
+            $toner = $this->getItemFromCache($row[$this->col_id]);
+            if (!$toner instanceof Proposalgen_Model_Toner)
+            {
+                $toner = new Proposalgen_Model_Toner($row);
+                $this->saveItemToCache($toner);
+            }
+            $toners[] = $toner;
+        }
+
+        return $toners;
     }
 
     /**

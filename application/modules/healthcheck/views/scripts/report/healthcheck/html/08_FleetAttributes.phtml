@@ -72,7 +72,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                 <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0) ?></td>
+            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
             <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>
@@ -112,7 +112,7 @@ $healthcheckViewModel = $this->healthcheckViewModel;
                 <br /> <?php echo $deviceInstance->ipAddress; ?></td>
             <td class="right"><?php echo number_format($deviceInstance->getAge(), 0) ?></td>
             <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></td>
-            <td class="right"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 0) ?></td>
+            <td class="right"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></td>
             <td class="right"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 2) ?>%</td>
             <td class="right"><?php echo number_format(($deviceInstance->isLeased ? $deviceInstance->getLeasedMonthlyRatePercentage($healthcheckViewModel->healthcheck->getHealthcheckSettings()->monthlyLeasePayment, $healthcheckViewModel->getLeasedBlackAndWhiteCharge(), $healthcheckViewModel->getLeasedColorCharge(), $healthcheckViewModel->calculateTotalMonthlyCost()) : $deviceInstance->getMonthlyRatePercentage($healthcheckViewModel->calculateTotalMonthlyCost(), $healthcheckViewModel->getCostPerPageSettingForCustomer())), 2) ?>%</td>
             <td class="center"> <?php echo($deviceInstance->reportsTonerLevels ? 'Y' : 'N') ?></td>

@@ -377,76 +377,10 @@ class Proposalgen_Service_ManageMasterDevices
 
         try
         {
+            /**
+             * Save Toners
+             */
             $tonerIds = explode(',', $tonersList);
-            if ($this->_isAllowed)
-            {
-                if ($validatedData['isLeased'] == false)
-                {
-                    $validatedData['leasedTonerYield'] = new Zend_Db_Expr("NULL");
-                }
-
-                if ($validatedData['dealerLaborCostPerPage'] == '')
-                {
-                    $validatedData['dealerLaborCostPerPage'] = new Zend_Db_Expr("NULL");
-                }
-
-                if ($validatedData['dealerPartsCostPerPage'] == '')
-                {
-                    $validatedData['dealerPartsCostPerPage'] = new Zend_Db_Expr("NULL");
-                }
-
-                if ($validatedData['leaseBuybackPrice'] == '')
-                {
-                    $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
-                }
-
-                if ($validatedData['ppmBlack'] == '')
-                {
-                    $validatedData['ppmBlack'] = new Zend_Db_Expr("NULL");
-                }
-
-                if ($validatedData['ppmColor'] == '')
-                {
-                    $validatedData['ppmColor'] = new Zend_Db_Expr("NULL");
-                }
-
-                if (isset($validatedData['wattsPowerNormal']))
-                {
-                    $validatedData['wattsPowerNormal'] = ceil($validatedData['wattsPowerNormal']);
-                }
-
-                if (isset($validatedData['wattsPowerIdle']))
-                {
-                    $validatedData['wattsPowerIdle'] = ceil($validatedData['wattsPowerIdle']);
-                }
-
-
-                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
-                {
-                    if ($this->_isAdmin && $approved)
-                    {
-                        $validatedData['isSystemDevice'] = 1;
-                    }
-                    $masterDevice->populate($validatedData);
-                    $masterDeviceMapper->save($masterDevice);
-                }
-                else
-                {
-                    if ($this->_isAdmin)
-                    {
-                        $validatedData['isSystemDevice'] = 1;
-                    }
-                    else
-                    {
-                        $validatedData['isSystemDevice'] = 0;
-                    }
-
-                    $validatedData['dateCreated'] = date('Y-m-d H:i:s');
-                    $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
-                    $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
-                    $masterDevice                 = $masterDeviceMapper->find($this->masterDeviceId);
-                }
-            }
 
             // If for some reason we have a '' without any numbers, lets remove it
             if (count($tonerIds) > 0 && $tonerIds[0] == '')
@@ -512,6 +446,81 @@ class Proposalgen_Service_ManageMasterDevices
                     {
                         $deviceTonerMapper->insert($deviceToner);
                     }
+                }
+            }
+
+            /**
+             * Save Master Device Attributes
+             */
+            if ($this->_isAllowed)
+            {
+                if ($validatedData['isLeased'] == false)
+                {
+                    $validatedData['leasedTonerYield'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['dealerLaborCostPerPage'] == '')
+                {
+                    $validatedData['dealerLaborCostPerPage'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['dealerPartsCostPerPage'] == '')
+                {
+                    $validatedData['dealerPartsCostPerPage'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['leaseBuybackPrice'] == '')
+                {
+                    $validatedData['leaseBuybackPrice'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['ppmBlack'] == '')
+                {
+                    $validatedData['ppmBlack'] = new Zend_Db_Expr("NULL");
+                }
+
+                if ($validatedData['ppmColor'] == '')
+                {
+                    $validatedData['ppmColor'] = new Zend_Db_Expr("NULL");
+                }
+
+                if (isset($validatedData['wattsPowerNormal']))
+                {
+                    $validatedData['wattsPowerNormal'] = ceil($validatedData['wattsPowerNormal']);
+                }
+
+                if (isset($validatedData['wattsPowerIdle']))
+                {
+                    $validatedData['wattsPowerIdle'] = ceil($validatedData['wattsPowerIdle']);
+                }
+
+
+                if ($masterDevice instanceof Proposalgen_Model_MasterDevice)
+                {
+                    if ($this->_isAdmin && $approved)
+                    {
+                        $validatedData['isSystemDevice'] = 1;
+                    }
+
+                    $masterDevice->populate($validatedData);
+                    $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
+                    $masterDeviceMapper->save($masterDevice);
+                }
+                else
+                {
+                    if ($this->_isAdmin)
+                    {
+                        $validatedData['isSystemDevice'] = 1;
+                    }
+                    else
+                    {
+                        $validatedData['isSystemDevice'] = 0;
+                    }
+
+                    $validatedData['dateCreated'] = date('Y-m-d H:i:s');
+                    $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
+                    $masterDevice                 = $masterDeviceMapper->find($this->masterDeviceId);
+                    $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
                 }
             }
 
@@ -788,8 +797,8 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * This creates, saves and deletes for the buttons inside the available toners jqGrid
      *
-     * @param array|bool                          $data
-     * @param bool                                $deleteTonerId
+     * @param bool|array                          $data
+     * @param bool|int                            $deleteTonerId
      * @param bool|Proposalgen_Model_MasterDevice $masterDevice
      *
      * @return int
@@ -955,8 +964,8 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * This creates, saves and deletes for the buttons inside the available options jqGrid
      *
-     * @param array|bool $validatedData
-     * @param bool       $deleteId
+     * @param bool|array $validatedData
+     * @param bool|int   $deleteId
      *
      * @return bool
      */
@@ -1022,8 +1031,8 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * This creates, saves and deletes for the buttons inside the hardware configurations jqGrid
      *
-     * @param bool $validatedData
-     * @param bool $deleteId
+     * @param bool|array $validatedData
+     * @param bool|int   $deleteId
      *
      * @return bool
      */

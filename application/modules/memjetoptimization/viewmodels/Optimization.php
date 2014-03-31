@@ -501,7 +501,7 @@ class Memjetoptimization_ViewModel_Optimization
             $maxVolume = 0;
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
+                $maxVolume += $deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume;
             }
             $this->_maximumMonthlyPrintVolume = $maxVolume;
         }
@@ -648,11 +648,11 @@ class Memjetoptimization_ViewModel_Optimization
         {
             if ($deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id))
             {
-                $maxVolume += $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id)->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
+                $maxVolume += $deviceInstance->getReplacementMasterDeviceForMemjetoptimization($this->_optimization->id)->maximumRecommendedMonthlyPageVolume;
             }
             else
             {
-                $maxVolume += $deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($this->getCostPerPageSettingForReplacements());
+                $maxVolume += $deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume;
             }
         }
 

@@ -59,7 +59,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer())) ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
         </tr>
     <?php endforeach; ?>
@@ -87,7 +87,7 @@ $graphs = $assessmentViewModel->getGraphs();
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($assessmentViewModel->getCostPerPageSettingForCustomer())) ?></div>
+                <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
         </tr>
     <?php endforeach; ?>

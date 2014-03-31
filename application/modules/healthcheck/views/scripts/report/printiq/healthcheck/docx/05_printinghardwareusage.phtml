@@ -76,7 +76,7 @@ foreach ($healthcheckViewModel->getLeastUsedDevices() as $device)
     $lowestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($device->getDeviceName(), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText(($device->serialNumber) ? : "Unknown", null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
-    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
+    $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
     $lowestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
 
@@ -98,7 +98,7 @@ foreach ($healthcheckViewModel->getMostUsedDevices() as $device)
     $highestUtilizationTable->addCell($cellWidths [0], $this->styles->tables->utilization->cell1)->addText($this->translate($device->getDeviceName()), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [1], $this->styles->tables->utilization->cell2)->addText($this->translate(($device->serialNumber)) ? : "Unknown", null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [2], $this->styles->tables->utilization->cell3)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
-    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
+    $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->getMasterDevice()->maximumRecommendedMonthlyPageVolume), null, 'nospacing_centeralign');
     $highestUtilizationTable->addCell($cellWidths [3], $this->styles->tables->utilization->cell4)->addText(number_format($device->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) . '%', null, 'nospacing_centeralign');
 }
 $section->addText('Only takes into account devices for which expected cartridge yields are known.', 'small_italic_text', 'nospacing');

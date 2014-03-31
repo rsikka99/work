@@ -66,7 +66,7 @@ foreach ($assessmentViewModel->getHighRiskDevices() as $device)
     $highRiskDevicesTable->addCell($cellWidths [2], $this->styles->tables->highriskdevices->cell3)->addText(number_format($device->getAge()) . " year(s)", null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [3], $this->styles->tables->highriskdevices->cell4)->addText($this->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly()), null, 'nospacing_centeralign');
     $highRiskDevicesTable->addCell($cellWidths [4], $this->styles->tables->highriskdevices->cell5)->addText(number_format($device->getMeter()->endMeterLife), null, 'nospacing_centeralign');
-    $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->getMasterDevice()->calculateEstimatedMaxLifeCount($assessmentViewModel->getCostPerPageSettingForCustomer())), null, 'nospacing_centeralign');
+    $highRiskDevicesTable->addCell($cellWidths [5], $this->styles->tables->highriskdevices->cell6)->addText(number_format($device->getMasterDevice()->calculateEstimatedMaxLifeCount()), null, 'nospacing_centeralign');
     $rowCount++;
     if ($rowCount >= 3)
     {

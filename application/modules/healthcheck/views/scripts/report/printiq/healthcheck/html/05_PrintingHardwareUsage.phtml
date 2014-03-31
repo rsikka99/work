@@ -58,7 +58,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
             <td class="column5">
                 <div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>
@@ -92,7 +92,7 @@ $graphs = $healthcheckViewModel->getGraphs();
                 <div class=" center"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()) ?></div>
             </td>
             <td class="column4">
-                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->getMaximumMonthlyPageVolume($healthcheckViewModel->getCostPerPageSettingForCustomer())) ?></div>
+                <div class=" center"><?php echo number_format($deviceInstance->getMasterDevice()->maximumRecommendedMonthlyPageVolume) ?></div>
             </td>
             <td class="column5">
                 <div class=" center"><?php echo number_format($deviceInstance->calculatePercentOfMaximumRecommendedMaxVolume($healthcheckViewModel->getCostPerPageSettingForCustomer()), 1) ?>%</div>

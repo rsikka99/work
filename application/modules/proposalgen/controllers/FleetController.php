@@ -1236,7 +1236,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         $jsonResponse["pageCounts"]['a3Combined']           = number_format($deviceInstance->getPageCounts()->getPrintA3CombinedPageCount()->getMonthly());
                         $jsonResponse["meters"]                             = array();
                         $jsonResponse["meters"]['life']                     = number_format($deviceInstance->getMeter()->endMeterLife);
-                        $jsonResponse["meters"]['maxLife']                  = number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting));
+                        $jsonResponse["meters"]['maxLife']                  = number_format($deviceInstance->getMasterDevice()->calculateEstimatedMaxLifeCount());
                         $jsonResponse["pageCoverage"]                       = array();
                         $jsonResponse["pageCoverage"]['monochrome']         = number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%';
                         $jsonResponse["pageCoverage"]['cyan']               = number_format((float)$deviceInstance->pageCoverageCyan, 2) . '%';

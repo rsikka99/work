@@ -44,11 +44,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     /**
      * @var int
      */
-    public $isSystemDevice;
-
-    /**
-     * @var int
-     */
     public $manufacturerId;
 
     /**
@@ -77,9 +72,19 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public $isDuplex;
 
     /**
+     * @var int
+     */
+    public $isSystemDevice;
+
+    /**
      * @var bool
      */
     public $isA3;
+
+    /**
+     * @var int
+     */
+    public $maximumRecommendedMonthlyPageVolume;
 
     /**
      * @var bool
@@ -250,7 +255,7 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      *
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
-     * @return int $MaximumMonthlyPageVolume
+     * @return int
      */
     public function getMaximumMonthlyPageVolume ($costPerPageSetting)
     {
@@ -308,11 +313,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->userId = $params->userId;
         }
 
-        if (isset($params->isSystemDevice) && !is_null($params->isSystemDevice))
-        {
-            $this->isSystemDevice = $params->isSystemDevice;
-        }
-
         if (isset($params->manufacturerId) && !is_null($params->manufacturerId))
         {
             $this->manufacturerId = $params->manufacturerId;
@@ -343,9 +343,19 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->isDuplex = $params->isDuplex;
         }
 
+        if (isset($params->isSystemDevice) && !is_null($params->isSystemDevice))
+        {
+            $this->isSystemDevice = $params->isSystemDevice;
+        }
+
         if (isset($params->isA3) && !is_null($params->isA3))
         {
             $this->isA3 = $params->isA3;
+        }
+
+        if (isset($params->maximumRecommendedMonthlyPageVolume) && !is_null($params->maximumRecommendedMonthlyPageVolume))
+        {
+            $this->maximumRecommendedMonthlyPageVolume = $params->maximumRecommendedMonthlyPageVolume;
         }
 
         if (isset($params->isReplacementDevice) && !is_null($params->isReplacementDevice))
@@ -453,28 +463,29 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public function toArray ()
     {
         return array(
-            "id"                              => $this->id,
-            "userId"                          => $this->userId,
-            "manufacturerId"                  => $this->manufacturerId,
-            "modelName"                       => $this->modelName,
-            "tonerConfigId"                   => $this->tonerConfigId,
-            "isCopier"                        => $this->isCopier,
-            "isFax"                           => $this->isFax,
-            "isDuplex"                        => $this->isDuplex,
-            "isA3"                            => $this->isA3,
-            "isReplacementDevice"             => $this->isReplacementDevice,
-            "isSystemDevice"                  => $this->isSystemDevice,
-            "wattsPowerNormal"                => $this->wattsPowerNormal,
-            "wattsPowerIdle"                  => $this->wattsPowerIdle,
-            "launchDate"                      => $this->launchDate,
-            "dateCreated"                     => $this->dateCreated,
-            "ppmBlack"                        => $this->ppmBlack,
-            "ppmColor"                        => $this->ppmColor,
-            "isLeased"                        => $this->isLeased,
-            "leasedTonerYield"                => $this->leasedTonerYield,
-            "isCapableOfReportingTonerLevels" => $this->isCapableOfReportingTonerLevels,
-            "partsCostPerPage"                => $this->partsCostPerPage,
-            "laborCostPerPage"                => $this->laborCostPerPage,
+            "id"                                  => $this->id,
+            "userId"                              => $this->userId,
+            "manufacturerId"                      => $this->manufacturerId,
+            "modelName"                           => $this->modelName,
+            "tonerConfigId"                       => $this->tonerConfigId,
+            "isCopier"                            => $this->isCopier,
+            "isFax"                               => $this->isFax,
+            "isDuplex"                            => $this->isDuplex,
+            "isSystemDevice"                      => $this->isSystemDevice,
+            "isA3"                                => $this->isA3,
+            "maximumRecommendedMonthlyPageVolume" => $this->maximumRecommendedMonthlyPageVolume,
+            "isReplacementDevice"                 => $this->isReplacementDevice,
+            "wattsPowerNormal"                    => $this->wattsPowerNormal,
+            "wattsPowerIdle"                      => $this->wattsPowerIdle,
+            "launchDate"                          => $this->launchDate,
+            "dateCreated"                         => $this->dateCreated,
+            "ppmBlack"                            => $this->ppmBlack,
+            "ppmColor"                            => $this->ppmColor,
+            "isLeased"                            => $this->isLeased,
+            "leasedTonerYield"                    => $this->leasedTonerYield,
+            "isCapableOfReportingTonerLevels"     => $this->isCapableOfReportingTonerLevels,
+            "partsCostPerPage"                    => $this->partsCostPerPage,
+            "laborCostPerPage"                    => $this->laborCostPerPage,
         );
     }
 
@@ -924,14 +935,36 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     }
 
     /**
-     * Calculates the max estimated life count
+     * Calculates the max estimated life count (Defaults to using OEM)
      *
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @internal param \Proposalgen_Model_CostPerPageSetting $costPerPageSetting Set this if you want to use a different set of toners
      *
      * @return int
      */
-    public function calculateEstimatedMaxLifeCount ($costPerPageSetting)
+    public function calculateEstimatedMaxLifeCount ()
     {
-        return $this->getMaximumMonthlyPageVolume($costPerPageSetting) * self::LIFE_PAGE_COUNT_MONTHS;
+        return $this->maximumRecommendedMonthlyPageVolume * self::LIFE_PAGE_COUNT_MONTHS;
+    }
+
+    /**
+     * Recalculate the max page volume for the device
+     */
+    public function recalculateMaximumRecommendedMonthlyPageVolume ()
+    {
+        $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchTonersAssignedToDevice($this->id);
+
+        $highestOEMYield = 0;
+        foreach ($toners as $toner)
+        {
+            if ($toner->manufacturerId == $this->manufacturerId)
+            {
+                if ($toner->yield > $highestOEMYield)
+                {
+                    $highestOEMYield = $toner->yield;
+                }
+            }
+        }
+
+        $this->maximumRecommendedMonthlyPageVolume = $highestOEMYield;
     }
 }

@@ -755,9 +755,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!isset($this->_usage))
         {
             // Calculate device usage by dividing it's current monthly volume by its maximum
-            if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) > 0)
+            if ($this->getMasterDevice()->maximumRecommendedMonthlyPageVolume > 0)
             {
-                $this->_usage = $this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting);
+                $this->_usage = $this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->maximumRecommendedMonthlyPageVolume;
             }
         }
 
@@ -765,19 +765,21 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     }
 
     /**
-     * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @internal param \Proposalgen_Model_CostPerPageSetting $costPerPageSetting
      *
      * @return float
      */
-    public function getLifeUsage ($costPerPageSetting)
+    public function getLifeUsage ()
     {
         if (!isset($this->_lifeUsage))
         {
+            $this->_lifeUsage = 0;
+
             // Calculate device life usage by dividing it's current life count
             // by it's estimated max life page count (maximum monthly page
             // volume * LIFE_PAGE_COUNT_MONTHS)
-            $maximumLifeCount = $this->getMasterDevice()->calculateEstimatedMaxLifeCount($costPerPageSetting);
-            if ($maximumLifeCount > 0)
+            $maximumLifeCount = $this->getMasterDevice()->calculateEstimatedMaxLifeCount();
+            if ($maximumLifeCount > 0 && $this->getMeter()->endMeterLife > 0)
             {
                 $this->_lifeUsage = $this->getMeter()->endMeterLife / $maximumLifeCount;
             }
@@ -819,7 +821,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     {
         if (!isset($this->_lifeUsageRank))
         {
-
             $this->_lifeUsageRank = null;
         }
 
@@ -1301,7 +1302,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
              *      - Over X years old
              */
             else if (
-                ($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->getLifeUsage($costPerPageSetting) > 1 || !$this->isCapableOfReportingTonerLevels())
+                ($this->getMasterDevice()->getAge() > self::REPLACEMENT_AGE || $this->getLifeUsage() > 1 || !$this->isCapableOfReportingTonerLevels())
                 && $this->getPageCounts()->getCombinedPageCount()->getMonthly() >= self::REPLACEMENT_MIN_PAGE_COUNT
             )
             {
@@ -1622,9 +1623,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     public function calculatePercentOfMaximumRecommendedMaxVolume ($costPerPageSetting)
     {
         $percent = 0;
-        if ($this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) > 0)
+        if ($this->getMasterDevice()->maximumRecommendedMonthlyPageVolume > 0)
         {
-            $percent = ($this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->getMaximumMonthlyPageVolume($costPerPageSetting) * 100);
+            $percent = ($this->getPageCounts()->getCombinedPageCount()->getMonthly() / $this->getMasterDevice()->maximumRecommendedMonthlyPageVolume * 100);
         }
 
         return $percent;
