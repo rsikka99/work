@@ -1,0 +1,24 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+$section->addTitle('Age Of Printing Devices', 2);
+$section->addText('The breakdown of the age of your printing devices is shown below:');
+$tcStyle    = $this->twocenter;
+$imageTable = $section->addTable($tcStyle->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell($tcStyle->col1Width)->addImage($graphs[10], $tcStyle->image->cell1);
+$imageTable->addCell($tcStyle->col2Width)->addImage($graphs[11], $tcStyle->image->cell2);
+$section->addTextBreak();

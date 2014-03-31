@@ -1,0 +1,78 @@
+<?php
+$this->placeholder('extraNavbar')->set($this->render('_partials/reportMenu.phtml'));
+$this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css"));
+
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $dealerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+$dealerOptimization = new Hardwareoptimization_Model_Optimization_Dealer($hardwareOptimization);
+
+/* @var $graphs array */
+$graphs = $dealerOptimization->getGraphs();
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $optimization->getDevicesGroupedByAction();
+
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+
+/* @var $costPerPageSetting */
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
+$titleData = array(
+    "hardwareOptimization" => $hardwareOptimization,
+    "dealerLogoFile"       => $this->dealerLogoFile,
+    "companyName"          => My_Brand::$companyName,
+);
+
+$profitabilityDevices = new Hardwareoptimization_Model_Optimization_Customer($hardwareOptimization);
+
+$data = array(
+    "hardwareOptimization" => $hardwareOptimization,
+    "optimization"         => $optimization,
+    "dealerOptimization"   => $dealerOptimization,
+    "graphs"               => $graphs,
+    "companyName"          => My_Brand::$companyName,
+    "deviceInstances"      => $deviceInstances,
+    "totalDevices"         => $totalNumberOfDevices,
+    "costPerPageSettting"  => $costPerPageSetting
+);
+?>
+<div class="row-fluid">
+    <div class="span10">
+        <div class="container full-width hardware-optimization" id="htmlReportContainer">
+            <?php
+            // Actual pages
+            echo $this->partial("report/dealer/optimization/html/01_titlepage.phtml", $titleData);
+            echo $this->partial("report/dealer/optimization/html/02_cost_analysis_summary.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/03_device_summary.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/04_suggested_replacement_devices.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/05_acceptable_devices.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/06_excess_inventory.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/07_retired_devices.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/08_flagged_devices.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/09_leased_devices.phtml", $data);
+            echo $this->partial("report/dealer/optimization/html/10_excluded.phtml", $data);
+            ?>
+        </div>
+    </div>
+    <div class="span2">
+        <div id="reportNavbar" data-spy="affix" data-offset-top="158" class="affix-top">
+            <ul id="reportNav" class="nav nav-list">
+                <li class="active"><a href="#title-page">Title Page</a></li>
+                <li><a href="#cost-analysis-summary">Summary</a></li>
+                <li><a href="#device-summary">Device Summary</a></li>
+                <li><a href="#replacements">Replaced Devices</a></li>
+                <li><a href="#acceptable">Acceptable Devices</a></li>
+                <li><a href="#excess">Excess Inventory</a></li>
+                <li><a href="#retired">Retired Devices</a></li>
+                <li><a href="#flagged">Flagged Devices</a></li>
+                <li><a href="#leased">Leased Devices</a></li>
+                <li><a href="#excluded">Excluded Devices</a></li>
+            </ul>
+        </div>
+    </div>
+</div>

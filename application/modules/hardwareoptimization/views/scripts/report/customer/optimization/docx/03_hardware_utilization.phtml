@@ -1,0 +1,35 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Customer */
+$customerOptimization = $this->customerOptimization;
+
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+
+$section->addTitle('Hardware Utilization and Capacity', 2);
+$section->addText("A good measure of the recommended maximum monthly page volume for a printing device is the manufacturer's stated yield of a single print cartridge. In
+    essence, you should not have to change the same toner cartridge more than once per month.
+    Using this definition of maximum monthly page volume, the total capacity of your printing fleet is the sum of the maximum page volumes for all of your
+    printing devices. As a guide we suggest that company printing should range between 30 and 50% of maximum fleet capacity. The closer you are to printing at
+    maximum capacity, the more return you are getting on your printing assets. Most find that they have more printing hardware than they need. The following
+    chart displays your estimated monthly page volume compared to your maximum monthly page capacity.");
+$section->addImage($graphs[4], $this->styles->images->center);
+$section->addTitle('Print Volume and Number of Printing Devices', 2);
+$section->addText(sprintf('You currently have %1$s networked printing devices that print an average of %2$s pages each per month, for an average total monthly print volume of %3$s pages. Ideally, you should have the minimum amount of printing hardware required to meet your print demand while maintaining user productivity.', number_format($optimization->getDevices()->allIncludedDeviceInstances->getCount()), $this->formatPageVolume(($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly() / $optimization->getDevices()->allIncludedDeviceInstances->getCount())), $this->formatPageVolume($optimization->getDevices()->allIncludedDeviceInstances->getPageCounts()->getCombinedPageCount()->getMonthly())));
+$section->addTextBreak();
+
+$imageTable = $section->addTable($this->styles->tables->doubleimage->tablestyle);
+$imageTable->addRow();
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell1)->addImage($graphs [5], array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [6], array('align' => 'center'));
+$imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage($graphs [7], array('align' => 'center'));
+
+$section->addTextBreak();

@@ -1,0 +1,41 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="titlepage" id="title-page">
+    <div class="header">
+        <div class="title-page-logo-box-wrapper">
+            <div class="title-page-logo-box">
+                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("img/report_logo.png")) ?> " />
+            </div>
+        </div>
+    </div>
+    <div class="title-page-report-title">
+        <h2>Hardware Optimization</h2>
+    </div>
+    <div class="title-page-customer-details">
+        <h3>Prepared for:
+            <?php
+            if (strlen($hardwareOptimization->getClient()->companyName) > 26)
+            {
+                echo "<br/>";
+            }
+
+            echo $hardwareOptimization->getClient()->companyName;
+            ?>
+        </h3>
+
+        <h3><?php echo $hardwareOptimization->dateCreated; ?></h3>
+
+        <p><?php echo nl2br($hardwareOptimization->getClient()->getAddress()); ?></p>
+    </div>
+</div>

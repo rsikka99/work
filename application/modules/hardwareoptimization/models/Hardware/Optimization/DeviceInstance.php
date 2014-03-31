@@ -9,6 +9,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance extends My
     const ACTION_KEEP    = 'Keep';
     const ACTION_REPLACE = 'Replace';
     const ACTION_RETIRE  = 'Retire';
+    const ACTION_LEASED  = 'Leased';
 
     /**
      * @var int

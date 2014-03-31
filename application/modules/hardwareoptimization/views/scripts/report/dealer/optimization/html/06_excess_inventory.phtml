@@ -1,0 +1,49 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE];
+
+/* @var $costPerPageSetting */
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader" id="excess">
+    Excess Inventory <em><?php echo '(' . count($deviceInstances) . ')' ?></em>
+</div>
+<em>The following devices are excess devices that can still be used inside your clients fleet.</em>
+<table class="rDevices">
+    <tr class='header'>
+        <th style='width:175px;'>Device Name</th>
+        <th>Serial / IP Address</th>
+        <th>Life Page Count</th>
+        <th><?php echo My_Brand::$jit; ?> Compatible</th>
+        <th>Mono CPP</th>
+        <th>Color CPP</th>
+    </tr>
+    <?php foreach ($deviceInstances as $deviceInstance) :
+        $masterDevice = $deviceInstance->getMasterDevice();
+        $isColor = $masterDevice->isColor();
+        ?>
+        <tr>
+            <td class='deviceName'><?php echo '<em>' . $masterDevice->getManufacturer()->fullname . '</em><br/><strong>' . $masterDevice->modelName . '</strong><br/><em>'; ?></td>
+            <td class='deviceName'><?php echo $deviceInstance->serialNumber . '<br/>' . $deviceInstance->ipAddress . '</em>'; ?></td>
+            <td><?php echo number_format($deviceInstance->getMeter()->endMeterLife); ?></td>
+            <td><?php echo ($deviceInstance->reportsTonerLevels) ? 'Yes' : 'No'; ?></td>
+            <td><?php echo $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage); ?></td>
+            <td><?php echo ($isColor) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : 'N/A'; ?></td>
+        </tr>
+    <?php endforeach ?>
+</table>
+<br />

@@ -1,0 +1,26 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $optimization Hardwareoptimization_ViewModel_Optimization */
+$optimization = $this->optimization;
+
+/* @var $customerOptimization Hardwareoptimization_Model_Optimization_Dealer */
+$dealerOptimization = $this->dealerOptimization;
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $optimization->getDevicesGroupedByAction();
+
+/* @var $graphs array */
+$graphs = $this->graphs;
+?>
+<div class="pheader" id="device-summary">
+    Device Summary
+</div>
+<table class='center'>
+    <tr>
+        <td><img src="<?php echo $graphs[0]; ?>" /></td>
+        <td><img src="<?php echo $graphs[1]; ?>" /></td>
+    </tr>
+</table>
+<br/>

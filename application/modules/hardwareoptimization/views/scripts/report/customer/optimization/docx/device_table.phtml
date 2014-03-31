@@ -1,0 +1,137 @@
+<?php
+/* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
+$hardwareOptimization = $this->hardwareOptimization;
+
+
+/* @var $profitabiltyDevices Hardwareoptimization_Model_Optimization_Dealer */
+$profitabiltyDevices = $this->profitabilityDevices;
+
+
+/* @var $section PHPWord_Section */
+$section                = $this->section;
+$title                  = $this->title;
+$description            = $this->description;
+$totalNumberOfDevices   = $this->totalNumberOfDevices;
+$showReplacementDevices = $this->showReplacementDevices;
+$showReason             = $this->showReason;
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $this->deviceInstances;
+
+$section->addTitle($title . " (" . number_format(count($deviceInstances)) . " out of " . number_format($totalNumberOfDevices) . " devices)", 2);
+$section->addText($description);
+
+$tcStyle = $this->tcStyle;
+$table   = $section->addTable($tcStyle->tablestyle);
+if (count($deviceInstances) > 0)
+{
+
+// Table header
+    $table->addRow($tcStyle->body->rowheight);
+    $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $tcStyle->header->header->cellStyle)->addText('Serial / IP Address', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $tcStyle->header->header->cellStyle)->addText('Mono AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Device Age', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    $table->addCell($tcStyle->col6Width, $tcStyle->header->header->cellStyle)->addText('Life Page Count', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    if ($showReplacementDevices)
+    {
+        if (!$showReason)
+        {
+            $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+        }
+        else
+        {
+            $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Replacement Device & Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+        }
+
+    }
+    elseif ($showReason)
+    {
+        $table->addCell($tcStyle->col7Width, $tcStyle->header->header->cellStyle)->addText('Reason', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+    }
+
+    foreach ($deviceInstances as $deviceInstance)
+    {
+        $masterDevice            = $deviceInstance->getMasterDevice();
+        $replacementMasterDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
+        $isColor                 = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
+        $cycle             = ($this->cycle(array(true, false))->next()->current());
+        if ($cycle)
+        {
+            $ampvStyle = $tcStyle->body->cell5->even;
+            $style     = $tcStyle->body->cell1->even;
+        }
+        else
+        {
+            $ampvStyle = $tcStyle->body->cell5->odd;
+            $style     = $tcStyle->body->cell1->odd;
+        }
+
+        $table->addRow($tcStyle->body->rowheight);
+        // Device Name
+        $cell = $table->addCell($tcStyle->collWidth, $style);
+        $cell->addText($masterDevice->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+        $cell->addText($masterDevice->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+
+        // Serial and IP
+        $cell = $table->addCell($tcStyle->col2Width, $style);
+        $cell->addText($deviceInstance->serialNumber, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell2->manufacturerName->paragraphStyle);
+        $cell->addText($deviceInstance->ipAddress, $tcStyle->body->cell2->modelName->fontStyle, $tcStyle->body->cell2->modelName->paragraphStyle);
+
+        // Monthly Statistics
+        //// Mono AMPV
+        $table->addCell($tcStyle->col3Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell3->modelName->fontStyle, $tcStyle->body->cell3->modelName->paragraphStyle);
+
+        //// Color AMPV
+        $cell = $table->addCell($tcStyle->col4Width, $style);
+        if ($isColor)
+        {
+            $cell->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly(), $tcStyle->body->cell4->modelName->fontStyle, $tcStyle->body->cell4->modelName->paragraphStyle));
+        }
+        else
+        {
+            $cell->addText("N/A", $tcStyle->body->cell4->modelName->fontStyle, $tcStyle->body->cell4->modelName->paragraphStyle);
+        }
+
+        // Device Age
+        $table->addCell($tcStyle->col5Width, $style)->addText($deviceInstance->getAge() . 'y', $tcStyle->body->cell5->modelName->fontStyle, $tcStyle->body->cell5->modelName->paragraphStyle);
+
+        // Life Page Count
+        $table->addCell($tcStyle->col6Width, $style)->addText($this->formatPageVolume($deviceInstance->getMeter()->endMeterLife, $tcStyle->body->cell6->modelName->fontStyle, $tcStyle->body->cell6->modelName->paragraphStyle));
+
+
+
+        if ($showReplacementDevices && $replacementMasterDevice)
+        {
+            $cell = $table->addCell($tcStyle->col7Width, $style);
+            // Replacement Device & Reason
+            $cell->addText($replacementMasterDevice->getManufacturer()->fullname, $tcStyle->body->cell7->manufacturerName->fontStyle, $tcStyle->body->cell7->manufacturerName->paragraphStyle);
+            $cell->addText($replacementMasterDevice->modelName, $tcStyle->body->cell7->modelName->fontStyle, $tcStyle->body->cell7->modelName->paragraphStyle);
+
+            $cell->addText($deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason, $tcStyle->body->cell7->paragraphStyle, $tcStyle->body->cell7->paragraphStyle);
+
+        }
+        elseif ($showReplacementDevices)
+        {
+            if ($showReason)
+            {
+                $cell = $table->addCell($tcStyle->col7Width, $style);
+                $cell->addText($deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason, $tcStyle->body->cell7->paragraphStyle, $tcStyle->body->cell7->paragraphStyle);
+            }
+        }
+        else
+        {
+            if ($showReason)
+            {
+                $cell = $table->addCell($tcStyle->col7Width, $style);
+                $cell->addText($deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getDeviceSwapReason()->reason, $tcStyle->body->cell7->paragraphStyle, $tcStyle->body->cell7->paragraphStyle);
+            }
+        }
+    }
+}
+else
+{
+    $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('No devices fall under this category.', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
+}
+

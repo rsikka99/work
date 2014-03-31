@@ -161,6 +161,6 @@ class Assessment_ViewModel_Devices
      */
     protected function _sortExcludedDevice ($deviceInstance)
     {
-        $this->unmappedDeviceInstances->add($deviceInstance);
+        $this->excludedDeviceInstances->add($deviceInstance);
     }
 }
