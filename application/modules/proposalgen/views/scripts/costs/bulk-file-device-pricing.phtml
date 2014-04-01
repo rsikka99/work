@@ -5,14 +5,17 @@
             <li class="active"><a href="#" title="Device Price"> Device Price </a></li>
             <?php if ($this->canApprove) : ?>
                 <li>
-                    <a href="<?php echo $this->url(array('action' => 'bulk-file-device-features', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Device Features"> Device Features </a>
+                    <a href="<?php echo $this->url(array('action' => 'bulk-file-device-features', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Device Features">
+                        Device Features </a>
                 </li>
             <?php endif; ?>
             <li>
-                <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-pricing', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Toner Pricing"> Toner Pricing</a>
+                <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-pricing', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Toner Pricing">
+                    Toner Pricing</a>
             </li>
             <li>
-                <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-matchup', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Toner Matchup"> Toner Matchup </a>
+                <a href="<?php echo $this->url(array('action' => 'bulk-file-toner-matchup', 'controller' => 'costs', 'module' => 'proposalgen')); ?>" title="Toner Matchup">
+                    Toner Matchup </a>
             </li>
         </ul>
 
@@ -30,7 +33,8 @@
                     </div>
 
                     <a href="#" id="importLink" onclick="do_action('import')" class="btn btn-primary"><i class="icon-upload"></i> Import</a>
-                    <a href="#" id="exportLink" onclick="do_action('export')" data-type="printer" class="btn btn-primary"><i class="icon-download"></i> Export</a>
+                    <a href="#" id="exportLink" onclick="do_action('export')" data-type="printer" class="btn btn-primary"><i class="icon-download"></i>
+                        Export</a>
 
                     <input class="manufacturerMultiSelect" type="text" name="manufacturers" id="manufacturers" />
                 </form>
@@ -38,7 +42,7 @@
         </div>
     </div>
     <br />
-    <input type="button" name="btnUpload" value="Back" onclick="do_action('cancel');" class="btn btn-inverse" />
+    <a href="<?php echo $this->url(array("action" => "bulkdevicepricing")); ?>" class="btn btn-inverse">Back</a>
 
 <?php if ($this->errorMessages != null): ?>
     <div class="well">
