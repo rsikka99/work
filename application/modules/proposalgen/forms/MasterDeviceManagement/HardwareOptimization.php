@@ -77,8 +77,8 @@ class Proposalgen_Form_MasterDeviceManagement_HardwareOptimization extends Twitt
 
 
         $this->addElement($isDeviceSwapElement);
-        $this->addElement($maximumPageCountElement);
         $this->addElement($minimumPageCountElement);
+        $this->addElement($maximumPageCountElement);
 
         $this->getElement("isDeviceSwap")->setDecorators(array("ViewHelper",
                                                                array(array('wrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'switch', 'data-on-label' => 'Yes', 'data-off-label' => 'No', 'data-off' => 'danger', 'data-on' => 'success')),
