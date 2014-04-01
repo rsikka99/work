@@ -72,7 +72,7 @@ class Assessment_Report_CostanalysisController extends Assessment_Library_Contro
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Cost_Analysis') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Cost Analysis') . ".$format";
 
         $this->initReportVariables($filename);
 

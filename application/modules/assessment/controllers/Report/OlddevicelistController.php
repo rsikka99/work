@@ -64,7 +64,7 @@ class Assessment_Report_OldDeviceListController extends Assessment_Library_Contr
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Old_Device_List') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Old Device List') . ".$format";
 
         $this->initReportVariables($filename);
 

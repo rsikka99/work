@@ -313,10 +313,9 @@ abstract class My_Controller_Report extends Tangent_Controller_Action
      */
     public function generateReportFilename ($clientModel, $reportName)
     {
-        $filter      = new Tangent_Filter_Filename();
-        $companyName = $filter->filter($clientModel->companyName);
+        $filter = new Tangent_Filter_Filename();
 
-        return $companyName . "_" . $reportName;
+        return $filter->filter($clientModel->companyName . "_" . $reportName);
     }
 
 }

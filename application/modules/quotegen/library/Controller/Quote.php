@@ -6,7 +6,7 @@
  *
  * @author Lee Robert
  */
-class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
+class Quotegen_Library_Controller_Quote extends My_Controller_Report
 {
     const QUOTE_SESSION_NAMESPACE = 'quotegen';
 
@@ -47,7 +47,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
      */
     public function init ()
     {
-
+        parent::init();
+        
         if (!My_Feature::canAccess(My_Feature::HARDWARE_QUOTE))
         {
             $this->_flashMessenger->addMessage(array(
@@ -109,6 +110,8 @@ class Quotegen_Library_Controller_Quote extends Tangent_Controller_Action
             // Create a new one
             $this->_quote = new Quotegen_Model_Quote();
         }
+
+
     }
 
     /**

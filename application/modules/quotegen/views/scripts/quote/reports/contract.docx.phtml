@@ -1,10 +1,7 @@
 <?php
 
-// TODO: Remove hardcoded values
-$filename = 'contract.docx';
-// /public/downloads/contract.docx
-$savePath = PUBLIC_PATH . '/downloads/' . $filename;
-//"/downloads/contract.docx"
+$filename   = $this->filename;
+$savePath   = PUBLIC_PATH . '/downloads/' . $filename;
 $linkToFile = $this->baseUrl('/downloads/' . $filename);
 
 // This may not need to be removed from here

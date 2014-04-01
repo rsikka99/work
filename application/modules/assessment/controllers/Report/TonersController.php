@@ -70,7 +70,7 @@ class Assessment_Report_TonersController extends Assessment_Library_Controller_A
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner_Report') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner Report') . ".$format";
 
         $this->initReportVariables($filename);
 

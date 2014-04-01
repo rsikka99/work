@@ -76,6 +76,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function purchaseQuoteAction ()
     {
+        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Purchase Quote') . ".docx";
         $this->view->clientId = $this->_quote->clientId;
         $this->view->quoteId  = $this->_quote->id;
     }
@@ -85,8 +86,10 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function leaseQuoteAction ()
     {
+        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Lease Quote') . ".docx";
         $this->view->clientId = $this->_quote->clientId;
         $this->view->quoteId  = $this->_quote->id;
+
     }
 
     /**
@@ -94,6 +97,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function orderListAction ()
     {
+        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), ucwords($this->_quote->quoteType) . ' Quote Order List') . ".xlsx";
         $this->view->clientId = $this->_quote->clientId;
         $this->view->quoteId  = $this->_quote->id;
     }
@@ -103,6 +107,7 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function contractAction ()
     {
+        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Contract') . ".docx";
         $this->view->clientId = $this->_quote->clientId;
         $this->view->quoteId  = $this->_quote->id;
     }

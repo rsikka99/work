@@ -1,7 +1,6 @@
 <?php
 
-// TODO: Remove hardcoded values
-$filename = "purchase-quote.docx";
+$filename = $this->filename;
 $savePath = PUBLIC_PATH . "/downloads/client/{$this->clientId}/quote/{$this->quoteId}/";
 
 if (!is_dir($savePath))

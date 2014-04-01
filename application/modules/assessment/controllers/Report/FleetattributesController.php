@@ -69,7 +69,7 @@ class Assessment_Report_FleetattributesController extends Assessment_Library_Con
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Fleet_Attributes_Report') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Fleet Attributes Report') . ".$format";
 
         $this->initReportVariables($filename);
 

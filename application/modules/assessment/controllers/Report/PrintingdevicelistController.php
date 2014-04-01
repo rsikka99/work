@@ -71,7 +71,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Printing_Device_List') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Printing Device List') . ".$format";
 
         $this->initReportVariables($filename);
 

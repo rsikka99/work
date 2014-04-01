@@ -69,7 +69,7 @@ class Assessment_Report_LeasebuybackController extends Assessment_Library_Contro
                 break;
         }
 
-        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner_Report') . ".$format";
+        $filename = $this->generateReportFilename($this->getAssessment()->getClient(), 'Toner Report') . ".$format";
 
         $this->initReportVariables($filename);
 
