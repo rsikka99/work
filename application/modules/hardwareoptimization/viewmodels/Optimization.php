@@ -703,7 +703,7 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_dealerMonthlyCostWithReplacements = 0;
 
-            $costPerPageSetting = $this->getCostPerPageSettingForDealer();
+            $costPerPageSetting = $this->getCostPerPageSettingForReplacements();
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
