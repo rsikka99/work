@@ -490,7 +490,7 @@ class Quotegen_Model_Quote extends My_Model_Abstract
         $this->dateCreated             = date('Y-m-d H:i:s');
         $this->dateModified            = date('Y-m-d H:i:s');
         $this->quoteDate               = date('Y-m-d H:i:s');
-        $this->name                    = $quoteType . "Quote" . date('Ymd');
+        $this->name                    = ucwords($quoteType) . " Quote " . date('Y/m/d');
         $this->userId                  = $userId;
         $this->colorPageMargin         = $quoteSetting->pageMargin;
         $this->monochromePageMargin    = $quoteSetting->pageMargin;
