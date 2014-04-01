@@ -127,7 +127,7 @@ class Assessment_Report_PrintingdevicelistController extends Assessment_Library_
                 $row []            = $device->getAge();
                 $row []            = ($device->isLeased) ? "Leased" : "Purchased";
                 $row []            = $this->view->formatPageVolume($device->getPageCounts()->getCombinedPageCount()->getMonthly());
-                $row []            = ($device->reportsTonerLevels) ? "Yes" : "No";
+                $row []            = ($device->isCapableOfReportingTonerLevels) ? "Yes" : "No";
                 $appendix_values[] = $row;
             } // end Purchased Devices foreach
         }

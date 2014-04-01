@@ -85,7 +85,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var int
      */
-    public $reportsTonerLevels;
+    public $isCapableOfReportingTonerLevels;
 
     /**
      * @var int
@@ -446,7 +446,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
 
         if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
         {
-            $this->reportsTonerLevels = $params->reportsTonerLevels;
+            $this->isCapableOfReportingTonerLevels = $params->reportsTonerLevels;
         }
 
         if (isset($params->serialNumber) && !is_null($params->serialNumber))
@@ -518,7 +518,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "isExcluded"               => $this->isExcluded,
             "isLeased"                 => $this->isLeased,
             "mpsDiscoveryDate"         => $this->mpsDiscoveryDate,
-            "reportsTonerLevels"       => $this->reportsTonerLevels,
+            "reportsTonerLevels"       => $this->isCapableOfReportingTonerLevels,
             "serialNumber"             => $this->serialNumber,
             "useUserData"              => $this->useUserData,
             "pageCoverageMonochrome"   => $this->pageCoverageMonochrome,

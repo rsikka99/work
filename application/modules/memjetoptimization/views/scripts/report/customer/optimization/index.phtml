@@ -212,7 +212,7 @@ $totalPurchasedDevices = count($optimization->getDevices()->purchasedDeviceInsta
                 <td class='deviceName'><?php echo $device->serialNumber . "<br/>" . $device->ipAddress; ?></td>
                 <td><?php echo number_format($device->getMeter()->endMeterLife); ?></td>
                 <td><?php echo $masterDevice->getAge(); ?></td>
-                <td><?php echo($device->reportsTonerLevels ? 'Yes' : 'No'); ?></td>
+                <td><?php echo($device->isCapableOfReportingTonerLevels ? 'Yes' : 'No'); ?></td>
             </tr>
         <?php endforeach; ?>
     </table>

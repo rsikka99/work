@@ -646,7 +646,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
                         if ($deviceInstance->getAge() < self::OLD_DEVICE_THRESHOLD)
                         {
                             //Check to see if it is reporting toner levels
-                            if ($deviceInstance->reportsTonerLevels || $deviceInstance->isLeased)
+                            if ($deviceInstance->isCapableOfReportingTonerLevels || $deviceInstance->isLeased)
                             {
                                 /**
                                  * We are a fully optimized device!
@@ -967,7 +967,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
         $devicesNotReportingTonerLevels = array();
         foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $device)
         {
-            if ($device->reportsTonerLevels == false)
+            if ($device->isCapableOfReportingTonerLevels == false)
             {
                 $devicesNotReportingTonerLevels[] = $device;
             }
@@ -1885,7 +1885,7 @@ class Healthcheck_ViewModel_Healthcheck extends Healthcheck_ViewModel_Abstract
 
             foreach ($this->getDevices()->allIncludedDeviceInstances->getDeviceInstances() as $device)
             {
-                if ($device->reportsTonerLevels)
+                if ($device->isCapableOfReportingTonerLevels)
                 {
                     $deviceAges ["Pages Printed on Devices Reporting Toner Levels"] += $device->getPageCounts()->getCombinedPageCount()->getMonthly();
                 }

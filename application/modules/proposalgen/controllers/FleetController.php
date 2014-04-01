@@ -596,7 +596,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "isManaged"                => $deviceInstance->isManaged,
                         "compatibleWithJitProgram" => $deviceInstance->compatibleWithJitProgram,
                         "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
-                        "reportsTonerLevels"       => $deviceInstance->reportsTonerLevels ? "Yes" : "No",
+                        "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
                         "validToners"              => $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)
                     );
@@ -666,7 +666,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
             $rmsUploadRow             = $deviceInstance->getRmsUploadRow();
             $this->view->rmsUploadRow = $rmsUploadRow;
-            $form->populate(array('reportsTonerLevels' => $deviceInstance->reportsTonerLevels));
+            $form->populate(array('reportsTonerLevels' => $deviceInstance->isCapableOfReportingTonerLevels));
             $form->populate($rmsUploadRow->toArray());
 
 
@@ -719,7 +719,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
 
                                 $deviceInstance->useUserData        = true;
-                                $deviceInstance->reportsTonerLevels = $formValues['reportsTonerLevels'];
+                                $deviceInstance->isCapableOfReportingTonerLevels = $formValues['reportsTonerLevels'];
                                 $deviceInstanceMapper->save($deviceInstance);
                             }
                             $db->commit();

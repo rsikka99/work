@@ -50,7 +50,7 @@ foreach ($profitabiltyDevices->retired as $device)
 
     $table->addCell($tcStyle->col3Width, $ampvStyle)->addText($device->getMeter()->endMeterLife, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
     $table->addCell($tcStyle->col4Width, $ampvStyle)->addText($device->getAge(), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($device->reportsTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $ampvStyle)->addText(($device->isCapableOfReportingTonerLevels) ? 'Yes' : 'No', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }
 $section->addTextBreak();
 $tcStyle    = $this->twocenter;

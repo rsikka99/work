@@ -53,7 +53,7 @@ $this->jit = My_Brand::$jit;
                 <div class="right"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()); ?></div>
             </td>
             <td class="column6">
-                <div class="center"><?php echo ($deviceInstance->reportsTonerLevels) ? "Yes" : "No"; ?></div>
+                <div class="center"><?php echo ($deviceInstance->isCapableOfReportingTonerLevels) ? "Yes" : "No"; ?></div>
             </td>
         </tr>
     <?php endforeach; ?>

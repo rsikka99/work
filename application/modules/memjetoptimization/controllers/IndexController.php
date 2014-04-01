@@ -310,7 +310,7 @@ class Memjetoptimization_IndexController extends Memjetoptimization_Library_Cont
                 "colorAmpv"              => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()),
                 "costPerPageMonochrome"  => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage),
                 "costPerPageColor"       => $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage),
-                "jitSuppliesSupported"   => (int)$deviceInstance->reportsTonerLevels,
+                "jitSuppliesSupported"   => (int)$deviceInstance->isCapableOfReportingTonerLevels,
                 "isCopy"                 => (int)$deviceInstance->getMasterDevice()->isCopier,
                 "isFax"                  => (int)$deviceInstance->getMasterDevice()->isFax,
                 "pageCoverageMonochrome" => ($deviceInstance->pageCoverageMonochrome > 0) ? number_format((float)$deviceInstance->pageCoverageMonochrome, 2) . '%' : 'N/A',

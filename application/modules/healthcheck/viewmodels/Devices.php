@@ -137,7 +137,7 @@ class Healthcheck_ViewModel_Devices extends Assessment_ViewModel_Devices
             }
         }
 
-        if ($deviceInstance->reportsTonerLevels)
+        if ($deviceInstance->isCapableOfReportingTonerLevels)
         {
             $this->reportingTonerLevelsDeviceInstances->add($deviceInstance);
         }
