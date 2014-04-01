@@ -20,16 +20,16 @@ $graphs = $this->graphs;
 </div>
 <table class="rDevices">
     <tr>
-        <td><strong>Target Monochrome CPP:</strong></td>
-        <td><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage); ?></td>
-        <td><strong>Target Color CPP:</strong></td>
-        <td><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage); ?></td>
+        <td class="cell-label">Target Monochrome CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetMonochromeCostPerPage); ?></td>
+        <td class="cell-label">Target Color CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo $this->formatCostPerPage($hardwareOptimization->getHardwareOptimizationSetting()->targetColorCostPerPage); ?></td>
     </tr>
     <tr>
-        <td><strong>Monthly Monochrome Page Count:</strong></td>
-        <td><?php echo $this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-        <td><strong>Monthly Color Page Count:</strong></td>
-        <td><?php echo $this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
+        <td class="cell-label">Monthly Monochrome Page Count:</td>
+        <td class="cell-data page-volume"><?php echo $this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
+        <td class="cell-label">Monthly Color Page Count:</td>
+        <td class="cell-data page-volume"><?php echo $this->formatPageVolume($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
     </tr>
 </table>
 <br />
@@ -37,42 +37,42 @@ $graphs = $this->graphs;
 <div class="pheader">
     Cost Analysis Summary
 </div>
-<table class="rDevices">
-    <tr class='header'>
-        <th colspan='2'>Current Fleet</th>
-        <th colspan='2'>Optimized Fleet</th>
+<table class="rDevices cost-analysis-summary-table">
+    <tr class="header">
+        <th colspan="2">Current Fleet</th>
+        <th colspan="2">Optimized Fleet</th>
     </tr>
     <tr>
-        <td style='width:150px;'><strong>Monochrome CPP:</strong></td>
-        <td><?php echo $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage) ?></td>
-        <td style='width:150px;'><strong>Monochrome CPP:</strong></td>
-        <td style='width:250px;'><?php echo $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage) ?></td>
+        <td class="cell-label">Monochrome CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage) ?></td>
+        <td class="cell-label">Monochrome CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->monochromeCostPerPage) ?></td>
     </tr>
     <tr>
-        <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage) : 'No print volume'; ?></td>
-        <td style='width:150px;'><strong>Color CPP:</strong></td>
-        <td style='width:250px;'><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'No print volume'; ?></td>
+        <td class="cell-label">Color CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage((float)$optimization->calculateDealerWeightedAverageMonthlyCostPerPage()->colorCostPerPage) : 'No print volume'; ?></td>
+        <td class="cell-label">Color CPP:</td>
+        <td class="cell-data cost-per-page"><?php echo ($optimization->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly() > 0) ? $this->formatCostPerPage($optimization->calculateDealerWeightedAverageMonthlyCostPerPageWithReplacements()->colorCostPerPage) : 'No print volume'; ?></td>
     </tr>
     <tr>
-        <td style='width:150px;'><strong>Total Cost:</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCost()) ?></td>
-        <td style='width:150px;'><strong>Total Cost:</strong></td>
-        <td style='width:250px;'><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()) ?></td>
+        <td class="cell-label">Total Cost:</td>
+        <td class="cell-data cost"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCost()) ?></td>
+        <td class="cell-label">Total Cost:</td>
+        <td class="cell-data cost"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyCostWithReplacements()) ?></td>
     </tr>
     <tr>
-        <td style='width:150px;'><strong>Margin ($):</strong></td>
-        <td><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()) ?></td>
-        <td style='width:150px;'><strong>Margin ($):</strong></td>
-        <td style='width:250px;'><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()) ?></td>
+        <td class="cell-label">Margin ($):</td>
+        <td class="cell-data margin-dollar"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPage()) ?></td>
+        <td class="cell-label">Margin ($):</td>
+        <td class="cell-data margin-dollar"><?php echo $this->currency((float)$optimization->calculateDealerMonthlyProfitUsingTargetCostPerPageAndReplacements()) ?></td>
     </tr>
     <tr>
-        <td style='width:150px;'><strong>Margin (%):</strong></td>
-        <td><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
+        <td class="cell-label">Margin (%):</td>
+        <td class="cell-data margin-percent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCost(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
             %
         </td>
-        <td style='width:150px;'><strong>Margin (%):</strong></td>
-        <td style='width:250px;'><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
+        <td class="cell-label">Margin (%):</td>
+        <td class="cell-data margin-percent"><?php echo number_format(Tangent_Accounting::reverseEngineerMargin((float)$optimization->calculateDealerMonthlyCostWithReplacements(), (float)$optimization->calculateDealerMonthlyRevenueUsingTargetCostPerPage()), 2) ?>
             %
         </td>
     </tr>
