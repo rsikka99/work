@@ -266,13 +266,14 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
     /**
      * @param int                                  $hardwareOptimizationId
      * @param Proposalgen_Model_CostPerPageSetting $costPerPageSetting
+     * @param Proposalgen_Model_CostPerPageSetting $replacementCostPerPageSetting
      * @param int                                  $limit
      * @param int                                  $offset
      * @param bool                                 $justCount
      *
      * @return array|int
      */
-    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $limit, $offset = 0, $justCount = false)
+    public function fetchAllForHardwareOptimization ($hardwareOptimizationId, $costPerPageSetting, $replacementCostPerPageSetting, $limit, $offset = 0, $justCount = false)
     {
         $db                     = $this->getDbTable()->getAdapter();
         $hardwareOptimizationId = $db->quote($hardwareOptimizationId, 'INTEGER');
@@ -365,7 +366,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
 
                 $pageCount                 = $deviceInstance->getPageCounts();
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice);
+                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementDevice);
                 $jsonData['monoAmpv']      = $pageCount->getBlackPageCount()->getMonthly();
                 $jsonData['colorAmpv']     = $pageCount->getColorPageCount()->getMonthly();
                 $jsonData['rawMonoCpp']    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
