@@ -116,7 +116,7 @@ class Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance extends My
     {
         if (!isset($this->_hardwareOptimization) && $this->hardwareOptimizationId > 0)
         {
-            $this->_hardwareOptimization = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($this->hardwareOptimizationId);
+            $this->_hardwareOptimization = Hardwareoptimization_Model_Mapper_Hardware_Optimization::getInstance()->find($this->hardwareOptimizationId);
         }
 
         return $this->_hardwareOptimization;
