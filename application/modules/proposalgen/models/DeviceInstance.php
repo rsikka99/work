@@ -1230,7 +1230,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         if (!array_key_exists($hardwareOptimizationId, $this->_replacementMasterDevice))
         {
             $hardwareOptimizationDeviceInstance = $this->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
-            if ($hardwareOptimizationDeviceInstance instanceof Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance)
+            if ($hardwareOptimizationDeviceInstance instanceof Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance && $hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
             {
                 $this->_replacementMasterDevice[$hardwareOptimizationId] = $hardwareOptimizationDeviceInstance->getMasterDevice();
             }

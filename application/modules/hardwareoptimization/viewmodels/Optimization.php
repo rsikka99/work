@@ -703,11 +703,20 @@ class Hardwareoptimization_ViewModel_Optimization
         {
             $this->_dealerMonthlyCostWithReplacements = 0;
 
-            $costPerPageSetting = $this->getCostPerPageSettingForReplacements();
+            $replacementCostPerPageSetting = $this->getCostPerPageSettingForReplacements();
+            $costPerPageSetting            = $this->getCostPerPageSettingForDealer();
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id));
+                $replacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id);
+                if ($replacementMasterDevice instanceof Proposalgen_Model_MasterDevice)
+                {
+                    $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementMasterDevice);
+                }
+                else
+                {
+                    $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting);
+                }
             }
         }
 
