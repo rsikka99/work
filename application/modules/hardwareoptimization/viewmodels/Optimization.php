@@ -707,7 +707,14 @@ class Hardwareoptimization_ViewModel_Optimization
 
             foreach ($this->getDevices()->purchasedDeviceInstances->getDeviceInstances() as $deviceInstance)
             {
-                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id));
+                $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($this->_optimization->id);
+                $replacementMasterDevice            = null;
+                if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
+                {
+                    $replacementMasterDevice = $deviceInstance->getReplacementMasterDeviceForHardwareOptimization($this->_optimization->id);
+                }
+
+                $this->_dealerMonthlyCostWithReplacements += $deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementMasterDevice);
             }
         }
 
