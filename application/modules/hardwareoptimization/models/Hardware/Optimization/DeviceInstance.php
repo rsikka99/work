@@ -174,7 +174,10 @@ class Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance extends My
     {
         if (!isset($this->_masterDevice) && $this->masterDeviceId > 0)
         {
-            $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($this->masterDeviceId);
+            $this->_masterDevice = Proposalgen_Model_Mapper_MasterDevice::getInstance()->findForReports($this->masterDeviceId,
+                $this->getHardwareOptimization()->dealerId,
+                $this->getHardwareOptimization()->getHardwareOptimizationSetting()->laborCostPerPage,
+                $this->getHardwareOptimization()->getHardwareOptimizationSetting()->partsCostPerPage);
         }
 
         return $this->_masterDevice;
