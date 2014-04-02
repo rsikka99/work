@@ -47,3 +47,4 @@ public/cache/*
 public/downloads/*
 phinx.yml
 .vagrant/
+node_modules/
