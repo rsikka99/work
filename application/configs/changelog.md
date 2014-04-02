@@ -3,7 +3,32 @@
 *[CPP]: Cost Per Page
 *[CSV]: Comma-separated values
 *[JIT]: Just In Time
+*[OEM]: Original Equipment Manufacturer
+*[RMS]: Remote Monitoring System
 *[UX]: User Experience
+
+Version 1.4.10
+==============
+* Added markdown parsing of the changelog
+* Added **NER Data** as a RMS vendor
+* Added more information to the device popups on the device summary and hardware optimization pages
+* Added the ability to change hardware device configurations
+* Changed the order of the "Minimum Page Count" and "Maximum Page Count" when dealing with a device swap in the "All Devices" editor
+* Changed the "recommended maximum monthly page volume" to be the highest OEM yield. Maximum life page volume is now the highest OEM yield * 36
+* Fixed device features bulk export
+* Fixed device management date popup being hidden in the background as well as how the date is shown
+* Fixed device swap not showing an error when trying to unset the reason for a category
+* Fixed formatting of cost/price for consistency
+* Fixed formatting of CPP for consistency
+* Fixed formatting of page volume for consistency
+* Fixed mapping large quantity of devices (150+ of a single type)
+* Fixed numbers and formatting on the toner gross vendor margin report
+* Fixed report names to generate properly and consistently throughout the system
+* Fixed selection of the leasing provider not loading ajax properly
+* Fixed the back button in the bulk device pricing/uploads area
+* Fixed the lease buyback report not working
+* Fixed the wrong toner preferences being used in the hardware optimization in some cases
+* Fixed toners not showing up as assigned when creating them for a device
 
 Version 1.4.9
 =============

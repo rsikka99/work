@@ -1,10 +1,9 @@
 Version Pending Changes
 =======================
 
-Version 1.4.10
+Version 1.4.11
 ==============
-* Added markdown parsing of the changelog
-* Added **NER Data** as a RMS vendor
+* Added something
 
 Template Change log
 ===================
