@@ -352,26 +352,32 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
             $maximum       = count($devices['jsonData']);
             for ($i = $offset; $i < $limit + $offset; $i++)
             {
+                $replacementDevice = null;
                 if ($i >= $maximum)
                 {
                     break;
                 }
                 // We want the two arrays to be in parallel since we need to pass and array of devices to the form to generate the select elements
-                $deviceInstance = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($devices['jsonData'][$i]['deviceInstanceId']);
+                $deviceInstance                     = Proposalgen_Model_Mapper_DeviceInstance::getInstance()->find($devices['jsonData'][$i]['deviceInstanceId']);
                 $hardwareOptimizationDeviceInstance = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimizationId);
-                $replacementDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
+                if ($hardwareOptimizationDeviceInstance->action === Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE)
+                {
+                    $replacementDevice = $hardwareOptimizationDeviceInstance->getMasterDevice();
+                }
 
                 $returnDevices['deviceInstances'][] = $deviceInstance;
                 $jsonData                           = $devices['jsonData'][$i];
 
                 $pageCount                 = $deviceInstance->getPageCounts();
                 $deviceInstanceMonthlyCost = $deviceInstance->calculateMonthlyCost($costPerPageSetting);
-                $costDelta                 = $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementDevice);
-                $jsonData['monoAmpv']      = $pageCount->getBlackPageCount()->getMonthly();
-                $jsonData['colorAmpv']     = $pageCount->getColorPageCount()->getMonthly();
-                $jsonData['rawMonoCpp']    = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
-                $jsonData['rawColorCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage;
-                $jsonData['rawCostDelta']  = $costDelta;
+
+
+                $costDelta                = ($replacementDevice instanceof Proposalgen_Model_MasterDevice) ? $deviceInstanceMonthlyCost - $deviceInstance->calculateMonthlyCost($replacementCostPerPageSetting, $replacementDevice) : 0;
+                $jsonData['monoAmpv']     = $pageCount->getBlackPageCount()->getMonthly();
+                $jsonData['colorAmpv']    = $pageCount->getColorPageCount()->getMonthly();
+                $jsonData['rawMonoCpp']   = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage;
+                $jsonData['rawColorCpp']  = $deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage;
+                $jsonData['rawCostDelta'] = $costDelta;
 
                 $returnDevices['jsonData'][] = $jsonData;
             }
