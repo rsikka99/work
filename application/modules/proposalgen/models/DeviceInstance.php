@@ -105,6 +105,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var float
      */
+    public $pageCoverageColor;
+
+    /**
+     * @var float
+     */
     public $pageCoverageCyan;
     /**
      * @var float
@@ -118,7 +123,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
     /**
      * @var string|int
      */
-    public $rmsDeviceId;
+    public $assetId;
 
     /**
      * @var bool
@@ -464,6 +469,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
         }
 
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
+
         if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
         {
             $this->pageCoverageCyan = $params->pageCoverageCyan;
@@ -484,9 +494,9 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             $this->isManaged = $params->isManaged;
         }
 
-        if (isset($params->rmsDeviceId) && !is_null($params->rmsDeviceId))
+        if (isset($params->assetId) && !is_null($params->assetId))
         {
-            $this->rmsDeviceId = $params->rmsDeviceId;
+            $this->assetId = $params->assetId;
         }
 
         if (isset($params->deviceSwapReasonId) && !is_null($params->deviceSwapReasonId))
@@ -522,11 +532,12 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "serialNumber"             => $this->serialNumber,
             "useUserData"              => $this->useUserData,
             "pageCoverageMonochrome"   => $this->pageCoverageMonochrome,
+            "pageCoverageColor"        => $this->pageCoverageColor,
             "pageCoverageCyan"         => $this->pageCoverageCyan,
             "pageCoverageMagenta"      => $this->pageCoverageMagenta,
             "pageCoverageYellow"       => $this->pageCoverageYellow,
             "isManaged"                => $this->isManaged,
-            "rmsDeviceId"              => $this->rmsDeviceId,
+            "assetId"                  => $this->assetId,
             "deviceSwapReasonId"       => $this->deviceSwapReasonId,
             "rawDeviceName"            => $this->rawDeviceName,
             "compatibleWithJitProgram" => $this->compatibleWithJitProgram,

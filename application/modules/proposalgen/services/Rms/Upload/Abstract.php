@@ -6,6 +6,27 @@
 abstract class Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
+     * The csv delimiter
+     *
+     * @var string
+     */
+    protected $csv_delimiter = null;
+
+    /**
+     * The csv value enclosure
+     *
+     * @var string
+     */
+    protected $csv_enclosure = null;
+
+    /**
+     * The csv escape format
+     *
+     * @var string
+     */
+    protected $csv_escape = null;
+
+    /**
      * Input filter
      *
      * @var Zend_Filter_Input
@@ -32,6 +53,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      * @var array
      */
     protected $_requiredHeaders = array(
+        'rmsVendorName'          => false,
+        'rmsReportVersion'       => false,
         'rmsModelId'             => false,
         'assetId'                => false,
         'monitorStartDate'       => true,
@@ -100,10 +123,12 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'tonerLevelMagenta'      => false,
         'tonerLevelYellow'       => false,
         'pageCoverageMonochrome' => false,
+        'pageCoverageColor'      => false,
         'pageCoverageCyan'       => false,
         'pageCoverageMagenta'    => false,
         'pageCoverageYellow'     => false,
         'isManaged'              => false,
+        'managementProgram'      => false,
         'rmsDeviceId'            => false,
     );
 
@@ -166,7 +191,6 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         $filters            = array(
             'rmsModelId'       => array(
                 'StringTrim',
-                'Digits'
             ),
             'isManaged'        => array(
                 'StringTrim',
@@ -297,7 +321,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
              * Pop off the first line since they are headers
              */
             $this->_csvHeaders = array();
-            foreach (str_getcsv(array_shift($fileLines)) as $header)
+
+            foreach (str_getcsv(array_shift($fileLines), $this->csv_delimiter, $this->csv_delimiter, $this->csv_escape) as $header)
             {
                 $lowerCaseHeader = strtolower(trim($header));
                 /*
@@ -329,7 +354,8 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             /*
              * Now we validate our lines and assign them in the areas we deem necessary
              */
-            if ($this->validateHeaders($this->_fieldsPresent))
+            $validHeadersMessage = $this->validateHeaders($this->_fieldsPresent);
+            if ($validHeadersMessage === true)
             {
                 $csvLineNumber = $this->_linesToTrim + 2;
                 // Get normalized data
@@ -367,7 +393,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
             }
             else
             {
-                return "Incompatible file, check vendor selection.";
+                return $validHeadersMessage;
             }
         }
 
@@ -383,14 +409,26 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
      */
     public function validateHeaders ($csvHeaders)
     {
+        $requiredHeadersMissing = array();
         // Loop through our standard headers
         foreach ($this->_requiredHeaders as $fieldName => $isRequired)
         {
             // If the header is required and doesn't exist in the array, return false
             if ($isRequired && !in_array($fieldName, $csvHeaders))
             {
-                return false;
+                $requiredHeadersMissing[] = $fieldName;
             }
+        }
+
+        if (count($requiredHeadersMissing) > 0)
+        {
+            $vendorHeadings = array();
+            foreach ($requiredHeadersMissing as $header)
+            {
+                $vendorHeadings[] = array_search($header, $this->_columnMapping);
+            }
+
+            return "File is missing required these headers: [" . implode(',', $vendorHeadings) . "]. Are you sure you selected the right RMS Vendor?";
         }
 
         return true;

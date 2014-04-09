@@ -16,7 +16,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $rmsProviderId;
 
     /**
-     * @var int
+     * @var string
      */
     public $rmsModelId;
 
@@ -338,6 +338,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     /**
      * @var float
      */
+    public $pageCoverageColor;
+
+    /**
+     * @var float
+     */
     public $pageCoverageCyan;
 
     /**
@@ -354,6 +359,26 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
      * @var bool
      */
     public $reportsTonerLevels;
+
+    /**
+     * @var string
+     */
+    public $assetId;
+
+    /**
+     * @var string
+     */
+    public $rmsVendorName;
+
+    /**
+     * @var string
+     */
+    public $rmsReportVersion;
+
+    /**
+     * @var string
+     */
+    public $managementProgram;
 
     /**
      * @var Proposalgen_Model_Manufacturer
@@ -701,6 +726,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
         }
 
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
+
         if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
         {
             $this->pageCoverageCyan = $params->pageCoverageCyan;
@@ -719,6 +749,26 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
         if (isset($params->reportsTonerLevels) && !is_null($params->reportsTonerLevels))
         {
             $this->reportsTonerLevels = $params->reportsTonerLevels;
+        }
+
+        if (isset($params->assetId) && !is_null($params->assetId))
+        {
+            $this->assetId = $params->assetId;
+        }
+
+        if (isset($params->rmsVendorName) && !is_null($params->rmsVendorName))
+        {
+            $this->rmsVendorName = $params->rmsVendorName;
+        }
+
+        if (isset($params->rmsReportVersion) && !is_null($params->rmsReportVersion))
+        {
+            $this->rmsReportVersion = $params->rmsReportVersion;
+        }
+
+        if (isset($params->managementProgram) && !is_null($params->managementProgram))
+        {
+            $this->managementProgram = $params->managementProgram;
         }
 
     }
@@ -795,10 +845,15 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "tonerLevelMagenta"        => $this->tonerLevelMagenta,
             "tonerLevelYellow"         => $this->tonerLevelYellow,
             "pageCoverageMonochrome"   => $this->pageCoverageMonochrome,
+            "pageCoverageColor"        => $this->pageCoverageColor,
             "pageCoverageCyan"         => $this->pageCoverageCyan,
             "pageCoverageMagenta"      => $this->pageCoverageMagenta,
             "pageCoverageYellow"       => $this->pageCoverageYellow,
             "reportsTonerLevels"       => $this->reportsTonerLevels,
+            "assetId"                  => $this->assetId,
+            "rmsVendorName"            => $this->rmsVendorName,
+            "rmsReportVersion"         => $this->rmsReportVersion,
+            "managementProgram"        => $this->managementProgram,
         );
     }
 

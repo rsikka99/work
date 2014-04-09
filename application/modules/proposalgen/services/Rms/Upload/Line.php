@@ -31,12 +31,27 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $isManaged;
 
     /**
+     * @var string
+     */
+    public $managementProgram;
+
+    /**
+     * @var string|int
+     */
+    public $rmsVendorName;
+
+    /**
+     * @var string|int
+     */
+    public $rmsReportVersion;
+
+    /**
      * @var string|int
      */
     public $rmsDeviceId;
 
     /**
-     * @var int
+     * @var string
      */
     public $rmsModelId;
 
@@ -403,6 +418,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     /**
      * @var float
      */
+    public $pageCoverageColor;
+
+    /**
+     * @var float
+     */
     public $pageCoverageCyan;
 
     /**
@@ -423,6 +443,16 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         if (is_array($params))
         {
             $params = new ArrayObject($params, ArrayObject::ARRAY_AS_PROPS);
+        }
+
+        if (isset($params->rmsVendorName) && !is_null($params->rmsVendorName))
+        {
+            $this->rmsVendorName = $params->rmsVendorName;
+        }
+
+        if (isset($params->rmsReportVersion) && !is_null($params->rmsReportVersion))
+        {
+            $this->rmsReportVersion = $params->rmsReportVersion;
         }
 
         if (isset($params->rmsModelId) && !is_null($params->rmsModelId))
@@ -818,7 +848,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         if (isset($params->isManaged) && !is_null($params->isManaged))
         {
             $this->isManaged = $params->isManaged;
+        }
 
+        if (isset($params->managementProgram) && !is_null($params->managementProgram))
+        {
+            $this->managementProgram = $params->managementProgram;
         }
     }
 
@@ -828,6 +862,8 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public function toArray ()
     {
         return array(
+            "rmsVendorName"          => $this->rmsVendorName,
+            "rmsReportVersion"       => $this->rmsReportVersion,
             "rmsModelId"             => $this->rmsModelId,
             "assetId"                => $this->assetId,
             "monitorStartDate"       => $this->monitorStartDate,
@@ -843,6 +879,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "isA3"                   => $this->isA3,
             "isDuplex"               => $this->isDuplex,
             "isManaged"              => $this->isManaged,
+            "managementProgram"              => $this->managementProgram,
             "manufacturer"           => $this->manufacturer,
             "rawDeviceName"          => $this->rawDeviceName,
             "modelName"              => $this->modelName,
@@ -898,6 +935,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "csvLineNumber"          => $this->csvLineNumber,
             "tonerConfigId"          => $this->tonerConfigId,
             "pageCoverageMonochrome" => $this->pageCoverageMonochrome,
+            "pageCoverageColor"      => $this->pageCoverageColor,
             "pageCoverageCyan"       => $this->pageCoverageCyan,
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
             "pageCoverageYellow"     => $this->pageCoverageYellow,

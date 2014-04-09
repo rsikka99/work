@@ -5,11 +5,12 @@
  */
 class Proposalgen_Model_Rms_Provider extends My_Model_Abstract
 {
-    const RMS_PROVIDER_PRINTFLEET  = 1;
-    const RMS_PROVIDER_FMAUDIT     = 2;
-    const RMS_PROVIDER_XEROX       = 3;
-    const RMS_PROVIDER_PRINT_AUDIT = 4;
-    const RMS_PROVIDER_NER_DATA    = 5;
+    const RMS_PROVIDER_PRINTFLEET_TWO   = 1;
+    const RMS_PROVIDER_FMAUDIT          = 2;
+    const RMS_PROVIDER_XEROX            = 3;
+    const RMS_PROVIDER_PRINT_AUDIT      = 4;
+    const RMS_PROVIDER_NER_DATA         = 5;
+    const RMS_PROVIDER_PRINTFLEET_THREE = 6;
 
     /**
      * @var int

@@ -6,12 +6,22 @@
 class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_Upload_Abstract
 {
     /**
+     * The csv value enclosure
+     *
+     * @var string
+     */
+    protected $csv_enclosure = '"';
+
+    /**
      * How to read the date coming in from the CSV
      *
      * @var string
      */
     protected $_incomingDateFormat = array(
-        "m/d/Y h:i:s A",
+        "Y-m-d\TH:i:s",
+        "Y-m-d\TH:i:s.u",
+        "Y-m-d\TH:i:s.uO",
+        DateTime::ISO8601,
         "m/d/Y G:i",
     );
 
@@ -22,39 +32,38 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
      * @var array
      */
     protected $_columnMapping = array(
-        'printermodelid'       => 'rmsModelId',
+        'rmsvendorname'        => 'rmsVendorName',
+        'rmsreportversion'     => 'rmsReportVersion',
+        'rmsmodelid'           => 'rmsModelId',
+        'deviceid'             => 'assetId',
         'managementstatus'     => 'isManaged',
-        'startdate'            => 'monitorStartDate',
-        'enddate'              => 'monitorEndDate',
-        'dateadoption'         => 'adoptionDate',
+        'managementprogram'    => 'managementProgram',
+        'monitorstartdate'     => 'monitorStartDate',
+        'monitorenddate'       => 'monitorEndDate',
+        'adoptiondate'         => 'adoptionDate',
         'discoverydate'        => 'discoveryDate',
-        'dateintroduction'     => 'launchDate',
+        'introductiondate'     => 'launchDate',
         'ipaddress'            => 'ipAddress',
-        'is_color'             => 'isColor',
-        'is_copier'            => 'isCopier',
-        'is_fax'               => 'isFax',
-        'is_a3'                => 'isA3',
-        'is_duplex'            => 'isDuplex',
+        'iscolor'              => 'isColor',
+        'iscopier'             => 'isCopier',
+        'isfax'                => 'isFax',
+        'isa3'                 => 'isA3',
+        'isduplex'             => 'isDuplex',
         'manufacturer'         => 'manufacturer',
-        'devicename'           => 'rawDeviceName',
         'modelname'            => 'modelName',
-        'ppm_black'            => 'ppmBlack',
-        'ppm_color'            => 'ppmColor',
+        'ppmblack'             => 'ppmBlack',
+        'ppmcolor'             => 'ppmColor',
         'serialnumber'         => 'serialNumber',
-        'wattspowernormal'     => 'wattsOperating',
-        'wattspoweridle'       => 'wattsIdle',
-        'black_prodcodeoem'    => 'blackTonerSku',
-        'black_yield'          => 'blackTonerYield',
-        'black_prodcostoem'    => 'blackTonerCost',
-        'cyan_prodcodeoem'     => 'cyanTonerSku',
-        'cyan_yield'           => 'cyanTonerYield',
-        'cyan_prodcostoem'     => 'cyanTonerCost',
-        'magenta_prodcodeoem'  => 'magentaTonerSku',
-        'magenta_yield'        => 'magentaTonerYield',
-        'magenta_prodcostoem'  => 'magentaTonerCost',
-        'yellow_prodcodeoem'   => 'yellowTonerSku',
-        'yellow_yield'         => 'yellowTonerYield',
-        'yellow_prodcostoem'   => 'yellowTonerCost',
+        'wattsoperating'       => 'wattsOperating',
+        'wattsidle'            => 'wattsIdle',
+        'blacktonersku'        => 'blackTonerSku',
+        'blacktoneryield'      => 'blackTonerYield',
+        'cyantonersku'         => 'cyanTonerSku',
+        'cyantoneryield'       => 'cyanTonerYield',
+        'magentatonersku'      => 'magentaTonerSku',
+        'magentatoneryield'    => 'magentaTonerYield',
+        'yellowtonersku'       => 'yellowTonerSku',
+        'yellowtoneryield'     => 'yellowTonerYield',
         'startmeterblack'      => 'startMeterBlack',
         'endmeterblack'        => 'endMeterBlack',
         'startmetercolor'      => 'startMeterColor',
@@ -73,17 +82,15 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'endmeterscan'         => 'endMeterScan',
         'startmeterfax'        => 'startMeterFax',
         'endmeterfax'          => 'endMeterFax',
-        'start11x7'            => 'startMeterPrintA3Black',
-        'end11x7'              => 'endMeterPrintA3Black',
-        'start11x17color'      => 'startMeterPrintA3Color',
-        'end11x17color'        => 'endMeterPrintA3Color',
-        'tonerlevel_black'     => 'tonerLevelBlack',
-        'tonerlevel_cyan'      => 'tonerLevelCyan',
-        'tonerlevel_magenta'   => 'tonerLevelMagenta',
-        'tonerlevel_yellow'    => 'tonerLevelYellow',
-        'black coverage'       => 'pageCoverageMonochrome',
-        'cyan coverage'        => 'pageCoverageCyan',
-        'magenta coverage'     => 'pageCoverageMagenta',
-        'yellow coverage'      => 'pageCoverageYellow',
+        'startmetera3black'    => 'startMeterPrintA3Black',
+        'endmetera3black'      => 'endMeterPrintA3Black',
+        'startmetera3color'    => 'startMeterPrintA3Color',
+        'endmetera3color'      => 'endMeterPrintA3Color',
+        'tonerlevelblack'      => 'tonerLevelBlack',
+        'tonerlevelcyan'       => 'tonerLevelCyan',
+        'tonerlevelmagenta'    => 'tonerLevelMagenta',
+        'tonerlevelyellow'     => 'tonerLevelYellow',
+        'monocoverage'         => 'pageCoverageMonochrome',
+        'colorcoverage'        => 'pageCoverageColor',
     );
 }

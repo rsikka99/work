@@ -11,7 +11,7 @@ class Proposalgen_Model_Rms_User_Matchup extends My_Model_Abstract
     public $rmsProviderId;
 
     /**
-     * @var int
+     * @var string
      */
     public $rmsModelId;
 

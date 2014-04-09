@@ -16,7 +16,7 @@ class Proposalgen_Model_Map_Device_Instance extends My_Model_Abstract
     public $rmsUploadRowId;
 
     /**
-     * @var int
+     * @var string
      */
     public $rmsModelId;
 

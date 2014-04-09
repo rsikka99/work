@@ -9,6 +9,7 @@ class Proposalgen_Model_Mapper_Rms_Provider extends My_Model_Mapper_Abstract
      * Column Definitions
      */
     public $col_id = 'id';
+    public $col_name = 'name';
 
     /**
      * The default db table class to use
@@ -191,6 +192,11 @@ class Proposalgen_Model_Mapper_Rms_Provider extends My_Model_Mapper_Abstract
      */
     public function fetchAll ($where = null, $order = null, $count = 25, $offset = null)
     {
+        if (!$order)
+        {
+            $order = "{$this->col_name} ASC";
+        }
+
         $resultSet = $this->getDbTable()->fetchAll($where, $order, $count, $offset);
         $entries   = array();
         foreach ($resultSet as $row)

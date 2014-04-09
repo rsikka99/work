@@ -84,6 +84,11 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
 
         $form = $uploadService->getForm();
 
+        if (isset($this->_mpsSession->lastSelectedRmsProviderId))
+        {
+            $form->getElement('rmsProviderId')->setValue($this->_mpsSession->lastSelectedRmsProviderId);
+        }
+
         if ($this->getRequest()->isPost())
         {
             $values = $this->getRequest()->getPost();
@@ -94,12 +99,14 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
             }
             else if (isset($values ["performUpload"]) && !($rmsUpload instanceof Proposalgen_Model_Rms_Upload))
             {
+                $this->_mpsSession->lastSelectedRmsProviderId = $values['rmsProviderId'];
+
                 /*
                  * Handle Upload
                  */
                 if ($form->isValid($values))
                 {
-                    $success = $uploadService->processUpload($values, $this->_identity->dealerId);
+                    $success                                      = $uploadService->processUpload($values, $this->_identity->dealerId);
 
                     /**
                      * Log how much time it took
@@ -718,7 +725,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                                 $rmsUploadRowMapper->save($rmsUploadRow);
 
 
-                                $deviceInstance->useUserData        = true;
+                                $deviceInstance->useUserData                     = true;
                                 $deviceInstance->isCapableOfReportingTonerLevels = $formValues['reportsTonerLevels'];
                                 $deviceInstanceMapper->save($deviceInstance);
                             }

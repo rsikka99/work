@@ -81,11 +81,15 @@ class Proposalgen_Service_Rms_Upload
             // Get the appropriate service based on the RMS provider
             switch ((int)$this->_rmsProviderId)
             {
-                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET :
-                    $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET;
+                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_THREE:
+                    $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_THREE;
                     $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintFleet();
                     break;
-                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_FMAUDIT :
+                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_TWO:
+                    $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_PRINTFLEET_TWO;
+                    $uploadCsvService = new Proposalgen_Service_Rms_Upload_PrintFleetLegacy();
+                    break;
+                case Proposalgen_Model_Rms_Provider::RMS_PROVIDER_FMAUDIT:
                     $uploadProviderId = Proposalgen_Model_Rms_Provider::RMS_PROVIDER_FMAUDIT;
                     $uploadCsvService = new Proposalgen_Service_Rms_Upload_FmAudit();
                     break;
@@ -196,7 +200,7 @@ class Proposalgen_Service_Rms_Upload
                                 /*
                                  * Check and insert RMS device
                                  */
-                                if ($line->rmsModelId > 0)
+                                if (strlen($line->rmsModelId) > 0)
                                 {
                                     $rmsDevice = $rmsDeviceMapper->find(array($uploadProviderId, $line->rmsModelId));
                                     if ($rmsDevice instanceof Proposalgen_Model_Rms_Device)
@@ -232,7 +236,19 @@ class Proposalgen_Service_Rms_Upload
                                     $rmsUploadRow->manufacturerId = $manufacturers[0]->id;
                                 }
 
-                                $rmsUploadRowMapper->insert($rmsUploadRow);
+                                try
+                                {
+                                    $rmsUploadRowMapper->insert($rmsUploadRow);
+                                }
+                                catch (Exception $e)
+                                {
+                                    if (isset($rmsDevice) && $rmsDevice instanceof Proposalgen_Model_Rms_Device)
+                                    {
+                                        Tangent_Log::crit(print_r($rmsDevice->toArray(), true));
+                                    }
+                                    Tangent_Log::crit(print_r($rmsUploadRow->toArray(), true));
+                                    throw $e;
+                                }
 
 
                                 /*
@@ -467,8 +483,8 @@ class Proposalgen_Service_Rms_Upload
                 }
                 catch (Exception $e)
                 {
-                    Tangent_Log::logException($e);
                     $db->rollBack();
+                    Tangent_Log::logException($e);
                     $this->errorMessages = "There was an error parsing your file. If this continues to happen please reference this id when requesting support: " . Tangent_Log::getUniqueId();
                 }
             }
