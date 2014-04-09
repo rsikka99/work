@@ -3,7 +3,7 @@ Version Pending Changes
 
 Version 1.4.11
 ==============
-* Added something
+* Added support for PrintFleet 3.x csv uploads
 
 Template Change log
 ===================
