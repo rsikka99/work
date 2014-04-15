@@ -189,10 +189,10 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
     public function __construct ()
     {
         $filters            = array(
-            'rmsModelId'       => array(
+            'rmsModelId'     => array(
                 'StringTrim',
             ),
-            'isManaged'        => array(
+            'isManaged'      => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Callback',
@@ -205,7 +205,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int',
             ),
-            'isColor'          => array(
+            'isColor'        => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',
@@ -215,7 +215,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int'
             ),
-            'isCopier'         => array(
+            'isCopier'       => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',
@@ -225,7 +225,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int'
             ),
-            'isFax'            => array(
+            'isFax'          => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',
@@ -235,7 +235,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int'
             ),
-            'isA3'             => array(
+            'isA3'           => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',
@@ -245,7 +245,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int'
             ),
-            'isDuplex'         => array(
+            'isDuplex'       => array(
                 'StringTrim',
                 array(
                     'filter'  => 'Boolean',
@@ -255,19 +255,19 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
                 ),
                 'Int'
             ),
-            'ppm_black'        => array(
+            'ppmBlack'       => array(
                 'StringTrim',
                 'Int'
             ),
-            'ppm_color'        => array(
+            'ppmColor'       => array(
                 'StringTrim',
                 'Int'
             ),
-            'wattspowernormal' => array(
+            'wattsOperating' => array(
                 'StringTrim',
                 'Int'
             ),
-            'wattspoweridle'   => array(
+            'wattsIdle'      => array(
                 'StringTrim',
                 'Int'
             )

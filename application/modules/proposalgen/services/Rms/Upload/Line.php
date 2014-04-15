@@ -820,6 +820,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             $this->pageCoverageMonochrome = $params->pageCoverageMonochrome;
         }
 
+        if (isset($params->pageCoverageColor) && !is_null($params->pageCoverageColor))
+        {
+            $this->pageCoverageColor = $params->pageCoverageColor;
+        }
+
         if (isset($params->pageCoverageCyan) && !is_null($params->pageCoverageCyan))
         {
             $this->pageCoverageCyan = $params->pageCoverageCyan;
@@ -879,7 +884,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "isA3"                   => $this->isA3,
             "isDuplex"               => $this->isDuplex,
             "isManaged"              => $this->isManaged,
-            "managementProgram"              => $this->managementProgram,
+            "managementProgram"      => $this->managementProgram,
             "manufacturer"           => $this->manufacturer,
             "rawDeviceName"          => $this->rawDeviceName,
             "modelName"              => $this->modelName,
@@ -1102,9 +1107,33 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
          * Sanitize Coverages
          */
         $this->pageCoverageMonochrome = ($this->pageCoverageMonochrome == 5) ? null : $this->pageCoverageMonochrome;
-        $this->pageCoverageCyan       = ($this->pageCoverageCyan == 5) ? null : $this->pageCoverageCyan;
-        $this->pageCoverageMagenta    = ($this->pageCoverageMagenta == 5) ? null : $this->pageCoverageMagenta;
-        $this->pageCoverageYellow     = ($this->pageCoverageYellow == 5) ? null : $this->pageCoverageYellow;
+
+        if ($this->pageCoverageColor > 0)
+        {
+            $this->pageCoverageColor = ($this->pageCoverageColor == 15) ? null : $this->pageCoverageColor;
+            $individualPageCoverage  = null;
+
+            if ($this->pageCoverageColor > 0)
+            {
+                $individualPageCoverage = $this->pageCoverageColor / 3;
+            }
+
+            $this->pageCoverageCyan    = $individualPageCoverage;
+            $this->pageCoverageMagenta = $individualPageCoverage;
+            $this->pageCoverageYellow  = $individualPageCoverage;
+        }
+        else
+        {
+            $this->pageCoverageCyan    = ($this->pageCoverageCyan == 5) ? null : $this->pageCoverageCyan;
+            $this->pageCoverageMagenta = ($this->pageCoverageMagenta == 5) ? null : $this->pageCoverageMagenta;
+            $this->pageCoverageYellow  = ($this->pageCoverageYellow == 5) ? null : $this->pageCoverageYellow;
+
+            if ($this->pageCoverageCyan > 0 || $this->pageCoverageMagenta > 0 || $this->pageCoverageYellow > 0)
+            {
+                $this->pageCoverageColor = $this->pageCoverageCyan + $this->pageCoverageMagenta + $this->pageCoverageYellow;
+            }
+        }
+
 
         return true;
     }
