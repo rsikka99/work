@@ -51,6 +51,7 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'isduplex'             => 'isDuplex',
         'manufacturer'         => 'manufacturer',
         'modelname'            => 'modelName',
+        'rawdevicename'        => 'rawDeviceName',
         'ppmblack'             => 'ppmBlack',
         'ppmcolor'             => 'ppmColor',
         'serialnumber'         => 'serialNumber',
