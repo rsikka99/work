@@ -378,6 +378,26 @@ class Proposalgen_Service_ManageMasterDevices
         try
         {
             /**
+             * If we need to insert the master device, do it here
+             */
+            if (!$masterDevice instanceof Proposalgen_Model_MasterDevice)
+            {
+                if ($this->_isAdmin)
+                {
+                    $validatedData['isSystemDevice'] = 1;
+                }
+                else
+                {
+                    $validatedData['isSystemDevice'] = 0;
+                }
+
+                $validatedData['dateCreated'] = date('Y-m-d H:i:s');
+                $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
+                $masterDevice                 = new Proposalgen_Model_MasterDevice($validatedData);
+                $this->masterDeviceId         = $masterDeviceMapper->insert($masterDevice);
+            }
+
+            /**
              * Save Toners
              */
             $tonerIds = explode(',', $tonersList);
@@ -505,22 +525,6 @@ class Proposalgen_Service_ManageMasterDevices
                     $masterDevice->populate($validatedData);
                     $masterDevice->recalculateMaximumRecommendedMonthlyPageVolume();
                     $masterDeviceMapper->save($masterDevice);
-                }
-                else
-                {
-                    if ($this->_isAdmin)
-                    {
-                        $validatedData['isSystemDevice'] = 1;
-                    }
-                    else
-                    {
-                        $validatedData['isSystemDevice'] = 0;
-                    }
-
-                    $validatedData['dateCreated'] = date('Y-m-d H:i:s');
-                    $validatedData['userId']      = Zend_Auth::getInstance()->getIdentity()->id;
-                    $masterDevice                 = $masterDeviceMapper->find($this->masterDeviceId);
-                    $this->masterDeviceId         = $masterDeviceMapper->insert(new Proposalgen_Model_MasterDevice($validatedData));
                 }
             }
 
