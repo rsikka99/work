@@ -257,7 +257,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
                 $fieldList [] = $isColor ? $this->view->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : "-";
                 $fieldList [] = $colorCost;
                 $fieldList [] = $colorYield;
-                $fieldList [] = $isColor ? $this->view->currency($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-";
+                $fieldList [] = $isColor ? $this->view->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->colorCostPerPage) : "-";
                 $fieldList [] = $isColor ? $this->view->currency($deviceInstance->calculateMonthlyColorCost($assessmentViewModel->getCostPerPageSettingForDealer())) : "-";
                 $fieldList [] = isset($tonerSkus['black']['dealerSku']) ? $tonerSkus['black']['dealerSku'] : '-';
                 $fieldList [] = isset($tonerSkus['cyan']['dealerSku']) ? $tonerSkus['cyan']['dealerSku'] : '-';

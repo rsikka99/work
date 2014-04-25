@@ -208,7 +208,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
                 <div class="right"><?php echo $blackYield ?></div>
             </td>
             <td class="column5 mono">
-                <div class="right"><?php echo $this->formatPageVolume($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
+                <div class="right"><?php echo $this->formatCostPerPage($deviceInstance->calculateCostPerPage($assessmentViewModel->getCostPerPageSettingForDealer())->getCostPerPage()->monochromeCostPerPage); ?></div>
             </td>
             <td class="column6 mono">
                 <div class="right">
