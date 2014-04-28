@@ -665,14 +665,12 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
                 'pmd.*',
             ))
                                       ->joinLeft(array('dmda' => 'dealer_master_device_attributes'), "pmd.id = dmda.masterDeviceId AND dmda.dealerId = {$dealerId}", array(
-                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, pmd.partsCostPerPage, {$defaultPartsCostPerPage})",
-                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, pmd.laborCostPerPage, {$defaultLaborCostPerPage})",
+                "calculatedPartsCostPerPage"    => "COALESCE(dmda.partsCostPerPage, {$defaultPartsCostPerPage})",
+                "calculatedLaborCostPerPage"    => "COALESCE(dmda.laborCostPerPage, {$defaultLaborCostPerPage})",
                 "isUsingDealerPartsCostPerPage" => "(dmda.partsCostPerPage IS NOT NULL)",
                 "isUsingDealerLaborCostPerPage" => "(dmda.laborCostPerPage IS NOT NULL)",
-                "isUsingDeviceLaborCostPerPage" => "(pmd.laborCostPerPage IS NOT NULL AND dmda.laborCostPerPage IS NULL)",
-                "isUsingDevicePartsCostPerPage" => "(pmd.partsCostPerPage IS NOT NULL AND dmda.partsCostPerPage IS NULL)",
-                "isUsingReportLaborCostPerPage" => "(pmd.laborCostPerPage IS NULL AND dmda.laborCostPerPage IS NULL)",
-                "isUsingReportPartsCostPerPage" => "(pmd.partsCostPerPage IS NULL AND dmda.partsCostPerPage IS NULL)"
+                "isUsingReportLaborCostPerPage" => "(dmda.laborCostPerPage IS NULL)",
+                "isUsingReportPartsCostPerPage" => "(dmda.partsCostPerPage IS NULL)"
             ))
                                       ->where("pmd.id = ? ", $masterDeviceId);
 

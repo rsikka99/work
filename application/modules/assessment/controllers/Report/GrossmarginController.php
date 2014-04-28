@@ -49,7 +49,7 @@ class Assessment_Report_GrossmarginController extends Assessment_Library_Control
         }
         catch (Exception $e)
         {
-            throw new Exception("Could not generate gross margin report.");
+            throw new Exception("Could not generate gross margin report.", 0, $e);
         }
     }
 

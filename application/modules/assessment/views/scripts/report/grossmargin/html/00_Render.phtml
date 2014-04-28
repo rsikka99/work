@@ -20,13 +20,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading"><?php echo $brandName ?> Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->currency($assessmentViewModel->getMPSBlackAndWhiteCPP(), 4); ?></div>
+            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSBlackAndWhiteCPP()); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Cost:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined, 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Combined); ?></div>
         </td>
     </tr>
     <tr>
@@ -34,13 +34,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading"><?php echo $brandName ?> Color CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->currency($assessmentViewModel->getMPSColorCPP(), 4); ?></div>
+            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getMPSColorCPP()); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Total Revenue:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined, 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyRevenue()->Combined); ?></div>
         </td>
     </tr>
     <tr>
@@ -48,13 +48,13 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading">Weighted Black And White CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite, 4); ?></div>
+            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->BlackAndWhite); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Monthly Profit:</div>
         </td>
         <td class="column4">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit(), 2); ?></div>
+            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginMonthlyProfit()); ?></div>
         </td>
     </tr>
     <tr>
@@ -62,7 +62,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             <div class="heading">Weighted Color CPP:</div>
         </td>
         <td class="column2">
-            <div><?php echo $this->currency($assessmentViewModel->getGrossMarginWeightedCPP()->Color, 4); ?></div>
+            <div><?php echo $this->formatCostPerPage($assessmentViewModel->getGrossMarginWeightedCPP()->Color); ?></div>
         </td>
         <td class="column3">
             <div class="heading">Overall Margin:</div>
@@ -212,7 +212,7 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
             </td>
             <td class="column6 mono">
                 <div class="right">
-                    <?php echo $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer()), 2); ?></div>
+                    <?php echo $this->currency($deviceInstance->getMonthlyBlackAndWhiteCost($assessmentViewModel->getCostPerPageSettingForDealer())); ?></div>
             </td>
 
             <!-- Color -->
@@ -270,14 +270,14 @@ $this->headLink()->appendStylesheet($this->baseUrl("css/reports/reports.css")); 
         </td>
         <td colspan="3"></td>
         <td class="column2">
-            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite, 2); ?></div>
+            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->BlackAndWhite); ?></div>
         </td>
         <td>
             <div class="center"><?php echo $this->formatPageVolume($assessmentViewModel->getDevices()->purchasedDeviceInstances->getPageCounts()->getColorPageCount()->getMonthly()); ?></div>
         </td>
         <td colspan="3"></td>
         <td>
-            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color, 2); ?></div>
+            <div class="right"><?php echo $this->currency($assessmentViewModel->getGrossMarginTotalMonthlyCost()->Color); ?></div>
         </td>
         <td colspan="2"></td>
     </tr>

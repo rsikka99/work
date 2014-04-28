@@ -806,8 +806,6 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         "masterID"                   => $masterDevice->id,
                         "manufacturerId"             => $masterDevice->getManufacturer()->fullname,
                         "printer_model"              => $masterDevice->modelName,
-                        "labor_cost_per_page"        => number_format($masterDevice->laborCostPerPage, 4),
-                        "parts_cost_per_page"        => number_format($masterDevice->partsCostPerPage, 4),
                         "labor_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->laborCostPerPage, 4),
                         "parts_cost_per_page_dealer" => number_format($masterDevice->getDealerAttributes()->partsCostPerPage, 4));
                     $i++;

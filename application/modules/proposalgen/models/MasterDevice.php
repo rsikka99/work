@@ -137,16 +137,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     public $isCapableOfReportingTonerLevels;
 
     /**
-     * @var float
-     */
-    public $partsCostPerPage;
-
-    /**
-     * @var float
-     */
-    public $laborCostPerPage;
-
-    /**
      * @var int
      */
     public $calculatedLaborCostPerPage;
@@ -155,11 +145,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * @var int
      */
     public $isUsingDealerLaborCostPerPage;
-
-    /**
-     * @var int
-     */
-    public $isUsingDeviceLaborCostPerPage;
 
     /**
      * @var int
@@ -175,11 +160,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
      * @var int
      */
     public $isUsingDealerPartsCostPerPage;
-
-    /**
-     * @var int
-     */
-    public $isUsingDevicePartsCostPerPage;
 
     /**
      * @var int
@@ -407,15 +387,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             $this->isCapableOfReportingTonerLevels = $params->isCapableOfReportingTonerLevels;
         }
 
-        if (isset($params->partsCostPerPage) && !is_null($params->partsCostPerPage))
-        {
-            $this->partsCostPerPage = $params->partsCostPerPage;
-        }
-
-        if (isset($params->laborCostPerPage) && !is_null($params->laborCostPerPage))
-        {
-            $this->laborCostPerPage = $params->laborCostPerPage;
-        }
         if (isset($params->calculatedLaborCostPerPage) && !is_null($params->calculatedLaborCostPerPage))
         {
             $this->calculatedLaborCostPerPage = $params->calculatedLaborCostPerPage;
@@ -424,11 +395,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (isset($params->isUsingDealerLaborCostPerPage) && !is_null($params->isUsingDealerLaborCostPerPage))
         {
             $this->isUsingDealerLaborCostPerPage = $params->isUsingDealerLaborCostPerPage;
-        }
-
-        if (isset($params->isUsingDeviceLaborCostPerPage) && !is_null($params->isUsingDeviceLaborCostPerPage))
-        {
-            $this->isUsingDeviceLaborCostPerPage = $params->isUsingDeviceLaborCostPerPage;
         }
 
         if (isset($params->isUsingReportLaborCostPerPage) && !is_null($params->isUsingReportLaborCostPerPage))
@@ -444,11 +410,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         if (isset($params->isUsingDealerPartsCostPerPage) && !is_null($params->isUsingDealerPartsCostPerPage))
         {
             $this->isUsingDealerPartsCostPerPage = $params->isUsingDealerPartsCostPerPage;
-        }
-
-        if (isset($params->isUsingDevicePartsCostPerPage) && !is_null($params->isUsingDevicePartsCostPerPage))
-        {
-            $this->isUsingDevicePartsCostPerPage = $params->isUsingDevicePartsCostPerPage;
         }
 
         if (isset($params->isUsingReportPartsCostPerPag) && !is_null($params->isUsingReportPartsCostPerPag))
@@ -484,8 +445,6 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
             "isLeased"                            => $this->isLeased,
             "leasedTonerYield"                    => $this->leasedTonerYield,
             "isCapableOfReportingTonerLevels"     => $this->isCapableOfReportingTonerLevels,
-            "partsCostPerPage"                    => $this->partsCostPerPage,
-            "laborCostPerPage"                    => $this->laborCostPerPage,
         );
     }
 
