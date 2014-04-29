@@ -430,12 +430,6 @@ class Proposalgen_ManagedevicesController extends Tangent_Controller_Action
                 $forms['suppliesAndService'] = $manageMasterDeviceService->getSuppliesAndServicesForm();
                 $tonersList                  = $formData['suppliesAndService']['tonersList'];
 
-                if ($formData['deviceAttributes']['launchDate'] != '')
-                {
-                    $launch_date                                = new Zend_Date($formData['deviceAttributes']['launchDate']);
-                    $formData['deviceAttributes']['launchDate'] = $launch_date->toString('yyyy-MM-dd');
-                }
-
                 $errorMessages = $manageMasterDeviceService->validateToners($tonersList, $formData['suppliesAndService']['tonerConfigId'], $manufacturerId, $formData['suppliesAndService']['isLeased']);
 
                 if ($errorMessages != null)
