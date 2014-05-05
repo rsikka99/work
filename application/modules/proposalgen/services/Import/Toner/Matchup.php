@@ -95,17 +95,17 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
             if ($this->_inputFilter->isValid())
             {
                 $oemTonerData                           = array(
-                    'sku'              => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_OEM_TONER_SKU),
-                    'manufacturerName' => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_MANUFACTURER),
+                    'sku'              => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_OEM_TONER_SKU),
+                    'manufacturerName' => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_MANUFACTURER),
                 );
                 $parsedTonerData['parsedToners']['oem'] = $this->_parseTonerData($oemTonerData);
 
                 $compTonerData                           = array(
-                    'sku'              => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU),
-                    'cost'             => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_COST),
-                    'yield'            => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_YIELD),
-                    'manufacturerName' => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME),
-                    'dealerSku'        => $this->_inputFilter->getEscaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU),
+                    'sku'              => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_SKU),
+                    'cost'             => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_COST),
+                    'yield'            => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_YIELD),
+                    'manufacturerName' => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_VENDOR_NAME),
+                    'dealerSku'        => $this->_inputFilter->getUnescaped(self::TONER_MATCHUP_COMPATIBLE_DEALER_SKU),
                 );
                 $parsedTonerData['parsedToners']['comp'] = $this->_parseTonerData($compTonerData);
             }
@@ -136,7 +136,7 @@ class Proposalgen_Service_Import_Toner_Matchup extends Proposalgen_Service_Impor
                 );
             }
 
-            return array_merge($this->_inputFilter->getEscaped(), $parsedTonerData);
+            return array_merge($this->_inputFilter->getUnescaped(), $parsedTonerData);
         }
         catch (Exception $e)
         {

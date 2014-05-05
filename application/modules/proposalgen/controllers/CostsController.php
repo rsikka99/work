@@ -678,6 +678,7 @@ class Proposalgen_CostsController extends Tangent_Controller_Action
                 catch (Exception $e)
                 {
                     $db->rollback();
+                    Tangent_Log::logException($e);
                     $this->_flashMessenger->addMessage(array("error" => "An error has occurred during the update and your changes were not applied. Please review your file and try again."));
                 }
                 $matchupService->closeFiles();
