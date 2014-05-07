@@ -1,4 +1,10 @@
-<?php $rmsUpload = $this->rmsUpload; ?>
+<?php
+/* @var $rmsUpload Proposalgen_Model_Rms_Upload */
+$rmsUpload = $this->rmsUpload;
+
+/* @var $invalidDevices Proposalgen_Service_Rms_Upload_Line[] */
+$invalidDevices = $this->invalidDevices;
+?>
 <?php if ($rmsUpload instanceof Proposalgen_Model_Rms_Upload) : ?>
     <div class="well">
         <h1>Upload Complete</h1>
@@ -7,17 +13,37 @@
             "<?php echo $this->escape($rmsUpload->fileName); ?>". There were <strong><?php echo number_format($rmsUpload->validRowCount); ?></strong> valid
             devices
             imported.</p>
+
         <?php if ($rmsUpload->invalidRowCount > 0) : ?>
             <p>The CSV file that was uploaded also contained <strong><?php echo number_format($rmsUpload->invalidRowCount); ?></strong> invalid rows.</p>
         <?php endif; ?>
-        <?php if ($rmsUpload->invalidRowCount > 0) : ?>
+
+        <?php if ($rmsUpload->invalidRowCount > 0 && $rmsUpload->validRowCount > 1) : ?>
             <?php $this->headScript()->captureStart('append', 'text/javascript'); ?>
             var rmsUploadId = <?php echo $rmsUpload->id; ?>
             <?php $this->headScript()->captureEnd(); ?>
             <?php $this->headScript()->appendFile($this->baseUrl('js/proposalgen/fleet/excludedRows.js')); ?>
             <table id="excludedTable"></table>
             <div id="excludedPager"></div>
+        <?php elseif ($rmsUpload->invalidRowCount > 0 && is_array($invalidDevices)) : ?>
+            <table class="table table-striped tabled-bordered">
+                <thead>
+                <tr>
+                    <th>CSV Line Number</th>
+                    <th>Error Message</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($invalidDevices as $invalidDevice) : ?>
+                    <tr>
+                        <td><?= $invalidDevice->csvLineNumber; ?></td>
+                        <td><?= $invalidDevice->validationErrorMessage; ?></td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php endif; ?>
+
         <?php echo $this->navigationForm; ?>
     </div>
 

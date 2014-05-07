@@ -106,7 +106,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                  */
                 if ($form->isValid($values))
                 {
-                    $success                                      = $uploadService->processUpload($values, $this->_identity->dealerId);
+                    $success = $uploadService->processUpload($values, $this->_identity->dealerId);
 
                     /**
                      * Log how much time it took
@@ -126,6 +126,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                     }
                     else
                     {
+                        $this->view->invalidDevices = $uploadService->invalidRows;
                         $this->_flashMessenger->addMessage(array("danger" => $uploadService->errorMessages));
                     }
 

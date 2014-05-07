@@ -23,6 +23,7 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'Y-m-d\TH:i:s.uO',
         DateTime::ISO8601,
         'm/d/Y G:i',
+        "m/d/Y h:i:s A",
     );
 
     /**

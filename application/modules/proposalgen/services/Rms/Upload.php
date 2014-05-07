@@ -40,6 +40,11 @@ class Proposalgen_Service_Rms_Upload
      */
     public $errorMessages;
 
+    /**
+     * @var array
+     */
+    public $invalidRows = array();
+
 
     /**
      * @param int                               $userId
@@ -153,6 +158,7 @@ class Proposalgen_Service_Rms_Upload
                          */
                         $this->rmsUpload->invalidRowCount = count($uploadCsvService->invalidCsvLines);
                         $this->rmsUpload->validRowCount   = count($uploadCsvService->validCsvLines);
+                        $this->invalidRows                = $uploadCsvService->invalidCsvLines;
 
                         if ($this->rmsUpload->validRowCount < 2)
                         {
