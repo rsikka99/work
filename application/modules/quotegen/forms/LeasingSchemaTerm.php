@@ -37,8 +37,7 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
         $this->addElement('text', 'term', array(
             'label'      => 'New Term:',
             'required'   => true,
-            'class'      => 'span1',
-            'maxlength'  => 3,
+            'class'      => 'span2',
             'filters'    => array(
                 'StringTrim',
                 'StripTags'
@@ -64,25 +63,17 @@ class Quotegen_Form_LeasingSchemaTerm extends EasyBib_Form
             $this->addElement('text', "rate{$leasingSchemaRangeId}", array(
                 'label'      => 'Rate:',
                 'required'   => true,
-                'maxlength'  => 6,
                 'filters'    => array(
                     'StringTrim',
                     'StripTags'
                 ),
-                'class'      => 'span1',
+                'class'      => 'span2 text-right',
                 'validators' => array(
-                    array(
-                        'validator' => 'StringLength',
-                        'options'   => array(
-                            1,
-                            6
-                        )
-                    ),
                     array(
                         'validator' => 'Between',
                         'options'   => array(
-                            0.0001,
-                            1.0000
+                            0.00001,
+                            1.00000
                         )
                     )
                 )

@@ -23,21 +23,13 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
         $this->addElement('text', 'range', array(
             'label'      => 'New Range:',
             'required'   => true,
-            'class'      => 'span1',
-            'maxlength'  => 6,
+            'class'      => 'span2 text-right',
             'style'      => 'position: relative; left: -4px;',
             'filters'    => array(
                 'StringTrim',
                 'StripTags'
             ),
             'validators' => array(
-                array(
-                    'validator' => 'StringLength',
-                    'options'   => array(
-                        1,
-                        6
-                    )
-                ),
                 array(
                     'validator' => 'Digits',
                     'message'   => 'Please enter a numeric value.'
@@ -52,25 +44,17 @@ class Quotegen_Form_LeasingSchemaRange extends EasyBib_Form
             $this->addElement('text', "rate{$leasingSchemaTermId}", array(
                 'label'      => 'Rate:',
                 'required'   => true,
-                'maxlength'  => 6,
                 'filters'    => array(
                     'StringTrim',
                     'StripTags'
                 ),
-                'class'      => 'span1',
+                'class'      => 'span2 text-right',
                 'validators' => array(
-                    array(
-                        'validator' => 'StringLength',
-                        'options'   => array(
-                            1,
-                            6
-                        )
-                    ),
                     array(
                         'validator' => 'Between',
                         'options'   => array(
-                            0.0001,
-                            1.0000
+                            0.00001,
+                            1.00000
                         )
                     )
                 )
