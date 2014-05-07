@@ -292,18 +292,23 @@ function loadSuppliesAndService()
         buttonicon   : "ui-icon-pencil",
         onClickButton: function ()
         {
-            $('#availableTonersId').val(jQuery("#assignedToners").jqGrid('getGridParam', 'selrow'));
-            var rowdata = $("#assignedToners").jqGrid('getGridParam', 'selrow');
+            var rowData = assignedTonersjQuery.jqGrid('getGridParam', 'selrow');
 
-            if (rowdata)
+            if (rowData)
             {
-                var data = $("#assignedToners").jqGrid('getRowData', rowdata);
+                var data = $("#assignedToners").jqGrid('getRowData', rowData);
+
+
                 clearForm("availableTonersForm");
                 populateForm("availableToners", data);
+
+
+
                 $('#availableTonersTitle').html("Edit Toner");
+
                 document.getElementById("availableTonersdealerCost").parentNode.parentNode.setAttribute("style", "display:inline-block");
-                var systemCostLabel = $("label[for='availableTonerssystemCost']");
-                systemCostLabel.text("System Cost");
+
+                var systemCostLabel = $("label[for='availableTonerssystemCost']").text("System Cost");
 
                 // If it is not a system device or we are an admin
                 if (data['isSystemDevice'] == 0 || isSaveAndApproveAdmin)
@@ -331,6 +336,8 @@ function loadSuppliesAndService()
                 {
                     $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none')
                 }
+
+                $('#availableTonersId').val(data['id']);
 
                 $('#availableTonersModal').modal('show');
             }
@@ -730,12 +737,11 @@ function loadSuppliesAndService()
         buttonicon   : "ui-icon-pencil",
         onClickButton: function ()
         {
-            $('#availableTonersId').val(jQuery("#availableToners").jqGrid('getGridParam', 'selrow'));
-            var rowdata = $("#availableToners").jqGrid('getGridParam', 'selrow');
+            var rowData = availableToners.jqGrid('getGridParam', 'selrow');
 
-            if (rowdata)
+            if (rowData)
             {
-                var data = $("#availableToners").jqGrid('getRowData', rowdata);
+                var data = $("#availableToners").jqGrid('getRowData', rowData);
                 clearForm("availableTonersForm");
                 populateForm("availableToners", data);
                 $('#availableTonersTitle').html("Edit Toner");
@@ -769,6 +775,8 @@ function loadSuppliesAndService()
                     document.getElementById("availableTonersyield").setAttribute("readonly", "readonly");
                     document.getElementById("availableTonerssystemCost").setAttribute("readonly", "readonly");
                 }
+
+                $('#availableTonersId').val(data['id']);
 
                 $('#availableTonersModal').modal('show');
             }

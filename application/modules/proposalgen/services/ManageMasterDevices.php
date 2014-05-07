@@ -833,7 +833,7 @@ class Proposalgen_Service_ManageMasterDevices
                     $validData['dealerCost'] = new Zend_Db_Expr("NULL");
                 }
                 // If we are adding a new toner
-                if ($validData['id'] == '')
+                if ($validData['Id'] == '')
                 {
                     $toner = new Proposalgen_Model_Toner();
                     $toner->populate($validData);
@@ -854,8 +854,8 @@ class Proposalgen_Service_ManageMasterDevices
                     $toner->tonerColorId = $validData['tonerColorId'];
                     $toner->userId       = Zend_Auth::getInstance()->getIdentity()->id;
 
-                    $validData['id'] = $tonerMapper->insert($toner);
-                    $toner->id       = (int)$validData['id'];
+                    $validData['Id'] = $tonerMapper->insert($toner);
+                    $toner->id       = (int)$validData['Id'];
 
                     /**
                      * Map The toner
@@ -876,9 +876,9 @@ class Proposalgen_Service_ManageMasterDevices
                     }
                 }
                 // We are editing a toner
-                else if ($validData['id'] > 0)
+                else if ($validData['Id'] > 0)
                 {
-                    $toner = $tonerMapper->find($validData['id']);
+                    $toner = $tonerMapper->find($validData['Id']);
 
                     if ($toner)
                     {
@@ -907,7 +907,7 @@ class Proposalgen_Service_ManageMasterDevices
                 }
 
                 // Save to dealer Toner Attributes
-                $dealerTonerAttributes = $dealerTonerAttributesMapper->findTonerAttributeByTonerId($validData['id'], $this->_dealerId);
+                $dealerTonerAttributes = $dealerTonerAttributesMapper->findTonerAttributeByTonerId($validData['Id'], $this->_dealerId);
 
                 if ($dealerTonerAttributes)
                 {
@@ -929,7 +929,7 @@ class Proposalgen_Service_ManageMasterDevices
                 else
                 {
                     $dealerTonerAttributes            = new Proposalgen_Model_Dealer_Toner_Attribute();
-                    $dealerTonerAttributes->tonerId   = $validData['id'];
+                    $dealerTonerAttributes->tonerId   = $validData['Id'];
                     $dealerTonerAttributes->dealerId  = $this->_dealerId;
                     $dealerTonerAttributes->cost      = $validData['dealerCost'];
                     $dealerTonerAttributes->dealerSku = $validData['dealerSku'];
