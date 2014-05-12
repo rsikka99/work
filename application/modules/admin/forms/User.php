@@ -17,16 +17,24 @@ class Admin_Form_User extends EasyBib_Form
      */
     protected $_formMode = self::MODE_CREATE;
 
+    protected $_defaultDealerId = 0;
+
 
     /**
      * @param null|int   $formMode
+     * @param bool|int   $dealerId
      * @param null|array $options
      */
-    public function __construct ($formMode = null, $options = null)
+    public function __construct ($formMode = null, $dealerId = false, $options = null)
     {
         if (null !== $formMode)
         {
             $this->_formMode = $formMode;
+        }
+
+        if ($dealerId > 0)
+        {
+            $this->_defaultDealerId = $dealerId;
         }
 
         parent::__construct($options);
@@ -139,12 +147,12 @@ class Admin_Form_User extends EasyBib_Form
         if ($dealers)
         {
             $this->addElement('select', 'dealerId', array(
-                    'label'        => 'Dealer:',
-                    'class'        => 'input-medium',
-                    'multiOptions' => $dealers,
-                    'required'     => true,
-                    'value'        => $firstDealerId)
-            );
+                'label'        => 'Dealer:',
+                'class'        => 'input-medium',
+                'multiOptions' => $dealers,
+                'required'     => true,
+                'value'        => ($this->_defaultDealerId > 0) ? $this->_defaultDealerId : $firstDealerId
+            ));
         }
 
         // No need to edit this when creating a user

@@ -817,6 +817,22 @@ WHERE `toners`.`id` IN ({$tonerIdList})
     }
 
     /**
+     * Finds an instance of a Proposalgen_Model_Toner by it's SKU and manufacturer
+     *
+     * @param string $sku
+     * @param int    $manufacturerId
+     *
+     * @return \Proposalgen_Model_Toner
+     */
+    public function fetchBySkuAndManufacturer ($sku, $manufacturerId)
+    {
+        return $this->fetch(array(
+            "{$this->col_sku} = ?"            => "{$sku}",
+            "{$this->col_manufacturerId} = ?" => "{$manufacturerId}"
+        ));
+    }
+
+    /**
      * Exports the toner pricing for the dealership
      *
      * @param $manufacturerId

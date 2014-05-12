@@ -17,12 +17,39 @@ class Admin_DealerController extends Tangent_Controller_Action
         $paginator    = new Zend_Paginator(new My_Paginator_MapperAdapter($dealerMapper));
 
         // Gets the current page for the passed parameter
-        $paginator->setCurrentPageNumber($this->_getParam('page', 1));
+        $paginator->setCurrentPageNumber($this->getRequest()->getUserParam('page', 1));
 
         // Sets the amount of dealers that we are showing per page.
         $paginator->setItemCountPerPage(15);
 
         $this->view->paginator = $paginator;
+    }
+
+    /**
+     * Allows a user to view a dealership
+     */
+    public function viewAction ()
+    {
+        $this->view->headTitle('View Dealer');
+        $this->view->headTitle('Dealers');
+        $this->view->headTitle('System');
+        $dealerId = $this->getRequest()->getUserParam('id', false);
+
+        if ($dealerId === false)
+        {
+            $this->_flashMessenger->addMessage(array('warning' => 'You must select a dealer to edit.'));
+            $this->redirect('index');
+        }
+
+        $dealerMapper = Admin_Model_Mapper_Dealer::getInstance();
+        $dealer       = $dealerMapper->find($dealerId);
+        if (!$dealer instanceof Admin_Model_Dealer)
+        {
+            $this->_flashMessenger->addMessage(array('warning' => 'Invalid dealer selected.'));
+            $this->redirect('index');
+        }
+
+        $this->view->dealer = $dealer;
     }
 
     /**
@@ -33,7 +60,7 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->headTitle('System');
         $this->view->headTitle('Dealers');
         $this->view->headTitle('Edit Dealer');
-        $dealerId = $this->_getParam('id', false);
+        $dealerId = $this->getRequest()->getUserParam('id', false);
 
         if ($dealerId === false)
         {
@@ -69,7 +96,7 @@ class Admin_DealerController extends Tangent_Controller_Action
             $postData = $this->getRequest()->getPost();
             if (isset($postData ['cancel']))
             {
-                $this->redirector("index");
+                $this->redirector('view', null, null, array('id' => $dealerId));
             }
             else
             {
@@ -132,7 +159,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
                         // All done
                         $this->_flashMessenger->addMessage(array('success' => "{$dealer->dealerName} has been successfully updated!"));
-                        $this->redirector("index");
+                        $this->redirector('view', null, null, array('id' => $dealerId));
                     }
                     catch (Exception $e)
                     {
@@ -320,7 +347,7 @@ class Admin_DealerController extends Tangent_Controller_Action
         $this->view->headTitle('System');
         $this->view->headTitle('Dealers');
         $this->view->headTitle('Delete Dealer');
-        $dealerId = $this->_getParam('id');
+        $dealerId = $this->getRequest()->getUserParam('id');
         $dealer   = Admin_Model_Mapper_Dealer::getInstance()->find($dealerId);
 
         if ($dealerId == 1)

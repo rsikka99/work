@@ -1,0 +1,105 @@
+<?php
+/* @var $dealer Admin_Model_Dealer */
+$dealer = $this->dealer;
+?>
+<h2><?= $dealer->dealerName ?></h2>
+<div class="well">
+    <a class="btn btn-default" href="<?php echo $this->url(array('controller' => 'dealer', 'action' => 'index')) ?>">
+        <i class="icon-white icon-arrow-left"></i>
+        Go Back
+    </a>
+</div>
+
+<div class='well'>
+    <h3>
+        <a class="btn btn-warning pull-right btn-small" href="<?php echo $this->url(array('controller' => 'dealer', 'action' => 'edit', 'id' => $dealer->id)) ?>">
+            <i class="icon-white icon-pencil"></i>
+            Edit
+        </a>
+        Dealer Details
+    </h3>
+
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Has Logo</th>
+            <th>Number Of Users</th>
+            <th>User Licenses</th>
+            <th>Date Created</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><?= number_format($dealer->id) ?></td>
+            <td><?= ($dealer->dealerLogoImageId > 0) ? "Yes" : "No" ?></td>
+            <td><?= number_format($dealer->getNumberOfLicensesUsed()) ?></td>
+            <td><?= number_format($dealer->userLicenses) ?></td>
+            <td><?= $dealer->dateCreated ?></td>
+        </tr>
+        </tbody>
+    </table>
+    <h3>Users</h3>
+
+    <div class="clearfix">
+        <a class="btn btn-success pull-right btn-small create-button" href="<?php echo $this->url(array('controller' => 'user', 'action' => 'create', 'dealerId' => $dealer->id)) ?>">
+            <i class="icon-white icon-plus-sign"></i>
+            Create new
+        </a>
+    </div>
+    <?php if (count($dealer->getUsers()) > 0) : ?>
+        <div class="progress progress-striped">
+            <?php $width = count($dealer->getUsers()) / $dealer->userLicenses * 100; ?>
+            <div class="bar <?php echo (count($dealer->getUsers()) < $dealer->userLicenses) ? '' : 'bar-danger'; ?>" style="width: <?php echo ($width > 100) ? 100 : $width . '%' ?>;"></div>
+        </div>
+        <table class="table table-striped table-condensed table-bordered">
+            <thead>
+            <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Dealer Name</th>
+                <th style="width: 70px;">Login Attempts</th>
+                <th style="width: 100px;">Frozen Until</th>
+                <th style="width: 60px;">Locked</th>
+                <th style="width: 120px;">Last Seen</th>
+                <th style="width: 60px;">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($dealer->getUsers() as $user) : /* @var $user Application_Model_User */ ?>
+                <tr>
+                    <td><?php echo $user->email; ?></td>
+                    <td><?php echo $user->firstname; ?> <?php echo $user->lastname; ?></td>
+                    <td><?php echo Admin_Model_Mapper_Dealer::getInstance()->find($user->dealerId)->dealerName ?></td>
+                    <td style="text-align: center;"><?php echo $user->loginAttempts; ?></td>
+                    <td><?php echo ($user->isFrozen()) ? $user->frozenUntil : ""; ?></td>
+                    <td style="text-align: center;"><?php echo ($user->locked) ? "Yes" : "No"; ?></td>
+                    <td><?php echo ($user->lastSeen === null) ? "Never" : (new \Carbon\Carbon($user->lastSeen))->diffForHumans(); ?></td>
+                    <td>
+                        <div class="btn-group">
+                            <?php if ($user->id == 1 && $this->identity()->id !== 1) : ?>
+                                <span class="btn btn-warning btn-mini disabled"><i class="icon-pencil"></i></span>
+                            <?php else : ?>
+                                <a class="btn btn-warning btn-mini" title="Edit User" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'edit', 'id' => $user->id, 'dealerId' => $dealer->id)) ?>"><i class="icon-pencil"></i></a>
+                                <?php if ($user->id == 1) : ?>
+                                    <span class="btn btn-danger btn-mini disabled"><i class="icon-trash"></i></span>
+                                <?php else : ?>
+                                    <a class="btn btn-danger btn-mini" title="Delete User" href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'user', 'action' => 'delete', 'id' => $user->id, 'dealerId' => $dealer->id)) ?>"><i class="icon-trash"></i></a>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php else : ?>
+        <h1>There are no users</h1>
+    <?php endif; ?>
+</div>
+<div class="well">
+    <a class="btn btn-default" href="<?php echo $this->url(array('controller' => 'dealer', 'action' => 'index')) ?>">
+        <i class="icon-white icon-arrow-left"></i>
+        Go Back
+    </a>
+</div>

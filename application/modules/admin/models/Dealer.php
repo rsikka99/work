@@ -29,7 +29,7 @@ class Admin_Model_Dealer extends My_Model_Abstract
     /**
      * Date that the dealer was created in our databases
      *
-     * @var DateTime
+     * @var string
      */
     public $dateCreated;
 
@@ -44,6 +44,11 @@ class Admin_Model_Dealer extends My_Model_Abstract
      * @var Preferences_Model_Dealer_Setting
      */
     protected $_dealerSettings;
+
+    /**
+     * @var Application_Model_User[]
+     */
+    protected $_users;
 
 
     /**
@@ -145,5 +150,34 @@ class Admin_Model_Dealer extends My_Model_Abstract
         }
 
         return $publicFilePath;
+    }
+
+    /**
+     * Gets the users
+     *
+     * @return Application_Model_User[]
+     */
+    public function getUsers ()
+    {
+        if (!isset($this->_users))
+        {
+            $this->_users = Application_Model_Mapper_User::getInstance()->fetchUserListForDealer($this->id);
+        }
+
+        return $this->_users;
+    }
+
+    /**
+     * Sets the users
+     *
+     * @param Application_Model_User[] $users
+     *
+     * @return $this
+     */
+    public function setUsers ($users)
+    {
+        $this->_users = $users;
+
+        return $this;
     }
 }

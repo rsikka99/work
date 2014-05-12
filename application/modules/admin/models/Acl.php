@@ -11,6 +11,7 @@ class Admin_Model_Acl
     const RESOURCE_ADMIN_CLIENT_WILDCARD            = "admin__client__%";
     const RESOURCE_ADMIN_CLIENT_INDEX               = "admin__client__index";
     const RESOURCE_ADMIN_DEALER_INDEX               = "admin__dealer__index";
+    const RESOURCE_ADMIN_ONBOARDING_INDEX           = "admin__onboarding__index";
     const RESOURCE_ADMIN_MEMJETDEVICESWAPS_WILDCARD = "admin__memjetdeviceswaps__%";
     const RESOURCE_ADMIN_INDEX_INDEX                = "admin__index__index";
     const RESOURCE_ADMIN_LEASINGSCHEMA_INDEX        = "admin__leasingschema__index";

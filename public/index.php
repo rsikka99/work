@@ -23,7 +23,7 @@ My_Error_Handler::set();
 //error_reporting(E_ALL);
 
 // Define application environment.
-defined('APPLICATION_ENV') || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+defined('APPLICATION_ENV') || define('APPLICATION_ENV', (isset($_SERVER['php_environment_mode']) ? $_SERVER['php_environment_mode'] : 'production'));
 
 // Create application, bootstrap, and run
 $application = new Zend_Application('production', array(

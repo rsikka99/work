@@ -256,10 +256,15 @@ class Proposalgen_Model_Mapper_Manufacturer extends My_Model_Mapper_Abstract
      */
     public function searchByName ($manufacturerName)
     {
-        $results = $this->fetchAll(array("{$this->col_fullName} LIKE ?" => "%{$manufacturerName}%"));
+        $results = $this->fetchAll(array(
+            "{$this->col_fullName} LIKE ?" => "%{$manufacturerName}%"
+        ));
+
         if (count($results) < 1)
         {
-            $results = $this->fetchAll(array("{$this->col_displayName} LIKE ?" => "%{$manufacturerName}%"));
+            $results = $this->fetchAll(array(
+                "{$this->col_displayName} LIKE ?" => "%{$manufacturerName}%"
+            ));
         }
 
         return $results;

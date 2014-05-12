@@ -30,10 +30,9 @@
                     <td>
                         <div class="btn-group">
                             <?php if ($dealer->id == 1 && $this->identity()->id !== 1) : ?>
-                                <span class="btn btn-warning disabled"><i class="icon-pencil"></i></span>
-
+                                <span class="btn btn-warning disabled"><i class="icon-eye-close"></i></span>
                             <?php else : ?>
-                                <a class="btn btn-warning" title="Edit" href="<?php echo $this->url(array('action' => 'edit', 'id' => $dealer->id)); ?>"><i class="icon-pencil"></i></a>
+                                <a class="btn btn-info" title="Edit" href="<?php echo $this->url(array('action' => 'view', 'id' => $dealer->id)); ?>"><i class="icon-eye-open"></i></a>
                                 <?php if ($dealer->id == 1) : ?>
                                     <span class="btn btn-danger disabled"><i class="icon-trash"></i></span>
                                 <?php else : ?>

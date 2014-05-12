@@ -1088,6 +1088,15 @@
                                     <icon>plus-sign</icon>
                                     <visible>0</visible>
                                 </create>
+                                <view>
+                                    <label>View Dealer</label>
+                                    <module>admin</module>
+                                    <controller>dealer</controller>
+                                    <action>view</action>
+                                    <resource>admin__dealer__view</resource>
+                                    <icon>plus-sign</icon>
+                                    <visible>0</visible>
+                                </view>
                                 <edit>
                                     <label>Edit Dealer</label>
                                     <module>admin</module>

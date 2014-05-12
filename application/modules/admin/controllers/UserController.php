@@ -40,8 +40,12 @@ class Admin_UserController extends Tangent_Controller_Action
     {
         $this->view->headTitle('Users');
         $this->view->headTitle('Create User');
-        $db      = Zend_Db_Table_Abstract::getDefaultAdapter();
-        $form    = new Admin_Form_User(Admin_Form_User::MODE_CREATE);
+
+        $dealerId = $this->getRequest()->getUserParam('id', false);
+
+        $db   = Zend_Db_Table_Abstract::getDefaultAdapter();
+        $form = new Admin_Form_User(Admin_Form_User::MODE_CREATE, $dealerId);
+
         $request = $this->getRequest();
 
         if ($request->isPost())
@@ -162,7 +166,15 @@ class Admin_UserController extends Tangent_Controller_Action
             }
             else
             {
-                $this->redirector('index');
+                if ($dealerId !== false)
+                {
+                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                }
+                else
+                {
+                    $this->redirector('index');
+                }
+
             }
         }
 
@@ -176,7 +188,8 @@ class Admin_UserController extends Tangent_Controller_Action
     {
         $this->view->headTitle('Users');
         $this->view->headTitle('Delete User');
-        $userId = $this->_getParam('id', false);
+        $userId   = $this->getRequest()->getUserParam('id', false);
+        $dealerId = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
@@ -201,6 +214,7 @@ class Admin_UserController extends Tangent_Controller_Action
             $this->redirector('index');
         }
 
+
         $form = new Application_Form_Delete("Are you sure you want to delete {$user->email} ({$user->firstname} {$user->lastname})?");
 
         $request = $this->getRequest();
@@ -215,21 +229,32 @@ class Admin_UserController extends Tangent_Controller_Action
                 if ($form->isValid($values))
                 {
                     $mapper->delete($user);
-
                     $this->_flashMessenger->addMessage(array('success' => "User deleted."));
-
-                    $this->redirector('index');
                 }
                 else
                 {
                     $this->_flashMessenger->addMessage(array('danger' => 'There was an error while deleting the user'));
+                }
+
+                if ($dealerId !== false)
+                {
+                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                }
+                else
+                {
                     $this->redirector('index');
                 }
             }
             else
             {
-                // User has cancelled.
-                $this->redirector('index');
+                if ($dealerId !== false)
+                {
+                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                }
+                else
+                {
+                    $this->redirector('index');
+                }
             }
         }
 
@@ -243,19 +268,34 @@ class Admin_UserController extends Tangent_Controller_Action
     {
         $this->view->headTitle('Users');
         $this->view->headTitle('Edit User');
-        $userId = $this->_getParam('id', false);
+        $userId   = $this->getRequest()->getUserParam('id', false);
+        $dealerId = $this->getRequest()->getUserParam('dealerId', false);
 
         // If they haven't provided an id, send them back to the view all users page
         if (!$userId)
         {
             $this->_flashMessenger->addMessage(array('warning' => 'Please select a user to delete first.'));
-            $this->redirector('index');
+            if ($dealerId !== false)
+            {
+                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+            }
+            else
+            {
+                $this->redirector('index');
+            }
         }
 
         if ($userId == '1' && !$this->_currentUserIsRoot)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'Insufficient Privilege: You cannot edit the root user.'));
-            $this->redirector('index');
+            if ($dealerId !== false)
+            {
+                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+            }
+            else
+            {
+                $this->redirector('index');
+            }
         }
 
         // Get the user
@@ -280,7 +320,14 @@ class Admin_UserController extends Tangent_Controller_Action
         if (!$user)
         {
             $this->_flashMessenger->addMessage(array('danger' => 'There was an error selecting the user to delete.'));
-            $this->redirector('index');
+            if ($dealerId !== false)
+            {
+                $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+            }
+            else
+            {
+                $this->redirector('index');
+            }
         }
 
         // Create a new form with the mode and roles set
@@ -455,7 +502,14 @@ class Admin_UserController extends Tangent_Controller_Action
             else
             {
                 // User has cancelled. We could do a redirect here if we wanted.
-                $this->redirector('index');
+                if ($dealerId !== false)
+                {
+                    $this->redirector('view', 'dealer', null, array('id' => $dealerId));
+                }
+                else
+                {
+                    $this->redirector('index');
+                }
             }
         }
 
