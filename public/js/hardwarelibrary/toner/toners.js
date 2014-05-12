@@ -299,12 +299,11 @@ $(function ()
         buttonicon   : "ui-icon-pencil",
         onClickButton: function ()
         {
-            $('#availableTonersId').val(jQuery("#availableToners").jqGrid('getGridParam', 'selrow'));
-            var rowdata = $("#availableToners").jqGrid('getGridParam', 'selrow');
+            var rowData = availableTonersjQuery.jqGrid('getGridParam', 'selrow');
 
-            if (rowdata)
+            if (rowData)
             {
-                var data = $("#availableToners").jqGrid('getRowData', rowdata);
+                var data = $("#availableToners").jqGrid('getRowData', rowData);
                 clearForm("availableTonersForm");
                 populateForm("availableToners", data);
                 $('#availableTonersTitle').html("Edit Toner");
@@ -338,6 +337,8 @@ $(function ()
                 {
                     $("#availableTonerssaveAndApprove").closest("div.control-group").attr('style', 'display:none')
                 }
+
+                $('#availableTonersId').val(data['id']);
 
                 $('#tonersModal').modal('show');
             }
