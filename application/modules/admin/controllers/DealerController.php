@@ -173,7 +173,7 @@ class Admin_DealerController extends Tangent_Controller_Action
 
         if ($dealer->dealerLogoImageId > 0)
         {
-            $this->view->dealerLogoImagePath = $dealer->getDealerLogoImageFile();
+            $this->view->dealerLogoImagePath = $dealer->getDealerLogoImageFile(true);
         }
         $this->view->form = $form;
     }
@@ -212,12 +212,17 @@ class Admin_DealerController extends Tangent_Controller_Action
                     case "image/png" :
                     case "image/x-png" :
                         $uploadedImage = imagecreatefrompng($uploadedImagePath);
+                        imageAlphaBlending($uploadedImage, true);
+                        imageSaveAlpha($uploadedImage, true);
                 }
 
                 if ($uploadedImage !== null)
                 {
-                    imagepng($uploadedImage, $uploadedImagePath);
-                    $base64ImageString = chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
+                    ob_start();
+                    imagepng($uploadedImage, null, 9, PNG_ALL_FILTERS);
+                    $base64ImageString = chunk_split(base64_encode(ob_get_contents()));
+//                    $base64ImageString =  chunk_split(base64_encode(file_get_contents($uploadedImagePath)));
+                    ob_end_clean();
 
                     /**
                      * Insert the image into the database
@@ -233,6 +238,8 @@ class Admin_DealerController extends Tangent_Controller_Action
                             Admin_Model_Mapper_Image::getInstance()->delete($dealer->dealerLogoImageId);
                         }
                         $dealer->dealerLogoImageId = $imageId;
+
+                        $dealer->getDealerLogoImageFile(true);
                     }
                 }
             }
