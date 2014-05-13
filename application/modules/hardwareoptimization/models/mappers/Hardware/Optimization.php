@@ -286,6 +286,7 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
         $deviceInstanceMasterDeviceMapper = Proposalgen_Model_Mapper_Device_Instance_Master_Device::getInstance();
         $masterDeviceMapper               = Proposalgen_Model_Mapper_MasterDevice::getInstance();
         $manufacturerMapper               = Proposalgen_Model_Mapper_Manufacturer::getInstance();
+        $deviceInstanceMeterMapper        = Proposalgen_Model_Mapper_DeviceInstanceMeter::getInstance();
 
         if ($justCount)
         {
@@ -296,9 +297,11 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
                    ->join(array("di" => $deviceInstanceMapper->getTableName()), "{$this->getTableName()}.{$this->col_rmsUploadId} = di.{$deviceInstanceMapper->col_rmsUploadId}")
                    ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
-                   ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+                   ->join(array("dim" => $deviceInstanceMeterMapper->getTableName()), "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
-                   ->where("md.isLeased = ?", 0);
+                   ->where("md.isLeased = ?", 0)
+                   ->where("di.isExcluded = ?", 0)
+                   ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
 
             return $db->query($select)->fetchColumn();
         }
@@ -319,9 +322,11 @@ class Hardwareoptimization_Model_Mapper_Hardware_Optimization extends My_Model_M
                    ->join(array("dimd" => $deviceInstanceMasterDeviceMapper->getTableName()), "dimd.{$deviceInstanceMasterDeviceMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->join(array("md" => $masterDeviceMapper->getTableName()), "md.{$masterDeviceMapper->col_id} = dimd.{$deviceInstanceMasterDeviceMapper->col_masterDeviceId}")
                    ->join(array("m" => $manufacturerMapper->getTableName()), "m.{$manufacturerMapper->col_id} = md.{$masterDeviceMapper->col_manufacturerId}")
+                   ->join(array("dim" => $deviceInstanceMeterMapper->getTableName()), "dim.{$deviceInstanceMeterMapper->col_deviceInstanceId} = di.{$deviceInstanceMapper->col_id}")
                    ->where("{$this->getTableName()}.$this->col_id = ?", $hardwareOptimizationId)
                    ->where("md.isLeased = ?", 0)
-                   ->where("di.isExcluded = ?", 0);
+                   ->where("di.isExcluded = ?", 0)
+                   ->where("DATEDIFF(dim.monitorEndDate, dim.monitorStartDate) >= ? ", Assessment_ViewModel_Devices::MINIMUM_MONITOR_INTERVAL_DAYS);
 
             $query = $db->query($select);
 
