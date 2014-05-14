@@ -196,7 +196,7 @@ class Admin_Service_Onboarding_Compatible extends Admin_Service_Onboarding_Abstr
                     /**
                      * Make sure the compatible toner is in the system
                      */
-                    $compatibleToner = $tonerMapper->fetchBySku($compatibleSku, $manufacturers[$compatibleManufacturerName]);
+                    $compatibleToner = $tonerMapper->fetchBySkuAndManufacturer($compatibleSku, $manufacturers[$compatibleManufacturerName]);
                     if (!$compatibleToner instanceof Proposalgen_Model_Toner)
                     {
                         $compatibleToner                 = new Proposalgen_Model_Toner();
@@ -208,6 +208,15 @@ class Admin_Service_Onboarding_Compatible extends Admin_Service_Onboarding_Abstr
                         $compatibleToner->cost           = Proposalgen_Service_Toner::obfuscateTonerCost($dealerCost);
                         $compatibleToner->isSystemDevice = false;
                         $tonerMapper->insert($compatibleToner);
+                    }
+                    else
+                    {
+                        if ($compatibleToner->manufacturerId != 46 && $compatibleToner->manufacturerId != 47)
+                        {
+                            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
+                            var_dump($compatibleToner);
+                            die();
+                        }
                     }
 
                     /**
