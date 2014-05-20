@@ -99,9 +99,9 @@ class Proposalgen_Service_ManageMasterDevices
 
 
     /**
-     * @param        $form
-     * @param string $data []
-     * @param string $formName
+     * @param Zend_Form $form
+     * @param string    $data []
+     * @param string    $formName
      *
      * @return array|null
      */
@@ -118,7 +118,7 @@ class Proposalgen_Service_ManageMasterDevices
             {
                 $count = 0;
 
-                foreach ($errorElement as $errorName => $elementErrorMessage)
+                foreach ($errorElement as $elementErrorMessage)
                 {
                     $count++;
                     $json['errorMessages'][$errorElementName] = $elementErrorMessage;
@@ -133,229 +133,89 @@ class Proposalgen_Service_ManageMasterDevices
     /**
      * Validates that we have toners
      *
-     * @param      $tonerList
-     * @param      $tonerConfigId
-     * @param      $manufacturerId
-     * @param bool $isLeased
+     * @param string $tonerList
+     * @param int    $tonerConfigId
+     * @param int    $manufacturerId
      *
      * @return null|string
      */
-    public function validateToners ($tonerList, $tonerConfigId, $manufacturerId, $isLeased = false)
+    public function validateToners ($tonerList, $tonerConfigId, $manufacturerId)
     {
-        $json   = null;
-        $toners = [];
+        $toners                  = [];
+        $validationErrorMessages = [];
 
         if ($tonerList)
         {
             $toners = Proposalgen_Model_Mapper_Toner::getInstance()->fetchListOfToners($tonerList, $this->masterDeviceId);
         }
 
-        $toners_valid = false;
+        $assignedOemTonerColors = array(
+            Proposalgen_Model_TonerColor::BLACK       => false,
+            Proposalgen_Model_TonerColor::CYAN        => false,
+            Proposalgen_Model_TonerColor::MAGENTA     => false,
+            Proposalgen_Model_TonerColor::YELLOW      => false,
+            Proposalgen_Model_TonerColor::THREE_COLOR => false,
+            Proposalgen_Model_TonerColor::FOUR_COLOR  => false,
+        );
 
-        // Validate toners against toner_config
-        $has_toner       = false;
-        $has_black       = false;
-        $has_yellow      = false;
-        $has_magenta     = false;
-        $has_cyan        = false;
-        $has_3color      = false;
-        $has_4color      = false;
-        $has_black_oem   = false;
-        $has_yellow_oem  = false;
-        $has_magenta_oem = false;
-        $has_cyan_oem    = false;
-        $has_3color_oem  = false;
-        $has_4color_oem  = false;
+        $assignedTonerColors = array(
+            Proposalgen_Model_TonerColor::BLACK       => false,
+            Proposalgen_Model_TonerColor::CYAN        => false,
+            Proposalgen_Model_TonerColor::MAGENTA     => false,
+            Proposalgen_Model_TonerColor::YELLOW      => false,
+            Proposalgen_Model_TonerColor::THREE_COLOR => false,
+            Proposalgen_Model_TonerColor::FOUR_COLOR  => false,
+        );
 
+        /**
+         * Figure out what color and type of toners we have
+         */
         foreach ($toners as $toner)
         {
-            if ($toner)
+            $assignedTonerColors[$toner['tonerColorId']] = true;
+
+            /**
+             * OEM toners have the same manufacturer id as the device
+             */
+            if ($toner['manufacturerId'] == $manufacturerId)
             {
-                $has_toner  = true;
-                $isOemToner = false;
-
-                if ($toner['manufacturerId'] == $manufacturerId)
-                {
-                    $isOemToner = true;
-                }
-
-                $curColor = strtolower(Proposalgen_Model_Mapper_TonerColor::getInstance()->find($toner['tonerColorId'])->tonerColorName);
-
-                if ($curColor == "black")
-                {
-                    $has_black     = true;
-                    $has_black_oem = ($has_black_oem ? true : $isOemToner);
-                }
-                else if ($curColor == "yellow")
-                {
-                    $has_yellow     = true;
-                    $has_yellow_oem = ($has_yellow_oem ? true : $isOemToner);
-                }
-                else if ($curColor == "magenta")
-                {
-                    $has_magenta     = true;
-                    $has_magenta_oem = ($has_magenta_oem ? true : $isOemToner);
-                }
-                else if ($curColor == "cyan")
-                {
-                    $has_cyan     = true;
-                    $has_cyan_oem = ($has_cyan_oem ? true : $isOemToner);
-                }
-                else if ($curColor == "3 color")
-                {
-                    $has_3color     = true;
-                    $has_3color_oem = ($has_3color_oem ? true : $isOemToner);
-                }
-                else if ($curColor == "4 color")
-                {
-                    $has_4color     = true;
-                    $has_4color_oem = ($has_4color_oem ? true : $isOemToner);
-                }
+                $assignedOemTonerColors[$toner['tonerColorId']] = true;
             }
         }
 
-        $toner_errors       = "";
-        $toner_error_colors = "";
+        $tonerConfigurationColors = Proposalgen_Model_TonerConfig::getRequiredTonersForTonerConfig($tonerConfigId);
 
-        if ($has_toner)
+        /**
+         * Devices require at least one full set of OEM toners for a given color set.
+         */
+        foreach ($tonerConfigurationColors as $requiredTonerColorId)
         {
-            // Has toners, validate to make sure they match the device
-            switch ($tonerConfigId)
+            if (!$assignedOemTonerColors[$requiredTonerColorId])
             {
-                case Proposalgen_Model_TonerConfig::BLACK_ONLY:
-                    // BLACK ONLY
-                    if ($has_3color || $has_4color || $has_cyan || $has_magenta || $has_yellow)
-                    {
-                        $toners_valid = false;
-                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black Toners are allowed.";
-                    }
-                    else if ($has_black_oem)
-                    {
-                        $toners_valid = true;
-                    }
-                    else if ($has_black && !$has_black_oem)
-                    {
-                        $toner_errors = "Error: Missing a Black OEM Toner.";
-                    }
-                    else
-                    {
-                        $toner_errors = "Error: Missing a Black Toner. Please add one and try again.";
-                    }
-
-                    break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_SEPARATED:
-                    // 3 COLOR - SEPARATED
-                    if ($has_3color || $has_4color)
-                    {
-                        $toners_valid = false;
-                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only Black, Yellow, Magenta and Cyan Toners are allowed.";
-                    }
-                    else if ($has_black_oem)
-                    {
-                        if ($has_yellow_oem)
-                        {
-                            if ($has_magenta_oem)
-                            {
-                                if ($has_cyan_oem)
-                                {
-                                    $toners_valid = true;
-                                }
-                                else
-                                {
-                                    $toner_error_colors = "Cyan";
-                                }
-                            }
-                            else
-                            {
-                                $toner_error_colors = "Magenta";
-                            }
-                        }
-                        else
-                        {
-                            $toner_error_colors = "Yellow";
-                        }
-                    }
-                    else
-                    {
-                        $toner_error_colors = "Black";
-                    }
-
-                    if ($toner_error_colors != '')
-                    {
-                        $toner_errors = "Error: Missing an " . $toner_error_colors . " OEM Toner. Please add one and try again.";
-                    }
-
-                    break;
-                case Proposalgen_Model_TonerConfig::THREE_COLOR_COMBINED:
-                    // 3 COLOR - COMBINED
-                    if ($has_4color || $has_cyan || $has_magenta || $has_yellow)
-                    {
-                        $toners_valid = false;
-                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 3 Color and Black Toners are allowed.";
-                    }
-                    else if ($has_black_oem)
-                    {
-                        if ($has_3color_oem)
-                        {
-                            $toners_valid = true;
-                        }
-                        else
-                        {
-                            $toner_error_colors = "3 Color";
-                        }
-                    }
-                    else
-                    {
-                        $toner_error_colors = "Black";
-                    }
-
-                    if ($toner_error_colors != '')
-                    {
-                        $toner_errors = "Error: Missing a " . $toner_error_colors . " OEM Toner. Please add one and try again.";
-                    }
-
-                    break;
-
-                case Proposalgen_Model_TonerConfig::FOUR_COLOR_COMBINED:
-                    // 4 COLOR - COMBINED
-                    if ($has_3color || $has_black || $has_cyan || $has_magenta || $has_yellow)
-                    {
-                        $toners_valid = false;
-                        $toner_errors = "Error: You are trying to add invalid toners to this printer. Only 4 Color Toners are allowed.";
-                    }
-                    else if ($has_4color_oem)
-                    {
-                        $toners_valid = true;
-                    }
-                    else
-                    {
-                        $toner_errors = "Error: Missing a 4 Color OEM Toner. Please add one and try again.";
-                    }
-
-                    break;
+                // Missing a required toner color
+                $validationErrorMessages[] = sprintf('Missing %1$s OEM Toner.', Proposalgen_Model_TonerColor::$ColorNames[$requiredTonerColorId]);
             }
+        }
+
+        /**
+         * Some devices cannot be assigned certain colors (IE Black devices can only have black toners)
+         */
+        foreach ($assignedTonerColors as $assignedTonerColorId => $isAssigned)
+        {
+            if ($isAssigned && !in_array($assignedTonerColorId, $tonerConfigurationColors))
+            {
+                // Invalid Toner Color assigned to the device
+                $validationErrorMessages[] = sprintf('%1$s Toners cannot be assigned to this device.', Proposalgen_Model_TonerColor::$ColorNames[$assignedTonerColorId]);
+            }
+        }
+
+        if (count($validationErrorMessages) > 0)
+        {
+            return implode(' ', $validationErrorMessages);
         }
         else
         {
-            // If leased, then toners not required
-            if ($isLeased)
-            {
-                $toners_valid = true;
-            }
-            else
-            {
-                $toners_valid = false;
-                $toner_errors = "Error: You must add required toners before saving this device.";
-            }
-        }
-
-        if ($toners_valid)
-        {
-            return null;
-        }
-        else
-        {
-            return $toner_errors;
+            return true;
         }
     }
 

@@ -606,7 +606,7 @@ class Proposalgen_FleetController extends Tangent_Controller_Action
                         "ampv"                     => $this->view->formatPageVolume($deviceInstance->getPageCounts()->getCombinedPageCount()->getMonthly()),
                         "reportsTonerLevels"       => $deviceInstance->isCapableOfReportingTonerLevels ? "Yes" : "No",
                         "isLeased"                 => $deviceInstance->isLeased,
-                        "validToners"              => $deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)
+                        "validToners"              => ($deviceInstance->hasValidToners($this->_identity->dealerId, $this->_selectedClientId)),
                     );
 
                     $row["deviceName"] = $deviceInstance->getRmsUploadRow()->manufacturer . " " . $deviceInstance->getRmsUploadRow()->modelName . "<br>" . $deviceInstance->ipAddress . "; " . $deviceInstance->serialNumber;

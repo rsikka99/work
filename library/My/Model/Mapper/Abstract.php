@@ -26,7 +26,7 @@ abstract class My_Model_Mapper_Abstract
      * The hash table database objects once retrieved, cached in memory so that we don't try to fetch the same id more
      * than once.
      *
-     * @var My_Model_Abstract
+     * @var My_Model_Abstract[]
      */
     protected $_rowHashTable = array();
 
@@ -154,15 +154,19 @@ abstract class My_Model_Mapper_Abstract
      * @param array|string $key
      *                 The key to search the cache with.
      *
+     * @param string       $cacheName
+     *
      * @return My_Model_Abstract|bool
      */
-    public function getItemFromCache ($key)
+    public function getItemFromCache ($key, $cacheName = 'default')
     {
         // Convert the key from an array to a string
         if (is_array($key))
         {
             $key = implode('_', $key);
         }
+
+        $key = "{$cacheName}_{$key}";
 
         // If the item exists, return it.
         if (array_key_exists((string)$key, $this->_rowHashTable))
@@ -176,16 +180,19 @@ abstract class My_Model_Mapper_Abstract
     /**
      * Saves a completed model into the database
      *
-     * @param My_Model_Abstract $object
-     *      Any object that extends My_Model_Abstract
+     * @param My_Model_Abstract $object    Any object that extends My_Model_Abstract
+     * @param string            $cacheName The cache name
      */
-    public function saveItemToCache (My_Model_Abstract $object)
+    public function saveItemToCache (My_Model_Abstract $object, $cacheName = 'default')
     {
         $key = $this->getPrimaryKeyValueForObject($object);
         if (is_array($key))
         {
             $key = implode('_', $key);
         }
+
+        $key = "{$cacheName}_{$key}";
+
         // Save the item into the cache
         $this->_rowHashTable [$key] = $object;
     }
@@ -193,17 +200,20 @@ abstract class My_Model_Mapper_Abstract
     /**
      * Deletes an item from the cache.
      *
-     * @param mixed $key
+     * @param mixed  $key
      *            The key of the model that we are deleting. This can be an array, it will be imploded into a single
      *            string using _'s as delimiters.
+     * @param string $cacheName
      */
-    protected function deleteItemFromCache ($key)
+    protected function deleteItemFromCache ($key, $cacheName = 'default')
     {
         // Convert the key from an array to a string
         if (is_array($key))
         {
             $key = implode('_', $key);
         }
+
+        $key = "{$cacheName}_{$key}";
 
         // Remove the item from the cache if it exists.
         if (array_key_exists($key, $this->_rowHashTable))

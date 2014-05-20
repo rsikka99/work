@@ -192,6 +192,13 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
     protected $_dealerAttributes;
 
     /**
+     * Whether or not this device has a valid set of oem toners
+     *
+     * @var bool
+     */
+    protected $_hasValidToners;
+
+    /**
      * @return Proposalgen_Model_Dealer_Master_Device_Attribute
      */
     public function getDealerAttributes ()
@@ -925,5 +932,47 @@ class Proposalgen_Model_MasterDevice extends My_Model_Abstract
         }
 
         $this->maximumRecommendedMonthlyPageVolume = $highestOEMYield;
+    }
+
+    /**
+     * Checks to see if a device has valid toners
+     *
+     * @param int $dealerId
+     * @param int $clientId
+     *
+     * @return int
+     */
+    public function hasValidToners ($dealerId, $clientId = null)
+    {
+        if (!isset($this->_hasValidToners))
+        {
+            $this->_hasValidToners = array();
+        }
+
+        $cacheKey = "{$dealerId}_{$clientId}";
+
+        if (!isset($this->_hasValidToners[$cacheKey]))
+        {
+            $masterDeviceService = new Proposalgen_Service_ManageMasterDevices($this->id, $dealerId);
+            $tonerList           = array();
+
+            foreach ($this->getToners($dealerId, $clientId) as $manufacturerIdList)
+            {
+                foreach ($manufacturerIdList as $tonerColorIdList)
+                {
+                    foreach ($tonerColorIdList as $toner)
+                    {
+                        $tonerList[] = $toner->id;
+                    }
+                }
+            }
+
+            $tonerList       = implode(',', $tonerList);
+            $tonerValidation = $masterDeviceService->validateToners($tonerList, $this->tonerConfigId, $this->manufacturerId);
+
+            $this->_hasValidToners[$cacheKey] = ($tonerValidation === true);
+        }
+
+        return $this->_hasValidToners[$cacheKey];
     }
 }

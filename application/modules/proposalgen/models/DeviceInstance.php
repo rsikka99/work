@@ -1695,36 +1695,6 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public function hasValidToners ($dealerId, $clientId = null)
     {
-        $masterDevice        = $this->getMasterDevice();
-        $masterDeviceService = new Proposalgen_Service_ManageMasterDevices($masterDevice->id, $dealerId);
-        $first               = true;
-        $tonersList          = "";
-
-        foreach ($masterDevice->getToners($dealerId, $clientId) as $manufacturerIdList)
-        {
-            foreach ($manufacturerIdList as $tonerColorIdList)
-            {
-                foreach ($tonerColorIdList as $toner)
-                {
-                    if (!$first)
-                    {
-                        $tonersList .= ",";
-                    }
-                    else
-                    {
-                        $first = false;
-                    }
-
-                    $tonersList .= $toner->id;
-                }
-            }
-        }
-
-        if ($masterDeviceService->validateToners($tonersList, $masterDevice->getTonerConfig()->tonerConfigId, $masterDevice->manufacturerId, false) == null)
-        {
-            return 1;
-        }
-
-        return 0;
+        return $this->getMasterDevice()->hasValidToners($dealerId, $clientId);
     }
 }

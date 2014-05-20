@@ -121,7 +121,7 @@ $(function ()
                     }
 
                     var validToners = '';
-                    if (row.validToners == false)
+                    if (row.validToners == 'false')
                     {
                         validToners = 'disabled="disabled"';
                     }

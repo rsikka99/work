@@ -306,7 +306,6 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
             if (!$toner instanceof Proposalgen_Model_Toner)
             {
                 $toner                                                                          = new Proposalgen_Model_Toner($row);
-                $tonerArray [$toner->manufacturerId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
                 $this->saveItemToCache($toner);
             }
             else
@@ -316,7 +315,7 @@ class Proposalgen_Model_Mapper_Toner extends My_Model_Mapper_Abstract
                 $toner->isUsingDealerPricing   = $row['isUsingDealerPricing'];
             }
 
-
+            $tonerArray [$toner->manufacturerId] [$toner->getTonerColor()->tonerColorId] [] = $toner;
         }
 
         return $tonerArray;

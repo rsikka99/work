@@ -655,6 +655,13 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
      */
     public function findForReports ($masterDeviceId, $dealerId, $defaultLaborCostPerPage = 0, $defaultPartsCostPerPage = 0)
     {
+        $cacheKey = "findForReports_{$dealerId}_{$defaultLaborCostPerPage}_{$defaultPartsCostPerPage}";
+
+        $result = $this->getItemFromCache($masterDeviceId, $cacheKey);
+        if ($result instanceof Proposalgen_Model_MasterDevice)
+        {
+            return $result;
+        }
 
         $db                      = Zend_Db_Table::getDefaultAdapter();
         $defaultPartsCostPerPage = $db->quote($defaultPartsCostPerPage, 'FLOAT');
@@ -682,7 +689,7 @@ class Proposalgen_Model_Mapper_MasterDevice extends My_Model_Mapper_Abstract
         if ($result)
         {
             $object = new Proposalgen_Model_MasterDevice($result);
-            $this->saveItemToCache($object);
+            $this->saveItemToCache($object, $cacheKey);
         }
 
         return $object;
