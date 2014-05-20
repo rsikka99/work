@@ -73,6 +73,9 @@ class Admin_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_CLIENT_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_SYSTEM_ADMIN, self::RESOURCE_ADMIN_LEASINGSCHEMA_WILDCARD, Application_Model_Acl::PRIVILEGE_ADMIN);
+
+        // Master Device Admin
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_ADMIN_INDEX_INDEX, Application_Model_Acl::PRIVILEGE_ADMIN);
     }
 
 }

@@ -15,6 +15,8 @@ class Proposalgen_Model_Acl
     const RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS    = "proposalgen__admin__filterlistitems";
     const RESOURCE_PROPOSALGEN_ADMIN_INDEX              = "proposalgen__admin__index";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS     = "proposalgen__admin__managematchups";
+    const RESOURCE_PROPOSALGEN_ADMIN_SETMAPPEDTO        = "proposalgen__admin__set-mapped-to";
+    const RESOURCE_PROPOSALGEN_ADMIN_MATCHUPLIST        = "proposalgen__admin__matchuplist";
     const RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS = "proposalgen__admin__managereplacements";
     const RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST  = "proposalgen__admin__masterdeviceslist";
     const RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS      = "proposalgen__admin__printermodels";
@@ -97,6 +99,8 @@ class Proposalgen_Model_Acl
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_REPLACETONER);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_FILTERLISTITEMS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_SETMAPPEDTO);
+        $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MATCHUPLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEREPLACEMENTS);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_MASTERDEVICESLIST);
         $acl->addResource(self::RESOURCE_PROPOSALGEN_ADMIN_PRINTERMODELS);
@@ -233,6 +237,9 @@ class Proposalgen_Model_Acl
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SAVEANDAPPROVE, Application_Model_Acl::PRIVILEGE_ADMIN);
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_MANUFACTURER_EDIT, Application_Model_Acl::PRIVILEGE_VIEW);
         $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_COSTS_BULKFILEDEVICEFEATURES, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_MANAGEMATCHUPS, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_MATCHUPLIST, Application_Model_Acl::PRIVILEGE_VIEW);
+        $acl->allow(Application_Model_Acl::ROLE_MASTER_DEVICE_ADMINISTRATOR, self::RESOURCE_PROPOSALGEN_ADMIN_SETMAPPEDTO, Application_Model_Acl::PRIVILEGE_VIEW);
 
         /**
          * System Admin

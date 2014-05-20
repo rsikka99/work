@@ -1032,6 +1032,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
         {
             $masterDeviceId = (int)$masterDeviceId;
             $masterDevice   = Proposalgen_Model_Mapper_MasterDevice::getInstance()->find($masterDeviceId);
+
             if ($masterDeviceId === 0 || $masterDevice)
             {
                 $rmsDevice = Proposalgen_Model_Mapper_Rms_Device::getInstance()->find(array($rmsProviderId, $rmsModelId));
@@ -1045,7 +1046,7 @@ class Proposalgen_AdminController extends Tangent_Controller_Action
                         if ($masterDeviceId > 0)
                         {
                             // Update
-                            if ($rmsMasterMatchup->mas != $masterDeviceId)
+                            if ($rmsMasterMatchup->masterDeviceId != $masterDeviceId)
                             {
                                 $rmsMasterMatchup->masterDeviceId = $masterDeviceId;
                                 $updateResult                     = Proposalgen_Model_Mapper_Rms_Master_Matchup::getInstance()->save($rmsMasterMatchup);
