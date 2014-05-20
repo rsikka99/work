@@ -1,45 +1,47 @@
-<?php $this->headScript()->captureStart(); ?>
-$(function()
-{
-doLoad($('#clientId')[0].value);
+<script>
+    // Script converted into a headscript. Tag kept for IDE compatibility reasons.
+    <?php $this->headScript()->captureStart(); ?>
+    $(function ()
+    {
+        var $clientId = $('#clientId');
+        var $quoteId = $('#quoteId');
 
-function doLoad(clientId)
-{
-$('#quoteId').empty().attr('disabled', 'disabled');
-$('#clientId').attr('disabled', 'disabled');
-$.ajax(
-{
-url:'<?php echo $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',)); ?>/clientId/' + clientId,
-success:function(data)
-{
-var quotes = data['quotes'];
-var html = '';
-var len = quotes.length;
-for(var i = 0; i < len; i++)
-{
-quoteType = (quotes[i].isLeased) ? 'Leased' : 'Purchased';
-html += '
-<option value="' + quotes[i].id + '">' + quotes[i].quotedate + ' - ' + quoteType + '</option>';
-}
-$('#quoteId').append(html);
-$('#quoteId').removeAttr('disabled');
-$('#clientId').removeAttr('disabled');
-},
-error:function(data)
-{
-alert('doesnt work');
-}
-});
-}
+        var doLoad = function (clientId)
+        {
+            $('#quoteId').empty().attr('disabled', 'disabled');
+            $('#clientId').attr('disabled', 'disabled');
+            $.ajax(
+                {
+                    url    : '<?php echo $this->url(array('format' => 'json', 'controller' => 'index', 'action' => 'get-reports-for-client',)); ?>/clientId/' + clientId,
+                    success: function (data)
+                    {
+                        var quotes = data['quotes'];
+                        var html = '';
+                        var len = quotes.length;
+                        for (var i = 0; i < len; i++)
+                        {
+                            quoteType = (quotes[i].isLeased) ? 'Leased' : 'Purchased';
+                            html += '<option value= "' + quotes[i].id + '" > ' + quotes[i].quotedate + ' - ' + quoteType + ' </option >';
+                        }
+                        $quoteId.append(html).removeAttr('disabled');
+                        $('#clientId').removeAttr('disabled');
+                    },
+                    error  : function (data)
+                    {
+                        alert('There was an issue loading the reports.');
+                    }
+                });
+        };
 
-$('#clientId').change(function()
-{
-var clientId = this.value;
-doLoad(clientId);
-});
-});
+        $clientId.change(function ()
+        {
+            doLoad(this.value);
+        });
 
-<?php $this->headScript()->captureEnd() ?>
+        doLoad($clientId[0].value);
+    });
+    <?php $this->headScript()->captureEnd() ?>
+</script>
 <div class="page-header">
     <h1>Quote Generator</h1>
 </div>
