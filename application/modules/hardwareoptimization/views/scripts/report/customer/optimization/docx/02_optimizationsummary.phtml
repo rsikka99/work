@@ -15,9 +15,12 @@ $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell2)->addImage(
 $imageTable->addCell(4514, $this->styles->tables->doubleimage->cell3)->addImage($graphs [2], array('align' => 'center'));
 
 $section->addTitle('Optimization Summary', 2);
-$section->addText($this->translate('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut semper rutrum nunc sed condimentum. Praesent id justo a enim sagittis sodales vitae in mauris. Nunc id eros vel
-urna laoreet feugiat. Quisque vitae lorem ligula, et porta felis. Suspendisse potenti. Maecenas viverra, arcu vel tempor accumsan, neque tellus facilisis ligula, sed posuere ipsum odio eget est.
-Duis venenatis sodales nisi ut congue. '));
+
+$section->addText($this->translate('All fleets vary in age and functionality. This report sorts the devices in your fleet into four categories, based on page count, functionality, and device optimal age. For the purposes of this report, the categories are as follows:'));
+$section->addText($this->translate('Keep: Devices are being used within their specifications.'));
+$section->addText($this->translate('Replace: Refer to the Appendix for reasons for device replacements.'));
+$section->addText($this->translate("Do Not Repair: These devices may remain in place but we don't recommend repairs if they are needed. The reasons can be any one of the following: the device is older than 10 years, it has printed more than its recommended maximum lifetime page count, or it is incompatible with an MPS program."));
+$section->addText($this->translate('Retire/Migrate: The device prints fewer than 200 pages per month; you may choose to migrate pages from these devices to other nearby devices to save on supply and electrical costs.'));
 
 $section->addImage($graphs[3], $this->styles->images->center);
 $section->addTextBreak();
