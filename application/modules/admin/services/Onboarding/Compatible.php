@@ -209,16 +209,7 @@ class Admin_Service_Onboarding_Compatible extends Admin_Service_Onboarding_Abstr
                         $compatibleToner->isSystemDevice = false;
                         $tonerMapper->insert($compatibleToner);
                     }
-                    else
-                    {
-                        if ($compatibleToner->manufacturerId != 46 && $compatibleToner->manufacturerId != 47)
-                        {
-                            echo "<pre>Var dump initiated at " . __LINE__ . " of:\n" . __FILE__ . "\n\n";
-                            var_dump($compatibleToner);
-                            die();
-                        }
-                    }
-
+                    
                     /**
                      * Toner colors must match. If we're inserting into the system this should always be true.
                      */
