@@ -17,7 +17,8 @@ $graphs = $this->graphs;
 <p>Out of your <strong><?php echo $optimization->getDevices()->allIncludedDeviceInstances->getCount(); ?></strong> networked printing devices, you have of
     <strong><?php echo $optimization->getNumberOfUniqueModels(); ?></strong> different models. Each section of the chart below represents a single model type.
     We estimate that <strong><?php echo count($optimization->getDevices()->leasedDeviceInstances->getDeviceInstances()); ?></strong> of your printing devices
-    are leased machines, for which supplies are included in your contract. The <strong><?php echo number_format($totalPurchasedDevices); ?></strong> remaining machines consist
+    are leased machines, for which supplies are included in your contract. The
+    <strong><?php echo number_format($optimization->getDevices()->purchasedDeviceInstances->getCount()); ?></strong> remaining machines consist
     of <strong><?php echo $optimization->getNumberOfUniquePurchasedModels(); ?></strong> different models and use
     <strong><?php echo $optimization->getNumberOfUniquePurchasedToners(); ?></strong> different supply types. If you hold two of each supply in inventory, you
     have an estimated <strong><?php echo $this->currency($optimization->getCashHeldInInventory()); ?> in operating cash held in printer supplies

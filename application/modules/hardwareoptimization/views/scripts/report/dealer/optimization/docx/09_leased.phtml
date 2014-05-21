@@ -9,21 +9,24 @@
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
+
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
-/* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
-$hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
-$costPerPageSetting          = $optimization->getCostPerPageSettingForDealer();
+
+$leasedDeviceInstances = $optimization->getDevices()->leasedDeviceInstances->getDeviceInstances();
+
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText('Leased Devices', 'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->leased) . ' of ' . $hardwareOptimizationDevices->getDeviceCount() . ')');
+$headerTextRun->addText(sprintf(' (%1$s)', number_format(count($leasedDeviceInstances))));
 $section->addText("The following devices have been deemed productive and fall within the target costs per pages.");
 
 // Table with values
 $tcStyle = $this->styles->tables->leased;
 $table   = $section->addTable($tcStyle->tablestyle);
+
 // Table header
 $table->addRow($tcStyle->body->rowheight);
 $table->addCell($tcStyle->col1Width, $tcStyle->header->header->cellStyle)->addText('Device Name', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
@@ -33,17 +36,14 @@ $table->addCell($tcStyle->col4Width, $tcStyle->header->header->cellStyle)->addTe
 $table->addCell($tcStyle->col5Width, $tcStyle->header->header->cellStyle)->addText('Color AMPV', $tcStyle->header->header->fontStyle, $tcStyle->header->header->paragraphStyle);
 
 // Begin with data rows
-foreach ($hardwareOptimizationDevices->leased as $device)
+foreach ($leasedDeviceInstances as $deviceInstance)
 {
-    $masterDevice = $device->getMasterDevice();
-    $isColor      = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-
     $table->addRow($tcStyle->body->rowheight);
     $style = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
-    $table->addCell($tcStyle->col1Width, $style)->addText($device->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
-    $table->addCell($tcStyle->col2Width, $style)->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $table->addCell($tcStyle->col3Width, $style)->addText($device->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText(($isColor) ? $this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+    $table->addCell($tcStyle->col1Width, $style)->addText($deviceInstance->getDeviceName(), $tcStyle->body->cell1->fontStyle, $tcStyle->body->cell1->paragraphStyle);
+    $table->addCell($tcStyle->col2Width, $style)->addText($deviceInstance->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+    $table->addCell($tcStyle->col3Width, $style)->addText($deviceInstance->ipAddress, $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+    $table->addCell($tcStyle->col4Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+    $table->addCell($tcStyle->col5Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 }

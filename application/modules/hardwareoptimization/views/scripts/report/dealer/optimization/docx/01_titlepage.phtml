@@ -14,7 +14,10 @@ $titleImageStyle = array('align' => 'center');
 $imageTable = $section->addTable(array('borderBottomSize' => 1));
 $imageTable->addRow(2500);
 $cell = $imageTable->addCell(15000.8, array('valign' => 'center'));
-$cell->addImage($this->theme("img/report_logo.png", true), array('align' => 'center'));
+$cell->addImage(PUBLIC_PATH . $this->dealerLogoFile, array(
+    'align' => 'center'
+));
+
 
 $section->addTextBreak();
 // Assessment Title

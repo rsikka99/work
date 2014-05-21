@@ -15,14 +15,10 @@ $assessmentViewModel = $this->assessmentViewModel;
     </div>
     <div class="title-page-customer-details">
         <h3>Prepared for:
-            <?php
-            if (strlen($assessmentViewModel->assessment->getClient()->companyName) > 26)
-            {
-                echo "<br/>";
-            }
-
-            echo $assessmentViewModel->assessment->getClient()->companyName;
-            ?>
+            <?php if (strlen($assessmentViewModel->assessment->getClient()->companyName) > 26) : ?>
+                <br>
+            <?php endif; ?>
+            <?= $assessmentViewModel->assessment->getClient()->companyName; ?>
         </h3>
 
         <h3><?php echo $assessmentViewModel->getDateReportPrepared(); ?></h3>

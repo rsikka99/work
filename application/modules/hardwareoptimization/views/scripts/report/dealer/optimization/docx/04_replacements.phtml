@@ -8,20 +8,24 @@
 
 /* @var $section PHPWord_Section */
 $section = $this->section;
+
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
+
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
-/* @var $hardwareOptimizationDevices Hardwareoptimization_Model_Optimization_Dealer */
-$hardwareOptimizationDevices = $this->hardwareOptimizationDevices;
-$costPerPageSetting          = $optimization->getCostPerPageSettingForDealer();
+
+/* @var $suggestedDeviceInstances Proposalgen_Model_DeviceInstance[] */
+$suggestedDeviceInstances = $this->deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_REPLACE];
+
+$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
 
 $section->addTextBreak();
 $headerTextRun = $section->createTextRun();
 $headerTextRun->addText('Suggested Replacement Devices', 'titlepageHeaderFont');
-$headerTextRun->addText(' (' . count($hardwareOptimizationDevices->replaced) . ' of ' . $hardwareOptimizationDevices->getDeviceCount() . ')');
-$costThreshold = number_format($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold);
-$section->addText('The following devices have been targeted for replacement, either for a monthly cost savings greater than {$costThreshold} or manual replacement.');
+$headerTextRun->addText(sprintf(' (%1$s of %2$s)', number_format(count($suggestedDeviceInstances)), number_format($this->totalDevices)));
+
+$section->addText(sprintf('The following devices have been targeted for replacement, either for a monthly cost savings greater than %1$s or manual replacement.', $this->currency($hardwareOptimization->getHardwareOptimizationSetting()->costThreshold)));
 
 // Table with values
 $tcStyle = $this->styles->tables->replacement;
@@ -47,35 +51,36 @@ $table->addCell($tcStyle->col11Width, $tcStyle->header->sub_header->cellStyle)->
 $table->addCell($tcStyle->col12Width, $tcStyle->header->sub_header->cellStyle)->addText('Cost Delta', $tcStyle->header->sub_header->fontStyle, $tcStyle->header->sub_header->paragraphStyle);
 
 // Begin with data rows
-foreach ($hardwareOptimizationDevices->replaced as $device)
+if ($suggestedDeviceInstances)
 {
-    $masterDevice      = $device->getMasterDevice();
-    $replacementDevice = $device->getReplacementMasterDevice();
-    $isColor           = ($masterDevice->tonerConfigId !== Proposalgen_Model_TonerConfig::BLACK_ONLY) ? true : false;
-    $style             = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
+    foreach ($suggestedDeviceInstances as $deviceInstance)
+    {
+        $replacementDevice = $deviceInstance->getHardwareOptimizationDeviceInstance($hardwareOptimization->id)->getMasterDevice();
+        $style             = ($this->cycle(array($tcStyle->body->cell1->odd, $tcStyle->body->cell1->even))->next()->current());
 
-    $table->addRow($tcStyle->body->rowheight);
-    $cell = $table->addCell($tcStyle->collWidth, $style);
-    $cell->addText($device->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
-    $cell->addText($device->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
+        $table->addRow($tcStyle->body->rowheight);
+        $cell = $table->addCell($tcStyle->collWidth, $style);
+        $cell->addText($deviceInstance->getMasterDevice()->getManufacturer()->fullname, $tcStyle->body->cell1->manufacturerName->fontStyle, $tcStyle->body->cell1->manufacturerName->paragraphStyle);
+        $cell->addText($deviceInstance->getMasterDevice()->modelName, $tcStyle->body->cell1->modelName->fontStyle, $tcStyle->body->cell1->modelName->paragraphStyle);
 
-    $cell2 = $table->addCell($tcStyle->col2Width, $style);
-    $cell2->addText($device->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
-    $cell2->addText($device->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+        $cell2 = $table->addCell($tcStyle->col2Width, $style);
+        $cell2->addText($deviceInstance->serialNumber, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
+        $cell2->addText($deviceInstance->ipAddress, $tcStyle->body->cell2->fontStyle, $tcStyle->body->cell2->paragraphStyle);
 
-    $table->addCell($tcStyle->col3Width, $style)->addText($this->formatCostPerPage($device->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
-    $table->addCell($tcStyle->col4Width, $style)->addText(($isColor) ? $this->formatCostPerPage($device->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
-    $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
+        $table->addCell($tcStyle->col3Width, $style)->addText($this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->monochromeCostPerPage), $tcStyle->body->cell3->fontStyle, $tcStyle->body->cell3->paragraphStyle);
+        $table->addCell($tcStyle->col4Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage($deviceInstance->calculateCostPerPage($costPerPageSetting)->getCostPerPage()->colorCostPerPage) : 'N/A', $tcStyle->body->cell4->fontStyle, $tcStyle->body->cell4->paragraphStyle);
+        $table->addCell($tcStyle->col5Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting)), $tcStyle->body->cell5->fontStyle, $tcStyle->body->cell5->paragraphStyle);
 
-    $cell6 = $table->addCell($tcStyle->col6Width, $style);
-    $cell6->addText($replacementDevice->getManufacturer()->fullname, $tcStyle->body->cell6->manufacturerName->fontStyle, $tcStyle->body->cell6->manufacturerName->paragraphStyle);
-    $cell6->addText($replacementDevice->modelName, $tcStyle->body->cell6->modelName->fontStyle, $tcStyle->body->cell6->modelName->paragraphStyle);
+        $cell6 = $table->addCell($tcStyle->col6Width, $style);
+        $cell6->addText($replacementDevice->getManufacturer()->fullname, $tcStyle->body->cell6->manufacturerName->fontStyle, $tcStyle->body->cell6->manufacturerName->paragraphStyle);
+        $cell6->addText($replacementDevice->modelName, $tcStyle->body->cell6->modelName->fontStyle, $tcStyle->body->cell6->modelName->paragraphStyle);
 
 
-    $table->addCell($tcStyle->col7Width, $style)->addText($this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
-    $table->addCell($tcStyle->col8Width, $style)->addText(($isColor) ? $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->colorCostPerPage) : 'N/A', $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
-    $table->addCell($tcStyle->col9Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting, $replacementDevice)), $tcStyle->body->cell9->fontStyle, $tcStyle->body->cell9->paragraphStyle);
-    $table->addCell($tcStyle->col10Width, $style)->addText($this->formatPageVolume($device->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell10->fontStyle, $tcStyle->body->cell10->paragraphStyle);
-    $table->addCell($tcStyle->col11Width, $style)->addText(($isColor) ? $this->formatPageVolume($device->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell11->fontStyle, $tcStyle->body->cell11->paragraphStyle);
-    $table->addCell($tcStyle->col12Width, $style)->addText($this->currency($device->calculateMonthlyCost($costPerPageSetting) - $device->calculateMonthlyCost($costPerPageSetting, $device->getReplacementMasterDevice())), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
+        $table->addCell($tcStyle->col7Width, $style)->addText($this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->monochromeCostPerPage), $tcStyle->body->cell7->fontStyle, $tcStyle->body->cell7->paragraphStyle);
+        $table->addCell($tcStyle->col8Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatCostPerPage($replacementDevice->calculateCostPerPage($optimization->getCostPerPageSettingForDealer())->getCostOfInkAndTonerPerPage()->colorCostPerPage) : 'N/A', $tcStyle->body->cell8->fontStyle, $tcStyle->body->cell8->paragraphStyle);
+        $table->addCell($tcStyle->col9Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting, $replacementDevice)), $tcStyle->body->cell9->fontStyle, $tcStyle->body->cell9->paragraphStyle);
+        $table->addCell($tcStyle->col10Width, $style)->addText($this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()), $tcStyle->body->cell10->fontStyle, $tcStyle->body->cell10->paragraphStyle);
+        $table->addCell($tcStyle->col11Width, $style)->addText(($deviceInstance->getMasterDevice()->isColor()) ? $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) : 'N/A', $tcStyle->body->cell11->fontStyle, $tcStyle->body->cell11->paragraphStyle);
+        $table->addCell($tcStyle->col12Width, $style)->addText($this->currency($deviceInstance->calculateMonthlyCost($costPerPageSetting) - $deviceInstance->calculateMonthlyCost($costPerPageSetting, $deviceInstance->getReplacementMasterDevice())), $tcStyle->body->cell12->fontStyle, $tcStyle->body->cell12->paragraphStyle);
+    }
 }

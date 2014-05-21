@@ -76,9 +76,10 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function purchaseQuoteAction ()
     {
-        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Purchase Quote') . ".docx";
-        $this->view->clientId = $this->_quote->clientId;
-        $this->view->quoteId  = $this->_quote->id;
+        $this->view->filename       = $this->generateReportFilename($this->_quote->getClient(), 'Purchase Quote') . ".docx";
+        $this->view->clientId       = $this->_quote->clientId;
+        $this->view->quoteId        = $this->_quote->id;
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
     }
 
     /**
@@ -86,9 +87,10 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function leaseQuoteAction ()
     {
-        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Lease Quote') . ".docx";
-        $this->view->clientId = $this->_quote->clientId;
-        $this->view->quoteId  = $this->_quote->id;
+        $this->view->filename       = $this->generateReportFilename($this->_quote->getClient(), 'Lease Quote') . ".docx";
+        $this->view->clientId       = $this->_quote->clientId;
+        $this->view->quoteId        = $this->_quote->id;
+        $this->view->dealerLogoFile = $this->getDealerLogoFile();
 
     }
 

@@ -15,14 +15,10 @@ $healthcheckViewModel = $this->healthcheckViewModel;
     </div>
     <div class="title-page-customer-details">
         <h3>Prepared for:
-            <?php
-            if (strlen($healthcheckViewModel->healthcheck->getClient()->companyName) > 26)
-            {
-                echo "<br/>";
-            }
-
-            echo $healthcheckViewModel->healthcheck->getClient()->companyName;
-            ?>
+            <?php if (strlen($healthcheckViewModel->healthcheck->getClient()->companyName) > 26) : ?>
+                <br>
+            <?php endif; ?>
+            <?= $healthcheckViewModel->healthcheck->getClient()->companyName; ?>
         </h3>
 
         <p><?php echo nl2br($healthcheckViewModel->healthcheck->getClient()->getAddress()); ?></p>

@@ -1,8 +1,14 @@
 <?php
 /* @var $optimization Hardwareoptimization_ViewModel_Optimization */
 $optimization = $this->optimization;
+
 /* @var $hardwareOptimization Hardwareoptimization_Model_Hardware_Optimization */
 $hardwareOptimization = $this->hardwareOptimization;
+
+/* @var $deviceInstances Proposalgen_Model_DeviceInstance[] */
+$deviceInstances = $optimization->getDevicesGroupedByAction();
+
+$totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
 
 /* @var $phpWord PHPWord */
 $phpWord = $this->phpword;
@@ -505,7 +511,9 @@ $data = array(
     "section"                     => $mainSection,
     "hardwareOptimizationDevices" => $hardwareOptimizationDevices,
     "graphs"                      => $this->graphs,
-    "styles"                      => $styles
+    "styles"                      => $styles,
+    "deviceInstances"             => $deviceInstances,
+    "totalDevices"                => $totalNumberOfDevices,
 );
 
 /**

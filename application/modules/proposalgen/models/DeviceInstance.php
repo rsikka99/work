@@ -1245,6 +1245,10 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             {
                 $this->_replacementMasterDevice[$hardwareOptimizationId] = $hardwareOptimizationDeviceInstance->getMasterDevice();
             }
+            else
+            {
+                $this->_replacementMasterDevice[$hardwareOptimizationId] = false;
+            }
         }
 
         return $this->_replacementMasterDevice[$hardwareOptimizationId];

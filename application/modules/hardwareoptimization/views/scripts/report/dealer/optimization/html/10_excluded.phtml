@@ -11,13 +11,16 @@ $dealerOptimization = $this->dealerOptimization;
 /* @var $graphs array */
 $graphs = $this->graphs;
 
+
 $excludedDeviceInstances = $optimization->getDevices()->excludedDeviceInstances->getDeviceInstances();
+
 $unmappedInstances = $optimization->getDevices()->unmappedDeviceInstances->getDeviceInstances();
-$costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
 $totalNumberOfDevices = $optimization->getDevices()->excludedDeviceInstances->getCount() + $optimization->getDevices()->unmappedDeviceInstances->getCount();
+
 ?>
 <div class="pheader" id="excluded">
-    Excluded and Unmapped <em><?php echo '(' . number_format($totalNumberOfDevices) . ')' ?></em>
+    Excluded and Unmapped <em>(<?= number_format($totalNumberOfDevices) ?>)</em>
 </div>
 <table class="rDevices">
     <tr class="header">
@@ -30,23 +33,23 @@ $totalNumberOfDevices = $optimization->getDevices()->excludedDeviceInstances->ge
     </tr>
     <?php foreach ($excludedDeviceInstances as $deviceInstance) : ?>
         <tr>
-            <td class="device-name"><?php echo $deviceInstance->getDeviceName(); ?></td>
-            <td class="serial-number"><?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="serial-number"><?php echo $deviceInstance->serialNumber; ?></td>
-            <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-            <td class="page-volume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
+            <td class="device-name"><?= $deviceInstance->getDeviceName() ?></td>
+            <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+            <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
             <td>Manually Excluded</td>
         </tr>
-    <?php endforeach; ?>
+    <?php endforeach ?>
 
     <?php foreach ($unmappedInstances as $deviceInstance) : ?>
         <tr>
-            <td class="deviceName"><?php echo $deviceInstance->getDeviceName(); ?></td>
-            <td class="serialNumber"><?php echo $deviceInstance->ipAddress; ?></td>
-            <td class="serialNumber"><?php echo $deviceInstance->serialNumber; ?></td>
-            <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()); ?></td>
-            <td class="pageVolume"><?php echo $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()); ?></td>
+            <td class="deviceName"><?= $deviceInstance->getDeviceName() ?></td>
+            <td class="ip-address"><?= $deviceInstance->ipAddress ?></td>
+            <td class="serial-number"><?= $deviceInstance->serialNumber ?></td>
+            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getBlackPageCount()->getMonthly()) ?></td>
+            <td class="page-volume"><?= $this->formatPageVolume($deviceInstance->getPageCounts()->getColorPageCount()->getMonthly()) ?></td>
             <td>Not Mapped</td>
         </tr>
-    <?php endforeach; ?>
+    <?php endforeach ?>
 </table>

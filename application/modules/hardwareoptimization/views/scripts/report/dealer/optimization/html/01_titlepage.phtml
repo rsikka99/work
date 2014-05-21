@@ -15,7 +15,7 @@ $graphs = $this->graphs;
     <div class="header">
         <div class="title-page-logo-box-wrapper">
             <div class="title-page-logo-box">
-                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->theme("img/report_logo.png")) ?> " />
+                <img class="title-page-logo" src="<?php echo $this->serverUrl($this->dealerLogoFile) ?> " />
             </div>
         </div>
     </div>
@@ -24,14 +24,10 @@ $graphs = $this->graphs;
     </div>
     <div class="title-page-customer-details">
         <h3>Prepared for:
-            <?php
-            if (strlen($hardwareOptimization->getClient()->companyName) > 26)
-            {
-                echo "<br/>";
-            }
-
-            echo $hardwareOptimization->getClient()->companyName;
-            ?>
+            <?php if (strlen($hardwareOptimization->getClient()->companyName) > 26) : ?>
+                <br>
+            <?php endif; ?>
+            <?= $hardwareOptimization->getClient()->companyName; ?>
         </h3>
 
         <h3><?php echo $hardwareOptimization->dateCreated; ?></h3>

@@ -12,7 +12,9 @@ $dealerOptimization = $this->dealerOptimization;
 $graphs = $this->graphs;
 
 $leasedDeviceInstances = $optimization->getDevices()->leasedDeviceInstances->getDeviceInstances();
+
 $costPerPageSetting = $optimization->getCostPerPageSettingForDealer();
+
 $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->getCount();
 ?>
 <div class="pheader" id="leased">

@@ -202,6 +202,9 @@ class Proposalgen_Model_DeviceCostPerPage extends My_Model_Abstract
 
     public function createCacheKey ()
     {
-        return "{$this->laborCostPerpage}_{$this->partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
+        $laborCostPerPage = (isset($this->laborCostPerpage) ? $this->laborCostPerpage : "null");
+        $partsCostPerPage = (isset($this->partsCostPerPage) ? $this->partsCostPerPage : "null");
+
+        return "{$laborCostPerPage}_{$partsCostPerPage}_{$this->isManaged}_{$this->costPerPageSetting->pricingMargin}";
     }
 }

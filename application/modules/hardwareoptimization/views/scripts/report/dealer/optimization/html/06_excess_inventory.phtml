@@ -30,7 +30,8 @@ $totalNumberOfDevices = $optimization->getDevices()->purchasedDeviceInstances->g
         <th>Mono CPP</th>
         <th>Color CPP</th>
     </tr>
-    <?php foreach ($excessDeviceInstances as $deviceInstance) :
+    <?php foreach ($excessDeviceInstances as $deviceInstance) : ?>
+        <?php
         $masterDevice = $deviceInstance->getMasterDevice();
         $isColor      = $masterDevice->isColor();
         ?>
