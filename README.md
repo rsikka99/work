@@ -12,9 +12,10 @@ There are a few steps to follow to get up and running with MPS Toolbox.
 * This application is best used on it's own dedicated domain rather than a folder within a domain. EG: ```my.example.com``` instead of ```my.example.com/example/app/```
 
 ## Installation ##
-1. Copy ```application/configs/local.php.dist``` to ```application/configs/local.php``` and fill out the appropriate values. 
-2. Run ```composer install```
-3. Run ```vendor/bin/phinx migrate``` to migrate the database the latest version. You will need to make sure to run this command when getting updates from the repository to run any new migrations.
+1. Copy ```application/configs/local.php.dist``` to ```application/configs/local.php``` and fill out the appropriate values.
+2. Copy ```phinx.yml.dist``` to ```phinx.yml``` and fill out appropriate values.
+3. Run ```composer install```
+4. Run ```vendor/bin/phinx migrate``` to migrate the database the latest version. You will need to make sure to run this command when getting updates from the repository to run any new migrations.
 
 ## Logging In ##
 
