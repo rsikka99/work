@@ -88,8 +88,8 @@ class Default_ErrorController extends Tangent_Controller_Action
         do
         {
             // Log exception, if logger available
-            Tangent_Log::log("[$uid] - Exception '" . $ex->getCode() . "' occurred in " . $ex->getFile() . " on line " . $ex->getLine() . ": " . $ex->getMessage(), $priority);
-            Tangent_Log::log("[$uid] - Stack Trace:\n" . $ex->getTraceAsString(), $priority);
+            Tangent_Log::log(sprintf('[%1$s] - Exception [%6$s] "%2$s" occurred in %3$s on line %4$s: %5$s', $uid, $ex->getCode(), $ex->getFile(), $ex->getLine(), $ex->getMessage(), get_class($ex)), $priority);
+            Tangent_Log::log(sprintf('[%1$s] - Stack Trace:\n%2$s', $uid, $ex->getTraceAsString()), $priority);
             $exceptions [] = $ex;
         } while (!is_null($ex = $ex->getPrevious()));
 
