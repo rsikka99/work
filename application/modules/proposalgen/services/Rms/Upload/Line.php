@@ -436,6 +436,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
     public $pageCoverageYellow;
 
     /**
+     * @var string
+     */
+    public $location;
+
+    /**
      * @param array $params An array of data to populate the model with
      */
     public function populate ($params)
@@ -859,6 +864,11 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
         {
             $this->managementProgram = $params->managementProgram;
         }
+
+        if (isset($params->location) && !is_null($params->location))
+        {
+            $this->location = $params->location;
+        }
     }
 
     /**
@@ -944,6 +954,7 @@ class Proposalgen_Service_Rms_Upload_Line extends My_Model_Abstract
             "pageCoverageCyan"       => $this->pageCoverageCyan,
             "pageCoverageMagenta"    => $this->pageCoverageMagenta,
             "pageCoverageYellow"     => $this->pageCoverageYellow,
+            "location"               => $this->location,
         );
     }
 

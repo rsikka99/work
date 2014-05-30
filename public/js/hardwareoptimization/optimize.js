@@ -260,6 +260,7 @@ $(function ()
                         $table.append($("<tr></tr>").append("<td colspan='2'><em>" + data.deviceInstance.deviceName + "</em></td>"));
                         $table.append($("<tr></tr>").append("<td>Serial Number</td><td>" + data.deviceInstance.serialNumber + "</td>"));
                         $table.append($("<tr></tr>").append("<td>IP Address</td><td>" + data.deviceInstance.ipAddress + "</td>"));
+                        $table.append($("<tr></tr>").append("<td>Location</td><td>" + data.deviceInstance.location + "</td>"));
                         $table.append($("<tr></tr>").append("<td>Age</td><td>" + data.deviceInstance.age + "y</td>"));
                         $table.append($("<tr></tr>").append("<td>Mono CPP</td><td>" + data.deviceInstance.costPerPageMonochrome + "</td>"));
                         $table.append($("<tr></tr>").append("<td>AMPV - Mono</td><td>" + data.deviceInstance.monoAmpv + "</td>"));

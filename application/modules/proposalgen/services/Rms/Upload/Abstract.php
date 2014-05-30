@@ -130,6 +130,7 @@ abstract class Proposalgen_Service_Rms_Upload_Abstract
         'isManaged'              => false,
         'managementProgram'      => false,
         'rmsDeviceId'            => false,
+        'location'               => false,
     );
 
     /**

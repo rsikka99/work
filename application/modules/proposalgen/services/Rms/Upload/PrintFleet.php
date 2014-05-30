@@ -94,5 +94,6 @@ class Proposalgen_Service_Rms_Upload_PrintFleet extends Proposalgen_Service_Rms_
         'tonerlevelyellow'         => 'tonerLevelYellow',
         'monocoverage'             => 'pageCoverageMonochrome',
         'colorcoverage'            => 'pageCoverageColor',
+        'location'                 => 'location',
     );
 }

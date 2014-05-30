@@ -75,6 +75,7 @@ class Proposalgen_Service_Rms_Upload_Generic extends Proposalgen_Service_Rms_Upl
         'tonerlevel_magenta'     => 'tonerLevelMagenta',
         'tonerlevel_yellow'      => 'tonerLevelYellow',
         'startdate'              => 'monitorStartDate',
-        'enddate'                => 'monitorEndDate'
+        'enddate'                => 'monitorEndDate',
+        'location'               => 'location',
     );
 }

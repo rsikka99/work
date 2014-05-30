@@ -175,6 +175,7 @@ $(function ()
                 $('#deviceDetails_tonerConfigName').empty().html(data.masterDevice.tonerConfigName);
                 $('#deviceDetails_isLeased').empty().html((data.masterDevice.isLeased) ? 'YES' : 'NO');
                 $('#deviceDetails_compatibleWithJit').empty().html((data.masterDevice.compatibleWithJit) ? 'YES' : 'NO');
+                $('#deviceDetails_location').empty().html(data.location);
 
                 $('#pageCoverageMonochrome').empty().html(data.pageCoverage.monochrome);
                 $('#pageCoverageCyan').empty().html(data.pageCoverage.cyan);

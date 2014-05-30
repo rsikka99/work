@@ -85,5 +85,6 @@ class Proposalgen_Service_Rms_Upload_PrintFleetLegacy extends Proposalgen_Servic
         'cyan coverage'        => 'pageCoverageCyan',
         'magenta coverage'     => 'pageCoverageMagenta',
         'yellow coverage'      => 'pageCoverageYellow',
+        'location'             => 'location',
     );
 }

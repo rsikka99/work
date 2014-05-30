@@ -150,6 +150,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
      */
     public $rawDeviceName;
 
+    /**
+     * @var string
+     */
+    public $location;
+
     /*
      * ********************************************************************************
      * Related Objects
@@ -513,6 +518,11 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
         {
             $this->compatibleWithJitProgram = $params->compatibleWithJitProgram;
         }
+
+        if (isset($params->location) && !is_null($params->location))
+        {
+            $this->location = $params->location;
+        }
     }
 
     /**
@@ -541,6 +551,7 @@ class Proposalgen_Model_DeviceInstance extends My_Model_Abstract
             "deviceSwapReasonId"       => $this->deviceSwapReasonId,
             "rawDeviceName"            => $this->rawDeviceName,
             "compatibleWithJitProgram" => $this->compatibleWithJitProgram,
+            "location"                 => $this->location,
         );
     }
 

@@ -381,6 +381,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
     public $managementProgram;
 
     /**
+     * @var string
+     */
+    public $location;
+
+    /**
      * @var Proposalgen_Model_Manufacturer
      */
     protected $_manufacturer;
@@ -771,6 +776,11 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             $this->managementProgram = $params->managementProgram;
         }
 
+        if (isset($params->location) && !is_null($params->location))
+        {
+            $this->location = $params->location;
+        }
+
     }
 
     /**
@@ -854,6 +864,7 @@ class Proposalgen_Model_Rms_Upload_Row extends My_Model_Abstract
             "rmsVendorName"            => $this->rmsVendorName,
             "rmsReportVersion"         => $this->rmsReportVersion,
             "managementProgram"        => $this->managementProgram,
+            "location"                 => $this->location,
         );
     }
 

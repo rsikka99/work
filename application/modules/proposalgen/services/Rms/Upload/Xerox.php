@@ -38,6 +38,7 @@ class Proposalgen_Service_Rms_Upload_Xerox extends Proposalgen_Service_Rms_Uploa
         'color meter 2' => 'startMeterColor',
         'color meter 1' => 'endMeterColor',
         'total meter 2' => 'startMeterLife',
-        'total meter 1' => 'endMeterLife'
+        'total meter 1' => 'endMeterLife',
+        'location'      => 'location',
     );
 }

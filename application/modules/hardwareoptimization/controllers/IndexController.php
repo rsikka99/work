@@ -334,7 +334,8 @@ class Hardwareoptimization_IndexController extends Hardwareoptimization_Library_
                 "pageCoverageMagenta"    => ($deviceInstance->pageCoverageMagenta > 0) ? number_format((float)$deviceInstance->pageCoverageMagenta, 2) . '%' : 'N/A',
                 "pageCoverageYellow"     => ($deviceInstance->pageCoverageYellow > 0) ? number_format((float)$deviceInstance->pageCoverageYellow, 2) . '%' : 'N/A',
                 "ppmBlack"               => ($deviceInstance->getMasterDevice()->ppmBlack > 0) ? number_format($deviceInstance->getMasterDevice()->ppmBlack) : 'N/A',
-                "ppmColor"               => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A'
+                "ppmColor"               => ($deviceInstance->getMasterDevice()->ppmColor > 0) ? number_format($deviceInstance->getMasterDevice()->ppmColor) : 'N/A',
+                "location"               => (strlen($deviceInstance->location) > 0) ? $deviceInstance->location : 'N/A',
             ),
             "hasReplacement" => (int)$hasReplacementDevice
         );
