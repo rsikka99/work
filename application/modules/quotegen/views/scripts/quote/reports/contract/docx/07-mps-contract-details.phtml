@@ -1,31 +1,19 @@
 <?php
 /* @var $section PHPWord_Section */
-$section   = $this->section;
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
 $tableSpan = $this->tableStyle->gridSpan;
 $noSpacing = $this->paragraphStyle->noSpacing;
 $labelFont = $this->fontStyle->label;
 
-// Begin customer table
-$customerTable = $section->addTable($this->tableStyle->standard);
-$customerTable->addRow();
-$customerTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[0], $this->fontStyle->invertBackground, $noSpacing);
 
-$customerTable->addRow();
-$textRun = $customerTable->addCell($tableSpan ['span8'], $this->cellStyle->bottomBorder, 8)->createTextRun($noSpacing);
-$textRun->addText(" FULL LEGAL NAME: ", $labelFont);
-$textRun->addText(" {$this->company->name}", $this->fontStyle->bold);
-
-$customerTable->addRow();
-$textRun = $customerTable->addCell($tableSpan ['span8'], null, 8)->createTextRun($noSpacing);
-$textRun->addText(" ADDRESS: ", $labelFont);
-$textRun->addText(" {$this->company->address}", $this->fontStyle->bold);
-// End Customer Table
-
-// Begin Customer Table
-$section->addTextBreak();
+// Begin Terms Table
 $termDetailsTable = $section->addTable($this->tableStyle->standard);
 $termDetailsTable->addRow();
-$termDetailsTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[1], $this->fontStyle->invertBackground, $noSpacing);
+$termDetailsTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
 $termDetailsTable->addRow();
 $termDetailsTable->addCell($tableSpan ['span1'], null, 2)->addText('TERM IN MONTHS: ' . $this->leaseDetails->termInMonths, $labelFont, $noSpacing);
 $termDetailsTable->addCell($tableSpan ['span1'], null, 2)->addText('SECURITY DEPOSIT ' . $this->leaseDetails->securityDeposit, $labelFont, $noSpacing);
@@ -88,56 +76,5 @@ $textRun->addText('$0.00', $this->fontStyle->bold);
 
 // Row #7
 $leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($tableSpan ['span4'], $this->cellStyle->leftRightBorder, 4)->addText("", null, $noSpacing);
-$leaseDetailsTable->addCell($tableSpan ['span4'], $this->cellStyle->rightBorder, 4)->addText("SEE MPS PROGRAM PLUS EQUIPMENT AND SCHEDULE AND DEVICE USAGE TERMS AND CONDITIONS (**PLUS TAX)", $labelFont, $noSpacing);
-
-// Agreement terms and conditions
-$leaseDetailsTable->addRow();
-$leaseDetailsTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($this->header->sectionHeader[4], $this->fontStyle->invertBackground, $noSpacing);
-
-$leaseDetailsTable->addRow();
-
-$cell    = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('AGREEMENT ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section1}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('PAGE CHARGES AND OVERAGES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section2}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('SERVICES AND SUPPLIES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section3}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('DEVICE USAGE PAYMENTS ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section4}", $this->fontStyle->finePrint);
-
-$cell    = $leaseDetailsTable->addCell($tableSpan ['span4'], null, 4);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('REMOTE MONITORING ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section5}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('TAXES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section6}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('DEFAULT AND REMEDIES ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section7}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('LAW/FORUM ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section8}", $this->fontStyle->finePrint);
-
-$cell->addTextBreak(1);
-$textRun = $cell->createTextRun($this->paragraphStyle->noSpacingJustified);
-$textRun->addText('MISCELLANEOUS ', $this->fontStyle->boldFinePrint);
-$textRun->addText("{$this->agreement->section9}", $this->fontStyle->finePrint);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($this->cellStyle->leftRightBorder, $this->cellStyle->bottomBorder), 4)->addText("", null, $noSpacing);
+$leaseDetailsTable->addCell($tableSpan ['span4'], array_merge($this->cellStyle->rightBorder, $this->cellStyle->bottomBorder), 4)->addText("SEE MPS PROGRAM PLUS EQUIPMENT AND SCHEDULE AND DEVICE USAGE TERMS AND CONDITIONS (**PLUS TAX)", $labelFont, $noSpacing);

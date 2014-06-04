@@ -1,25 +1,58 @@
 <?php
 
-$filename   = $this->filename;
-$savePath   = PUBLIC_PATH . '/downloads/' . $filename;
-$linkToFile = $this->baseUrl('/downloads/' . $filename);
+/**
+ * Creates a brand new section
+ *
+ * @param PHPWord           $phpWord
+ * @param PHPWord_Section[] $sections
+ * @param string            $sectionName
+ *
+ * @return mixed
+ */
+function getNewSection ($phpWord, &$sections, $sectionName = 'default')
+{
+    if (!isset($sections[$sectionName]))
+    {
+        $section       = $phpWord->createSection();
+        $sectionStyles = $section->getSettings();
+        $sectionStyles->setMarginLeft(300);
+        $sectionStyles->setMarginBottom(300);
+        $sectionStyles->setMarginTop(300);
+        $sectionStyles->setMarginRight(300);
+        $sections[$sectionName] = $section;
+    }
+
+    return $sections[$sectionName];
+}
+
+/**
+ * @var $sections PHPWord_Section[]
+ */
+$sections = array();
+
+/* @var $contractTemplate Quotegen_Model_ContractTemplate */
+$contractTemplate = $this->contractTemplate;
+$filename         = $this->filename;
+$savePath         = PUBLIC_PATH . '/downloads/' . $filename;
+$linkToFile       = $this->baseUrl('/downloads/' . $filename);
 
 // This may not need to be removed from here
 // Base path to the files used to render the document
 $basePath            = 'quote/reports/contract/docx';
 $commonPartsBasePath = 'quote/reports/common/' . $this->App()->theme . '/docx/contract';
 
-$this->quote = $this->Quote();
 /* @var $quote Quotegen_Model_Quote */
+$this->quote = $this->Quote();
+$quote       = $this->quote;
 
-/* @var $phpword PHPWord */
-$phpword = $this->phpword;
-$phpword->setDefaultFontName('Inconsolata');
+/* @var $phpWord PHPWord */
+$phpWord = $this->phpword;
+$phpWord->setDefaultFontName('Consolas');
 
 /**
  * Document Properties
  */
-$properties = $phpword->getProperties();
+$properties = $phpWord->getProperties();
 $properties->setCreator('Demo Report');
 $properties->setCompany('Demo Report');
 $properties->setTitle('Demo Report');
@@ -31,14 +64,9 @@ $properties->setModified(time());
 $properties->setSubject('Demo Report');
 $properties->setKeywords('demo, assessment, report');
 
-$section       = $phpword->createSection();
-$sectionStyles = $section->getSettings();
-$sectionStyles->setMarginLeft(300);
-$sectionStyles->setMarginBottom(300);
-$sectionStyles->setMarginTop(300);
-$sectionStyles->setMarginRight(300);
-
+$section       = getNewSection($phpWord, $sections);
 $this->section = $section;
+
 
 // Styles hold color schema and theme specific attributes
 $this->render("{$commonPartsBasePath}/styles.phtml");
@@ -49,16 +77,194 @@ $this->render("{$basePath}/quoteData.phtml");
 // Page holds all the formatting for the styles used building the document
 $this->render("{$basePath}/formattingStyles.phtml");
 
-// Render the documents
-$this->render("{$basePath}/header.phtml");
-$this->render("{$basePath}/contractPage1.phtml");
-$this->render("{$basePath}/footer.phtml");
-$section->addPageBreak();
-$this->render("{$basePath}/header.phtml");
-$this->render("{$basePath}/contractPage2.phtml");
-$this->render("{$basePath}/footer.phtml");
 
-$objWriter = PHPWord_IOFactory::createWriter($phpword, 'Word2007');
+$contractTemplateSections = $contractTemplate->getContractTemplateSections();
+
+$contractTemplateSectionBySectionId = array();
+foreach ($contractTemplateSections as $contractTemplateSection)
+{
+    if ($contractTemplateSection->enabled && !isset($contractTemplateSectionBySectionId[$contractTemplateSection->contractSectionId]))
+    {
+        $contractTemplateSectionBySectionId[$contractTemplateSection->contractSectionId] = $contractTemplateSection;
+    }
+}
+
+/**
+ * Render the different sections if they've appeared
+ */
+
+$defaultData = array(
+    "section"        => $section,
+    "tableStyle"     => $this->tableStyle,
+    "fontStyle"      => $this->fontStyle,
+    "cellStyle"      => $this->cellStyle,
+    "paragraphStyle" => $this->paragraphStyle,
+    "header"         => $this->header,
+    "leaseDetails"   => $this->leaseDetails,
+    "company"        => $this->company,
+    "quote"          => $this->quote,
+);
+
+/**
+ * Customer ("you" or "your")
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMER_YOU_YOUR]))
+{
+    $this->partial("{$basePath}/01-customer-you-your.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMER_YOU_YOUR],
+            )
+        )
+    );
+
+    if (!isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR]))
+    {
+        $section->addTextBreak();
+    }
+}
+
+/**
+ * Vendor Statement
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR]))
+{
+    $this->partial("{$basePath}/02-vendor.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_VENDOR],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * Contract
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CONTRACT]))
+{
+    $this->partial("{$basePath}/03-contract.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CONTRACT],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * MPS Contract Details
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_MPS_CONTRACT_DETAILS]))
+{
+    $this->partial("{$basePath}/07-mps-contract-details.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_MPS_CONTRACT_DETAILS],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * Hardware Contract Details
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_HARDWARE_CONTRACT_DETAILS]))
+{
+    $this->partial("{$basePath}/08-hardware-contract-details.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_HARDWARE_CONTRACT_DETAILS],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * Customer's Authorized Signature - Signature Box
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMERS_AUTH_SIGNATURE]))
+{
+    $this->partial("{$basePath}/04-customers-authorizing-signature.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_CUSTOMERS_AUTH_SIGNATURE],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * Owner ("we", "us", "our") - Signature Box
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_OWNER_WE_US_OUR]))
+{
+    $this->partial("{$basePath}/05-owner-we-us-our.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_OWNER_WE_US_OUR],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+/**
+ * Unconditional Guaranty - Signature Boxes
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_UNCONDITIONAL_GUARANTY]))
+{
+    $this->partial("{$basePath}/06-unconditional-guaranty.phtml", array_merge(
+            $defaultData,
+            array(
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_UNCONDITIONAL_GUARANTY],
+            )
+        )
+    );
+    $section->addTextBreak();
+}
+
+
+/**
+ * Equipment List
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_EQUIPMENT_LIST]))
+{
+    $equipmentSection = getNewSection($phpWord, $sections, 'equipment');
+
+    $this->partial("{$basePath}/09-equipment-list.phtml", array_merge(
+            $defaultData,
+            array(
+                "section"                 => $equipmentSection,
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_EQUIPMENT_LIST],
+            )
+        )
+    );
+}
+
+/**
+ * Additional Terms and Conditions
+ */
+if (isset($contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_ADDITIONAL_TERMS_AND_CONDITIONS]))
+{
+    $termsAndConditionsSection = getNewSection($phpWord, $sections, 'terms-and-conditions');
+
+    $this->partial("{$basePath}/10-additional-terms-and-conditions.phtml", array_merge(
+            $defaultData,
+            array(
+                "section"                 => $termsAndConditionsSection,
+                "contractTemplateSection" => $contractTemplateSectionBySectionId[Quotegen_Model_ContractSection::SECTION_ADDITIONAL_TERMS_AND_CONDITIONS],
+            )
+        )
+    );
+}
+
+$objWriter = PHPWord_IOFactory::createWriter($phpWord, 'Word2007');
 
 try
 {
@@ -66,7 +272,8 @@ try
 }
 catch (Exception $e)
 {
-    echo "Error Writing to File.";
+    Tangent_Log::logException($e);
+    echo "There was an error while trying to write your document to disk. Trace ID: " . Tangent_Log::getUniqueId();
     die();
 }
 

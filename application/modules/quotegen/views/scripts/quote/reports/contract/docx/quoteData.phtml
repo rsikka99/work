@@ -20,9 +20,3 @@ $this->leaseDetails->meterFrequency = '';
 $this->company          = new stdClass();
 $this->company->name    = ($quote->getClient()->legalName ? $quote->getClient()->legalName : $quote->getClient()->companyName);
 $this->company->address = "{$quote->getClient()->getAddress()->getFullAddressOneLine()}";
-
-// Dealer company details
-$this->dealerCompany                 = new stdClass();
-$this->dealerCompany->companyName    = 'COMPANY NAME, INC.';
-$this->dealerCompany->companyOwner   = 'BUGS BUNNY, CARROT CONNOISSEUR';
-$this->dealerCompany->companyAddress = '231 LOONEY PLACE, Albuquerque, 90210';

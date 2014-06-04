@@ -78,7 +78,7 @@ $this->fontStyle                   = new stdClass();
 $this->fontStyle->invertBackground = array(
     'color' => 'FFFFFF',
     'bold'  => true,
-    'size'  => '8'
+    'size'  => '10'
 );
 $this->fontStyle->subHeader        = array(
     'size' => '16',
@@ -89,10 +89,10 @@ $this->fontStyle->label            = array(
 );
 $this->fontStyle->boldFinePrint    = array(
     'bold' => true,
-    'size' => '6'
+    'size' => '8'
 );
 $this->fontStyle->finePrint        = array(
-    'size' => '6'
+    'size' => '8'
 );
 
 $this->fontStyle->center    = array(
@@ -123,6 +123,10 @@ $this->paragraphStyle->noSpacingRight    = array(
 
 $this->paragraphStyle->noSpacingJustified = array(
     'spaceAfter' => 0,
+    'align'      => 'both'
+);
+
+$this->paragraphStyle->justified = array(
     'align'      => 'both'
 );
 

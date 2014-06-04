@@ -31,12 +31,23 @@ $(document).ready(function ()
         var extension = "." + $(this).data('ext');
 
         var loadingMessage = $(this).data('loadingmessage');
+        var extraDataContents = $(this).data('extra-parameter');
 
         if (loadingMessage == null || loadingMessage.length < 1)
         {
             loadingMessage = "Please be patient while we generate your document. This normally takes a minute or two.";
         }
         var cancelled = false;
+
+        var extraData = {};
+
+        if (extraDataContents != null || extraDataContents.length > 0)
+        {
+
+            extraData[extraDataContents] = $('#' + extraDataContents.toString()).val();
+        }
+
+
         var xhr;
 
         e.preventDefault();
@@ -60,6 +71,7 @@ $(document).ready(function ()
 
         xhr = $.ajax({
             url     : this.href,
+            data    : extraData,
             success : function (data)
             {
                 if (data.indexOf(extension) < 0 || data.length > 100)
@@ -90,15 +102,30 @@ $(document).ready(function ()
             {
                 if (!cancelled)
                 {
-                    $("<div id='errorMessage'></div>").append(data).dialog({
-                        height    : 500,
-                        width     : 900,
-                        modal     : true,
-                        draggable : true,
-                        resizeable: true,
-                        title     : "Error"
+                    if (data.responseJSON && data.responseJSON.error)
+                    {
+                        $("<div id='errorMessage'></div>").html(data.responseJSON.error).dialog({
+                            height    : 500,
+                            width     : 900,
+                            modal     : true,
+                            draggable : true,
+                            resizeable: true,
+                            title     : "Error"
 
-                    });
+                        });
+                    }
+                    else
+                    {
+                        $("<div id='errorMessage'></div>").html(data.responseText).dialog({
+                            height    : 500,
+                            width     : 900,
+                            modal     : true,
+                            draggable : true,
+                            resizeable: true,
+                            title     : "Error"
+
+                        });
+                    }
                 }
             },
             complete: function (data)

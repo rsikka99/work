@@ -109,9 +109,26 @@ class Quotegen_Quote_ReportsController extends Quotegen_Library_Controller_Quote
      */
     public function contractAction ()
     {
-        $this->view->filename = $this->generateReportFilename($this->_quote->getClient(), 'Contract') . ".docx";
-        $this->view->clientId = $this->_quote->clientId;
-        $this->view->quoteId  = $this->_quote->id;
+        $contractTemplateId = $this->_getParam('contractTemplateId', false);
+
+        if ($contractTemplateId === false)
+        {
+            $this->sendJsonError('Invalid Contract Template Id');
+        }
+
+        /**
+         * Users can only use contract templates that are owned by them or flagged as system templates
+         */
+        $contractTemplate = Quotegen_Model_Mapper_ContractTemplate::getInstance()->find((int)$contractTemplateId);
+        if (!$contractTemplate instanceof Quotegen_Model_ContractTemplate || ($contractTemplate->dealerId != $this->_identity->dealerId && !$contractTemplate->isSystemTemplate))
+        {
+            $this->sendJsonError('Invalid Contract Template');
+        }
+
+        $this->view->contractTemplate = $contractTemplate;
+        $this->view->filename         = $this->generateReportFilename($this->_quote->getClient(), 'Contract') . ".docx";
+        $this->view->clientId         = $this->_quote->clientId;
+        $this->view->quoteId          = $this->_quote->id;
     }
 }
 

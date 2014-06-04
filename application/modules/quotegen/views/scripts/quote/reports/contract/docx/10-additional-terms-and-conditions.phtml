@@ -1,0 +1,42 @@
+<?php
+/* @var $section PHPWord_Section */
+$section = $this->section;
+
+/* @var $contractTemplateSection Quotegen_Model_ContractTemplateSection */
+$contractTemplateSection = $this->contractTemplateSection;
+
+$tableSpan = $this->tableStyle->gridSpan;
+$noSpacing = $this->paragraphStyle->noSpacing;
+$labelFont = $this->fontStyle->label;
+
+$leaseDetailsTable = $section->addTable($this->tableStyle->standard);
+$leaseDetailsTable->addRow();
+$leaseDetailsTable->addCell($tableSpan ['span8'], $this->cellStyle->invertBackground, 8)->addText($contractTemplateSection->getContractSectionName(), $this->fontStyle->invertBackground, $noSpacing);
+
+
+$contractHtml = new DOMDocument(5);
+$contractHtml->loadHTML($contractTemplateSection->getContractSectionText());
+
+/* @var $childNode DOMElement */
+foreach ($contractHtml->getElementsByTagName('p') as $paragraphNode)
+{
+    $leaseDetailsTable->addRow();
+    $cell    = $leaseDetailsTable->addCell($tableSpan ['span8'], null, 8);
+    $textRun = $cell->createTextRun(array_merge($this->paragraphStyle->noSpacingJustified, array('spacing' => 1.1)));
+
+    $childNodes = $paragraphNode->childNodes;
+    for ($i = 0; $i < $childNodes->length; $i++)
+    {
+        /** @var $node DOMElement */
+        $node = $childNodes->item($i);
+
+        if ($node->tagName == 'b')
+        {
+            $textRun->addText($node->textContent, $this->fontStyle->boldFinePrint);
+        }
+        else
+        {
+            $textRun->addText($node->textContent, $this->fontStyle->finePrint);
+        }
+    }
+}
