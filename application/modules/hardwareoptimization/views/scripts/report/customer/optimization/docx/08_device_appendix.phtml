@@ -51,7 +51,7 @@ $this->partial('report/customer/optimization/docx/device_table.phtml',
 $this->partial('report/customer/optimization/docx/device_table.phtml',
     array(
         "section"                => $section,
-        "title"                  => "Devices eligible for retirement",
+        "title"                  => "Devices Eligible for Retirement",
         "description"            => "Devices with both low volume and age of over " . Proposalgen_Model_DeviceInstance::RETIREMENT_AGE . " years have been target for retirement. We suggest migrating the page volume into another device.",
         "deviceInstances"        => $deviceInstances[Hardwareoptimization_Model_Hardware_Optimization_DeviceInstance::ACTION_RETIRE],
         "showReplacementDevices" => false,
