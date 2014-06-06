@@ -183,6 +183,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         // Add default scripts
         $view->headScript()->prependFile($view->baseUrl("/js/script.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/plugins.js"));
+        $view->headScript()->prependFile($view->baseUrl("/js/downloadPlugin.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/select2/select2.min.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-switch.js"));
         $view->headScript()->prependFile($view->baseUrl("/js/libs/bootstrap-modalmanager.js"));
