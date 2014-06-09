@@ -6,7 +6,7 @@
 class Hardwareoptimization_Model_Optimization_Customer extends Hardwareoptimization_Model_Optimization_Abstract
 {
     const AVERAGE_MONTHLY_PAGES_PER_EMPLOYEE = 200;
-    const AVERAGE_MONTHLY_PAGES              = 4200;
+    const AVERAGE_MONTHLY_PAGES              = 1500;
 
     /**
      * A list of string to image resources to the graphs

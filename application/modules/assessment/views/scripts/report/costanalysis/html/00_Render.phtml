@@ -10,10 +10,10 @@ $deviceInstances = $assessmentViewModel->getMonthlyHighCostPurchasedDevice($cust
     <h2 class="reportTitle">Customer Cost Analysis</h2><br />
 
     <p><strong>Average Black CPP:</strong>
-        <?php echo $this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage, 4); ?></p>
+        <?php echo $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->monochromeCostPerPage); ?></p>
 
     <p><strong>Average Color CPP:</strong>
-        <?php echo $this->currency($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage, 4); ?></p>
+        <?php echo $this->formatCostPerPage($assessmentViewModel->calculateCustomerWeightedAverageMonthlyCostPerPage()->colorCostPerPage); ?></p>
 
     <table class="mainTable">
         <tr>

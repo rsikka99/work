@@ -255,8 +255,11 @@ class Assessment_ViewModel_Ranking extends Tangent_Model_Abstract
 
             $totalRanking = round((((($LeasedBWPerPage + $LeasedColorPerPage) / 2) + (($PurchasedBWPerPage + $PurchasedColorPerPage) / 2)) / 2), 1);
 
-            $rankingText = $this->getOverallRankingText($totalRanking, "expense");
-            $rankingText .= " Under the reportName program, we estimate that we can save " . $this->proposal->assessment->getClient()->companyName . " up to $" . number_format($this->proposal->getPrintIQSavings()) . " annually.";
+            $rankingText = sprintf('%1$s Under this program we estimate that %2$s can save up to %3$s annually.',
+                $this->getOverallRankingText($totalRanking, "expense"),
+                $this->proposal->assessment->getClient()->companyName,
+                number_format($this->proposal->getPrintIQSavings())
+            );
 
             $this->Expense = (object)array(
                 "Rank"        => $totalRanking,

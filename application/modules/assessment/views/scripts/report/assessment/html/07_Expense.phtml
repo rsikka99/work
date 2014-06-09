@@ -69,23 +69,23 @@ $assessmentViewModel = $this->assessmentViewModel;
     </tr>
     <tr>
         <td class="bold topborder">Estimated per-page lease cost</td>
-        <td class="right bold topborder"><?php echo $this->currency($assessmentViewModel->getPerPageLeaseCost(), 4); ?></td>
+        <td class="right bold topborder"><?php echo $this->formatCostPerPage($assessmentViewModel->getPerPageLeaseCost()); ?></td>
     </tr>
     <tr>
         <td>Estimated monochrome per-page charge</td>
-        <td class="right"><?php echo $this->currency($assessmentViewModel->getLeasedBlackAndWhiteCharge(), 4); ?></td>
+        <td class="right"><?php echo $this->formatCostPerPage($assessmentViewModel->getLeasedBlackAndWhiteCharge()); ?></td>
     </tr>
     <tr>
         <td>Estimated color per-page charge</td>
-        <td class="right"><?php echo $this->currency($assessmentViewModel->getLeasedColorCharge(), 4); ?></td>
+        <td class="right"><?php echo $this->formatCostPerPage($assessmentViewModel->getLeasedColorCharge()); ?></td>
     </tr>
     <tr>
         <td class="bold topborder">Estimated all-in cost for a monochrome page</td>
-        <td class="right bold topborder"><?php echo $this->currency($assessmentViewModel->getLeasedEstimatedBlackAndWhiteCPP(), 4); ?></td>
+        <td class="right bold topborder"><?php echo $this->formatCostPerPage($assessmentViewModel->getLeasedEstimatedBlackAndWhiteCPP()); ?></td>
     </tr>
     <tr>
         <td class="bold">Estimated all-in cost for a color page</td>
-        <td class="right bold"><?php echo $this->currency($assessmentViewModel->getLeasedEstimatedColorCPP(), 4); ?></td>
+        <td class="right bold"><?php echo $this->formatCostPerPage($assessmentViewModel->getLeasedEstimatedColorCPP()); ?></td>
     </tr>
     <tr>
         <td class="bold topborder">TOTAL ESTIMATED ANNUAL COST</td>
