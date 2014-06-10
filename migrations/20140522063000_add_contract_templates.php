@@ -34,7 +34,7 @@ class AddContractTemplates extends AbstractMigration
         $this->execute('INSERT INTO contract_sections (id, sectionDefaultName, sectionDefaultText) VALUES
     (1, \'Customer ("you" or "your")\', \'\'),
     (2, "Vendor (Vendor is not Owner\'s agent nor is Vendor authorized to waive or alter any term or condition of this Agreement)", \'\'),
-    (3, \'Contract\', \'<p><b>This agreement is non-cancelable and irrevocable. It cannot be terminated. please read carefully before signing. This agreement and
+    (3, \'Contract\', \'<p><b>This agreement is non-cancelable and irrevocable. It cannot be terminated. Please read carefully before signing. This agreement and
 any claim related to this agreement shall be governed by the laws of the state of Iowa. Any dispute will be adjudicated in a
 federal or state court in Linn County, Iowa. You hereby consent to personal jurisdiction and venue in such courts and waive
 transfer of venue. Each party waives any right to a jury trial.</b></p>\'),
